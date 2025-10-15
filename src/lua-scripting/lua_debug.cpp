@@ -96,8 +96,7 @@ namespace LuaScripting
             return false;
             }
 
-                        return true;
-
+        return true;
         }
 
     //-------------------------------------------------------------
