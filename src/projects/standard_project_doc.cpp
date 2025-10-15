@@ -41,7 +41,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(ProjectDoc, wxDocument)
     //-------------------------------------------------------
     void ProjectDoc::ShowQueuedMessages()
     {
-    BaseProjectView* view = dynamic_cast<BaseProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<BaseProjectView*>(GetFirstView());
     for (std::vector<WarningMessage>::const_iterator queuedMsgIter = GetQueuedMessages().begin();
          queuedMsgIter != GetQueuedMessages().end(); ++queuedMsgIter)
         {
@@ -59,7 +59,7 @@ void ProjectDoc::RemoveMisspellings([[maybe_unused]] const wxArrayString& misspe
 //-------------------------------------------------------
 void ProjectDoc::ExcludeAllCustomTestsTests()
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     for (std::vector<CustomReadabilityTestInterface>::const_iterator pos =
              GetCustTestsInUse().begin();
          pos != GetCustTestsInUse().end(); ++pos)
@@ -76,7 +76,7 @@ void ProjectDoc::ExcludeAllCustomTestsTests()
 std::vector<CustomReadabilityTestInterface>::iterator
 ProjectDoc::RemoveCustomReadabilityTest(const wxString& testName, const int Id)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     // remove any views that are related to this test
     // (text window and word list window)
@@ -123,16 +123,16 @@ void ProjectDoc::RefreshStatisticsReports()
         }
 
     // if refresh is not necessary then return
-    if (IsRefreshRequired() == false)
+    if (!IsRefreshRequired())
         {
         return;
         }
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     const auto selectedItem = view->GetSideBar()->GetSelectedFolderId();
 
-    wxWindowUpdateLocker noUpdates(GetDocumentWindow());
-    BaseProjectProcessingLock processingLock(this);
+    const wxWindowUpdateLocker noUpdates(GetDocumentWindow());
+    const BaseProjectProcessingLock processingLock(this);
     DisplayStatistics();
 
     view->UpdateSideBarIcons();
@@ -162,13 +162,13 @@ void ProjectDoc::RefreshGraphs()
         }
 
     // if refresh is not necessary then return
-    if (IsRefreshRequired() == false)
+    if (!IsRefreshRequired())
         {
         return;
         }
 
-    wxWindowUpdateLocker noUpdates(GetDocumentWindow());
-    BaseProjectProcessingLock processingLock(this);
+    const wxWindowUpdateLocker noUpdates(GetDocumentWindow());
+    const BaseProjectProcessingLock processingLock(this);
     DisplayReadabilityScores(false);
     DisplayReadabilityGraphs();
     DisplayWordCharts();
@@ -188,14 +188,14 @@ void ProjectDoc::RefreshProject()
         }
 
     // if refresh is not necessary then return
-    if (IsRefreshRequired() == false)
+    if (!IsRefreshRequired())
         {
         return;
         }
 
     StopRealtimeUpdate();
 
-    wxBusyCursor bc;
+    const wxBusyCursor bc;
 
     // reload the excluded phrases
     LoadExcludePhrases();
@@ -203,16 +203,16 @@ void ProjectDoc::RefreshProject()
     // load appended template file (if there is one)
     LoadAppendedDocument();
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     const auto selectedItem = view->GetSideBar()->GetSelectedSubItemId();
 
     // If the original text is gone (there won't be anything to analyze),
     // or if just cosmetic changes (e.g., graph options), then don't re-index,
     // just do a simple refresh.
-    if (LoadingOriginalTextSucceeded() == false || !IsDocumentReindexingRequired())
+    if (!LoadingOriginalTextSucceeded() || !IsDocumentReindexingRequired())
         {
-        wxWindowUpdateLocker noUpdates(GetDocumentWindow());
-        BaseProjectProcessingLock processingLock(this);
+        const wxWindowUpdateLocker noUpdates(GetDocumentWindow());
+        const BaseProjectProcessingLock processingLock(this);
         DisplayReadabilityScores(false);
         DisplayStatistics();
         DisplayReadabilityGraphs();
@@ -242,8 +242,8 @@ void ProjectDoc::RefreshProject()
         Modify(true);
         return;
         }
-    BaseProjectProcessingLock processingLock(this);
-    wxWindowUpdateLocker noUpdates(GetDocumentWindow());
+    const BaseProjectProcessingLock processingLock(this);
+    const wxWindowUpdateLocker noUpdates(GetDocumentWindow());
 
     // reload the document
     if (GetDocumentStorageMethod() == TextStorage::LoadFromExternalDocument)
@@ -288,9 +288,9 @@ void ProjectDoc::RefreshProject()
            disable on the text view windows. On macOS, disabling/re-enabling
            text controls appears to reset their font color (which we are customizing
            in DisplayHighlightedText()).*/
-        wxBusyInfo bi(wxBusyInfoFlags()
-                          .Text(_(L"Reloading project..."))
-                          .Parent(wxGetApp().GetParentingWindow()));
+        const wxBusyInfo bi(wxBusyInfoFlags()
+                                .Text(_(L"Reloading project..."))
+                                .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
         wxTheApp->Yield();
@@ -359,10 +359,10 @@ void ProjectDoc::RefreshProject()
 //------------------------------------------------
 bool ProjectDoc::LoadProjectFile(const char* projectFileText, const size_t textLength)
     {
-    Wisteria::ZipCatalog cat(projectFileText, textLength);
+    const Wisteria::ZipCatalog cat(projectFileText, textLength);
 
     // open the project settings file
-    std::wstring settingsFile = cat.ReadTextFile(ProjectSettingsFileLabel());
+    const std::wstring settingsFile = cat.ReadTextFile(ProjectSettingsFileLabel());
     if (!settingsFile.empty())
         {
         LoadSettingsFile(settingsFile.c_str());
@@ -488,13 +488,13 @@ bool ProjectDoc::LoadProjectFile(const char* projectFileText, const size_t textL
 //------------------------------------------------
 bool ProjectDoc::OnOpenDocument(const wxString& filename)
     {
-    wxBusyCursor bc;
+    const wxBusyCursor bc;
 
     wxLogMessage(L"Opening project \"%s\"", filename);
     // make sure there aren't any projects getting updated before we start opening a new one.
     // opening a project may try to add new custom tests, which would cause a race condition with
     // the processing project
-    wxList docs = wxGetApp().GetDocManager()->GetDocuments();
+    const wxList docs = wxGetApp().GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         const BaseProjectDoc* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
@@ -520,7 +520,7 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
     SetTitle(ParseTitleFromFileName(filename));
     SetFilename(filename, true);
 
-    BaseProjectProcessingLock processingLock(this);
+    const BaseProjectProcessingLock processingLock(this);
 
     MemoryMappedFile sourceFile;
     try
@@ -602,9 +602,9 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
        external file could not be found (if applicable).*/
     if (LoadingOriginalTextSucceeded())
         {
-        wxBusyInfo bi(wxBusyInfoFlags()
-                          .Text(_(L"Loading project..."))
-                          .Parent(wxGetApp().GetParentingWindow()));
+        const wxBusyInfo bi(wxBusyInfoFlags()
+                                .Text(_(L"Loading project..."))
+                                .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
         wxTheApp->Yield();
@@ -657,7 +657,7 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
        loading the project and user searched for the document then the modified flag is set*/
     SetDocumentSaved(true);
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     view->UpdateSideBarIcons();
     view->UpdateRibbonState();
     view->Present();
@@ -689,7 +689,7 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
     FreeDocumentText();
 
     // Run through the project wizard
-    ProjectWizardDlg* wizard =
+    auto* wizard =
         new ProjectWizardDlg(wxGetApp().GetParentingWindow(), ProjectType::StandardProject, path);
     if (wizard->ShowModal() != wxID_OK)
         {
@@ -1025,10 +1025,11 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         // Custom tests. See what was selected, look it up in the global list of test, and add
         // its unique test ID to the options manager's list of included custom tests.
         wxGetApp().GetAppOptions()->GetIncludedCustomTests().clear();
-        wxArrayInt selectedTestIndices = wizard->GetSelectedCustomTests();
+        const wxArrayInt selectedTestIndices = wizard->GetSelectedCustomTests();
         for (size_t i = 0; i < selectedTestIndices.Count(); ++i)
             {
-            CustomReadabilityTest selectedTest = m_custom_word_tests[selectedTestIndices.Item(i)];
+            const CustomReadabilityTest& selectedTest =
+                m_custom_word_tests[selectedTestIndices.Item(i)];
             AddCustomReadabilityTest(selectedTest.get_name().c_str());
             wxGetApp().GetAppOptions()->GetIncludedCustomTests().emplace_back(
                 selectedTest.get_name().c_str());
@@ -1098,8 +1099,8 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
 void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
     {
     // this area can be included for an empty project, just won't show anything
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
-    if (view)
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    if (view != nullptr)
         {
         view->GetReadabilityScoresList()->Clear();
         }
@@ -1129,7 +1130,7 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
             false);
         }
     AddCustomReadabilityTests();
-    if (view)
+    if (view != nullptr)
         {
         UpdateExplanationListOptions(view->GetReadabilityScoresList());
         view->UpdateStatistics();
@@ -1150,11 +1151,10 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                 {
                 text = _(L"No tests are currently in the project.");
                 }
-            Wisteria::UI::HtmlTableWindow* scoresReport =
-                dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
-                    view->GetReadabilityResultsView().FindWindowById(
-                        BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID));
-            if (!scoresReport)
+            auto* scoresReport = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
+                view->GetReadabilityResultsView().FindWindowById(
+                    BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID));
+            if (scoresReport == nullptr)
                 {
                 scoresReport = new Wisteria::UI::HtmlTableWindow(
                     view->GetSplitter(),
@@ -1189,10 +1189,10 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
         // add/remove the goals
         if (GetTestGoals().size() || GetStatGoals().size())
             {
-            Wisteria::UI::ListCtrlEx* goalsList = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
+            auto* goalsList = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
                 view->GetReadabilityResultsView().FindWindowById(
                     BaseProjectView::READABILITY_GOALS_PAGE_ID));
-            if (!goalsList)
+            if (goalsList == nullptr)
                 {
                 goalsList = new Wisteria::UI::ListCtrlEx(
                     view->GetSplitter(), BaseProjectView::READABILITY_GOALS_PAGE_ID,
@@ -1307,7 +1307,7 @@ bool ProjectDoc::OnCreate(const wxString& path, long flags)
             {
             wxLogWarning(L"Unable to find examples folder: %s", exampleFolder);
             }
-        FilePathResolver resolvePath(path, false);
+        const FilePathResolver resolvePath(path, false);
         // If a file path to a document (e.g., an RTF file) that is NOT from the examples folder,
         // then bypass the wizard and just use the system defaults.
         // Also bypass the wizard if we are running a Lua script.
@@ -1324,17 +1324,14 @@ bool ProjectDoc::OnCreate(const wxString& path, long flags)
             }
         // scripting framework passes this in to create an empty project
         // that can have files added later
-        else if (path == L"EMPTY_PROJECT")
+        if (path == L"EMPTY_PROJECT")
             {
             return wxDocument::OnCreate(wxString{}, flags);
             }
         // otherwise, use the wizard if raw text (or no text, or examples file path) was passed in
-        else
+        if (!RunProjectWizard(path))
             {
-            if (!RunProjectWizard(path))
-                {
-                return false;
-                }
+            return false;
             }
         }
     return wxDocument::OnCreate(path, flags);
@@ -1348,11 +1345,11 @@ bool ProjectDoc::OnNewDocument()
         return false;
         }
 
-    wxBusyCursor bc;
+    const wxBusyCursor bc;
 
-    BaseProjectProcessingLock processingLock(this);
+    const BaseProjectProcessingLock processingLock(this);
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxASSERT_MSG(view->GetFrame(), L"Invalid frame for newly created document!");
 
     LoadExcludePhrases();
@@ -1401,7 +1398,7 @@ bool ProjectDoc::OnNewDocument()
        document will be ignored.
        Note that we don't bother with this check with webpages because they normally
        contain lists for things like menus that we would indeed want to ignore.*/
-    FilePathResolver resolvePath(GetOriginalDocumentFilePath(), true);
+    const FilePathResolver resolvePath(GetOriginalDocumentFilePath(), true);
     if (GetWords()->get_sentence_count() > 0 && !resolvePath.IsWebFile())
         {
         /* if document is nothing but valid sentences then it is OK.*/
@@ -1411,14 +1408,14 @@ bool ProjectDoc::OnNewDocument()
             }
         else
             {
-            const double numberOfInvalidSentencesPercentage = safe_divide<double>(
+            const auto numberOfInvalidSentencesPercentage = safe_divide<double>(
                 (GetWords()->get_sentence_count() - GetWords()->get_complete_sentence_count()),
                 GetWords()->get_sentence_count());
-            if (numberOfInvalidSentencesPercentage > 0.60f &&
+            if (numberOfInvalidSentencesPercentage > 0.60 &&
                 (GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
                  GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings))
                 {
-                auto warningIter =
+                const auto warningIter =
                     WarningManager::GetWarning(_DT(L"high-count-sentences-being-ignored"));
                 if (warningIter != WarningManager::GetWarnings().end() &&
                     warningIter->ShouldBeShown())
@@ -1451,9 +1448,9 @@ bool ProjectDoc::OnNewDocument()
 
         // make the busy message go out of scope before queued messages appear
         {
-        wxBusyInfo bi(wxBusyInfoFlags()
-                          .Text(_(L"Loading project..."))
-                          .Parent(wxGetApp().GetParentingWindow()));
+        const wxBusyInfo bi(wxBusyInfoFlags()
+                                .Text(_(L"Loading project..."))
+                                .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
         wxTheApp->Yield();
@@ -1561,7 +1558,7 @@ bool ProjectDoc::OnNewDocument()
 
     // Go through the sentences and see if any are not complete but considered valid because of
     // their length. If any are found, then mention it to the user.
-    size_t sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength{ 0 };
+    size_t sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength{ 0 };
     std::vector<punctuation::punctuation_mark>::const_iterator punctPos =
         GetWords()->get_punctuation().cbegin();
     wxArrayString longIncompleteSentences;
@@ -1572,12 +1569,12 @@ bool ProjectDoc::OnNewDocument()
             sent.get_ending_punctuation() != common_lang_constants::SEMICOLON &&
             sent.get_word_count() > GetIncludeIncompleteSentencesIfLongerThanValue())
             {
-            ++sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength;
+            ++sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength;
             longIncompleteSentences.Add(ProjectReportFormat::FormatSentence(
                 this, sent, punctPos, GetWords()->get_punctuation().cend()));
             }
         }
-    if (sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength > 0)
+    if (sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength > 0)
         {
         auto warningIter =
             WarningManager::GetWarning(_DT(L"incomplete-sentences-valid-from-length"));
@@ -1600,8 +1597,8 @@ bool ProjectDoc::OnNewDocument()
                         "which will be included in the analysis.\n\nTo change this, increase the "
                         "\"Include incomplete sentences containing more than...\" option under "
                         "Project Properties->Document Indexing.",
-                        sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength),
-                    sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength,
+                        sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength),
+                    sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength,
                     GetIncludeIncompleteSentencesIfLongerThanValue()));
             const int dlgResponse = listDlg.ShowModal();
             // save the checkbox status
@@ -1666,13 +1663,13 @@ void ProjectDoc::DisplayWordsBreakdown()
 
     DisplayWordCharts();
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     // place the word lists beneath the last graph in the Words Breakdown section
     int lastGraphPosition{ wxNOT_FOUND };
-    auto lastGraphWindow =
+    const auto* lastGraphWindow =
         view->GetWordsBreakdownView().RFindWindowByType(CLASSINFO(Wisteria::Canvas));
-    if (lastGraphWindow)
+    if (lastGraphWindow != nullptr)
         {
         lastGraphPosition =
             view->GetWordsBreakdownView().FindWindowPositionById(lastGraphWindow->GetId());
@@ -1696,7 +1693,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().Is3PlusSyllablesEnabled() &&
             GetTotalUnique3PlusSyllableWords() > 0 && Get3SyllablePlusData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetTotalUnique3PlusSyllableWords());
                 listView->Resort();
@@ -1722,12 +1719,9 @@ void ProjectDoc::DisplayWordsBreakdown()
                 UpdateListOptions(listView);
                 // sort by syllable count, then frequency, then words (highest to lowest)
                 std::vector<std::pair<size_t, Wisteria::SortDirection>> columnsToSort;
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    1, Wisteria::SortDirection::SortDescending));
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    2, Wisteria::SortDirection::SortDescending));
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    0, Wisteria::SortDirection::SortAscending));
+                columnsToSort.emplace_back(1, Wisteria::SortDirection::SortDescending);
+                columnsToSort.emplace_back(2, Wisteria::SortDirection::SortDescending);
+                columnsToSort.emplace_back(0, Wisteria::SortDirection::SortAscending);
                 listView->SortColumns(columnsToSort);
 
                 if (view->GetWordsBreakdownView().GetWindowCount() == 0)
@@ -1756,7 +1750,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().Is6PlusCharacterEnabled() &&
             GetTotalUnique6CharsPlusWords() > 0 && Get6CharacterPlusData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetTotalUnique6CharsPlusWords());
                 listView->Resort();
@@ -1782,12 +1776,9 @@ void ProjectDoc::DisplayWordsBreakdown()
                 UpdateListOptions(listView);
                 // sort by character count, then frequency, then word (highest to lowest)
                 std::vector<std::pair<size_t, Wisteria::SortDirection>> columnsToSort;
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    1, Wisteria::SortDirection::SortDescending));
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    2, Wisteria::SortDirection::SortDescending));
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    0, Wisteria::SortDirection::SortAscending));
+                columnsToSort.emplace_back(1, Wisteria::SortDirection::SortDescending);
+                columnsToSort.emplace_back(2, Wisteria::SortDirection::SortDescending);
+                columnsToSort.emplace_back(0, Wisteria::SortDirection::SortAscending);
                 listView->SortColumns(columnsToSort);
 
                 if (view->GetWordsBreakdownView().GetWindowCount() == 0)
@@ -1816,7 +1807,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().IsDCUnfamiliarEnabled() && IsDaleChallLikeTestIncluded() &&
             GetTotalUniqueDCHardWords() > 0 && GetDaleChallHardWordData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetTotalUniqueDCHardWords());
                 listView->Resort();
@@ -1868,7 +1859,7 @@ void ProjectDoc::DisplayWordsBreakdown()
             GetReadabilityTests().is_test_included(ReadabilityMessages::SPACHE()) &&
             GetTotalUniqueHardWordsSpache() > 0 && GetSpacheHardWordData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetTotalUniqueHardWordsSpache());
                 listView->Resort();
@@ -1921,7 +1912,7 @@ void ProjectDoc::DisplayWordsBreakdown()
             GetReadabilityTests().is_test_included(ReadabilityMessages::HARRIS_JACOBSON()) &&
             GetTotalUniqueHarrisJacobsonHardWords() > 0 && GetHarrisJacobsonHardWordDataData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetTotalUniqueHarrisJacobsonHardWords());
                 listView->Resort();
@@ -1976,7 +1967,7 @@ void ProjectDoc::DisplayWordsBreakdown()
             pos->GetIterator()->is_using_familiar_words() &&
             pos->GetUniqueUnfamiliarWordCount() > 0 && pos->GetListViewData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(pos->GetListViewData());
                 listView->SetVirtualDataSize(pos->GetUniqueUnfamiliarWordCount());
@@ -2026,7 +2017,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().IsAllWordsEnabled() && GetTotalWords() > 0 &&
             GetAllWordsBaseData())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetAllWordsBaseData()->GetItemCount());
                 listView->Resort();
@@ -2081,7 +2072,7 @@ void ProjectDoc::DisplayWordsBreakdown()
             // that took place and that these lists are the same).
             (GetKeyWordsBaseData()->GetItemCount() != GetAllWordsBaseData()->GetItemCount()))
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetKeyWordsBaseData()->GetItemCount());
                 listView->Resort();
@@ -2131,7 +2122,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().IsProperNounsEnabled() && GetProperNounsData() &&
             GetProperNounsData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetProperNounsData()->GetItemCount());
                 listView->Resort();
@@ -2182,7 +2173,7 @@ void ProjectDoc::DisplayWordsBreakdown()
         if (GetWordsBreakdownInfo().IsContractionsEnabled() && GetContractionsData() &&
             GetContractionsData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetContractionsData()->GetItemCount());
                 listView->Resort();
@@ -2236,17 +2227,17 @@ void ProjectDoc::DisplaySentenceCharts()
         return;
         }
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
     // box plot of sentence lengths
     if (GetSentencesBreakdownInfo().IsLengthsBoxPlotEnabled() &&
         m_sentenceWordLengths->GetRowCount())
         {
-        Wisteria::Canvas* sentenceBoxPlotCanvas =
+        auto* sentenceBoxPlotCanvas =
             dynamic_cast<Wisteria::Canvas*>(view->GetSentencesBreakdownView().FindWindowById(
                 BaseProjectView::SENTENCE_BOX_PLOT_PAGE_ID));
-        if (!sentenceBoxPlotCanvas)
+        if (sentenceBoxPlotCanvas == nullptr)
             {
             sentenceBoxPlotCanvas = new Wisteria::Canvas(
                 view->GetSplitter(), BaseProjectView::SENTENCE_BOX_PLOT_PAGE_ID);
@@ -2297,10 +2288,10 @@ void ProjectDoc::DisplaySentenceCharts()
     if (GetSentencesBreakdownInfo().IsLengthsHistogramEnabled() &&
         m_sentenceWordLengths->GetRowCount())
         {
-        Wisteria::Canvas* sentenceHistogramCanvas =
+        auto* sentenceHistogramCanvas =
             dynamic_cast<Wisteria::Canvas*>(view->GetSentencesBreakdownView().FindWindowById(
                 BaseProjectView::SENTENCE_HISTOGRAM_PAGE_ID));
-        if (!sentenceHistogramCanvas)
+        if (sentenceHistogramCanvas == nullptr)
             {
             sentenceHistogramCanvas = new Wisteria::Canvas(
                 view->GetSplitter(), BaseProjectView::SENTENCE_HISTOGRAM_PAGE_ID);
@@ -2368,10 +2359,10 @@ void ProjectDoc::DisplaySentenceCharts()
     if (GetSentencesBreakdownInfo().IsLengthsHeatmapEnabled() &&
         m_sentenceWordLengths->GetRowCount())
         {
-        Wisteria::Canvas* sentenceHeatmapCanvas =
+        auto* sentenceHeatmapCanvas =
             dynamic_cast<Wisteria::Canvas*>(view->GetSentencesBreakdownView().FindWindowById(
                 BaseProjectView::SENTENCE_HEATMAP_PAGE_ID));
-        if (!sentenceHeatmapCanvas)
+        if (sentenceHeatmapCanvas == nullptr)
             {
             sentenceHeatmapCanvas = new Wisteria::Canvas(view->GetSplitter(),
                                                          BaseProjectView::SENTENCE_HEATMAP_PAGE_ID);
@@ -2439,15 +2430,15 @@ void ProjectDoc::DisplayWordCharts()
         return;
         }
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
     // word bar chart
-    Wisteria::Canvas* wordBarChartCanvas = dynamic_cast<Wisteria::Canvas*>(
+    auto* wordBarChartCanvas = dynamic_cast<Wisteria::Canvas*>(
         view->GetWordsBreakdownView().FindWindowById(BaseProjectView::WORD_BREAKDOWN_PAGE_ID));
     if (GetWordsBreakdownInfo().IsWordBarchartEnabled() && GetTotalWords() > 0)
         {
-        if (!wordBarChartCanvas)
+        if (wordBarChartCanvas == nullptr)
             {
             wordBarChartCanvas =
                 new Wisteria::Canvas(view->GetSplitter(), BaseProjectView::WORD_BREAKDOWN_PAGE_ID);
@@ -2674,11 +2665,11 @@ void ProjectDoc::DisplayWordCharts()
         }
 
     // syllable histogram
-    Wisteria::Canvas* histoCanvas = dynamic_cast<Wisteria::Canvas*>(
+    auto* histoCanvas = dynamic_cast<Wisteria::Canvas*>(
         view->GetWordsBreakdownView().FindWindowById(BaseProjectView::SYLLABLE_HISTOGRAM_PAGE_ID));
     if (GetWordsBreakdownInfo().IsSyllableGraphsEnabled() && GetTotalWords() > 0)
         {
-        if (!histoCanvas)
+        if (histoCanvas == nullptr)
             {
             histoCanvas = new Wisteria::Canvas(view->GetSplitter(),
                                                BaseProjectView::SYLLABLE_HISTOGRAM_PAGE_ID);
@@ -2783,11 +2774,11 @@ void ProjectDoc::DisplayWordCharts()
         }
 
     // syllable donut chart
-    Wisteria::Canvas* syllablePieCanvas = dynamic_cast<Wisteria::Canvas*>(
+    auto* syllablePieCanvas = dynamic_cast<Wisteria::Canvas*>(
         view->GetWordsBreakdownView().FindWindowById(BaseProjectView::SYLLABLE_PIECHART_PAGE_ID));
     if (GetWordsBreakdownInfo().IsSyllableGraphsEnabled() && GetTotalWords() > 0)
         {
-        if (!syllablePieCanvas)
+        if (syllablePieCanvas == nullptr)
             {
             syllablePieCanvas = new Wisteria::Canvas(view->GetSplitter(),
                                                      BaseProjectView::SYLLABLE_PIECHART_PAGE_ID);
@@ -2841,7 +2832,7 @@ void ProjectDoc::DisplayWordCharts()
         }
 
     // word cloud
-    Wisteria::Canvas* wordCloudCanvas = dynamic_cast<Wisteria::Canvas*>(
+    auto* wordCloudCanvas = dynamic_cast<Wisteria::Canvas*>(
         view->GetWordsBreakdownView().FindWindowById(BaseProjectView::WORD_CLOUD_PAGE_ID));
     if (GetWordsBreakdownInfo().IsWordCloudEnabled() && GetTotalWords() > 0 &&
         m_keyWordsDataset != nullptr && m_keyWordsDataset->GetRowCount())
@@ -2860,9 +2851,9 @@ void ProjectDoc::DisplayWordCharts()
 
             // place beneath bar charts (if included)
             int otherGraphPosition{ wxNOT_FOUND };
-            auto otherGraphWindow =
+            auto* otherGraphWindow =
                 view->GetWordsBreakdownView().RFindWindowByType(CLASSINFO(Wisteria::Canvas));
-            if (otherGraphWindow)
+            if (otherGraphWindow != nullptr)
                 {
                 otherGraphPosition =
                     view->GetWordsBreakdownView().FindWindowPositionById(otherGraphWindow->GetId());
@@ -2908,12 +2899,12 @@ void ProjectDoc::AddCrawfordGraph(const bool setFocus)
         Wisteria::Data::RowInfo().Continuous({ gradeValue, syllablesPer100Words }));
 
     // Crawford graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* crawfordGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* crawfordGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::CRAWFORD_GRAPH_PAGE_ID));
-    if (crawfordGraphView)
+    if (crawfordGraphView != nullptr)
         {
         auto crawfordGraph = std::dynamic_pointer_cast<Wisteria::Graphs::CrawfordGraph>(
             crawfordGraphView->GetFixedObject(0, 0));
@@ -2967,10 +2958,10 @@ void ProjectDoc::AddDB2Plot(const bool setFocus)
     scoreDataset->AddRow(Wisteria::Data::RowInfo().Continuous({ static_cast<double>(score) }));
 
     // DB2
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* db2PlotView = dynamic_cast<Wisteria::Canvas*>(
+    auto* db2PlotView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::DB2_PAGE_ID));
     if (db2PlotView != nullptr)
         {
@@ -3030,13 +3021,13 @@ void ProjectDoc::AddLixGermanGauge(const bool setFocus)
     scoreDataset->AddRow(Wisteria::Data::RowInfo().Continuous({ static_cast<double>(score) }));
 
     // Lix Gauge (German)
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* lixGaugeView =
+    auto* lixGaugeView =
         dynamic_cast<Wisteria::Canvas*>(view->GetReadabilityResultsView().FindWindowById(
             BaseProjectView::LIX_GAUGE_GERMAN_PAGE_ID));
-    if (lixGaugeView)
+    if (lixGaugeView != nullptr)
         {
         auto lixGauge = std::dynamic_pointer_cast<Wisteria::Graphs::LixGaugeGerman>(
             lixGaugeView->GetFixedObject(0, 0));
@@ -3098,12 +3089,12 @@ void ProjectDoc::AddLixGauge(const bool setFocus)
     scoreDataset->AddRow(Wisteria::Data::RowInfo().Continuous({ static_cast<double>(score) }));
 
     // Lix Gauge
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* lixGaugeView = dynamic_cast<Wisteria::Canvas*>(
+    auto* lixGaugeView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::LIX_GAUGE_PAGE_ID));
-    if (lixGaugeView)
+    if (lixGaugeView != nullptr)
         {
         auto lixGauge = std::dynamic_pointer_cast<Wisteria::Graphs::LixGauge>(
             lixGaugeView->GetFixedObject(0, 0));
@@ -3149,8 +3140,8 @@ void ProjectDoc::AddLixGauge(const bool setFocus)
 //-------------------------------------------------------
 void ProjectDoc::AddFleschChart(const bool setFocus)
     {
-    const double ASL = safe_divide<double>(GetTotalWords(), GetTotalSentences());
-    const double ASW = safe_divide<double>(
+    const auto asl = safe_divide<double>(GetTotalWords(), GetTotalSentences());
+    const auto asw = safe_divide<double>(
         (GetFleschNumeralSyllabizeMethod() == FleschNumeralSyllabize::NumeralIsOneSyllable) ?
             GetTotalSyllablesNumeralsOneSyllable() :
             GetTotalSyllables(),
@@ -3173,15 +3164,15 @@ void ProjectDoc::AddFleschChart(const bool setFocus)
     scoreDataset->AddContinuousColumn(syllablesColumnName);
 
     scoreDataset->AddRow(
-        Wisteria::Data::RowInfo().Continuous({ ASL, static_cast<double>(score), ASW }));
+        Wisteria::Data::RowInfo().Continuous({ asl, static_cast<double>(score), asw }));
 
     // Flesch chart
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* fleschChartCanvas = dynamic_cast<Wisteria::Canvas*>(
+    auto* fleschChartCanvas = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::FLESCH_CHART_PAGE_ID));
-    if (fleschChartCanvas)
+    if (fleschChartCanvas != nullptr)
         {
         auto fleschChart = std::dynamic_pointer_cast<Wisteria::Graphs::FleschChart>(
             fleschChartCanvas->GetFixedObject(0, 0));
@@ -3230,16 +3221,16 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SCHWARTZ();
+    const wxString currentTestKey = ReadabilityMessages::SCHWARTZ();
 
     const wxString wordsColumnName{ _DT(L"WORDS") };
     const wxString syllablesColumnName{ _DT(L"SYLLABLES") };
-    const wxString sencentesColumnName{ _DT(L"SENTENCES") };
+    const wxString sentencesColumnName{ _DT(L"SENTENCES") };
 
     auto scoreDataset = std::make_shared<Wisteria::Data::Dataset>();
     scoreDataset->AddContinuousColumn(wordsColumnName);
     scoreDataset->AddContinuousColumn(syllablesColumnName);
-    scoreDataset->AddContinuousColumn(sencentesColumnName);
+    scoreDataset->AddContinuousColumn(sentencesColumnName);
 
     scoreDataset->AddRow(Wisteria::Data::RowInfo().Continuous(
         { GetTotalWords(), GetTotalSyllablesNumeralsOneSyllable(), GetTotalSentenceUnits() }));
@@ -3249,9 +3240,9 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
         LogMessage(
             wxString::Format(_(L"Unable to calculate %s: at least one word "
                                "must be present in document."),
-                             GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                             GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentenceUnits() == 0)
@@ -3259,24 +3250,24 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
         LogMessage(
             wxString::Format(_(L"Unable to calculate %s: at least one sentence "
                                "must be present in document."),
-                             GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                             GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     // Schwartz graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* schwartzGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* schwartzGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::SCHWARTZ_PAGE_ID));
-    if (schwartzGraphView)
+    if (schwartzGraphView != nullptr)
         {
         auto schwartzGraph = std::dynamic_pointer_cast<Wisteria::Graphs::SchwartzGraph>(
             schwartzGraphView->GetFixedObject(0, 0));
         assert(schwartzGraph);
         schwartzGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
-                               sencentesColumnName);
+                               sentencesColumnName);
         }
     else
         {
@@ -3296,7 +3287,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
                     Wisteria::Colors::Color::CelestialBlue) }));
         schwartzGraph->SetMessageCatalog(GetReadabilityMessageCatalogPtr());
         schwartzGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
-                               sencentesColumnName);
+                               sentencesColumnName);
 
         schwartzGraphView->SetFixedObject(0, 0, schwartzGraph);
         view->GetReadabilityResultsView().AddWindow(schwartzGraphView);
@@ -3311,7 +3302,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
     schwartzGraph->ShowcaseScore(IsShowcasingKeyItems());
     schwartzGraphView->CalcAllSizes(gdc);
 
-    const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+    const auto theTest = GetReadabilityTests().find_test(currentTestKey);
     if (!VerifyTestBeforeAdding(theTest))
         {
         return false;
@@ -3323,14 +3314,14 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
             L"<tr><td>" + wxString(_(L"Text is too difficult to be plotted.")) + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{},
             std::numeric_limits<double>::quiet_NaN(), // will be shown as an empty string
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     else
         {
-        const wxString INFLUENCE_DESCRIPTION =
+        const wxString influenceDescription =
             schwartzGraph->GetScores().front().IsWordsHard() ?
                 _(L"3+ syllable words in the text primarily influenced this score.") :
                 _(L"The sentence lengths in the text primarily influenced this score.");
@@ -3345,7 +3336,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
             description = ProjectReportFormat::FormatTestResult(
                 GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeValues.first,
                                                                         gradeValues.second) +
-                    L"<br /><br />" + INFLUENCE_DESCRIPTION,
+                    L"<br /><br />" + influenceDescription,
                 theTest.first->get_test());
             }
         else
@@ -3358,12 +3349,12 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
                 }
             description = ProjectReportFormat::FormatTestResult(
                 GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeValues.first) +
-                    L"<br /><br />" + INFLUENCE_DESCRIPTION,
+                    L"<br /><br />" + influenceDescription,
                 theTest.first->get_test());
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(safe_divide<double>(gradeValues.first + gradeValues.second, 2),
                            displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
@@ -3373,7 +3364,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
             setFocus);
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     // if they asked to set focus to the score then select the graph
     if (setFocus)
@@ -3391,16 +3382,16 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FRASE();
+    const wxString currentTestKey = ReadabilityMessages::FRASE();
 
     const wxString wordsColumnName{ _DT(L"WORDS") };
     const wxString syllablesColumnName{ _DT(L"SYLLABLES") };
-    const wxString sencentesColumnName{ _DT(L"SENTENCES") };
+    const wxString sentencesColumnName{ _DT(L"SENTENCES") };
 
     auto scoreDataset = std::make_shared<Wisteria::Data::Dataset>();
     scoreDataset->AddContinuousColumn(wordsColumnName);
     scoreDataset->AddContinuousColumn(syllablesColumnName);
-    scoreDataset->AddContinuousColumn(sencentesColumnName);
+    scoreDataset->AddContinuousColumn(sentencesColumnName);
 
     scoreDataset->AddRow(Wisteria::Data::RowInfo().Continuous(
         { GetTotalWords(), GetTotalSyllables(), GetTotalSentences() }));
@@ -3410,9 +3401,9 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
         LogMessage(
             wxString::Format(_(L"Unable to calculate %s: at least one word must "
                                "be present in document."),
-                             GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                             GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -3420,24 +3411,24 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
         LogMessage(
             wxString::Format(_(L"Unable to calculate %s: at least one sentence must "
                                "be present in document."),
-                             GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                             GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     // FRASE graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* fraseGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* fraseGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::FRASE_PAGE_ID));
-    if (fraseGraphView)
+    if (fraseGraphView != nullptr)
         {
         auto fraseGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FraseGraph>(
             fraseGraphView->GetFixedObject(0, 0));
         assert(fraseGraph);
         fraseGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
-                            sencentesColumnName);
+                            sentencesColumnName);
         }
     else
         {
@@ -3457,7 +3448,7 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
                     Wisteria::Colors::Color::CelestialBlue) }));
         fraseGraph->SetMessageCatalog(GetReadabilityMessageCatalogPtr());
         fraseGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
-                            sencentesColumnName);
+                            sentencesColumnName);
 
         fraseGraphView->SetFixedObject(0, 0, fraseGraph);
         view->GetReadabilityResultsView().AddWindow(fraseGraphView);
@@ -3466,7 +3457,7 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
 
     fraseGraphView->CalcAllSizes(gdc);
 
-    const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+    const auto theTest = GetReadabilityTests().find_test(currentTestKey);
     if (!VerifyTestBeforeAdding(theTest))
         {
         return false;
@@ -3481,30 +3472,30 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
             L"<tr><td>" + wxString(_(L"Text is too difficult to be plotted.")) + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{},
             std::numeric_limits<double>::quiet_NaN() /*Will be shown as an empty string*/,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     else
         {
-        const wxString INFLUENCE_DESCRIPTION =
+        const wxString influenceDescription =
             fraseGraph->GetScores().front().IsWordsHard() ?
                 _(L"3+ syllable words in the text primarily influenced this score.") :
                 _(L"The sentence lengths in the text primarily influenced this score.");
         const size_t val = fraseGraph->GetScores().front().GetScore();
 
         const wxString description = ProjectReportFormat::FormatTestResult(
-            ReadabilityMessages::GetFraseDescription(val) + L"<br /><br />" + INFLUENCE_DESCRIPTION,
+            ReadabilityMessages::GetFraseDescription(val) + L"<br /><br />" + influenceDescription,
             theTest.first->get_test());
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     // if they asked to set focus to the score then select the graph
     if (setFocus)
@@ -3528,7 +3519,7 @@ void ProjectDoc::DisplayReadabilityGraphs()
 
     try
         {
-        ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+        auto* view = dynamic_cast<ProjectView*>(GetFirstView());
         wxGCDC gdc(view->GetDocFrame());
 
         // remove Fry graph if test is not included (Note that this chart is added by AddFryTest,
@@ -3603,10 +3594,10 @@ void ProjectDoc::DisplayReadabilityGraphs()
         // Dolch graphs
         if (IsIncludingDolchSightWords())
             {
-            Wisteria::Canvas* coverageBarChartCanvas =
+            auto* coverageBarChartCanvas =
                 dynamic_cast<Wisteria::Canvas*>(view->GetDolchSightWordsView().FindWindowById(
                     BaseProjectView::DOLCH_COVERAGE_CHART_PAGE_ID));
-            if (!coverageBarChartCanvas)
+            if (coverageBarChartCanvas == nullptr)
                 {
                 coverageBarChartCanvas = new Wisteria::Canvas(
                     view->GetSplitter(), BaseProjectView::DOLCH_COVERAGE_CHART_PAGE_ID);
@@ -3817,10 +3808,10 @@ void ProjectDoc::DisplayReadabilityGraphs()
                 m_dolchPronounCounts.second + m_dolchAdverbCounts.second +
                 m_dolchAdjectiveCounts.second + m_dolchVerbCounts.second + m_dolchNounCounts.second;
 
-            Wisteria::Canvas* wordBarChartCanvas =
+            auto* wordBarChartCanvas =
                 dynamic_cast<Wisteria::Canvas*>(view->GetDolchSightWordsView().FindWindowById(
                     BaseProjectView::DOLCH_BREAKDOWN_PAGE_ID));
-            if (!wordBarChartCanvas)
+            if (wordBarChartCanvas == nullptr)
                 {
                 wordBarChartCanvas = new Wisteria::Canvas(view->GetSplitter(),
                                                           BaseProjectView::DOLCH_BREAKDOWN_PAGE_ID);
@@ -4074,7 +4065,7 @@ void ProjectDoc::DisplayStatistics()
 
     if (GetStatisticsInfo().IsTableEnabled())
         {
-        Wisteria::UI::ListCtrlEx* tabularStatsList = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
+        auto* tabularStatsList = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
             view->GetSummaryView().FindWindowById(BaseProjectView::STATS_LIST_PAGE_ID));
         if (tabularStatsList == nullptr)
             {
@@ -4116,7 +4107,7 @@ void ProjectDoc::DisplayStatistics()
         {
         auto* sumWindow = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
             view->GetDolchSightWordsView().FindWindowById(BaseProjectView::DOLCH_STATS_PAGE_ID));
-        if (!sumWindow)
+        if (sumWindow == nullptr)
             {
             sumWindow = new Wisteria::UI::HtmlTableWindow(view->GetSplitter(),
                                                           BaseProjectView::DOLCH_STATS_PAGE_ID);
@@ -4151,7 +4142,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::GPM_FRY();
+    const wxString currentTestKey = ReadabilityMessages::GPM_FRY();
 
     const wxString wordsColumnName{ _DT(L"WORDS") };
     const wxString syllablesColumnName{ _DT(L"SYLLABLES") };
@@ -4169,9 +4160,9 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -4179,18 +4170,18 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     // GPM (Fry) graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* fryGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* fryGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::GPM_FRY_PAGE_ID));
-    if (fryGraphView)
+    if (fryGraphView != nullptr)
         {
         auto gFryGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FryGraph>(
             fryGraphView->GetFixedObject(0, 0));
@@ -4227,7 +4218,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
     gFryGraph->ShowcaseScore(IsShowcasingKeyItems());
     fryGraphView->CalcAllSizes(gdc);
 
-    const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+    const auto theTest = GetReadabilityTests().find_test(currentTestKey);
     if (!VerifyTestBeforeAdding(theTest))
         {
         return false;
@@ -4239,7 +4230,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
             L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                            BaseProjectView::GetFailedLabel()),
             BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
@@ -4247,17 +4238,17 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
         }
     else if (gFryGraph->GetScores().front().IsScoreOutOfGradeRange())
         {
-        const wxString TOO_DIFFICULT_DESCRIPTION =
+        const wxString tooDifficultDescription =
             gFryGraph->GetScores().front().IsWordsHard() ?
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many high syllable words.") :
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many long sentences.");
 
-        const wxString description = L"<tr><td>" + TOO_DIFFICULT_DESCRIPTION + L"</td></tr>";
+        const wxString description = L"<tr><td>" + tooDifficultDescription + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                            BaseProjectView::GetFailedLabel()),
             BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
@@ -4265,7 +4256,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
         }
     else
         {
-        const wxString INFLUENCE_DESCRIPTION =
+        const wxString influenceDescription =
             gFryGraph->GetScores().front().IsWordsHard() ?
                 _(L"3+ syllable words in the text primarily influenced this grade level score.") :
                 _(L"The sentence lengths in the text primarily influenced this grade level score.");
@@ -4273,7 +4264,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
 
         const wxString description = ProjectReportFormat::FormatTestResult(
             GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeValue) + L"<br /><br />" +
-                INFLUENCE_DESCRIPTION,
+                influenceDescription,
             theTest.first->get_test(),
             ((GetTotalNumerals() > 0) ? ReadabilityMessages::GetNumeralAreFullySyllabizedNote() :
                                         wxString{}));
@@ -4286,7 +4277,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -4294,7 +4285,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
             setFocus);
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     // if they asked to set focus to the score then select the graph
     if (setFocus)
@@ -4312,7 +4303,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FRY();
+    const wxString currentTestKey = ReadabilityMessages::FRY();
 
     const wxString wordsColumnName{ _DT(L"WORDS") };
     const wxString syllablesColumnName{ _DT(L"SYLLABLES") };
@@ -4330,9 +4321,9 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -4340,18 +4331,18 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     // Fry graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* fryGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* fryGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::FRY_PAGE_ID));
-    if (fryGraphView)
+    if (fryGraphView != nullptr)
         {
         auto fryGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FryGraph>(
             fryGraphView->GetFixedObject(0, 0));
@@ -4389,7 +4380,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
     fryGraph->ShowcaseScore(IsShowcasingKeyItems());
     fryGraphView->CalcAllSizes(gdc);
 
-    const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+    const auto theTest = GetReadabilityTests().find_test(currentTestKey);
     if (!VerifyTestBeforeAdding(theTest))
         {
         return false;
@@ -4397,11 +4388,11 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
 
     if (fryGraph->GetScores().front().IsScoreInvalid())
         {
-        wxString description =
+        const wxString description =
             L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                            BaseProjectView::GetFailedLabel()),
             BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
@@ -4409,17 +4400,17 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
         }
     else if (fryGraph->GetScores().front().IsScoreOutOfGradeRange())
         {
-        const wxString TOO_DIFFICULT_DESCRIPTION =
+        const wxString tooDifficultDescription =
             fryGraph->GetScores().front().IsWordsHard() ?
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many high syllable words.") :
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many long sentences.");
 
-        wxString description = L"<tr><td>" + TOO_DIFFICULT_DESCRIPTION + L"</td></tr>";
+        const wxString description = L"<tr><td>" + tooDifficultDescription + L"</td></tr>";
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                            BaseProjectView::GetFailedLabel()),
             BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
@@ -4427,7 +4418,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
         }
     else
         {
-        const wxString INFLUENCE_DESCRIPTION =
+        const wxString influenceDescription =
             fryGraph->GetScores().front().IsWordsHard() ?
                 _(L"3+ syllable words in the text primarily influenced this grade level score.") :
                 _(L"The sentence lengths in the text primarily influenced this grade level score.");
@@ -4435,7 +4426,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
 
         const wxString description = ProjectReportFormat::FormatTestResult(
             GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeValue) + L"<br />" +
-                INFLUENCE_DESCRIPTION,
+                influenceDescription,
             theTest.first->get_test(),
             ((GetTotalNumerals() > 0) ? ReadabilityMessages::GetNumeralAreFullySyllabizedNote() :
                                         wxString{}));
@@ -4448,7 +4439,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -4456,7 +4447,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
             setFocus);
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     // if they asked to set focus to the score then select the graph
     if (setFocus)
@@ -4474,7 +4465,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::RAYGOR();
+    const wxString currentTestKey = ReadabilityMessages::RAYGOR();
 
     const wxString wordsColumnName{ _DT(L"WORDS") };
     const wxString sixCharWordsColumnName{ _DT(L"6CHARWORDS") };
@@ -4493,9 +4484,9 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentences())
@@ -4503,18 +4494,18 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     // Raygor graph
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxGCDC gdc(view->GetDocFrame());
 
-    Wisteria::Canvas* raygorGraphView = dynamic_cast<Wisteria::Canvas*>(
+    auto* raygorGraphView = dynamic_cast<Wisteria::Canvas*>(
         view->GetReadabilityResultsView().FindWindowById(BaseProjectView::RAYGOR_PAGE_ID));
-    if (raygorGraphView)
+    if (raygorGraphView != nullptr)
         {
         auto raygorGraph = std::dynamic_pointer_cast<Wisteria::Graphs::RaygorGraph>(
             raygorGraphView->GetFixedObject(0, 0));
@@ -4555,7 +4546,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
     raygorGraph->SetRaygorStyle(GetRaygorStyle());
     raygorGraphView->CalcAllSizes(gdc);
 
-    const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+    const auto theTest = GetReadabilityTests().find_test(currentTestKey);
     if (!VerifyTestBeforeAdding(theTest))
         {
         return false;
@@ -4564,7 +4555,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
     if (raygorGraph->GetScores().at(0).IsScoreInvalid())
         {
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(),
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(),
             L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>",
             std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                            BaseProjectView::GetFailedLabel()),
@@ -4573,24 +4564,24 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
         }
     else if (raygorGraph->GetScores().at(0).IsScoreOutOfGradeRange())
         {
-        const wxString TOO_DIFFICULT_DESCRIPTION =
+        const wxString tooDifficultDescription =
             raygorGraph->GetScores().at(0).IsWordsHard() ?
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many 6+ character words.") :
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many long sentences.");
 
-        SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(),
-            L"<tr><td>" + TOO_DIFFICULT_DESCRIPTION + L"</td></tr>",
-            std::make_pair(std::numeric_limits<double>::quiet_NaN(),
-                           BaseProjectView::GetFailedLabel()),
-            BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
-            std::numeric_limits<double>::quiet_NaN(), setFocus);
+        SetReadabilityTestResult(currentTestKey, theTest.first->get_test().get_long_name().c_str(),
+                                 L"<tr><td>" + tooDifficultDescription + L"</td></tr>",
+                                 std::make_pair(std::numeric_limits<double>::quiet_NaN(),
+                                                BaseProjectView::GetFailedLabel()),
+                                 BaseProjectView::GetFailedLabel(),
+                                 std::numeric_limits<double>::quiet_NaN(),
+                                 std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     else
         {
-        const wxString INFLUENCE_DESCRIPTION =
+        const wxString influenceDescription =
             raygorGraph->GetScores().at(0).IsWordsHard() ?
                 _(L"6+ character words in the text primarily influenced this grade level score.") :
                 _(L"The sentence lengths in the text primarily influenced this grade level score.");
@@ -4604,11 +4595,11 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
             }
         const wxString description = ProjectReportFormat::FormatTestResult(
             GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeValue) + L"<br /><br />" +
-                INFLUENCE_DESCRIPTION,
+                influenceDescription,
             theTest.first->get_test(), ReadabilityMessages::GetPunctuationIgnoredNote());
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -4616,7 +4607,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
             setFocus);
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     // if they asked to set focus to the score then select the graph
     if (setFocus)
@@ -4652,7 +4643,7 @@ bool ProjectDoc::AddDolchSightWords()
     RefreshRequired(ProjectRefresh::FullReindexing);
     RefreshProject();
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     view->GetSideBar()->SelectFolder(
         view->GetSideBar()->FindFolder(BaseProjectView::SIDEBAR_DOLCH_SECTION_ID));
 
@@ -4669,9 +4660,9 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
     BaseProject::SetReadabilityTestResult(testId, testName, description, USGradeLevel, readerAge,
                                           indexScore, clozeScore, setFocus);
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     assert(view && "Invalid view when adding test!");
-    if (!view)
+    if (view == nullptr)
         {
         return;
         }
@@ -4684,7 +4675,7 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
         ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX), testName,
         description);
 
-    wxWindowUpdateLocker noUpdates(view->GetReadabilityScoresList());
+    const wxWindowUpdateLocker noUpdates(view->GetReadabilityScoresList());
     long location = view->GetReadabilityScoresList()->GetResultsListCtrl()->FindEx(testName);
     if (location == wxNOT_FOUND)
         {
@@ -4751,7 +4742,7 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
 //-------------------------------------------------------
 void ProjectDoc::UpdateHighlightedTextWindows()
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     // DC
     if (GetWordsBreakdownInfo().IsDCUnfamiliarEnabled() && IsDaleChallLikeTestIncluded())
         {
@@ -4830,7 +4821,7 @@ ProjectDoc::HighlighterColors ProjectDoc::BuildReportColors(const wxColour& high
     {
     HighlighterColors highlighterColors;
 
-    Wisteria::Colors::ColorContrast colorContrast(backgroundColor);
+    const Wisteria::Colors::ColorContrast colorContrast(backgroundColor);
     highlighterColors.highlightColor =
         (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
             colorContrast.Contrast(highlightColor) :
@@ -5359,7 +5350,7 @@ std::pair<ProjectDoc::TextLegendLines, size_t>
 ProjectDoc::BuildLegendLines(const HighlighterTags& highlighterTags) const
     {
     [[maybe_unused]]
-    lily_of_the_valley::rtf_encode_text rtfEncode;
+    const lily_of_the_valley::rtf_encode_text rtfEncode;
     TextLegendLines legendLines;
 
     // clang-format off
@@ -5587,7 +5578,7 @@ wxString ProjectDoc::BuildLegendLine(const HighlighterTags& highlighterTags,
                                      const wxString& legendStr)
     {
     [[maybe_unused]]
-    lily_of_the_valley::rtf_encode_text rtfEncode;
+    const lily_of_the_valley::rtf_encode_text rtfEncode;
 
     return wxString::Format(L"%s    %s   %s  %s%s", highlighterTags.CRLF,
                             highlighterTags.HIGHLIGHT_BEGIN_LEGEND,
@@ -5805,7 +5796,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 
     try
         {
-        ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+        auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
         // build the general highlighters
         const HighlighterColors highlighterColorsThemed =
@@ -5840,22 +5831,21 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsThemed.HIGHLIGHT_BEGIN, highlighterTagsThemed.HIGHLIGHT_END);
         WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem> is6PlusCharsThemed(
             6, highlighterTagsThemed.HIGHLIGHT_BEGIN, highlighterTagsThemed.HIGHLIGHT_END);
-        IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
-                                          stemming::no_op_stem<word_case_insensitive_no_stem>>
+        const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
+                                                stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotDCWordThemed(IsIncludingStockerCatholicSupplement() ?
                                   &BaseProject::m_dale_chall_plus_stocker_catholic_word_list :
                                   &BaseProject::m_dale_chall_word_list,
                               highlighterTagsThemed.HIGHLIGHT_BEGIN,
                               highlighterTagsThemed.HIGHLIGHT_END,
-                              static_cast<readability::proper_noun_counting_method>(
-                                  GetDaleChallProperNounCountingMethod()));
+                              GetDaleChallProperNounCountingMethod());
         IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
                                           stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotSpacheWordThemed(
                 &m_spache_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
                 highlighterTagsThemed.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
-        IsNotFamiliarWordExcludeNumeralsWithHighlighting<
+        const IsNotFamiliarWordExcludeNumeralsWithHighlighting<
             word_case_insensitive_no_stem, const word_list,
             stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotHJWordThemed(
@@ -5873,29 +5863,28 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             &m_dolch_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
             highlighterTagsThemed.HIGHLIGHT_END);
 
-        SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
+        const SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
             is3PlusSyllablesPaperWhite(
                 3, (GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable),
                 highlighterTagsPaperWhite.HIGHLIGHT_BEGIN, highlighterTagsPaperWhite.HIGHLIGHT_END);
-        WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem>
+        const WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem>
             is6PlusCharsPaperWhite(6, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                                    highlighterTagsPaperWhite.HIGHLIGHT_END);
-        IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
-                                          stemming::no_op_stem<word_case_insensitive_no_stem>>
+        const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
+                                                stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotDCWordPaperWhite(IsIncludingStockerCatholicSupplement() ?
                                       &BaseProject::m_dale_chall_plus_stocker_catholic_word_list :
                                       &BaseProject::m_dale_chall_word_list,
                                   highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                                   highlighterTagsPaperWhite.HIGHLIGHT_END,
-                                  static_cast<readability::proper_noun_counting_method>(
-                                      GetDaleChallProperNounCountingMethod()));
-        IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
-                                          stemming::no_op_stem<word_case_insensitive_no_stem>>
+                                  GetDaleChallProperNounCountingMethod());
+        const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
+                                                stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotSpacheWordPaperWhite(
                 &m_spache_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                 highlighterTagsPaperWhite.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
-        IsNotFamiliarWordExcludeNumeralsWithHighlighting<
+        const IsNotFamiliarWordExcludeNumeralsWithHighlighting<
             word_case_insensitive_no_stem, const word_list,
             stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotHJWordPaperWhite(
@@ -5904,7 +5893,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN,
                 highlighterTagsPaperWhite.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
-        IsDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isDolchWordPaperWhite(
+        const IsDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isDolchWordPaperWhite(
             &m_dolch_word_list, highlighterTagsPaperWhite.DOLCH_CONJUNCTION_BEGIN,
             highlighterTagsPaperWhite.DOLCH_PREPOSITIONS_BEGIN,
             highlighterTagsPaperWhite.DOLCH_PRONOUN_BEGIN,
@@ -5912,11 +5901,11 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             highlighterTagsPaperWhite.DOLCH_ADJECTIVE_BEGIN,
             highlighterTagsPaperWhite.DOLCH_VERB_BEGIN, highlighterTagsPaperWhite.DOLCH_NOUN_BEGIN,
             highlighterTagsPaperWhite.HIGHLIGHT_END);
-        IsNotDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isNotDolchWordPaperWhite(
-            &m_dolch_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
-            highlighterTagsPaperWhite.HIGHLIGHT_END);
+        const IsNotDolchWordWithLevelHighlighting<word_case_insensitive_no_stem>
+            isNotDolchWordPaperWhite(&m_dolch_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
+                                     highlighterTagsPaperWhite.HIGHLIGHT_END);
 
-        constexpr bool useRtfEncoding =
+        constexpr bool USE_RTF_ENCODING =
 #ifdef __WXGTK__
             false;
 #else
@@ -5934,7 +5923,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         // loads text buffers for text window
         const auto loadTextBuffer =
             [this, textBeingExcluded, &textHeaderThemed, &highlighterTagsThemed,
-             useRtfEncoding](auto& highlighter, const wxString& legend, std::wstring& mainBuffer)
+             USE_RTF_ENCODING](auto& highlighter, const wxString& legend, std::wstring& mainBuffer)
         {
             highlighter.Reset();
 
@@ -5945,12 +5934,12 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsThemed.HIGHLIGHT_END.wc_string(), highlighterTagsThemed.TAB_SYMBOL,
                 highlighterTagsThemed.CRLF, textBeingExcluded,
                 GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                textBeingExcluded, useRtfEncoding);
+                textBeingExcluded, USE_RTF_ENCODING);
         };
 
         const auto loadPaperTextBuffer =
             [this, textBeingExcluded, &textHeaderPaperWhite, &highlighterTagsPaperWhite,
-             useRtfEncoding](auto& highlighter, const wxString& legend, std::wstring& paperBuffer)
+             USE_RTF_ENCODING](auto& highlighter, const wxString& legend, std::wstring& paperBuffer)
         {
             highlighter.Reset();
 
@@ -5962,7 +5951,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                 textBeingExcluded,
                 GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                textBeingExcluded, useRtfEncoding);
+                textBeingExcluded, USE_RTF_ENCODING);
         };
 
         std::wstring formattedBuffer;
@@ -6011,7 +6000,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                     // forcibly exclude lists but include headers,
                     // invalid words will also be valid
-                    true, true, false, useRtfEncoding);
+                    true, true, false, USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6023,7 +6012,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, useRtfEncoding);
+                    textBeingExcluded, USE_RTF_ENCODING);
                 }
 
             // paper (printable) buffer
@@ -6040,7 +6029,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     // forcibly exclude lists but include headers,
                     // invalid words will also be valid
-                    true, true, false, useRtfEncoding);
+                    true, true, false, USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6054,7 +6043,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, useRtfEncoding);
+                    textBeingExcluded, USE_RTF_ENCODING);
                 }
             }
 
@@ -6077,7 +6066,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                     // HJ explicitly states what to exclude, so always show what it is
                     // excluding in this window
-                    true, true, false, useRtfEncoding);
+                    true, true, false, USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6089,7 +6078,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, useRtfEncoding);
+                    textBeingExcluded, USE_RTF_ENCODING);
                 }
 
             // paper
@@ -6106,7 +6095,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     // HJ explicitly states what to exclude, so always show what it
                     // is excluding in this window
-                    true, true, false, useRtfEncoding);
+                    true, true, false, USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6120,7 +6109,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, useRtfEncoding);
+                    textBeingExcluded, USE_RTF_ENCODING);
                 }
             }
 
@@ -6198,7 +6187,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 
             if (pos->GetIterator()->is_using_familiar_words())
                 {
-                if (!textWindow)
+                if (textWindow == nullptr)
                     {
                     textWindow = new Wisteria::UI::FormattedTextCtrl(
                         view->GetSplitter(), pos->GetIterator()->get_interface_id(),
@@ -6270,7 +6259,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, useRtfEncoding);
+                            true, true, false, USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6284,7 +6273,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, useRtfEncoding);
+                            true, true, false, USE_RTF_ENCODING);
                         }
                     }
                 else
@@ -6301,7 +6290,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, useRtfEncoding);
+                            textBeingExcluded, USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6315,7 +6304,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, useRtfEncoding);
+                            textBeingExcluded, USE_RTF_ENCODING);
                         }
                     }
 #ifndef __WXGTK__
@@ -6355,7 +6344,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, useRtfEncoding);
+                            true, true, false, USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6369,7 +6358,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, useRtfEncoding);
+                            true, true, false, USE_RTF_ENCODING);
                         }
                     }
                 else
@@ -6386,7 +6375,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, useRtfEncoding);
+                            textBeingExcluded, USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6400,7 +6389,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, useRtfEncoding);
+                            textBeingExcluded, USE_RTF_ENCODING);
                         }
                     }
                 textWindow->SetUnthemedFormattedText(formattedBuffer.c_str());
@@ -6419,7 +6408,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
                 view->GetGrammarView().FindWindowById(
                     BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID));
-            if (!textWindow)
+            if (textWindow == nullptr)
                 {
                 textWindow = new Wisteria::UI::FormattedTextCtrl(
                     view->GetSplitter(), BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID,
@@ -6446,7 +6435,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
                                                                   highlighterTagsThemed.BOLD_END,
                 highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
-                textBeingExcluded, useRtfEncoding);
+                textBeingExcluded, USE_RTF_ENCODING);
 #ifndef __WXGTK__
             textWindow->SetMaxLength(static_cast<unsigned long>(formattedBuffer.length()));
 #endif
@@ -6479,7 +6468,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
                                                                   highlighterTagsThemed.BOLD_END,
                 highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
-                textBeingExcluded, textBeingExcluded, useRtfEncoding);
+                textBeingExcluded, textBeingExcluded, USE_RTF_ENCODING);
             textWindow->SetUnthemedFormattedText(formattedBuffer.c_str());
             }
         else
@@ -6532,7 +6521,7 @@ ProjectDoc::LoadTextWindow(Wisteria::UI::FormattedTextCtrl* textWindow, const in
                            const wxString& label, const std::wstring& mainBuffer,
                            const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (textWindow == nullptr)
         {
@@ -6578,7 +6567,7 @@ ProjectDoc::LoadTextWindow(Wisteria::UI::FormattedTextCtrl* textWindow, const in
 void ProjectDoc::LoadThreeSyllTextWindow(const std::wstring& mainBuffer,
                                          const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (GetWordsBreakdownInfo().Is3PlusSyllablesEnabled() && GetTotalUnique3PlusSyllableWords() > 0)
         {
@@ -6603,7 +6592,7 @@ void ProjectDoc::LoadThreeSyllTextWindow(const std::wstring& mainBuffer,
 void ProjectDoc::LoadSixCharsTextWindow(const std::wstring& mainBuffer,
                                         const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (GetWordsBreakdownInfo().Is6PlusCharacterEnabled() && GetTotalUnique6CharsPlusWords() > 0)
         {
@@ -6628,7 +6617,7 @@ void ProjectDoc::LoadSixCharsTextWindow(const std::wstring& mainBuffer,
 void ProjectDoc::LoadSpacheTextWindow(const std::wstring& mainBuffer,
                                       const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsSpacheUnfamiliarEnabled() &&
@@ -6654,7 +6643,7 @@ void ProjectDoc::LoadSpacheTextWindow(const std::wstring& mainBuffer,
 //-------------------------------------------------------
 void ProjectDoc::LoadHJTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsHarrisJacobsonUnfamiliarEnabled() &&
@@ -6695,7 +6684,7 @@ void ProjectDoc::LoadHJTextWindow(const std::wstring& mainBuffer, const std::wst
 //-------------------------------------------------------
 void ProjectDoc::LoadDCTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer)
     {
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsDCUnfamiliarEnabled() && IsDaleChallLikeTestIncluded())
@@ -6745,7 +6734,7 @@ bool ProjectDoc::OnSaveDocument(const wxString& filename)
         // must be coming from Save As, so make sure file isn't locked
         try
             {
-            MemoryMappedFile sourceFile(filename);
+            const MemoryMappedFile sourceFile(filename);
             }
         catch (const MemoryMappedFileShareViolationException&)
             {
@@ -6862,7 +6851,7 @@ void ProjectDoc::DisplayOverlyLongSentences()
         return;
         }
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     if (!GetWords())
         {
@@ -6878,7 +6867,6 @@ void ProjectDoc::DisplayOverlyLongSentences()
     const grammar::sentence_length_greater_than sentenceGreater(GetDifficultSentenceLength());
     const grammar::complete_sentence_length_greater_than completeSentenceGreater(
         GetDifficultSentenceLength());
-    wxString currentSentence;
     // punctuation markers
     auto punctPos = GetWords()->get_punctuation().cbegin();
     for (std::vector<grammar::sentence_info>::const_iterator pos =
@@ -6892,7 +6880,7 @@ void ProjectDoc::DisplayOverlyLongSentences()
             (GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings &&
              completeSentenceGreater(*pos)))
             {
-            currentSentence = ProjectReportFormat::FormatSentence(
+            const wxString currentSentence = ProjectReportFormat::FormatSentence(
                 this, *pos, punctPos, GetWords()->get_punctuation().cend());
 
             m_overlyLongSentenceData->SetItemText(longSentenceCount, 0, currentSentence);
@@ -6922,7 +6910,7 @@ void ProjectDoc::DisplayOverlyLongSentences()
     if (GetSentencesBreakdownInfo().IsLongSentencesEnabled() &&
         m_overlyLongSentenceData->GetItemCount())
         {
-        if (listView)
+        if (listView != nullptr)
             {
             listView->SetVirtualDataProvider(m_overlyLongSentenceData);
             listView->SetVirtualDataSize(m_overlyLongSentenceData->GetItemCount());
@@ -6949,10 +6937,8 @@ void ProjectDoc::DisplayOverlyLongSentences()
             // sort by length (high to low), then by index
             // (low to high, order of appearance in the document)
             std::vector<std::pair<size_t, Wisteria::SortDirection>> columnsToSort;
-            columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                1, Wisteria::SortDirection::SortDescending));
-            columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                2, Wisteria::SortDirection::SortAscending));
+            columnsToSort.emplace_back(1, Wisteria::SortDirection::SortDescending);
+            columnsToSort.emplace_back(2, Wisteria::SortDirection::SortAscending);
             listView->SortColumns(columnsToSort);
             view->GetSentencesBreakdownView().AddWindow(listView);
             }
@@ -6980,7 +6966,7 @@ void ProjectDoc::DisplayGrammar()
         return;
         }
 
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
     const auto resetListView = [](Wisteria::UI::ListCtrlEx* listView)
     {
@@ -7075,7 +7061,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::WORDING_ERRORS_LIST_PAGE_ID));
         if (GetGrammarInfo().IsWordingErrorsEnabled() && m_wordingErrorData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_wordingErrorData);
                 listView->SetVirtualDataSize(m_wordingErrorData->GetItemCount());
@@ -7134,7 +7120,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::MISSPELLED_WORD_LIST_PAGE_ID));
         if (GetGrammarInfo().IsMisspellingsEnabled() && m_misspelledWordData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_misspelledWordData);
                 listView->SetVirtualDataSize(m_misspelledWordData->GetItemCount());
@@ -7189,7 +7175,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::DUPLICATES_LIST_PAGE_ID));
         if (GetGrammarInfo().IsRepeatedWordsEnabled() && m_dupWordData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_dupWordData);
                 listView->SetVirtualDataSize(m_dupWordData->GetItemCount());
@@ -7249,7 +7235,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::INCORRECT_ARTICLE_PAGE_ID));
         if (GetGrammarInfo().IsArticleMismatchesEnabled() && m_incorrectArticleData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_incorrectArticleData);
                 listView->SetVirtualDataSize(m_incorrectArticleData->GetItemCount());
@@ -7290,7 +7276,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::REDUNDANT_PHRASE_LIST_PAGE_ID));
         if (GetGrammarInfo().IsRedundantPhrasesEnabled() && m_redundantPhraseData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_redundantPhraseData);
                 listView->SetVirtualDataSize(m_redundantPhraseData->GetItemCount());
@@ -7348,7 +7334,7 @@ void ProjectDoc::DisplayGrammar()
                 }
             previousPunctPos = punctPos;
             previousSentencePos = overUsedWordsListsIter->first;
-            wxString currentSentence = ProjectReportFormat::FormatSentence(
+            const wxString currentSentence = ProjectReportFormat::FormatSentence(
                 this, GetWords()->get_sentences()[overUsedWordsListsIter->first], punctPos,
                 GetWords()->get_punctuation().cend());
             // format the list of like words
@@ -7385,7 +7371,7 @@ void ProjectDoc::DisplayGrammar()
         if (GetGrammarInfo().IsOverUsedWordsBySentenceEnabled() &&
             GetOverusedWordsBySentenceData() && GetOverusedWordsBySentenceData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetOverusedWordsBySentenceData()->GetItemCount());
                 listView->Resort();
@@ -7411,10 +7397,8 @@ void ProjectDoc::DisplayGrammar()
                 UpdateListOptions(listView);
                 // sort by sentence length, then words (lowest to highest)
                 std::vector<std::pair<size_t, Wisteria::SortDirection>> columnsToSort;
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    2, Wisteria::SortDirection::SortAscending));
-                columnsToSort.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                    0, Wisteria::SortDirection::SortAscending));
+                columnsToSort.emplace_back(2, Wisteria::SortDirection::SortAscending);
+                columnsToSort.emplace_back(0, Wisteria::SortDirection::SortAscending);
                 listView->SortColumns(columnsToSort);
 
                 view->GetGrammarView().AddWindow(listView);
@@ -7435,7 +7419,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::WORDY_PHRASES_LIST_PAGE_ID));
         if (GetGrammarInfo().IsWordyPhrasesEnabled() && m_wordyPhraseData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_wordyPhraseData);
                 listView->SetVirtualDataSize(m_wordyPhraseData->GetItemCount());
@@ -7477,7 +7461,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::CLICHES_LIST_PAGE_ID));
         if (GetGrammarInfo().IsClichesEnabled() && m_clichePhraseData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_clichePhraseData);
                 listView->SetVirtualDataSize(m_clichePhraseData->GetItemCount());
@@ -7545,7 +7529,7 @@ void ProjectDoc::DisplayGrammar()
             view->GetGrammarView().FindWindowById(BaseProjectView::PASSIVE_VOICE_PAGE_ID));
         if (GetGrammarInfo().IsPassiveVoiceEnabled() && m_passiveVoiceData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_passiveVoiceData);
                 listView->SetVirtualDataSize(m_passiveVoiceData->GetItemCount());
@@ -7613,7 +7597,7 @@ void ProjectDoc::DisplayGrammar()
         if (GetGrammarInfo().IsConjunctionStartingSentencesEnabled() &&
             m_sentenceStartingWithConjunctionsData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_sentenceStartingWithConjunctionsData);
                 listView->SetVirtualDataSize(
@@ -7684,7 +7668,7 @@ void ProjectDoc::DisplayGrammar()
         if (GetGrammarInfo().IsLowercaseSentencesEnabled() &&
             m_sentenceStartingWithLowercaseData->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataProvider(m_sentenceStartingWithLowercaseData);
                 listView->SetVirtualDataSize(m_sentenceStartingWithLowercaseData->GetItemCount());
@@ -7725,9 +7709,9 @@ void ProjectDoc::DisplayGrammar()
 void ProjectDoc::DisplaySightWords()
     {
     PROFILE();
-    ProjectView* view = dynamic_cast<ProjectView*>(GetFirstView());
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     assert(view && "Error getting view when displaying sight words!");
-    if (!view)
+    if (view == nullptr)
         {
         return;
         }
@@ -7748,7 +7732,7 @@ void ProjectDoc::DisplaySightWords()
                 BaseProjectView::DOLCH_WORDS_LIST_PAGE_ID));
         if (IsIncludingDolchSightWords() && GetDolchWordData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetDolchWordData()->GetItemCount());
                 listView->DistributeColumns();
@@ -7795,7 +7779,7 @@ void ProjectDoc::DisplaySightWords()
                 BaseProjectView::NON_DOLCH_WORDS_LIST_PAGE_ID));
         if (IsIncludingDolchSightWords() && GetNonDolchWordData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetNonDolchWordData()->GetItemCount());
                 listView->DistributeColumns();
@@ -7840,7 +7824,7 @@ void ProjectDoc::DisplaySightWords()
                 BaseProjectView::UNUSED_DOLCH_WORDS_LIST_PAGE_ID));
         if (IsIncludingDolchSightWords() && GetUnusedDolchWordData()->GetItemCount())
             {
-            if (listView)
+            if (listView != nullptr)
                 {
                 listView->SetVirtualDataSize(GetUnusedDolchWordData()->GetItemCount());
                 listView->DistributeColumns();
@@ -7997,7 +7981,7 @@ void ProjectDoc::CalculateGraphData()
         m_sentenceWordLengths->GetContinuousColumn(GetSentenceWordCountsColumnName());
     auto sentenceIndicesColumn =
         m_sentenceWordLengths->GetContinuousColumn(GetSentenceIndicesColumnName());
-    statistics::find_outliers outlierInfo(wordCountColumn->GetValues());
+    const statistics::find_outliers outlierInfo(wordCountColumn->GetValues());
     for (auto labelsPos = wordCountColumn->GetValues().cbegin();
          labelsPos != wordCountColumn->GetValues().cend(); ++labelsPos)
         {
