@@ -62,10 +62,10 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int ShowScriptEditor(lua_State* L)
         {
-        if (wxGetApp().GetMainFrameEx()->GetLuaEditor())
+        if (wxGetApp().GetMainFrameEx()->GetLuaEditor() != nullptr)
             {
             wxGetApp().GetMainFrameEx()->GetLuaEditor()->Show(
-                lua_gettop(L) > 0 ? lua_toboolean(L, 1) : true);
+                lua_gettop(L) > 0 ? int_to_bool(lua_toboolean(L, 1)) : true);
             }
         return 1;
         }
@@ -78,9 +78,9 @@ namespace LuaScripting
             return 0;
             }
 
-        lua_pushboolean(
-            L, Screenshot::ConvertImageToPng(wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
-                                             wxSize(lua_tonumber(L, 2), lua_tonumber(L, 3)), true));
+        lua_pushboolean(L, static_cast<int>(Screenshot::ConvertImageToPng(
+                               wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
+                               wxSize(lua_tonumber(L, 2), lua_tonumber(L, 3)), true)));
         return 1;
         }
 
@@ -101,8 +101,8 @@ namespace LuaScripting
             const wxWindowID wId = lua_tonumber(L, 2);
             if (wId != wxID_ANY)
                 {
-                auto idPos = wxGetApp().GetDynamicIdMap().find(wId);
-                if (idPos != wxGetApp().GetDynamicIdMap().cend())
+                auto idPos = ReadabilityApp::GetDynamicIdMap().find(wId);
+                if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                     {
                     startWindowToHighlight = idPos->second;
                     }
@@ -117,8 +117,8 @@ namespace LuaScripting
             const wxWindowID wId = lua_tonumber(L, 3);
             if (wId != wxID_ANY)
                 {
-                auto idPos = wxGetApp().GetDynamicIdMap().find(wId);
-                if (idPos != wxGetApp().GetDynamicIdMap().cend())
+                auto idPos = ReadabilityApp::GetDynamicIdMap().find(wId);
+                if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                     {
                     endWindowToHighlight = idPos->second;
                     }
@@ -133,8 +133,8 @@ namespace LuaScripting
             const wxWindowID wId = lua_tonumber(L, 4);
             if (wId != wxID_ANY)
                 {
-                auto idPos = wxGetApp().GetDynamicIdMap().find(wId);
-                if (idPos != wxGetApp().GetDynamicIdMap().cend())
+                auto idPos = ReadabilityApp::GetDynamicIdMap().find(wId);
+                if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                     {
                     cutOffWindow = idPos->second;
                     }
@@ -144,9 +144,9 @@ namespace LuaScripting
                     }
                 }
             }
-        lua_pushboolean(L, Screenshot::SaveScreenshot(
+        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshot(
                                wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
-                               startWindowToHighlight, endWindowToHighlight, cutOffWindow));
+                               startWindowToHighlight, endWindowToHighlight, cutOffWindow)));
         return 1;
         }
 
@@ -161,8 +161,8 @@ namespace LuaScripting
 
         int startWindowToHighlight = wxID_ANY, endWindowToHighlight = wxID_ANY;
 
-        auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 3));
-        if (idPos != wxGetApp().GetDynamicIdMap().cend())
+        auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 3));
+        if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
             {
             startWindowToHighlight = idPos->second;
             }
@@ -173,8 +173,8 @@ namespace LuaScripting
 
         if (lua_gettop(L) > 3)
             {
-            auto endIdPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 4));
-            if (endIdPos != wxGetApp().GetDynamicIdMap().cend())
+            auto endIdPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 4));
+            if (endIdPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 endWindowToHighlight = endIdPos->second;
                 }
@@ -184,10 +184,10 @@ namespace LuaScripting
                 }
             }
 
-        lua_pushboolean(L,
-                        Screenshot::SaveScreenshot(wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
-                                                   wxString{ luaL_checkstring(L, 2), wxConvUTF8 },
-                                                   startWindowToHighlight, endWindowToHighlight));
+        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshot(
+                               wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
+                               wxString{ luaL_checkstring(L, 2), wxConvUTF8 },
+                               startWindowToHighlight, endWindowToHighlight)));
         return 1;
         }
 
@@ -205,14 +205,14 @@ namespace LuaScripting
         wxDocument* currentDoc =
             wxGetApp().GetMainFrame()->GetDocumentManager()->GetCurrentDocument();
 
-        if (currentDoc && (currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc)) ||
-                           currentDoc->IsKindOf(wxCLASSINFO(BatchProjectDoc))))
+        if ((currentDoc != nullptr) && (currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc)) ||
+                                        currentDoc->IsKindOf(wxCLASSINFO(BatchProjectDoc))))
             {
-            auto project = dynamic_cast<BaseProjectDoc*>(currentDoc);
-            auto firstView = project->GetFirstView();
+            auto* project = dynamic_cast<BaseProjectDoc*>(currentDoc);
+            auto* firstView = project->GetFirstView();
             if (firstView != nullptr && firstView->IsKindOf(wxCLASSINFO(BaseProjectView)))
                 {
-                auto docView = dynamic_cast<BaseProjectView*>(firstView);
+                auto* docView = dynamic_cast<BaseProjectView*>(firstView);
                 docView->Activate(true);
                 int x{ 0 }, y{ 0 }, mainX{ 0 }, mainY{ 0 };
                 docView->GetQuickToolbar()->GetScreenPosition(&mainX, &mainY);
@@ -221,7 +221,7 @@ namespace LuaScripting
                 if (Screenshot::SaveScreenshot(path))
                     {
                     // if requesting to crop the image vertically to the last
-                    // or selected) item in the sidebar
+                    // (or selected) item in the sidebar
                     if (lua_gettop(L) >= 2)
                         {
                         auto cropMode{ static_cast<ProjectScreenshotCropMode>(
@@ -233,41 +233,31 @@ namespace LuaScripting
                                   0);
                         if (cropMode == ProjectScreenshotCropMode::NoCrop)
                             {
-                            lua_pushboolean(L, true);
+                            lua_pushboolean(L, 1);
                             return 1;
                             }
                         if (Screenshot::CropScreenshot(path, wxDefaultCoord, y))
                             {
-                            lua_pushboolean(L, true);
+                            lua_pushboolean(L, 1);
                             return 1;
                             }
-                        lua_pushboolean(L, false);
+                        lua_pushboolean(L, 0);
                         return 1;
                         }
-                    else
-                        {
-                        lua_pushboolean(L, true);
-                        return 1;
-                        }
-                    }
-                else
-                    {
-                    lua_pushboolean(L, false);
+
+                    lua_pushboolean(L, 1);
                     return 1;
                     }
-                }
-            else
-                {
-                lua_pushboolean(L, false);
+
+                lua_pushboolean(L, 0);
                 return 1;
                 }
-            }
-        else
-            {
-            lua_pushboolean(L, false);
+
+            lua_pushboolean(L, 0);
             return 1;
             }
 
+        lua_pushboolean(L, 0);
         return 1;
         }
 
@@ -292,14 +282,12 @@ namespace LuaScripting
 
         if (Screenshot::CropScreenshot(wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, x, y))
             {
-            lua_pushboolean(L, true);
+            lua_pushboolean(L, 1);
             return 1;
             }
-        else
-            {
-            lua_pushboolean(L, false);
-            return 1;
-            }
+
+        lua_pushboolean(L, 0);
+        return 1;
         }
 
     //-------------------------------------------------------------
@@ -312,8 +300,8 @@ namespace LuaScripting
             }
 
         wxWindowID windowId = lua_tonumber(L, 2);
-        if (const auto windowMappedId = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 2));
-            windowMappedId != wxGetApp().GetDynamicIdMap().cend())
+        if (const auto windowMappedId = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 2));
+            windowMappedId != ReadabilityApp::GetDynamicIdMap().cend())
             {
             windowId = windowMappedId->second;
             }
@@ -325,7 +313,7 @@ namespace LuaScripting
             }
         if (windowToCapture == nullptr)
             {
-            lua_pushboolean(L, false);
+            lua_pushboolean(L, 0);
             return 1;
             }
         if (windowToCapture->GetId() != windowId ||
@@ -338,7 +326,7 @@ namespace LuaScripting
                 }
             else
                 {
-                lua_pushboolean(L, false);
+                lua_pushboolean(L, 0);
                 return 1;
                 }
             }
@@ -347,7 +335,7 @@ namespace LuaScripting
         wxASSERT(textCtrl);
         if (textCtrl == nullptr)
             {
-            lua_pushboolean(L, false);
+            lua_pushboolean(L, 0);
             return 1;
             }
 
@@ -364,8 +352,7 @@ namespace LuaScripting
                     wxTextSearch{ contentToFind }.Start(previousFind ? previousFind.m_end : 0));
                 if (searchResult)
                     {
-                    highlightPoints.push_back(
-                        std::make_pair(searchResult.m_start, searchResult.m_end));
+                    highlightPoints.emplace_back(searchResult.m_start, searchResult.m_end);
                     previousFind = searchResult;
                     }
                 else
@@ -381,9 +368,9 @@ namespace LuaScripting
                 }
             }
 
-        lua_pushboolean(L, Screenshot::SaveScreenshotOfTextWindow(
+        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshotOfTextWindow(
                                wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, windowId,
-                               lua_toboolean(L, 3), highlightPoints));
+                               int_to_bool(lua_toboolean(L, 3)), highlightPoints)));
         return 1;
         }
 
@@ -399,8 +386,8 @@ namespace LuaScripting
         int pageToSelect{ 0 }, firstButtonBarID{ -1 }, lastButtonBarID{ -1 };
         if (lua_gettop(L) >= 2)
             {
-            auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 2));
-            if (idPos != wxGetApp().GetDynamicIdMap().cend())
+            auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 2));
+            if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 pageToSelect = idPos->second;
                 }
@@ -411,8 +398,8 @@ namespace LuaScripting
             }
         if (lua_gettop(L) >= 3)
             {
-            auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 3));
-            if (idPos != wxGetApp().GetDynamicIdMap().cend())
+            auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 3));
+            if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 firstButtonBarID = idPos->second;
                 }
@@ -423,8 +410,8 @@ namespace LuaScripting
             }
         if (lua_gettop(L) >= 4)
             {
-            auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 4));
-            if (idPos != wxGetApp().GetDynamicIdMap().cend())
+            auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 4));
+            if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 lastButtonBarID = idPos->second;
                 }
@@ -433,9 +420,9 @@ namespace LuaScripting
                 lastButtonBarID = lua_tonumber(L, 3);
                 }
             }
-        lua_pushboolean(
-            L, Screenshot::SaveScreenshotOfRibbon(wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
-                                                  pageToSelect, firstButtonBarID, lastButtonBarID));
+        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshotOfRibbon(
+                               wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, pageToSelect,
+                               firstButtonBarID, lastButtonBarID)));
         return 1;
         }
 
@@ -470,18 +457,18 @@ namespace LuaScripting
             cutOffRow = lua_tonumber(L, 7);
             }
         wxWindowID windowId = lua_tonumber(L, 2);
-        if (const auto windowMappedId = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 2));
-            windowMappedId != wxGetApp().GetDynamicIdMap().cend())
+        if (const auto windowMappedId = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 2));
+            windowMappedId != ReadabilityApp::GetDynamicIdMap().cend())
             {
             windowId = windowMappedId->second;
             }
-        lua_pushboolean(L, Screenshot::SaveScreenshotOfListControl(
-                               wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, windowId,
-                               // make zero-indexed
-                               startRow == -1 ? -1 : startRow - 1, endRow == -1 ? -1 : endRow - 1,
-                               startColumn == -1 ? -1 : startColumn - 1,
-                               endColumn == -1 ? -1 : endColumn - 1,
-                               cutOffRow == -1 ? -1 : cutOffRow - 1));
+        lua_pushboolean(
+            L, static_cast<int>(Screenshot::SaveScreenshotOfListControl(
+                   wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, windowId,
+                   // make zero-indexed
+                   startRow == -1 ? -1 : startRow - 1, endRow == -1 ? -1 : endRow - 1,
+                   startColumn == -1 ? -1 : startColumn - 1, endColumn == -1 ? -1 : endColumn - 1,
+                   cutOffRow == -1 ? -1 : cutOffRow - 1)));
         return 1;
         }
 
@@ -498,8 +485,8 @@ namespace LuaScripting
         wxString propertyStart, propertyEnd;
         if (lua_gettop(L) > 1)
             {
-            auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 2));
-            if (idPos != wxGetApp().GetDynamicIdMap().cend())
+            auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 2));
+            if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 propGridId = idPos->second;
                 }
@@ -517,11 +504,11 @@ namespace LuaScripting
             propertyEnd = wxString{ luaL_checkstring(L, 4), wxConvUTF8 };
             }
         lua_pushboolean(
-            L, Screenshot::SaveScreenshotOfDialogWithPropertyGrid(
+            L, static_cast<int>(Screenshot::SaveScreenshotOfDialogWithPropertyGrid(
                    wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, propGridId, propertyStart,
                    propertyEnd,
                    std::make_pair(((lua_gettop(L) > 4) ? int_to_bool(lua_toboolean(L, 5)) : false),
-                                  ((lua_gettop(L) > 5) ? lua_tonumber(L, 6) : -1))));
+                                  ((lua_gettop(L) > 5) ? lua_tonumber(L, 6) : -1)))));
         return 1;
         }
 
@@ -533,10 +520,10 @@ namespace LuaScripting
             return 0;
             }
 
-        lua_pushboolean(L, Screenshot::HighlightItemInScreenshot(
+        lua_pushboolean(L, static_cast<int>(Screenshot::HighlightItemInScreenshot(
                                wxString{ luaL_checkstring(L, 1), wxConvUTF8 },
                                wxPoint(lua_tonumber(L, 2), lua_tonumber(L, 3)),
-                               wxPoint(lua_tonumber(L, 4), lua_tonumber(L, 5))));
+                               wxPoint(lua_tonumber(L, 4), lua_tonumber(L, 5)))));
         return 1;
         }
 
@@ -561,7 +548,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseDocGroupSelectDlg(lua_State*)
+    int CloseDocGroupSelectDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaDocGroupSelectDlg != nullptr)
             {
@@ -579,14 +566,14 @@ namespace LuaScripting
             {
             wxDocument* currentDoc =
                 wxGetApp().GetMainFrame()->GetDocumentManager()->GetCurrentDocument();
-            LuaEditTextDlg =
-                new EditTextDlg(wxGetApp().GetMainFrame(),
-                                (currentDoc && currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc))) ?
-                                    dynamic_cast<ProjectDoc*>(currentDoc) :
-                                    nullptr,
-                                (currentDoc && currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc))) ?
-                                    dynamic_cast<ProjectDoc*>(currentDoc)->GetDocumentText() :
-                                    wxString{});
+            LuaEditTextDlg = new EditTextDlg(
+                wxGetApp().GetMainFrame(),
+                ((currentDoc != nullptr) && currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc))) ?
+                    dynamic_cast<ProjectDoc*>(currentDoc) :
+                    nullptr,
+                ((currentDoc != nullptr) && currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc))) ?
+                    dynamic_cast<ProjectDoc*>(currentDoc)->GetDocumentText() :
+                    wxString{});
             if (lua_gettop(L) > 1)
                 {
                 LuaEditTextDlg->SetSize(
@@ -599,7 +586,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseEditorTextDlg(lua_State*)
+    int CloseEditorTextDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaEditTextDlg != nullptr)
             {
@@ -631,7 +618,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseEditWordListDlg(lua_State*)
+    int CloseEditWordListDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaEditWordListDlg != nullptr)
             {
@@ -657,8 +644,7 @@ namespace LuaScripting
         std::vector<std::pair<size_t, Wisteria::SortDirection>> sortInfo;
         for (size_t i = 0; i < columns.size(); ++i)
             {
-            sortInfo.push_back(std::pair<size_t, Wisteria::SortDirection>(
-                i, Wisteria::SortDirection::SortAscending));
+            sortInfo.emplace_back(i, Wisteria::SortDirection::SortAscending);
             }
         LuaListCtrlSortDlg->FillSortCriteria(sortInfo);
         LuaListCtrlSortDlg->Show();
@@ -667,7 +653,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseSortListDlg(lua_State*)
+    int CloseSortListDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaListCtrlSortDlg != nullptr)
             {
@@ -679,7 +665,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ShowFilteredTextPreviewDlg(lua_State*)
+    int ShowFilteredTextPreviewDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaFilteredTextPreviewDlg == nullptr)
             {
@@ -704,7 +690,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseFilteredTextPreviewDlg(lua_State*)
+    int CloseFilteredTextPreviewDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaFilteredTextPreviewDlg != nullptr)
             {
@@ -716,7 +702,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ShowStandardProjectWizardLanguagePage(lua_State*)
+    int ShowStandardProjectWizardLanguagePage([[maybe_unused]] lua_State* L)
         {
         if (LuaStandardProjectWizard != nullptr)
             {
@@ -970,7 +956,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseStandardProjectWizard(lua_State*)
+    int CloseStandardProjectWizard([[maybe_unused]] lua_State* L)
         {
         if (LuaStandardProjectWizard != nullptr)
             {
@@ -1188,7 +1174,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseBatchProjectWizard(lua_State*)
+    int CloseBatchProjectWizard([[maybe_unused]] lua_State* L)
         {
         if (LuaBatchProjectWizard != nullptr)
             {
@@ -1221,8 +1207,8 @@ namespace LuaScripting
             }
         if (lua_gettop(L) > 1)
             {
-            auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 2));
-            if (idPos != wxGetApp().GetDynamicIdMap().cend())
+            auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 2));
+            if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
                 {
                 LuaTestBundleDlg->SelectPage(idPos->second);
                 }
@@ -1238,7 +1224,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseTestBundleDialog(lua_State*)
+    int CloseTestBundleDialog([[maybe_unused]] lua_State* L)
         {
         if (LuaTestBundleDlg != nullptr)
             {
@@ -1331,8 +1317,8 @@ namespace LuaScripting
         // set the custom words
         if (lua_gettop(L) > 0)
             {
-            wxString wordFile(luaL_checklstring(L, 1, nullptr), wxConvUTF8);
-            if (wordFile.length())
+            const wxString wordFile(luaL_checklstring(L, 1, nullptr), wxConvUTF8);
+            if (!wordFile.empty())
                 {
                 LuaCustomTestDlg->SetIncludingCustomWordList(true);
                 LuaCustomTestDlg->SetWordListFilePath(wordFile);
@@ -1373,7 +1359,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ShowCustomTestDialogClassification(lua_State*)
+    int ShowCustomTestDialogClassification([[maybe_unused]] lua_State* L)
         {
         if (LuaCustomTestDlg == nullptr)
             {
@@ -1393,7 +1379,7 @@ namespace LuaScripting
             wxMessageBox(
                 wxString::Format(_(L"%s: invalid number of arguments."), wxString{ __func__ }),
                 _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
-            lua_pushboolean(L, false);
+            lua_pushboolean(L, 0);
             return 1;
             }
         if (LuaCustomTestDlg == nullptr)
@@ -1406,7 +1392,7 @@ namespace LuaScripting
         LuaCustomTestDlg->SetYoungAdultAndAdultLiteratureSelected(int_to_bool(lua_toboolean(L, 4)));
         LuaCustomTestDlg->SetChildrensLiteratureSelected(int_to_bool(lua_toboolean(L, 5)));
         wxGetApp().Yield();
-        lua_pushboolean(L, true);
+        lua_pushboolean(L, 1);
         return 1;
         }
 
@@ -1418,7 +1404,7 @@ namespace LuaScripting
             wxMessageBox(
                 wxString::Format(_(L"%s: invalid number of arguments."), wxString{ __func__ }),
                 _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
-            lua_pushboolean(L, false);
+            lua_pushboolean(L, 0);
             return 1;
             }
         if (LuaCustomTestDlg == nullptr)
@@ -1433,7 +1419,7 @@ namespace LuaScripting
         LuaCustomTestDlg->SetSecondaryLanguageSelected(int_to_bool(lua_toboolean(L, 6)));
         LuaCustomTestDlg->SetBroadcastingSelected(int_to_bool(lua_toboolean(L, 7)));
         wxGetApp().Yield();
-        lua_pushboolean(L, true);
+        lua_pushboolean(L, 1);
         return 1;
         }
 
@@ -1454,7 +1440,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseCustomTestDialog(lua_State*)
+    int CloseCustomTestDialog([[maybe_unused]] lua_State* L)
         {
         if (LuaCustomTestDlg != nullptr)
             {
@@ -1476,8 +1462,8 @@ namespace LuaScripting
             {
             LuaOptionsDlg = new ToolsOptionsDlg(wxGetApp().GetMainFrame());
             }
-        auto idPos = wxGetApp().GetDynamicIdMap().find(lua_tonumber(L, 1));
-        if (idPos != wxGetApp().GetDynamicIdMap().cend())
+        auto idPos = ReadabilityApp::GetDynamicIdMap().find(lua_tonumber(L, 1));
+        if (idPos != ReadabilityApp::GetDynamicIdMap().cend())
             {
             LuaOptionsDlg->SelectPage(idPos->second);
             }
@@ -1491,7 +1477,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseOptions(lua_State*)
+    int CloseOptions([[maybe_unused]] lua_State* L)
         {
         if (LuaOptionsDlg != nullptr)
             {
@@ -1503,7 +1489,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ShowPrinterHeaderFooterOptions(lua_State*)
+    int ShowPrinterHeaderFooterOptions([[maybe_unused]] lua_State* L)
         {
         if (LuaPrinterOptions == nullptr)
             {
@@ -1521,7 +1507,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ClosePrinterHeaderFooterOptions(lua_State*)
+    int ClosePrinterHeaderFooterOptions([[maybe_unused]] lua_State* L)
         {
         if (LuaPrinterOptions != nullptr)
             {
@@ -1548,7 +1534,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseListExportDlg(lua_State*)
+    int CloseListExportDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaListExportDlg != nullptr)
             {
@@ -1560,7 +1546,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseListViewItemDlg(lua_State*)
+    int CloseListViewItemDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaListViewItemDlg != nullptr)
             {
@@ -1579,7 +1565,7 @@ namespace LuaScripting
             CloseListViewItemDlg(L);
             }
         LuaListViewItemDlg = new ListCtrlItemViewDlg;
-        FilePathResolver fileResolve;
+        const FilePathResolver fileResolve;
         for (int i = 1; i < lua_gettop(L); i += 2)
             {
             LuaListViewItemDlg->AddValue(
@@ -1607,7 +1593,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseGetArchiveDlg(lua_State*)
+    int CloseGetArchiveDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaGetArchiveDlg != nullptr)
             {
@@ -1633,7 +1619,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseGetDirDlg(lua_State*)
+    int CloseGetDirDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaGetDirDlg != nullptr)
             {
@@ -1652,7 +1638,7 @@ namespace LuaScripting
             wxArrayString docNames;
             docNames.Add(_(L"Standard Project"));
             docNames.Add(_(L"Batch Project"));
-            wxArrayString docDescriptions;
+            const wxArrayString docDescriptions;
             LuaSelectProjectType =
                 new RadioBoxDlg(wxGetApp().GetMainFrame(), _(L"Select Project Type"), wxEmptyString,
                                 _(L"Project types:"), _(L"New Project"), docNames, docDescriptions);
@@ -1664,7 +1650,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseSelectProjectTypeDlg(lua_State*)
+    int CloseSelectProjectTypeDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaSelectProjectType != nullptr)
             {
@@ -1676,7 +1662,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ShowWebHarvesterDlg(lua_State*)
+    int ShowWebHarvesterDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaSelectProjectType == nullptr)
             {
@@ -1691,7 +1677,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int CloseWebHarvesterDlg(lua_State*)
+    int CloseWebHarvesterDlg([[maybe_unused]] lua_State* L)
         {
         if (LuaWebHarvesterDlg != nullptr)
             {

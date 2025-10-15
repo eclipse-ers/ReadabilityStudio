@@ -95,10 +95,9 @@ namespace LuaScripting
                          _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
             return false;
             }
-        else
-            {
-            return true;
-            }
+
+                        return true;
+
         }
 
     //-------------------------------------------------------------

@@ -46,10 +46,8 @@ namespace LuaScripting
                              _(L"Warning"), wxOK | wxICON_INFORMATION);
                 return false;
                 }
-            else
-                {
-                return true;
-                }
+
+            return true;
             }
 
         /// @note This takes into account the boolean parameter in the front
@@ -73,10 +71,8 @@ namespace LuaScripting
                     _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
                 return false;
                 }
-            else
-                {
-                return true;
-                }
+
+            return true;
             }
 
         bool ReloadIfNotDelayed();
@@ -174,7 +170,7 @@ namespace LuaScripting
         // PROJECT SETTINGS
         int SetLanguage(lua_State* L /*Language lang*/); // Sets the project language. This will affect syllable counting and which tests are available.
         int /*Language*/ GetLanguage(lua_State* L); // Returns the project's language.
-        int SetReviewer(lua_State* L /*string reviewer*/); // Sets the user name for the software.
+        int SetReviewer(lua_State* L /*string reviewer*/); // Sets the username for the software.
         int /*string*/ GetReviewer(lua_State* L); // Returns the reviewer's name.
         int SetStatus(lua_State* L /*string status*/); // Sets the status of the project. This can be freeform text.
         int /*string*/ GetStatus(lua_State* L); // Returns the status of the project.
@@ -209,11 +205,11 @@ namespace LuaScripting
         int SetIncludeIncompleteTolerance(lua_State* L /*number minWordsForCompleteSentence*/); // Sets the incomplete-sentence tolerance. This is the minimum number of words that will make a sentence missing terminating punctuation be considered complete.
         int /*number*/ GetIncludeIncompleteTolerance(lua_State* L); // Sets the incomplete-sentence tolerance. This is the minimum number of words that will make a sentence missing terminating punctuation be considered complete.
         int AggressivelyExclude(lua_State* L /*boolean beAggressive*/); // Specifies whether to use aggressive text exclusion.
-        int ExcludeCopyrightNotices(lua_State* L /*boolean exclude*/); // Specifies whether or not to exclude copyright notices.
-        int ExcludeTrailingCitations(lua_State* L /*boolean exclude*/); // Specifies whether or not to exclude trailing citations.
-        int ExcludeFileAddress(lua_State* L /*boolean exclude*/); // Specifies whether or not to exclude file addresses.
-        int ExcludeNumerals(lua_State* L /*boolean exclude*/); // Specifies whether or not to exclude numerals.
-        int ExcludeProperNouns(lua_State* L /*boolean exclude*/); // Specifies whether or not to exclude proper nouns.
+        int ExcludeCopyrightNotices(lua_State* L /*boolean exclude*/); // Specifies whether to exclude copyright notices.
+        int ExcludeTrailingCitations(lua_State* L /*boolean exclude*/); // Specifies whether to exclude trailing citations.
+        int ExcludeFileAddress(lua_State* L /*boolean exclude*/); // Specifies whether to exclude file addresses.
+        int ExcludeNumerals(lua_State* L /*boolean exclude*/); // Specifies whether to exclude numerals.
+        int ExcludeProperNouns(lua_State* L /*boolean exclude*/); // Specifies whether to exclude proper nouns.
         int /*boolean*/ IsExcludingAggressively(lua_State* L); // Returns whether to aggressively exclude.
         int /*boolean*/ IsExcludingCopyrightNotices(lua_State* L); // Returns whether to exclude copyright notices.
         int /*boolean*/ IsExcludingTrailingCitations(lua_State* L); // Returns whether to exclude trailing citations.
@@ -346,7 +342,7 @@ namespace LuaScripting
         int Reload(lua_State*); // Reanalyzes the project's document.
         int Close(lua_State* L /*boolean saveChanges*/); // Closes the project.
 
-        int ExportAll(lua_State* L /*string outputFolder*/); // Exports all of the results from the project into a folder.
+        int ExportAll(lua_State* L /*string outputFolder*/); // Exports all the results from the project into a folder.
         int ExportGraph(lua_State* L/*GraphType type, string outputFilePath, boolean grayScale, number width, number height*/); // Saves the specified graph as an image.
         int ExportScores(lua_State* L /*string outputFilePath*/); // Saves the project's test scores to *outputFilePath*.
         int ExportHighlightedWords(lua_State* L /*HighlightedWordReportType type, string outputFilePath*/); // Saves the specified highlighted words as an RTF or HTML report.

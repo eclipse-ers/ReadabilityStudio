@@ -41,7 +41,7 @@ class LuaInterpreter
     /** @brief Runs a block of Lua code.
         @param code The code to run.
         @param filePath The script's file path. This is only used for any calls to GetScriptPath()
-                        from the script, it will not affect the code being ran.
+                        from the script, it will not affect the code being run.
                         It can be left empty, that will just cause any calls to
                         GetScriptPath() to return empty as well.
         @param[out] errorMessage If an error is encountered,
@@ -59,7 +59,7 @@ class LuaInterpreter
     static void Quit() { m_quitRequested = true; }
 
     /// @returns The file path of the currently running script
-    ///     (may be empty if RunLuaCode() was called with no defined file path).
+    ///     (might be empty if RunLuaCode() was called with no defined file path).
     [[nodiscard]]
     const wxString& GetScriptFilePath() const noexcept
         {

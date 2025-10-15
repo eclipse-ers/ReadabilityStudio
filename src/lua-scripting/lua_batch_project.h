@@ -36,6 +36,7 @@ namespace LuaScripting
         BatchProjectDoc* m_project{ nullptr };
         ToolsOptionsDlg* m_settingsDlg{ nullptr };
 
+        [[nodiscard]]
         bool VerifyProjectIsOpen(const wxString& functionName) const
             {
             if (m_project == nullptr)
@@ -157,11 +158,11 @@ namespace LuaScripting
         int SetIncludeIncompleteTolerance(lua_State* L /*number minWordsForCompleteSentence*/); // Sets the incomplete-sentence tolerance. This is the minimum number of words that will make a sentence missing terminating punctuation be considered complete.
         int /*number*/ GetIncludeIncompleteTolerance(lua_State* L); // Sets the incomplete-sentence tolerance. This is the minimum number of words that will make a sentence missing terminating punctuation be considered complete.
         int AggressivelyExclude(lua_State* L/*boolean beAggressive*/); // Specifies whether to use aggressive text exclusion.
-        int ExcludeCopyrightNotices(lua_State* L/*boolean exclude*/); // Specifies whether or not to exclude copyright notices.
-        int ExcludeTrailingCitations(lua_State* L/*boolean exclude*/); // Specifies whether or not to exclude trailing citations.
-        int ExcludeFileAddress(lua_State* L/*boolean exclude*/); // Specifies whether or not to exclude file addresses.
-        int ExcludeNumerals(lua_State* L/*boolean exclude*/); // Specifies whether or not to exclude numerals.
-        int ExcludeProperNouns(lua_State* L/*boolean exclude*/); // Specifies whether or not to exclude proper nouns.
+        int ExcludeCopyrightNotices(lua_State* L/*boolean exclude*/); // Specifies whether to exclude copyright notices.
+        int ExcludeTrailingCitations(lua_State* L/*boolean exclude*/); // Specifies whether to exclude trailing citations.
+        int ExcludeFileAddress(lua_State* L/*boolean exclude*/); // Specifies whether to exclude file addresses.
+        int ExcludeNumerals(lua_State* L/*boolean exclude*/); // Specifies whether to exclude numerals.
+        int ExcludeProperNouns(lua_State* L/*boolean exclude*/); // Specifies whether to exclude proper nouns.
         int /*boolean*/ IsExcludingAggressively(lua_State* L); // Returns whether to aggressively exclude.
         int /*boolean*/ IsExcludingCopyrightNotices(lua_State* L); // Returns whether to exclude copyright notices.
         int /*boolean*/ IsExcludingTrailingCitations(lua_State* L); // Returns whether to exclude trailing citations.
@@ -290,7 +291,7 @@ namespace LuaScripting
         int AddTest(lua_State* L/*Test test*/); // Adds a test to the project.
         int Reload(lua_State*); // Reanalyzes the project's document.
         int Close(lua_State* L /*boolean saveChanges*/); // Closes the project.
-        int ExportAll(lua_State* L/*string outputFolder*/); // Exports all of the results from the project into a folder.
+        int ExportAll(lua_State* L/*string outputFolder*/); // Exports all the results from the project into a folder.
         int ExportList(lua_State* L /*ListType type, string outputFilePath, number fromRow, number toRow, number fromColumn, number toColumn, boolean includeHeaders, boolean includePageBreaks*/); // Saves the specified list as an HTML, text, or LaTeX file to *outputFilePath*.
         int ExportGraph(lua_State* L /*SideBarSection section, GraphType type, string outputFilePath, boolean grayScale, number width, number height*/); // Saves the specified graph as an image.
         int SelectWindow(lua_State* L /*SideBarSection section, number windowId*/); // Selects a window in the project.

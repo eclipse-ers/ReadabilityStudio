@@ -15,7 +15,6 @@
 #define LUASCREENSHOT_H
 
 #include "lua.hpp"
-#include <wx/wx.h>
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)

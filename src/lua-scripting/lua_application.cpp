@@ -25,11 +25,6 @@
 #include "../projects/standard_project_doc.h"
 #include <wx/dir.h>
 
-using namespace Wisteria;
-using namespace Wisteria::Graphs;
-using namespace Wisteria::Colors;
-using namespace Wisteria::GraphItems;
-
 wxDECLARE_APP(ReadabilityApp);
 
 // NOLINTBEGIN(readability-identifier-length)
@@ -87,7 +82,7 @@ namespace LuaScripting
                 }
             wchar_t* dummy{ nullptr };
             const wxString extractedHexCode{ path.substr(percentIndex + 1, 2) };
-            const wchar_t value =
+            const auto value =
                 static_cast<wchar_t>(std::wcstol(extractedHexCode.wc_str(), &dummy, 16));
             path.replace(percentIndex, 3, wxString(1, value));
             }
@@ -136,13 +131,13 @@ namespace LuaScripting
             const std::wstring heightStr =
                 lily_of_the_valley::html_extract_text::read_attribute_as_string(
                     link, _DT(L"height"), true, false);
-            if (widthStr.length() && heightStr.length())
+            if (!widthStr.empty() && !heightStr.empty())
                 {
-                const long width = static_cast<long>(std::wcstol(widthStr.c_str(), nullptr, 10));
-                const long height = static_cast<long>(std::wcstol(heightStr.c_str(), nullptr, 10));
+                const long width = std::wcstol(widthStr.c_str(), nullptr, 10);
+                const long height = std::wcstol(heightStr.c_str(), nullptr, 10);
                 if (fn.FileExists())
                     {
-                    wxLogNull logNo;
+                    const wxLogNull logNo;
                     wxImage img;
                     img.LoadFile(fn.GetFullPath());
                     if (!img.IsOk())
@@ -360,7 +355,7 @@ namespace LuaScripting
             L"*.;");
         while (tkz.HasMoreTokens())
             {
-            wxString nextFileExt = tkz.GetNextToken();
+            const wxString nextFileExt = tkz.GetNextToken();
             if (!nextFileExt.empty())
                 {
                 wxGetApp().GetWebHarvester().AddAllowableFileType(nextFileExt);
@@ -381,7 +376,7 @@ namespace LuaScripting
             return 0;
             }
 
-        FilePathResolver resolver(wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, true);
+        const FilePathResolver resolver(wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, true);
         wxGetApp().GetWebHarvester().SetUrl(resolver.GetResolvedPath());
         return 0;
         }
@@ -407,28 +402,25 @@ namespace LuaScripting
             wxGetApp().GetMainFrame()->GetDocumentManager()->GetCurrentDocument();
         if (currentDoc && currentDoc->IsKindOf(wxCLASSINFO(BatchProjectDoc)))
             {
-            BatchProject* batchProject = new BatchProject(L);
+            auto* batchProject = new BatchProject(L);
             batchProject->SetProject(dynamic_cast<BatchProjectDoc*>(currentDoc));
             Luna<LuaScripting::BatchProject>::push(L, batchProject);
             return 1;
             }
-        else
+
+        const wxList docs = wxGetApp().GetDocManager()->GetDocuments();
+        for (size_t i = 0; i < docs.GetCount(); ++i)
             {
-            wxList docs = wxGetApp().GetDocManager()->GetDocuments();
-            for (size_t i = 0; i < docs.GetCount(); ++i)
+            if (docs.Item(i)->GetData()->IsKindOf(wxCLASSINFO(BatchProjectDoc)))
                 {
-                if (docs.Item(i)->GetData()->IsKindOf(wxCLASSINFO(BatchProjectDoc)))
-                    {
-                    BatchProject* batchProject = new BatchProject(L);
-                    batchProject->SetProject(
-                        dynamic_cast<BatchProjectDoc*>(docs.Item(i)->GetData()));
-                    Luna<LuaScripting::BatchProject>::push(L, batchProject);
-                    return 1;
-                    }
+                auto* batchProject = new BatchProject(L);
+                batchProject->SetProject(dynamic_cast<BatchProjectDoc*>(docs.Item(i)->GetData()));
+                Luna<LuaScripting::BatchProject>::push(L, batchProject);
+                return 1;
                 }
-            wxLogError(L"No active batch project found.");
-            return 0;
             }
+        wxLogError(L"No active batch project found.");
+        return 0;
         }
 
     int GetActiveStandardProject(lua_State* L)
@@ -437,27 +429,25 @@ namespace LuaScripting
             wxGetApp().GetMainFrame()->GetDocumentManager()->GetCurrentDocument();
         if (currentDoc && currentDoc->IsKindOf(wxCLASSINFO(ProjectDoc)))
             {
-            StandardProject* standardProject = new StandardProject(L);
+            auto* standardProject = new StandardProject(L);
             standardProject->SetProject(dynamic_cast<ProjectDoc*>(currentDoc));
             Luna<LuaScripting::StandardProject>::push(L, standardProject);
             return 1;
             }
-        else
+
+        const wxList docs = wxGetApp().GetDocManager()->GetDocuments();
+        for (size_t i = 0; i < docs.GetCount(); ++i)
             {
-            wxList docs = wxGetApp().GetDocManager()->GetDocuments();
-            for (size_t i = 0; i < docs.GetCount(); ++i)
+            if (docs.Item(i)->GetData()->IsKindOf(wxCLASSINFO(ProjectDoc)))
                 {
-                if (docs.Item(i)->GetData()->IsKindOf(wxCLASSINFO(ProjectDoc)))
-                    {
-                    StandardProject* standardProject = new StandardProject(L);
-                    standardProject->SetProject(dynamic_cast<ProjectDoc*>(docs.Item(i)->GetData()));
-                    Luna<LuaScripting::StandardProject>::push(L, standardProject);
-                    return 1;
-                    }
+                auto* standardProject = new StandardProject(L);
+                standardProject->SetProject(dynamic_cast<ProjectDoc*>(docs.Item(i)->GetData()));
+                Luna<LuaScripting::StandardProject>::push(L, standardProject);
+                return 1;
                 }
-            wxLogError(L"No active standard project found.");
-            return 0;
             }
+        wxLogError(L"No active standard project found.");
+        return 0;
         }
 
     //-------------------------------------------------------------
@@ -476,9 +466,8 @@ namespace LuaScripting
             return 1;
             }
 
-        CustomReadabilityTestCollection::const_iterator testIter =
-            std::find(BaseProject::m_custom_word_tests.begin(),
-                      BaseProject::m_custom_word_tests.end(), testName);
+        auto testIter = std::find(BaseProject::m_custom_word_tests.begin(),
+                                  BaseProject::m_custom_word_tests.end(), testName);
         if (testIter != BaseProject::m_custom_word_tests.end())
             {
             lua_pushnumber(L, testIter->get_interface_id());
@@ -543,14 +532,13 @@ namespace LuaScripting
             }
         lua_newtable(L);
 
-        wxDir dir;
         const int flags = ((lua_gettop(L) >= 3) ? int_to_bool(lua_toboolean(L, 3)) : true) ?
                               (wxDIR_FILES | wxDIR_DIRS) :
                               wxDIR_FILES;
         wxArrayString files;
         const size_t fileCount =
-            dir.GetAllFiles(wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, &files,
-                            wxString{ luaL_checkstring(L, 2), wxConvUTF8 }, flags);
+            wxDir::GetAllFiles(wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, &files,
+                               wxString{ luaL_checkstring(L, 2), wxConvUTF8 }, flags);
 
         for (size_t i = 1; i <= fileCount; ++i)
             {
@@ -588,7 +576,7 @@ namespace LuaScripting
             }
 
         // create the folder to the filepath, if necessary
-        wxString outPath(luaL_checkstring(L, lua_gettop(L) - 1), wxConvUTF8);
+        const wxString outPath(luaL_checkstring(L, lua_gettop(L) - 1), wxConvUTF8);
         wxFileName::Mkdir(wxFileName(outPath).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
         const wxImage img =
@@ -620,7 +608,7 @@ namespace LuaScripting
             }
 
         // create the folder to the filepath, if necessary
-        wxString path(luaL_checkstring(L, 2), wxConvUTF8);
+        const wxString path(luaL_checkstring(L, 2), wxConvUTF8);
         wxFileName::Mkdir(wxFileName(path).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
         const wxImage img = Wisteria::GraphItems::Image::ApplyEffect(
@@ -741,12 +729,12 @@ namespace LuaScripting
                    wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .5));
         if (bitmap.IsOk())
             {
-            bitmap = wxGetApp().CreateSplashscreen(bitmap, wxGetApp().GetAppName(),
-                                                   wxGetApp().GetAppSubName(),
-                                                   wxGetApp().GetVendorName(), true);
+            bitmap = ReadabilityApp::CreateSplashscreen(bitmap, wxGetApp().GetAppName(),
+                                                        wxGetApp().GetAppSubName(),
+                                                        wxGetApp().GetVendorName(), true);
 
             [[maybe_unused]]
-            wxSplashScreen* splash =
+            auto* splash =
                 new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 60000,
                                    nullptr, -1, wxDefaultPosition, wxDefaultSize,
                                    wxFRAME_NO_TASKBAR | wxSTAY_ON_TOP | wxSPLASH_NO_TIMEOUT);
@@ -758,7 +746,7 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int QAVerify(lua_State* L)
         {
-        lua_pushboolean(L, wxGetApp().VerifyWordLists());
+        lua_pushboolean(L, ReadabilityApp::VerifyWordLists());
         return 1;
         }
 
@@ -769,7 +757,7 @@ namespace LuaScripting
             {
             return 0;
             }
-        wxString path(luaL_checkstring(L, 1), wxConvUTF8);
+        const wxString path(luaL_checkstring(L, 1), wxConvUTF8);
 
         if (!wxFileName::DirExists(path))
             {
@@ -783,17 +771,16 @@ namespace LuaScripting
         std::multimap<wxString, wxString> badImageSizes;
 
         // get the physical files in the system
-        wxDir dir;
         wxArrayString files;
-        dir.GetAllFiles(path, &files, _DT(L"*.htm*"));
+        wxDir::GetAllFiles(path, &files, _DT(L"*.htm*"));
 
         wxString fileContent;
-        const bool IncludeExternalLinks = int_to_bool(lua_toboolean(L, 2));
+        const bool includeExternalLinks = int_to_bool(lua_toboolean(L, 2));
         for (size_t i = 0; i < files.Count(); ++i)
             {
             Wisteria::TextStream::ReadFile(files[i], fileContent);
 
-            std::set<wxString> BookmarksInCurrentPage;
+            std::set<wxString> bookmarksInCurrentPage;
             std::pair<const wchar_t*, std::wstring> foundBookMark;
             const wchar_t* const htmlEnd = foundBookMark.first + fileContent.length();
             while (foundBookMark.first)
@@ -802,7 +789,7 @@ namespace LuaScripting
                     foundBookMark.first, htmlEnd);
                 if (foundBookMark.first)
                     {
-                    BookmarksInCurrentPage.insert(foundBookMark.second);
+                    bookmarksInCurrentPage.insert(foundBookMark.second);
                     foundBookMark.first += foundBookMark.second.length();
                     }
                 else
@@ -812,12 +799,12 @@ namespace LuaScripting
                 }
             // read any elements' IDs that may be used as bookmarks
             std::wstring_view htmlContent{ fileContent.wc_str(), fileContent.length() };
-            while (htmlContent.length() > 0)
+            while (!htmlContent.empty())
                 {
                 auto nextBookmark = lily_of_the_valley::html_extract_text::find_id(htmlContent);
-                if (nextBookmark.length() > 0)
+                if (!nextBookmark.empty())
                     {
-                    BookmarksInCurrentPage.insert(nextBookmark);
+                    bookmarksInCurrentPage.insert(nextBookmark);
                     }
                 }
 
@@ -828,9 +815,9 @@ namespace LuaScripting
                 // review bookmarks in the current page
                 if (hparse.get_current_hyperlink_length() > 2 && *currentLink == L'#')
                     {
-                    wxString currentBookmark(currentLink + 1,
-                                             hparse.get_current_hyperlink_length() - 1);
-                    if (!BookmarksInCurrentPage.contains(currentBookmark))
+                    const wxString currentBookmark(currentLink + 1,
+                                                   hparse.get_current_hyperlink_length() - 1);
+                    if (!bookmarksInCurrentPage.contains(currentBookmark))
                         {
                         badLinks.emplace(
                             wxFileName(files[i]).GetFullName(),
@@ -841,7 +828,7 @@ namespace LuaScripting
                     {
                     VerifyLink(currentLink, hparse.get_current_hyperlink_length(),
                                hparse.is_current_link_an_image(), files[i], badLinks, badImageSizes,
-                               IncludeExternalLinks);
+                               includeExternalLinks);
                     }
                 }
             }
@@ -881,7 +868,7 @@ namespace LuaScripting
 
     // Closes the application
     //-------------------------------------------------------------
-    int Close(lua_State*)
+    int Close([[maybe_unused]] lua_State* L)
         {
         if (wxGetApp().GetMainFrame()->GetDocumentManager()->CloseDocuments())
             {
@@ -964,7 +951,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int RemoveAllCustomTests(lua_State*)
+    int RemoveAllCustomTests([[maybe_unused]] lua_State* L)
         {
         ProjectDoc::RemoveAllGlobalCustomReadabilityTests();
         wxGetApp().Yield();
@@ -972,7 +959,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int RemoveAllCustomTestBundles(lua_State*)
+    int RemoveAllCustomTestBundles([[maybe_unused]] lua_State* L)
         {
         wxGetApp().RemoveAllCustomTestBundles();
         wxGetApp().Yield();
@@ -1079,7 +1066,7 @@ namespace LuaScripting
              ++pos)
             {
             if (pos->first.get_word_count() == 1 &&
-                pos->first.get_type() == grammar::phrase_type::phrase_wordy && pos->second.length())
+                pos->first.get_type() == grammar::phrase_type::phrase_wordy && !pos->second.empty())
                 {
                 outputStr += wxString::Format(L"%s\t%s\r\n", pos->first.to_string().c_str(),
                                               pos->second.c_str());
@@ -1230,7 +1217,7 @@ namespace LuaScripting
             }
 
         // create the folder to the filepath, if necessary
-        wxString path{ luaL_checkstring(L, lua_gettop(L)), wxConvUTF8 };
+        const wxString path{ luaL_checkstring(L, lua_gettop(L)), wxConvUTF8 };
         wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
         wxFileName{ path }.SetPermissions(wxS_DEFAULT);
@@ -1281,7 +1268,7 @@ namespace LuaScripting
         outputStr.Trim(false);
 
         // create the folder to the filepath, if necessary
-        wxString path{ luaL_checkstring(L, lua_gettop(L)), wxConvUTF8 };
+        const wxString path{ luaL_checkstring(L, lua_gettop(L)), wxConvUTF8 };
         wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
         wxFileName{ path }.SetPermissions(wxS_DEFAULT);
@@ -1544,7 +1531,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int ResetSettings(lua_State*)
+    int ResetSettings([[maybe_unused]] lua_State* L)
         {
         wxGetApp().GetAppOptions()->ResetSettings();
         wxGetApp().Yield();
@@ -1552,14 +1539,14 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int DisableAllWarnings(lua_State*)
+    int DisableAllWarnings([[maybe_unused]] lua_State* L)
         {
         WarningManager::DisableWarnings();
         return 0;
         }
 
     //-------------------------------------------------------------
-    int EnableAllWarnings(lua_State*)
+    int EnableAllWarnings([[maybe_unused]] lua_State* L)
         {
         WarningManager::EnableWarnings();
         return 0;
@@ -1908,8 +1895,8 @@ namespace LuaScripting
         if (exclusionTags.length() >= 2)
             {
             wxGetApp().GetAppOptions()->GetExclusionBlockTags().clear();
-            wxGetApp().GetAppOptions()->GetExclusionBlockTags().push_back(
-                std::make_pair(exclusionTags[0], exclusionTags[1]));
+            wxGetApp().GetAppOptions()->GetExclusionBlockTags().emplace_back(exclusionTags[0],
+                                                                             exclusionTags[1]);
             }
         return 0;
         }
@@ -2775,7 +2762,7 @@ namespace LuaScripting
             }
 
         wxGetApp().GetAppOptions()->SetGraphBarEffect(
-            static_cast<BoxEffect>(luaL_checkinteger(L, 1)));
+            static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 1)));
         return 0;
         }
 
@@ -2858,7 +2845,7 @@ namespace LuaScripting
             }
 
         wxGetApp().GetAppOptions()->SetHistogramBarEffect(
-            static_cast<BoxEffect>(luaL_checkinteger(L, 1)));
+            static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 1)));
         return 0;
         }
 
@@ -3000,7 +2987,7 @@ namespace LuaScripting
             }
 
         wxGetApp().GetAppOptions()->SetGraphBoxEffect(
-            static_cast<BoxEffect>(luaL_checkinteger(L, 1)));
+            static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 1)));
         return 0;
         }
 

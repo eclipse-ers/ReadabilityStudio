@@ -19,12 +19,8 @@
 #include "../projects/batch_project_view.h"
 #include "../projects/standard_project_doc.h"
 #include "../ui/dialogs/tools_options_dlg.h"
+#include <utility>
 #include <wx/dir.h>
-
-using namespace Wisteria;
-using namespace Wisteria::Graphs;
-using namespace Wisteria::Colors;
-using namespace Wisteria::UI;
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -158,7 +154,7 @@ namespace LuaScripting
 
         // append the files to this project, leave what was there already
         m_project->GetSourceFilesInfo().reserve(m_project->GetSourceFilesInfo().size() + fileCount);
-        for (int i = 1; i <= static_cast<int>(fileCount); ++i)
+        for (int i = 1; std::cmp_less_equal(i, fileCount); ++i)
             {
             lua_rawgeti(L, 2, i);
             const wxString inputFile(luaL_checkstring(L, -1), wxConvUTF8);
@@ -1726,7 +1722,7 @@ namespace LuaScripting
             return 0;
             }
 
-        m_project->SetGraphBarEffect(static_cast<BoxEffect>(luaL_checkinteger(L, 2)));
+        m_project->SetGraphBarEffect(static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 2)));
         ReloadIfNotDelayedSimple();
         return 0;
         }
@@ -1864,7 +1860,7 @@ namespace LuaScripting
             return 0;
             }
 
-        m_project->SetHistogramBarEffect(static_cast<BoxEffect>(luaL_checkinteger(L, 2)));
+        m_project->SetHistogramBarEffect(static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 2)));
         ReloadIfNotDelayedSimple();
         return 0;
         }
@@ -2065,7 +2061,7 @@ namespace LuaScripting
             return 0;
             }
 
-        m_project->SetGraphBoxEffect(static_cast<BoxEffect>(luaL_checkinteger(L, 2)));
+        m_project->SetGraphBoxEffect(static_cast<Wisteria::BoxEffect>(luaL_checkinteger(L, 2)));
         ReloadIfNotDelayedSimple();
         return 0;
         }
@@ -2580,7 +2576,7 @@ namespace LuaScripting
             }
 
         m_project->SetFilePathTruncationMode(
-            static_cast<ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode>(
+            static_cast<Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode>(
                 luaL_checkinteger(L, 2)));
         ReloadIfNotDelayed();
         return 0;
@@ -3061,7 +3057,7 @@ namespace LuaScripting
         auto* view = dynamic_cast<BatchProjectView*>(m_project->GetFirstView());
         if (view != nullptr)
             {
-            ListCtrlEx* listWindow = nullptr;
+            Wisteria::UI::ListCtrlEx* listWindow = nullptr;
             const auto listId = ReadabilityApp::GetDynamicIdMap().find(luaL_checkinteger(L, 2));
             if (listId == ReadabilityApp::GetDynamicIdMap().cend())
                 {
@@ -3076,9 +3072,9 @@ namespace LuaScripting
                 {
                 view->GetSideBar()->SelectSubItem(parentPos.value(), childPos.value());
                 wxWindow* selWindow = view->GetActiveProjectWindow();
-                if (selWindow && selWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                if (selWindow && selWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
-                    listWindow = dynamic_cast<ListCtrlEx*>(selWindow);
+                    listWindow = dynamic_cast<Wisteria::UI::ListCtrlEx*>(selWindow);
                     }
                 }
             else
@@ -3088,9 +3084,9 @@ namespace LuaScripting
                     {
                     view->GetSideBar()->SelectFolder(index.value());
                     wxWindow* selWindow = view->GetActiveProjectWindow();
-                    if (selWindow && selWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                    if (selWindow && selWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
-                        listWindow = dynamic_cast<ListCtrlEx*>(selWindow);
+                        listWindow = dynamic_cast<Wisteria::UI::ListCtrlEx*>(selWindow);
                         }
                     }
                 }
@@ -3101,7 +3097,7 @@ namespace LuaScripting
                 listWindow->SetLabel(
                     originalLabel +
                     wxString::Format(L" [%s]", wxFileName::StripExtension(doc->GetTitle())));
-                GridExportOptions exportOptions;
+                Wisteria::UI::GridExportOptions exportOptions;
                 exportOptions.m_fromRow = (lua_gettop(L) > 3) ? luaL_checkinteger(L, 4) : 1;
                 exportOptions.m_toRow = (lua_gettop(L) > 4) ? luaL_checkinteger(L, 5) : -1;
                 exportOptions.m_fromColumn = (lua_gettop(L) > 5) ? luaL_checkinteger(L, 6) : 1;
@@ -3348,9 +3344,9 @@ namespace LuaScripting
                 {
                 view->GetSideBar()->SelectSubItem(parentPos.value(), childPos.value());
                 wxWindow* selWindow = view->GetActiveProjectWindow();
-                if (selWindow && selWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                if (selWindow && selWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
-                    dynamic_cast<ListCtrlEx*>(selWindow)->SortColumns(columns);
+                    dynamic_cast<Wisteria::UI::ListCtrlEx*>(selWindow)->SortColumns(columns);
                     }
                 }
             else
@@ -3360,9 +3356,9 @@ namespace LuaScripting
                     {
                     view->GetSideBar()->SelectFolder(index.value());
                     wxWindow* selWindow = view->GetActiveProjectWindow();
-                    if (selWindow && selWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                    if (selWindow && selWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
-                        dynamic_cast<ListCtrlEx*>(selWindow)->SortColumns(columns);
+                        dynamic_cast<Wisteria::UI::ListCtrlEx*>(selWindow)->SortColumns(columns);
                         }
                     }
                 }
