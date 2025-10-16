@@ -29,7 +29,7 @@ if(ENABLE_SANITIZERS)
         list(APPEND SANITIZER_LIST "ASAN (AddressSanitizer: detects memory errors such as use-after-free, buffer overflows)")
 
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "^(Apple)?Clang$" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        set(SANITIZER_FLAGS "-fsanitize=address,undefined -fno-omit-frame-pointer")
+        set(SANITIZER_FLAGS "-fsanitize=address,undefined;-fno-omit-frame-pointer")
         set(SANITIZER_LINK_FLAGS "-fsanitize=address,undefined")
         list(APPEND SANITIZER_LIST
             "ASAN (AddressSanitizer: detects memory errors such as use-after-free, buffer overflows)"
