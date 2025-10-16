@@ -18,9 +18,9 @@
 //-------------------------------------------------------------
 void FilteredTextExportOptionsDlg::CreateControls()
     {
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer* itemBoxSizer = new wxStaticBoxSizer(
+    auto* itemBoxSizer = new wxStaticBoxSizer(
         new wxStaticBox(this, wxID_ANY, _(L"Along with text exclusion, also:")), wxVERTICAL);
     mainSizer->Add(itemBoxSizer, wxSizerFlags{}.Top().Border());
 
@@ -59,15 +59,15 @@ void FilteredTextExportOptionsDlg::CreateControls()
     mainSizer->Add(
         new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL),
         wxSizerFlags{ 1 }.Expand().Border(wxLEFT | wxRIGHT));
-    wxSizer* OkCancelSizer = CreateButtonSizer(wxOK | wxCANCEL | wxHELP);
-    wxStaticText* infoText = new wxStaticText(
+    wxSizer* okCancelSizer = CreateButtonSizer(wxOK | wxCANCEL | wxHELP);
+    auto* infoText = new wxStaticText(
         this, wxID_ANY,
         _(L"Note: these options will be used along with your project's text-exclusion settings."),
         wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
     infoText->Wrap(FromDIP(wxSize{ 200, 200 }.GetWidth()));
-    OkCancelSizer->Insert(0, infoText, wxSizerFlags{}.Expand().Border(wxRIGHT));
+    okCancelSizer->Insert(0, infoText, wxSizerFlags{}.Expand().Border(wxRIGHT));
 
-    mainSizer->Add(OkCancelSizer, wxSizerFlags{}.Expand().Border());
+    mainSizer->Add(okCancelSizer, wxSizerFlags{}.Expand().Border());
 
     SetSizerAndFit(mainSizer);
     }

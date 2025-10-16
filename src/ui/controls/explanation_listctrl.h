@@ -16,13 +16,10 @@
 
 #include "../../Wisteria-Dataviz/src/base/canvas.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/htmltablewin.h"
-#include "../../Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
-#include "../../Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.h"
 #include "../../Wisteria-Dataviz/src/util/parentblocker.h"
 #include <map>
 #include <wx/html/htmprint.h>
-#include <wx/print.h>
 #include <wx/splitter.h>
 #include <wx/xrc/xmlres.h>
 
@@ -143,7 +140,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
 
     /// @brief Sets the watermark for the list when printed.
     /// @param watermark The watermark information.
-    void SetWatermark(const Wisteria::Canvas::Watermark& watermark) noexcept
+    void SetWatermark(const Wisteria::Canvas::Watermark& watermark)
         {
         m_waterMark = watermark;
         }
@@ -189,7 +186,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
 
     /// @returns The HTML window.
     [[nodiscard]]
-    Wisteria::UI::HtmlTableWindow* GetExplanationView() noexcept
+    Wisteria::UI::HtmlTableWindow* GetExplanationView() const noexcept
         {
         return m_explanation_view;
         }
@@ -214,7 +211,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
     /// @param sortTopicPath The subpath to the topic.
     void SetResources(const wxString& helpProjectPath, const wxString& sortTopicPath)
         {
-        if (GetResultsListCtrl())
+        if (GetResultsListCtrl() != nullptr)
             {
             GetResultsListCtrl()->SetSortHelpTopic(helpProjectPath, sortTopicPath);
             }
@@ -228,7 +225,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
     void OnSave([[maybe_unused]] wxCommandEvent& event);
     void OnCopy([[maybe_unused]] wxCommandEvent& event);
     void OnFind(wxFindDialogEvent& event);
-    void OnItemSelected(wxListEvent& event);
+    void OnItemSelected(const wxListEvent& event);
     void OnResize(wxSizeEvent& event);
     void OnMenuCommand(wxCommandEvent& event);
 

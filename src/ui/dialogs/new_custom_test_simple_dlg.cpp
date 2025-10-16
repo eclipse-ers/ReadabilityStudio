@@ -29,7 +29,7 @@ void NewCustomWordTestSimpleDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
                      wxICON_EXCLAMATION | wxOK, this);
         return;
         }
-    else if (m_wordListFilePath.empty() || !wxFileName::FileExists(m_wordListFilePath))
+    if (m_wordListFilePath.empty() || !wxFileName::FileExists(m_wordListFilePath))
         {
         wxMessageBox(_(L"Please select a valid file path."), _(L"Invalid File"),
                      wxICON_EXCLAMATION | wxOK, this);
@@ -51,7 +51,7 @@ void NewCustomWordTestSimpleDlg::OnBrowseForFileClick([[maybe_unused]] wxCommand
     {
     TransferDataFromWindow();
     wxFileDialog dialog(this, _(L"Select Word List File"),
-                        m_wordListFilePath.length() ? wxString{} :
+                        !m_wordListFilePath.empty() ? wxString{} :
                                                       wxGetApp().GetAppOptions()->GetWordListPath(),
                         m_wordListFilePath, _(L"Text files (*.txt)|*.txt"),
                         wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
@@ -68,28 +68,27 @@ void NewCustomWordTestSimpleDlg::OnBrowseForFileClick([[maybe_unused]] wxCommand
 //-------------------------------------------------------------
 void NewCustomWordTestSimpleDlg::CreateControls()
     {
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer* testNameBoxSizer =
+    auto* testNameBoxSizer =
         new wxStaticBoxSizer(new wxStaticBox(this, wxID_ANY, _(L"Test name:")), wxVERTICAL);
-    wxStaticBoxSizer* fileBrowseBoxSizer = new wxStaticBoxSizer(
+    auto* fileBrowseBoxSizer = new wxStaticBoxSizer(
         new wxStaticBox(this, wxID_ANY, _(L"Custom familiar word list:")), wxHORIZONTAL);
     mainSizer->Add(testNameBoxSizer, wxSizerFlags{}.Expand().Border());
     mainSizer->Add(fileBrowseBoxSizer, wxSizerFlags{}.Expand().Border());
 
-    wxTextCtrl* testNameEdit =
+    auto* testNameEdit =
         new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, FromDIP(wxSize(400, 25)),
                        wxBORDER_THEME, wxGenericValidator(&m_testName));
     testNameBoxSizer->Add(testNameEdit, wxSizerFlags{ 1 }.Expand());
 
-    wxTextCtrl* filePathEdit =
-        new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                       wxSize(FromDIP(wxSize(400, 400)).GetWidth(), -1), wxBORDER_THEME,
-                       wxGenericValidator(&m_wordListFilePath));
+    auto* filePathEdit = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                        wxSize(FromDIP(wxSize(400, 400)).GetWidth(), -1),
+                                        wxBORDER_THEME, wxGenericValidator(&m_wordListFilePath));
     filePathEdit->AutoCompleteFileNames();
     fileBrowseBoxSizer->Add(filePathEdit, wxSizerFlags{ 1 }.Expand());
 
-    wxBitmapButton* fileBrowseButton =
+    auto* fileBrowseButton =
         new wxBitmapButton(this, ID_FOLDER_BROWSE_BUTTON,
                            wxArtProvider::GetBitmapBundle(wxART_FILE_OPEN, wxART_BUTTON));
     fileBrowseBoxSizer->Add(fileBrowseButton, 0, wxALIGN_CENTER_VERTICAL);

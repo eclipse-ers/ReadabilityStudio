@@ -601,8 +601,8 @@ namespace grammar
     //----------------------------------------------
     bool english_syllabize::does_prefix_disconnect_e(const wchar_t* word, size_t prefix_length)
         {
-        return m_e_disconnecting_prefixes.find(traits::case_insensitive_wstring_ex(
-                   word, prefix_length)) != m_e_disconnecting_prefixes.end();
+        return m_e_disconnecting_prefixes.contains(
+            traits::case_insensitive_wstring_ex(word, prefix_length));
         }
 
     //----------------------------------------------
@@ -610,8 +610,7 @@ namespace grammar
         {
         assert(word);
         if (suffix_length >= 4 &&
-            (m_non_affecting_suffixes_4.find(traits::case_insensitive_wstring_ex(word, 4)) !=
-             m_non_affecting_suffixes_4.end()))
+            (m_non_affecting_suffixes_4.contains(traits::case_insensitive_wstring_ex(word, 4))))
             {
             return true;
             }
@@ -791,52 +790,52 @@ namespace grammar
             return true;
             }
         // angelic, generic, benefice, bedevil
-        else if ((suffix_length - next_vowel_index) >= 2 &&
-                 traits::case_insensitive_ex::eq(suffix[next_vowel_index],
-                                                 common_lang_constants::LOWER_I) &&
-                 (traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                  common_lang_constants::LOWER_C) ||
-                  traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                  common_lang_constants::LOWER_T) ||
-                  traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                  common_lang_constants::LOWER_L)))
+        if ((suffix_length - next_vowel_index) >= 2 &&
+            traits::case_insensitive_ex::eq(suffix[next_vowel_index],
+                                            common_lang_constants::LOWER_I) &&
+            (traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                             common_lang_constants::LOWER_C) ||
+             traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                             common_lang_constants::LOWER_T) ||
+             traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                             common_lang_constants::LOWER_L)))
             {
             return true;
             }
         /*if the word ends like "e[consonant block]e" then the front 'e' must be part of the last
         syllable and the last 'e' will be silent*/
-        else if ((suffix_length - next_vowel_index) == 1 &&
-                 traits::case_insensitive_ex::eq(suffix[next_vowel_index],
-                                                 common_lang_constants::LOWER_E))
+        if ((suffix_length - next_vowel_index) == 1 &&
+            traits::case_insensitive_ex::eq(suffix[next_vowel_index],
+                                            common_lang_constants::LOWER_E))
             {
             return true;
             }
         /*if the word ends like "e[consonant block][es][er][ed][or][ing]" then the front 'e' must be
         part of the last syllable*/
-        else if ((suffix_length - next_vowel_index) == 2 &&
-                 ((traits::case_insensitive_ex::eq(suffix[next_vowel_index],
-                                                   common_lang_constants::LOWER_E) &&
-                   (traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                    common_lang_constants::LOWER_S) ||
-                    traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                    common_lang_constants::LOWER_D) ||
-                    traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                    common_lang_constants::LOWER_R))) ||
-                  (traits::case_insensitive_ex::eq(suffix[next_vowel_index],
-                                                   common_lang_constants::LOWER_O) &&
-                   traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                   common_lang_constants::LOWER_R))))
+        if ((suffix_length - next_vowel_index) == 2 &&
+            ((traits::case_insensitive_ex::eq(suffix[next_vowel_index],
+                                              common_lang_constants::LOWER_E) &&
+              (traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                               common_lang_constants::LOWER_S) ||
+               traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                               common_lang_constants::LOWER_D) ||
+               traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                               common_lang_constants::LOWER_R))) ||
+             (traits::case_insensitive_ex::eq(suffix[next_vowel_index],
+                                              common_lang_constants::LOWER_O) &&
+              traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                              common_lang_constants::LOWER_R))))
             {
             return true;
             }
         // forEsting--the middle 'e' is part of a separate vowel
-        else if ((suffix_length - next_vowel_index) == 3 &&
-                 traits::case_insensitive_ex::eq(suffix[next_vowel_index],
-                                                 common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
-                                                 common_lang_constants::LOWER_N) &&
-                 traits::case_insensitive_ex::eq(suffix[next_vowel_index + 2],
-                                                 common_lang_constants::LOWER_G))
+        if ((suffix_length - next_vowel_index) == 3 &&
+            traits::case_insensitive_ex::eq(suffix[next_vowel_index],
+                                            common_lang_constants::LOWER_I) &&
+            traits::case_insensitive_ex::eq(suffix[next_vowel_index + 1],
+                                            common_lang_constants::LOWER_N) &&
+            traits::case_insensitive_ex::eq(suffix[next_vowel_index + 2],
+                                            common_lang_constants::LOWER_G))
             {
             return true;
             }
@@ -1068,7 +1067,7 @@ namespace grammar
         if (position == m_length - 1 && m_length > 3 &&
             (traits::case_insensitive_ex::eq(word[m_length - 2], common_lang_constants::LOWER_R) ||
              traits::case_insensitive_ex::eq(word[m_length - 2], common_lang_constants::LOWER_V)) &&
-            isChar.is_apostrophe(word[m_length - 3]))
+            characters::is_character::is_apostrophe(word[m_length - 3]))
             {
             return true;
             }
@@ -1090,7 +1089,7 @@ namespace grammar
                 {
                 // found another vowel before end of word,
                 // so this 'e' is still a candidate
-                if (isChar.is_vowel(word[nextVowel]))
+                if (characters::is_character::is_vowel(word[nextVowel]))
                     {
                     // watch out for "ey", this could still be a silent y
                     if (traits::case_insensitive_ex::eq(word[nextVowel],
@@ -1637,7 +1636,7 @@ namespace grammar
             if (m_length > 5)
                 {
                 // here-after
-                if (isChar.is_vowel(word[position + 1]))
+                if (characters::is_character::is_vowel(word[position + 1]))
                     {
                     return true;
                     }
@@ -1727,7 +1726,7 @@ namespace grammar
         // [consonant][consonant]e
         if ((position >= 3) && (position - m_previous_vowel) > 2)
             {
-            if (!isChar.is_vowel(word[position - 2]) &&
+            if (!characters::is_character::is_vowel(word[position - 2]) &&
                 !traits::case_insensitive_ex::eq(word[position - 1], word[position - 2]))
                 {
                 // [consonant]re causes a separate syllable
@@ -1801,7 +1800,7 @@ namespace grammar
                 return false;
                 }
             // features
-            if (position >= 2 && isChar.is_vowel(word[position - 2]))
+            if (position >= 2 && characters::is_character::is_vowel(word[position - 2]))
                 {
                 return true;
                 }
@@ -1928,162 +1927,138 @@ namespace grammar
                 return false;
                 }
             // ben-nes
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_N) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_N))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_N))
                 {
                 return false;
                 }
             // ter-rest-tri-al
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_R))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_R))
                 {
                 return false;
                 }
             // con-de-scen-sion
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_N) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_D))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_D))
                 {
                 return false;
                 }
             // court-es-y
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_T))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_T))
                 {
                 return false;
                 }
             // mag-nes
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_G) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_N))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_G) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_N))
                 {
                 return false;
                 }
             // ar-gues
-            else if (position >= 4 &&
-                     traits::case_insensitive_ex::eq(word[position - 3],
-                                                     common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_G) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_U))
+            if (position >= 4 &&
+                traits::case_insensitive_ex::eq(word[position - 3],
+                                                common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_G) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_U))
                 {
                 return false;
                 }
             // a-gues
-            else if (position == 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 3],
-                                                     common_lang_constants::LOWER_A) &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_G) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_U))
+            if (position == 3 &&
+                traits::case_insensitive_ex::eq(word[position - 3],
+                                                common_lang_constants::LOWER_A) &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_G) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_U))
                 {
                 return false;
                 }
             // a-chill-es
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 3],
-                                                     common_lang_constants::LOWER_I) &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_L) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_L))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 3],
+                                                common_lang_constants::LOWER_I) &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_L) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_L))
                 {
                 return false;
                 }
             // bur-lesqu
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_L))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_L))
                 {
                 return false;
                 }
             // mea-sles
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_S) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_L))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_S) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_L))
                 {
                 return false;
                 }
             // par-mes-an
-            else if (position >= 3 &&
-                     traits::case_insensitive_ex::eq(word[position - 2],
-                                                     common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_M))
+            if (position >= 3 &&
+                traits::case_insensitive_ex::eq(word[position - 2],
+                                                common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_M))
                 {
                 return false;
                 }
-            else
-                {
-                return true;
-                }
+            return true;
             }
         // ER
-        else if (m_length >= (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_R))
+        if (m_length >= (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_R))
             {
             return false;
             }
         // CHEMI
-        else if (m_length >= (position + 3) && position >= 2 &&
-                 traits::case_insensitive_ex::eq(word[position - 2],
-                                                 common_lang_constants::LOWER_C) &&
-                 traits::case_insensitive_ex::eq(word[position - 1],
-                                                 common_lang_constants::LOWER_H) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_M) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_I))
+        if (m_length >= (position + 3) && position >= 2 &&
+            traits::case_insensitive_ex::eq(word[position - 2], common_lang_constants::LOWER_C) &&
+            traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_H) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_M) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_I))
             {
             return false;
             }
         // EP (door-step)
-        else if (m_length == (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_P))
+        if (m_length == (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_P))
             {
             return false;
             }
         // EPS (door-steps)
-        else if (m_length == (position + 3) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_P) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_S))
+        if (m_length == (position + 3) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_P) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_S))
             {
             return false;
             }
         // EN (heath-en, chos-en)
-        else if (m_length >= (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_N))
+        if (m_length >= (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_N))
             {
             return false;
             }
         // EL
-        else if (m_length >= (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_L))
+        if (m_length >= (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_L))
             {
             // lovely
             if (traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_Y))
@@ -2096,17 +2071,17 @@ namespace grammar
                 return false;
                 }
             // ape-look (two consecutive vowels cannot start syllable)
-            if ((position + 3 < m_length) && isChar.is_vowel(word[position + 2]) &&
-                isChar.is_vowel(word[position + 3]))
+            if ((position + 3 < m_length) &&
+                characters::is_character::is_vowel(word[position + 2]) &&
+                characters::is_character::is_vowel(word[position + 3]))
                 {
                 return true;
                 }
             return true;
             }
         // ET
-        else if (m_length >= (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_T))
+        if (m_length >= (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_T))
             {
             if (m_length >= (position + 3))
                 {
@@ -2173,9 +2148,8 @@ namespace grammar
             return false;
             }
         // ED
-        else if (m_length >= (position + 2) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_D))
+        if (m_length >= (position + 2) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_D))
             {
             // if "ted" and "ded" then 'ed' is a new syllable
             //(e.g., "exited", "refuted", "acted", "embedded")
@@ -2205,43 +2179,31 @@ namespace grammar
             if (m_length >= (position + 3))
                 {
                 // verify that it is not something like "edr"
-                if (nextVowel != m_length && (nextVowel - 2) > position)
-                    {
-                    return true;
-                    }
-                return false;
+                return nextVowel != m_length && (nextVowel - 2) > position;
                 }
             // something like "raked"
             return true;
             }
         // E and various consonants at end of word
-        else if (position + 2 == m_length &&
-                 (traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_B) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_C) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_K) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_M) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_N) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_W) ||
-                  traits::case_insensitive_ex::eq(word[position + 1],
-                                                  common_lang_constants::LOWER_Y)))
+        if (position + 2 == m_length &&
+            (traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_B) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_C) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_K) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_M) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_N) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_W) ||
+             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_Y)))
             {
             return false;
             }
         /// E consonant O at end of word
         /// toledo, imported words (e.g. Italian words)
-        else if (position + 3 == m_length && !isChar.is_vowel(word[position + 1]) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_O))
+        if (position + 3 == m_length && !characters::is_character::is_vowel(word[position + 1]) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_O))
             {
             return false;
             }
-        else if (position >= 4)
+        if (position >= 4)
             {
             if (traits::case_insensitive_ex::eq(word[position - 4],
                                                 common_lang_constants::LOWER_A) &&
@@ -2325,14 +2287,11 @@ namespace grammar
             traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_T))
             {
             // exception: shirt-waist
-            if (position > 0 &&
+            return !(
+                position > 0 &&
                 traits::case_insensitive_ex::eq(word[position - 1],
                                                 common_lang_constants::LOWER_W) &&
-                traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_A))
-                {
-                return false;
-                }
-            return true;
+                traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_A));
             }
         // theist
         if (vowel_block_size == 2 && position + 3 < m_length && position == 2 &&
@@ -2374,54 +2333,44 @@ namespace grammar
             return true;
             }
         // [vowel]ing always splits
-        else if (vowel_block_size == 2 && position + 3 < m_length &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_N) &&
-                 traits::case_insensitive_ex::eq(word[position + 3],
-                                                 common_lang_constants::LOWER_G))
+        if (vowel_block_size == 2 && position + 3 < m_length &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_I) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_N) &&
+            traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_G))
             {
             return true;
             }
         // poly[vowel] always splits
-        else if (vowel_block_size >= 2 && position == 3 &&
-                 traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
-                 traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_L) &&
-                 traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_Y))
+        if (vowel_block_size >= 2 && position == 3 &&
+            traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
+            traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
+            traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_L) &&
+            traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_Y))
             {
             return true;
             }
         // eex always splits
-        else if (vowel_block_size == 2 && position + 2 < m_length &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_X))
+        if (vowel_block_size == 2 && position + 2 < m_length &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_E) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_X))
             {
             return true;
             }
         // ooe always splits
-        else if (vowel_block_size == 2 && position + 2 < m_length &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_E))
+        if (vowel_block_size == 2 && position + 2 < m_length &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_O) &&
+            traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_E))
             {
             return true;
             }
         // fry-er, fly-er
-        else if (vowel_block_size == 2 && position >= 2 &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E) &&
-                 (traits::case_insensitive_ex::eq(word[position - 1],
-                                                  common_lang_constants::LOWER_L) ||
-                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                  common_lang_constants::LOWER_R)))
+        if (vowel_block_size == 2 && position >= 2 &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_E) &&
+            (traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_L) ||
+             traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_R)))
             {
             return true;
             }
@@ -2432,7 +2381,7 @@ namespace grammar
             {
             /* found another vowel before end of word,
                so this 'e' is still a candidate*/
-            if (isChar.is_vowel(word[nextVowel]))
+            if (characters::is_character::is_vowel(word[nextVowel]))
                 {
                 break;
                 }
@@ -2476,16 +2425,13 @@ namespace grammar
                 traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_U))
                 {
                 // herbaceous, advantageous, righteous
-                if (position >= 1 && (traits::case_insensitive_ex::eq(
-                                          word[position - 1], common_lang_constants::LOWER_C) ||
-                                      traits::case_insensitive_ex::eq(
-                                          word[position - 1], common_lang_constants::LOWER_G) ||
-                                      traits::case_insensitive_ex::eq(
-                                          word[position - 1], common_lang_constants::LOWER_R)))
-                    {
-                    return false;
-                    }
-                return true;
+                return !(position >= 1 &&
+                         (traits::case_insensitive_ex::eq(word[position - 1],
+                                                          common_lang_constants::LOWER_C) ||
+                          traits::case_insensitive_ex::eq(word[position - 1],
+                                                          common_lang_constants::LOWER_G) ||
+                          traits::case_insensitive_ex::eq(word[position - 1],
+                                                          common_lang_constants::LOWER_R)));
                 }
             if (vowel_block_size == 3 &&
                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
@@ -2533,13 +2479,9 @@ namespace grammar
             traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_O))
             {
             // exception: gaol
-            if (position == 1 && m_length >= 4 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_L))
-                {
-                return false;
-                }
-            return true;
+            return !(position == 1 && m_length >= 4 &&
+                     traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_G) &&
+                     traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_L));
             }
         // coliseum
         if (position + 3 <= m_length &&
@@ -2563,15 +2505,11 @@ namespace grammar
             if (position == 0)
                 {
                 // special case for oasis
-                if (m_length > 3 &&
-                    traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_I))
-                    {
-                    return true;
-                    }
-                return false;
+                return m_length > 3 &&
+                       traits::case_insensitive_ex::eq(word[position + 2],
+                                                       common_lang_constants::LOWER_S) &&
+                       traits::case_insensitive_ex::eq(word[position + 3],
+                                                       common_lang_constants::LOWER_I);
                 }
             // first chance logic for special case "coa[consonant]"
             if (position >= 1 &&
@@ -2600,19 +2538,15 @@ namespace grammar
                 if (position + 4 <= m_length &&
                     traits::case_insensitive_ex::eq(word[position + 2],
                                                     common_lang_constants::LOWER_L) &&
-                    isChar.is_vowel(word[position + 3]))
+                    characters::is_character::is_vowel(word[position + 3]))
                     {
-                    if (position + 5 <= m_length &&
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_E) &&
-                        (traits::case_insensitive_ex::eq(word[position + 4],
-                                                         common_lang_constants::LOWER_R) ||
-                         traits::case_insensitive_ex::eq(word[position + 4],
-                                                         common_lang_constants::LOWER_D)))
-                        {
-                        return false;
-                        }
-                    return true;
+                    return !(position + 5 <= m_length &&
+                             traits::case_insensitive_ex::eq(word[position + 3],
+                                                             common_lang_constants::LOWER_E) &&
+                             (traits::case_insensitive_ex::eq(word[position + 4],
+                                                              common_lang_constants::LOWER_R) ||
+                              traits::case_insensitive_ex::eq(word[position + 4],
+                                                              common_lang_constants::LOWER_D)));
                     }
                 }
 
@@ -2701,10 +2635,9 @@ namespace grammar
             return true;
             }
         // OI
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_I))
+        if ((position + 1 < m_length) &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_I))
             {
             // O-IZE
             if ((position + 3 < m_length) &&
@@ -2728,10 +2661,9 @@ namespace grammar
             return false;
             }
         // rye, goodbye
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E))
+        if ((position + 1 < m_length) &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_E))
             {
             // dryer
             if (position + 3 == m_length &&
@@ -2742,15 +2674,14 @@ namespace grammar
             return false;
             }
         // bryan
-        else if (traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y))
+        if (traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y))
             {
             return true;
             }
         // IO
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_O))
+        if ((position + 1 < m_length) &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_O))
             {
             // if at the end of the word then always split (e.g., bio, radio, io)
             if (position + 2 == m_length ||
@@ -2830,10 +2761,9 @@ namespace grammar
             return true;
             }
         // IA
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_A))
+        if ((position + 1 < m_length) &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_A))
             {
             // [consonant]ia[consonant]
             if ((position > 0) && (position + 2 < m_length))
@@ -2940,867 +2870,929 @@ namespace grammar
                 return true;
                 }
             // diabetes
-            else if (position + 2 < m_length && position > 0 &&
-                     (traits::case_insensitive_ex::eq(word[position + 2],
-                                                      common_lang_constants::LOWER_B)))
+            if (position + 2 < m_length && position > 0 &&
+                (traits::case_insensitive_ex::eq(word[position + 2],
+                                                 common_lang_constants::LOWER_B)))
                 {
                 return false;
                 }
             ///@bug ammonia is broken
             // fantasia
-            else if (position + 2 == m_length && position > 0 &&
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_S))
+            if (position + 2 == m_length && position > 0 &&
+                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_S))
                 {
                 return false;
                 }
             // dial, pia
-            else
-                {
-                return true;
-                }
+
+            return true;
             }
         // EE
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E))
+        if ((position + 1 < m_length) &&
+            traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
+            traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_E))
             {
             ///@bug seer is broken
             return false;
             }
         // EI
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_I))
+        else
             {
-            // reign
-            if (position + 3 < m_length &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_N))
+            if ((position + 1 < m_length) &&
+                traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_I))
                 {
-                return false;
-                }
-            // cor-por-e-it-y
-            if ((position == m_length - 4) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_T) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_Y))
-                {
-                return true;
-                }
-            if (position == 1)
-                {
-                // reintroduce
-                if (traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_R))
-                    {
-                    return true;
-                    }
-                // deity, deirdre
+                // reign
                 if (position + 3 < m_length &&
-                    traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_D) &&
-                    !traits::case_insensitive_ex::eq(word[position + 2],
-                                                     common_lang_constants::LOWER_R))
-                    {
-                    // watch out for deify. "deify" splits, but some other forms don't
-                    if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                        common_lang_constants::LOWER_F))
-                        {
-                        if (traits::case_insensitive_ex::eq(word[position + 3],
-                                                            common_lang_constants::LOWER_Y) ||
-                            (position + 4 < m_length &&
-                             traits::case_insensitive_ex::eq(word[position + 3],
-                                                             common_lang_constants::LOWER_I) &&
-                             traits::case_insensitive_ex::eq(word[position + 4],
-                                                             common_lang_constants::LOWER_C)))
-                            {
-                            return true;
-                            }
-                        return false;
-                        }
-                    return true;
-                    }
-                return false;
-                }
-            return false;
-            }
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_A))
-            {
-            // EA[letter][letter]...
-            if (position == 0)
-                {
-                // eaten (only a consonant in front can cause a split)
-                return false;
-                }
-            // i-de-a, i-de-al
-            if (position == 2 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_I) &&
-                traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_D))
-                {
-                return true;
-                }
-            // pre-arr-ange, pre-am-ble
-            if (position == 2 && m_length >= 6 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
-                traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R) &&
-                (traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_R) ||
-                 traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_M) ||
-                 traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_G)))
-                {
-                return true;
-                }
-            // EA at end of word
-            if (position + 2 == m_length)
-                {
-                // plea
-                if (m_syllable_count == 0)
-                    {
-                    return false;
-                    }
-                // achillea, nausea
-                return true;
-                }
-            // EA[letter]...
-            if (position + 3 == m_length ||
-                (position + 4 == m_length &&
-                 traits::case_insensitive_ex::eq(word[position + 3],
-                                                 common_lang_constants::LOWER_S)))
-                {
-                // EAN
-                if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_N))
-                    {
-                    // If "ea" is the first vowels then it is one sound
-                    // bean
-                    if (m_previous_block_vowel == m_length)
-                        {
-                        return false;
-                        }
-                    // boolean
-                    if (position >= 3 &&
-                        traits::case_insensitive_ex::eq(word[position - 3],
-                                                        common_lang_constants::LOWER_O) &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
-                                                        common_lang_constants::LOWER_O) &&
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_L))
-                        {
-                        return true;
-                        }
-                    // aegean
-                    if (position >= 1 && traits::case_insensitive_ex::eq(
-                                             word[position - 1], common_lang_constants::LOWER_G))
-                        {
-                        return true;
-                        }
-                    // ocean
-                    if (m_syllable_count == 1 &&
-                        (m_previous_block_vowel == position - 2 ||
-                         can_consonants_begin_sound(word + (m_previous_block_vowel + 1),
-                                                    position - (m_previous_block_vowel + 1))))
-                        {
-                        return false;
-                        }
-                    // demean, crustacean
-                    if (position >= 1 && (traits::case_insensitive_ex::eq(
-                                              word[position - 1], common_lang_constants::LOWER_M) ||
-                                          traits::case_insensitive_ex::eq(
-                                              word[position - 1], common_lang_constants::LOWER_C)))
-                        {
-                        return false;
-                        }
-                    // soybean
-                    if (position >= 1 && traits::case_insensitive_ex::eq(
-                                             word[position - 1], common_lang_constants::LOWER_B))
-                        {
-                        // exception: Caribbean
-                        if (position >= 2 &&
-                            traits::case_insensitive_ex::eq(word[position - 2],
-                                                            common_lang_constants::LOWER_B))
-                            {
-                            return true;
-                            }
-                        return false;
-                        }
-                    // cyclopean
-                    if (position >= 1 && traits::case_insensitive_ex::eq(
-                                             word[position - 1], common_lang_constants::LOWER_P))
-                        {
-                        return true;
-                        }
-                    // korean
-                    if (position >= 1 && traits::case_insensitive_ex::eq(
-                                             word[position - 1], common_lang_constants::LOWER_R))
-                        {
-                        return true;
-                        }
-                    // european
-                    return true;
-                    }
-                // surreal, cereal, real
-                if ((position > 1) &&
-                    traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_R) &&
                     traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_L))
-                    {
-                    // exception: unreal
-                    if (position == 3 &&
-                        traits::case_insensitive_ex::eq(word[position - 3],
-                                                        common_lang_constants::LOWER_U) &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
-                                                        common_lang_constants::LOWER_N))
-                        {
-                        return false;
-                        }
-                    return true;
-                    }
-                }
-            else if (position + 3 < m_length)
-                {
-                // react
-                if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_T))
-                    {
-                    return true;
-                    }
-                // miscreant
-                if (position >= 2 &&
-                    traits::case_insensitive_ex::eq(word[position - 2],
-                                                    common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_T))
-                    {
-                    return true;
-                    }
-                // MEAB
-                if (position > 0 &&
-                    traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_B))
-                    {
-                    return true;
-                    }
-                // re-al-i-ty
-                if ((position == 1) &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_R))
-                    {
-                    if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                        common_lang_constants::LOWER_L))
-                        {
-                        // always splits (except for "realm")
-                        return !(traits::case_insensitive_ex::eq(word[position + 3],
-                                                                 common_lang_constants::LOWER_M));
-                        }
-                    // reappointment
-                    if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                        common_lang_constants::LOWER_P) &&
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_P))
-                        {
-                        return true;
-                        }
-                    // rearranged
-                    if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                        common_lang_constants::LOWER_R) &&
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_R))
-                        {
-                        return true;
-                        }
-                    return false;
-                    }
-                // ne-ther-realms
-                if (position > 1 && traits::case_insensitive_ex::eq(word[position + 3],
-                                                                    common_lang_constants::LOWER_M))
-                    {
-                    return false;
-                    }
-                // mile-age
-                if (traits::case_insensitive_ex::eq(word[position + 2],
                                                     common_lang_constants::LOWER_G) &&
                     traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_E))
+                                                    common_lang_constants::LOWER_N))
                     {
-                    // except for "eag-er"
-                    if (position + 4 < m_length &&
-                        traits::case_insensitive_ex::eq(word[position + 4],
-                                                        common_lang_constants::LOWER_R))
-                        {
-                        return false;
-                        }
+                    return false;
+                    }
+                // cor-por-e-it-y
+                if ((position == m_length - 4) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_T) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_Y))
+                    {
                     return true;
                     }
-                if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_T))
+                if (position == 1)
                     {
-                    // creator
-                    if (position > 1 &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
-                                                        common_lang_constants::LOWER_C) &&
-                        traits::case_insensitive_ex::eq(word[position - 1],
+                    // reintroduce
+                    if (traits::case_insensitive_ex::eq(word[position - 1],
                                                         common_lang_constants::LOWER_R))
                         {
-                        // "creature" special case
-                        if (position + 3 < m_length &&
-                            traits::case_insensitive_ex::eq(word[position + 3],
-                                                            common_lang_constants::LOWER_U))
+                        return true;
+                        }
+                    // deity, deirdre
+                    if (position + 3 < m_length &&
+                        traits::case_insensitive_ex::eq(word[position - 1],
+                                                        common_lang_constants::LOWER_D) &&
+                        !traits::case_insensitive_ex::eq(word[position + 2],
+                                                         common_lang_constants::LOWER_R))
+                        {
+                        // watch out for deify. "deify" splits, but some other forms don't
+                        if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                            common_lang_constants::LOWER_F))
                             {
+                            if (traits::case_insensitive_ex::eq(word[position + 3],
+                                                                common_lang_constants::LOWER_Y) ||
+                                (position + 4 < m_length &&
+                                 traits::case_insensitive_ex::eq(word[position + 3],
+                                                                 common_lang_constants::LOWER_I) &&
+                                 traits::case_insensitive_ex::eq(word[position + 4],
+                                                                 common_lang_constants::LOWER_C)))
+                                {
+                                return true;
+                                }
                             return false;
                             }
                         return true;
                         }
-                    // permeate
-                    if (position >= 2 &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
-                                                        common_lang_constants::LOWER_R) &&
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_M) &&
-                        position + 3 < m_length &&
-                        traits::case_insensitive_ex::eq(word[position + 2],
-                                                        common_lang_constants::LOWER_T) &&
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_E))
-                        {
-                        return true;
-                        }
-                    // theatrical
-                    if (position + 4 < m_length &&
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_R) &&
-                        traits::case_insensitive_ex::eq(word[position + 4],
-                                                        common_lang_constants::LOWER_I))
-                        {
-                        return true;
-                        }
-                    // eaten
                     return false;
                     }
-                if (traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_N))
+                return false;
+                }
+            if ((position + 1 < m_length) &&
+                traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(word[position + 1], common_lang_constants::LOWER_A))
+                {
+                // EA[letter][letter]...
+                if (position == 0)
                     {
-                    // oleander, leann
-                    if (traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_D) ||
-                        traits::case_insensitive_ex::eq(word[position + 3],
-                                                        common_lang_constants::LOWER_N))
-                        {
-                        return true;
-                        }
+                    // eaten (only a consonant in front can cause a split)
                     return false;
                     }
-                // surreal, cereal, realize
-                if ((position > 1) &&
-                    traits::case_insensitive_ex::eq(word[position - 1],
-                                                    common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_L))
+                // i-de-a, i-de-al
+                if (position == 2 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_D))
                     {
                     return true;
                     }
-                }
-            else
-                {
-                return false;
-                }
-            }
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_U))
-            {
-            return true;
-            }
-        // EO
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_O))
-            {
-            // foreordain
-            if (position >= 3 &&
-                traits::case_insensitive_ex::eq(word[position - 3],
-                                                common_lang_constants::LOWER_F) &&
-                traits::case_insensitive_ex::eq(word[position - 2],
-                                                common_lang_constants::LOWER_O) &&
-                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_R))
-                {
-                return false;
-                }
-            // george
-            if (position == 1 && position + 3 < m_length &&
-                traits::case_insensitive_ex::eq(word[position - 1],
-                                                common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_R) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_G))
-                {
-                return false;
-                }
-            // geoff
-            if (position == 1 && position + 3 < m_length &&
-                traits::case_insensitive_ex::eq(word[position - 1],
-                                                common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_F) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_F))
-                {
-                return false;
-                }
-            // where-on
-            if (position >= 3 &&
-                traits::case_insensitive_ex::eq(word[position - 3],
-                                                common_lang_constants::LOWER_H) &&
-                traits::case_insensitive_ex::eq(word[position - 2],
-                                                common_lang_constants::LOWER_E) &&
-                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_R))
-                {
-                return false;
-                }
-            // bludgeon
-            if (position >= 1 && position + 2 < m_length &&
-                (traits::case_insensitive_ex::eq(word[position - 1],
-                                                 common_lang_constants::LOWER_G) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_N)))
-                {
-                return false;
-                }
-            // PEO and JEO
-            if (position >= 1 && (traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_P) ||
-                                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_J)))
-                {
-                // people and jeopardy will not split on the "eo"
-                if (position + 2 < m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_P))
+                // pre-arr-ange, pre-am-ble
+                if (position == 2 && m_length >= 6 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
+                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R) &&
+                    (traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_R) ||
+                     traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_M) ||
+                     traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_G)))
                     {
-                    return false;
+                    return true;
                     }
-                // everything else (e.g., "peon" and "Peoria" will split)
-                return true;
-                }
-            // someone
-            if (position == 3 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_S) &&
-                traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
-                traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_M))
-                {
-                return false;
-                }
-            // geometric, neon
-            return true;
-            }
-        // UI
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_U) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_I))
-            {
-            if ((position + 3) <= m_length &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_T))
-                {
-                // fruit(s)
+                // EA at end of word
+                if (position + 2 == m_length)
+                    {
+                    // plea
+                    if (m_syllable_count == 0)
+                        {
+                        return false;
+                        }
+                    // achillea, nausea
+                    return true;
+                    }
+                // EA[letter]...
                 if (position + 3 == m_length ||
                     (position + 4 == m_length &&
                      traits::case_insensitive_ex::eq(word[position + 3],
                                                      common_lang_constants::LOWER_S)))
                     {
+                    // EAN
+                    if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_N))
+                        {
+                        // If "ea" is the first vowels then it is one sound
+                        // bean
+                        if (m_previous_block_vowel == m_length)
+                            {
+                            return false;
+                            }
+                        // boolean
+                        if (position >= 3 &&
+                            traits::case_insensitive_ex::eq(word[position - 3],
+                                                            common_lang_constants::LOWER_O) &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_O) &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_L))
+                            {
+                            return true;
+                            }
+                        // aegean
+                        if (position >= 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_G))
+                            {
+                            return true;
+                            }
+                        // ocean
+                        if (m_syllable_count == 1 &&
+                            (m_previous_block_vowel == position - 2 ||
+                             can_consonants_begin_sound(word + (m_previous_block_vowel + 1),
+                                                        position - (m_previous_block_vowel + 1))))
+                            {
+                            return false;
+                            }
+                        // demean, crustacean
+                        if (position >= 1 &&
+                            (traits::case_insensitive_ex::eq(word[position - 1],
+                                                             common_lang_constants::LOWER_M) ||
+                             traits::case_insensitive_ex::eq(word[position - 1],
+                                                             common_lang_constants::LOWER_C)))
+                            {
+                            return false;
+                            }
+                        // soybean
+                        if (position >= 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_B))
+                            {
+                            // exception: Caribbean
+                            if (position >= 2 &&
+                                traits::case_insensitive_ex::eq(word[position - 2],
+                                                                common_lang_constants::LOWER_B))
+                                {
+                                return true;
+                                }
+                            return false;
+                            }
+                        // cyclopean
+                        if (position >= 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_P))
+                            {
+                            return true;
+                            }
+                        // korean
+                        if (position >= 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_R))
+                            {
+                            return true;
+                            }
+                        // european
+                        return true;
+                        }
+                    // surreal, cereal, real
+                    if ((position > 1) &&
+                        traits::case_insensitive_ex::eq(word[position - 1],
+                                                        common_lang_constants::LOWER_R) &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_L))
+                        {
+                        // exception: unreal
+                        if (position == 3 &&
+                            traits::case_insensitive_ex::eq(word[position - 3],
+                                                            common_lang_constants::LOWER_U) &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_N))
+                            {
+                            return false;
+                            }
+                        return true;
+                        }
+                    }
+                else if (position + 3 < m_length)
+                    {
+                    // react
+                    if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_C) &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_T))
+                        {
+                        return true;
+                        }
+                    // miscreant
+                    if (position >= 2 &&
+                        traits::case_insensitive_ex::eq(word[position - 2],
+                                                        common_lang_constants::LOWER_C) &&
+                        traits::case_insensitive_ex::eq(word[position - 1],
+                                                        common_lang_constants::LOWER_R) &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_N) &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_T))
+                        {
+                        return true;
+                        }
+                    // MEAB
+                    if (position > 0 &&
+                        traits::case_insensitive_ex::eq(word[position - 1],
+                                                        common_lang_constants::LOWER_M) &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_B))
+                        {
+                        return true;
+                        }
+                    // re-al-i-ty
+                    if ((position == 1) &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_R))
+                        {
+                        if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                            common_lang_constants::LOWER_L))
+                            {
+                            // always splits (except for "realm")
+                            return !(traits::case_insensitive_ex::eq(
+                                word[position + 3], common_lang_constants::LOWER_M));
+                            }
+                        // reappointment
+                        if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                            common_lang_constants::LOWER_P) &&
+                            traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_P))
+                            {
+                            return true;
+                            }
+                        // rearranged
+                        if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                            common_lang_constants::LOWER_R) &&
+                            traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_R))
+                            {
+                            return true;
+                            }
+                        return false;
+                        }
+                    // ne-ther-realms
+                    if (position > 1 && traits::case_insensitive_ex::eq(
+                                            word[position + 3], common_lang_constants::LOWER_M))
+                        {
+                        return false;
+                        }
+                    // mile-age
+                    if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_G) &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_E))
+                        {
+                        // except for "eag-er"
+                        if (position + 4 < m_length &&
+                            traits::case_insensitive_ex::eq(word[position + 4],
+                                                            common_lang_constants::LOWER_R))
+                            {
+                            return false;
+                            }
+                        return true;
+                        }
+                    if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_T))
+                        {
+                        // creator
+                        if (position > 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_C) &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_R))
+                            {
+                            // "creature" special case
+                            if (position + 3 < m_length &&
+                                traits::case_insensitive_ex::eq(word[position + 3],
+                                                                common_lang_constants::LOWER_U))
+                                {
+                                return false;
+                                }
+                            return true;
+                            }
+                        // permeate
+                        if (position >= 2 &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_R) &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_M) &&
+                            position + 3 < m_length &&
+                            traits::case_insensitive_ex::eq(word[position + 2],
+                                                            common_lang_constants::LOWER_T) &&
+                            traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_E))
+                            {
+                            return true;
+                            }
+                        // theatrical
+                        if (position + 4 < m_length &&
+                            traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_R) &&
+                            traits::case_insensitive_ex::eq(word[position + 4],
+                                                            common_lang_constants::LOWER_I))
+                            {
+                            return true;
+                            }
+                        // eaten
+                        return false;
+                        }
+                    if (traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_N))
+                        {
+                        // oleander, leann
+                        if (traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_D) ||
+                            traits::case_insensitive_ex::eq(word[position + 3],
+                                                            common_lang_constants::LOWER_N))
+                            {
+                            return true;
+                            }
+                        return false;
+                        }
+                    // surreal, cereal, realize
+                    if ((position > 1) &&
+                        traits::case_insensitive_ex::eq(word[position - 1],
+                                                        common_lang_constants::LOWER_R) &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_L))
+                        {
+                        return true;
+                        }
+                    }
+                else
+                    {
                     return false;
                     }
-                // acuity
-                if (traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_Y))
+                }
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_I) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_U))
+                {
+                return true;
+                }
+            // EO
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_E) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_O))
+                {
+                // foreordain
+                if (position >= 3 &&
+                    traits::case_insensitive_ex::eq(word[position - 3],
+                                                    common_lang_constants::LOWER_F) &&
+                    traits::case_insensitive_ex::eq(word[position - 2],
+                                                    common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_R))
                     {
-                    // except "fruity"
-                    if (position == 2 &&
-                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_F) &&
+                    return false;
+                    }
+                // george
+                if (position == 1 && position + 3 < m_length &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_G) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_G))
+                    {
+                    return false;
+                    }
+                // geoff
+                if (position == 1 && position + 3 < m_length &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_G) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_F) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_F))
+                    {
+                    return false;
+                    }
+                // where-on
+                if (position >= 3 &&
+                    traits::case_insensitive_ex::eq(word[position - 3],
+                                                    common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(word[position - 2],
+                                                    common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_R))
+                    {
+                    return false;
+                    }
+                // bludgeon
+                if (position >= 1 && position + 2 < m_length &&
+                    (traits::case_insensitive_ex::eq(word[position - 1],
+                                                     common_lang_constants::LOWER_G) &&
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_N)))
+                    {
+                    return false;
+                    }
+                // PEO and JEO
+                if (position >= 1 && (traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_P) ||
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_J)))
+                    {
+                    // people and jeopardy will not split on the "eo"
+                    if (position + 2 < m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_P))
+                        {
+                        return false;
+                        }
+                    // everything else (e.g., "peon" and "Peoria" will split)
+                    return true;
+                    }
+                // someone
+                if (position == 3 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_M))
+                    {
+                    return false;
+                    }
+                // geometric, neon
+                return true;
+                }
+            // UI
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_U) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_I))
+                {
+                if ((position + 3) <= m_length &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_T))
+                    {
+                    // fruit(s)
+                    if (position + 3 == m_length ||
+                        (position + 4 == m_length &&
+                         traits::case_insensitive_ex::eq(word[position + 3],
+                                                         common_lang_constants::LOWER_S)))
+                        {
+                        return false;
+                        }
+                    // acuity
+                    if (traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_Y))
+                        {
+                        // except "fruity"
+                        if (position == 2 &&
+                            traits::case_insensitive_ex::eq(word[0],
+                                                            common_lang_constants::LOWER_F) &&
+                            traits::case_insensitive_ex::eq(word[1],
+                                                            common_lang_constants::LOWER_R))
+                            {
+                            return false;
+                            }
+                        return true;
+                        }
+                    // uities
+                    if (position + 6 == m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 2],
+                                                        common_lang_constants::LOWER_T) &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_I) &&
+                        traits::case_insensitive_ex::eq(word[position + 4],
+                                                        common_lang_constants::LOWER_E) &&
+                        traits::case_insensitive_ex::eq(word[position + 5],
+                                                        common_lang_constants::LOWER_S))
+                        {
+                        return true;
+                        }
+                    // intuitive
+                    if (position + 5 < m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_I) &&
+                        traits::case_insensitive_ex::eq(word[position + 4],
+                                                        common_lang_constants::LOWER_V) &&
+                        traits::case_insensitive_ex::eq(word[position + 5],
+                                                        common_lang_constants::LOWER_E))
+                        {
+                        return true;
+                        }
+                    // intuition
+                    if (position + 5 < m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_I) &&
+                        traits::case_insensitive_ex::eq(word[position + 4],
+                                                        common_lang_constants::LOWER_O) &&
+                        traits::case_insensitive_ex::eq(word[position + 5],
+                                                        common_lang_constants::LOWER_N))
+                        {
+                        return true;
+                        }
+                    // suite, suited
+                    return false;
+                    }
+                // guide, fluid, ruin
+                if ((traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_D) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_N)) &&
+                    !is_silent_u(word, position))
+                    {
+                    return true;
+                    }
+                // bluish
+                if ((position + 4) <= m_length &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_H))
+                    {
+                    return true;
+                    }
+                return false;
+                }
+            // UO
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_U) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_O))
+                {
+                // fluoridate
+                if (position + 2 < m_length &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_R))
+                    {
+                    return false;
+                    }
+                // duo
+                return true;
+                }
+            // OO
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_O) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_O))
+                {
+                // zoologist
+                if (m_length >= 4 && position == 1 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_Z) &&
+                    (traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_G) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_L) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_P)) &&
+                    nextVowel != m_length)
+                    {
+                    return true;
+                    }
+                // coordinate, coop
+                if (m_length > 6 && position == 1 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_C) &&
+                    (traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_R) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_P) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_W)) &&
+                    nextVowel != m_length)
+                    {
+                    return true;
+                    }
+                // coowner
+                if (m_length >= 4 && position == 1 &&
+                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_W) &&
+                    nextVowel != m_length)
+                    {
+                    return true;
+                    }
+                return false;
+                }
+            // OE
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_O) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_E))
+                {
+                // toe-nail, woe-ful
+                if (position == 1 && (traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_T) ||
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_W)))
+                    {
+                    return false;
+                    }
+                // doe, toe
+                if (position + 2 == m_length)
+                    {
+                    // Chloe is an exception here
+                    if (position >= 3 && (traits::case_insensitive_ex::eq(
+                                              word[position - 3], common_lang_constants::LOWER_C) &&
+                                          traits::case_insensitive_ex::eq(
+                                              word[position - 2], common_lang_constants::LOWER_H) &&
+                                          traits::case_insensitive_ex::eq(
+                                              word[position - 1], common_lang_constants::LOWER_L)))
+                        {
+                        return true;
+                        }
+                    return false;
+                    }
+                // does, hoed
+                if (position + 3 == m_length &&
+                    (traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_S) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_D)))
+                    {
+                    return false;
+                    }
+                // doesn't
+                if (m_ends_with_nt_contraction && m_length == 7 && position == 1 &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_S))
+                    {
+                    return false;
+                    }
+                // phoenix
+                if (position >= 2 && (traits::case_insensitive_ex::eq(
+                                          word[position - 2], common_lang_constants::LOWER_P) &&
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_H)))
+                    {
+                    return false;
+                    }
+                // shoe
+                if (position >= 2 && (traits::case_insensitive_ex::eq(
+                                          word[position - 2], common_lang_constants::LOWER_S) &&
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_H)))
+                    {
+                    return false;
+                    }
+                // Schoen
+                if (position >= 3 && (traits::case_insensitive_ex::eq(
+                                          word[position - 3], common_lang_constants::LOWER_S) &&
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 2], common_lang_constants::LOWER_C) &&
+                                      traits::case_insensitive_ex::eq(
+                                          word[position - 1], common_lang_constants::LOWER_H)))
+                    {
+                    return false;
+                    }
+                // amoeba
+                if (position >= 2 && position + 3 <= m_length &&
+                    (traits::case_insensitive_ex::eq(word[position - 2],
+                                                     common_lang_constants::LOWER_A) &&
+                     traits::case_insensitive_ex::eq(word[position - 1],
+                                                     common_lang_constants::LOWER_M) &&
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_B)))
+                    {
+                    return false;
+                    }
+                // coerce, coedit
+                // Also, "oe"s not handle here are usually a part of compound word that would split
+                return true;
+                }
+            /// IE
+            else if ((position + 1 < m_length) &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_I) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_E))
+                {
+                // hottie, tie
+                if (position + 2 == m_length)
+                    {
+                    return false;
+                    }
+                // hy-giene
+                if (position > 0 && position + 2 < m_length &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_G) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_N))
+                    {
+                    return false;
+                    }
+                // acqui-esce, "quies" at the end won't split
+                if (position >= 2 && position + 3 < m_length &&
+                    traits::case_insensitive_ex::eq(word[position - 2],
+                                                    common_lang_constants::LOWER_Q) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_S))
+                    {
+                    return true;
+                    }
+                // fiend
+                if ((position + 3 < m_length) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_N) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_D))
+                    {
+                    return false;
+                    }
+                // happiest, driest
+                if ((position + 3 < m_length) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(word[position + 3],
+                                                    common_lang_constants::LOWER_T))
+                    {
+                    // special case for "priest"
+                    if ((position == 2) &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
                         traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R))
                         {
                         return false;
                         }
                     return true;
                     }
-                // uities
-                if (position + 6 == m_length &&
+                // soviet
+                if ((position + 2 < m_length) &&
                     traits::case_insensitive_ex::eq(word[position + 2],
-                                                    common_lang_constants::LOWER_T) &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(word[position + 4],
-                                                    common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(word[position + 5],
-                                                    common_lang_constants::LOWER_S))
+                                                    common_lang_constants::LOWER_T))
                     {
                     return true;
                     }
-                // intuitive
-                if (position + 5 < m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(word[position + 4],
-                                                    common_lang_constants::LOWER_V) &&
-                    traits::case_insensitive_ex::eq(word[position + 5],
-                                                    common_lang_constants::LOWER_E))
+                // IEG
+                if ((position + 2 < m_length) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_G))
                     {
-                    return true;
+                    // blitzkrieg
+                    if (position + 3 == m_length)
+                        {
+                        return false;
+                        }
+                    // Diego
+                    if (traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_O))
+                        {
+                        return true;
+                        }
+                    // siege
+                    return false;
                     }
-                // intuition
-                if (position + 5 < m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(word[position + 4],
-                                                    common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(word[position + 5],
+                // IEN
+                if ((position + 2 < m_length) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
                                                     common_lang_constants::LOWER_N))
                     {
-                    return true;
-                    }
-                // suite, suited
-                return false;
-                }
-            // guide, fluid, ruin
-            if ((traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_D) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_N)) &&
-                !is_silent_u(word, position))
-                {
-                return true;
-                }
-            // bluish
-            if ((position + 4) <= m_length &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_S) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_H))
-                {
-                return true;
-                }
-            return false;
-            }
-        // UO
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_U) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_O))
-            {
-            // fluoridate
-            if (position + 2 < m_length &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_R))
-                {
-                return false;
-                }
-            // duo
-            return true;
-            }
-        // OO
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_O))
-            {
-            // zoologist
-            if (m_length >= 4 && position == 1 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_Z) &&
-                (traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_G) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_L) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_P)) &&
-                nextVowel != m_length)
-                {
-                return true;
-                }
-            // coordinate, coop
-            if (m_length > 6 && position == 1 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_C) &&
-                (traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_R) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_P) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_W)) &&
-                nextVowel != m_length)
-                {
-                return true;
-                }
-            // coowner
-            if (m_length >= 4 && position == 1 &&
-                traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_C) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_W) &&
-                nextVowel != m_length)
-                {
-                return true;
-                }
-            return false;
-            }
-        // OE
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_O) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E))
-            {
-            // toe-nail, woe-ful
-            if (position == 1 && (traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_T) ||
-                                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_W)))
-                {
-                return false;
-                }
-            // doe, toe
-            if (position + 2 == m_length)
-                {
-                // Chloe is an exception here
-                if (position >= 3 && (traits::case_insensitive_ex::eq(
-                                          word[position - 3], common_lang_constants::LOWER_C) &&
-                                      traits::case_insensitive_ex::eq(
-                                          word[position - 2], common_lang_constants::LOWER_H) &&
-                                      traits::case_insensitive_ex::eq(
-                                          word[position - 1], common_lang_constants::LOWER_L)))
-                    {
-                    return true;
-                    }
-                return false;
-                }
-            // does, hoed
-            if (position + 3 == m_length &&
-                (traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_S) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_D)))
-                {
-                return false;
-                }
-            // doesn't
-            if (m_ends_with_nt_contraction && m_length == 7 && position == 1 &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_S))
-                {
-                return false;
-                }
-            // phoenix
-            if (position >= 2 && (traits::case_insensitive_ex::eq(word[position - 2],
-                                                                  common_lang_constants::LOWER_P) &&
-                                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_H)))
-                {
-                return false;
-                }
-            // shoe
-            if (position >= 2 && (traits::case_insensitive_ex::eq(word[position - 2],
-                                                                  common_lang_constants::LOWER_S) &&
-                                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_H)))
-                {
-                return false;
-                }
-            // Schoen
-            if (position >= 3 && (traits::case_insensitive_ex::eq(word[position - 3],
-                                                                  common_lang_constants::LOWER_S) &&
-                                  traits::case_insensitive_ex::eq(word[position - 2],
-                                                                  common_lang_constants::LOWER_C) &&
-                                  traits::case_insensitive_ex::eq(word[position - 1],
-                                                                  common_lang_constants::LOWER_H)))
-                {
-                return false;
-                }
-            // amoeba
-            if (position >= 2 && position + 3 <= m_length &&
-                (traits::case_insensitive_ex::eq(word[position - 2],
-                                                 common_lang_constants::LOWER_A) &&
-                 traits::case_insensitive_ex::eq(word[position - 1],
-                                                 common_lang_constants::LOWER_M) &&
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_B)))
-                {
-                return false;
-                }
-            // coerce, coedit
-            // Also, "oe"s not handle here are usually a part of compound word that would split
-            return true;
-            }
-        /// IE
-        else if ((position + 1 < m_length) &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_I) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_E))
-            {
-            // hottie, tie
-            if (position + 2 == m_length)
-                {
-                return false;
-                }
-            // hy-giene
-            if (position > 0 && position + 2 < m_length &&
-                traits::case_insensitive_ex::eq(word[position - 1],
-                                                common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_N))
-                {
-                return false;
-                }
-            // acqui-esce, "quies" at the end won't split
-            if (position >= 2 && position + 3 < m_length &&
-                traits::case_insensitive_ex::eq(word[position - 2],
-                                                common_lang_constants::LOWER_Q) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_S))
-                {
-                return true;
-                }
-            // fiend
-            if ((position + 3 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_N) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_D))
-                {
-                return false;
-                }
-            // happiest, driest
-            if ((position + 3 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2],
-                                                common_lang_constants::LOWER_S) &&
-                traits::case_insensitive_ex::eq(word[position + 3], common_lang_constants::LOWER_T))
-                {
-                // special case for "priest"
-                if ((position == 2) &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_P) &&
-                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R))
-                    {
-                    return false;
-                    }
-                return true;
-                }
-            // soviet
-            if ((position + 2 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_T))
-                {
-                return true;
-                }
-            // IEG
-            if ((position + 2 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_G))
-                {
-                // blitzkrieg
-                if (position + 3 == m_length)
-                    {
-                    return false;
-                    }
-                // Diego
-                if (traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_O))
-                    {
-                    return true;
-                    }
-                // siege
-                return false;
-                }
-            // IEN
-            if ((position + 2 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_N))
-                {
-                // "science", "client"
-                if (is_first_vowel_block_in_word && position > 1)
-                    {
-                    return true;
-                    }
-                // watch out for "cien"
-                if (position > 0 && traits::case_insensitive_ex::eq(word[position - 1],
-                                                                    common_lang_constants::LOWER_C))
-                    {
-                    // sci-en[tc] words should split
-                    if (position > 1 &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
-                                                        common_lang_constants::LOWER_S) &&
-                        (position + 3 < m_length) &&
-                        (traits::case_insensitive_ex::eq(word[position + 3],
-                                                         common_lang_constants::LOWER_T) ||
-                         traits::case_insensitive_ex::eq(word[position + 3],
-                                                         common_lang_constants::LOWER_C)))
+                    // "science", "client"
+                    if (is_first_vowel_block_in_word && position > 1)
                         {
-                        // exception for "ne-scient"
-                        if (position == 4 &&
-                            traits::case_insensitive_ex::eq(word[0],
-                                                            common_lang_constants::LOWER_N) &&
-                            traits::case_insensitive_ex::eq(word[1],
-                                                            common_lang_constants::LOWER_E))
+                        return true;
+                        }
+                    // watch out for "cien"
+                    if (position > 0 && traits::case_insensitive_ex::eq(
+                                            word[position - 1], common_lang_constants::LOWER_C))
+                        {
+                        // sci-en[tc] words should split
+                        if (position > 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_S) &&
+                            (position + 3 < m_length) &&
+                            (traits::case_insensitive_ex::eq(word[position + 3],
+                                                             common_lang_constants::LOWER_T) ||
+                             traits::case_insensitive_ex::eq(word[position + 3],
+                                                             common_lang_constants::LOWER_C)))
                             {
-                            return false;
+                            // exception for "ne-scient"
+                            if (position == 4 &&
+                                traits::case_insensitive_ex::eq(word[0],
+                                                                common_lang_constants::LOWER_N) &&
+                                traits::case_insensitive_ex::eq(word[1],
+                                                                common_lang_constants::LOWER_E))
+                                {
+                                return false;
+                                }
+                            // exception for "pre-scient"
+                            if (position == 5 &&
+                                traits::case_insensitive_ex::eq(word[0],
+                                                                common_lang_constants::LOWER_P) &&
+                                traits::case_insensitive_ex::eq(word[1],
+                                                                common_lang_constants::LOWER_R) &&
+                                traits::case_insensitive_ex::eq(word[2],
+                                                                common_lang_constants::LOWER_E))
+                                {
+                                return false;
+                                }
+                            // exception for "om-ni-scient"
+                            if (position == 6 &&
+                                traits::case_insensitive_ex::eq(word[0],
+                                                                common_lang_constants::LOWER_O) &&
+                                traits::case_insensitive_ex::eq(word[1],
+                                                                common_lang_constants::LOWER_M) &&
+                                traits::case_insensitive_ex::eq(word[2],
+                                                                common_lang_constants::LOWER_N) &&
+                                traits::case_insensitive_ex::eq(word[3],
+                                                                common_lang_constants::LOWER_I))
+                                {
+                                return false;
+                                }
+                            return true;
                             }
-                        // exception for "pre-scient"
-                        if (position == 5 &&
-                            traits::case_insensitive_ex::eq(word[0],
-                                                            common_lang_constants::LOWER_P) &&
-                            traits::case_insensitive_ex::eq(word[1],
-                                                            common_lang_constants::LOWER_R) &&
-                            traits::case_insensitive_ex::eq(word[2],
-                                                            common_lang_constants::LOWER_E))
+                        return false;
+                        }
+                    // IENCE
+                    if (position > 0 && position + 5 <= m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_C) &&
+                        (traits::case_insensitive_ex::eq(word[position + 4],
+                                                         common_lang_constants::LOWER_E) ||
+                         traits::case_insensitive_ex::eq(word[position + 4],
+                                                         common_lang_constants::LOWER_Y) ||
+                         traits::case_insensitive_ex::eq(word[position + 4],
+                                                         common_lang_constants::LOWER_I)))
+                        {
+                        // nu-tri-ence
+                        if (position > 1 &&
+                            traits::case_insensitive_ex::eq(word[position - 2],
+                                                            common_lang_constants::LOWER_T) &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_R))
                             {
-                            return false;
+                            return true;
                             }
-                        // exception for "om-ni-scient"
-                        if (position == 6 &&
-                            traits::case_insensitive_ex::eq(word[0],
-                                                            common_lang_constants::LOWER_O) &&
-                            traits::case_insensitive_ex::eq(word[1],
-                                                            common_lang_constants::LOWER_M) &&
-                            traits::case_insensitive_ex::eq(word[2],
-                                                            common_lang_constants::LOWER_N) &&
-                            traits::case_insensitive_ex::eq(word[3],
-                                                            common_lang_constants::LOWER_I))
+                        // "[ltn]ienc[ye]" will be one sound. "pat-ience", "conv-en-ience",
+                        // "sent-ience", "e-bull-ience"
+                        if (traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_L) ||
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_T) ||
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_N))
                             {
+                            // special exception for "len-i-ence"
+                            if (position == 3 &&
+                                traits::case_insensitive_ex::eq(word[0],
+                                                                common_lang_constants::LOWER_L) &&
+                                traits::case_insensitive_ex::eq(word[1],
+                                                                common_lang_constants::LOWER_E))
+                                {
+                                return true;
+                                }
+                            // special exception for "sal-i-ence"
+                            if (position == 3 &&
+                                traits::case_insensitive_ex::eq(word[0],
+                                                                common_lang_constants::LOWER_S) &&
+                                traits::case_insensitive_ex::eq(word[1],
+                                                                common_lang_constants::LOWER_A) &&
+                                traits::case_insensitive_ex::eq(word[2],
+                                                                common_lang_constants::LOWER_L))
+                                {
+                                return true;
+                                }
                             return false;
                             }
                         return true;
                         }
-                    return false;
-                    }
-                // IENCE
-                if (position > 0 && position + 5 <= m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_C) &&
-                    (traits::case_insensitive_ex::eq(word[position + 4],
-                                                     common_lang_constants::LOWER_E) ||
-                     traits::case_insensitive_ex::eq(word[position + 4],
-                                                     common_lang_constants::LOWER_Y) ||
-                     traits::case_insensitive_ex::eq(word[position + 4],
-                                                     common_lang_constants::LOWER_I)))
-                    {
-                    // nu-tri-ence
-                    if (position > 1 &&
-                        traits::case_insensitive_ex::eq(word[position - 2],
+                    // "[ltn]ient" will be one sound. "pat-ient", "conv-en-ient", "sent-ient"
+                    if (position > 0 && position + 4 <= m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
                                                         common_lang_constants::LOWER_T) &&
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_R))
+                        (traits::case_insensitive_ex::eq(word[position - 1],
+                                                         common_lang_constants::LOWER_L) ||
+                         traits::case_insensitive_ex::eq(word[position - 1],
+                                                         common_lang_constants::LOWER_T) ||
+                         traits::case_insensitive_ex::eq(word[position - 1],
+                                                         common_lang_constants::LOWER_N)))
                         {
-                        return true;
-                        }
-                    // "[ltn]ienc[ye]" will be one sound. "pat-ience", "conv-en-ience",
-                    // "sent-ience", "e-bull-ience"
-                    if (traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_L) ||
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_T) ||
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_N))
-                        {
-                        // special exception for "len-i-ence"
+                        // special exception for "len-i-ent"
                         if (position == 3 &&
                             traits::case_insensitive_ex::eq(word[0],
                                                             common_lang_constants::LOWER_L) &&
@@ -3809,7 +3801,7 @@ namespace grammar
                             {
                             return true;
                             }
-                        // special exception for "sal-i-ence"
+                        // special exception for "sal-i-ent"
                         if (position == 3 &&
                             traits::case_insensitive_ex::eq(word[0],
                                                             common_lang_constants::LOWER_S) &&
@@ -3822,192 +3814,168 @@ namespace grammar
                             }
                         return false;
                         }
-                    return true;
-                    }
-                // "[ltn]ient" will be one sound. "pat-ient", "conv-en-ient", "sent-ient"
-                if (position > 0 && position + 4 <= m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_T) &&
-                    (traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_L) ||
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_T) ||
-                     traits::case_insensitive_ex::eq(word[position - 1],
-                                                     common_lang_constants::LOWER_N)))
-                    {
-                    // special exception for "len-i-ent"
-                    if (position == 3 &&
-                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_L) &&
-                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_E))
+                    // a-per-i-ent, nu-tri-ent
+                    if (position > 0 && traits::case_insensitive_ex::eq(
+                                            word[position - 1], common_lang_constants::LOWER_R))
                         {
+                        // ...except for "friend"
+                        if (position + 3 < m_length &&
+                            traits::case_insensitive_ex::eq(word[position - 1],
+                                                            common_lang_constants::LOWER_D))
+                            {
+                            return false;
+                            }
                         return true;
                         }
-                    // special exception for "sal-i-ent"
-                    if (position == 3 &&
-                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_S) &&
-                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_A) &&
-                        traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_L))
+                    // [?]lien
+                    if (position > 1 && traits::case_insensitive_ex::eq(
+                                            word[position - 1], common_lang_constants::LOWER_L))
                         {
+                        // a-li-en, cli-ent
                         return true;
                         }
-                    return false;
-                    }
-                // a-per-i-ent, nu-tri-ent
-                if (position > 0 && traits::case_insensitive_ex::eq(word[position - 1],
-                                                                    common_lang_constants::LOWER_R))
-                    {
-                    // ...except for "friend"
-                    if (position + 3 < m_length &&
-                        traits::case_insensitive_ex::eq(word[position - 1],
-                                                        common_lang_constants::LOWER_D))
+                    // lien
+                    if (position == 1 && traits::case_insensitive_ex::eq(
+                                             word[position - 1], common_lang_constants::LOWER_L))
                         {
                         return false;
                         }
                     return true;
                     }
-                // [?]lien
-                if (position > 1 && traits::case_insensitive_ex::eq(word[position - 1],
-                                                                    common_lang_constants::LOWER_L))
+                // IER
+                if ((position + 2 < m_length) &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_R))
                     {
-                    // a-li-en, cli-ent
-                    return true;
+                    // bombardier, frontier, and soldier are special cases
+                    if (position == 4 &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_S) &&
+                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
+                        traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_L) &&
+                        traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_D))
+                        {
+                        return false;
+                        }
+                    if (position == 4 &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_G) &&
+                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_L) &&
+                        traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_A) &&
+                        traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_C))
+                        {
+                        return false;
+                        }
+                    if (position == 5 &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_F) &&
+                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R) &&
+                        traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_O) &&
+                        traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_N) &&
+                        traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_T))
+                        {
+                        return false;
+                        }
+                    if (position == 7 &&
+                        traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_B) &&
+                        traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
+                        traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_M) &&
+                        traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_B) &&
+                        traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_A) &&
+                        traits::case_insensitive_ex::eq(word[5], common_lang_constants::LOWER_R) &&
+                        traits::case_insensitive_ex::eq(word[6], common_lang_constants::LOWER_D))
+                        {
+                        return false;
+                        }
+
+                    if (position > 1 /*"pier" won't split*/ && (position + 3 == m_length))
+                        {
+                        // "ier" may be replacing a lower 'y' at the end of a word
+                        return true;
+                        }
+                    // out-li-ers
+                    if (position > 1 && // "piers" won't split
+                        position + 4 == m_length &&
+                        traits::case_insensitive_ex::eq(word[position + 3],
+                                                        common_lang_constants::LOWER_S))
+                        {
+                        return true;
+                        }
+                    // "ier" is inside the word
+                    if (characters::is_character::is_vowel(word[position + 3]))
+                        {
+                        // antierosion
+                        return true;
+                        }
+                    if (nextVowel != m_length)
+                        {
+                        // apierce
+                        if (can_consonants_end_sound(word + position + 2,
+                                                     (nextVowel - 1) - (position + 1)))
+                            {
+                            return false;
+                            }
+                        return true;
+                        }
+                    // rest of word is consonants, so this is one sound at the end
+                    return false;
                     }
-                // lien
-                if (position == 1 && traits::case_insensitive_ex::eq(
-                                         word[position - 1], common_lang_constants::LOWER_L))
+                return false;
+                }
+            // UA
+            else if ((position + 1) < m_length &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_U) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_A))
+                {
+                // persuade
+                if ((position + 2) < m_length &&
+                    traits::case_insensitive_ex::eq(word[position + 2],
+                                                    common_lang_constants::LOWER_D))
                     {
                     return false;
                     }
+                // persuasion, suave
+                if (position > 0 &&
+                    traits::case_insensitive_ex::eq(word[position - 1],
+                                                    common_lang_constants::LOWER_S) &&
+                    (position + 2) < m_length &&
+                    (traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_S) ||
+                     traits::case_insensitive_ex::eq(word[position + 2],
+                                                     common_lang_constants::LOWER_V)))
+                    {
+                    return false;
+                    }
+                // dual, manual
                 return true;
                 }
-            // IER
-            if ((position + 2 < m_length) &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_R))
+            // UU
+            else if ((position + 1) < m_length &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_U) &&
+                     traits::case_insensitive_ex::eq(word[position + 1],
+                                                     common_lang_constants::LOWER_U))
                 {
-                // bombardier, frontier, and soldier are special cases
-                if (position == 4 &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_L) &&
-                    traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_D))
+                // muumuu seems to be the only special case where it does not split
+                if (position > 0 && traits::case_insensitive_ex::eq(word[position - 1],
+                                                                    common_lang_constants::LOWER_M))
                     {
                     return false;
                     }
-                if (position == 4 &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_G) &&
-                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_L) &&
-                    traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_C))
-                    {
-                    return false;
-                    }
-                if (position == 5 &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_F) &&
-                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_T))
-                    {
-                    return false;
-                    }
-                if (position == 7 &&
-                    traits::case_insensitive_ex::eq(word[0], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(word[1], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(word[2], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(word[3], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(word[4], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(word[5], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(word[6], common_lang_constants::LOWER_D))
-                    {
-                    return false;
-                    }
-
-                if (position > 1 /*"pier" won't split*/ && (position + 3 == m_length))
-                    {
-                    // "ier" may be replacing a lower 'y' at the end of a word
-                    return true;
-                    }
-                // out-li-ers
-                if (position > 1 && // "piers" won't split
-                    position + 4 == m_length &&
-                    traits::case_insensitive_ex::eq(word[position + 3],
-                                                    common_lang_constants::LOWER_S))
-                    {
-                    return true;
-                    }
-                // "ier" is inside the word
-                if (characters::is_character::is_vowel(word[position + 3]))
-                    {
-                    // antierosion
-                    return true;
-                    }
-                if (nextVowel != m_length)
-                    {
-                    // apierce
-                    if (can_consonants_end_sound(word + position + 2,
-                                                 (nextVowel - 1) - (position + 1)))
-                        {
-                        return false;
-                        }
-                    return true;
-                    }
-                // rest of word is consonants, so this is one sound at the end
-                return false;
+                // everything else, such as vacuum, duumvir
+                return true;
                 }
-            return false;
-            }
-        // UA
-        else if ((position + 1) < m_length &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_U) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_A))
-            {
-            // persuade
-            if ((position + 2) < m_length &&
-                traits::case_insensitive_ex::eq(word[position + 2], common_lang_constants::LOWER_D))
+            // embryo
+            else if (position > 0 &&
+                     traits::case_insensitive_ex::eq(word[position],
+                                                     common_lang_constants::LOWER_Y) &&
+                     !characters::is_character::is_vowel(word[position - 1]))
+                {
+                return true;
+                }
+            else
                 {
                 return false;
                 }
-            // persuasion, suave
-            if (position > 0 &&
-                traits::case_insensitive_ex::eq(word[position - 1],
-                                                common_lang_constants::LOWER_S) &&
-                (position + 2) < m_length &&
-                (traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_S) ||
-                 traits::case_insensitive_ex::eq(word[position + 2],
-                                                 common_lang_constants::LOWER_V)))
-                {
-                return false;
-                }
-            // dual, manual
-            return true;
-            }
-        // UU
-        else if ((position + 1) < m_length &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_U) &&
-                 traits::case_insensitive_ex::eq(word[position + 1],
-                                                 common_lang_constants::LOWER_U))
-            {
-            // muumuu seems to be the only special case where it does not split
-            if (position > 0 &&
-                traits::case_insensitive_ex::eq(word[position - 1], common_lang_constants::LOWER_M))
-                {
-                return false;
-                }
-            // everything else, such as vacuum, duumvir
-            return true;
-            }
-        // embryo
-        else if (position > 0 &&
-                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_Y) &&
-                 !characters::is_character::is_vowel(word[position - 1]))
-            {
-            return true;
-            }
-        else
-            {
-            return false;
             }
         return false;
         }
@@ -5037,47 +5005,47 @@ namespace grammar
                 return std::make_pair(2, 5);
                 }
             // supra
-            else if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_S) &&
-                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_P) &&
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A))
+            if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_S) &&
+                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
+                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_P) &&
+                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A))
                 {
                 return std::make_pair(2, 5);
                 }
             // ultra
-            else if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_U) &&
-                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_L) &&
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T) &&
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_R) &&
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A))
+            if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_U) &&
+                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_L) &&
+                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T) &&
+                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_R) &&
+                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A))
                 {
                 return std::make_pair(2, 5);
                 }
             // video
-            else if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_V) &&
-                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_D) &&
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_O))
+            if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_V) &&
+                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
+                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_D) &&
+                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_O))
                 {
                 return std::make_pair(3, 5);
                 }
             // under
-            else if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_U) &&
-                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_D) &&
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_R))
+            if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_U) &&
+                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_D) &&
+                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_R))
                 {
                 return std::make_pair(2, 5);
                 }
             // inade
-            else if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_I) &&
-                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_A) &&
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_D) &&
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_E))
+            if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_I) &&
+                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_A) &&
+                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_D) &&
+                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_E))
                 {
                 return std::make_pair(3, 5);
                 }

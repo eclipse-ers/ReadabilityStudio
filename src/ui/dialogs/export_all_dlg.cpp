@@ -20,8 +20,6 @@
 
 wxDECLARE_APP(ReadabilityApp);
 
-using namespace Wisteria::GraphItems;
-
 ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fileMode,
                            wxWindowID id /*= wxID_ANY*/,
                            const wxString& caption /*= _(L"Export Options")*/,
@@ -35,7 +33,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     if (exportDir.empty())
         {
         // if export path not specified yet then try the path of the project (if saved already)
-        wxFileName fn(doc->GetFilename());
+        const wxFileName fn((doc != nullptr) ? doc->GetFilename() : wxString{});
         if (!fn.GetPath().empty())
             {
             exportDir = fn.GetPath();
@@ -52,7 +50,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     if (exportFile.empty())
         {
         // if export path not specified yet, then try the path of the project (if saved already)
-        wxFileName fn(doc->GetFilename());
+        const wxFileName fn(doc->GetFilename());
         if (!fn.GetPath().empty())
             {
             exportFile = fn.GetPathWithSep() + doc->GetTitle() + L".htm";
@@ -60,20 +58,20 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
         }
     m_filePath = exportFile;
 
-    m_listExt = doc->GetExportListExt();
-    m_textViewExt = doc->GetExportTextViewExt();
-    m_graphExt = doc->GetExportGraphExt();
-    m_exportHardWordLists = doc->IsExportingHardWordLists();
-    m_exportSentencesBreakdown = doc->IsExportingSentencesBreakdown();
-    m_exportGraphs = doc->IsExportingGraphs();
-    m_exportTestResults = doc->IsExportingTestResults();
-    m_exportStatistics = doc->IsExportingStatistics();
-    m_exportWordiness = doc->IsExportingWordiness();
-    m_exportSightWords = doc->IsExportingSightWords();
-    m_exportWarnings = doc->IsExportingWarnings();
-    m_exportingLists = doc->IsExportingLists();
-    m_exportingTextReports = doc->IsExportingTextReports();
-    m_imageExportOptions.m_imageSize = doc->GetImageExportOptions().m_imageSize;
+    m_listExt = BaseProjectDoc::GetExportListExt();
+    m_textViewExt = BaseProjectDoc::GetExportTextViewExt();
+    m_graphExt = BaseProjectDoc::GetExportGraphExt();
+    m_exportHardWordLists = BaseProjectDoc::IsExportingHardWordLists();
+    m_exportSentencesBreakdown = BaseProjectDoc::IsExportingSentencesBreakdown();
+    m_exportGraphs = BaseProjectDoc::IsExportingGraphs();
+    m_exportTestResults = BaseProjectDoc::IsExportingTestResults();
+    m_exportStatistics = BaseProjectDoc::IsExportingStatistics();
+    m_exportWordiness = BaseProjectDoc::IsExportingWordiness();
+    m_exportSightWords = BaseProjectDoc::IsExportingSightWords();
+    m_exportWarnings = BaseProjectDoc::IsExportingWarnings();
+    m_exportingLists = BaseProjectDoc::IsExportingLists();
+    m_exportingTextReports = BaseProjectDoc::IsExportingTextReports();
+    m_imageExportOptions.m_imageSize = BaseProjectDoc::GetImageExportOptions().m_imageSize;
     Create(parent, id, caption, pos, size, style);
 
     Bind(wxEVT_BUTTON, &ExportAllDlg::OnFolderBrowseButtonClick, this, ID_FOLDER_BROWSE_BUTTON);
@@ -110,15 +108,15 @@ void ExportAllDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
                      wxOK | wxICON_EXCLAMATION);
         return;
         }
-    if (m_textViewCombo)
+    if (m_textViewCombo != nullptr)
         {
         m_textViewExt = m_textViewCombo->GetValue();
         }
-    if (m_listCombo)
+    if (m_listCombo != nullptr)
         {
         m_listExt = m_listCombo->GetValue();
         }
-    if (m_graphCombo)
+    if (m_graphCombo != nullptr)
         {
         m_graphExt = m_graphCombo->GetValue();
         }
@@ -138,23 +136,23 @@ void ExportAllDlg::OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEven
     {
     TransferDataFromWindow();
 
-    auto exportControl = FindWindow(ID_LIST_TYPE_LABEL);
-    if (exportControl)
+    auto* exportControl = FindWindow(ID_LIST_TYPE_LABEL);
+    if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingLists);
         }
     exportControl = FindWindow(ID_LIST_TYPE_COMBO);
-    if (exportControl)
+    if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingLists);
         }
     exportControl = FindWindow(ID_TEXT_TYPE_LABEL);
-    if (exportControl)
+    if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingTextReports);
         }
     exportControl = FindWindow(ID_TEXT_TYPE_COMBO);
-    if (exportControl)
+    if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingTextReports);
         }
@@ -166,10 +164,10 @@ void ExportAllDlg::OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEven
 void ExportAllDlg::OnImageOptionsButtonClick([[maybe_unused]] wxCommandEvent& event)
     {
     wxASSERT_MSG(m_graphCombo, L"Graph file combobox not initialized!");
-
-    wxString ext{ (m_graphCombo ? m_graphCombo->GetValue() : wxString{ L"png" }) };
-    Wisteria::UI::ImageExportDlg optDlg(this, Image::GetImageFileTypeFromExtension(ext),
-                                        wxNullBitmap, m_imageExportOptions);
+    wxString ext{ ((m_graphCombo != nullptr) ? m_graphCombo->GetValue() : wxString{ L"png" }) };
+    Wisteria::UI::ImageExportDlg optDlg(
+        this, Wisteria::GraphItems::Image::GetImageFileTypeFromExtension(ext), wxNullBitmap,
+        m_imageExportOptions);
     optDlg.SetHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(), L"online/publishing.html");
     if (optDlg.ShowModal() == wxID_OK)
         {
@@ -186,7 +184,7 @@ void ExportAllDlg::OnFolderBrowseButtonClick([[maybe_unused]] wxCommandEvent& ev
         {
         wxFileDialog fdialog(
             this, _(L"Save As"), wxString{},
-            m_filePath.length() ? m_filePath : m_readabilityProjectDoc->GetTitle() + L".htm",
+            !m_filePath.empty() ? m_filePath : m_readabilityProjectDoc->GetTitle() + L".htm",
             _(L"HTML Files (*.htm;*.html)|*.htm;*.html"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if (fdialog.ShowModal() != wxID_OK)
             {
@@ -290,7 +288,7 @@ void ExportAllDlg::CreateControls()
         }
     else
         {
-        const BatchProjectView* view =
+        const auto* view =
             dynamic_cast<const BatchProjectView*>(m_readabilityProjectDoc->GetFirstView());
 
         auto* testResultsCheck = new wxCheckBox(inclusionSectionBoxSizer->GetStaticBox(), wxID_ANY,
@@ -355,7 +353,7 @@ void ExportAllDlg::CreateControls()
     auto* exportTypeStaticBoxSizer = new wxStaticBoxSizer(exportTypeBox, wxVERTICAL);
     itemsBoxSizer->Add(exportTypeStaticBoxSizer);
 
-    auto exportTypeBoxSizer = new wxFlexGridSizer(3, 5, 5);
+    auto* exportTypeBoxSizer = new wxFlexGridSizer(3, 5, 5);
     exportTypeStaticBoxSizer->Add(exportTypeBoxSizer);
 
     if (!m_fileMode)
@@ -442,12 +440,13 @@ void ExportAllDlg::CreateControls()
 //---------------------------------------------
 bool ExportAllDlg::IsStandardProject() const
     {
-    return (m_readabilityProjectDoc && m_readabilityProjectDoc->IsKindOf(CLASSINFO(ProjectDoc)));
+    return ((m_readabilityProjectDoc != nullptr) &&
+            m_readabilityProjectDoc->IsKindOf(CLASSINFO(ProjectDoc)));
     }
 
 //---------------------------------------------
 bool ExportAllDlg::IsBatchProject() const
     {
-    return (m_readabilityProjectDoc &&
+    return ((m_readabilityProjectDoc != nullptr) &&
             m_readabilityProjectDoc->IsKindOf(CLASSINFO(BatchProjectDoc)));
     }

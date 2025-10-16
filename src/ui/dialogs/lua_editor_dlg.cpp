@@ -16,6 +16,7 @@
 #include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../Wisteria-Dataviz/src/ui/ribbon/artmetro.h"
 #include "../../app/readability_app.h"
+#include <utility>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -25,8 +26,8 @@ LuaEditorDlg::LuaEditorDlg(
     const wxPoint& pos /*= wxDefaultPosition*/, const wxSize& size /*= wxDefaultSize*/,
     long style /*= wxCAPTION | wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER*/)
     : wxFrame(parent, id, caption, pos, size,
-              ((parent == nullptr) ? style | wxDIALOG_NO_PARENT : style)),
-      m_debugMessageWindow(nullptr)
+              ((parent == nullptr) ? style | wxDIALOG_NO_PARENT : style))
+
     {
     ImportAPI();
 
@@ -53,7 +54,7 @@ LuaEditorDlg::LuaEditorDlg(
                 return;
                 }
 
-            auto editor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+            auto* editor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
             editor->AnnotationClearAll();
             wxString errorMessage;
 
@@ -73,7 +74,7 @@ LuaEditorDlg::LuaEditorDlg(
             m_toolbar->EnableTool(XRCID("ID_STOP"), false);
             m_toolbar->Refresh();
 
-            if (errorMessage.length())
+            if (!errorMessage.empty())
                 {
                 const int lineOffset = (editor->GetSelectionStart() == editor->GetSelectionEnd()) ?
                                            0 :
@@ -105,7 +106,8 @@ LuaEditorDlg::LuaEditorDlg(
                     editor->GotoLine((editor->GetFirstVisibleLine() < lineNumber) ? lineNumber :
                                                                                     lineNumber - 1);
                     editor->AnnotationSetText(lineNumber, errorMessage);
-                    editor->AnnotationSetStyle(lineNumber, editor->ERROR_ANNOTATION_STYLE);
+                    editor->AnnotationSetStyle(lineNumber,
+                                               Wisteria::UI::CodeEditor::ERROR_ANNOTATION_STYLE);
 
                     // Scintilla doesn't update the scroll width for annotations, even with
                     // scroll width tracking on, so do it manually.
@@ -117,8 +119,9 @@ LuaEditorDlg::LuaEditorDlg(
                     // doesn't seem to be any way to get it directly from Scintilla.
                     const int indent = editor->GetLineIndentation(lineNumber) + FromDIP(3);
 
-                    const int widthAnn = editor->TextWidth(editor->ERROR_ANNOTATION_STYLE,
-                                                           errorMessage + wxString(indent, L' '));
+                    const int widthAnn =
+                        editor->TextWidth(Wisteria::UI::CodeEditor::ERROR_ANNOTATION_STYLE,
+                                          errorMessage + wxString(indent, L' '));
 
                     if (widthAnn > width)
                         {
@@ -148,7 +151,7 @@ LuaEditorDlg::LuaEditorDlg(
                  return;
                  }
 
-             auto codeEditor =
+             auto* codeEditor =
                  dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
              if (codeEditor && codeEditor->GetModify())
                  {
@@ -253,7 +256,7 @@ LuaEditorDlg::LuaEditorDlg(
     Bind(wxEVT_SEARCH,
          [this](wxCommandEvent& evt)
          {
-             auto codeEditor =
+             auto* codeEditor =
                  dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
              if (codeEditor)
                  {
@@ -291,7 +294,7 @@ LuaEditorDlg::LuaEditorDlg(
     accelEntries[3].Set(wxACCEL_CMD, static_cast<int>(L'F'), wxID_FIND);
     accelEntries[4].Set(wxACCEL_CMD, static_cast<int>(L'H'), wxID_REPLACE);
     accelEntries[5].Set(wxACCEL_NORMAL, WXK_F5, XRCID("ID_RUN"));
-    wxAcceleratorTable accelTable(std::size(accelEntries), accelEntries);
+    const wxAcceleratorTable accelTable(std::size(accelEntries), accelEntries);
     wxWindowBase::SetAcceleratorTable(accelTable);
     }
 
@@ -334,16 +337,16 @@ void LuaEditorDlg::ImportAPI()
 
             for (auto& lib : apiStrings)
                 {
-                if (lib.size())
+                if (!lib.empty())
                     {
-                    std::wstring libName = lib.front();
+                    const std::wstring libName = lib.front();
                     lib.erase(lib.begin(), lib.begin() + 1);
                     Wisteria::UI::CodeEditor::NameList nl;
                     for (const auto& className : lib)
                         {
                         nl.insert(className);
                         }
-                    m_classes.push_back({ libName, nl });
+                    m_classes.emplace_back(libName, nl);
                     }
                 }
             }
@@ -362,16 +365,16 @@ void LuaEditorDlg::ImportAPI()
 
             for (auto& lib : apiStrings)
                 {
-                if (lib.size())
+                if (!lib.empty())
                     {
-                    std::wstring libName = lib.front();
+                    const std::wstring libName = lib.front();
                     lib.erase(lib.begin(), lib.begin() + 1);
                     Wisteria::UI::CodeEditor::NameList nl;
                     for (const auto& lName : lib)
                         {
                         nl.insert(lName);
                         }
-                    m_libraries.push_back({ libName, nl });
+                    m_libraries.emplace_back(libName, nl);
                     }
                 }
             }
@@ -390,16 +393,16 @@ void LuaEditorDlg::ImportAPI()
 
             for (auto& lib : apiStrings)
                 {
-                if (lib.size())
+                if (!lib.empty())
                     {
-                    std::wstring libName = lib.front();
+                    const std::wstring libName = lib.front();
                     lib.erase(lib.begin(), lib.begin() + 1);
                     Wisteria::UI::CodeEditor::NameList nl;
                     for (const auto& lName : lib)
                         {
                         nl.insert(lName);
                         }
-                    m_enums.push_back({ libName, nl });
+                    m_enums.emplace_back(libName, nl);
                     }
                 }
             }
@@ -427,14 +430,14 @@ void LuaEditorDlg::OnSave([[maybe_unused]] wxCommandEvent& event)
 //------------------------------------------------------
 void LuaEditorDlg::OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event)
     {
-    auto currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
     if (currentScript != nullptr && m_findData.GetFindString().empty())
         {
         m_findData.SetFindString(currentScript->GetSelectedText());
         }
 
     // get rid of Find dialog (if it was opened)
-    if (m_dlgFind)
+    if (m_dlgFind != nullptr)
         {
         m_dlgFind->Destroy();
         m_dlgFind = nullptr;
@@ -451,14 +454,14 @@ void LuaEditorDlg::OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event)
 //------------------------------------------------------
 void LuaEditorDlg::OnShowFindDialog([[maybe_unused]] wxCommandEvent& event)
     {
-    auto currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
     if (currentScript != nullptr && m_findData.GetFindString().empty())
         {
         m_findData.SetFindString(currentScript->GetSelectedText());
         }
 
     // get rid of Replace dialog (if it was opened)
-    if (m_dlgReplace)
+    if (m_dlgReplace != nullptr)
         {
         m_dlgReplace->Destroy();
         m_dlgReplace = nullptr;
@@ -479,7 +482,7 @@ void LuaEditorDlg::OnFindDialog(wxFindDialogEvent& event)
         return;
         }
 
-    auto currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
     if (currentScript == nullptr)
         {
         return;
@@ -501,8 +504,7 @@ void LuaEditorDlg::OnFindDialog(wxFindDialogEvent& event)
         if (foundPos != wxSTC_INVALID_POSITION)
             {
             // if what is being replaced matches what was already selected, then replace it
-            if (from == foundPos &&
-                to == static_cast<long>(foundPos + event.GetFindString().length()))
+            if (from == foundPos && std::cmp_equal(to, foundPos + event.GetFindString().length()))
                 {
                 currentScript->Replace(foundPos, foundPos + event.GetFindString().length(),
                                        event.GetReplaceString());
@@ -552,13 +554,13 @@ void LuaEditorDlg::OnFindDialog(wxFindDialogEvent& event)
         }
     else if (event.GetEventType() == wxEVT_FIND_CLOSE)
         {
-        if (m_dlgReplace)
+        if (m_dlgReplace != nullptr)
             {
             m_dlgReplace->Destroy();
             m_dlgReplace = nullptr;
             }
 
-        if (m_dlgFind)
+        if (m_dlgFind != nullptr)
             {
             m_dlgFind->Destroy();
             m_dlgFind = nullptr;
@@ -581,7 +583,7 @@ void LuaEditorDlg::SetThemeColor(const wxColour& color)
     m_toolbar->SetArtProvider(toolbarArt);
 
     // notebook (and its children edit windows)
-    wxAuiDefaultTabArt* notebookArt = new wxAuiDefaultTabArt;
+    auto* notebookArt = new wxAuiDefaultTabArt;
     notebookArt->SetColour(color);
     m_notebook->SetArtProvider(notebookArt);
 
@@ -600,7 +602,7 @@ void LuaEditorDlg::SetThemeColor(const wxColour& color)
 //-------------------------------------------------------
 void LuaEditorDlg::DebugOutput(const wxString& str)
     {
-    if (m_debugMessageWindow)
+    if (m_debugMessageWindow != nullptr)
         {
         const wxColour bkColor = m_mgr.GetArtProvider()->GetColour(wxAUI_DOCKART_BACKGROUND_COLOUR);
         const wxString htmlText = wxString{ lily_of_the_valley::html_extract_text::get_body(
@@ -619,7 +621,7 @@ void LuaEditorDlg::DebugOutput(const wxString& str)
 //-------------------------------------------------------
 void LuaEditorDlg::DebugClear()
     {
-    if (m_debugMessageWindow)
+    if (m_debugMessageWindow != nullptr)
         {
         const wxColour bkColor = m_mgr.GetArtProvider()->GetColour(wxAUI_DOCKART_BACKGROUND_COLOUR);
         const auto debugReportBody = wxString::Format(
@@ -634,7 +636,7 @@ void LuaEditorDlg::DebugClear()
 //-------------------------------------------------------
 Wisteria::UI::CodeEditor* LuaEditorDlg::CreateLuaScript(wxWindow* parent)
     {
-    auto codeEditor = new Wisteria::UI::CodeEditor(parent, wxSTC_LEX_LUA);
+    auto* codeEditor = new Wisteria::UI::CodeEditor(parent, wxSTC_LEX_LUA);
     codeEditor->Show(false);
     codeEditor->IncludeNumberMargin(true);
     codeEditor->IncludeFoldingMargin(true);
@@ -787,8 +789,8 @@ void LuaEditorDlg::OnClose([[maybe_unused]] wxCloseEvent& event)
     // ask about any unsaved changes
     for (size_t i = 0; i < m_notebook->GetPageCount(); ++i)
         {
-        auto codeEditor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetPage(i));
-        if (codeEditor && codeEditor->GetModify() &&
+        auto* codeEditor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetPage(i));
+        if ((codeEditor != nullptr) && codeEditor->GetModify() &&
             (wxMessageBox(_(L"Do you wish to save your unsaved changes?"), _(L"Save Script"),
                           wxYES_NO | wxICON_QUESTION) == wxYES))
             {

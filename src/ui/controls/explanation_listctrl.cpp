@@ -12,8 +12,7 @@
  ********************************************************************************/
 
 #include "explanation_listctrl.h"
-
-using namespace Wisteria::UI;
+#include "../../Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxSplitterWindow)
 
@@ -29,16 +28,16 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
                                          const wxString& name /*= wxString{}*/)
     : wxSplitterWindow(parent, id, point, size, wxCLIP_CHILDREN | wxSP_NOBORDER, name)
     {
-    m_results_view = new ListCtrlEx(this, id, wxDefaultPosition, wxDefaultSize,
-                                    wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL | wxBORDER_SUNKEN,
-                                    wxDefaultValidator);
+    m_results_view = new Wisteria::UI::ListCtrlEx(
+        this, id, wxDefaultPosition, wxDefaultSize,
+        wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL | wxBORDER_SUNKEN, wxDefaultValidator);
     GetResultsListCtrl()->SetVirtualDataProvider(m_data);
     GetResultsListCtrl()->SetVirtualDataSize(0);
     GetResultsListCtrl()->EnableGridLines();
     GetResultsListCtrl()->EnableAlternateRowColours(false);
-    m_explanation_view = new HtmlTableWindow(this);
-    SplitHorizontally(GetResultsListCtrl(), GetExplanationView());
-    SetMinimumPaneSize(100 * GetDPIScaleFactor());
+    m_explanation_view = new Wisteria::UI::HtmlTableWindow(this);
+    wxSplitterWindow::SplitHorizontally(GetResultsListCtrl(), GetExplanationView());
+    SetMinimumPaneSize(100 * wxWindow::GetDPIScaleFactor());
 
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnPreview, this, wxID_PREVIEW);
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnCopy, this, wxID_COPY);
@@ -58,7 +57,7 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
 //------------------------------------------------------
 void ExplanationListCtrl::OnMenuCommand(wxCommandEvent& event)
     {
-    ParentEventBlocker blocker(GetResultsListCtrl());
+    const ParentEventBlocker blocker(GetResultsListCtrl());
     GetResultsListCtrl()->ProcessWindowEvent(event);
     }
 
@@ -95,7 +94,7 @@ void ExplanationListCtrl::PrintPreview()
 //------------------------------------------------------
 void ExplanationListCtrl::Print()
     {
-    if (m_printData)
+    if (m_printData != nullptr)
         {
         GetResultsListCtrl()->SetPrinterSettings(m_printData);
         }
@@ -190,8 +189,9 @@ void ExplanationListCtrl::OnSave([[maybe_unused]] wxCommandEvent& event)
     descriptions.Add(
         _(L"Save a report of the explanations associated with the items in the grid."));
     descriptions.Add(_(L"Save the grid and explanations."));
-    RadioBoxDlg choiceDlg(this, _(L"Save List"), wxString{}, _(L"Select which section to save:"),
-                          _(L"Save"), choices, descriptions);
+    Wisteria::UI::RadioBoxDlg choiceDlg(this, _(L"Save List"), wxString{},
+                                        _(L"Select which section to save:"), _(L"Save"), choices,
+                                        descriptions);
     choiceDlg.SetSelection(static_cast<int>(m_lastSaveOption));
     if (choiceDlg.ShowModal() != wxID_OK)
         {
@@ -211,8 +211,9 @@ void ExplanationListCtrl::OnCopy([[maybe_unused]] wxCommandEvent& event)
     descriptions.Add(_(L"Copy the selected item in the grid."));
     descriptions.Add(_(L"Copy all items in the grid."));
     descriptions.Add(_(L"Copy the explanation of the selected item in the grid."));
-    RadioBoxDlg choiceDlg(this, _(L"Copy List"), wxString{}, _(L"Select which section to copy:"),
-                          _(L"Copy"), choices, descriptions);
+    Wisteria::UI::RadioBoxDlg choiceDlg(this, _(L"Copy List"), wxString{},
+                                        _(L"Select which section to copy:"), _(L"Copy"), choices,
+                                        descriptions);
     choiceDlg.SetSelection(static_cast<int>(m_lastCopyOption));
     if (choiceDlg.ShowModal() != wxID_OK)
         {
@@ -236,7 +237,7 @@ void ExplanationListCtrl::OnCopy([[maybe_unused]] wxCommandEvent& event)
 //------------------------------------------------------
 void ExplanationListCtrl::OnFind(wxFindDialogEvent& event)
     {
-    ParentEventBlocker blocker(GetResultsListCtrl());
+    const ParentEventBlocker blocker(GetResultsListCtrl());
     GetResultsListCtrl()->ProcessWindowEvent(event);
     }
 
@@ -248,7 +249,7 @@ void ExplanationListCtrl::OnResize(wxSizeEvent& event)
     }
 
 //------------------------------------------------------
-void ExplanationListCtrl::OnItemSelected(wxListEvent& event)
+void ExplanationListCtrl::OnItemSelected(const wxListEvent& event)
     {
     GetExplanationView()->SetPage(
         wxString::Format(L"<body>%s</body>",
@@ -260,7 +261,7 @@ void ExplanationListCtrl::FitWindows()
     {
     if (IsSplit())
         {
-        if (GetResultsListCtrl()->GetItemCount())
+        if (GetResultsListCtrl()->GetItemCount() != 0)
             {
             wxRect rect;
             GetResultsListCtrl()->GetItemRect(GetResultsListCtrl()->GetItemCount() - 1, rect);
@@ -293,7 +294,7 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
 wxString ExplanationListCtrl::GetExplanationsText() const
     {
     wxString descriptionHtml;
-    if (GetResultsListCtrl())
+    if (GetResultsListCtrl() != nullptr)
         {
         for (long i = 0; i < GetResultsListCtrl()->GetItemCount(); ++i)
             {

@@ -79,9 +79,6 @@ std::map<comparable_first_pair<Goal::string_type, Goal::string_type>,
           { return safe_divide<double>(100, proj->GetTotalWords()) * proj->GetTotalSyllables(); } }
     };
 
-using namespace lily_of_the_valley;
-using namespace Wisteria;
-
 //-------------------------------------------------------
 bool BaseProject::LoadAppendedDocument()
     {
@@ -2294,7 +2291,7 @@ void BaseProject::LoadHardWords()
                                      wordPos->second.second,
                                      (wordPos->second.first - wordPos->second.second)),
                     Wisteria::NumberFormatInfo{
-                        NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                     wordPos->second.second);
                 }
             else
@@ -2516,7 +2513,7 @@ void BaseProject::LoadHardWords()
                             nonProperCount, wordPos->second.first,
                             (wordPos->second.first - nonProperCount), nonProperCount),
                         Wisteria::NumberFormatInfo{
-                            NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                         nonProperCount);
                     }
                 auto replacement = harris_jacobson_replacement_list.find(wordPos->first.c_str());
@@ -2564,7 +2561,7 @@ void BaseProject::LoadHardWords()
                                 nonProperCount, wordPos->second.first,
                                 (wordPos->second.first - nonProperCount), nonProperCount),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             nonProperCount);
                         }
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
@@ -2619,7 +2616,7 @@ void BaseProject::LoadHardWords()
                                 _(L"1 (%zu total occurrences, only first occurrence unfamiliar)"),
                                 wordPos->second.first),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             1);
                         }
                     else
@@ -2632,7 +2629,7 @@ void BaseProject::LoadHardWords()
                                   "unfamiliar, %zu non-proper and unfamiliar)"),
                                 nonProperCount + 1, wordPos->second.first, nonProperCount),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             nonProperCount + 1);
                         }
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
@@ -2671,7 +2668,7 @@ void BaseProject::LoadHardWords()
                             nonProperCount, wordPos->second.first,
                             (wordPos->second.first - nonProperCount), nonProperCount),
                         Wisteria::NumberFormatInfo{
-                            NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                         nonProperCount);
                     }
                 auto replacement = spache_replacement_list.find(wordPos->first.c_str());
@@ -2710,8 +2707,8 @@ void BaseProject::LoadHardWords()
                     {
                     continue;
                     }
-                else if (pos->GetIterator()->get_proper_noun_method() ==
-                         readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
+                if (pos->GetIterator()->get_proper_noun_method() ==
+                    readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                     {
                     // only load the data if user asked for this view
                     if (HasUI())
@@ -2734,7 +2731,8 @@ void BaseProject::LoadHardWords()
                                     nonProperCount, wordPos->second.first,
                                     (wordPos->second.first - nonProperCount), nonProperCount),
                                 Wisteria::NumberFormatInfo{
-                                    NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
                                 nonProperCount);
                             }
                         }
@@ -2775,7 +2773,8 @@ void BaseProject::LoadHardWords()
                                                    "occurrence unfamiliar)"),
                                                  wordPos->second.first),
                                 Wisteria::NumberFormatInfo{
-                                    NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
                                 1);
                             }
                         else
@@ -2789,7 +2788,8 @@ void BaseProject::LoadHardWords()
                                       "non-proper and unfamiliar)"),
                                     nonProperCount + 1, wordPos->second.first, nonProperCount),
                                 Wisteria::NumberFormatInfo{
-                                    NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
                                 nonProperCount + 1);
                             }
                         }
@@ -2843,7 +2843,7 @@ void BaseProject::LoadHardWords()
                     allValuesStr.append(subWord.first.c_str()).append(L"; ");
                     }
                 allValuesStr.Trim().RemoveLast();
-                assert(allValuesStr.length() && L"Empty word list from stemmed word?!");
+                assert(!allValuesStr.empty() && L"Empty word list from stemmed word?!");
 
                 GetKeyWordsBaseData()->SetItemText(uniqueImportWordsCount, 0, allValuesStr);
                 GetKeyWordsBaseData()->SetItemValue(uniqueImportWordsCount++, 1,
@@ -2887,7 +2887,7 @@ void BaseProject::LoadHardWords()
     m_totalSentencesFromCompleteSentencesAndHeaders = 0;
     m_totalNumeralsFromCompleteSentencesAndHeaders = 0;
     m_totalCharactersFromCompleteSentencesAndHeaders = 0;
-    double_frequency_set<word_case_insensitive_no_stem> complete_sent_and_header_word_frequency_map;
+    double_frequency_set<word_case_insensitive_no_stem> completeSentAndHeaderWordFrequencyMap;
     for (std::vector<grammar::sentence_info>::const_iterator sentPos =
              GetWords()->get_sentences().cbegin();
          sentPos != GetWords()->get_sentences().cend(); ++sentPos)
@@ -2906,7 +2906,7 @@ void BaseProject::LoadHardWords()
                     }
                 m_totalCharactersFromCompleteSentencesAndHeaders +=
                     GetWords()->get_words()[wordIter].get_length_excluding_punctuation();
-                complete_sent_and_header_word_frequency_map.insert(
+                completeSentAndHeaderWordFrequencyMap.insert(
                     GetWords()->get_words()[wordIter],
                     GetWords()->get_words()[wordIter].is_proper_noun());
                 }
@@ -2923,7 +2923,7 @@ void BaseProject::LoadHardWords()
             }
         GetHarrisJacobsonHardWordDataData()->DeleteAllItems();
         GetHarrisJacobsonHardWordDataData()->SetSize(
-            complete_sent_and_header_word_frequency_map.get_data().size(), 3);
+            completeSentAndHeaderWordFrequencyMap.get_data().size(), 3);
         }
     if (HasUI() && (GetDaleChallTextExclusionMode() ==
                     SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings))
@@ -2933,8 +2933,8 @@ void BaseProject::LoadHardWords()
             m_DCHardWordsData = std::make_shared<Wisteria::UI::ListCtrlExNumericDataProvider>();
             }
         GetDaleChallHardWordData()->DeleteAllItems();
-        GetDaleChallHardWordData()->SetSize(
-            complete_sent_and_header_word_frequency_map.get_data().size(), 3);
+        GetDaleChallHardWordData()->SetSize(completeSentAndHeaderWordFrequencyMap.get_data().size(),
+                                            3);
         }
     for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
          pos != m_customTestsInUse.end(); ++pos)
@@ -2950,12 +2950,12 @@ void BaseProject::LoadHardWords()
             if (HasUI() && pos->GetIterator()->is_using_familiar_words())
                 {
                 pos->GetListViewData()->SetSize(
-                    complete_sent_and_header_word_frequency_map.get_data().size(), 2);
+                    completeSentAndHeaderWordFrequencyMap.get_data().size(), 2);
                 }
             }
         }
-    for (auto wordPos = complete_sent_and_header_word_frequency_map.get_data().cbegin();
-         wordPos != complete_sent_and_header_word_frequency_map.get_data().cend(); ++wordPos)
+    for (auto wordPos = completeSentAndHeaderWordFrequencyMap.get_data().cbegin();
+         wordPos != completeSentAndHeaderWordFrequencyMap.get_data().cend(); ++wordPos)
         {
         assert(wordPos->second.first >= wordPos->second.second);
         /* subtract number of times word is proper from total count of word
@@ -2994,7 +2994,7 @@ void BaseProject::LoadHardWords()
                             nonProperCount, wordPos->second.first,
                             (wordPos->second.first - nonProperCount), nonProperCount),
                         Wisteria::NumberFormatInfo{
-                            NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                         nonProperCount);
                     }
                 auto replacement = harris_jacobson_replacement_list.find(wordPos->first.c_str());
@@ -3043,7 +3043,7 @@ void BaseProject::LoadHardWords()
                                 nonProperCount, wordPos->second.first,
                                 (wordPos->second.first - nonProperCount), nonProperCount),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             nonProperCount);
                         }
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
@@ -3099,7 +3099,7 @@ void BaseProject::LoadHardWords()
                                 _(L"1 (%zu total occurrences, only first occurrence unfamiliar)"),
                                 wordPos->second.first),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             1);
                         }
                     else
@@ -3113,7 +3113,7 @@ void BaseProject::LoadHardWords()
                                   "non-proper and unfamiliar)"),
                                 nonProperCount + 1, wordPos->second.first, nonProperCount),
                             Wisteria::NumberFormatInfo{
-                                NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             nonProperCount + 1);
                         }
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
@@ -3159,9 +3159,8 @@ void BaseProject::LoadHardWords()
                         {
                         continue;
                         }
-                    else if (pos->GetIterator()->get_proper_noun_method() ==
-                             readability::proper_noun_counting_method::
-                                 all_proper_nouns_are_familiar)
+                    if (pos->GetIterator()->get_proper_noun_method() ==
+                        readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                         {
                         // only load the data if user asked for this view
                         if (HasUI())
@@ -3184,7 +3183,8 @@ void BaseProject::LoadHardWords()
                                         nonProperCount, wordPos->second.first,
                                         (wordPos->second.first - nonProperCount), nonProperCount),
                                     Wisteria::NumberFormatInfo{
-                                        NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                        Wisteria::NumberFormatInfo::NumberFormatType::
+                                            StandardFormatting },
                                     nonProperCount);
                                 }
                             }
@@ -3229,7 +3229,8 @@ void BaseProject::LoadHardWords()
                                           "occurrence unfamiliar)"),
                                         wordPos->second.first),
                                     Wisteria::NumberFormatInfo{
-                                        NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                        Wisteria::NumberFormatInfo::NumberFormatType::
+                                            StandardFormatting },
                                     1);
                                 }
                             else
@@ -3243,7 +3244,8 @@ void BaseProject::LoadHardWords()
                                           "%zu non-proper and unfamiliar)"),
                                         nonProperCount + 1, wordPos->second.first, nonProperCount),
                                     Wisteria::NumberFormatInfo{
-                                        NumberFormatInfo::NumberFormatType::StandardFormatting },
+                                        Wisteria::NumberFormatInfo::NumberFormatType::
+                                            StandardFormatting },
                                     nonProperCount + 1);
                                 }
                             }
@@ -3391,15 +3393,15 @@ void BaseProject::CalculateStatisticsIgnoringInvalidSentences()
         if (GetTotalSentences() > 0)
             {
             // if to be calculated by outlier range
-            std::vector<double> statistic_sizes(GetTotalSentences());
+            std::vector<double> statisticSizes(GetTotalSentences());
 
             // load a vector of the sentence lengths
             copy_member_if(
                 GetWords()->get_sentences().begin(), GetWords()->get_sentences().end(),
-                statistic_sizes.begin(),
+                statisticSizes.begin(),
                 [](const grammar::sentence_info& s) noexcept { return s.is_valid(); },
                 [](const grammar::sentence_info& s) noexcept { return s.get_valid_word_count(); });
-            statistics::find_outliers fos(statistic_sizes);
+            const statistics::find_outliers fos(statisticSizes);
             m_difficultSentenceLength = static_cast<int>(fos.get_upper_outlier_boundary());
             }
         else
@@ -3552,7 +3554,6 @@ void BaseProject::CalculateStatistics()
 
     // load the unique words and their frequencies
     m_word_frequency_map = std::make_shared<double_frequency_set<word_case_insensitive_no_stem>>();
-    std::vector<word_case_insensitive_no_stem>::const_iterator currentWord;
     for (std::vector<grammar::sentence_info>::const_iterator sentPos =
              GetWords()->get_sentences().cbegin();
          sentPos != GetWords()->get_sentences().cend(); ++sentPos)
@@ -3560,7 +3561,7 @@ void BaseProject::CalculateStatistics()
         // go through the words in the current sentence and add them to the map
         for (size_t i = sentPos->get_first_word_index(); i <= sentPos->get_last_word_index(); ++i)
             {
-            currentWord = GetWords()->get_words().begin() + i;
+            auto currentWord = GetWords()->get_words().begin() + i;
             m_word_frequency_map->insert(*currentWord, currentWord->is_proper_noun());
             }
         }
@@ -3571,13 +3572,13 @@ void BaseProject::CalculateStatistics()
         if (GetTotalSentences() > 0)
             {
             // if to be calculated by outlier range
-            std::vector<double> statistic_sizes(GetTotalSentences());
+            std::vector<double> statisticSizes(GetTotalSentences());
 
             // load a vector of the sentence lengths
             copy_member(GetWords()->get_sentences().begin(), GetWords()->get_sentences().end(),
-                        statistic_sizes.begin(), [](const grammar::sentence_info& s) noexcept
+                        statisticSizes.begin(), [](const grammar::sentence_info& s) noexcept
                         { return s.get_word_count(); });
-            statistics::find_outliers fos(statistic_sizes);
+            const statistics::find_outliers fos(statisticSizes);
             m_difficultSentenceLength = static_cast<int>(fos.get_upper_outlier_boundary());
             }
         else
@@ -3674,27 +3675,27 @@ BaseProject::ExtractRawTextWithEncoding(const std::wstring& sourceFileText,
                                         wxString& label)
     {
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    lily_of_the_valley::html_extract_text filter_html;
-    filter_html.set_log_message_separator(L", ");
+    lily_of_the_valley::html_extract_text filterHtml;
+    filterHtml.set_log_message_separator(L", ");
     const WebPageExtension isHtmlExtension;
 
     try
         {
         if (isHtmlExtension(fileExtension.wc_str()))
             {
-            std::wstring filteredText{ filter_html(sourceFileText.c_str(), sourceFileText.length(),
-                                                   true, false) };
-            if (!filter_html.get_log().empty())
+            std::wstring filteredText{ filterHtml(sourceFileText.c_str(), sourceFileText.length(),
+                                                  true, false) };
+            if (!filterHtml.get_log().empty())
                 {
-                wxLogWarning(L"%s: %s", fileName.GetFullPath(), filter_html.get_log());
+                wxLogWarning(L"%s: %s", fileName.GetFullPath(), filterHtml.get_log());
                 }
             if (convertDiacritics(filteredText))
                 {
                 filteredText = convertDiacritics.get_conversion();
                 }
-            label = coalesce<wchar_t>({ filter_html.get_subject(), filter_html.get_title(),
-                                        filter_html.get_keywords(), filter_html.get_description(),
-                                        filter_html.get_author() });
+            label = coalesce<wchar_t>({ filterHtml.get_subject(), filterHtml.get_title(),
+                                        filterHtml.get_keywords(), filterHtml.get_description(),
+                                        filterHtml.get_author() });
             return std::make_pair(true, std::move(filteredText));
             }
         else
@@ -3713,11 +3714,11 @@ BaseProject::ExtractRawTextWithEncoding(const std::wstring& sourceFileText,
 std::pair<bool, std::wstring> BaseProject::ExtractDocxRawText(std::string_view sourceFileText)
     {
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    word2007_extract_text filter_docx;
+    lily_of_the_valley::word2007_extract_text filter_docx;
     filter_docx.set_log_message_separator(L", ");
-    Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
+    const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring docxMetaFileText = archive.ReadTextFile(L"docProps/core.xml");
-    if (docxMetaFileText.length())
+    if (!docxMetaFileText.empty())
         {
         filter_docx.read_meta_data(docxMetaFileText.c_str(), docxMetaFileText.length());
         SetOriginalDocumentDescription(coalesce<wchar_t>(
@@ -3738,7 +3739,7 @@ std::pair<bool, std::wstring> BaseProject::ExtractDocxRawText(std::string_view s
     try
         {
         filter_docx(docxFileText.c_str(), docxFileText.length());
-        if (filter_docx.get_log().length())
+        if (!filter_docx.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_docx.get_log());
             }
@@ -3764,10 +3765,10 @@ std::pair<bool, std::wstring> BaseProject::ExtractDocRawText(std::string_view so
     try
         {
         grammar::convert_ligatures_and_diacritics convertDiacritics;
-        word1997_extract_text filter_word; // Word 97-2003
+        lily_of_the_valley::word1997_extract_text filter_word; // Word 97-2003
         filter_word.set_log_message_separator(L", ");
         filter_word(sourceFileText.data(), sourceFileText.length());
-        if (filter_word.get_log().length())
+        if (!filter_word.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_word.get_log());
             }
@@ -3783,61 +3784,61 @@ std::pair<bool, std::wstring> BaseProject::ExtractDocRawText(std::string_view so
             }
         return std::make_pair(true, std::move(extractedText));
         }
-    catch (const rtf_extract_text::rtfparse_exception&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_exception&)
         {
         LogMessage(_(L"Invalid RTF file."), _(L"Import Error"), wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::cfb_bad_bat&)
+    catch (const lily_of_the_valley::word1997_extract_text::cfb_bad_bat&)
         {
         LogMessage(_(L"Word file is corrupted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::cfb_bad_bat_entry&)
+    catch (const lily_of_the_valley::word1997_extract_text::cfb_bad_bat_entry&)
         {
         LogMessage(_(L"Word file is corrupted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::cfb_bad_xbat&)
+    catch (const lily_of_the_valley::word1997_extract_text::cfb_bad_xbat&)
         {
         LogMessage(_(L"Word file is corrupted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::cfb_bad_xbat_entry&)
+    catch (const lily_of_the_valley::word1997_extract_text::cfb_bad_xbat_entry&)
         {
         LogMessage(_(L"Word file is corrupted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::msword_encrypted&)
+    catch (const lily_of_the_valley::word1997_extract_text::msword_encrypted&)
         {
         LogMessage(_(L"Word file is encrypted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::msword_corrupted&)
+    catch (const lily_of_the_valley::word1997_extract_text::msword_corrupted&)
         {
         LogMessage(_(L"Word file is corrupted and cannot be read."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::msword_fastsaved&)
+    catch (const lily_of_the_valley::word1997_extract_text::msword_fastsaved&)
         {
         LogMessage(_(L"Word file is \"fast-saved\" and could not be read.\n"
                      "Please save file with \"fast-saving\" turned off and try again."),
                    _(L"Import Error"), wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::msword_header_not_found&)
+    catch (const lily_of_the_valley::word1997_extract_text::msword_header_not_found&)
         {
         LogMessage(_(L"File does not appear to be a valid Word file."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const word1997_extract_text::msword_root_entry_not_found&)
+    catch (const lily_of_the_valley::word1997_extract_text::msword_root_entry_not_found&)
         {
         LogMessage(_(L"File does not appear to be a valid Word file."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
@@ -3861,7 +3862,7 @@ std::pair<bool, std::wstring> BaseProject::ExtractRtfRawText(std::string_view so
         lily_of_the_valley::rtf_extract_text filter_rtf;
         filter_rtf.set_log_message_separator(L", ");
         filter_rtf(sourceFileText.data(), sourceFileText.length());
-        if (filter_rtf.get_log().length())
+        if (!filter_rtf.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_rtf.get_log());
             }
@@ -3877,37 +3878,37 @@ std::pair<bool, std::wstring> BaseProject::ExtractRtfRawText(std::string_view so
             }
         return std::make_pair(true, std::move(extractedText));
         }
-    catch (const rtf_extract_text::rtfparse_stack_underflow&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_stack_underflow&)
         {
         LogMessage(_(L"Unable to import RTF file. Stack underflow."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const rtf_extract_text::rtfparse_stack_overflow&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_stack_overflow&)
         {
         LogMessage(_(L"Unable to import RTF file. Stack overflow."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const rtf_extract_text::rtfparse_unmatched_brace&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_unmatched_brace&)
         {
         LogMessage(_(L"Unable to import RTF file. Unmatched brace."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const rtf_extract_text::rtfparse_assertion&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_assertion&)
         {
         LogMessage(_(L"Unable to import RTF file. Assertion."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const rtf_extract_text::rtfparse_invalid_hex&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_invalid_hex&)
         {
         LogMessage(_(L"Unable to import RTF file. Invalid hex value."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
-    catch (const rtf_extract_text::rtfparse_bad_table&)
+    catch (const lily_of_the_valley::rtf_extract_text::rtfparse_bad_table&)
         {
         LogMessage(_(L"Unable to import RTF file. Bad table."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
@@ -3930,7 +3931,7 @@ std::pair<bool, std::wstring> BaseProject::ExtractPostscriptRawText(std::string_
     try
         {
         filter_ps(sourceFileText.data(), sourceFileText.length());
-        if (filter_ps.get_log().length())
+        if (!filter_ps.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_ps.get_log());
             }
@@ -3968,9 +3969,9 @@ BaseProject::ExtractOpenDocumentRawText(std::string_view sourceFileText)
     grammar::convert_ligatures_and_diacritics convertDiacritics;
     lily_of_the_valley::odt_odp_extract_text filter_odt;
     filter_odt.set_log_message_separator(L", ");
-    Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
+    const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring odtMetaFileText = archive.ReadTextFile(L"meta.xml");
-    if (odtMetaFileText.length())
+    if (!odtMetaFileText.empty())
         {
         filter_odt.read_meta_data(odtMetaFileText.c_str(), odtMetaFileText.length());
         SetOriginalDocumentDescription(
@@ -3980,7 +3981,7 @@ BaseProject::ExtractOpenDocumentRawText(std::string_view sourceFileText)
                                 wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
         }
     const std::wstring odtFileText = archive.ReadTextFile(L"content.xml");
-    if (odtFileText.empty() && archive.GetMessages().size())
+    if (odtFileText.empty() && !archive.GetMessages().empty())
         {
         LogMessage(wxString::Format(_(L"Unable to open ODT/ODP document: %s"),
                                     archive.GetMessages().at(0).m_message),
@@ -3990,7 +3991,7 @@ BaseProject::ExtractOpenDocumentRawText(std::string_view sourceFileText)
     try
         {
         filter_odt(odtFileText.c_str(), odtFileText.length());
-        if (filter_odt.get_log().length())
+        if (!filter_odt.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_odt.get_log());
             }
@@ -4081,9 +4082,9 @@ std::pair<bool, std::wstring> BaseProject::ExtractPowerPointRawText(std::string_
     lily_of_the_valley::pptx_extract_text filter_pptx;
     filter_pptx.set_log_message_separator(L", ");
     std::wstring pptParsedText;
-    Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
+    const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring pptMetaFileText = archive.ReadTextFile(L"docProps/core.xml");
-    if (pptMetaFileText.length())
+    if (!pptMetaFileText.empty())
         {
         filter_pptx.read_meta_data(pptMetaFileText.c_str(), pptMetaFileText.length());
         SetOriginalDocumentDescription(coalesce<wchar_t>(
@@ -4109,7 +4110,7 @@ std::pair<bool, std::wstring> BaseProject::ExtractPowerPointRawText(std::string_
                 {
                 pptParsedText += filter_pptx(pptxFileText.c_str(), pptxFileText.length());
                 pptParsedText += L"\n";
-                if (filter_pptx.get_log().length())
+                if (!filter_pptx.get_log().empty())
                     {
                     wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_pptx.get_log());
                     }
@@ -4146,7 +4147,7 @@ std::pair<bool, std::wstring> BaseProject::ExtractWorkshopRawText(std::string_vi
         const std::wstring hhStr = Wisteria::TextStream::CharStreamToUnicode(
             sourceFileText.data(), sourceFileText.length());
         filter_hhc_hhk(hhStr.c_str(), hhStr.length());
-        if (filter_hhc_hhk.get_log().length())
+        if (!filter_hhc_hhk.get_log().empty())
             {
             wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_hhc_hhk.get_log());
             }
@@ -4248,51 +4249,51 @@ std::pair<bool, std::wstring> BaseProject::ExtractRawText(std::string_view sourc
         {
         return ExtractRtfRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"doc") == 0 || fileExtension.CmpNoCase(L"dot") == 0)
+    if (fileExtension.CmpNoCase(L"doc") == 0 || fileExtension.CmpNoCase(L"dot") == 0)
         {
         return ExtractDocRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"docx") == 0 || fileExtension.CmpNoCase(L"docm") == 0)
+    if (fileExtension.CmpNoCase(L"docx") == 0 || fileExtension.CmpNoCase(L"docm") == 0)
         {
         return ExtractDocxRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"hhc") == 0 || fileExtension.CmpNoCase(L"hhk") == 0)
+    if (fileExtension.CmpNoCase(L"hhc") == 0 || fileExtension.CmpNoCase(L"hhk") == 0)
         {
         return ExtractWorkshopRawText(sourceFileText);
         }
-    else if (isHtmlExtension(fileExtension))
+    if (isHtmlExtension(fileExtension))
         {
         return ExtractHtmlRawText(sourceFileText, isHtmlExtension, fileExtension);
         }
-    else if (fileExtension.CmpNoCase(L"ps") == 0)
+    if (fileExtension.CmpNoCase(L"ps") == 0)
         {
         return ExtractPostscriptRawText(sourceFileText);
         }
     // OpenDocument text or presentation files
-    else if (fileExtension.CmpNoCase(L"odt") == 0 || fileExtension.CmpNoCase(L"ott") == 0 ||
-             fileExtension.CmpNoCase(L"odp") == 0 || fileExtension.CmpNoCase(L"otp") == 0)
+    if (fileExtension.CmpNoCase(L"odt") == 0 || fileExtension.CmpNoCase(L"ott") == 0 ||
+        fileExtension.CmpNoCase(L"odp") == 0 || fileExtension.CmpNoCase(L"otp") == 0)
         {
         return ExtractOpenDocumentRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"pptx") == 0 || fileExtension.CmpNoCase(L"pptm") == 0)
+    if (fileExtension.CmpNoCase(L"pptx") == 0 || fileExtension.CmpNoCase(L"pptm") == 0)
         {
         return ExtractPowerPointRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"idl") == 0)
+    if (fileExtension.CmpNoCase(L"idl") == 0)
         {
         return ExtractIdlRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"cpp") == 0 || fileExtension.CmpNoCase(L"c") == 0 ||
-             fileExtension.CmpNoCase(L"h") == 0)
+    if (fileExtension.CmpNoCase(L"cpp") == 0 || fileExtension.CmpNoCase(L"c") == 0 ||
+        fileExtension.CmpNoCase(L"h") == 0)
         {
         return ExtractCppRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"md") == 0 || fileExtension.CmpNoCase(L"rmd") == 0 ||
-             fileExtension.CmpNoCase(L"qmd") == 0)
+    if (fileExtension.CmpNoCase(L"md") == 0 || fileExtension.CmpNoCase(L"rmd") == 0 ||
+        fileExtension.CmpNoCase(L"qmd") == 0)
         {
         return ExtractMarkdownRawText(sourceFileText);
         }
-    else if (fileExtension.CmpNoCase(L"txt") == 0)
+    if (fileExtension.CmpNoCase(L"txt") == 0)
         {
         SetOriginalDocumentDescription(
             coalesce({ GetOriginalDocumentDescription(),
@@ -4306,55 +4307,52 @@ std::pair<bool, std::wstring> BaseProject::ExtractRawText(std::string_view sourc
             }
         return std::make_pair(true, std::move(extractedText));
         }
-    else if (fileExtension.CmpNoCase(L"pdf") == 0)
+    if (fileExtension.CmpNoCase(L"pdf") == 0)
         {
         LogMessage(_(L"PDF files are not supported."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
         }
     // Unknown (or no) extension
-    else
+
+    // See if it is HTML, given that a lot of web pages may not use a known file extension
+    if (string_util::stristr(sourceFileText.data(), "<html") != nullptr)
         {
-        // See if it is HTML, given that a lot of web pages may not use a known file extension
-        if (string_util::stristr(sourceFileText.data(), "<html"))
+        std::pair<bool, std::wstring> extractResult(false, std::wstring{});
+        wxString title;
+        // if UTF-8 or simply 7-bit ASCII, then just convert as UTF-8 and
+        // run the HTML parser on it
+        if (utf8::is_valid(sourceFileText.data(), sourceFileText.data() + sourceFileText.length()))
             {
-            std::pair<bool, std::wstring> extractResult(false, std::wstring{});
-            wxString title;
-            // if UTF-8 or simply 7-bit ASCII, then just convert as UTF-8 and
-            // run the HTML parser on it
-            if (utf8::is_valid(sourceFileText.data(),
-                               sourceFileText.data() + sourceFileText.length()))
-                {
-                extractResult =
-                    ExtractRawTextWithEncoding(Wisteria::TextStream::CharStreamToUnicode(
-                                                   sourceFileText.data(), sourceFileText.length()),
-                                               L"html", GetOriginalDocumentFilePath(), title);
-                }
-            // Otherwise, need to search for the encoding in the HTML itself and convert using that,
-            // then run the HTML parser on it
-            else
-                {
-                const std::wstring str = Wisteria::TextStream::CharStreamToUnicode(
-                    sourceFileText.data(), sourceFileText.length(),
-                    WebHarvester::GetCharsetFromPageContent(
-                        { sourceFileText.data(), sourceFileText.length() }));
-                extractResult =
-                    ExtractRawTextWithEncoding(str, L"html", GetOriginalDocumentFilePath(), title);
-                }
-            SetOriginalDocumentDescription(
-                coalesce({ GetOriginalDocumentDescription(), title,
-                           wxFileName(GetOriginalDocumentFilePath()).GetName() }));
-            return std::make_pair(true, std::move(extractResult.second));
+            extractResult =
+                ExtractRawTextWithEncoding(Wisteria::TextStream::CharStreamToUnicode(
+                                               sourceFileText.data(), sourceFileText.length()),
+                                           L"html", GetOriginalDocumentFilePath(), title);
             }
-        // ...otherwise, just load it as regular text
+        // Otherwise, need to search for the encoding in the HTML itself and convert using that,
+        // then run the HTML parser on it
         else
             {
-            // This should be logged instead of shown to the user;
-            // otherwise, they will see this warning every time they refresh.
-            wxLogWarning(L"Unknown file extension. File will be imported as plain text.");
-            return std::make_pair(true, Wisteria::TextStream::CharStreamToUnicode(
-                                            sourceFileText.data(), sourceFileText.length()));
+            const std::wstring str = Wisteria::TextStream::CharStreamToUnicode(
+                sourceFileText.data(), sourceFileText.length(),
+                WebHarvester::GetCharsetFromPageContent(
+                    { sourceFileText.data(), sourceFileText.length() }));
+            extractResult =
+                ExtractRawTextWithEncoding(str, L"html", GetOriginalDocumentFilePath(), title);
             }
+        SetOriginalDocumentDescription(
+            coalesce({ GetOriginalDocumentDescription(), title,
+                       wxFileName(GetOriginalDocumentFilePath()).GetName() }));
+        return std::make_pair(true, std::move(extractResult.second));
+        }
+    // ...otherwise, just load it as regular text
+    else
+        {
+        // This should be logged instead of shown to the user;
+        // otherwise, they will see this warning every time they refresh.
+        wxLogWarning(L"Unknown file extension. File will be imported as plain text.");
+        return std::make_pair(true, Wisteria::TextStream::CharStreamToUnicode(
+                                        sourceFileText.data(), sourceFileText.length()));
         }
     }
 
@@ -4439,7 +4437,7 @@ bool BaseProject::LoadExternalDocument()
                                                   GetOriginalDocumentFilePath()),
                                  _(L"Document Not Found"), wxYES_NO | wxICON_QUESTION) == wxYES)
                     {
-                    wxFileName fn(StripIllegalFileCharacters(GetOriginalDocumentFilePath()));
+                    const wxFileName fn(StripIllegalFileCharacters(GetOriginalDocumentFilePath()));
                     wxFileDialog dialog(nullptr, _(L"Select Document to Analyze"), fn.GetPath(),
                                         fn.GetName(), fn.GetFullName(),
                                         wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
@@ -4460,7 +4458,7 @@ bool BaseProject::LoadExternalDocument()
                         {
                         // there is embedded text (that may have been passed from a batch project),
                         // so load that here.
-                        if (GetDocumentText().length())
+                        if (!GetDocumentText().empty())
                             {
                             LoadDocument();
                             return true;
@@ -4557,10 +4555,10 @@ bool BaseProject::LoadExternalDocument()
                 return false;
                 }
             }
-        Wisteria::ZipCatalog zc(poundFn.GetFullPath());
+        const Wisteria::ZipCatalog zc(poundFn.GetFullPath());
         wxMemoryOutputStream memstream;
         if (!zc.ReadFile(GetOriginalDocumentFilePath().substr(poundInFile + 5), memstream) &&
-            zc.GetMessages().size())
+            !zc.GetMessages().empty())
             {
             LogMessage(zc.GetMessages().back().m_message, poundFn.GetFullPath(),
                        zc.GetMessages().back().m_icon);
@@ -4615,41 +4613,39 @@ bool BaseProject::LoadExternalDocument()
         const size_t slash = worksheetName.find_last_of(L'#');
         if (slash != wxString::npos)
             {
-            const wxString CellName = worksheetName.substr(slash + 1);
+            const wxString cellName = worksheetName.substr(slash + 1);
             worksheetName.Truncate(slash);
-            lily_of_the_valley::xlsx_extract_text filter_xlsx{ false };
-            Wisteria::ZipCatalog zc(poundFn.GetFullPath());
+            lily_of_the_valley::xlsx_extract_text filterXlsx{ false };
+            const Wisteria::ZipCatalog zc(poundFn.GetFullPath());
             // read in the worksheets
-            std::wstring workBookFileText = zc.ReadTextFile(L"xl/workbook.xml");
-            filter_xlsx.read_worksheet_names(workBookFileText.c_str(), workBookFileText.length());
+            const std::wstring workBookFileText = zc.ReadTextFile(L"xl/workbook.xml");
+            filterXlsx.read_worksheet_names(workBookFileText.c_str(), workBookFileText.length());
             // read in the string table
             const std::wstring sharedStrings = zc.ReadTextFile(L"xl/sharedStrings.xml");
-            if (!sharedStrings.length())
+            if (sharedStrings.empty())
                 {
                 return false;
                 }
             // find the sheet to get the cells from
             auto sheetPos =
-                std::find(filter_xlsx.get_worksheet_names().begin(),
-                          filter_xlsx.get_worksheet_names().end(), worksheetName.wc_str());
-            if (sheetPos != filter_xlsx.get_worksheet_names().end())
+                std::find(filterXlsx.get_worksheet_names().begin(),
+                          filterXlsx.get_worksheet_names().end(), worksheetName.wc_str());
+            if (sheetPos != filterXlsx.get_worksheet_names().end())
                 {
                 const std::wstring sheetFile = zc.ReadTextFile(
                     wxString::Format(L"xl/worksheets/sheet%zu.xml",
-                                     (sheetPos - filter_xlsx.get_worksheet_names().begin()) + 1));
-                SetDocumentText(filter_xlsx.get_cell_text(CellName.wc_str(), sharedStrings.c_str(),
-                                                          sharedStrings.length(), sheetFile.c_str(),
-                                                          sheetFile.length()));
+                                     (sheetPos - filterXlsx.get_worksheet_names().begin()) + 1));
+                SetDocumentText(filterXlsx.get_cell_text(cellName.wc_str(), sharedStrings.c_str(),
+                                                         sharedStrings.length(), sheetFile.c_str(),
+                                                         sheetFile.length()));
                 LoadDocument();
                 return true;
                 }
-            else
-                {
-                LogMessage(wxString::Format(_(L"Unable to find the worksheet \"%s\" in \"%s\"."),
-                                            worksheetName, poundFn.GetFullPath()),
-                           _(L"Error"), wxOK | wxICON_EXCLAMATION);
-                return false;
-                }
+
+            LogMessage(wxString::Format(_(L"Unable to find the worksheet \"%s\" in \"%s\"."),
+                                        worksheetName, poundFn.GetFullPath()),
+                       _(L"Error"), wxOK | wxICON_EXCLAMATION);
+            return false;
             }
         }
 
@@ -4855,7 +4851,7 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::BORMUTH_CLOZE_MEAN();
+    const wxString currentTestKey = ReadabilityMessages::BORMUTH_CLOZE_MEAN();
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -4864,9 +4860,9 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetDaleChallTextExclusionMode() ==
@@ -4877,9 +4873,9 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -4907,7 +4903,7 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
                     GetTotalSentences()) *
             100 /* convert to integer percentage*/);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -4922,17 +4918,17 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
                       wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{},
             std::numeric_limits<double>::quiet_NaN(), val, setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -4941,7 +4937,7 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::BORMUTH_GRADE_PLACEMENT_35();
+    const wxString currentTestKey = ReadabilityMessages::BORMUTH_GRADE_PLACEMENT_35();
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -4950,9 +4946,9 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetDaleChallTextExclusionMode() ==
@@ -4963,9 +4959,9 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -4990,7 +4986,7 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
                 GetTotalSentencesFromCompleteSentencesAndHeaders() :
                 GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5011,7 +5007,7 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5020,11 +5016,11 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5033,15 +5029,15 @@ bool BaseProject::AddPskDaleChallTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::PSK_DALE_CHALL();
+    const wxString currentTestKey = ReadabilityMessages::PSK_DALE_CHALL();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -5049,9 +5045,9 @@ bool BaseProject::AddPskDaleChallTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5070,7 +5066,7 @@ bool BaseProject::AddPskDaleChallTest(const bool setFocus)
                 GetTotalSentencesFromCompleteSentencesAndHeaders() :
                 GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5090,7 +5086,7 @@ bool BaseProject::AddPskDaleChallTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5099,11 +5095,11 @@ bool BaseProject::AddPskDaleChallTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5112,7 +5108,7 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::DALE_CHALL();
+    const wxString currentTestKey = ReadabilityMessages::DALE_CHALL();
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -5121,9 +5117,9 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetDaleChallTextExclusionMode() ==
@@ -5134,9 +5130,9 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5156,7 +5152,7 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
                                         GetTotalHardWordsDaleChall(), GetTotalSentences());
             }
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5184,7 +5180,7 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), explanation,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), explanation,
             std::make_pair(safe_divide<double>(gradeBegin + gradeEnd, 2), gradeValue),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeBegin, gradeEnd, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5193,11 +5189,11 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5206,7 +5202,7 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::DEGREES_OF_READING_POWER_GE();
+    const wxString currentTestKey = ReadabilityMessages::DEGREES_OF_READING_POWER_GE();
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -5215,9 +5211,9 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetDaleChallTextExclusionMode() ==
@@ -5228,9 +5224,9 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5255,7 +5251,7 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
                 GetTotalSentencesFromCompleteSentencesAndHeaders() :
                 GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5277,7 +5273,7 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5286,11 +5282,11 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5299,7 +5295,7 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::DEGREES_OF_READING_POWER();
+    const wxString currentTestKey = ReadabilityMessages::DEGREES_OF_READING_POWER();
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -5308,9 +5304,9 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetDaleChallTextExclusionMode() ==
@@ -5321,9 +5317,9 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5348,7 +5344,7 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
                 GetTotalSentencesFromCompleteSentencesAndHeaders() :
                 GetTotalSentences()));
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5363,17 +5359,17 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
                 wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5382,16 +5378,16 @@ bool BaseProject::AddSolSpanishTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SOL_SPANISH();
+    const wxString currentTestKey = ReadabilityMessages::SOL_SPANISH();
 
     if (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5400,7 +5396,7 @@ bool BaseProject::AddSolSpanishTest(const bool setFocus)
         const double gradeValue = readability::sol_spanish(
             GetTotalHardWordsSol(), GetTotalSentencesFromCompleteSentencesAndHeaders());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5423,7 +5419,7 @@ bool BaseProject::AddSolSpanishTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5432,11 +5428,11 @@ bool BaseProject::AddSolSpanishTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5445,16 +5441,16 @@ bool BaseProject::AddElfTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::ELF();
+    const wxString currentTestKey = ReadabilityMessages::ELF();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5463,7 +5459,7 @@ bool BaseProject::AddElfTest(const bool setFocus)
         const double gradeValue = readability::easy_listening_formula(
             GetTotalWords(), GetTotalSyllables(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5483,7 +5479,7 @@ bool BaseProject::AddElfTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5492,11 +5488,11 @@ bool BaseProject::AddElfTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5505,16 +5501,16 @@ bool BaseProject::AddSmogSimplifiedTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SMOG_SIMPLIFIED();
+    const wxString currentTestKey = ReadabilityMessages::SMOG_SIMPLIFIED();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5523,7 +5519,7 @@ bool BaseProject::AddSmogSimplifiedTest(const bool setFocus)
         const double gradeValue = readability::smog_simplified(
             GetTotal3PlusSyllabicWordsNumeralsFullySyllabized(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5547,7 +5543,7 @@ bool BaseProject::AddSmogSimplifiedTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5556,11 +5552,11 @@ bool BaseProject::AddSmogSimplifiedTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5569,16 +5565,16 @@ bool BaseProject::AddModifiedSmogTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::MODIFIED_SMOG();
+    const wxString currentTestKey = ReadabilityMessages::MODIFIED_SMOG();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5587,7 +5583,7 @@ bool BaseProject::AddModifiedSmogTest(const bool setFocus)
         const double gradeValue = readability::modified_smog(
             GetUnique3PlusSyllabicWordsNumeralsFullySyllabized(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5611,7 +5607,7 @@ bool BaseProject::AddModifiedSmogTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5620,11 +5616,11 @@ bool BaseProject::AddModifiedSmogTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5633,16 +5629,16 @@ bool BaseProject::AddQuBambergerVanecekTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::QU();
+    const wxString currentTestKey = ReadabilityMessages::QU();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5652,7 +5648,7 @@ bool BaseProject::AddQuBambergerVanecekTest(const bool setFocus)
             GetTotalWords(), GetTotal3PlusSyllabicWordsNumeralsFullySyllabized(),
             GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5676,7 +5672,7 @@ bool BaseProject::AddQuBambergerVanecekTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5685,11 +5681,11 @@ bool BaseProject::AddQuBambergerVanecekTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5698,16 +5694,16 @@ bool BaseProject::AddSmogBambergerVanecekTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SMOG_BAMBERGER_VANECEK();
+    const wxString currentTestKey = ReadabilityMessages::SMOG_BAMBERGER_VANECEK();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5716,7 +5712,7 @@ bool BaseProject::AddSmogBambergerVanecekTest(const bool setFocus)
         const double gradeValue = readability::smog_bamberger_vanecek(
             GetTotal3PlusSyllabicWordsNumeralsFullySyllabized(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5740,7 +5736,7 @@ bool BaseProject::AddSmogBambergerVanecekTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5749,11 +5745,11 @@ bool BaseProject::AddSmogBambergerVanecekTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5762,16 +5758,16 @@ bool BaseProject::AddSmogTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SMOG();
+    const wxString currentTestKey = ReadabilityMessages::SMOG();
 
     if (GetTotalSentences() == 0)
         {
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5780,7 +5776,7 @@ bool BaseProject::AddSmogTest(const bool setFocus)
         const double gradeValue = readability::smog(
             GetTotal3PlusSyllabicWordsNumeralsFullySyllabized(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5804,7 +5800,7 @@ bool BaseProject::AddSmogTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5813,11 +5809,11 @@ bool BaseProject::AddSmogTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5826,15 +5822,15 @@ bool BaseProject::AddCrawfordTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::CRAWFORD();
+    const wxString currentTestKey = ReadabilityMessages::CRAWFORD();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5843,7 +5839,7 @@ bool BaseProject::AddCrawfordTest(const bool setFocus)
         const double gradeValue =
             readability::crawford(GetTotalWords(), GetTotalSyllables(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5867,7 +5863,7 @@ bool BaseProject::AddCrawfordTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5876,13 +5872,13 @@ bool BaseProject::AddCrawfordTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddCrawfordGraph(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5891,15 +5887,15 @@ bool BaseProject::AddNeueWienerSachtextformel1(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL1();
+    const wxString currentTestKey = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL1();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -5907,9 +5903,9 @@ bool BaseProject::AddNeueWienerSachtextformel1(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5919,7 +5915,7 @@ bool BaseProject::AddNeueWienerSachtextformel1(const bool setFocus)
             GetTotalWords(), GetTotalMonoSyllabicWords(), GetTotal3PlusSyllabicWords(),
             GetTotalHardLixRixWords(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -5939,7 +5935,7 @@ bool BaseProject::AddNeueWienerSachtextformel1(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -5948,11 +5944,11 @@ bool BaseProject::AddNeueWienerSachtextformel1(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -5961,15 +5957,15 @@ bool BaseProject::AddNeueWienerSachtextformel2(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL2();
+    const wxString currentTestKey = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL2();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -5977,9 +5973,9 @@ bool BaseProject::AddNeueWienerSachtextformel2(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -5989,7 +5985,7 @@ bool BaseProject::AddNeueWienerSachtextformel2(const bool setFocus)
             GetTotalWords(), GetTotal3PlusSyllabicWords(), GetTotalHardLixRixWords(),
             GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6009,7 +6005,7 @@ bool BaseProject::AddNeueWienerSachtextformel2(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6018,11 +6014,11 @@ bool BaseProject::AddNeueWienerSachtextformel2(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6031,15 +6027,15 @@ bool BaseProject::AddNeueWienerSachtextformel3(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL3();
+    const wxString currentTestKey = ReadabilityMessages::NEUE_WIENER_SACHTEXTFORMEL3();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6047,9 +6043,9 @@ bool BaseProject::AddNeueWienerSachtextformel3(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6058,7 +6054,7 @@ bool BaseProject::AddNeueWienerSachtextformel3(const bool setFocus)
         const double gradeValue = readability::neue_wiener_sachtextformel_3(
             GetTotalWords(), GetTotal3PlusSyllabicWords(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6078,7 +6074,7 @@ bool BaseProject::AddNeueWienerSachtextformel3(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6087,11 +6083,11 @@ bool BaseProject::AddNeueWienerSachtextformel3(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6100,15 +6096,15 @@ bool BaseProject::AddWheelerSmithBambergerVanecekTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::WHEELER_SMITH_BAMBERGER_VANECEK();
+    const wxString currentTestKey = ReadabilityMessages::WHEELER_SMITH_BAMBERGER_VANECEK();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentenceUnits())
@@ -6116,21 +6112,21 @@ bool BaseProject::AddWheelerSmithBambergerVanecekTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
     try
         {
-        double index_score(0);
+        double indexScore(0);
         const size_t gradeValue = readability::wheeler_smith_bamberger_vanecek(
             GetTotalWords(),
             // German version uses 3+ syllable words, not 2+
-            GetTotal3PlusSyllabicWords(), GetTotalSentenceUnits(), index_score);
+            GetTotal3PlusSyllabicWords(), GetTotalSentenceUnits(), indexScore);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6150,19 +6146,19 @@ bool BaseProject::AddWheelerSmithBambergerVanecekTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeValue),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
-            index_score, std::numeric_limits<double>::quiet_NaN(), setFocus);
+            indexScore, std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6171,15 +6167,15 @@ bool BaseProject::AddWheelerSmithTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::WHEELER_SMITH();
+    const wxString currentTestKey = ReadabilityMessages::WHEELER_SMITH();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentenceUnits())
@@ -6187,21 +6183,21 @@ bool BaseProject::AddWheelerSmithTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
     try
         {
-        double index_score(0);
+        double indexScore(0);
         const size_t gradeValue = readability::wheeler_smith(
             GetTotalWords(),
             // Polysyllabic here means 2+ syllable words (or non-monosyllabic)
-            GetTotalWords() - GetTotalMonoSyllabicWords(), GetTotalSentenceUnits(), index_score);
+            GetTotalWords() - GetTotalMonoSyllabicWords(), GetTotalSentenceUnits(), indexScore);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6221,19 +6217,19 @@ bool BaseProject::AddWheelerSmithTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeValue),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
-            index_score, std::numeric_limits<double>::quiet_NaN(), setFocus);
+            indexScore, std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6242,15 +6238,15 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::COLEMAN_LIAU();
+    const wxString currentTestKey = ReadabilityMessages::COLEMAN_LIAU();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6258,9 +6254,9 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6272,7 +6268,7 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
         // convert to a percentage because the test returns a fractal value
         predictedClozeScore *= 100;
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6297,7 +6293,7 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6305,11 +6301,11 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6366,12 +6362,9 @@ bool BaseProject::AddStandardReadabilityTest(const wxString& id, const bool setF
         {
         return (this->*addTestFunction->second)(setFocus);
         }
-    else
-        {
-        wxFAIL_MSG(
-            wxString::Format(L"%s test function pointer not found, unable to add test.", id));
-        return false;
-        }
+
+    wxFAIL_MSG(wxString::Format(L"%s test function pointer not found, unable to add test.", id));
+    return false;
     }
 
 //-------------------------------------------------------
@@ -6379,15 +6372,15 @@ bool BaseProject::AddSpacheTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SPACHE();
+    const wxString currentTestKey = ReadabilityMessages::SPACHE();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6395,9 +6388,9 @@ bool BaseProject::AddSpacheTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6406,7 +6399,7 @@ bool BaseProject::AddSpacheTest(const bool setFocus)
         const double gradeValue = readability::spache(
             GetTotalWords(), GetTotalUniqueHardWordsSpache(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6426,7 +6419,7 @@ bool BaseProject::AddSpacheTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6435,11 +6428,11 @@ bool BaseProject::AddSpacheTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6448,15 +6441,15 @@ bool BaseProject::AddNewFogCountTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEW_FOG();
+    const wxString currentTestKey = ReadabilityMessages::NEW_FOG();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((IsFogUsingSentenceUnits() && GetTotalSentenceUnits() == 0) || GetTotalSentences() == 0)
@@ -6464,9 +6457,9 @@ bool BaseProject::AddNewFogCountTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6476,7 +6469,7 @@ bool BaseProject::AddNewFogCountTest(const bool setFocus)
             GetTotalWords(), GetTotalHardWordsFog(),
             IsFogUsingSentenceUnits() ? GetTotalSentenceUnits() : GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6500,7 +6493,7 @@ bool BaseProject::AddNewFogCountTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6509,11 +6502,11 @@ bool BaseProject::AddNewFogCountTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6522,15 +6515,15 @@ bool BaseProject::AddPskFogTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::PSK_GUNNING_FOG();
+    const wxString currentTestKey = ReadabilityMessages::PSK_GUNNING_FOG();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((IsFogUsingSentenceUnits() && GetTotalSentenceUnits() == 0) || GetTotalSentences() == 0)
@@ -6538,9 +6531,9 @@ bool BaseProject::AddPskFogTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6550,7 +6543,7 @@ bool BaseProject::AddPskFogTest(const bool setFocus)
             GetTotalWords(), GetTotalHardWordsFog(),
             IsFogUsingSentenceUnits() ? GetTotalSentenceUnits() : GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6574,7 +6567,7 @@ bool BaseProject::AddPskFogTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6583,11 +6576,11 @@ bool BaseProject::AddPskFogTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6596,15 +6589,15 @@ bool BaseProject::AddFogTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::GUNNING_FOG();
+    const wxString currentTestKey = ReadabilityMessages::GUNNING_FOG();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((IsFogUsingSentenceUnits() && GetTotalSentenceUnits() == 0) || GetTotalSentences() == 0)
@@ -6612,9 +6605,9 @@ bool BaseProject::AddFogTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6624,7 +6617,7 @@ bool BaseProject::AddFogTest(const bool setFocus)
             GetTotalWords(), GetTotalHardWordsFog(),
             IsFogUsingSentenceUnits() ? GetTotalSentenceUnits() : GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6648,7 +6641,7 @@ bool BaseProject::AddFogTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6657,11 +6650,11 @@ bool BaseProject::AddFogTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6670,15 +6663,15 @@ bool BaseProject::AddForcastTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FORCAST();
+    const wxString currentTestKey = ReadabilityMessages::FORCAST();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6687,7 +6680,7 @@ bool BaseProject::AddForcastTest(const bool setFocus)
         const double gradeValue =
             readability::forcast(GetTotalWords(), GetTotalMonoSyllabicWords());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6707,7 +6700,7 @@ bool BaseProject::AddForcastTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6716,11 +6709,11 @@ bool BaseProject::AddForcastTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6729,15 +6722,15 @@ bool BaseProject::AddAmstadTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::AMSTAD();
+    const wxString currentTestKey = ReadabilityMessages::AMSTAD();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6745,9 +6738,9 @@ bool BaseProject::AddAmstadTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6761,7 +6754,7 @@ bool BaseProject::AddAmstadTest(const bool setFocus)
                 GetTotalSyllables(),
             GetTotalSentences(), diffLevel);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6774,17 +6767,17 @@ bool BaseProject::AddAmstadTest(const bool setFocus)
                                          wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     return true;
     }
@@ -6794,15 +6787,15 @@ bool BaseProject::AddDanielsonBryan1Test(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::DANIELSON_BRYAN_1();
+    const wxString currentTestKey = ReadabilityMessages::DANIELSON_BRYAN_1();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6810,9 +6803,9 @@ bool BaseProject::AddDanielsonBryan1Test(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6821,7 +6814,7 @@ bool BaseProject::AddDanielsonBryan1Test(const bool setFocus)
         const double gradeValue = readability::danielson_bryan_1(
             GetTotalWords(), GetTotalCharactersPlusPunctuation(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6841,7 +6834,7 @@ bool BaseProject::AddDanielsonBryan1Test(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -6850,11 +6843,11 @@ bool BaseProject::AddDanielsonBryan1Test(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -6863,15 +6856,15 @@ bool BaseProject::AddDanielsonBryan2Test(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::DANIELSON_BRYAN_2();
+    const wxString currentTestKey = ReadabilityMessages::DANIELSON_BRYAN_2();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6879,9 +6872,9 @@ bool BaseProject::AddDanielsonBryan2Test(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6892,7 +6885,7 @@ bool BaseProject::AddDanielsonBryan2Test(const bool setFocus)
         const readability::flesch_difficulty diffLevel =
             readability::flesch_score_to_difficulty_level(val);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6905,19 +6898,19 @@ bool BaseProject::AddDanielsonBryan2Test(const bool setFocus)
                       wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddDB2Plot(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     return true;
     }
@@ -6927,15 +6920,15 @@ bool BaseProject::AddFleschTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FLESCH();
+    const wxString currentTestKey = ReadabilityMessages::FLESCH();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -6943,9 +6936,9 @@ bool BaseProject::AddFleschTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -6959,7 +6952,7 @@ bool BaseProject::AddFleschTest(const bool setFocus)
                 GetTotalSyllables(),
             GetTotalSentences(), diffLevel);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -6972,19 +6965,19 @@ bool BaseProject::AddFleschTest(const bool setFocus)
                                          wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddFleschChart(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
 
     return true;
     }
@@ -6994,15 +6987,15 @@ bool BaseProject::AddFarrJenkinsPatersonTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FARR_JENKINS_PATERSON();
+    const wxString currentTestKey = ReadabilityMessages::FARR_JENKINS_PATERSON();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7010,9 +7003,9 @@ bool BaseProject::AddFarrJenkinsPatersonTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7022,7 +7015,7 @@ bool BaseProject::AddFarrJenkinsPatersonTest(const bool setFocus)
         const size_t val = readability::farr_jenkins_paterson(
             GetTotalWords(), GetTotalMonoSyllabicWords(), GetTotalSentences(), diffLevel);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7035,17 +7028,17 @@ bool BaseProject::AddFarrJenkinsPatersonTest(const bool setFocus)
                                          wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7054,15 +7047,15 @@ bool BaseProject::AddNewFarrJenkinsPatersonTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEW_FARR_JENKINS_PATERSON();
+    const wxString currentTestKey = ReadabilityMessages::NEW_FARR_JENKINS_PATERSON();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7070,9 +7063,9 @@ bool BaseProject::AddNewFarrJenkinsPatersonTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7081,7 +7074,7 @@ bool BaseProject::AddNewFarrJenkinsPatersonTest(const bool setFocus)
         const double gradeValue = readability::new_farr_jenkins_paterson(
             GetTotalWords(), GetTotalMonoSyllabicWords(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7101,7 +7094,7 @@ bool BaseProject::AddNewFarrJenkinsPatersonTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7110,11 +7103,11 @@ bool BaseProject::AddNewFarrJenkinsPatersonTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7123,15 +7116,15 @@ bool BaseProject::AddPskFarrJenkinsPatersonTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::PSK_FARR_JENKINS_PATERSON();
+    const wxString currentTestKey = ReadabilityMessages::PSK_FARR_JENKINS_PATERSON();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7139,9 +7132,9 @@ bool BaseProject::AddPskFarrJenkinsPatersonTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7150,7 +7143,7 @@ bool BaseProject::AddPskFarrJenkinsPatersonTest(const bool setFocus)
         const double gradeValue = readability::powers_sumner_kearl_farr_jenkins_paterson(
             GetTotalWords(), GetTotalMonoSyllabicWords(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7170,7 +7163,7 @@ bool BaseProject::AddPskFarrJenkinsPatersonTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7179,11 +7172,11 @@ bool BaseProject::AddPskFarrJenkinsPatersonTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7192,15 +7185,15 @@ bool BaseProject::AddFleschKincaidSimplifiedTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FLESCH_KINCAID_SIMPLIFIED();
+    const wxString currentTestKey = ReadabilityMessages::FLESCH_KINCAID_SIMPLIFIED();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7208,9 +7201,9 @@ bool BaseProject::AddFleschKincaidSimplifiedTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7224,7 +7217,7 @@ bool BaseProject::AddFleschKincaidSimplifiedTest(const bool setFocus)
                 GetTotalSyllables(),
             GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7244,7 +7237,7 @@ bool BaseProject::AddFleschKincaidSimplifiedTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7253,11 +7246,11 @@ bool BaseProject::AddFleschKincaidSimplifiedTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7266,15 +7259,15 @@ bool BaseProject::AddFleschKincaidTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::FLESCH_KINCAID();
+    const wxString currentTestKey = ReadabilityMessages::FLESCH_KINCAID();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7282,9 +7275,9 @@ bool BaseProject::AddFleschKincaidTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7298,7 +7291,7 @@ bool BaseProject::AddFleschKincaidTest(const bool setFocus)
                 GetTotalSyllables(),
             GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7318,7 +7311,7 @@ bool BaseProject::AddFleschKincaidTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7327,11 +7320,11 @@ bool BaseProject::AddFleschKincaidTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7340,15 +7333,15 @@ bool BaseProject::AddPskFleschTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::PSK_FLESCH();
+    const wxString currentTestKey = ReadabilityMessages::PSK_FLESCH();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7356,9 +7349,9 @@ bool BaseProject::AddPskFleschTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7371,7 +7364,7 @@ bool BaseProject::AddPskFleschTest(const bool setFocus)
                 GetTotalSyllables(),
             GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7391,7 +7384,7 @@ bool BaseProject::AddPskFleschTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, wxString(theTest.first->get_test().get_long_name().c_str()),
+            currentTestKey, wxString(theTest.first->get_test().get_long_name().c_str()),
             description, std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7400,11 +7393,11 @@ bool BaseProject::AddPskFleschTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7413,15 +7406,15 @@ bool BaseProject::AddAriTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::ARI();
+    const wxString currentTestKey = ReadabilityMessages::ARI();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7429,9 +7422,9 @@ bool BaseProject::AddAriTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7440,7 +7433,7 @@ bool BaseProject::AddAriTest(const bool setFocus)
         const double gradeValue = readability::automated_readability_index(
             GetTotalWords(), GetTotalCharactersPlusPunctuation(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7460,7 +7453,7 @@ bool BaseProject::AddAriTest(const bool setFocus)
                       wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7469,11 +7462,11 @@ bool BaseProject::AddAriTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7482,15 +7475,15 @@ bool BaseProject::AddNewAriTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::NEW_ARI();
+    const wxString currentTestKey = ReadabilityMessages::NEW_ARI();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7498,9 +7491,9 @@ bool BaseProject::AddNewAriTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7509,7 +7502,7 @@ bool BaseProject::AddNewAriTest(const bool setFocus)
         const double gradeValue = readability::new_automated_readability_index(
             GetTotalWords(), GetTotalCharactersPlusPunctuation(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7529,7 +7522,7 @@ bool BaseProject::AddNewAriTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7538,11 +7531,11 @@ bool BaseProject::AddNewAriTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7551,15 +7544,15 @@ bool BaseProject::AddSimplifiedAriTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::SIMPLE_ARI();
+    const wxString currentTestKey = ReadabilityMessages::SIMPLE_ARI();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7567,9 +7560,9 @@ bool BaseProject::AddSimplifiedAriTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7578,7 +7571,7 @@ bool BaseProject::AddSimplifiedAriTest(const bool setFocus)
         const double gradeValue = readability::simplified_automated_readability_index(
             GetTotalWords(), GetTotalCharactersPlusPunctuation(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7598,7 +7591,7 @@ bool BaseProject::AddSimplifiedAriTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7607,11 +7600,11 @@ bool BaseProject::AddSimplifiedAriTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7620,15 +7613,15 @@ bool BaseProject::AddEflawTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::EFLAW();
+    const wxString currentTestKey = ReadabilityMessages::EFLAW();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7636,9 +7629,9 @@ bool BaseProject::AddEflawTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7649,7 +7642,7 @@ bool BaseProject::AddEflawTest(const bool setFocus)
         const size_t val = readability::eflaw(diffLevel, GetTotalWords(), GetTotalMiniWords(),
                                               GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7663,17 +7656,17 @@ bool BaseProject::AddEflawTest(const bool setFocus)
                 wxString{};
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{}, val,
             std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7682,7 +7675,7 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::HARRIS_JACOBSON();
+    const wxString currentTestKey = ReadabilityMessages::HARRIS_JACOBSON();
 
     if ((GetHarrisJacobsonTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
@@ -7691,9 +7684,9 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if ((GetHarrisJacobsonTextExclusionMode() ==
@@ -7704,9 +7697,9 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7729,7 +7722,7 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
                                                       GetTotalSentences());
             }
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7749,7 +7742,7 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeValue, displayableGradeLevel),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeValue, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7758,11 +7751,11 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7771,15 +7764,15 @@ bool BaseProject::AddRixTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::RIX();
+    const wxString currentTestKey = ReadabilityMessages::RIX();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentenceUnits())
@@ -7787,9 +7780,9 @@ bool BaseProject::AddRixTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7799,7 +7792,7 @@ bool BaseProject::AddRixTest(const bool setFocus)
         const double val =
             readability::rix(gradeLevel, GetTotalHardLixRixWords(), GetTotalSentenceUnits());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7820,7 +7813,7 @@ bool BaseProject::AddRixTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7828,11 +7821,11 @@ bool BaseProject::AddRixTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7841,15 +7834,15 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::RIX_GERMAN_FICTION();
+    const wxString currentTestKey = ReadabilityMessages::RIX_GERMAN_FICTION();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentenceUnits())
@@ -7857,9 +7850,9 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7869,7 +7862,7 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
             GetTotalWords(), GetTotalHardLixRixWords(), GetTotalSentenceUnits());
         const size_t gradeLevel = readability::rix_index_to_german_fiction_grade_level(val);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7890,7 +7883,7 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7898,11 +7891,11 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7911,15 +7904,15 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::RIX_GERMAN_NONFICTION();
+    const wxString currentTestKey = ReadabilityMessages::RIX_GERMAN_NONFICTION();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (!GetTotalSentenceUnits())
@@ -7927,9 +7920,9 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -7939,7 +7932,7 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
             GetTotalWords(), GetTotalHardLixRixWords(), GetTotalSentenceUnits());
         const size_t gradeLevel = readability::rix_index_to_german_nonfiction_grade_level(val);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -7960,7 +7953,7 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -7968,11 +7961,11 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -7981,15 +7974,15 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::LIX_GERMAN_CHILDRENS_LITERATURE();
+    const wxString currentTestKey = ReadabilityMessages::LIX_GERMAN_CHILDRENS_LITERATURE();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -7997,9 +7990,9 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -8008,9 +8001,10 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
         readability::german_lix_difficulty diffLevel;
         const size_t val = readability::german_lix(diffLevel, GetTotalWords(),
                                                    GetTotalHardLixRixWords(), GetTotalSentences());
-        size_t gradeLevel = readability::lix_index_to_german_childrens_literature_grade_level(val);
+        const size_t gradeLevel =
+            readability::lix_index_to_german_childrens_literature_grade_level(val);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -8031,7 +8025,7 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -8039,13 +8033,13 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddLixGermanGauge(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -8054,15 +8048,15 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::LIX_GERMAN_TECHNICAL();
+    const wxString currentTestKey = ReadabilityMessages::LIX_GERMAN_TECHNICAL();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -8070,9 +8064,9 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -8081,9 +8075,10 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
         readability::german_lix_difficulty diffLevel;
         const size_t val = readability::german_lix(diffLevel, GetTotalWords(),
                                                    GetTotalHardLixRixWords(), GetTotalSentences());
-        size_t gradeLevel = readability::lix_index_to_german_technical_literature_grade_level(val);
+        const size_t gradeLevel =
+            readability::lix_index_to_german_technical_literature_grade_level(val);
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -8104,7 +8099,7 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -8112,13 +8107,13 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddLixGermanGauge(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -8127,15 +8122,15 @@ bool BaseProject::AddLixTest(const bool setFocus)
     {
     ClearReadabilityTestResult();
 
-    const wxString CURRENT_TEST_KEY = ReadabilityMessages::LIX();
+    const wxString currentTestKey = ReadabilityMessages::LIX();
 
     if (GetTotalWords() == 0)
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
-                       GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                       GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
                    _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
     if (GetTotalSentences() == 0)
@@ -8143,9 +8138,9 @@ bool BaseProject::AddLixTest(const bool setFocus)
         LogMessage(
             wxString::Format(
                 _(L"Unable to calculate %s: at least one sentence must be present in document."),
-                GetReadabilityTests().get_test_short_name(CURRENT_TEST_KEY).c_str()),
+                GetReadabilityTests().get_test_short_name(currentTestKey).c_str()),
             _(L"Error"), wxOK | wxICON_ERROR, wxString{}, true);
-        GetReadabilityTests().include_test(CURRENT_TEST_KEY, false);
+        GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
 
@@ -8156,7 +8151,7 @@ bool BaseProject::AddLixTest(const bool setFocus)
         const size_t val = readability::lix(diffLevel, gradeLevel, GetTotalWords(),
                                             GetTotalHardLixRixWords(), GetTotalSentences());
 
-        const auto theTest = GetReadabilityTests().find_test(CURRENT_TEST_KEY);
+        const auto theTest = GetReadabilityTests().find_test(currentTestKey);
         if (!VerifyTestBeforeAdding(theTest))
             {
             return false;
@@ -8177,7 +8172,7 @@ bool BaseProject::AddLixTest(const bool setFocus)
             }
 
         SetReadabilityTestResult(
-            CURRENT_TEST_KEY, theTest.first->get_test().get_long_name().c_str(), description,
+            currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
             std::make_pair(gradeLevel, displayableScore),
             ReadabilityMessages::GetAgeFromUSGrade(
                 gradeLevel, GetReadabilityMessageCatalog().GetReadingAgeDisplay()),
@@ -8185,13 +8180,13 @@ bool BaseProject::AddLixTest(const bool setFocus)
         }
     catch (...)
         {
-        HandleFailedTestCalculation(CURRENT_TEST_KEY);
+        HandleFailedTestCalculation(currentTestKey);
         return false;
         }
 
     AddLixGauge(setFocus);
 
-    GetReadabilityTests().include_test(CURRENT_TEST_KEY, true);
+    GetReadabilityTests().include_test(currentTestKey, true);
     return true;
     }
 
@@ -8202,7 +8197,7 @@ void BaseProject::SyncCustomTests()
          pos != m_customTestsInUse.end();
          /* in loop*/)
         {
-        CustomReadabilityTestCollection::iterator testIter =
+        auto testIter =
             std::find(m_custom_word_tests.begin(), m_custom_word_tests.end(), pos->GetTestName());
         // shouldn't happen, but remove test from project if not found in the global system
         if (testIter == m_custom_word_tests.end())
@@ -8228,8 +8223,7 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
     ClearReadabilityTestResult();
 
     // first, see if this is a legit custom test that is loaded in the global system
-    const CustomReadabilityTestCollection::const_iterator testIter =
-        std::find(m_custom_word_tests.cbegin(), m_custom_word_tests.cend(), name);
+    const auto testIter = std::find(m_custom_word_tests.cbegin(), m_custom_word_tests.cend(), name);
     if (testIter == m_custom_word_tests.cend())
         {
         return false;
@@ -8532,7 +8526,7 @@ bool BaseProject::RemoveTest(const wxString& name)
         m_includeDolchSightWords = false;
         return true;
         }
-    else if (GetReadabilityTests().include_test(name, false))
+    if (GetReadabilityTests().include_test(name, false))
         {
         // remove from the test's goals too
         const auto [sTest, found] = GetReadabilityTests().find_test(name.wc_str());
@@ -8546,7 +8540,7 @@ bool BaseProject::RemoveTest(const wxString& name)
             }
         return true;
         }
-    else if (HasCustomTest(name))
+    if (HasCustomTest(name))
         {
         RemoveCustomReadabilityTest(name, GetCustomTest(name)->GetIterator()->get_interface_id());
         // remove from the test's goals too
@@ -8598,25 +8592,21 @@ bool BaseProject::FindMissingFile(const wxString& filePath,
                 SetModifiedFlag();
                 return true;
                 }
-            else
-                {
-                fileBySameNameInProjectDirectory.Clear();
-                return false;
-                }
+
+            fileBySameNameInProjectDirectory.Clear();
+            return false;
             }
         // or if they said "yes" before, then use the found path
-        else if (warningIter != WarningManager::GetWarnings().end() &&
-                 warningIter->GetPreviousResponse() == wxID_YES)
+        if (warningIter != WarningManager::GetWarnings().end() &&
+            warningIter->GetPreviousResponse() == wxID_YES)
             {
             SetModifiedFlag();
             return true;
             }
         // if they said "no" before, then don't bother using the found path
-        else
-            {
-            fileBySameNameInProjectDirectory.Clear();
-            return false;
-            }
+
+        fileBySameNameInProjectDirectory.Clear();
+        return false;
         }
     // alternate file path not found
     else
@@ -8855,9 +8845,8 @@ bool BaseProject::ReviewStatGoal(const wxString& statName, const double value)
         GetStatGoals().insert(std::move(node));
         return true;
         }
-    else
-        {
-        wxLogError(L"%s: unable to find statistic for goal review.", statName);
-        }
+
+    wxLogError(L"%s: unable to find statistic for goal review.", statName);
+
     return false;
     }

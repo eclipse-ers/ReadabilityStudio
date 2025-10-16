@@ -48,7 +48,7 @@ bool EditWordListDlg::Save(const wxString& filePath)
     if (filePath.empty())
         {
         TransferDataFromWindow();
-        wxFileName fn(m_wordListFilePath);
+        const wxFileName fn(m_wordListFilePath);
         wxFileDialog dialog(this, _(L"Save Word List"), fn.GetPath(), fn.GetFullName(),
                             _(L"Text files (*.txt)|*.txt"), wxFD_SAVE | wxFD_PREVIEW);
         if (dialog.ShowModal() != wxID_OK)
@@ -72,8 +72,7 @@ bool EditWordListDlg::Save(const wxString& filePath)
             }
         // sort and remove duplicates
         std::ranges::sort(outputWords);
-        std::vector<OutputStringType>::iterator endOfUniquePos =
-            std::unique(outputWords.begin(), outputWords.end());
+        auto endOfUniquePos = std::unique(outputWords.begin(), outputWords.end());
         if (endOfUniquePos != outputWords.end())
             {
             outputWords.erase(endOfUniquePos, outputWords.end());
@@ -115,7 +114,7 @@ bool EditWordListDlg::Save(const wxString& filePath)
 //---------------------------------------------
 void EditWordListDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
     {
-    wxBusyCursor wait;
+    const wxBusyCursor wait;
     TransferDataFromWindow();
 
     if (m_wordsList->HasItemBeenEditedByUser() && !Save(m_wordListFilePath))
@@ -136,7 +135,7 @@ void EditWordListDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
 //---------------------------------------------
 void EditWordListDlg::OnClose([[maybe_unused]] wxCommandEvent& event)
     {
-    wxBusyCursor wait;
+    const wxBusyCursor wait;
     TransferDataFromWindow();
 
     if (m_wordsList->HasItemBeenEditedByUser() &&
@@ -171,10 +170,10 @@ bool EditWordListDlg::Create(wxWindow* parent, wxWindowID id, const wxString& ca
 //------------------------------------------------------
 void EditWordListDlg::CreateControls()
     {
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBox* wordFilePathBox = new wxStaticBox(this, wxID_ANY, _(L"File containing list:"));
-    wxStaticBoxSizer* wordFilePathSizer = new wxStaticBoxSizer(wordFilePathBox, wxHORIZONTAL);
+    auto* wordFilePathBox = new wxStaticBox(this, wxID_ANY, _(L"File containing list:"));
+    auto* wordFilePathSizer = new wxStaticBoxSizer(wordFilePathBox, wxHORIZONTAL);
     mainSizer->Add(wordFilePathSizer, wxSizerFlags{}.Expand().Border(wxTOP | wxLEFT | wxRIGHT));
 
     m_wordListFilePathCtrl = new wxTextCtrl(
@@ -190,10 +189,10 @@ void EditWordListDlg::CreateControls()
             wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_BUTTON, FromDIP(wxSize{ 16, 16 }))),
         wxSizerFlags{}.CenterVertical().Border(wxRIGHT | wxTOP | wxBOTTOM));
 
-    wxBoxSizer* wordListSizer = new wxBoxSizer(wxVERTICAL);
+    auto* wordListSizer = new wxBoxSizer(wxVERTICAL);
     mainSizer->Add(wordListSizer, wxSizerFlags{ 1 }.Expand().Border());
-    wxBoxSizer* toolbarSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxBitmapButton* listButton = new wxBitmapButton(
+    auto* toolbarSizer = new wxBoxSizer(wxHORIZONTAL);
+    auto* listButton = new wxBitmapButton(
         this, ID_ADD_ITEM,
         wxArtProvider::GetBitmap(L"ID_ADD", wxART_BUTTON, FromDIP(wxSize{ 16, 16 })));
     listButton->SetToolTip(_(L"Add a new item"));
@@ -258,9 +257,9 @@ void EditWordListDlg::OnFilePathChanged(wxCommandEvent& event)
             return;
             }
 
-        wxBusyCursor wait;
+        const wxBusyCursor wait;
 
-        wxWindowUpdateLocker noUpdates(m_wordsList);
+        const wxWindowUpdateLocker noUpdates(m_wordsList);
         if (m_phraseFileMode)
             {
             lily_of_the_valley::standard_delimited_character_column tabbedColumn(
@@ -376,7 +375,7 @@ void EditWordListDlg::OnBrowseForFileClick([[maybe_unused]] wxCommandEvent& even
     {
     TransferDataFromWindow();
     wxFileDialog dialog(this, _(L"Select Word List"),
-                        m_wordListFilePath.length() ? wxString{} : m_defaultDir, m_wordListFilePath,
+                        !m_wordListFilePath.empty() ? wxString{} : m_defaultDir, m_wordListFilePath,
                         _(L"Text files (*.txt)|*.txt"), wxFD_OPEN | wxFD_PREVIEW);
     if (dialog.ShowModal() != wxID_OK)
         {

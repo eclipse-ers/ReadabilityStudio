@@ -88,7 +88,7 @@ class LuaEditorDlg final : public wxFrame
         // close any call tip and auto-completion windows
         if (m_notebook != nullptr && m_notebook->GetPageCount() > 0)
             {
-            auto codeEditor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+            auto* codeEditor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
             if (codeEditor != nullptr)
                 {
                 if (codeEditor->CallTipActive())
