@@ -17,7 +17,6 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include "../../app/optionenums.h"
 #include <wx/collpane.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 /// @brief Dialog for previewing filtered (i.e., romanized) text.

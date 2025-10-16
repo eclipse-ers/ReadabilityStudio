@@ -11,32 +11,22 @@
  *   Blake Madden - initial implementation
  ********************************************************************************/
 
-#ifndef __CHAPTER_SPLIT_H__
-#define __CHAPTER_SPLIT_H__
+#ifndef CHAPTER_SPLIT_H
+#define CHAPTER_SPLIT_H
 
-#include "../Wisteria-Dataviz/src/import/html_encode.h"
-#include "../Wisteria-Dataviz/src/import/html_extract_text.h"
-#include "../Wisteria-Dataviz/src/utfcpp/source/utf8.h"
-#include "../Wisteria-Dataviz/src/util/donttranslate.h"
 #include "../Wisteria-Dataviz/src/util/fileutil.h"
-#include "../Wisteria-Dataviz/src/util/string_util.h"
-#include "../Wisteria-Dataviz/src/util/textstream.h"
-#include "../indexing/sentence.h"
-#include "../webharvester/filepathresolver.h"
-#include <wx/file.h>
-#include <wx/wx.h>
 
 class ChapterSplit
     {
   public:
     void SetOutputFolder(const wxString& outFolder) { m_outputFolder = outFolder; }
 
-    void SplitIntoChapters(const wchar_t* fileText);
+    void SplitIntoChapters(const wchar_t* fileText) const;
     static bool SplitHtmlByBookmarks(wxString& sourceFile, const bool convertToXhtml);
 
   private:
-    void WriteChapterFile(const wchar_t* textStart, const wchar_t* textEnd);
+    void WriteChapterFile(const wchar_t* textStart, const wchar_t* textEnd) const;
     wxString m_outputFolder;
     };
 
-#endif //__CHAPTER_SPLIT_H__
+#endif // CHAPTER_SPLIT_H

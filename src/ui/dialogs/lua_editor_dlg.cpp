@@ -184,14 +184,14 @@ LuaEditorDlg::LuaEditorDlg(
                 }
             const wxString filePath = dialogOpen.GetPath();
 
-            auto scriptCtrl = CreateLuaScript(m_notebook);
-            if (scriptCtrl)
+            auto* scriptCtrl = CreateLuaScript(m_notebook);
+            if (scriptCtrl != nullptr)
                 {
                 // Just the generic default page open and nothing in it? Then get rid of it
                 // now that we are opening an existing script.
                 if (m_notebook->GetPageCount() == 1)
                     {
-                    auto codeEditor =
+                    auto* codeEditor =
                         dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
                     if (codeEditor && !codeEditor->GetModify() &&
                         codeEditor->GetScriptFilePath().empty())
@@ -292,7 +292,7 @@ LuaEditorDlg::LuaEditorDlg(
     accelEntries[4].Set(wxACCEL_CMD, static_cast<int>(L'H'), wxID_REPLACE);
     accelEntries[5].Set(wxACCEL_NORMAL, WXK_F5, XRCID("ID_RUN"));
     wxAcceleratorTable accelTable(std::size(accelEntries), accelEntries);
-    SetAcceleratorTable(accelTable);
+    wxWindowBase::SetAcceleratorTable(accelTable);
     }
 
 //------------------------------------------------------

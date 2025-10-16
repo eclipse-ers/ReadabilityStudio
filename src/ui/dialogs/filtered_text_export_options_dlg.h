@@ -16,7 +16,6 @@
 
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include <wx/statline.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 /// @brief Provides options for exporting filtered (e.g., romanized) text.

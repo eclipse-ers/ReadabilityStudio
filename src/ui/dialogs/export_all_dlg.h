@@ -18,8 +18,6 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/imageexportdlg.h"
 #include <wx/combobox.h>
 #include <wx/string.h>
-#include <wx/tooltip.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 class BaseProjectDoc;

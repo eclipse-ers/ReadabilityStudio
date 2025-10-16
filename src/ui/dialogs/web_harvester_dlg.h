@@ -25,8 +25,6 @@
 #include <wx/combobox.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
-#include <wx/tooltip.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 /// @private

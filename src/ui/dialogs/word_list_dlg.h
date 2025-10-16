@@ -17,11 +17,8 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebarbook.h"
 #include "../../indexing/word_list.h"
-#include <wx/ribbon/art.h>
-#include <wx/ribbon/bar.h>
 #include <wx/ribbon/buttonbar.h>
 #include <wx/ribbon/gallery.h>
-#include <wx/ribbon/toolbar.h>
 
 /// @brief Dialog to display multiple word lists (read-only viewing).
 class WordListDlg final : public wxDialog
@@ -68,7 +65,7 @@ class WordListDlg final : public wxDialog
     void OnClose([[maybe_unused]] wxCloseEvent& event);
     void AddSingleColumnPage(Wisteria::UI::SideBarBook* sideBar, const int id, const int listId,
                              const wxString& label, const int imageId,
-                             std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider> data,
+                             const std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider>& data,
                              const word_list& wordList);
 
     constexpr static int DALE_CHALL_LIST_ID = wxID_HIGHEST + 5;

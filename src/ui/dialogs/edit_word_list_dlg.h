@@ -23,11 +23,8 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <wx/artprov.h>
-#include <wx/bmpbuttn.h>
 #include <wx/combobox.h>
 #include <wx/intl.h>
-#include <wx/tooltip.h>
 #include <wx/wx.h>
 
 /// @brief A dialog to edit a word (or phrase) list.

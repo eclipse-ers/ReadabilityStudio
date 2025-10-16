@@ -12,13 +12,13 @@
  ********************************************************************************/
 
 #include "chapter_split.h"
-
-using namespace lily_of_the_valley;
+#include "../Wisteria-Dataviz/src/import/html_encode.h"
+#include "../indexing/sentence.h"
 
 //------------------------------------------------
 bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convertToXhtml)
     {
-    wxString outputFolder =
+    const wxString outputFolder =
         wxFileName(sourceFile).GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR) +
         wxFileName(sourceFile).GetName();
     if (!wxFileName::DirExists(outputFolder))
@@ -30,11 +30,11 @@ bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convert
             }
         }
 
-    wxString FileText;
-    Wisteria::TextStream::ReadFile(sourceFile, FileText);
+    wxString fileText;
+    Wisteria::TextStream::ReadFile(sourceFile, fileText);
 
-    const wchar_t* htmlText = FileText.wc_str();
-    const wchar_t* const htmlTextEnd = htmlText + FileText.length();
+    const wchar_t* htmlText = fileText.wc_str();
+    const wchar_t* const htmlTextEnd = htmlText + fileText.length();
 
     // read the Head section
     wxString headSection{
@@ -47,16 +47,16 @@ bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convert
         "<link rel=\"stylesheet\" type=\"application/vnd.adobe-page-template+xml\" "
         "href=\"page-template.xpgt\"/>\n</head>"
     };
-    const wchar_t* headStart =
-        html_extract_text::find_element(htmlText, htmlTextEnd, _DT(L"head"), true);
-    if (!convertToXhtml && headStart)
+    const wchar_t* headStart = lily_of_the_valley::html_extract_text::find_element(
+        htmlText, htmlTextEnd, _DT(L"head"), true);
+    if (!convertToXhtml && (headStart != nullptr))
         {
-        const wchar_t* headEnd =
-            html_extract_text::find_closing_element(headStart, htmlTextEnd, _DT(L"head"));
-        if (headEnd)
+        const wchar_t* headEnd = lily_of_the_valley::html_extract_text::find_closing_element(
+            headStart, htmlTextEnd, _DT(L"head"));
+        if (headEnd != nullptr)
             {
-            headEnd = html_extract_text::find_close_tag(headEnd);
-            if (headEnd)
+            headEnd = lily_of_the_valley::html_extract_text::find_close_tag(headEnd);
+            if (headEnd != nullptr)
                 {
                 headSection = wxString(headStart, headEnd + 1);
                 }
@@ -65,35 +65,37 @@ bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convert
         }
     // read the Body declaration
     wxString bodySection{ L"<body>" };
-    const wchar_t* bodyStart =
-        html_extract_text::find_element(htmlText, htmlTextEnd, _DT(L"body"), true);
-    if (!convertToXhtml && bodyStart)
+    const wchar_t* bodyStart = lily_of_the_valley::html_extract_text::find_element(
+        htmlText, htmlTextEnd, _DT(L"body"), true);
+    if (!convertToXhtml && (bodyStart != nullptr))
         {
-        const wchar_t* bodyEnd = html_extract_text::find_close_tag(bodyStart);
-        if (bodyEnd)
+        const wchar_t* bodyEnd = lily_of_the_valley::html_extract_text::find_close_tag(bodyStart);
+        if (bodyEnd != nullptr)
             {
-            bodyEnd = html_extract_text::find_close_tag(bodyEnd);
-            if (bodyEnd)
+            bodyEnd = lily_of_the_valley::html_extract_text::find_close_tag(bodyEnd);
+            if (bodyEnd != nullptr)
                 {
                 bodySection = wxString(bodyStart, bodyEnd + 1);
                 }
             }
         }
     // begin splitting up the file
-    auto bookmark = html_extract_text::find_bookmark(htmlText, htmlTextEnd);
-    while (bookmark.first)
+    auto bookmark = lily_of_the_valley::html_extract_text::find_bookmark(htmlText, htmlTextEnd);
+    while (bookmark.first != nullptr)
         {
-        auto nextBookMark = html_extract_text::find_bookmark(bookmark.first + 1, htmlTextEnd);
-        const wchar_t* endOfFirstBookmark = html_extract_text::find_close_tag(bookmark.first);
+        auto nextBookMark =
+            lily_of_the_valley::html_extract_text::find_bookmark(bookmark.first + 1, htmlTextEnd);
+        const wchar_t* endOfFirstBookmark =
+            lily_of_the_valley::html_extract_text::find_close_tag(bookmark.first);
         // shouldn't happen
         if (endOfFirstBookmark == nullptr)
             {
             break;
             }
-        if (nextBookMark.first)
+        if (nextBookMark.first != nullptr)
             {
             std::wstring outputText(++endOfFirstBookmark, nextBookMark.first);
-            if (outputText.length())
+            if (!outputText.empty())
                 {
                 outputText.insert(0, wxString::Format(L"%s\n%s\n<div id=\"%s\">", headSection,
                                                       bodySection, bookmark.second.c_str()));
@@ -110,7 +112,7 @@ bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convert
         else
             {
             std::wstring outputText(++endOfFirstBookmark);
-            if (outputText.length())
+            if (!outputText.empty())
                 {
                 outputText.insert(0, wxString::Format(L"%s\n%s\n<div id=\"%s\">", headSection,
                                                       bodySection, bookmark.second.c_str()));
@@ -134,21 +136,21 @@ bool ChapterSplit::SplitHtmlByBookmarks(wxString& sourceFile, const bool convert
     }
 
 //------------------------------------------------
-void ChapterSplit::WriteChapterFile(const wchar_t* textStart, const wchar_t* textEnd)
+void ChapterSplit::WriteChapterFile(const wchar_t* textStart, const wchar_t* textEnd) const
     {
-    if (!textStart || !textEnd || (textEnd - textStart) == 0)
+    if ((textStart == nullptr) || (textEnd == nullptr) || (textEnd - textStart) == 0)
         {
         return;
         }
     const wxString chapterContent(textStart, (textEnd - textStart));
     const wchar_t *firstLine(textStart), *endOfFirstLine(nullptr);
-    while (*firstLine && (firstLine < textEnd) && std::iswspace(firstLine[0]))
+    while ((*firstLine != 0) && (firstLine < textEnd) && (std::iswspace(firstLine[0]) != 0))
         {
         ++firstLine;
         }
     endOfFirstLine = firstLine;
-    const grammar::is_end_of_line isEol;
-    while (*endOfFirstLine && (endOfFirstLine < textEnd) && !isEol(endOfFirstLine[0]))
+    constexpr grammar::is_end_of_line IS_EOL;
+    while ((*endOfFirstLine != 0) && (endOfFirstLine < textEnd) && !IS_EOL(endOfFirstLine[0]))
         {
         ++endOfFirstLine;
         }
@@ -163,14 +165,14 @@ void ChapterSplit::WriteChapterFile(const wchar_t* textStart, const wchar_t* tex
     }
 
 //------------------------------------------------
-void ChapterSplit::SplitIntoChapters(const wchar_t* fileText)
+void ChapterSplit::SplitIntoChapters(const wchar_t* fileText) const
     {
-    if (!fileText)
+    if (fileText == nullptr)
         {
         return;
         }
     const wchar_t* nextChapterStart = std::wcschr(fileText, 0x0C);
-    while (nextChapterStart)
+    while (nextChapterStart != nullptr)
         {
         WriteChapterFile(fileText, nextChapterStart);
         fileText = nextChapterStart + 1;

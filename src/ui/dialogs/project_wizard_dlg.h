@@ -16,16 +16,13 @@
 
 #include "../../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebarbook.h"
-#include "../../Wisteria-Dataviz/src/ui/controls/thumbnail.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/archivedlg.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/excelpreviewdlg.h"
-#include "../../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
 #include "../../app/readability_app.h"
 #include "../../projects/standard_project_doc.h"
 #include "../../webharvester/webharvester.h"
 #include "doc_group_select_dlg.h"
 #include "web_harvester_dlg.h"
-#include <wx/choicdlg.h>
 
 class ReadabilityApp;
 
@@ -298,7 +295,7 @@ class ProjectWizardDlg final : public wxDialog
         }
 
     [[nodiscard]]
-    const wxArrayInt GetSelectedCustomTests() const noexcept
+    wxArrayInt GetSelectedCustomTests() const noexcept
         {
         return m_selectedCustomTests;
         }
@@ -356,7 +353,7 @@ class ProjectWizardDlg final : public wxDialog
         }
 
     void LoadSpreadsheet(wxString excelPath = wxString{});
-    void LoadArchive(wxString archivePath = wxString{});
+    void LoadArchive(const wxString& archivePath = wxString{});
     void UpdateTestSelectionMethodUI();
     void UpdateTestsUI();
     /** @brief Fills the file list from @c currentFileCount with group labels

@@ -554,7 +554,7 @@ bool WebHarvester::CrawlLinks(wxString& url,
     m_alreadyCrawledFiles.insert(url);
 
     wxYield();
-    if (m_progressDlg)
+    if (m_progressDlg != nullptr)
         {
         wxStringTokenizer tkz(url, L"\n\r", wxTOKEN_STRTOK);
         const wxString urlLabel = tkz.GetNextToken();
@@ -571,7 +571,7 @@ bool WebHarvester::CrawlLinks(wxString& url,
     html_utilities::hyperlink_parse getHyperLinks(fileText.wc_str(), fileText.length(), method);
     if (getHyperLinks.get_parse_method() ==
             html_utilities::hyperlink_parse::hyperlink_parse_method::html &&
-        getHyperLinks.get_html_parser().get_base_url())
+        getHyperLinks.get_html_parser().get_base_url() != nullptr)
         {
         url.assign(getHyperLinks.get_html_parser().get_base_url(),
                    getHyperLinks.get_html_parser().get_base_url_length());
@@ -663,7 +663,7 @@ void WebHarvester::CrawlLink(const wxString& currentLink,
         GetContentType(fullUrl, responseCode);
         if (responseCode == 404)
             {
-            m_brokenLinks.emplace(std::make_pair(fullUrl, mainUrl));
+            m_brokenLinks.emplace(fullUrl, mainUrl);
             }
         if (QueueDownload::IsBadResponseCode(responseCode))
             {
@@ -873,7 +873,7 @@ bool WebHarvester::HarvestLink(wxString& url, const wxString& fileExtension)
         }
 
     // Verify that the file is HTTP/HTTPS.
-    FilePathResolver resolve(url, false);
+    const FilePathResolver resolve(url, false);
     if (!resolve.IsHTTPFile() && !resolve.IsHTTPSFile())
         {
         return false;

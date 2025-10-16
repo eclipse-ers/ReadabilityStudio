@@ -18,8 +18,6 @@
 #include <wx/filename.h>
 #include <wx/statline.h>
 #include <wx/string.h>
-#include <wx/valgen.h>
-#include <wx/valtext.h>
 #include <wx/wx.h>
 
 /// @brief Dialog to create a new custom word test.

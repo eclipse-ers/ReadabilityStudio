@@ -12,34 +12,36 @@
  ********************************************************************************/
 
 #include "project_wizard_dlg.h"
+#include "../../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
+#include <utility>
 #include <wx/dir.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
 wxString ProjectWizardDlg::m_lastSelectedFolder;
 
-class Banner : public wxWindow
+class Banner final : public wxWindow
     {
   public:
-    Banner(wxWindow* parent, wxWindowID id, const wxBitmapBundle& logo, const wxString& label)
+    Banner(wxWindow* parent, wxWindowID id, const wxBitmapBundle& logo, wxString label)
         : wxWindow(parent, id, wxDefaultPosition, wxSize{ 300, 50 }, wxFULL_REPAINT_ON_RESIZE),
-          m_logo(logo), m_label(label)
+          m_logo(logo), m_label(std::move(label))
         {
         wxWindow::SetMinSize(FromDIP(wxSize{ 300, 50 }));
         wxWindow::SetBackgroundStyle(wxBG_STYLE_CUSTOM);
         Bind(wxEVT_PAINT, &Banner::OnPaint, this);
         }
 
-    void OnPaint([[maybe_unused]] wxPaintEvent&)
+    void OnPaint([[maybe_unused]] wxPaintEvent& evt)
         {
         wxAutoBufferedPaintDC adc(this);
         adc.Clear();
         wxGCDC dc(adc);
 
-        wxCoord textWidth, textHeight;
+        wxCoord textWidth{ 0 }, textHeight{ 0 };
         dc.GetTextExtent(m_label, &textWidth, &textHeight);
 
-        wxBitmap logo = m_logo.GetBitmap(FromDIP(wxSize{ 32, 32 })).ConvertToImage();
+        const wxBitmap logo = m_logo.GetBitmap(FromDIP(wxSize{ 32, 32 })).ConvertToImage();
 
         const wxCoord leftBorder =
             (GetClientSize().GetWidth() / 2) - ((logo.GetWidth() / 2) + (textWidth / 2) + 3);
@@ -83,12 +85,13 @@ ProjectWizardDlg::ProjectWizardDlg(wxWindow* parent, const ProjectType projectTy
     m_selectedLang(static_cast<int>(wxGetApp().GetAppOptions()->GetProjectLanguage())),
     m_fileListTruncationMode(fileTruncMode)
     {
-    wxWindow::SetExtraStyle(GetExtraStyle() | wxWS_EX_VALIDATE_RECURSIVELY | wxWS_EX_CONTEXTHELP);
+    wxNonOwnedWindow::SetExtraStyle(GetExtraStyle() | wxWS_EX_VALIDATE_RECURSIVELY |
+                                    wxWS_EX_CONTEXTHELP);
     wxDialog::Create(parent, id, caption, pos, size, style);
     // determine whether a file path or raw text was passed in
-    if (path.length())
+    if (!path.empty())
         {
-        FilePathResolver resolvePath(path, false);
+        const FilePathResolver resolvePath(path, false);
         if (resolvePath.IsInvalidFile())
             {
             m_fromFileSelected = false;
@@ -129,41 +132,31 @@ ProjectWizardDlg::ProjectWizardDlg(wxWindow* parent, const ProjectType projectTy
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnNavigate, this, wxID_FORWARD);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnNavigate, this, wxID_BACKWARD);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnOK, this, wxID_OK);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnFileBrowseButtonClick, this,
-         ProjectWizardDlg::ID_FILE_BROWSE_BUTTON);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnFileBrowseButtonClick, this, ID_FILE_BROWSE_BUTTON);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnButtonClick, this,
-         ProjectWizardDlg::NARRATIVE_WITH_ILLUSTRATIONS_LINK_ID);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnButtonClick, this,
-         ProjectWizardDlg::FRAGMENTED_LINK_ID);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnButtonClick, this,
-         ProjectWizardDlg::CENTERED_TEXT_LINK_ID);
+         NARRATIVE_WITH_ILLUSTRATIONS_LINK_ID);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnButtonClick, this, FRAGMENTED_LINK_ID);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnButtonClick, this, CENTERED_TEXT_LINK_ID);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddFolderButtonClick, this,
-         ProjectWizardDlg::ID_BATCH_FOLDER_BROWSE_BUTTON);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddFileButtonClick, this,
-         ProjectWizardDlg::ID_BATCH_FILE_BROWSE_BUTTON);
+         ID_BATCH_FOLDER_BROWSE_BUTTON);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddFileButtonClick, this, ID_BATCH_FILE_BROWSE_BUTTON);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddWebPagesButtonClick, this,
-         ProjectWizardDlg::ID_WEB_PAGES_BROWSE_BUTTON);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddWebPageButtonClick, this,
-         ProjectWizardDlg::ID_WEB_PAGE_BROWSE_BUTTON);
+         ID_WEB_PAGES_BROWSE_BUTTON);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddWebPageButtonClick, this, ID_WEB_PAGE_BROWSE_BUTTON);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddArchiveFileButtonClick, this,
-         ProjectWizardDlg::ID_ARCHIVE_FILE_BROWSE_BUTTON);
+         ID_ARCHIVE_FILE_BROWSE_BUTTON);
     Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddSpreadsheetFileButtonClick, this,
-         ProjectWizardDlg::ID_SPREADSHEET_FILE_BROWSE_BUTTON);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddToListClick, this,
-         ProjectWizardDlg::ID_ADD_FILE_BUTTON);
-    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnDeleteFromListClick, this,
-         ProjectWizardDlg::ID_DELETE_FILE_BUTTON);
+         ID_SPREADSHEET_FILE_BROWSE_BUTTON);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnAddToListClick, this, ID_ADD_FILE_BUTTON);
+    Bind(wxEVT_BUTTON, &ProjectWizardDlg::OnDeleteFromListClick, this, ID_DELETE_FILE_BUTTON);
 
-    Bind(wxEVT_CHECKBOX, &ProjectWizardDlg::OnRandomSampleCheck, this,
-         ProjectWizardDlg::ID_RANDOM_SAMPLE_CHECK);
-    Bind(wxEVT_CHOICE, &ProjectWizardDlg::OnLanguageChanged, this,
-         ProjectWizardDlg::LANGUAGE_BUTTON);
+    Bind(wxEVT_CHECKBOX, &ProjectWizardDlg::OnRandomSampleCheck, this, ID_RANDOM_SAMPLE_CHECK);
+    Bind(wxEVT_CHOICE, &ProjectWizardDlg::OnLanguageChanged, this, LANGUAGE_BUTTON);
+    Bind(wxEVT_RADIOBUTTON, &ProjectWizardDlg::OnSourceRadioChange, this, ID_FROM_FILE_BUTTON);
     Bind(wxEVT_RADIOBUTTON, &ProjectWizardDlg::OnSourceRadioChange, this,
-         ProjectWizardDlg::ID_FROM_FILE_BUTTON);
-    Bind(wxEVT_RADIOBUTTON, &ProjectWizardDlg::OnSourceRadioChange, this,
-         ProjectWizardDlg::ID_MANUALLY_ENTERED_TEXT_BUTTON);
+         ID_MANUALLY_ENTERED_TEXT_BUTTON);
     Bind(wxEVT_RADIOBOX, &ProjectWizardDlg::OnTestSelectionMethodChanged, this,
-         ProjectWizardDlg::TEST_SELECT_METHOD_BUTTON);
+         TEST_SELECT_METHOD_BUTTON);
 
     Bind(wxEVT_SIDEBARBOOK_PAGE_CHANGED, &ProjectWizardDlg::OnPageChange, this);
 
@@ -189,9 +182,9 @@ ProjectWizardDlg::ProjectWizardDlg(wxWindow* parent, const ProjectType projectTy
 //-------------------------------------------------------------
 void ProjectWizardDlg::CreateControls()
     {
-    const int ScaledNoteWidth = FromDIP(wxSize(500, 500)).GetWidth();
+    const int scaledNoteWidth = FromDIP(wxSize(500, 500)).GetWidth();
 
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
     wxGetApp().UpdateSideBarTheme(m_sideBarBook->GetSideBar());
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());
@@ -320,7 +313,7 @@ void ProjectWizardDlg::CreateControls()
                        0, wxALIGN_LEFT | wxALL, wxSizerFlags::GetDefaultBorder());
         optionsSizer->Add(langSizer);
 
-        auto buttonsSizer = new wxGridSizer(
+        auto* buttonsSizer = new wxGridSizer(
             4, wxSize(wxSizerFlags::GetDefaultBorder(), wxSizerFlags::GetDefaultBorder()));
 
         auto* button = new wxButton(page, ID_BATCH_FOLDER_BROWSE_BUTTON, _(L"&Add folder..."));
@@ -369,17 +362,16 @@ void ProjectWizardDlg::CreateControls()
 
         optionsSizer->Add(filesButtonsSizer, wxSizerFlags{}.Right());
 
-        if (GetFilePath().length())
+        if (!GetFilePath().empty())
             {
-            FilePathResolver rp(GetFilePath(), false);
+            const FilePathResolver rp(GetFilePath(), false);
             // if page is created with a default folder or file then add it to the list
             if (wxFileName::DirExists(GetFilePath()))
                 {
-                wxBusyCursor wait;
+                const wxBusyCursor wait;
                 wxArrayString files;
                 wxDir::GetAllFiles(GetFilePath(), &files, wxString{}, wxDIR_FILES | wxDIR_DIRS);
-                files =
-                    FilterFiles(files, wxGetApp().GetAppOptions()->ALL_DOCUMENTS_WILDCARD.data());
+                files = FilterFiles(files, ReadabilityAppOptions::ALL_DOCUMENTS_WILDCARD.data());
 
                 m_fileData->SetSize(files.GetCount(), 2);
                 m_fileData->SetValues(files);
@@ -520,10 +512,10 @@ void ProjectWizardDlg::CreateControls()
                   "Items such as headers and list items are not part of the narrative text and "
                   "should be ignored."),
                 wxDefaultPosition, wxDefaultSize, 0);
-            noteLabel->Wrap(ScaledNoteWidth);
+            noteLabel->Wrap(scaledNoteWidth);
             narrativeLabelsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
             narrativeLabelsSizer->Add(noteLabel, 1, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
-            narrativeLabelsSizer->SetMinSize(ScaledNoteWidth, -1);
+            narrativeLabelsSizer->SetMinSize(scaledNoteWidth, -1);
             narrativeSizer->Add(narrativeLabelsSizer, wxSizerFlags{}.Center());
 
             narrativeSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
@@ -563,7 +555,7 @@ void ProjectWizardDlg::CreateControls()
                   "consists of list items and terse sentence fragments. "
                   "NOTE: this option will disable text exclusion."),
                 wxDefaultPosition, wxDefaultSize, 0);
-            noteLabel->Wrap(ScaledNoteWidth);
+            noteLabel->Wrap(scaledNoteWidth);
             auto* noteSizer = new wxBoxSizer(wxHORIZONTAL);
             noteSizer->Add(noteLabel, 1, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
 
@@ -577,7 +569,7 @@ void ProjectWizardDlg::CreateControls()
                 moreInfoButton->SetBackgroundColour(GetBackgroundColour());
                 }
             noteSizer->Add(moreInfoButton, wxSizerFlags{}.Border(wxLEFT));
-            noteSizer->SetMinSize(ScaledNoteWidth, -1);
+            noteSizer->SetMinSize(scaledNoteWidth, -1);
 
             sparseLabelsSizer->Add(noteSizer);
 
@@ -620,10 +612,10 @@ void ProjectWizardDlg::CreateControls()
                 _(L"The document's sentences may be wrapped around illustrations or contain "
                   "empty lines between them. This is common for children's picture books."),
                 wxDefaultPosition, wxDefaultSize, 0);
-            noteLabel->Wrap(ScaledNoteWidth);
+            noteLabel->Wrap(scaledNoteWidth);
             auto* noteSizer = new wxBoxSizer(wxHORIZONTAL);
             noteSizer->Add(noteLabel, 1, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
-            noteSizer->SetMinSize(ScaledNoteWidth, -1);
+            noteSizer->SetMinSize(scaledNoteWidth, -1);
 
             auto* moreInfoButton = new wxButton(
                 docLayoutSizer->GetStaticBox(), NARRATIVE_WITH_ILLUSTRATIONS_LINK_ID, wxString{},
@@ -695,7 +687,7 @@ void ProjectWizardDlg::CreateControls()
                   "Selecting this option will instruct the program to ignore indenting when "
                   "deducing where paragraphs begin and end."),
                 wxDefaultPosition, wxDefaultSize, 0);
-            noteLabel->Wrap(ScaledNoteWidth);
+            noteLabel->Wrap(scaledNoteWidth);
             auto* noteSizer = new wxBoxSizer(wxHORIZONTAL);
             noteSizer->Add(noteLabel, 1, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
 
@@ -709,7 +701,7 @@ void ProjectWizardDlg::CreateControls()
                 moreInfoButton->SetBackgroundColour(GetBackgroundColour());
                 }
             noteSizer->Add(moreInfoButton, 0, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
-            noteSizer->SetMinSize(ScaledNoteWidth, -1);
+            noteSizer->SetMinSize(scaledNoteWidth, -1);
 
             centeredLabelsSizer->Add(noteSizer, wxSizerFlags{}.Center());
 
@@ -749,10 +741,10 @@ void ProjectWizardDlg::CreateControls()
                   "end of the sentence and paragraph, "
                   "regardless of whether it ends with a period."),
                 wxDefaultPosition, wxDefaultSize, 0);
-            noteLabel->Wrap(ScaledNoteWidth);
+            noteLabel->Wrap(scaledNoteWidth);
             wrappedLabelsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
             wrappedLabelsSizer->Add(noteLabel, 1, wxLEFT, wxSizerFlags::GetDefaultBorder() * 3);
-            wrappedLabelsSizer->SetMinSize(ScaledNoteWidth, -1);
+            wrappedLabelsSizer->SetMinSize(scaledNoteWidth, -1);
             wrappedSizer->Add(wrappedLabelsSizer, wxSizerFlags{}.Center());
 
             wrappedSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
@@ -869,11 +861,11 @@ void ProjectWizardDlg::CreateControls()
         m_testsSizer->Add(new wxStaticText(page, wxID_STATIC, _(L"Standard tests:")));
         m_testsSizer->Add(new wxStaticText(
             page, wxID_STATIC,
-            BaseProject::m_custom_word_tests.size() ? _(L"Custom tests:") : wxString{}));
+            !BaseProject::m_custom_word_tests.empty() ? _(L"Custom tests:") : wxString{}));
         m_testsSizer->AddGrowableRow(1, 1);
         m_testsSizer->Add(m_testsCheckListBox, wxSizerFlags{}.Expand());
         // custom test
-        if (BaseProject::m_custom_word_tests.size())
+        if (!BaseProject::m_custom_word_tests.empty())
             {
             wxArrayString customTestNames;
             for (const auto& customTest : BaseProject::m_custom_word_tests)
@@ -884,7 +876,7 @@ void ProjectWizardDlg::CreateControls()
             for (size_t i = 0; i < wxGetApp().GetAppOptions()->GetIncludedCustomTests().size(); ++i)
                 {
                 // find the test in the global list of tests, searching by test id
-                CustomReadabilityTestCollection::const_iterator testIter =
+                auto testIter =
                     std::find(BaseProject::m_custom_word_tests.begin(),
                               BaseProject::m_custom_word_tests.end(),
                               wxGetApp().GetAppOptions()->GetIncludedCustomTests().at(i).c_str());
@@ -952,7 +944,7 @@ void ProjectWizardDlg::CreateControls()
     mainSizer->Add(buttonsSizer, wxSizerFlags{}.Expand().Border());
     SetSizerAndFit(mainSizer);
 
-    if (GetFileList())
+    if (GetFileList() != nullptr)
         {
         m_fileList->SetColumnWidth(0, m_fileList->GetClientSize().GetWidth() * .75);
         m_fileList->SetColumnWidth(1, m_fileList->GetClientSize().GetWidth() * .25);
@@ -960,27 +952,27 @@ void ProjectWizardDlg::CreateControls()
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnDeleteFromListClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnDeleteFromListClick([[maybe_unused]] wxCommandEvent& evt)
     {
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         m_fileList->DeleteSelectedItems();
         }
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddToListClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddToListClick([[maybe_unused]] wxCommandEvent& evt)
     {
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         m_fileList->EditItem(m_fileList->AddRow(), 0);
         }
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnGroupClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnGroupClick([[maybe_unused]] wxCommandEvent& evt)
     {
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         const auto getCommonFolder = [this]()
         {
@@ -1002,7 +994,7 @@ void ProjectWizardDlg::OnGroupClick([[maybe_unused]] wxCommandEvent&)
                         {
                         return wxString{};
                         }
-                    if (lastCommonFolder.length() > 0 &&
+                    if (!lastCommonFolder.empty() &&
                         currentCommonFolder.CmpNoCase(lastCommonFolder) != 0)
                         {
                         return wxString{};
@@ -1012,10 +1004,8 @@ void ProjectWizardDlg::OnGroupClick([[maybe_unused]] wxCommandEvent&)
                     }
                 return lastCommonFolder;
                 }
-            else
-                {
-                return wxString{};
-                }
+
+            return wxString{};
         };
 
         auto firstSelected = m_fileList->GetFirstSelected();
@@ -1033,7 +1023,7 @@ void ProjectWizardDlg::OnGroupClick([[maybe_unused]] wxCommandEvent&)
                                   _(L"Group Label"), currentGroup);
             if (dlg.ShowModal() == wxID_OK)
                 {
-                wxWindowUpdateLocker noUpdates(m_fileList);
+                const wxWindowUpdateLocker noUpdates(m_fileList);
                 while (firstSelected != wxNOT_FOUND)
                     {
                     m_fileList->SetItemText(firstSelected, 1, dlg.GetValue());
@@ -1071,7 +1061,7 @@ void ProjectWizardDlg::UpdateTestsUI()
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::LoadArchive(wxString archivePath /*= wxString{}*/)
+void ProjectWizardDlg::LoadArchive(const wxString& archivePath /*= wxString{}*/)
     {
     Wisteria::UI::ArchiveDlg dlg(this, ReadabilityAppOptions::GetDocumentFilter());
     dlg.SetPath(archivePath);
@@ -1112,7 +1102,7 @@ void ProjectWizardDlg::LoadArchive(wxString archivePath /*= wxString{}*/)
 #endif
     wxGetApp().SetLastSelectedDocFilter(dlg.GetSelectedFileFilter());
 
-    Wisteria::ZipCatalog archive(dlg.GetPath());
+    const Wisteria::ZipCatalog archive(dlg.GetPath());
     wxArrayString files = FilterFiles(archive.GetPaths(),
                                       ExtractExtensionsFromFileFilter(dlg.GetSelectedFileFilter()));
     files.Sort();
@@ -1122,18 +1112,18 @@ void ProjectWizardDlg::LoadArchive(wxString archivePath /*= wxString{}*/)
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
         m_fileData->SetItemText(currentFileCount + i, 0, dlg.GetPath() + L"#" + files[i]);
-        if (groupLabel.length())
+        if (!groupLabel.empty())
             {
             m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
             }
         }
 
-    if (groupByLastCommonFolder && files.size() > 0)
+    if (groupByLastCommonFolder && !files.empty())
         {
         LoadGroupFromLastCommonFolder(currentFileCount, files);
         }
 
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
         m_fileList->SetColumnWidth(0, m_fileList->GetClientSize().GetWidth() * .75);
@@ -1173,7 +1163,7 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         groupLabel = dlg.GetValue();
         }
 
-    Wisteria::ZipCatalog archive(excelPath);
+    const Wisteria::ZipCatalog archive(excelPath);
     if (archive.Find(L"xl/workbook.xml") == nullptr)
         {
         wxMessageBox(
@@ -1193,7 +1183,7 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         excelExtract.read_worksheet_names(workbookFileText.c_str(), workbookFileText.length());
         // read the string table
         const std::wstring sharedStrings = archive.ReadTextFile(L"xl/sharedStrings.xml");
-        if (sharedStrings.length())
+        if (!sharedStrings.empty())
             {
             excelExtract.read_shared_strings(sharedStrings.c_str(), sharedStrings.length());
             }
@@ -1231,7 +1221,7 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
 #endif
             const std::wstring sheetFile = archive.ReadTextFile(
                 wxString::Format(L"xl/worksheets/sheet%d.xml", workSheetSelections.Item(i) + 1));
-            if (sheetFile.length())
+            if (!sheetFile.empty())
                 {
                 excelExtract(sheetFile.c_str(), sheetFile.length(), wrk);
                 }
@@ -1278,15 +1268,15 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
                     excelExtract.get_worksheet_names().at(workSheetSelections.Item(i)).c_str());
             excelPreviewFilterDEBUG.ShowModal();
 #endif
-            workSheets.push_back(std::pair<std::wstring, std::vector<std::wstring>>(
+            workSheets.emplace_back(
                 excelExtract.get_worksheet_names().at(workSheetSelections.Item(i)),
-                std::vector<std::wstring>()));
+                std::vector<std::wstring>());
             lily_of_the_valley::xlsx_extract_text::get_text_cell_names(
                 wrk, workSheets[workSheets.size() - 1].second);
             }
         }
 
-    if (workSheets.size())
+    if (!workSheets.empty())
         {
         const wxWindowDisabler disableAll;
         const wxBusyInfo wait(_(L"Updating file list..."), this);
@@ -1307,18 +1297,18 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         for (size_t i = 0; i < workSheets.size(); ++i)
             {
             const wxString fullPath = excelPath + L"#" + workSheets[i].first.c_str() + L"#";
-            for (std::vector<std::wstring>::const_iterator cellPos = workSheets[i].second.begin();
-                 cellPos != workSheets[i].second.end(); ++cellPos, ++cellCounter)
+            for (auto cellPos = workSheets[i].second.begin(); cellPos != workSheets[i].second.end();
+                 ++cellPos, ++cellCounter)
                 {
                 m_fileData->SetItemText(currentFileCount + cellCounter, 0,
                                         fullPath + cellPos->c_str());
-                if (groupLabel.length())
+                if (!groupLabel.empty())
                     {
                     m_fileData->SetItemText(currentFileCount + cellCounter, 1, groupLabel);
                     }
                 }
             }
-        if (m_fileList)
+        if (m_fileList != nullptr)
             {
             m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
             m_fileList->SetColumnWidth(0, m_fileList->GetClientSize().GetWidth() * .75);
@@ -1367,33 +1357,33 @@ void ProjectWizardDlg::OnPageChange(wxBookCtrlEvent& event)
     {
     if (event.GetSelection() == 0)
         {
-        if (wxWindow::FindWindow(wxID_BACKWARD))
+        if (wxWindow::FindWindow(wxID_BACKWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_BACKWARD)->Enable(false);
             }
-        if (wxWindow::FindWindow(wxID_FORWARD))
+        if (wxWindow::FindWindow(wxID_FORWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_FORWARD)->Enable(true);
             }
         }
     else if (static_cast<size_t>(event.GetSelection()) == m_sideBarBook->GetPageCount() - 1)
         {
-        if (wxWindow::FindWindow(wxID_FORWARD))
+        if (wxWindow::FindWindow(wxID_FORWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_FORWARD)->Enable(false);
             }
-        if (wxWindow::FindWindow(wxID_BACKWARD))
+        if (wxWindow::FindWindow(wxID_BACKWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_BACKWARD)->Enable(true);
             }
         }
     else
         {
-        if (wxWindow::FindWindow(wxID_BACKWARD))
+        if (wxWindow::FindWindow(wxID_BACKWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_BACKWARD)->Enable(true);
             }
-        if (wxWindow::FindWindow(wxID_FORWARD))
+        if (wxWindow::FindWindow(wxID_FORWARD) != nullptr)
             {
             wxWindow::FindWindow(wxID_FORWARD)->Enable(true);
             }
@@ -1430,7 +1420,7 @@ void ProjectWizardDlg::OnNavigate(wxCommandEvent& event)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent& evt)
     {
     Validate();
     TransferDataFromWindow();
@@ -1439,7 +1429,7 @@ void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent&)
         {
         if (IsTextFromFileSelected())
             {
-            FilePathResolver resolvePath(GetFilePath(), true);
+            const FilePathResolver resolvePath(GetFilePath(), true);
             if (resolvePath.IsInvalidFile() || (resolvePath.IsLocalOrNetworkFile() &&
                                                 !wxFile::Exists(resolvePath.GetResolvedPath())))
                 {
@@ -1447,7 +1437,7 @@ void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent&)
                 wxCommandEvent fileButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, ID_FILE_BROWSE_BUTTON);
                 GetEventHandler()->ProcessEvent(fileButtonEvent);
                 // if user hit Cancel then don't proceed and tell them what to do
-                if (GetFilePath().length() == 0)
+                if (GetFilePath().empty())
                     {
                     m_sideBarBook->SetSelection(0);
                     wxMessageBox(_(L"Please enter a file to be analyzed before continuing."),
@@ -1455,7 +1445,7 @@ void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent&)
                     return;
                     }
                 // if file doesn't exist
-                else if (!wxFile::Exists(GetFilePath()))
+                if (!wxFile::Exists(GetFilePath()))
                     {
                     m_sideBarBook->SetSelection(0);
                     wxMessageBox(_(L"File not found. Please enter a valid file to be analyzed "
@@ -1575,14 +1565,14 @@ void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent&)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnTestSelectionMethodChanged([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnTestSelectionMethodChanged([[maybe_unused]] wxCommandEvent& evt)
     {
     TransferDataFromWindow();
     UpdateTestSelectionMethodUI();
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     wxLaunchDefaultBrowser(wxFileName::FileNameToURL(wxGetApp().GetMainFrame()->GetHelpDirectory() +
                                                      wxFileName::GetPathSeparator() +
@@ -1590,7 +1580,7 @@ void ProjectWizardDlg::OnButtonClick([[maybe_unused]] wxCommandEvent&)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnLanguageChanged([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnLanguageChanged([[maybe_unused]] wxCommandEvent& evt)
     {
     TransferDataFromWindow();
     UpdateTestsUI();
@@ -1605,7 +1595,7 @@ void ProjectWizardDlg::OnSourceRadioChange(wxCommandEvent& event)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnFileBrowseButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnFileBrowseButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     TransferDataFromWindow();
     wxFileDialog dialog(this, _(L"Select Document to Analyze"), wxString{}, wxString{},
@@ -1623,22 +1613,22 @@ void ProjectWizardDlg::OnFileBrowseButtonClick([[maybe_unused]] wxCommandEvent&)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnRandomSampleCheck([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnRandomSampleCheck([[maybe_unused]] wxCommandEvent& evt)
     {
     TransferDataFromWindow();
-    if (m_randPercentageCtrl && m_isRandomSampling)
+    if ((m_randPercentageCtrl != nullptr) && (m_isRandomSampling != nullptr))
         {
         m_randPercentageCtrl->Enable(m_isRandomSampling->IsChecked());
         }
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     wxTextEntryDialog textDlg(this, _(L"Enter a web page to analyze:"), _(L"Enter Web Page"));
-    if (textDlg.ShowModal() == wxID_OK && textDlg.GetValue().length())
+    if (textDlg.ShowModal() == wxID_OK && !textDlg.GetValue().empty())
         {
-        FilePathResolver resolver(textDlg.GetValue(), false);
+        const FilePathResolver resolver(textDlg.GetValue(), false);
         if (!resolver.IsWebFile())
             {
             wxMessageBox(
@@ -1667,7 +1657,7 @@ void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent&)
         const size_t currentFileCount = m_fileData->GetItemCount();
         m_fileData->SetSize(currentFileCount + 1, 2);
         m_fileData->SetItemText(currentFileCount, 0, resolver.GetResolvedPath());
-        if (groupLabel.length())
+        if (!groupLabel.empty())
             {
             m_fileData->SetItemText(currentFileCount, 1, groupLabel);
             }
@@ -1678,7 +1668,7 @@ void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent&)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     WebHarvesterDlg webHarvestDlg(this, wxGetApp().GetLastSelectedWebPages(),
                                   ReadabilityAppOptions::GetDocumentFilter(),
@@ -1722,7 +1712,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
 
     for (size_t urlCounter = 0; urlCounter < webHarvestDlg.GetUrls().GetCount(); ++urlCounter)
         {
-        FilePathResolver resolver(webHarvestDlg.GetUrls().Item(urlCounter), false);
+        const FilePathResolver resolver(webHarvestDlg.GetUrls().Item(urlCounter), false);
         wxGetApp().GetWebHarvester().SetUrl(resolver.GetResolvedPath());
 
         // if cancelled, we still will want what was harvested up to that point,
@@ -1742,7 +1732,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
                 {
                 m_fileData->SetItemText(currentFileCount + i, 0, path);
                 files.push_back(path);
-                if (groupLabel.length())
+                if (!groupLabel.empty())
                     {
                     m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
                     }
@@ -1759,7 +1749,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
                 {
                 m_fileData->SetItemText(currentFileCount + i, 0, path);
                 files.push_back(path);
-                if (groupLabel.length())
+                if (!groupLabel.empty())
                     {
                     m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
                     }
@@ -1781,7 +1771,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
     wxGetApp().GetAppOptions()->SetUserAgent(webHarvestDlg.GetUserAgent());
     wxGetApp().GetAppOptions()->SetDownloadsPath(webHarvestDlg.GetDownloadFolder());
 
-    if (groupByLastCommonFolder && files.size() > 0)
+    if (groupByLastCommonFolder && !files.empty())
         {
         LoadGroupFromLastCommonFolder(totalFileCount, files);
         }
@@ -1792,7 +1782,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     Wisteria::UI::GetDirFilterDialog dirDlg(this, ReadabilityAppOptions::GetDocumentFilter());
     dirDlg.SetSelectedFileFilter(wxGetApp().GetLastSelectedDocFilter());
@@ -1806,8 +1796,8 @@ void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent&)
     // get the list of files
     wxArrayString files;
         {
-        wxWindowDisabler disableAll;
-        wxBusyInfo wait(_(L"Retrieving files..."), this);
+        const wxWindowDisabler disableAll;
+        const wxBusyInfo wait(_(L"Retrieving files..."), this);
 #ifdef __WXGTK__
         wxMilliSleep(100);
         wxTheApp->Yield();
@@ -1841,13 +1831,13 @@ void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent&)
         }
     wxGetApp().GetAppOptions()->SetBatchGroupMethod(selectLabelTypeDlg.GetSelection());
 
-    wxWindowUpdateLocker noUpdates(m_fileList);
+    const wxWindowUpdateLocker noUpdates(m_fileList);
     const size_t currentFileCount = m_fileData->GetItemCount();
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
         m_fileData->SetItemText(currentFileCount + i, 0, files.Item(i));
-        if (groupLabel.length())
+        if (!groupLabel.empty())
             {
             m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
             }
@@ -1855,7 +1845,7 @@ void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent&)
         // then those are loaded on import later
         }
 
-    if (groupByLastCommonFolder && files.size() > 0)
+    if (groupByLastCommonFolder && !files.empty())
         {
         LoadGroupFromLastCommonFolder(currentFileCount, files);
         }
@@ -1874,13 +1864,13 @@ void ProjectWizardDlg::LoadGroupFromLastCommonFolder(const size_t currentFileCou
     for (; i < files.GetCount() - 1; ++i)
         {
         // if last item had a common folder group match, then...
-        if (commonFolder.first.length() > 0)
+        if (!commonFolder.first.empty())
             {
             const auto lastMatch{ commonFolder };
             commonFolder = GetCommonFolder(files[i], files[i + 1]);
             // ...update if the match between the current item and the next one
             // is a longer path
-            if (commonFolder.first.length() > 0 && lastMatch.second <= commonFolder.second)
+            if (!commonFolder.first.empty() && lastMatch.second <= commonFolder.second)
                 {
                 m_fileData->SetItemText(currentFileCount + i, 1, commonFolder.first);
                 m_fileData->SetItemText(currentFileCount + i + 1, 1, commonFolder.first);
@@ -1888,7 +1878,7 @@ void ProjectWizardDlg::LoadGroupFromLastCommonFolder(const size_t currentFileCou
             continue;
             }
         commonFolder = GetCommonFolder(files[i], files[i + 1]);
-        if (commonFolder.first.length() > 0)
+        if (!commonFolder.first.empty())
             {
             m_fileData->SetItemText(currentFileCount + i, 1, commonFolder.first);
             m_fileData->SetItemText(currentFileCount + i + 1, 1, commonFolder.first);
@@ -1897,19 +1887,19 @@ void ProjectWizardDlg::LoadGroupFromLastCommonFolder(const size_t currentFileCou
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddSpreadsheetFileButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddSpreadsheetFileButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     LoadSpreadsheet();
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddArchiveFileButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddArchiveFileButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     LoadArchive();
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent& evt)
     {
     wxFileDialog dialog(this, _(L"Select Documents to Analyze"), wxString{}, wxString{},
                         ReadabilityAppOptions::GetDocumentFilter(),
@@ -1951,14 +1941,14 @@ void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent&)
 
     // set the default name of the project to the last folder of the file selected here.
     const wxArrayString folders = wxFileName(wxFileName(files[0]).GetPathWithSep()).GetDirs();
-    SetLastSelectedFolder(folders.size() ? folders.back() : wxString{});
+    SetLastSelectedFolder(!folders.empty() ? folders.back() : wxString{});
 
     const size_t currentFileCount = m_fileData->GetItemCount();
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
         m_fileData->SetItemText(currentFileCount + i, 0, files.Item(i));
-        if (groupLabel.length())
+        if (!groupLabel.empty())
             {
             m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
             }
@@ -1966,7 +1956,7 @@ void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent&)
         // then those are loaded on import
         }
 
-    if (groupByLastCommonFolder && files.size() > 0)
+    if (groupByLastCommonFolder && !files.empty())
         {
         LoadGroupFromLastCommonFolder(currentFileCount, files);
         }
@@ -1977,14 +1967,14 @@ void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent&)
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnContextHelp([[maybe_unused]] wxHelpEvent&)
+void ProjectWizardDlg::OnContextHelp([[maybe_unused]] wxHelpEvent& evt)
     {
     wxCommandEvent cmd;
     OnHelp(cmd);
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::OnHelp([[maybe_unused]] wxCommandEvent&)
+void ProjectWizardDlg::OnHelp([[maybe_unused]] wxCommandEvent& evt)
     {
     wxLaunchDefaultBrowser(wxFileName::FileNameToURL(wxGetApp().GetMainFrame()->GetHelpDirectory() +
                                                      wxFileName::GetPathSeparator() +

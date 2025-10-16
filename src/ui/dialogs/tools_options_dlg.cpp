@@ -98,7 +98,7 @@ void ToolsOptionsDlg::OnExclusionBlockTagChange([[maybe_unused]] wxCommandEvent&
 void ToolsOptionsDlg::OnNumberSyllabizeChange([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    if (m_readTestsSyllableLabel)
+    if (m_readTestsSyllableLabel != nullptr)
         {
         m_readTestsSyllableLabel->SetLabel(
             (m_syllabicationMethod == static_cast<int>(NumeralSyllabize::WholeWordIsOneSyllable)) ?
@@ -110,7 +110,7 @@ void ToolsOptionsDlg::OnNumberSyllabizeChange([[maybe_unused]] wxCommandEvent& e
 //-------------------------------------------------------------
 void ToolsOptionsDlg::OnDeleteFileClick([[maybe_unused]] wxCommandEvent& event)
     {
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         m_fileList->DeleteSelectedItems();
         }
@@ -119,7 +119,7 @@ void ToolsOptionsDlg::OnDeleteFileClick([[maybe_unused]] wxCommandEvent& event)
 //-------------------------------------------------------------
 void ToolsOptionsDlg::OnAddFileClick([[maybe_unused]] wxCommandEvent& event)
     {
-    if (m_fileList)
+    if (m_fileList != nullptr)
         {
         m_fileList->EditItem(m_fileList->AddRow(), 0);
         }
@@ -170,7 +170,7 @@ void ToolsOptionsDlg::OnAddFilesClick([[maybe_unused]] wxCommandEvent& event)
         {
         m_fileList->EnsureVisible(m_fileList->GetItemCount() - 1);
         }
-    if (m_docStorageRadioBox)
+    if (m_docStorageRadioBox != nullptr)
         {
         m_docStorageRadioBox->Enable(false);
         }
@@ -180,19 +180,19 @@ void ToolsOptionsDlg::OnAddFilesClick([[maybe_unused]] wxCommandEvent& event)
 void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    if (m_syllableLabel)
+    if (m_syllableLabel != nullptr)
         {
         m_syllableLabel->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::IncludeAsFullSentences)) ||
             !m_excludeNumerals);
         }
-    if (m_syllableCombo)
+    if (m_syllableCombo != nullptr)
         {
         m_syllableCombo->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::IncludeAsFullSentences)) ||
             !m_excludeNumerals);
         }
-    if (m_readTestsSyllableLabel)
+    if (m_readTestsSyllableLabel != nullptr)
         {
         m_readTestsSyllableLabel->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::IncludeAsFullSentences)) ||
@@ -213,67 +213,67 @@ void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEven
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::IncludeAsFullSentences)) ||
                 !m_excludeNumerals);
         }
-    if (m_ignoreCopyrightsCheckBox)
+    if (m_ignoreCopyrightsCheckBox != nullptr)
         {
         m_ignoreCopyrightsCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_ignoreCitationsCheckBox)
+    if (m_ignoreCitationsCheckBox != nullptr)
         {
         m_ignoreCitationsCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_ignoreFileAddressesCheckBox)
+    if (m_ignoreFileAddressesCheckBox != nullptr)
         {
         m_ignoreFileAddressesCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_ignoreNumeralsCheckBox)
+    if (m_ignoreNumeralsCheckBox != nullptr)
         {
         m_ignoreNumeralsCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_ignoreProperNounsCheckBox)
+    if (m_ignoreProperNounsCheckBox != nullptr)
         {
         m_ignoreProperNounsCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_includeExcludedPhraseFirstOccurrenceCheckBox)
+    if (m_includeExcludedPhraseFirstOccurrenceCheckBox != nullptr)
         {
         m_includeExcludedPhraseFirstOccurrenceCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_excludedPhrasesPathFilePathEdit)
+    if (m_excludedPhrasesPathFilePathEdit != nullptr)
         {
         m_excludedPhrasesPathFilePathEdit->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_excludedPhrasesEditBrowseButton)
+    if (m_excludedPhrasesEditBrowseButton != nullptr)
         {
         m_excludedPhrasesEditBrowseButton->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_exclusionBlockTagsCombo)
+    if (m_exclusionBlockTagsCombo != nullptr)
         {
         m_exclusionBlockTagsCombo->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_exclusionBlockTagsLabel)
+    if (m_exclusionBlockTagsLabel != nullptr)
         {
         m_exclusionBlockTagsLabel->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings)));
         }
-    if (m_aggressiveExclusionCheckBox)
+    if (m_aggressiveExclusionCheckBox != nullptr)
         {
         m_aggressiveExclusionCheckBox->Enable(
             (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis)) ||
@@ -281,7 +281,7 @@ void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEven
         }
     if (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeFromAnalysis))
         {
-        if (m_textExclusionLabel)
+        if (m_textExclusionLabel != nullptr)
             {
             m_textExclusionLabel->SetLabel(
                 _(L"** Text exclusion system default: exclude all incomplete sentences."));
@@ -289,7 +289,7 @@ void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEven
         }
     else if (m_textExclusionMethod == static_cast<int>(InvalidSentence::ExcludeExceptForHeadings))
         {
-        if (m_textExclusionLabel)
+        if (m_textExclusionLabel != nullptr)
             {
             m_textExclusionLabel->SetLabel(_(L"** Text exclusion system default: exclude all "
                                              "incomplete sentences, except headings."));
@@ -297,7 +297,7 @@ void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEven
         }
     else if (m_textExclusionMethod == static_cast<int>(InvalidSentence::IncludeAsFullSentences))
         {
-        if (m_textExclusionLabel)
+        if (m_textExclusionLabel != nullptr)
             {
             m_textExclusionLabel->SetLabel(
                 _(L"** Text exclusion system default: do not exclude any text."));
@@ -310,13 +310,13 @@ void ToolsOptionsDlg::OnIncompleteSentencesChange([[maybe_unused]] wxCommandEven
 void ToolsOptionsDlg::OnParagraphParseChange([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    if (m_ignoreBlankLinesCheckBox)
+    if (m_ignoreBlankLinesCheckBox != nullptr)
         {
         m_ignoreBlankLinesCheckBox->Enable(
             static_cast<ParagraphParse>(m_paragraphParsingMethod.get_value()) ==
             ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs);
         }
-    if (m_ignoreIndentingCheckBox)
+    if (m_ignoreIndentingCheckBox != nullptr)
         {
         m_ignoreIndentingCheckBox->Enable(
             static_cast<ParagraphParse>(m_paragraphParsingMethod.get_value()) ==
@@ -356,17 +356,18 @@ void ToolsOptionsDlg::OnExcludedPhrasesFileEditButtonClick([[maybe_unused]] wxCo
 void ToolsOptionsDlg::OnDocumentStorageRadioButtonClick([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    if (m_filePathEdit)
+    if (m_filePathEdit != nullptr)
         {
         m_filePathEdit->Enable(m_documentStorageMethod ==
                                static_cast<int>(TextStorage::NoEmbedText));
         }
-    if (m_fileBrowseButton)
+    if (m_fileBrowseButton != nullptr)
         {
         m_fileBrowseButton->Enable(m_documentStorageMethod ==
                                    static_cast<int>(TextStorage::NoEmbedText));
         }
-    if (m_fileList && m_addFileButton && m_deleteFileButton && m_addFilesButton)
+    if (m_fileList != nullptr && m_addFileButton != nullptr && m_deleteFileButton != nullptr &&
+        m_addFilesButton != nullptr)
         {
         m_fileList->Enable(m_documentStorageMethod == static_cast<int>(TextStorage::NoEmbedText));
         m_addFileButton->Enable(m_documentStorageMethod ==
@@ -376,7 +377,7 @@ void ToolsOptionsDlg::OnDocumentStorageRadioButtonClick([[maybe_unused]] wxComma
         m_addFilesButton->Enable(m_documentStorageMethod ==
                                  static_cast<int>(TextStorage::NoEmbedText));
         }
-    if (m_realTimeUpdateCheckBox)
+    if (m_realTimeUpdateCheckBox != nullptr)
         {
         m_realTimeUpdateCheckBox->Enable(m_documentStorageMethod ==
                                          static_cast<int>(TextStorage::NoEmbedText));
@@ -388,7 +389,7 @@ void ToolsOptionsDlg::OnAdditionalDocumentFileBrowseButtonClick(
     [[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    wxFileName fn(m_appendedDocumentFilePath);
+    const wxFileName fn(m_appendedDocumentFilePath);
     wxFileDialog dialog(this, _(L"Select Document to Append"), fn.GetPath(), fn.GetFullName(),
                         ReadabilityAppOptions::GetDocumentFilter(),
                         wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
@@ -406,7 +407,7 @@ void ToolsOptionsDlg::OnAdditionalDocumentFileBrowseButtonClick(
 void ToolsOptionsDlg::OnFileBrowseButtonClick([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
-    wxFileName fn(m_filePath);
+    const wxFileName fn(m_filePath);
     wxFileDialog dialog(this, _(L"Select Document to Analyze"), fn.GetPath(), fn.GetFullName(),
                         ReadabilityAppOptions::GetDocumentFilter(),
                         wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
@@ -1122,7 +1123,7 @@ bool ToolsOptionsDlg::Create(wxWindow* parent, wxWindowID id, const wxString& ca
         }
     else if (IsBatchProjectSettings())
         {
-        const BatchProjectView* view =
+        const auto* view =
             dynamic_cast<const BatchProjectView*>(m_readabilityProjectDoc->GetFirstView());
         const auto selectedID = view->GetSideBar()->GetSelectedFolderId();
         if (view->GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3911,8 +3912,8 @@ void ToolsOptionsDlg::CreateControls()
     // readability settings
     if (GetSectionsBeingShown() & ScoresSection)
         {
-        wxPanel* ScoreTestOptionsPage = new wxPanel(
-            m_sideBar, SCORES_TEST_OPTIONS_PAGE, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+        auto* ScoreTestOptionsPage = new wxPanel(m_sideBar, SCORES_TEST_OPTIONS_PAGE,
+                                                 wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
         m_sideBar->AddPage(ScoreTestOptionsPage, GetReadabilityScoresLabel(),
                            SCORES_TEST_OPTIONS_PAGE,
                            // if the only section being shown, then show this page
@@ -4971,7 +4972,7 @@ void ToolsOptionsDlg::CreateControls()
         wxArrayString highlightOptions;
         highlightOptions.Add(_(L"Background color"));
         highlightOptions.Add(_(L"Font color"));
-        wxChoice* highlightCombo =
+        auto* highlightCombo =
             new wxChoice(Panel, ID_PARAGRAPH_PARSE, wxDefaultPosition, wxDefaultSize,
                          highlightOptions, 0, wxGenericValidator(&m_textHighlightMethod));
         highlightSizer->Add(highlightCombo, wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
@@ -4998,7 +4999,7 @@ void ToolsOptionsDlg::CreateControls()
 
                 // Conjunctions color
                 {
-                wxBoxSizer* rowSizer = new wxBoxSizer(wxHORIZONTAL);
+                auto* rowSizer = new wxBoxSizer(wxHORIZONTAL);
                 optionsIndentSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
                 optionsIndentSizer->Add(rowSizer, wxSizerFlags{}.Expand());
 
@@ -5015,7 +5016,7 @@ void ToolsOptionsDlg::CreateControls()
                 }
                 // Prepositions color
                 {
-                wxBoxSizer* rowSizer = new wxBoxSizer(wxHORIZONTAL);
+                auto* rowSizer = new wxBoxSizer(wxHORIZONTAL);
                 optionsIndentSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
                 optionsIndentSizer->Add(rowSizer, wxSizerFlags{}.Expand());
 
@@ -5143,7 +5144,7 @@ void ToolsOptionsDlg::CreateControls()
             displayableProjectName.Truncate(49).Append(static_cast<wchar_t>(8230));
             }
 
-        auto banner = new wxBannerWindow(this, wxTOP);
+        auto* banner = new wxBannerWindow(this, wxTOP);
         banner->SetText(
             _(L"Project Properties"),
             wxString::Format(_(L"These options only affect the current project (\"%s\").\n"
@@ -5165,47 +5166,47 @@ void ToolsOptionsDlg::CreateControls()
         GetFileList()->SetColumnWidth(1, GetFileList()->GetClientSize().GetWidth() * .25);
         }
 
-    if (m_readabilityTestsPropertyGrid)
+    if (m_readabilityTestsPropertyGrid != nullptr)
         {
         m_readabilityTestsPropertyGrid->FitColumns();
         }
-    if (m_gradeLevelPropertyGrid)
+    if (m_gradeLevelPropertyGrid != nullptr)
         {
         m_gradeLevelPropertyGrid->FitColumns();
         }
-    if (m_grammarPropertyGrid)
+    if (m_grammarPropertyGrid != nullptr)
         {
         m_grammarPropertyGrid->FitColumns();
         }
-    if (m_wordsBreakdownPropertyGrid)
+    if (m_wordsBreakdownPropertyGrid != nullptr)
         {
         m_wordsBreakdownPropertyGrid->FitColumns();
         }
-    if (m_sentencesBreakdownPropertyGrid)
+    if (m_sentencesBreakdownPropertyGrid != nullptr)
         {
         m_sentencesBreakdownPropertyGrid->FitColumns();
         }
-    if (m_statisticsPropertyGrid)
+    if (m_statisticsPropertyGrid != nullptr)
         {
         m_statisticsPropertyGrid->FitColumns();
         }
-    if (m_generalGraphPropertyGrid)
+    if (m_generalGraphPropertyGrid != nullptr)
         {
         m_generalGraphPropertyGrid->FitColumns();
         }
-    if (m_readabilityGraphPropertyGrid)
+    if (m_readabilityGraphPropertyGrid != nullptr)
         {
         m_readabilityGraphPropertyGrid->FitColumns();
         }
-    if (m_barChartPropertyGrid)
+    if (m_barChartPropertyGrid != nullptr)
         {
         m_barChartPropertyGrid->FitColumns();
         }
-    if (m_histogramPropertyGrid)
+    if (m_histogramPropertyGrid != nullptr)
         {
         m_histogramPropertyGrid->FitColumns();
         }
-    if (m_boxPlotsPropertyGrid)
+    if (m_boxPlotsPropertyGrid != nullptr)
         {
         m_boxPlotsPropertyGrid->FitColumns();
         }
@@ -5253,7 +5254,7 @@ void ToolsOptionsDlg::CreateGraphSection()
                     break;
                     }
                 }
-            auto colorSchemeProp = m_generalGraphPropertyGrid->Append(
+            auto* colorSchemeProp = m_generalGraphPropertyGrid->Append(
                 new wxEnumProperty(GetGraphColorSchemeLabel(), wxPG_LABEL, graphColorSchemes));
             colorSchemeProp->SetValue(defaultColorSchemeValue);
             colorSchemeProp->SetHelpString(
@@ -5265,7 +5266,7 @@ void ToolsOptionsDlg::CreateGraphSection()
                 GetGraphBackgroundLabel(),
                 _(L"The options in this section customize the backgrounds of the graphs."));
             // color
-            auto backgroundColorProp = m_generalGraphPropertyGrid->Append(new wxColourProperty(
+            auto* backgroundColorProp = m_generalGraphPropertyGrid->Append(new wxColourProperty(
                 GetColorLabel(), GetBackgroundColorLabel(),
                 (m_readabilityProjectDoc ? m_readabilityProjectDoc->GetBackGroundColor() :
                                            wxGetApp().GetAppOptions()->GetBackGroundColor())));
@@ -5274,7 +5275,7 @@ void ToolsOptionsDlg::CreateGraphSection()
                   "Note that if you are displaying an image, then the image will be "
                   "shown on top of this color."));
             // color fade
-            auto colorFadeProp = backgroundColorProp->AppendChild(new wxBoolProperty(
+            auto* colorFadeProp = backgroundColorProp->AppendChild(new wxBoolProperty(
                 GetApplyFadeLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ?
                      m_readabilityProjectDoc->GetGraphBackGroundLinearGradient() :
@@ -5294,14 +5295,14 @@ void ToolsOptionsDlg::CreateGraphSection()
                   "backgrounds of the graphs."));
 
             // color
-            auto plotColor = new wxColourProperty(
+            auto* plotColor = new wxColourProperty(
                 GetColorLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ? m_readabilityProjectDoc->GetPlotBackGroundColor() :
                                            wxGetApp().GetAppOptions()->GetPlotBackGroundColor()));
             plotColor->SetHelpString(
                 _(L"Selects the color for the plot area background of the graphs."));
             // opacity
-            auto plotColorOpacity = plotColor->AppendChild(new wxIntProperty(
+            auto* plotColorOpacity = plotColor->AppendChild(new wxIntProperty(
                 GetOpacityLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ?
                      m_readabilityProjectDoc->GetPlotBackGroundColorOpacity() :
@@ -5337,7 +5338,7 @@ void ToolsOptionsDlg::CreateGraphSection()
             imgEffects.Add(_(L"Sepia"));
             imgEffects.Add(_(L"Frosted glass"));
             imgEffects.Add(_(L"Oil painting"));
-            auto imgEffectProp = backgroundImage->AppendChild(new wxEnumProperty(
+            auto* imgEffectProp = backgroundImage->AppendChild(new wxEnumProperty(
                 GetEffectLabel(), wxPG_LABEL, imgEffects,
                 (m_readabilityProjectDoc ?
                      static_cast<int>(m_readabilityProjectDoc->GetPlotBackGroundImageEffect()) :
@@ -5346,7 +5347,7 @@ void ToolsOptionsDlg::CreateGraphSection()
             imgEffectProp->SetHelpString(_(L"Applies an effect to the plot background image."));
 
             // image opacity
-            auto imgOpacityProp = backgroundImage->AppendChild(new wxIntProperty(
+            auto* imgOpacityProp = backgroundImage->AppendChild(new wxIntProperty(
                 GetOpacityLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ?
                      m_readabilityProjectDoc->GetPlotBackGroundImageOpacity() :
@@ -5461,14 +5462,14 @@ void ToolsOptionsDlg::CreateGraphSection()
                     break;
                     }
                 }
-            auto shapesProp = m_generalGraphPropertyGrid->Append(
+            auto* shapesProp = m_generalGraphPropertyGrid->Append(
                 new wxEnumProperty(GetStippleShapeLabel(), wxPG_LABEL, shapes));
             shapesProp->SetValue(defaultValue);
             shapesProp->SetHelpString(
                 _(L"Select from here which shape to use for a stipple brush. "
                   "A stipple brush can be used to draw stacked shape across bars and boxes"));
 
-            auto shapeColorProp = shapesProp->AppendChild(new wxColourProperty(
+            auto* shapeColorProp = shapesProp->AppendChild(new wxColourProperty(
                 GetColorLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ? m_readabilityProjectDoc->GetStippleShapeColor() :
                                            wxGetApp().GetAppOptions()->GetStippleShapeColor())));
@@ -5507,7 +5508,7 @@ void ToolsOptionsDlg::CreateGraphSection()
                   "and labels. Unchecking this option will give your graphs a more \"flat\" "
                   "look."));
 
-            auto showcaseOption = m_generalGraphPropertyGrid->Append(new wxBoolProperty(
+            auto* showcaseOption = m_generalGraphPropertyGrid->Append(new wxBoolProperty(
                 GetShowcaseKeyItemsLabel(), wxPG_LABEL,
                 (m_readabilityProjectDoc ? m_readabilityProjectDoc->IsShowcasingKeyItems() :
                                            wxGetApp().GetAppOptions()->IsShowcasingKeyItems())));

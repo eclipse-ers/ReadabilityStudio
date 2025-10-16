@@ -19,11 +19,11 @@ wxDECLARE_APP(ReadabilityApp);
 //-------------------------------------------------------------
 LinkDialog::LinkDialog(wxWindow* parent, const wxString& message, const wxString& caption)
     {
-    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+    wxNonOwnedWindow::SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
     wxDialog::Create(parent, wxID_ANY, caption, wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
     mainSizer->Add(new wxStaticText(this, wxID_STATIC, message), wxSizerFlags{}.Border());
 
@@ -152,7 +152,7 @@ void WebHarvesterDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
         return;
         }
 
-    // validators seem to be broken with comboboxes, so do this the old fashioned way
+    // validators seem to be broken with combo boxes, so do this the old-fashioned way
     m_selectedDocFilter = m_docFilterCombo->GetValue();
 
     if (IsModal())
@@ -194,9 +194,9 @@ void WebHarvesterDlg::OnLoadUrlsClick([[maybe_unused]] wxCommandEvent& event)
                             _(L"Load URLs"));
         if (linksDlg.ShowModal() == wxID_OK)
             {
-            // case sensitive is fine since Linux servers use case-sensitive page links
+            // case-sensitive is fine since Linux servers use case-sensitive page links
             std::set<wxString> gatheredLinks;
-            wxString content{ linksDlg.GetValue() };
+            const wxString content{ linksDlg.GetValue() };
             html_utilities::hyperlink_parse getHyperLinks(
                 content.wc_str(), content.length(),
                 html_utilities::hyperlink_parse::hyperlink_parse_method::html);
@@ -529,10 +529,9 @@ void WebHarvesterDlg::UpdateHarvesterSettings(WebHarvester& harvester)
     harvester.ClearAllowableFileTypes();
 
     wxStringTokenizer tkz(ExtractExtensionsFromFileFilter(GetSelectedDocFilter()), L"*.;");
-    wxString nextFileExt;
     while (tkz.HasMoreTokens())
         {
-        nextFileExt = tkz.GetNextToken();
+        const wxString nextFileExt = tkz.GetNextToken();
         if (!nextFileExt.empty())
             {
             harvester.AddAllowableFileType(nextFileExt);

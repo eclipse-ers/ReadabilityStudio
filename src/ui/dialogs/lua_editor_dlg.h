@@ -17,15 +17,10 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/codeeditor.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
 #include <wx/aui/aui.h>
-#include <wx/dialog.h>
 #include <wx/fdrepdlg.h>
 #include <wx/html/helpwnd.h>
 #include <wx/renderer.h>
-#include <wx/ribbon/art.h>
-#include <wx/ribbon/bar.h>
 #include <wx/ribbon/buttonbar.h>
-#include <wx/ribbon/gallery.h>
-#include <wx/ribbon/toolbar.h>
 #include <wx/splitter.h>
 #include <wx/srchctrl.h>
 

@@ -12,6 +12,7 @@
  ********************************************************************************/
 
 #include "doc_group_select_dlg.h"
+#include <wx/valgen.h>
 
 //----------------------------------------------------------
 void DocGroupSelectDlg::CreateControls()

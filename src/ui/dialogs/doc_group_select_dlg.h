@@ -17,8 +17,6 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include <wx/dialog.h>
 #include <wx/html/htmlwin.h>
-#include <wx/htmllbox.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 /// @brief A dialog to choose what sort of label should be connected
@@ -40,7 +38,7 @@ class DocGroupSelectDlg final : public Wisteria::UI::DialogWithHelp
                                long style = wxDEFAULT_DIALOG_STYLE | wxCLIP_CHILDREN |
                                             wxRESIZE_BORDER)
         {
-        SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+        wxNonOwnedWindow::SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
         DialogWithHelp::Create(parent, id, caption, pos, size, style);
 
         CreateControls();
@@ -73,7 +71,7 @@ class DocGroupSelectDlg final : public Wisteria::UI::DialogWithHelp
 
     /// @brief Sets the grouping label.
     /// @param label The label to use.
-    void SetGroupingLabel(const wxString& label) noexcept
+    void SetGroupingLabel(const wxString& label)
         {
         m_groupingLabel = label;
         TransferDataToWindow();

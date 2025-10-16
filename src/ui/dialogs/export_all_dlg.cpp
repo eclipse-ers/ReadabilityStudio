@@ -31,7 +31,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     : m_readabilityProjectDoc(doc), m_fileMode(fileMode)
     {
     wxASSERT_MSG(doc, L"NULL document passed to export all dialog!");
-    wxString exportDir = doc->GetExportFolder();
+    wxString exportDir = (doc != nullptr) ? doc->GetExportFolder() : wxString{};
     if (exportDir.empty())
         {
         // if export path not specified yet then try the path of the project (if saved already)

@@ -12,6 +12,7 @@
  ********************************************************************************/
 
 #include "filtered_text_preview_dlg.h"
+#include <wx/valgen.h>
 
 //-------------------------------------------------------------
 void FilteredTextPreviewDlg::CreateControls()

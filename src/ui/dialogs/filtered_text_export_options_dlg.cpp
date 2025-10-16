@@ -12,6 +12,7 @@
  ********************************************************************************/
 
 #include "filtered_text_export_options_dlg.h"
+#include <wx/valgen.h>
 
 /// Creates the controls and sizers
 //-------------------------------------------------------------

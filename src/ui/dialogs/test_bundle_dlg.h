@@ -19,7 +19,6 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include "../../projects/base_project.h"
 #include "../../readability/readability_test.h"
-#include <wx/gbsizer.h>
 #include <wx/wx.h>
 
 class TestBundle;

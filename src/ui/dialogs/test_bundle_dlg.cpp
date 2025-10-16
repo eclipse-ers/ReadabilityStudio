@@ -14,6 +14,7 @@
 #include "test_bundle_dlg.h"
 #include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../app/readability_app.h"
+#include <wx/gbsizer.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -148,12 +149,10 @@ void TestBundleDlg::CreateControls()
 
             // set the test to included (i.e., checked) if it is already included in the bundle
             sTest.include(
-                m_testBundle.GetTestGoals().find(TestGoal{ sTest.get_test().get_id() }) !=
-                    m_testBundle.GetTestGoals().cend() ||
-                m_testBundle.GetTestGoals().find(TestGoal{ sTest.get_test().get_short_name() }) !=
-                    m_testBundle.GetTestGoals().cend() ||
-                m_testBundle.GetTestGoals().find(TestGoal{ sTest.get_test().get_long_name() }) !=
-                    m_testBundle.GetTestGoals().cend());
+                m_testBundle.GetTestGoals().contains(TestGoal{ sTest.get_test().get_id() }) ||
+                m_testBundle.GetTestGoals().contains(
+                    TestGoal{ sTest.get_test().get_short_name() }) ||
+                m_testBundle.GetTestGoals().contains(TestGoal{ sTest.get_test().get_long_name() }));
 
             wxCheckBox* testCheckBox = new wxCheckBox(
                 page, wxID_ANY, sTest.get_test().get_long_name().c_str(), wxDefaultPosition,
@@ -205,10 +204,10 @@ void TestBundleDlg::CreateControls()
             availableTestNames.push_back(cTest.get_name().c_str());
 
             // go through the list of custom tests and see if any of them are in the bundle
-            cTest.include(m_testBundle.GetTestGoals().find(TestGoal{ cTest.get_name().c_str() }) !=
-                          m_testBundle.GetTestGoals().end());
+            cTest.include(
+                m_testBundle.GetTestGoals().contains(TestGoal{ cTest.get_name().c_str() }));
             // add the test to the dialog
-            wxCheckBox* testCheckBox =
+            auto* testCheckBox =
                 new wxCheckBox(page, wxID_ANY, cTest.get_name().c_str(), wxDefaultPosition,
                                wxDefaultSize, 0, wxGenericValidator(&cTest.get_include_flag()));
             if (m_testBundle.IsLocked())
@@ -228,20 +227,19 @@ void TestBundleDlg::CreateControls()
     // Vocabulary suites
     // Dolch
     m_includeDolchSightWords =
-        (m_testBundle.GetTestGoals().find(TestGoal{ ReadabilityMessages::DOLCH().wc_str() }) !=
-         m_testBundle.GetTestGoals().end());
+        (m_testBundle.GetTestGoals().contains(TestGoal{ ReadabilityMessages::DOLCH().wc_str() }));
     if ((m_testBundle.GetLanguage() == readability::test_language::unknown_language ||
          m_testBundle.GetLanguage() == readability::test_language::english_test) &&
         // only show if editable or Dolch is included
         (!m_testBundle.IsLocked() || m_includeDolchSightWords))
         {
-        wxPanel* page = new wxPanel(m_sideBarBook, ID_VOCAB_PAGE, wxDefaultPosition, wxDefaultSize,
-                                    wxTAB_TRAVERSAL);
-        wxBoxSizer* mainPanelSizer = new wxBoxSizer(wxVERTICAL);
+        auto* page = new wxPanel(m_sideBarBook, ID_VOCAB_PAGE, wxDefaultPosition, wxDefaultSize,
+                                 wxTAB_TRAVERSAL);
+        auto* mainPanelSizer = new wxBoxSizer(wxVERTICAL);
         page->SetSizer(mainPanelSizer);
         m_sideBarBook->AddPage(page, _(L"Vocabulary Tools"), ID_VOCAB_PAGE, false);
 
-        wxCheckBox* DolchCheckBox =
+        auto* DolchCheckBox =
             new wxCheckBox(page, wxID_ANY, _(L"&Dolch Sight Words Suite"), wxDefaultPosition,
                            wxDefaultSize, 0, wxGenericValidator(&m_includeDolchSightWords));
         DolchCheckBox->SetHelpText(
@@ -261,9 +259,9 @@ void TestBundleDlg::CreateControls()
                       [](const auto& test) noexcept { return test.HasGoals(); });
     if (!m_testBundle.IsLocked() || (includedTestGoals || m_testBundle.GetStatGoals().size()))
         {
-        wxPanel* page = new wxPanel(m_sideBarBook, ID_GOALS_PAGE, wxDefaultPosition, wxDefaultSize,
-                                    wxTAB_TRAVERSAL);
-        wxBoxSizer* mainPanelSizer = new wxBoxSizer(wxVERTICAL);
+        auto* page = new wxPanel(m_sideBarBook, ID_GOALS_PAGE, wxDefaultPosition, wxDefaultSize,
+                                 wxTAB_TRAVERSAL);
+        auto* mainPanelSizer = new wxBoxSizer(wxVERTICAL);
         page->SetSizer(mainPanelSizer);
         m_sideBarBook->AddPage(page, _(L"Goals"), ID_GOALS_PAGE, false);
 
@@ -272,8 +270,8 @@ void TestBundleDlg::CreateControls()
             if (!m_testBundle.IsLocked())
                 {
                 // add and remove buttons for grid
-                wxBoxSizer* editButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
-                auto addButton =
+                auto* editButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
+                auto* addButton =
                     new wxBitmapButton(page, ID_ADD_TEST_GOALS_BUTTON,
                                        wxArtProvider::GetBitmapBundle(L"ID_ADD", wxART_BUTTON));
                 addButton->SetToolTip(_(L"Add a test goal"));
@@ -284,7 +282,7 @@ void TestBundleDlg::CreateControls()
                     { m_testGoalsListCtrl->EditItem(m_testGoalsListCtrl->AddRow(), 0); },
                     ID_ADD_TEST_GOALS_BUTTON);
 
-                auto deleteButton =
+                auto* deleteButton =
                     new wxBitmapButton(page, ID_DELETE_TEST_GOALS_BUTTON,
                                        wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_BUTTON));
                 deleteButton->SetToolTip(_(L"Remove selected test goals"));
@@ -514,8 +512,7 @@ void TestBundleDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
     // or that the name is already taken
     if (m_bundleNameCtrl)
         {
-        if (BaseProject::m_testBundles.find(TestBundle(m_bundleName.wc_str())) !=
-            BaseProject::m_testBundles.end())
+        if (BaseProject::m_testBundles.contains(TestBundle(m_bundleName.wc_str())))
             {
             wxMessageBox(
                 wxString::Format(

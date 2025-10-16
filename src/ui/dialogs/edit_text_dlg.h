@@ -16,15 +16,10 @@
 
 #include "../../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
 #include "../../Wisteria-Dataviz/src/ui/ribbon/artmetro.h"
-#include <wx/datetime.h>
 #include <wx/dialog.h>
 #include <wx/fdrepdlg.h>
-#include <wx/ribbon/art.h>
 #include <wx/ribbon/bar.h>
 #include <wx/ribbon/buttonbar.h>
-#include <wx/ribbon/gallery.h>
-#include <wx/ribbon/toolbar.h>
-#include <wx/valgen.h>
 #include <wx/wx.h>
 
 class BaseProjectDoc;

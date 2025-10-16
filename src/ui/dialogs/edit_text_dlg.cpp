@@ -17,6 +17,7 @@
 #include "../../projects/base_project_doc.h"
 #include "../../projects/batch_project_doc.h"
 #include "../../projects/standard_project_doc.h"
+#include <utility>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -401,9 +402,9 @@ void EditTextDlg::OnFindDialog(wxFindDialogEvent& event)
     {
     if (event.GetEventType() == wxEVT_FIND || event.GetEventType() == wxEVT_FIND_NEXT)
         {
-        auto foundPos = m_textEntry->FindText(event.GetFindString(), (event.GetFlags() & wxFR_DOWN),
-                                              (event.GetFlags() & wxFR_WHOLEWORD),
-                                              (event.GetFlags() & wxFR_MATCHCASE));
+        auto foundPos = m_textEntry->FindText(
+            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
+            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
         if (foundPos != wxNOT_FOUND)
             {
             m_textEntry->SetSelection(foundPos, foundPos + event.GetFindString().length());
@@ -416,24 +417,24 @@ void EditTextDlg::OnFindDialog(wxFindDialogEvent& event)
         // force search to start from beginning of selection
         m_textEntry->SetSelection(fromSelection, fromSelection);
 
-        auto foundPos = m_textEntry->FindText(event.GetFindString(), (event.GetFlags() & wxFR_DOWN),
-                                              (event.GetFlags() & wxFR_WHOLEWORD),
-                                              (event.GetFlags() & wxFR_MATCHCASE));
+        auto foundPos = m_textEntry->FindText(
+            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
+            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
         if (foundPos != wxNOT_FOUND)
             {
             // if what is being replaced matches what was already selected, then replace it
             if (fromSelection == foundPos &&
-                toSelection ==
-                    static_cast<decltype(toSelection)>(foundPos + event.GetFindString().length()))
+                std::cmp_equal(toSelection, foundPos + event.GetFindString().length()))
                 {
                 m_textEntry->Replace(foundPos, foundPos + event.GetFindString().length(),
                                      event.GetReplaceString());
                 m_textEntry->SetSelection(foundPos, foundPos + event.GetReplaceString().length());
                 // ...then, find the next occurrence of string being replaced for the next replace
                 // button click
-                foundPos = m_textEntry->FindText(
-                    event.GetFindString(), (event.GetFlags() & wxFR_DOWN),
-                    (event.GetFlags() & wxFR_WHOLEWORD), (event.GetFlags() & wxFR_MATCHCASE));
+                foundPos = m_textEntry->FindText(event.GetFindString(),
+                                                 (event.GetFlags() & wxFR_DOWN) != 0,
+                                                 (event.GetFlags() & wxFR_WHOLEWORD) != 0,
+                                                 (event.GetFlags() & wxFR_MATCHCASE) != 0);
                 if (foundPos != wxNOT_FOUND)
                     {
                     m_textEntry->SetSelection(foundPos, foundPos + event.GetFindString().length());
@@ -455,9 +456,9 @@ void EditTextDlg::OnFindDialog(wxFindDialogEvent& event)
     else if (event.GetEventType() == wxEVT_FIND_REPLACE_ALL)
         {
         m_textEntry->SetSelection(0, 0);
-        auto foundPos = m_textEntry->FindText(event.GetFindString(), (event.GetFlags() & wxFR_DOWN),
-                                              (event.GetFlags() & wxFR_WHOLEWORD),
-                                              (event.GetFlags() & wxFR_MATCHCASE));
+        auto foundPos = m_textEntry->FindText(
+            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
+            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
         while (foundPos != wxNOT_FOUND)
             {
             m_textEntry->Replace(foundPos, foundPos + event.GetFindString().length(),
@@ -465,9 +466,9 @@ void EditTextDlg::OnFindDialog(wxFindDialogEvent& event)
             m_textEntry->SetSelection(foundPos + event.GetReplaceString().length(),
                                       foundPos + event.GetReplaceString().length());
             // ...then, find the next occurrence of string being replaced for the next loop
-            foundPos = m_textEntry->FindText(event.GetFindString(), (event.GetFlags() & wxFR_DOWN),
-                                             (event.GetFlags() & wxFR_WHOLEWORD),
-                                             (event.GetFlags() & wxFR_MATCHCASE));
+            foundPos = m_textEntry->FindText(
+                event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
+                (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
             }
         }
     else if (event.GetEventType() == wxEVT_FIND_CLOSE)
