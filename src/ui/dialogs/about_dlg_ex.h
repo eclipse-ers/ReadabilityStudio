@@ -16,6 +16,7 @@
 
 #include "../../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebarbook.h"
+#include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include <wx/bitmap.h>
 #include <wx/dialog.h>
 #include <wx/hyperlink.h>
@@ -26,7 +27,7 @@
 #include <wx/wxhtml.h>
 
 /// @brief Enhanced About dialog for an application.
-class AboutDialogEx final : public wxDialog
+class AboutDialogEx final : public Wisteria::UI::DialogWithHelp
     {
   public:
     /** @brief Constructor.
