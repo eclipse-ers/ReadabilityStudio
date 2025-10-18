@@ -285,7 +285,7 @@ void AboutDialogEx::CreateControls()
         appTitleSizer->Add(new wxStaticBitmap(
             mainPage, wxID_ANY,
             Wisteria::UI::DialogWithHelp::FixStaticBitmapImage(wxGetApp().GetMainFrame()->GetLogo(),
-                                                               FromDIP(wxSize{ 128, 128 }))));
+                                                               wxSize{ 128, 128 })));
         appTitleSizer->Add(appLabelSizer, wxSizerFlags{}.CenterVertical());
         mainPanelSizer->Add(appTitleSizer, wxSizerFlags{}.Left().Border(wxLEFT));
 
