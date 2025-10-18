@@ -41,15 +41,17 @@ class Banner final : public wxWindow
         wxCoord textWidth{ 0 }, textHeight{ 0 };
         dc.GetTextExtent(m_label, &textWidth, &textHeight);
 
-        const wxBitmap logo = m_logo.GetBitmap(FromDIP(wxSize{ 32, 32 })).ConvertToImage();
+        wxBitmap logo = m_logo.GetBitmap(ScaleToContentSize(FromDIP(wxSize{ 32, 32 })));
+        logo.SetScaleFactor(GetContentScaleFactor());
 
         const wxCoord leftBorder =
-            (GetClientSize().GetWidth() / 2) - ((logo.GetWidth() / 2) + (textWidth / 2) + 3);
+            (GetClientSize().GetWidth() / 2) - ((logo.GetLogicalWidth() / 2) + (textWidth / 2) + 3);
 
         dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-        dc.DrawBitmap(logo, leftBorder, (GetClientSize().GetHeight() / 2) - (logo.GetHeight() / 2));
-        dc.DrawText(m_label, leftBorder + logo.GetWidth() + 6,
+        dc.DrawBitmap(logo, leftBorder,
+                      (GetClientSize().GetHeight() / 2) - (logo.GetLogicalHeight() / 2));
+        dc.DrawText(m_label, leftBorder + logo.GetLogicalWidth() + 6,
                     (GetClientSize().GetHeight() / 2) - (textHeight / 2));
         dc.DrawLine((GetClientSize().GetWidth() / 10), GetClientSize().GetHeight() - 1,
                     GetClientSize().GetWidth() - (GetClientSize().GetWidth() / 10),
@@ -61,6 +63,18 @@ class Banner final : public wxWindow
     void SetLabel(const wxString& label) final { m_label = label; }
 
   private:
+    [[nodiscard]]
+    wxSize ScaleToContentSize(const wxSize sz) const
+        {
+        auto scaledSize{ sz };
+        // for Retina display
+        const double scaling = GetContentScaleFactor();
+
+        scaledSize = wxSize{ static_cast<int>(std::lround(scaledSize.GetWidth() * scaling)),
+                             static_cast<int>(std::lround(scaledSize.GetHeight() * scaling)) };
+        return scaledSize;
+        }
+
     wxBitmapBundle m_logo;
     wxString m_label;
     };
@@ -207,10 +221,9 @@ void ProjectWizardDlg::CreateControls()
         // The options
         auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
 
-        auto* banner = new Banner(
-            page, wxID_ANY,
-            wxArtProvider::GetBitmap(L"ID_DOCUMENT", wxART_BUTTON, FromDIP(wxSize{ 32, 32 })),
-            _(L"Select Document"));
+        auto* banner =
+            new Banner(page, wxID_ANY, wxArtProvider::GetBitmapBundle(L"ID_DOCUMENT", wxART_BUTTON),
+                       _(L"Select Document"));
         optionsSizer->Add(banner, wxSizerFlags{}.Expand().Border(wxBOTTOM));
 
         // select the language
@@ -294,10 +307,9 @@ void ProjectWizardDlg::CreateControls()
         // The options
         auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
 
-        auto* banner = new Banner(
-            page, wxID_ANY,
-            wxArtProvider::GetBitmap(L"ID_DOCUMENT", wxART_BUTTON, FromDIP(wxSize{ 32, 32 })),
-            _(L"Select Documents"));
+        auto* banner =
+            new Banner(page, wxID_ANY, wxArtProvider::GetBitmapBundle(L"ID_DOCUMENT", wxART_BUTTON),
+                       _(L"Select Documents"));
         optionsSizer->Add(banner, wxSizerFlags{}.Expand().Border(wxBOTTOM));
 
         // select the language
