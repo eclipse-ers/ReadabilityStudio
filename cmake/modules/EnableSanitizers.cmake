@@ -38,7 +38,7 @@ if(ENABLE_SANITIZERS)
             # AppleClang: extra ASan goodness
             set(SANITIZER_EXTRA_FLAGS "-fsanitize-address-use-after-scope")
             list(APPEND SANITIZER_LIST
-                "EXTRA: -fsanitize-address-use-after-scope (detects use-after-scope of stack variables; AppleClang only)")
+                "EXTRA: -fsanitize-address-use-after-scope (detects use-after-scope of stack variables [AppleClang only])")
         endif()
         # NOTE: TSan conflicts with ASan. If you want TSan runs, swap flags to -fsanitize=thread in a different config.
     endif()
@@ -63,7 +63,7 @@ if(ENABLE_SANITIZERS)
             # Avoid suggesting detect_leaks on Apple (not fully supported)
             list(APPEND _env_hints
                 "ASAN_OPTIONS (suggested): ${_asan_opts}"
-                "Note: LeakSanitizer is limited on Apple platforms; 'detect_leaks' may not be supported.")
+                "Note: LeakSanitizer is limited on Apple platforms ('detect_leaks' may not be supported).")
         else()
             set(_asan_opts "${_asan_opts}:detect_leaks=1")
             list(APPEND _env_hints "ASAN_OPTIONS (suggested): ${_asan_opts}")
