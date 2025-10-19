@@ -140,10 +140,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
 
     /// @brief Sets the watermark for the list when printed.
     /// @param watermark The watermark information.
-    void SetWatermark(const Wisteria::Canvas::Watermark& watermark)
-        {
-        m_waterMark = watermark;
-        }
+    void SetWatermark(const Wisteria::Canvas::Watermark& watermark) { m_waterMark = watermark; }
 
     /// @returns The printer watermark.
     [[nodiscard]]

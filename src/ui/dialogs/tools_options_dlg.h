@@ -885,7 +885,7 @@ class ToolsOptionsDlg final : public wxDialog
 
     /// Replaces various filepath shortcuts to the full pathway
     [[nodiscard]]
-    static wxString ExpandPath(wxString path) ;
+    static wxString ExpandPath(wxString path);
 
     [[nodiscard]]
     ToolSections GetSectionsBeingShown() const noexcept
@@ -900,7 +900,7 @@ class ToolsOptionsDlg final : public wxDialog
         }
 
     static void CreateLabelHeader(wxWindow* parent, wxSizer* parentSizer, const wxString& title,
-                           const bool addSidePadding = false) ;
+                                  const bool addSidePadding = false);
 
     BaseProjectDoc* m_readabilityProjectDoc{ nullptr };
     wxRadioBox* m_docStorageRadioBox{ nullptr };

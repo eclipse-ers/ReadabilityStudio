@@ -282,10 +282,10 @@ void AboutDialogEx::CreateControls()
             wxSystemSettings::SelectLightDark(wxColour{ L"#F89522" }, wxColour{ 255, 255, 255 }));
         appLabelSizer->Add(appLabel);
         auto* appTitleSizer = new wxBoxSizer(wxHORIZONTAL);
-        appTitleSizer->Add(new wxStaticBitmap(
-            mainPage, wxID_ANY,
-            Wisteria::UI::DialogWithHelp::FixStaticBitmapImage(wxGetApp().GetMainFrame()->GetLogo(),
-                                                               wxSize{ 128, 128 })));
+        appTitleSizer->Add(
+            new wxStaticBitmap(mainPage, wxID_ANY,
+                               Wisteria::UI::DialogWithHelp::FixStaticBitmapImage(
+                                   wxGetApp().GetMainFrame()->GetLogo(), wxSize{ 128, 128 })));
         appTitleSizer->Add(appLabelSizer, wxSizerFlags{}.CenterVertical());
         mainPanelSizer->Add(appTitleSizer, wxSizerFlags{}.Left().Border(wxLEFT));
 
