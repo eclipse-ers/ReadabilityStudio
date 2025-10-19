@@ -472,11 +472,9 @@ void ProjectWizardDlg::CreateControls()
         }
         // document structure
         {
-        const wxFont imageFont(wxFontInfo{}.Bold(true));
         Wisteria::GraphItems::Label imageLabel(Wisteria::GraphItems::GraphItemInfo()
                                                    .DPIScaling(GetDPIScaleFactor())
                                                    .Pen(wxPen(wxColour(L"#BCE8F1"), 2))
-                                                   .Font(imageFont)
                                                    .Padding(4, 4, 4, 4));
         imageLabel.SetFontBackgroundColor(wxColour(L"#D9EDF7"));
         imageLabel.SetFontColor(wxColour(L"#31708F"));
@@ -544,7 +542,6 @@ void ProjectWizardDlg::CreateControls()
             wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/narrative-text.png",
                                                               wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
-            memDc.SetFont(imageFont);
             // draw the label
             imageLabel.SetText(
                 _(L"Narrative text is analyzed, while headers such as these are ignored."));
@@ -765,15 +762,15 @@ void ProjectWizardDlg::CreateControls()
             wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/hard-returns.png",
                                                               wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
-            memDc.SetFont(imageFont);
             // draw the labels
             imageLabel.SetText(_(L"Hard returns separate these lines into different paragraphs. "
                                  "This prevents them from being combined into one sentence."));
             imageLabel.SplitTextToFitBoundingBox(
-                memDc, wxSize(memDc.GetSize().GetWidth() * .55f, memDc.GetSize().GetHeight()));
+                memDc, wxSize(memDc.GetSize().GetWidth() * math_constants::half,
+                              memDc.GetSize().GetHeight()));
             imageLabel.SetAnchorPoint(
                 wxPoint(memDc.GetSize().GetWidth() - wxSizerFlags::GetDefaultBorder(),
-                        wxSizerFlags::GetDefaultBorder() * 10));
+                        wxSizerFlags::GetDefaultBorder()));
             imageLabel.Draw(memDc);
             memDc.SelectObject(wxNullBitmap);
             wrappedSizer->AddStretchSpacer();
@@ -784,7 +781,6 @@ void ProjectWizardDlg::CreateControls()
             previewImage = wxGetApp().GetScaledImage(L"wizard/line-ends-are-new-paragraphs.png",
                                                      wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc2(previewImage);
-            memDc2.SetFont(imageFont);
             // draw the labels
             imageLabel.SetText(
                 _(L"Line ends always force the start of a new sentence and paragraph."));
