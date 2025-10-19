@@ -198,6 +198,17 @@ void ProjectWizardDlg::CreateControls()
     {
     const int scaledNoteWidth = FromDIP(wxSize(500, 500)).GetWidth();
 
+    const wxSize maxImageSize{
+        static_cast<int>(static_cast<int>(safe_divide<int>(
+                             wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X),
+                             GetContentScaleFactor())) *
+                         .75),
+        static_cast<int>(static_cast<int>(safe_divide<int>(
+                             wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y),
+                             GetContentScaleFactor())) *
+                         .75)
+    };
+
     auto* mainSizer = new wxBoxSizer(wxVERTICAL);
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
     wxGetApp().UpdateSideBarTheme(m_sideBarBook->GetSideBar());
@@ -461,8 +472,7 @@ void ProjectWizardDlg::CreateControls()
         }
         // document structure
         {
-        wxFont imageFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        imageFont.MakeBold().MakeLarger().MakeLarger();
+        const wxFont imageFont(wxFontInfo{}.Bold(true));
         Wisteria::GraphItems::Label imageLabel(Wisteria::GraphItems::GraphItemInfo()
                                                    .DPIScaling(GetDPIScaleFactor())
                                                    .Pen(wxPen(wxColour(L"#BCE8F1"), 2))
@@ -531,19 +541,18 @@ void ProjectWizardDlg::CreateControls()
             narrativeSizer->Add(narrativeLabelsSizer, wxSizerFlags{}.Center());
 
             narrativeSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            wxBitmap previewImage = wxGetApp().GetScaledImage(
-                L"wizard/narrative-text.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/narrative-text.png",
+                                                              wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
             memDc.SetFont(imageFont);
             // draw the label
             imageLabel.SetText(
                 _(L"Narrative text is analyzed, while headers such as these are ignored."));
             imageLabel.SplitTextToFitBoundingBox(
-                memDc, wxSize(memDc.GetSize().GetWidth() * .70f, memDc.GetSize().GetHeight()));
+                memDc,
+                wxSize(previewImage.GetLogicalWidth() * .70f, previewImage.GetLogicalHeight()));
             imageLabel.SetAnchorPoint(
-                wxPoint(memDc.GetSize().GetWidth() - wxSizerFlags::GetDefaultBorder(),
+                wxPoint(previewImage.GetLogicalWidth() - wxSizerFlags::GetDefaultBorder(),
                         wxSizerFlags::GetDefaultBorder()));
             imageLabel.Draw(memDc);
             memDc.SelectObject(wxNullBitmap);
@@ -588,10 +597,8 @@ void ProjectWizardDlg::CreateControls()
             sparseSizer->Add(sparseLabelsSizer, wxSizerFlags{}.Center());
 
             sparseSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            wxBitmap previewImage = wxGetApp().GetScaledImage(
-                L"wizard/sparse-text.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/sparse-text.png",
+                                                              wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
             // draw the label
             imageLabel.SetText(
@@ -645,10 +652,8 @@ void ProjectWizardDlg::CreateControls()
             narrativeSizer->Add(narrativeLabelsSizer, wxSizerFlags{}.Center());
 
             narrativeSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            wxBitmap previewImage = wxGetApp().GetScaledImage(
-                L"wizard/narrative-illustrated.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/narrative-illustrated.png",
+                                                              wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
             // draw the label
             imageLabel.SetText(
@@ -665,10 +670,8 @@ void ProjectWizardDlg::CreateControls()
                 new Wisteria::UI::Thumbnail(docLayoutSizer->GetStaticBox(), previewImage));
             narrativeSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
-            previewImage = wxGetApp().GetScaledImage(
-                L"wizard/narrative-with-lines.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            previewImage = wxGetApp().GetScaledImage(L"wizard/narrative-with-lines.png",
+                                                     wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc2(previewImage);
             // draw the label
             imageLabel.SetText(
@@ -719,10 +722,8 @@ void ProjectWizardDlg::CreateControls()
 
             centeredSizer->Add(centeredLabelsSizer, wxSizerFlags{}.Center());
 
-            wxBitmap previewImage = wxGetApp().GetScaledImage(
-                L"wizard/centered-text.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/centered-text.png",
+                                                              wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
             // draw the label
             imageLabel.SetText(_(L"Text is left-aligned to be centered on the page."));
@@ -761,10 +762,8 @@ void ProjectWizardDlg::CreateControls()
 
             wrappedSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
-            wxBitmap previewImage = wxGetApp().GetScaledImage(
-                L"wizard/hard-returns.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            wxBitmap previewImage = wxGetApp().GetScaledImage(L"wizard/hard-returns.png",
+                                                              wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc(previewImage);
             memDc.SetFont(imageFont);
             // draw the labels
@@ -782,10 +781,8 @@ void ProjectWizardDlg::CreateControls()
                 new Wisteria::UI::Thumbnail(docLayoutSizer->GetStaticBox(), previewImage));
             wrappedSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
-            previewImage = wxGetApp().GetScaledImage(
-                L"wizard/line-ends-are-new-paragraphs.png", wxBITMAP_TYPE_PNG,
-                wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .75,
-                       wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .75));
+            previewImage = wxGetApp().GetScaledImage(L"wizard/line-ends-are-new-paragraphs.png",
+                                                     wxBITMAP_TYPE_PNG, maxImageSize);
             wxMemoryDC memDc2(previewImage);
             memDc2.SetFont(imageFont);
             // draw the labels

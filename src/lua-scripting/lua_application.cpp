@@ -723,10 +723,8 @@ namespace LuaScripting
         assert(wxGetApp().GetSplashscreenPaths().GetCount());
         const auto index = std::clamp<size_t>(luaL_checkinteger(L, 1) - 1 /*make it zero-indexed*/,
                                               0, wxGetApp().GetSplashscreenPaths().GetCount() - 1);
-        wxBitmap bitmap = wxGetApp().GetScaledImage(
-            wxGetApp().GetSplashscreenPaths()[index], wxBITMAP_TYPE_PNG,
-            wxSize(wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X) * .5,
-                   wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) * .5));
+        wxBitmap bitmap = wxGetApp().GetScaledImage(wxGetApp().GetSplashscreenPaths()[index],
+                                                    wxBITMAP_TYPE_PNG, wxSize{ 800, 600 });
         if (bitmap.IsOk())
             {
             bitmap = ReadabilityApp::CreateSplashscreen(bitmap, wxGetApp().GetAppName(),

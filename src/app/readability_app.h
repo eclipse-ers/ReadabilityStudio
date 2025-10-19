@@ -423,10 +423,9 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         m_splashscreenImagePaths.Add(imagePath);
         }
 
-    /** @returns A bitmap from the resource manager, scaling it to the system's
-       DPI.
+    /** @returns A bitmap from the resource manager, scaling it to the system's DPI.
         @param image The path to the image from the resource manager (e.g.,
-       "ribbon/logo.png").
+            "ribbon/logo.png").
         @param type The image type of @c image.
         @param imageSize The size of the image (in pixels).\n
             This function will scale this according to the system's DPI.*/
@@ -434,18 +433,33 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     wxBitmap GetScaledImage(const wxString& image, const wxBitmapType type = wxBITMAP_TYPE_PNG,
                             const wxSize imageSize = wxSize{ 32, 32 })
         {
-        assert(GetMainFrame());
+        wxASSERT(GetMainFrame());
+        if (GetMainFrame() == nullptr)
+            {
+            return wxNullBitmap;
+            }
+#ifndef __WXMSW__
+        // For example, 2.0 on Retina
+        const double scaling = GetMainFrame()->GetContentScaleFactor();
+
+        const wxSize scaledSize{ static_cast<int>(std::lround(imageSize.GetWidth() * scaling)),
+                                 static_cast<int>(std::lround(imageSize.GetHeight() * scaling)) };
+#else
         const wxSize scaledSize = GetMainFrame()->FromDIP(imageSize);
-        const wxBitmap bmp = GetResourceManager().GetBitmap(image, type);
+#endif
+        wxBitmap bmp = GetResourceManager().GetBitmap(image, type);
 
         // Only resize if being downscaled. If the original image is smaller than
-        // the requested size, then return the original image (i.e., don't upscale
-        // it).
+        // the requested size, then return the original image (i.e., don't upscale it).
         const auto [width, height] = geometry::downscaled_size(
-            std::make_pair(bmp.GetWidth(), bmp.GetHeight()),
+            std::make_pair(bmp.GetLogicalWidth(), bmp.GetLogicalHeight()),
             std::make_pair(scaledSize.GetWidth(), scaledSize.GetHeight()));
 
-        return bmp.ConvertToImage().Rescale(width, height, wxIMAGE_QUALITY_HIGH);
+        wxBitmap::Rescale(bmp, wxSize{ static_cast<int>(width), static_cast<int>(height) });
+#ifndef __WXMSW__
+        bmp.SetScaleFactor(scaling);
+#endif
+        return bmp;
         }
 
     [[nodiscard]]
