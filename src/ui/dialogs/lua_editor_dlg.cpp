@@ -760,8 +760,8 @@ void LuaEditorDlg::CreateControls()
                                          .MinimizeButton(true)
                                          .MaximizeButton(true)
                                          .Caption(_(L"Function Browser"))
-                                         .FloatingSize(FromDIP(wxSize{ 800, 1000 }))
-                                         .BestSize(FromDIP(wxSize{ 800, 1000 }))
+                                         .FloatingSize(FromDIP(wxSize{ 800, 800 }))
+                                         .BestSize(FromDIP(wxSize{ 800, 800 }))
                                          .PinButton(true)
                                          .CloseButton(true)
                                          .Hide());
@@ -778,7 +778,7 @@ void LuaEditorDlg::CreateControls()
                                             .PinButton(true)
                                             .CloseButton(false));
 
-    SetSize(FromDIP(wxSize{ 1600, 1200 }));
+    SetSize(FromDIP(wxSize{ 800, 800 }));
 
     m_mgr.Update();
     }
