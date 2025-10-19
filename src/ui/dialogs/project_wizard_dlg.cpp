@@ -480,6 +480,7 @@ void ProjectWizardDlg::CreateControls()
         imageLabel.SetFontColor(wxColour(L"#31708F"));
         imageLabel.SetTextAlignment(Wisteria::TextAlignment::FlushLeft);
         imageLabel.SetAnchoring(Wisteria::Anchoring::TopRightCorner);
+        imageLabel.SetBoxCorners(Wisteria::BoxCorners::Rounded);
 
         if (wxGetApp().GetAppOptions()->GetInvalidSentenceMethod() ==
             InvalidSentence::IncludeAsFullSentences)
