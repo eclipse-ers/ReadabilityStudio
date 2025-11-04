@@ -6,3 +6,14 @@ cmake --build ./build --target all -j $(nproc) --config Release
 
 # Uncomment to build the help manuals
 #cmake --build ./build --target manuals -j $(nproc) --config Release
+
+git clone ${GIT_REPO}.git --recurse-submodules
+cd ReadabilityStudio
+
+cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release \
+      -DENABLE_SANITIZERS=TRUE \
+      -DHAS_MAC_TEXT_PRINTING
+cmake --build ./build --target all -j $(nproc) --config Release
+
+# Uncomment to build the help manuals
+#cmake --build ./build --target manuals -j $(nproc) --config Release

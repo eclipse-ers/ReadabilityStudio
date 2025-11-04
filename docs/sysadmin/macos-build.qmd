@@ -65,7 +65,7 @@ Follow the instructions in `r menu(c('wxpatch', 'macOS', 'Instructions.txt'))` t
 
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
-```{.bash include="build-commands.txt" start-line=9 end-line=17}
+```{.bash include="build-commands.txt" start-line=10 end-line=19}
 ```
 
 ::: {.tipsection data-latex=""}

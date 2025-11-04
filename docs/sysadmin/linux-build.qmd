@@ -45,7 +45,7 @@ This should be cloned into a folder next to *{{< var PROGRAM_NAME >}}*.
 
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
-```{.bash include="build-commands.txt" start-line=1 end-line=7}
+```{.bash include="build-commands.txt" start-line=1 end-line=8}
 ```
 
 ::: {.tipsection data-latex=""}
