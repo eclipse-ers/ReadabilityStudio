@@ -13,8 +13,8 @@ The following styles should be applied to all help projects:
 
 - Software and library names should be italicized
 - References to dialog/menu/button/tab names should in bold
-- File names should be double quoted
-- Folders and file paths should be put in `file_path` blocks
+- File and folder names should be double quoted
+- File paths should be put in `file_path` blocks
 - Data types (programming docs) should be in typewriter font
 - Parameters to functions (programming docs) should be italicized
 - Values (numbers and strings) in programming docs should be in typewriter font

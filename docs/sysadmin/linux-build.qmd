@@ -50,7 +50,9 @@ This should be cloned into a folder next to *{{< var PROGRAM_NAME >}}*.
 
 ::: {.tipsection data-latex=""}
 To create a debug build, pass `-DCMAKE_BUILD_TYPE=Debug` during the configuration stage, and `--config Debug` during the build stage.
-Additionally, pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer for debug builds.
+You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support in debug builds.
+
+If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
 :::
 
 ## Build the AppImage {-}

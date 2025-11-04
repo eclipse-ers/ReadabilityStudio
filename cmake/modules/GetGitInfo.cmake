@@ -170,7 +170,11 @@ function(get_git_submodule_hash SUBMODULE_PATH OUT_VAR)
     endif()
 
     if(NOT "${STATUS_OUTPUT}" STREQUAL "")
-        message(FATAL_ERROR "Submodule '${SUBMODULE_PATH}' has uncommitted or untracked changes:\n${STATUS_OUTPUT}")
+        if(ALLOW_DIRTY_SUBMODULES)
+            message(WARNING "Submodule '${SUBMODULE_PATH}' has uncommitted or untracked changes:\n${STATUS_OUTPUT}")
+        else()
+            message(FATAL_ERROR "Submodule '${SUBMODULE_PATH}' has uncommitted or untracked changes:\n${STATUS_OUTPUT}")
+        endif()
     endif()
 
     execute_process(

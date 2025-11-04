@@ -25,24 +25,32 @@ source('R/appdown.r')
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
 - From *Visual Studio*, select **Clone a Repository** again
-  - Enter ["{{< var GIT_REPO >}}.git"]({{< var GIT_REPO >}}.git) and clone it to the same level as the **wxWidgets** folder
-- Once the **ReadabilityStudio** folder is cloned, open it in *Visual Studio*
+  - Enter ["{{< var GIT_REPO >}}.git"]({{< var GIT_REPO >}}.git) and clone it to the same level as the "wxWidgets" folder
+- Once the "ReadabilityStudio" folder is cloned, open it in *Visual Studio*
 - Select the "{{< var MIN_MSVC_REQUIRED >}} Release" configuration and build it
 - Optionally, the "manuals" target can also be ran to rebuild the documentation
 
 ::: {.tipsection data-latex=""}
 To create a debug build, select the "{{< var MIN_MSVC_REQUIRED >}} Debug" configuration.
 Additionally, selecting "{{< var MIN_MSVC_REQUIRED >}} Debug w/ ASAN" will enable AddressSanitizer.
+
+To allow building with uncommitted changes in Git submodules, open your "CMakePresets.json" file and add the following to your chosen profile:
+
+```json
+"cacheVariables": {
+  "ALLOW_DIRTY_SUBMODULES": "ON"
+}
+```
 :::
 
 ## Build the installer {-}
 
 ::: {.notesection data-latex=""}
-If you build the "Release" version of *{{< var PROGRAM_NAME >}}*, then the *CMake* build process will copy **{{< var BUILD_TARGET >}}.exe** into `r menu(c('installers', 'windows', 'release'))`.
+If you build the "Release" version of *{{< var PROGRAM_NAME >}}*, then the *CMake* build process will copy "{{< var BUILD_TARGET >}}.exe" into `r menu(c('installers', 'windows', 'release'))`.
 :::
 
 - Go to `r menu(c('installers', 'windows'))`
 - Digitally sign "release/{{< var BUILD_TARGET >}}.exe"
-- Open **{{< var BUILD_TARGET >}}.iss** in *Inno Setup* and build the installer
-  - The installer will be placed in **output/rssetup{{< var FULL_VERSION >}}.exe**
+- Open "{{< var BUILD_TARGET >}}.iss" in *Inno Setup* and build the installer
+  - The installer will be placed in "output/rssetup{{< var FULL_VERSION >}}.exe"
 - Digitally sign the installer
