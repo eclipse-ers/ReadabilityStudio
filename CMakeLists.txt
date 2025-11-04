@@ -253,8 +253,9 @@ if(NOT EXISTS "${wxWidgets_BASEDIR}")
     message(FATAL_ERROR "wxWidgets base directory not found: ${wxWidgets_BASEDIR}")
 endif()
 message(STATUS "wxWidgets found in: ${wxWidgets_BASEDIR}")
-add_subdirectory(${wxWidgets_BASEDIR} ${CMAKE_CURRENT_SOURCE_DIR}/wxWidgets_lib)
-set(wxWidgets_LIBRARIES wx::core wx::base wx::xrc wx::propgrid wx::xml wx::aui wx::ribbon wx::qa wx::stc wx::net wx::richtext)
+add_subdirectory(${wxWidgets_BASEDIR} ${CMAKE_CURRENT_SOURCE_DIR}/wxWidgets_lib EXCLUDE_FROM_ALL)
+set(wxWidgets_LIBRARIES wx::core wx::base wx::xrc wx::propgrid wx::xml
+                        wx::aui wx::ribbon wx::qa wx::stc wx::net wx::richtext)
 message(STATUS "Adding wxWidgets libraries: ${wxWidgets_LIBRARIES}")
 
 if(wxVERSION VERSION_LESS ${MIN_WXWIDGETS_REQUIRED})
