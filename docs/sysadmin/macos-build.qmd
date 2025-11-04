@@ -73,6 +73,7 @@ To create a debug build, pass `-DCMAKE_BUILD_TYPE=Debug` during the configuratio
 You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support in debug builds.
 
 If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
+(This is currently necessary for the macOS build.)
 :::
 
 If code signing locally, do the following:

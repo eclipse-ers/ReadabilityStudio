@@ -119,7 +119,7 @@ This will sort, merge, remove duplicates, and generate supplemental word lists.
 All translation catalogs (\*.po files) are in the `r file_path(c("locale"))` folder.
 After editing a catalog, compile it with a *gettext* tool (e.g., *POEdit*) into a \*.mo file.
 
-If you are compiling against a newer version of *wxWidgets*:
+For the translations provided with *wxWidgets*:
 
 - compile the required \*.po files
 - rename the output to "wxstd.mo"
