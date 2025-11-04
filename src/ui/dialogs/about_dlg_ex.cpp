@@ -19,6 +19,7 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include "../../Wisteria-Dataviz/src/util/hardwareinfo.h"
 #include "../../app/readability_app.h"
+#include "../../app/sbom.h"
 #include "../../lua/lua.h"
 #include "../../tinyexpr-plusplus/tinyexpr.h"
 #include "../../tinyxml2/tinyxml2.h"
@@ -336,10 +337,12 @@ void AboutDialogEx::CreateControls()
         auto* componentsPage = new wxPanel(m_sideBarBook);
         auto* mainPanelSizer = new wxBoxSizer(wxVERTICAL);
         componentsPage->SetSizer(mainPanelSizer);
-        m_sideBarBook->AddPage(componentsPage, _(L"Components"), ID_COMPONENTS, false);
+        m_sideBarBook->AddPage(componentsPage, /* TRANSLATORS: Software bill of materials */ _(L"SBOM"),
+                               ID_COMPONENTS, false);
 
         // Consistently format library info with the name and version number.
-        const auto formatLibInfo = [](const auto& libInfo) -> wxString
+        const auto formatLibInfo = [](const auto& libInfo, wxString commitHash = wxString{},
+                                      wxString origin = wxString{}) -> wxString
         {
             if (!libInfo.IsOk())
                 {
@@ -348,50 +351,70 @@ void AboutDialogEx::CreateControls()
             wxString copyright = libInfo.GetCopyright();
             copyright.Replace(L"\n", L"<br />");
 
+            if (!commitHash.empty())
+                {
+                commitHash = wxString::Format(_(L"Commit hash: %s<br />"), commitHash);
+                }
+            if (!origin.empty())
+                {
+                origin = wxString::Format(_(L"Origin: %s<br />"), origin);
+                }
+
             return wxString::Format(
-                L"<span style='font-weight: bold;'>%s</span> - %s<br />%s<br />", libInfo.GetName(),
+                L"<span style='font-weight: bold;'>%s</span> - %s<br />%s%s%s<br />",
+                libInfo.GetName(),
                 (libInfo.AtLeast(0, 0, 1) ?
                      wxString::Format(_(L"version %s"), libInfo.GetNumericVersionString()) :
                      _(L"unversioned")),
-                (libInfo.HasCopyright() ? copyright + L"<br />" : wxString{}));
+                (libInfo.HasCopyright() ? copyright + L"<br />" : wxString{}), commitHash, origin);
         };
 
         // Get wxWidget's version, as well as its submodules, and sort them.
         std::vector<wxString> allLibInfo{
-            formatLibInfo(wxGetLibraryVersionInfo()),
-            formatLibInfo(Wisteria::GetLibraryVersionInfo()),
+            formatLibInfo(wxGetLibraryVersionInfo(), WXWIDGETS_HASH, WXWIDGETS_ORIGIN),
+            formatLibInfo(Wisteria::GetLibraryVersionInfo(), WISTERIA_DATAVIZ_HASH,
+                          WISTERIA_DATAVIZ_ORIGIN),
             formatLibInfo(wxVersionInfo{ L"Lua", LUA_VERSION_MAJOR_N, LUA_VERSION_MINOR_N,
-                                         LUA_VERSION_RELEASE_N, 0, wxString{}, LUA_COPYRIGHT }),
-            formatLibInfo(wxVersionInfo{
-                L"Oleander Stemming Library", stemming::OLEANDER_STEM_MAJOR_VERSION,
-                stemming::OLEANDER_STEM_MINOR_VERSION, stemming::OLEANDER_STEM_PATCH_VERSION,
-                stemming::OLEANDER_STEM_TWEAK_VERSION, wxString{},
-                stemming::OLEANDER_STEM_COPYRIGHT }),
+                                         LUA_VERSION_RELEASE_N, 0, wxString{}, LUA_COPYRIGHT },
+                          LUA_HASH, LUA_ORIGIN),
+            formatLibInfo(wxVersionInfo{ L"Oleander Stemming Library",
+                                         stemming::OLEANDER_STEM_MAJOR_VERSION,
+                                         stemming::OLEANDER_STEM_MINOR_VERSION,
+                                         stemming::OLEANDER_STEM_PATCH_VERSION,
+                                         stemming::OLEANDER_STEM_TWEAK_VERSION, wxString{},
+                                         stemming::OLEANDER_STEM_COPYRIGHT },
+                          OLEANDERSTEMMINGLIBRARY_HASH, OLEANDERSTEMMINGLIBRARY_ORIGIN),
             formatLibInfo(wxVersionInfo{ L"TinyExpr++", TINYEXPR_CPP_MAJOR_VERSION,
                                          TINYEXPR_CPP_MINOR_VERSION, TINYEXPR_CPP_PATCH_VERSION,
                                          TINYEXPR_CPP_TWEAK_VERSION, wxString{},
-                                         TINYEXPR_CPP_COPYRIGHT }),
+                                         TINYEXPR_CPP_COPYRIGHT },
+                          TINYEXPR_PLUSPLUS_HASH, TINYEXPR_PLUSPLUS_ORIGIN),
             formatLibInfo(wxVersionInfo{ L"TinyXML2", TIXML2_MAJOR_VERSION, TIXML2_MINOR_VERSION,
-                                         TIXML2_PATCH_VERSION }),
-            formatLibInfo(wxTIFFHandler::GetLibraryVersionInfo()),
-            formatLibInfo(wxJPEGHandler::GetLibraryVersionInfo()),
-            formatLibInfo(wxPNGHandler::GetLibraryVersionInfo()),
-            formatLibInfo(wxWEBPHandler::GetLibraryVersionInfo()),
-            formatLibInfo(wxRegEx::GetLibraryVersionInfo()),
-            formatLibInfo(wxXmlDocument::GetLibraryVersionInfo()),
-            formatLibInfo(wxStyledTextCtrl::GetLibraryVersionInfo()),
-            formatLibInfo(wxGetZlibVersionInfo()),
+                                         TIXML2_PATCH_VERSION },
+                          TINYXML2_HASH, TINYXML2_ORIGIN),
+            formatLibInfo(wxTIFFHandler::GetLibraryVersionInfo(), TIFF_HASH, TIFF_ORIGIN),
+            formatLibInfo(wxJPEGHandler::GetLibraryVersionInfo(), JPEG_HASH, JPEG_ORIGIN),
+            formatLibInfo(wxPNGHandler::GetLibraryVersionInfo(), PNG_HASH, PNG_ORIGIN),
+            formatLibInfo(wxWEBPHandler::GetLibraryVersionInfo(), LIBWEBP_HASH, LIBWEBP_ORIGIN),
+            formatLibInfo(wxRegEx::GetLibraryVersionInfo(), PCRE_HASH, PCRE_ORIGIN),
+            formatLibInfo(wxXmlDocument::GetLibraryVersionInfo(), EXPAT_HASH, EXPAT_ORIGIN),
+            formatLibInfo(wxStyledTextCtrl::GetLibraryVersionInfo(), SCINTILLA_HASH,
+                          SCINTILLA_ORIGIN),
+            formatLibInfo(wxGetZlibVersionInfo(), ZLIB_HASH, ZLIB_ORIGIN),
             /// @todo uncomment if WebView is ever included
             // formatLibInfo(wxWebView::GetBackendVersionInfo()),
             // submodules without version information
-            formatLibInfo(wxVersionInfo{ L"NanoSVG", -1 }),
+            formatLibInfo(wxVersionInfo{ L"NanoSVG", -1 }, NANOSVG_HASH, NANOSVG_ORIGIN),
             formatLibInfo(wxVersionInfo{ L"CRC++", CRCPP_MAJOR_VERSION, CRCPP_MINOR_VERSION,
                                          CRCPP_PATCH_VERSION, CRCPP_REVISION_VERSION, wxString{},
-                                         CRCPP_COPYRIGHT }),
-            formatLibInfo(wxVersionInfo{ L"wxStartPage", -1 }),
-            formatLibInfo(wxVersionInfo{ L"easyexif", -1, 0, 0, 0, wxString{},
-                                         easyexif::EASYEXIF_COPYRIGHT }),
-            formatLibInfo(wxVersionInfo{ L"UTF8-CPP", -1 })
+                                         CRCPP_COPYRIGHT },
+                          CRCPP_HASH, CRCPP_ORIGIN),
+            formatLibInfo(wxVersionInfo{ L"wxStartPage", -1 }, WXSTARTPAGE_HASH,
+                          WXSTARTPAGE_ORIGIN),
+            formatLibInfo(
+                wxVersionInfo{ L"easyexif", -1, 0, 0, 0, wxString{}, easyexif::EASYEXIF_COPYRIGHT },
+                EASYEXIF_HASH, EASYEXIF_ORIGIN),
+            formatLibInfo(wxVersionInfo{ L"UTF8-CPP", -1 }, UTFCPP_HASH, UTFCPP_ORIGIN)
         };
 
         std::ranges::sort(allLibInfo,
@@ -412,8 +435,9 @@ void AboutDialogEx::CreateControls()
         }();
 
         mainPanelSizer->Add(
-            new wxStaticText(componentsPage, wxID_ANY,
-                             /* TRANSLATORS: program library */ _(L"Included libraries:")),
+            new wxStaticText(
+                componentsPage, wxID_ANY,
+                /* TRANSLATORS: program libraries */ _(L"Software bill of materials:")),
             wxSizerFlags{}.Border(wxLEFT));
         auto* textRowSizer = new wxBoxSizer(wxHORIZONTAL);
         auto* textWindow =
