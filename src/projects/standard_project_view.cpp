@@ -1793,7 +1793,7 @@ void ProjectView::UpdateStatistics()
                 statistics::median(ages), 1, wxNumberFormatter::Style::Style_NoTrailingZeroes);
             const std::set<double> modes = statistics::mode(ages, floor_value<double>{});
             ageMode.Clear();
-            for (double mode : modes)
+            for (const double mode : modes)
                 {
                 ageMode += wxNumberFormatter::ToString(
                                mode, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
