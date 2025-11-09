@@ -55,6 +55,7 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebarbook.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include "../../webharvester/webharvester.h"
+#include <utility>
 #include <wx/arrstr.h>
 #include <wx/bmpbuttn.h>
 #include <wx/collpane.h>
@@ -62,7 +63,6 @@
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 #include <wx/wx.h>
-#include <utility>
 
 /// @private
 /// @internal Dialog for prompting a user for a block of HTML code to extract links from.
