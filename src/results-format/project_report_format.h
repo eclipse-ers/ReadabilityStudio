@@ -109,9 +109,10 @@ class ProjectReportFormat
                This is because FormatStatisticsInfo() uses this function to append\n
                Dolch statistics to its own @c listData argument.*/
     [[nodiscard]]
-    static wxString
-    FormatDolchStatisticsInfo(const BaseProject* project, const StatisticsReportInfo& statsInfo, bool includeExplanation, const wxColour& attentionColor,
-                              const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
+    static wxString FormatDolchStatisticsInfo(
+        const BaseProject* project, const StatisticsReportInfo& statsInfo, bool includeExplanation,
+        const wxColour& attentionColor,
+        const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     /** @brief Formats a full sentence from a project's sentence information structure.
         @param project The project containing the sentence and words.
         @param sentence The iterator to the sentence structure.

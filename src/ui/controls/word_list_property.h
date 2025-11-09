@@ -73,7 +73,7 @@ class WordListProperty final : public wxLongStringProperty
         @param name The property name.
         @param value The file path to the word list.*/
     explicit WordListProperty(const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL,
-                     const wxString& value = wxString{});
+                              const wxString& value = wxString{});
     /// @private
     [[nodiscard]]
     wxValidator* DoGetValidator() const final;

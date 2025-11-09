@@ -1199,7 +1199,7 @@ void CustomTestDlg::SelectPage(const wxWindowID pageId)
     {
     for (size_t i = 0; i < m_sideBarBook->GetPageCount(); ++i)
         {
-        wxWindow const* page = m_sideBarBook->GetPage(i);
+        const wxWindow* page = m_sideBarBook->GetPage(i);
         if ((page != nullptr) && page->GetId() == pageId)
             {
             m_sideBarBook->SetSelection(i);
