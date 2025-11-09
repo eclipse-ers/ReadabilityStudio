@@ -62,7 +62,6 @@
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 #include <wx/wx.h>
-
 #include <utility>
 
 /// @private

@@ -48,10 +48,9 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "readability_messages.h"
-
-#include <algorithm>
 #include "wx/numformatter.h"
 #include "wx/tokenzr.h"
+#include <algorithm>
 
 //-----------------------------------------------
 wxString ReadabilityMessages::GetGradeScaleLongLabel(size_t grade) const
