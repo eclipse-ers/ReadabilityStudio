@@ -631,13 +631,10 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
 #endif
 
     // connect the test events
-    for (auto rTest =
-             dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests().cbegin();
-         rTest !=
-         dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests().cend();
-         ++rTest)
+    for (const auto& rTest :
+         dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests())
         {
-        Connect(rTest->get_test().get_interface_id(), wxEVT_MENU,
+        Connect(rTest.get_test().get_interface_id(), wxEVT_MENU,
                 wxCommandEventHandler(BatchProjectView::OnAddTest));
         }
 
@@ -2900,11 +2897,11 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
             return;
             }
 
-        for (size_t fileIter = 0; fileIter < selectedFilePaths.size(); ++fileIter)
+        for (const auto& selectedFilePath : selectedFilePaths)
             {
             if (event.GetId() == XRCID("ID_EXPORT_FILTERED_DOCUMENT"))
                 {
-                const BaseProject* subProject = doc->GetDocument(selectedFilePaths[fileIter].first);
+                const BaseProject* subProject = doc->GetDocument(selectedFilePath.first);
                 if (subProject == nullptr)
                     {
                     wxMessageBox(_(L"Unable to find selected subproject."), _(L"Error"),
@@ -2971,23 +2968,22 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
                         // so that it gets analyzed the same way.
                         // Also, if there were any special settings for this subproject,
                         // then copy over its settings on top of the batch project's settings.
-                        auto* const newDoc = dynamic_cast<ProjectDoc*>(docTemplate->CreateDocument(
-                            selectedFilePaths[fileIter].first, wxDOC_SILENT));
+                        auto* const newDoc = dynamic_cast<ProjectDoc*>(
+                            docTemplate->CreateDocument(selectedFilePath.first, wxDOC_SILENT));
                         if (newDoc == nullptr)
                             {
                             return;
                             }
                         newDoc->CopyDocumentLevelSettings(*doc, false);
-                        const BaseProject* subDocument =
-                            doc->GetDocument(selectedFilePaths[fileIter].first);
+                        const BaseProject* subDocument = doc->GetDocument(selectedFilePath.first);
                         if (subDocument != nullptr)
                             {
                             newDoc->CopySettings(*subDocument);
                             }
                         newDoc->SetUIMode(true);
                         // set the document path
-                        newDoc->SetOriginalDocumentFilePath(selectedFilePaths[fileIter].first);
-                        newDoc->SetOriginalDocumentDescription(selectedFilePaths[fileIter].second);
+                        newDoc->SetOriginalDocumentFilePath(selectedFilePath.first);
+                        newDoc->SetOriginalDocumentDescription(selectedFilePath.second);
                         if (!newDoc->OnNewDocument())
                             {
                             // Document is implicitly deleted by DeleteAllViews
@@ -3031,7 +3027,7 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
                 }
             else if (event.GetId() == XRCID("ID_LAUNCH_SOURCE_FILE"))
                 {
-                const FilePathResolver resolvePath(selectedFilePaths[fileIter].first, false);
+                const FilePathResolver resolvePath(selectedFilePath.first, false);
                 if (doc->GetDocumentStorageMethod() == TextStorage::EmbedText)
                     {
                     std::vector<BaseProject*>::iterator subDocPos;
@@ -3039,7 +3035,7 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
                          subDocPos != doc->GetDocuments().end(); ++subDocPos)
                         {
                         if (CompareFilePaths((*subDocPos)->GetOriginalDocumentFilePath(),
-                                             selectedFilePaths[fileIter].first) == 0)
+                                             selectedFilePath.first) == 0)
                             {
                             break;
                             }
@@ -3075,13 +3071,11 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
                                 {
                                 doc->SetModifiedFlag();
                                 doc->SetDocumentStorageMethod(TextStorage::NoEmbedText);
-                                for (auto subDocIter = doc->GetDocuments().begin();
-                                     subDocIter != doc->GetDocuments().end(); ++subDocIter)
+                                for (auto& subDoc : doc->GetDocuments())
                                     {
-                                    (*subDocIter)
-                                        ->SetDocumentStorageMethod(TextStorage::NoEmbedText);
+                                    subDoc->SetDocumentStorageMethod(TextStorage::NoEmbedText);
                                     }
-                                wxLaunchDefaultApplication(selectedFilePaths[fileIter].first);
+                                wxLaunchDefaultApplication(selectedFilePath.first);
                                 return;
                                 }
                             }
@@ -3091,12 +3085,11 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
                             {
                             doc->SetModifiedFlag();
                             doc->SetDocumentStorageMethod(TextStorage::NoEmbedText);
-                            for (auto subDocIter = doc->GetDocuments().begin();
-                                 subDocIter != doc->GetDocuments().end(); ++subDocIter)
+                            for (auto& subDoc : doc->GetDocuments())
                                 {
-                                (*subDocIter)->SetDocumentStorageMethod(TextStorage::NoEmbedText);
+                                subDoc->SetDocumentStorageMethod(TextStorage::NoEmbedText);
                                 }
-                            wxLaunchDefaultApplication(selectedFilePaths[fileIter].first);
+                            wxLaunchDefaultApplication(selectedFilePath.first);
                             return;
                             }
                         }

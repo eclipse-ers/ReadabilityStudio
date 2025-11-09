@@ -142,15 +142,15 @@ class EditTextDlg final : public wxDialog
 
     /// Creates the controls and sizers.
     void CreateControls();
-    void OnEditButtons(wxRibbonButtonBarEvent& event);
-    void OnLineSpaceSelected(wxCommandEvent& event);
+    void OnEditButtons(const wxRibbonButtonBarEvent& event);
+    void OnLineSpaceSelected(const wxCommandEvent& event);
     void OnParagraphSpaceSelected([[maybe_unused]] wxCommandEvent& event);
     void OnSaveButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnTextChanged([[maybe_unused]] wxCommandEvent& event);
     void OnClose([[maybe_unused]] wxCloseEvent& event);
     void OnShowFindDialog([[maybe_unused]] wxCommandEvent& event);
     void OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event);
-    void OnFindDialog(wxFindDialogEvent& event);
+    void OnFindDialog(const wxFindDialogEvent& event);
     void OnOK([[maybe_unused]] wxCommandEvent& event);
 
     void Save();

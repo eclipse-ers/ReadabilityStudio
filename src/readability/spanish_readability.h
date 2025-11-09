@@ -54,7 +54,6 @@
 #include "english_readability.h"
 #include "grade_scales.h"
 #include <algorithm>
-#include <cmath>
 #include <stdexcept>
 
 namespace readability
@@ -77,7 +76,7 @@ namespace readability
             {
             throw std::domain_error("invalid word count");
             }
-        const double normalizationFactor = safe_divide<double>(100, number_of_words);
+        const auto normalizationFactor = safe_divide<double>(100, number_of_words);
 
         const double result = (-.205 * (number_of_sentences * normalizationFactor)) +
                               (.049 * (number_of_syllables * normalizationFactor)) - 3.407;

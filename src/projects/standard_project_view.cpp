@@ -1793,10 +1793,10 @@ void ProjectView::UpdateStatistics()
                 statistics::median(ages), 1, wxNumberFormatter::Style::Style_NoTrailingZeroes);
             const std::set<double> modes = statistics::mode(ages, floor_value<double>{});
             ageMode.Clear();
-            for (auto modesIter = modes.cbegin(); modesIter != modes.cend(); ++modesIter)
+            for (double mode : modes)
                 {
                 ageMode += wxNumberFormatter::ToString(
-                               *modesIter, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
+                               mode, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
                            L"; ";
                 }
             // chop off the last "; "
@@ -1815,10 +1815,10 @@ void ProjectView::UpdateStatistics()
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes);
             const std::set<double> modes = statistics::mode(clozeScores, floor_value<double>{});
             clozeMode.Clear();
-            for (auto modesIter = modes.cbegin(); modesIter != modes.cend(); ++modesIter)
+            for (const double mode : modes)
                 {
                 clozeMode += wxNumberFormatter::ToString(
-                                 *modesIter, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
+                                 mode, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
                              L"; ";
                 }
             // chop off the last "; "

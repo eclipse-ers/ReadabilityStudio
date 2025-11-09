@@ -1329,9 +1329,9 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         // list the cells in the grid
         const size_t currentFileCount = m_fileData->GetItemCount();
         size_t cellCount = 0;
-        for (size_t i = 0; i < workSheets.size(); ++i)
+        for (auto& workSheet : workSheets)
             {
-            cellCount += workSheets[i].second.size();
+            cellCount += workSheet.second.size();
             }
         m_fileData->SetSize(currentFileCount + cellCount, 2);
 

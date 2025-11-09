@@ -48,6 +48,8 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "readability_messages.h"
+
+#include <algorithm>
 #include "wx/numformatter.h"
 #include "wx/tokenzr.h"
 
@@ -188,10 +190,7 @@ wxString ReadabilityMessages::GetFormattedValue(const wxString& value,
 //-----------------------------------------------
 wxString ReadabilityMessages::GetMonthLabel(size_t month)
     {
-    if (month > 9)
-        {
-        month = 9;
-        }
+    month = std::min<size_t>(month, 9);
 
     switch (month)
         {

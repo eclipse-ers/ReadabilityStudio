@@ -107,7 +107,7 @@ class FilteredTextPreviewDlg final : public Wisteria::UI::DialogWithHelp
     /// @param show @c true to expand it, @c false to collapse it.
     void ShowDetails(const bool show = true)
         {
-        if (m_collPane)
+        if (m_collPane != nullptr)
             {
             if (show)
                 {

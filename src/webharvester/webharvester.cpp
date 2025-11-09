@@ -57,11 +57,11 @@ bool wxStringLessWebPath::operator()(const wxString& first, const wxString& seco
     FilePathResolver resolver;
     wxString firstPath = resolver.ResolvePath(first, true);
     wxString secondPath = resolver.ResolvePath(second, true);
-    if (firstPath.length() > 0 && firstPath[firstPath.length() - 1] == L'/')
+    if (!firstPath.empty() && firstPath[firstPath.length() - 1] == L'/')
         {
         firstPath.RemoveLast();
         }
-    if (secondPath.length() > 0 && secondPath[secondPath.length() - 1] == L'/')
+    if (!secondPath.empty() && secondPath[secondPath.length() - 1] == L'/')
         {
         secondPath.RemoveLast();
         }
@@ -91,7 +91,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
     const wxRegEx re(L"^(http|https|ftp|ftps|gopher|file)://", wxRE_ICASE | wxRE_EXTENDED);
     re.ReplaceFirst(&urlLocalFileFriendlyName, wxString{});
     // in case of an url like www.company.com/events/
-    if (urlLocalFileFriendlyName.length() > 0 &&
+    if (!urlLocalFileFriendlyName.empty() &&
         urlLocalFileFriendlyName[urlLocalFileFriendlyName.length() - 1] == L'/')
         {
         // chop off the trailing '/'
@@ -106,7 +106,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
 
     // first create the folder to save the file
     wxString downloadPath = m_downloadDirectory;
-    if (downloadPath.length() > 0 &&
+    if (!downloadPath.empty() &&
         downloadPath[downloadPath.length() - 1] != wxFileName::GetPathSeparator())
         {
         downloadPath += wxFileName::GetPathSeparator();
@@ -122,7 +122,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
         webDirPath.Replace(L"/", L"\\");
 #endif
         webDirPath = StripIllegalFileCharacters(webDirPath);
-        if (webDirPath.length() > 0 &&
+        if (!webDirPath.empty() &&
             webDirPath[webDirPath.length() - 1] != wxFileName::GetPathSeparator())
             {
             webDirPath += wxFileName::GetPathSeparator();
@@ -134,7 +134,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
 
     // and see where it will be downloaded locally
     // (make sure file name is legal for the local file system)
-    wxString fileName = wxFileName(urlLocalFileFriendlyName).GetFullName();
+    const wxString fileName = wxFileName(urlLocalFileFriendlyName).GetFullName();
     if (fileName.empty())
         {
         return {};
@@ -162,7 +162,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
             wxLogVerbose(L"'%s': querying file type from MIME type", Url);
             int rCode{ 200 };
             const wxString downloadExt = StripIllegalFileCharacters(
-                fileExtension.length() ? fileExtension :
+                !fileExtension.empty() ? fileExtension :
                                          GetFileTypeFromContentType(GetContentType(Url, rCode)));
             // If we needed to connect to the page to get its MIME type, then check the response
             // code while we are at it. Bail early if we got a bad response (or timed out).
@@ -231,7 +231,7 @@ wxString WebHarvester::DownloadFile(wxString& Url, const wxString& fileExtension
                     {
                     cookies += cookie + L';';
                     }
-                if (cookies.length() > 0 && cookies[cookies.length() - 1] == L';')
+                if (!cookies.empty() && cookies[cookies.length() - 1] == L';')
                     {
                     cookies.erase(cookies.length() - 1);
                     }
@@ -344,7 +344,7 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
                      QueueDownload::GetResponseMessage(responseCode));
         return false;
         }
-    if (m_downloader.GetLastRead().size() > 0)
+    if (!m_downloader.GetLastRead().empty())
         {
         contentType = m_downloader.GetLastContentType();
         if (contentType.empty())
@@ -353,7 +353,7 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
             }
 
         // first make sure it is really a webpage
-        if (acceptOnlyHtmlOrScriptFiles && contentType.length() &&
+        if (acceptOnlyHtmlOrScriptFiles && !contentType.empty() &&
             string_util::strnicmp(contentType.wc_str(), HTML_CONTENT_TYPE.data(),
                                   HTML_CONTENT_TYPE.length()) != 0 &&
             string_util::strnicmp(contentType.wc_str(), JAVASCRIPT_CONTENT_TYPE.data(),
@@ -531,7 +531,7 @@ bool WebHarvester::CrawlLinks(wxString& url,
             {
             std::wstring cookies = html_utilities::javascript_hyperlink_parse::get_cookies(
                 { fileText.wc_str(), fileText.length() });
-            if (cookies.length() > 0)
+            if (!cookies.empty())
                 {
                 if (m_persistJsCookies)
                     {
@@ -541,7 +541,7 @@ bool WebHarvester::CrawlLinks(wxString& url,
                         {
                         cookies += cookie + L';';
                         }
-                    if (cookies.length() > 0 && cookies[cookies.length() - 1] == L';')
+                    if (!cookies.empty() && cookies[cookies.length() - 1] == L';')
                         {
                         cookies.erase(cookies.length() - 1);
                         }
@@ -833,7 +833,7 @@ void WebHarvester::CrawlLink(const wxString& currentLink,
                 }
             // ...finally, not a webpage and an unknown extension.
             // Just figure out its real type and see if we should download it
-            else if (contentType.length())
+            if (contentType.length())
                 {
                 fileExt = GetFileTypeFromContentType(contentType);
                 if (VerifyFileExtension(fileExt))
@@ -920,7 +920,7 @@ bool WebHarvester::HarvestLink(wxString& url, const wxString& fileExtension)
     if (IsDownloadingFilesWhileCrawling())
         {
         wxString downloadPath = DownloadFile(url, fileExtension);
-        if (downloadPath.length())
+        if (!downloadPath.empty())
             {
             // Some image links are actually HTML pages being used as a gallery of sorts
             // for an image, so treat it as such if the MIME type indicates that.
@@ -999,11 +999,9 @@ wxString WebHarvester::GetCharsetFromContentType(const wxString& contentType)
         charSet.Trim(true);
         return charSet;
         }
-    else
-        {
-        const wxString encoding = wxLocale::GetSystemEncodingName().MakeLower();
-        return (encoding.find(L"utf") != wxString::npos) ? wxString{ L"windows-1252" } : encoding;
-        }
+
+    const wxString encoding = wxLocale::GetSystemEncodingName().MakeLower();
+    return (encoding.find(L"utf") != wxString::npos) ? wxString{ L"windows-1252" } : encoding;
     }
 
 //----------------------------------

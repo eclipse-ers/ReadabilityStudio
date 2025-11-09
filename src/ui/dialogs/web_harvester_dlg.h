@@ -63,6 +63,8 @@
 #include <wx/spinctrl.h>
 #include <wx/wx.h>
 
+#include <utility>
+
 /// @private
 /// @internal Dialog for prompting a user for a block of HTML code to extract links from.
 class LinkDialog final : public wxDialog
@@ -80,7 +82,7 @@ class LinkDialog final : public wxDialog
 
     void OnOK([[maybe_unused]] wxCommandEvent& event);
 
-  protected:
+  private:
     Wisteria::UI::CodeEditor* m_codeWindow{ nullptr };
     };
 
@@ -91,12 +93,13 @@ class WebHarvesterDlg final : public Wisteria::UI::DialogWithHelp
     /// @brief Constructor.
     /// @note Call UpdateFromHarvesterSettings() to fill in the remaining settings
     ///     from an existing WebHarvester object.
-    WebHarvesterDlg(wxWindow* parent, wxArrayString urls, const wxString& fullDocFilter,
-                    const wxString& selectedDocFilter, const bool hideLocalDownloadOption,
-                    wxWindowID id = wxID_ANY, const wxString& caption = _(L"Web Harvester"),
+    WebHarvesterDlg(wxWindow* parent, wxArrayString urls, wxString fullDocFilter,
+                    wxString selectedDocFilter, const bool hideLocalDownloadOption,
+                    const wxWindowID id = wxID_ANY, const wxString& caption = _(L"Web Harvester"),
                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                    long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-        : m_fullDocFilter(fullDocFilter), m_selectedDocFilter(selectedDocFilter),
+                    const long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        : m_fullDocFilter(std::move(fullDocFilter)),
+          m_selectedDocFilter(std::move(selectedDocFilter)),
           m_hideLocalDownloadOption(hideLocalDownloadOption), m_urls(std::move(urls))
         {
         Create(parent, id, caption, pos, size, style);
@@ -206,7 +209,7 @@ class WebHarvesterDlg final : public Wisteria::UI::DialogWithHelp
         return m_downloadFolder;
         }
 
-    void SetDownloadFolder(const wxString& dir) noexcept
+    void SetDownloadFolder(const wxString& dir)
         {
         if (wxFileName::DirExists(dir))
             {
@@ -268,7 +271,7 @@ class WebHarvesterDlg final : public Wisteria::UI::DialogWithHelp
         }
 
     [[nodiscard]]
-    wxString GetUserSpecifiedDomainsLabel() const
+    static wxString GetUserSpecifiedDomainsLabel()
         {
         return _(L"Restricted to user-defined domains");
         }

@@ -54,7 +54,6 @@
 #include "../Wisteria-Dataviz/src/util/string_util.h"
 #include "../indexing/character_traits.h"
 #include <algorithm>
-#include <functional>
 #include <set>
 
 namespace readability

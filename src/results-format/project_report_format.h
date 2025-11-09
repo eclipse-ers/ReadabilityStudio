@@ -96,7 +96,7 @@ class ProjectReportFormat
     static wxString
     FormatStatisticsInfo(const BaseProject* project, const StatisticsReportInfo& statsInfo,
                          const wxColour& attentionColor,
-                         std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase> listData);
+                         const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     /** @returns Dolch statistics information from a project.
         @param project The project to analyze Dolch statistics from.
         @param statsInfo Information about which statistics to include.
@@ -110,9 +110,8 @@ class ProjectReportFormat
                Dolch statistics to its own @c listData argument.*/
     [[nodiscard]]
     static wxString
-    FormatDolchStatisticsInfo(const BaseProject* project, const StatisticsReportInfo& statsInfo,
-                              const bool includeExplanation, const wxColour& attentionColor,
-                              std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase> listData);
+    FormatDolchStatisticsInfo(const BaseProject* project, const StatisticsReportInfo& statsInfo, bool includeExplanation, const wxColour& attentionColor,
+                              const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     /** @brief Formats a full sentence from a project's sentence information structure.
         @param project The project containing the sentence and words.
         @param sentence The iterator to the sentence structure.

@@ -191,7 +191,7 @@ wxString ProjectReportFormat::FormatFormulaToHtml(const wxString& formula)
 wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     const BaseProject* project, const StatisticsReportInfo& statsInfo,
     const bool includeExplanation, const wxColour& attentionColor,
-    std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase> listData)
+    const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData)
     {
     assert(project);
     if (project == nullptr)
@@ -1292,7 +1292,7 @@ wxString ProjectReportFormat::FormatHtmlReportEnd() { return { L"\n</body>\n</ht
 wxString ProjectReportFormat::FormatStatisticsInfo(
     const BaseProject* project, const StatisticsReportInfo& statsInfo,
     const wxColour& attentionColor,
-    std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase> listData)
+    const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData)
     {
     PROFILE();
     if (project == nullptr)

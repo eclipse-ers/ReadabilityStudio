@@ -50,7 +50,7 @@
 #ifndef GRADE_SCALES_H
 #define GRADE_SCALES_H
 
-#include <functional>
+#include <algorithm>
 
 namespace readability
     {
@@ -168,13 +168,10 @@ namespace readability
         USGradeScore = truncate_k12_plus_grade(USGradeScore);
         // split up the number
         double intpart{ 0.0 };
-        double fractpart = std::modf(USGradeScore, &intpart);
+        const double fractpart = std::modf(USGradeScore, &intpart);
         grade = static_cast<size_t>(intpart);
         month = static_cast<size_t>(round_to_integer(fractpart * 10));
-        if (month > 9)
-            {
-            month = 9;
-            }
+        month = std::min<size_t>(month, 9);
         }
     } // namespace readability
 

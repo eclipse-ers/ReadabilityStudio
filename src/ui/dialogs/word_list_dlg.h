@@ -99,10 +99,11 @@ class WordListDlg final : public wxDialog
     void OnRibbonButton(wxRibbonButtonBarEvent& event);
     void OnNegative(wxCommandEvent& event);
     void OnClose([[maybe_unused]] wxCloseEvent& event);
-    void AddSingleColumnPage(Wisteria::UI::SideBarBook* sideBar, const int id, const int listId,
-                             const wxString& label, const int imageId,
-                             const std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider>& data,
-                             const word_list& wordList);
+    static void
+    AddSingleColumnPage(Wisteria::UI::SideBarBook* sideBar, const int id, const int listId,
+                        const wxString& label, const int imageId,
+                        const std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider>& data,
+                        const word_list& wordList);
 
     constexpr static int DALE_CHALL_LIST_ID = wxID_HIGHEST + 5;
     constexpr static int STOCKER_LIST_ID = wxID_HIGHEST + 6;

@@ -334,11 +334,9 @@ bool BaseProject::IsIncludingClozeTest() const
             return true;
             }
         }
-    for (std::vector<CustomReadabilityTestInterface>::const_iterator customTestPos =
-             GetCustTestsInUse().cbegin();
-         customTestPos != GetCustTestsInUse().cend(); ++customTestPos)
+    for (const auto& customTest : GetCustTestsInUse())
         {
-        if (customTestPos->GetIterator()->get_test_type() ==
+        if (customTest.GetIterator()->get_test_type() ==
             readability::readability_test_type::predicted_cloze_score)
             {
             return true;
@@ -3748,18 +3746,18 @@ BaseProject::ExtractRawTextWithEncoding(const std::wstring& sourceFileText,
 std::pair<bool, std::wstring> BaseProject::ExtractDocxRawText(std::string_view sourceFileText)
     {
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    lily_of_the_valley::word2007_extract_text filter_docx;
-    filter_docx.set_log_message_separator(L", ");
+    lily_of_the_valley::word2007_extract_text filterDocx;
+    filterDocx.set_log_message_separator(L", ");
     const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring docxMetaFileText = archive.ReadTextFile(L"docProps/core.xml");
     if (!docxMetaFileText.empty())
         {
-        filter_docx.read_meta_data(docxMetaFileText.c_str(), docxMetaFileText.length());
-        SetOriginalDocumentDescription(coalesce<wchar_t>(
-            { GetOriginalDocumentDescription().wc_str(), filter_docx.get_subject(),
-              filter_docx.get_title(), filter_docx.get_keywords(), filter_docx.get_description(),
-              filter_docx.get_author(),
-              wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
+        filterDocx.read_meta_data(docxMetaFileText.c_str(), docxMetaFileText.length());
+        SetOriginalDocumentDescription(
+            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterDocx.get_subject(),
+                                filterDocx.get_title(), filterDocx.get_keywords(),
+                                filterDocx.get_description(), filterDocx.get_author(),
+                                wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
         }
     if (archive.Find(L"word/document.xml") == nullptr)
         {
@@ -3772,12 +3770,12 @@ std::pair<bool, std::wstring> BaseProject::ExtractDocxRawText(std::string_view s
     const std::wstring docxFileText = archive.ReadTextFile(L"word/document.xml");
     try
         {
-        filter_docx(docxFileText.c_str(), docxFileText.length());
-        if (!filter_docx.get_log().empty())
+        filterDocx(docxFileText.c_str(), docxFileText.length());
+        if (!filterDocx.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_docx.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterDocx.get_log());
             }
-        std::wstring extractedText = filter_docx.get_filtered_buffer();
+        std::wstring extractedText = filterDocx.get_filtered_buffer();
         if (convertDiacritics(extractedText))
             {
             extractedText = convertDiacritics.get_conversion();
@@ -3799,19 +3797,19 @@ std::pair<bool, std::wstring> BaseProject::ExtractDocRawText(std::string_view so
     try
         {
         grammar::convert_ligatures_and_diacritics convertDiacritics;
-        lily_of_the_valley::word1997_extract_text filter_word; // Word 97-2003
-        filter_word.set_log_message_separator(L", ");
-        filter_word(sourceFileText.data(), sourceFileText.length());
-        if (!filter_word.get_log().empty())
+        lily_of_the_valley::word1997_extract_text filterWord; // Word 97-2003
+        filterWord.set_log_message_separator(L", ");
+        filterWord(sourceFileText.data(), sourceFileText.length());
+        if (!filterWord.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_word.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterWord.get_log());
             }
-        SetOriginalDocumentDescription(coalesce<wchar_t>(
-            { GetOriginalDocumentDescription().wc_str(), filter_word.get_subject(),
-              filter_word.get_title(), filter_word.get_keywords(), filter_word.get_comments(),
-              filter_word.get_author(),
-              wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
-        std::wstring extractedText = filter_word.get_filtered_buffer();
+        SetOriginalDocumentDescription(
+            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterWord.get_subject(),
+                                filterWord.get_title(), filterWord.get_keywords(),
+                                filterWord.get_comments(), filterWord.get_author(),
+                                wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
+        std::wstring extractedText = filterWord.get_filtered_buffer();
         if (convertDiacritics(extractedText))
             {
             extractedText = convertDiacritics.get_conversion();
@@ -3893,19 +3891,19 @@ std::pair<bool, std::wstring> BaseProject::ExtractRtfRawText(std::string_view so
     try
         {
         grammar::convert_ligatures_and_diacritics convertDiacritics;
-        lily_of_the_valley::rtf_extract_text filter_rtf;
-        filter_rtf.set_log_message_separator(L", ");
-        filter_rtf(sourceFileText.data(), sourceFileText.length());
-        if (!filter_rtf.get_log().empty())
+        lily_of_the_valley::rtf_extract_text filterRtf;
+        filterRtf.set_log_message_separator(L", ");
+        filterRtf(sourceFileText.data(), sourceFileText.length());
+        if (!filterRtf.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_rtf.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterRtf.get_log());
             }
         SetOriginalDocumentDescription(
-            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filter_rtf.get_subject(),
-                                filter_rtf.get_title(), filter_rtf.get_keywords(),
-                                filter_rtf.get_comments(), filter_rtf.get_author(),
+            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterRtf.get_subject(),
+                                filterRtf.get_title(), filterRtf.get_keywords(),
+                                filterRtf.get_comments(), filterRtf.get_author(),
                                 wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
-        std::wstring extractedText = filter_rtf.get_filtered_buffer();
+        std::wstring extractedText = filterRtf.get_filtered_buffer();
         if (convertDiacritics(extractedText))
             {
             extractedText = convertDiacritics.get_conversion();
@@ -3960,19 +3958,19 @@ std::pair<bool, std::wstring> BaseProject::ExtractRtfRawText(std::string_view so
 //------------------------------------------------
 std::pair<bool, std::wstring> BaseProject::ExtractPostscriptRawText(std::string_view sourceFileText)
     {
-    lily_of_the_valley::postscript_extract_text filter_ps;
-    filter_ps.set_log_message_separator(L", ");
+    lily_of_the_valley::postscript_extract_text filterPs;
+    filterPs.set_log_message_separator(L", ");
     try
         {
-        filter_ps(sourceFileText.data(), sourceFileText.length());
-        if (!filter_ps.get_log().empty())
+        filterPs(sourceFileText.data(), sourceFileText.length());
+        if (!filterPs.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_ps.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterPs.get_log());
             }
         SetOriginalDocumentDescription(
-            coalesce({ GetOriginalDocumentDescription(), wxString(filter_ps.get_title()),
+            coalesce({ GetOriginalDocumentDescription(), wxString(filterPs.get_title()),
                        wxFileName(GetOriginalDocumentFilePath()).GetName() }));
-        return std::make_pair(true, std::move(filter_ps.get_filtered_buffer()));
+        return std::make_pair(true, std::move(filterPs.get_filtered_buffer()));
         }
     catch (const lily_of_the_valley::postscript_extract_text::postscript_header_not_found&)
         {
@@ -4001,17 +3999,17 @@ std::pair<bool, std::wstring>
 BaseProject::ExtractOpenDocumentRawText(std::string_view sourceFileText)
     {
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    lily_of_the_valley::odt_odp_extract_text filter_odt;
-    filter_odt.set_log_message_separator(L", ");
+    lily_of_the_valley::odt_odp_extract_text filterOdt;
+    filterOdt.set_log_message_separator(L", ");
     const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring odtMetaFileText = archive.ReadTextFile(L"meta.xml");
     if (!odtMetaFileText.empty())
         {
-        filter_odt.read_meta_data(odtMetaFileText.c_str(), odtMetaFileText.length());
+        filterOdt.read_meta_data(odtMetaFileText.c_str(), odtMetaFileText.length());
         SetOriginalDocumentDescription(
-            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filter_odt.get_subject(),
-                                filter_odt.get_title(), filter_odt.get_keywords(),
-                                filter_odt.get_description(), filter_odt.get_author(),
+            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterOdt.get_subject(),
+                                filterOdt.get_title(), filterOdt.get_keywords(),
+                                filterOdt.get_description(), filterOdt.get_author(),
                                 wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
         }
     const std::wstring odtFileText = archive.ReadTextFile(L"content.xml");
@@ -4024,12 +4022,12 @@ BaseProject::ExtractOpenDocumentRawText(std::string_view sourceFileText)
         }
     try
         {
-        filter_odt(odtFileText.c_str(), odtFileText.length());
-        if (!filter_odt.get_log().empty())
+        filterOdt(odtFileText.c_str(), odtFileText.length());
+        if (!filterOdt.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_odt.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterOdt.get_log());
             }
-        std::wstring extractedText = filter_odt.get_filtered_buffer();
+        std::wstring extractedText = filterOdt.get_filtered_buffer();
         if (convertDiacritics(extractedText))
             {
             extractedText = convertDiacritics.get_conversion();
@@ -4113,19 +4111,19 @@ BaseProject::ExtractHtmlRawText(std::string_view sourceFileText,
 std::pair<bool, std::wstring> BaseProject::ExtractPowerPointRawText(std::string_view sourceFileText)
     {
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    lily_of_the_valley::pptx_extract_text filter_pptx;
-    filter_pptx.set_log_message_separator(L", ");
+    lily_of_the_valley::pptx_extract_text filterPptx;
+    filterPptx.set_log_message_separator(L", ");
     std::wstring pptParsedText;
     const Wisteria::ZipCatalog archive(sourceFileText.data(), sourceFileText.length());
     const std::wstring pptMetaFileText = archive.ReadTextFile(L"docProps/core.xml");
     if (!pptMetaFileText.empty())
         {
-        filter_pptx.read_meta_data(pptMetaFileText.c_str(), pptMetaFileText.length());
-        SetOriginalDocumentDescription(coalesce<wchar_t>(
-            { GetOriginalDocumentDescription().wc_str(), filter_pptx.get_subject(),
-              filter_pptx.get_title(), filter_pptx.get_keywords(), filter_pptx.get_description(),
-              filter_pptx.get_author(),
-              wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
+        filterPptx.read_meta_data(pptMetaFileText.c_str(), pptMetaFileText.length());
+        SetOriginalDocumentDescription(
+            coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterPptx.get_subject(),
+                                filterPptx.get_title(), filterPptx.get_keywords(),
+                                filterPptx.get_description(), filterPptx.get_author(),
+                                wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
         }
     if (archive.Find(L"ppt/slides/slide1.xml") == nullptr)
         {
@@ -4142,11 +4140,11 @@ std::pair<bool, std::wstring> BaseProject::ExtractPowerPointRawText(std::string_
                 archive.ReadTextFile(wxString::Format(L"ppt/slides/slide%zu.xml", i));
             try
                 {
-                pptParsedText += filter_pptx(pptxFileText.c_str(), pptxFileText.length());
+                pptParsedText += filterPptx(pptxFileText.c_str(), pptxFileText.length());
                 pptParsedText += L"\n";
-                if (!filter_pptx.get_log().empty())
+                if (!filterPptx.get_log().empty())
                     {
-                    wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_pptx.get_log());
+                    wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterPptx.get_log());
                     }
                 }
             catch (...)
@@ -4176,19 +4174,19 @@ std::pair<bool, std::wstring> BaseProject::ExtractWorkshopRawText(std::string_vi
     try
         {
         grammar::convert_ligatures_and_diacritics convertDiacritics;
-        lily_of_the_valley::hhc_hhk_extract_text filter_hhc_hhk;
-        filter_hhc_hhk.set_log_message_separator(L", ");
+        lily_of_the_valley::hhc_hhk_extract_text filterHhcHhk;
+        filterHhcHhk.set_log_message_separator(L", ");
         const std::wstring hhStr = Wisteria::TextStream::CharStreamToUnicode(
             sourceFileText.data(), sourceFileText.length());
-        filter_hhc_hhk(hhStr.c_str(), hhStr.length());
-        if (!filter_hhc_hhk.get_log().empty())
+        filterHhcHhk(hhStr.c_str(), hhStr.length());
+        if (!filterHhcHhk.get_log().empty())
             {
-            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filter_hhc_hhk.get_log());
+            wxLogWarning(L"%s: %s", GetOriginalDocumentFilePath(), filterHhcHhk.get_log());
             }
         SetOriginalDocumentDescription(
             coalesce({ GetOriginalDocumentDescription(),
                        wxFileName(GetOriginalDocumentFilePath()).GetName() }));
-        std::wstring extractedText = filter_hhc_hhk.get_filtered_buffer();
+        std::wstring extractedText = filterHhcHhk.get_filtered_buffer();
         if (convertDiacritics(extractedText))
             {
             extractedText = convertDiacritics.get_conversion();
@@ -4214,10 +4212,10 @@ std::pair<bool, std::wstring> BaseProject::ExtractIdlRawText(std::string_view so
         Wisteria::TextStream::CharStreamToUnicode(sourceFileText.data(), sourceFileText.length());
     SetOriginalDocumentDescription(coalesce(
         { GetOriginalDocumentDescription(), wxFileName(GetOriginalDocumentFilePath()).GetName() }));
-    lily_of_the_valley::idl_extract_text filter_idl;
-    filter_idl({ unicodeStr.c_str(), unicodeStr.length() });
+    lily_of_the_valley::idl_extract_text filterIdl;
+    filterIdl({ unicodeStr.c_str(), unicodeStr.length() });
 
-    std::wstring extractedText = filter_idl.get_filtered_buffer();
+    std::wstring extractedText = filterIdl.get_filtered_buffer();
     if (convertDiacritics(extractedText))
         {
         extractedText = convertDiacritics.get_conversion();
@@ -4230,16 +4228,16 @@ std::pair<bool, std::wstring> BaseProject::ExtractCppRawText(std::string_view so
     {
     SpellCheckIgnoreProgrammerCode(true);
     grammar::convert_ligatures_and_diacritics convertDiacritics;
-    lily_of_the_valley::cpp_extract_text filter_cpp;
-    filter_cpp.include_all_comments(true);
+    lily_of_the_valley::cpp_extract_text filterCpp;
+    filterCpp.include_all_comments(true);
     const std::wstring unicodeStr =
         Wisteria::TextStream::CharStreamToUnicode(sourceFileText.data(), sourceFileText.length());
     SetOriginalDocumentDescription(
-        coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filter_cpp.get_author(),
+        coalesce<wchar_t>({ GetOriginalDocumentDescription().wc_str(), filterCpp.get_author(),
                             wxFileName(GetOriginalDocumentFilePath()).GetName().wc_str() }));
-    filter_cpp(unicodeStr.c_str(), unicodeStr.length());
+    filterCpp(unicodeStr.c_str(), unicodeStr.length());
 
-    std::wstring extractedText = filter_cpp.get_filtered_buffer();
+    std::wstring extractedText = filterCpp.get_filtered_buffer();
     if (convertDiacritics(extractedText))
         {
         extractedText = convertDiacritics.get_conversion();
@@ -4255,10 +4253,10 @@ std::pair<bool, std::wstring> BaseProject::ExtractMarkdownRawText(std::string_vi
         Wisteria::TextStream::CharStreamToUnicode(sourceFileText.data(), sourceFileText.length());
     SetOriginalDocumentDescription(coalesce(
         { GetOriginalDocumentDescription(), wxFileName(GetOriginalDocumentFilePath()).GetName() }));
-    lily_of_the_valley::markdown_extract_text filter_md;
-    filter_md({ unicodeStr.c_str(), unicodeStr.length() });
+    lily_of_the_valley::markdown_extract_text filterMd;
+    filterMd({ unicodeStr.c_str(), unicodeStr.length() });
 
-    std::wstring extractedText = filter_md.get_filtered_buffer();
+    std::wstring extractedText = filterMd.get_filtered_buffer();
     if (convertDiacritics(extractedText))
         {
         extractedText = convertDiacritics.get_conversion();
@@ -4496,19 +4494,15 @@ bool BaseProject::LoadExternalDocument()
                             return true;
                             }
                         // otherwise, fail.
-                        else
+
+                        if (WarningManager::HasWarning(_DT(L"no-embedded-text")))
                             {
-                            if (WarningManager::HasWarning(_DT(L"no-embedded-text")))
-                                {
-                                LogMessage(*WarningManager::GetWarning(_DT(L"no-embedded-text")));
-                                }
-                            return false;
+                            LogMessage(*WarningManager::GetWarning(_DT(L"no-embedded-text")));
                             }
-                        }
-                    else
-                        {
                         return false;
                         }
+
+                    return false;
                     }
                 }
             }
@@ -4536,10 +4530,8 @@ bool BaseProject::LoadExternalDocument()
                     }
                 return true;
                 }
-            else
-                {
-                return false;
-                }
+
+            return false;
             }
         // weird exception that auto-buffering won't help, so explain it to the user
         catch (const MemoryMappedFileCloudFileError&)
@@ -4615,10 +4607,8 @@ bool BaseProject::LoadExternalDocument()
                 }
             return true;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
     // or a cell in an Excel file
     else if (resolvePath.IsExcelCell())
@@ -4788,7 +4778,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
         SetLoadingOriginalTextSucceeded(false);
         return false;
         }
-    else if (GetTotalWords() < minWordCount)
+    if (GetTotalWords() < minWordCount)
         {
         LogMessage(
             wxString::Format(_(L"The text that you are analyzing is less than %zu words. "
@@ -4799,7 +4789,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
         SetLoadingOriginalTextSucceeded(false);
         return false;
         }
-    else if (GetTotalWords() < 100)
+    if (GetTotalWords() < 100)
         {
         if (WarningManager::HasWarning(_DT(L"document-less-than-100-words")))
             {
@@ -4887,8 +4877,8 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -4899,8 +4889,8 @@ bool BaseProject::AddBormuthClozeMeanTest(const bool setFocus)
         }
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -4973,8 +4963,8 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -4985,8 +4975,8 @@ bool BaseProject::AddBormuthGradePlacement35Test(const bool setFocus)
         }
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -5144,8 +5134,8 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -5156,8 +5146,8 @@ bool BaseProject::AddNewDaleChallTest(const bool setFocus)
         }
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -5238,8 +5228,8 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -5250,8 +5240,8 @@ bool BaseProject::AddDegreesOfReadingPowerGeTest(const bool setFocus)
         }
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -5331,8 +5321,8 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
 
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -5343,8 +5333,8 @@ bool BaseProject::AddDegreesOfReadingPowerTest(const bool setFocus)
         }
     if ((GetDaleChallTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -6139,7 +6129,7 @@ bool BaseProject::AddWheelerSmithBambergerVanecekTest(const bool setFocus)
         GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
-    if (!GetTotalSentenceUnits())
+    if (GetTotalSentenceUnits() == 0.0)
         {
         LogMessage(
             wxString::Format(
@@ -6210,7 +6200,7 @@ bool BaseProject::AddWheelerSmithTest(const bool setFocus)
         GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
-    if (!GetTotalSentenceUnits())
+    if (GetTotalSentenceUnits() == 0.0)
         {
         LogMessage(
             wxString::Format(
@@ -6778,7 +6768,7 @@ bool BaseProject::AddAmstadTest(const bool setFocus)
 
     try
         {
-        readability::flesch_difficulty diffLevel;
+        readability::flesch_difficulty diffLevel{};
         const size_t val = readability::amstad(
             GetTotalWords(),
             (GetFleschNumeralSyllabizeMethod() == FleschNumeralSyllabize::NumeralIsOneSyllable) ?
@@ -6976,7 +6966,7 @@ bool BaseProject::AddFleschTest(const bool setFocus)
 
     try
         {
-        readability::flesch_difficulty diffLevel;
+        readability::flesch_difficulty diffLevel{};
         const size_t val = readability::flesch_reading_ease(
             GetTotalWords(),
             (GetFleschNumeralSyllabizeMethod() == FleschNumeralSyllabize::NumeralIsOneSyllable) ?
@@ -7043,7 +7033,7 @@ bool BaseProject::AddFarrJenkinsPatersonTest(const bool setFocus)
 
     try
         {
-        readability::flesch_difficulty diffLevel;
+        readability::flesch_difficulty diffLevel{};
         const size_t val = readability::farr_jenkins_paterson(
             GetTotalWords(), GetTotalMonoSyllabicWords(), GetTotalSentences(), diffLevel);
 
@@ -7667,7 +7657,7 @@ bool BaseProject::AddEflawTest(const bool setFocus)
         return false;
         }
 
-    readability::eflaw_difficulty diffLevel;
+    readability::eflaw_difficulty diffLevel{};
 
     try
         {
@@ -7711,8 +7701,8 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
 
     if ((GetHarrisJacobsonTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalWordsFromCompleteSentencesAndHeaders()) ||
-        !GetTotalWords())
+         (GetTotalWordsFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalWords() == 0.0))
         {
         LogMessage(wxString::Format(
                        _(L"Unable to calculate %s: at least one word must be present in document."),
@@ -7723,8 +7713,8 @@ bool BaseProject::AddHarrisJacobsonTest(const bool setFocus)
         }
     if ((GetHarrisJacobsonTextExclusionMode() ==
              SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings &&
-         !GetTotalSentencesFromCompleteSentencesAndHeaders()) ||
-        !GetTotalSentences())
+         (GetTotalSentencesFromCompleteSentencesAndHeaders() == 0.0)) ||
+        (GetTotalSentences() == 0.0))
         {
         LogMessage(
             wxString::Format(
@@ -7807,7 +7797,7 @@ bool BaseProject::AddRixTest(const bool setFocus)
         GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
-    if (!GetTotalSentenceUnits())
+    if (GetTotalSentenceUnits() == 0.0)
         {
         LogMessage(
             wxString::Format(
@@ -7877,7 +7867,7 @@ bool BaseProject::AddRixGermanFiction(const bool setFocus)
         GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
-    if (!GetTotalSentenceUnits())
+    if (GetTotalSentenceUnits() == 0.0)
         {
         LogMessage(
             wxString::Format(
@@ -7947,7 +7937,7 @@ bool BaseProject::AddRixGermanNonFiction(const bool setFocus)
         GetReadabilityTests().include_test(currentTestKey, false);
         return false;
         }
-    if (!GetTotalSentenceUnits())
+    if (GetTotalSentenceUnits() == 0.0)
         {
         LogMessage(
             wxString::Format(
@@ -8030,7 +8020,7 @@ bool BaseProject::AddLixGermanChildrensLiterature(const bool setFocus)
 
     try
         {
-        readability::german_lix_difficulty diffLevel;
+        readability::german_lix_difficulty diffLevel{};
         const size_t val = readability::german_lix(diffLevel, GetTotalWords(),
                                                    GetTotalHardLixRixWords(), GetTotalSentences());
         const size_t gradeLevel =
@@ -8104,7 +8094,7 @@ bool BaseProject::AddLixGermanTechnical(const bool setFocus)
 
     try
         {
-        readability::german_lix_difficulty diffLevel;
+        readability::german_lix_difficulty diffLevel{};
         const size_t val = readability::german_lix(diffLevel, GetTotalWords(),
                                                    GetTotalHardLixRixWords(), GetTotalSentences());
         const size_t gradeLevel =
@@ -8178,7 +8168,7 @@ bool BaseProject::AddLixTest(const bool setFocus)
 
     try
         {
-        readability::lix_difficulty diffLevel;
+        readability::lix_difficulty diffLevel{};
         size_t gradeLevel{ 1 };
         const size_t val = readability::lix(diffLevel, gradeLevel, GetTotalWords(),
                                             GetTotalHardLixRixWords(), GetTotalSentences());
@@ -8583,10 +8573,8 @@ bool BaseProject::RemoveTest(const wxString& name)
             }
         return true;
         }
-    else
-        {
-        return false;
-        }
+
+    return false;
     }
 
 //------------------------------------------------------
@@ -8641,11 +8629,9 @@ bool BaseProject::FindMissingFile(const wxString& filePath,
         return false;
         }
     // alternate file path not found
-    else
-        {
-        fileBySameNameInProjectDirectory.Clear();
-        return false;
-        }
+
+    fileBySameNameInProjectDirectory.Clear();
+    return false;
     }
 
 //------------------------------------------------------

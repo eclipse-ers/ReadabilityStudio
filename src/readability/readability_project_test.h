@@ -80,7 +80,7 @@ namespace readability
         readability_project_test() = delete;
 
         /// @private
-        virtual ~readability_project_test() {}
+        virtual ~readability_project_test() = default;
 
         /// @private
         void operator=(const readability_project_test& that) noexcept

@@ -67,6 +67,7 @@
 #include "readability_test.h"
 #include <algorithm>
 #include <string>
+#include <utility>
 
 namespace readability
     {
@@ -81,9 +82,8 @@ namespace readability
         /// @brief The familiar word list type.
         using word_list_type = familiar_word_container<string_type>;
 
-        custom_test(const string_type& name, const string_type& formula,
-                    const readability_test_type result_type, const string_type& file_path,
-                    const stemming::stemming_type stem_type,
+        custom_test(string_type name, string_type formula, const readability_test_type result_type,
+                    string_type file_path, const stemming::stemming_type stem_type,
                     const bool inc_custom_familiar_word_list, const bool inc_dale_chall_list,
                     const word_list* dale_chall_list, const bool inc_spache_list,
                     const word_list* spache_list, const bool inc_harris_jacobson_list,
@@ -111,8 +111,8 @@ namespace readability
                   industryBroadcastingSelected, documentGeneralSelected, documentTechSelected,
                   documentNonNarrativeFormSelected, documentYoungAdultSelected,
                   documentChildrenSelected),
-              m_name(name), m_formula(formula), m_result_type(result_type),
-              m_familiar_word_list_file_path(file_path), m_stemming_type(stem_type),
+              m_name(std::move(name)), m_formula(std::move(formula)), m_result_type(result_type),
+              m_familiar_word_list_file_path(std::move(file_path)), m_stemming_type(stem_type),
               m_include_custom_familiar_word_list(inc_custom_familiar_word_list),
               m_familiar_words_ref_counter(new word_list_type),
               m_include_dale_chall_list(inc_dale_chall_list),
@@ -131,8 +131,8 @@ namespace readability
               m_familiar_words_must_be_on_all_included_list(
                   familiar_words_must_be_on_each_included_list),
               is_word_familiar_proper_or_numeric(nullptr, properNounMethod,
-                                                 treat_numeric_as_familiar),
-              m_included(false)
+                                                 treat_numeric_as_familiar)
+
             {
             is_word_familiar_no_stem.set_word_list(m_familiar_words_ref_counter.get());
             is_word_familiar_danish_stem.set_word_list(m_familiar_words_ref_counter.get());
@@ -319,7 +319,7 @@ namespace readability
 
         // get/set numeric/proper noun inclusion
         [[nodiscard]]
-        readability::proper_noun_counting_method get_proper_noun_method() const noexcept
+        proper_noun_counting_method get_proper_noun_method() const noexcept
             {
             return is_word_familiar_proper_or_numeric.get_proper_noun_method();
             }
@@ -483,7 +483,7 @@ namespace readability
         ///     numeric settings specified by this test.
         /// @param the_word The word to review.
         [[nodiscard]]
-        inline bool is_word_familiar(const word_typeT& the_word) const
+        bool is_word_familiar(const word_typeT& the_word) const
             {
             if (is_word_familiar_proper_or_numeric(the_word))
                 {
@@ -498,8 +498,8 @@ namespace readability
         /// situations. Note that the proper flag is just true or false for simplicity, so "count
         /// first occurrence" option is not available here.
         [[nodiscard]]
-        inline bool is_word_familiar(const word_typeT& theWord, const bool treat_proper_as_familiar,
-                                     const bool treat_numeric_as_familiar) const
+        bool is_word_familiar(const word_typeT& theWord, const bool treat_proper_as_familiar,
+                              const bool treat_numeric_as_familiar) const
             {
             is_familiar_word<word_typeT, const word_list_type, stemming::no_op_stem<string_type>>
                 temp_proper_noun_or_numeric_familiar(
@@ -566,7 +566,7 @@ namespace readability
       private:
         /// Doesn't look at proper noun and numeric settings.
         [[nodiscard]]
-        inline bool is_word_familiar_standard(const word_typeT& theWord) const
+        bool is_word_familiar_standard(const word_typeT& theWord) const
             {
             // first, see if the word is already on a list (most often the case)
             if (is_familiar_words_must_be_on_each_included_list() &&
@@ -574,8 +574,8 @@ namespace readability
                 {
                 return true;
                 }
-            else if (!is_familiar_words_must_be_on_each_included_list() &&
-                     is_word_familiar_any_included_list(theWord))
+            if (!is_familiar_words_must_be_on_each_included_list() &&
+                is_word_familiar_any_included_list(theWord))
                 {
                 return true;
                 }
@@ -605,8 +605,8 @@ namespace readability
                         {
                         return false;
                         }
-                    else if (!is_familiar_words_must_be_on_each_included_list() &&
-                             !is_word_familiar_any_included_list(currentToken))
+                    if (!is_familiar_words_must_be_on_each_included_list() &&
+                        !is_word_familiar_any_included_list(currentToken))
                         {
                         return false;
                         }
@@ -617,7 +617,7 @@ namespace readability
             }
 
         [[nodiscard]]
-        inline bool is_word_familiar_any_included_list(const word_typeT& theWord) const
+        bool is_word_familiar_any_included_list(const word_typeT& theWord) const
             {
             // first, see if the word is on any of the standard lists
             const bool onStandardLists =
@@ -661,14 +661,11 @@ namespace readability
                     return is_word_familiar_no_stem(theWord);
                     }
                 }
-            else
-                {
-                return false;
-                }
+            return false;
             }
 
         [[nodiscard]]
-        inline bool is_word_familiar_all_included_list(const word_typeT& theWord) const
+        bool is_word_familiar_all_included_list(const word_typeT& theWord) const
             {
             // If word is on all included standard lists then continue.
             // If not, then return false.

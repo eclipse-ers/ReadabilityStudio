@@ -135,7 +135,7 @@ class CustomTestDlg final : public wxDialog
     /// @param form The formula.
     void SetFormula(const wxString& form)
         {
-        if (m_formulaCtrl)
+        if (m_formulaCtrl != nullptr)
             {
             m_formulaCtrl->ClearAll();
             m_formulaCtrl->SetText(form);
@@ -146,7 +146,7 @@ class CustomTestDlg final : public wxDialog
     [[nodiscard]]
     wxString GetFormula() const
         {
-        return m_formulaCtrl ? m_formulaCtrl->GetText() : wxString{};
+        return (m_formulaCtrl != nullptr) ? m_formulaCtrl->GetText() : wxString{};
         }
 
     /// Get/Set name functions
@@ -170,7 +170,7 @@ class CustomTestDlg final : public wxDialog
     void SetWordListFilePath(const wxString& path)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetFileContainingFamiliarWordsLabel(), path);
             }
@@ -180,15 +180,16 @@ class CustomTestDlg final : public wxDialog
     wxString GetWordListFilePath() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ? m_wordListsPropertyGrid->GetPropertyValueAsString(
-                                             GetFileContainingFamiliarWordsLabel()) :
-                                         wxString{};
+        return (m_wordListsPropertyGrid != nullptr) ?
+                   m_wordListsPropertyGrid->GetPropertyValueAsString(
+                       GetFileContainingFamiliarWordsLabel()) :
+                   wxString{};
         }
 
     void SetIncludingDaleChallList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetIncludeDCWordListLabel(), include);
             }
@@ -199,7 +200,7 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingDaleChallList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ?
+        return (m_wordListsPropertyGrid != nullptr) ?
                    m_wordListsPropertyGrid->GetPropertyValueAsBool(GetIncludeDCWordListLabel()) :
                    false;
         }
@@ -207,7 +208,7 @@ class CustomTestDlg final : public wxDialog
     void SetIncludingCustomWordList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetIncludeCustomListLabel(), include);
             }
@@ -218,7 +219,7 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingCustomWordList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ?
+        return (m_wordListsPropertyGrid != nullptr) ?
                    m_wordListsPropertyGrid->GetPropertyValueAsBool(GetIncludeCustomListLabel()) :
                    false;
         }
@@ -226,7 +227,7 @@ class CustomTestDlg final : public wxDialog
     void SetIncludingSpacheList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetIncludeSpacheWordListLabel(), include);
             }
@@ -237,15 +238,16 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingSpacheList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ? m_wordListsPropertyGrid->GetPropertyValueAsBool(
-                                             GetIncludeSpacheWordListLabel()) :
-                                         false;
+        return (m_wordListsPropertyGrid != nullptr) ?
+                   m_wordListsPropertyGrid->GetPropertyValueAsBool(
+                       GetIncludeSpacheWordListLabel()) :
+                   false;
         }
 
     void SetIncludingHJList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetIncludeHJWordListLabel(), include);
             }
@@ -256,7 +258,7 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingHJList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ?
+        return (m_wordListsPropertyGrid != nullptr) ?
                    m_wordListsPropertyGrid->GetPropertyValueAsBool(GetIncludeHJWordListLabel()) :
                    false;
         }
@@ -264,7 +266,7 @@ class CustomTestDlg final : public wxDialog
     void SetIncludingStockerList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetIncludeStockerWordListLabel(), include);
             }
@@ -275,15 +277,16 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingStockerList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ? m_wordListsPropertyGrid->GetPropertyValueAsBool(
-                                             GetIncludeStockerWordListLabel()) :
-                                         false;
+        return (m_wordListsPropertyGrid != nullptr) ?
+                   m_wordListsPropertyGrid->GetPropertyValueAsBool(
+                       GetIncludeStockerWordListLabel()) :
+                   false;
         }
 
     void SetFamiliarWordsMustBeOnEachIncludedList(const bool include)
         {
         wxASSERT(m_wordListsPropertyGrid);
-        if (m_wordListsPropertyGrid)
+        if (m_wordListsPropertyGrid != nullptr)
             {
             m_wordListsPropertyGrid->SetPropertyValue(GetFamiliarWordsOnAllLabel(), include);
             }
@@ -293,7 +296,7 @@ class CustomTestDlg final : public wxDialog
     bool IsFamiliarWordsMustBeOnEachIncludedList() const
         {
         wxASSERT(m_wordListsPropertyGrid);
-        return m_wordListsPropertyGrid ?
+        return (m_wordListsPropertyGrid != nullptr) ?
                    m_wordListsPropertyGrid->IsPropertyEnabled(GetFamiliarWordsOnAllLabel()) &&
                        m_wordListsPropertyGrid->GetPropertyValueAsBool(
                            GetFamiliarWordsOnAllLabel()) :
@@ -303,7 +306,7 @@ class CustomTestDlg final : public wxDialog
     void SetProperNounMethod(const int method)
         {
         wxASSERT(m_properNounsNumbersPropertyGrid);
-        if (m_properNounsNumbersPropertyGrid)
+        if (m_properNounsNumbersPropertyGrid != nullptr)
             {
             m_properNounsNumbersPropertyGrid->SetPropertyValue(GetFamiliarityLabel(), method);
             }
@@ -313,7 +316,7 @@ class CustomTestDlg final : public wxDialog
     int GetProperNounMethod() const
         {
         wxASSERT(m_properNounsNumbersPropertyGrid);
-        return m_properNounsNumbersPropertyGrid ?
+        return (m_properNounsNumbersPropertyGrid != nullptr) ?
                    m_properNounsNumbersPropertyGrid->GetPropertyValueAsInt(GetFamiliarityLabel()) :
                    0;
         }
@@ -321,7 +324,7 @@ class CustomTestDlg final : public wxDialog
     void SetIncludingNumeric(const bool include)
         {
         wxASSERT(m_properNounsNumbersPropertyGrid);
-        if (m_properNounsNumbersPropertyGrid)
+        if (m_properNounsNumbersPropertyGrid != nullptr)
             {
             m_properNounsNumbersPropertyGrid->SetPropertyValue(GetNumeralsAsFamiliarLabel(),
                                                                include);
@@ -332,7 +335,7 @@ class CustomTestDlg final : public wxDialog
     bool IsIncludingNumeric() const
         {
         wxASSERT(m_properNounsNumbersPropertyGrid);
-        return m_properNounsNumbersPropertyGrid ?
+        return (m_properNounsNumbersPropertyGrid != nullptr) ?
                    m_properNounsNumbersPropertyGrid->GetPropertyValueAsBool(
                        GetNumeralsAsFamiliarLabel()) :
                    false;
@@ -372,7 +375,7 @@ class CustomTestDlg final : public wxDialog
     bool IsChildrensPublishingSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[0]) :
                    false;
         }
@@ -380,7 +383,7 @@ class CustomTestDlg final : public wxDialog
     void SetChildrensPublishingSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[0], select);
             }
@@ -390,7 +393,7 @@ class CustomTestDlg final : public wxDialog
     bool IsAdultPublishingSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[1]) :
                    false;
         }
@@ -398,7 +401,7 @@ class CustomTestDlg final : public wxDialog
     void SetAdultPublishingSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[1], select);
             }
@@ -408,7 +411,7 @@ class CustomTestDlg final : public wxDialog
     bool IsChildrensHealthCareTestSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[2]) :
                    false;
         }
@@ -416,7 +419,7 @@ class CustomTestDlg final : public wxDialog
     void SetChildrensHealthCareTestSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[2], select);
             }
@@ -426,7 +429,7 @@ class CustomTestDlg final : public wxDialog
     bool IsAdultHealthCareTestSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[3]) :
                    false;
         }
@@ -434,7 +437,7 @@ class CustomTestDlg final : public wxDialog
     void SetAdultHealthCareTestSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[3], select);
             }
@@ -444,7 +447,7 @@ class CustomTestDlg final : public wxDialog
     bool IsMilitaryTestSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[4]) :
                    false;
         }
@@ -452,7 +455,7 @@ class CustomTestDlg final : public wxDialog
     void SetMilitaryTestSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[4], select);
             }
@@ -462,7 +465,7 @@ class CustomTestDlg final : public wxDialog
     bool IsSecondaryLanguageSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[5]) :
                    false;
         }
@@ -470,7 +473,7 @@ class CustomTestDlg final : public wxDialog
     void SetSecondaryLanguageSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[5], select);
             }
@@ -480,7 +483,7 @@ class CustomTestDlg final : public wxDialog
     bool IsBroadcastingSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_professionNames[6]) :
                    false;
         }
@@ -488,7 +491,7 @@ class CustomTestDlg final : public wxDialog
     void SetBroadcastingSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_professionNames[6], select);
             }
@@ -499,7 +502,7 @@ class CustomTestDlg final : public wxDialog
     bool IsGeneralDocumentSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_documentNames[0]) :
                    false;
         }
@@ -507,7 +510,7 @@ class CustomTestDlg final : public wxDialog
     void SetGeneralDocumentSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_documentNames[0], select);
             }
@@ -517,7 +520,7 @@ class CustomTestDlg final : public wxDialog
     bool IsTechnicalDocumentSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_documentNames[1]) :
                    false;
         }
@@ -525,7 +528,7 @@ class CustomTestDlg final : public wxDialog
     void SetTechnicalDocumentSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_documentNames[1], select);
             }
@@ -535,7 +538,7 @@ class CustomTestDlg final : public wxDialog
     bool IsNonNarrativeFormSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_documentNames[2]) :
                    false;
         }
@@ -543,7 +546,7 @@ class CustomTestDlg final : public wxDialog
     void SetNonNarrativeFormSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_documentNames[2], select);
             }
@@ -553,7 +556,7 @@ class CustomTestDlg final : public wxDialog
     bool IsYoungAdultAndAdultLiteratureSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_documentNames[3]) :
                    false;
         }
@@ -561,7 +564,7 @@ class CustomTestDlg final : public wxDialog
     void SetYoungAdultAndAdultLiteratureSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_documentNames[3], select);
             }
@@ -571,7 +574,7 @@ class CustomTestDlg final : public wxDialog
     bool IsChildrensLiteratureSelected() const
         {
         wxASSERT(m_associationPropertyGrid);
-        return m_associationPropertyGrid ?
+        return (m_associationPropertyGrid != nullptr) ?
                    m_associationPropertyGrid->GetPropertyValueAsBool(m_documentNames[4]) :
                    false;
         }
@@ -579,7 +582,7 @@ class CustomTestDlg final : public wxDialog
     void SetChildrensLiteratureSelected(const bool select)
         {
         wxASSERT(m_associationPropertyGrid);
-        if (m_associationPropertyGrid)
+        if (m_associationPropertyGrid != nullptr)
             {
             m_associationPropertyGrid->SetPropertyValue(m_documentNames[4], select);
             }

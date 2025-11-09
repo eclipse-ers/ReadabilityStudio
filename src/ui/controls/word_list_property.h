@@ -52,7 +52,6 @@
 
 #include "../dialogs/edit_word_list_dlg.h"
 #include <wx/propgrid/advprops.h>
-#include <wx/propgrid/manager.h>
 #include <wx/propgrid/property.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/propgriddefs.h>
@@ -73,7 +72,7 @@ class WordListProperty final : public wxLongStringProperty
         @param label The label to display in the property grid.
         @param name The property name.
         @param value The file path to the word list.*/
-    WordListProperty(const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL,
+    explicit WordListProperty(const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL,
                      const wxString& value = wxString{});
     /// @private
     [[nodiscard]]

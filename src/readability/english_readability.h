@@ -95,18 +95,16 @@ namespace readability
             {
             return eflaw_difficulty::eflaw_very_easy;
             }
-        else if (index <= 25)
+        if (index <= 25)
             {
             return eflaw_difficulty::eflaw_easy;
             }
-        else if (index <= 29)
+        if (index <= 29)
             {
             return eflaw_difficulty::eflaw_confusing;
             }
-        else
-            {
-            return eflaw_difficulty::eflaw_very_confusing;
-            }
+
+        return eflaw_difficulty::eflaw_very_confusing;
         }
 
     /** McAlpine EFLAW. Test for detecting flawed (i.e., difficult) English as a
@@ -127,7 +125,7 @@ namespace readability
             {
             throw std::domain_error("invalid sentence count.");
             }
-        size_t result = static_cast<size_t>(round_to_integer(safe_divide<double>(
+        auto result = static_cast<size_t>(round_to_integer(safe_divide<double>(
             (static_cast<double>(number_of_words) + number_of_mini_words), number_of_sentences)));
         if (result == 0)
             {
@@ -167,9 +165,9 @@ namespace readability
             {
             throw std::domain_error("invalid word/sentence count.");
             }
-        const double CPSp =
+        const auto CPSp =
             safe_divide<double>(number_of_characters_and_punctuation, number_of_spaces);
-        const double CPSt =
+        const auto CPSt =
             safe_divide<double>(number_of_characters_and_punctuation, number_of_sentences);
         return truncate_k12_plus_grade(1.0364 * CPSp + .0194 * CPSt - .6059);
         }
@@ -189,9 +187,9 @@ namespace readability
             {
             throw std::domain_error("invalid word/sentence count.");
             }
-        const double CPSp =
+        const auto CPSp =
             safe_divide<double>(number_of_characters_and_punctuation, number_of_spaces);
-        const double CPSt =
+        const auto CPSt =
             safe_divide<double>(number_of_characters_and_punctuation, number_of_sentences);
         return std::clamp<double>(131.059 - 10.364 * CPSp - .194 * CPSt, 0, 100);
         }
@@ -302,7 +300,7 @@ namespace readability
             {
             throw std::domain_error("Not enough sentences in formula.");
             }
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
         const double percentOfNonDCWords =
             safe_divide<double>(number_of_unfamiliar_words, number_of_words) * 100;
         return truncate_k12_plus_grade((3.2672 + (.0596 * ASL) + (.1155 * percentOfNonDCWords)));
@@ -2003,9 +2001,9 @@ namespace readability
             {
             throw std::domain_error("Not enough sentences in formula.");
             }
-        const double sampleSizeNormalizationFactor = safe_divide<double>(100, number_of_words);
+        const auto sampleSizeNormalizationFactor = safe_divide<double>(100, number_of_words);
 
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
         const double gradeLevel =
             (.121 * ASL) + (.082 * (number_of_unfamiliar_words * sampleSizeNormalizationFactor)) +
             .659;
@@ -2035,8 +2033,8 @@ namespace readability
         const double sampleSizeCoefficient =
             COLEMAN_LIAU_WORD_COEFFICIENT / static_cast<double>(number_of_words);
 
-        double normalizedLettersVal = number_of_letters * sampleSizeCoefficient;
-        double normalizedSentenceVal = number_of_sentences * sampleSizeCoefficient;
+        const double normalizedLettersVal = number_of_letters * sampleSizeCoefficient;
+        const double normalizedSentenceVal = number_of_sentences * sampleSizeCoefficient;
 
         predicted_cloze_score =
             (141.8401 - (.214590 * normalizedLettersVal)) + (1.079812 * normalizedSentenceVal);
@@ -2313,7 +2311,7 @@ namespace readability
             {
             throw std::domain_error("invalid word or sentence count");
             }
-        const size_t dprScore = static_cast<size_t>(round_to_integer(
+        const auto dprScore = static_cast<size_t>(round_to_integer(
             degrees_of_reading_power(number_of_words, number_of_familiar_dale_chall_words,
                                      number_of_characters, number_of_sentences)));
         return std::clamp<double>(degrees_of_reading_power_to_ge(dprScore), 0, 18);
@@ -2338,7 +2336,7 @@ namespace readability
             {
             throw std::domain_error("invalid sentence count.");
             }
-        const double sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
+        const auto sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
         const double score = std::clamp<double>(
             round_to_integer(std::sqrt(number_of_big_words * sentenceNormalizationFactor)), 1, 13);
         return (score <= 3) ? score : score + 1;
@@ -2363,7 +2361,7 @@ namespace readability
             {
             throw std::domain_error("invalid sentence count.");
             }
-        const double sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
+        const auto sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
         return truncate_k12_plus_grade(
             std::floor(std::sqrt(number_of_big_words * sentenceNormalizationFactor)) + 3.0);
         }
@@ -2385,7 +2383,7 @@ namespace readability
             {
             throw std::domain_error("invalid sentence count.");
             }
-        const double sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
+        const auto sentenceNormalizationFactor = safe_divide<double>(30, number_of_sentences);
         const double score =
             (1.0430 * std::sqrt(number_of_big_words * sentenceNormalizationFactor)) + 3.1291;
         return truncate_score_to_range ? truncate_k12_plus_grade(score) : score;
@@ -2418,7 +2416,7 @@ namespace readability
         // step 1
         double V1 = safe_divide<double>(number_of_hard_words, number_of_words) * 100;
         // step 2
-        double V2 = safe_divide<double>(number_of_words, number_of_sentences);
+        auto V2 = safe_divide<double>(number_of_words, number_of_sentences);
         // step 3
         V1 *= .245;
         // step 4
@@ -2596,7 +2594,7 @@ namespace readability
             {
             throw std::domain_error("invalid word count.");
             }
-        const double normalizationFactor =
+        const auto normalizationFactor =
             safe_divide<double>(FORCAST_WORD_COEFFICIENT, number_of_words);
         return truncate_k12_plus_grade((
             20 - safe_divide<double>((number_of_single_syllable_words * normalizationFactor), 10)));
@@ -2613,7 +2611,7 @@ namespace readability
         {
         assert(fog_word);
         assert(fog_word && std::wcslen(fog_word) >= length);
-        if (!fog_word)
+        if (fog_word == nullptr)
             {
             return false;
             }
@@ -2622,11 +2620,11 @@ namespace readability
             const wchar_t* dashPos = string_util::strcspn_pointer(
                 fog_word, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(),
                 common_lang_constants::COMPOUND_WORD_SEPARATORS.length());
-            if (dashPos)
+            if (dashPos != nullptr)
                 {
                 grammar::english_syllabize syllabize;
                 const wchar_t* lastPos = fog_word;
-                while (dashPos)
+                while (dashPos != nullptr)
                     {
                     size_t syllableCount = syllabize(lastPos, dashPos - lastPos);
                     if (syllableCount >= 3)
@@ -2650,29 +2648,25 @@ namespace readability
                 // all parts are less than 3 syllables
                 return true;
                 }
-            else if (syllable_count == 3 &&
-                     //"ed"
-                     (string_util::has_suffix(fog_word, length, L"ded", 3) ||
-                      string_util::has_suffix(fog_word, length, L"ted", 3) ||
-                      //"es"
-                      string_util::has_suffix(fog_word, length, L"shes", 4) ||
-                      string_util::has_suffix(fog_word, length, L"ces", 3) ||
-                      string_util::has_suffix(fog_word, length, L"ges", 3) ||
-                      string_util::has_suffix(fog_word, length, L"xes", 3) ||
-                      string_util::has_suffix(fog_word, length, L"zes", 3) ||
-                      string_util::has_suffix(fog_word, length, L"ses", 3)))
+            if (syllable_count == 3 &&
+                //"ed"
+                (string_util::has_suffix(fog_word, length, L"ded", 3) ||
+                 string_util::has_suffix(fog_word, length, L"ted", 3) ||
+                 //"es"
+                 string_util::has_suffix(fog_word, length, L"shes", 4) ||
+                 string_util::has_suffix(fog_word, length, L"ces", 3) ||
+                 string_util::has_suffix(fog_word, length, L"ges", 3) ||
+                 string_util::has_suffix(fog_word, length, L"xes", 3) ||
+                 string_util::has_suffix(fog_word, length, L"zes", 3) ||
+                 string_util::has_suffix(fog_word, length, L"ses", 3)))
                 {
                 return true;
                 }
-            else
-                {
-                return false;
-                }
+
+            return false;
             }
-        else // syllable count < 3
-            {
-            return true;
-            }
+        // syllable count < 3
+        return true;
         }
 
     /** @brief U.S. grade level test, designed for business publications.
@@ -2715,7 +2709,7 @@ namespace readability
             }
         const double hardWordPercentage =
             safe_divide<double>(number_of_hard_words, number_of_words) * 100;
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
         const double result = 3.0680 + .0877 * ASL + .0984 * hardWordPercentage;
         return truncate_k12_plus_grade(result);
         }
@@ -2794,7 +2788,7 @@ namespace readability
 
         const double monoSyllabicWordPercentage =
             safe_divide<double>(number_of_monosyllabic_words, number_of_words) * 100;
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
 
         const auto result = static_cast<size_t>(std::clamp<double>(
             round_to_integer(-31.517 - (1.015 * ASL) + (1.599 * monoSyllabicWordPercentage)), 0,
@@ -2820,7 +2814,7 @@ namespace readability
             }
         const double monoSyllabicWordPercentage =
             safe_divide<double>(number_of_monosyllabic_words, number_of_words) * 100;
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
 
         return truncate_k12_plus_grade(22.05 + (.387 * ASL) - (.307 * monoSyllabicWordPercentage));
         }
@@ -2842,7 +2836,7 @@ namespace readability
             }
         const double monoSyllabicWordPercentage =
             safe_divide<double>(number_of_monosyllabic_words, number_of_words) * 100;
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
 
         return truncate_k12_plus_grade(8.4335 + (.0923 * ASL) -
                                        (.0648 * monoSyllabicWordPercentage));
@@ -2866,30 +2860,28 @@ namespace readability
             {
             throw std::domain_error("invalid word or unit count.");
             }
-        const double AUL = safe_divide<double>(number_of_words, number_of_units);
+        const auto AUL = safe_divide<double>(number_of_words, number_of_units);
         // should remain in fractal format
-        const double PSP = safe_divide<double>(number_of_polysyllabic_words, number_of_words);
+        const auto PSP = safe_divide<double>(number_of_polysyllabic_words, number_of_words);
         index_score = round_decimal_place(std::clamp(AUL * PSP * 10, 4.0, 34.5), 10);
         if (index_score <= 8.0)
             {
             return 0;
             }
-        else if (index_score > 8.0 && index_score <= 11.5)
+        if (index_score > 8.0 && index_score <= 11.5)
             {
             return 1;
             }
-        else if (index_score > 11.5 && index_score <= 19)
+        if (index_score > 11.5 && index_score <= 19)
             {
             return 2;
             }
-        else if (index_score > 19 && index_score <= 26.5)
+        if (index_score > 19 && index_score <= 26.5)
             {
             return 3;
             }
-        else
-            {
-            return 4;
-            }
+
+        return 4;
         }
 
     /** U.S. grade level test, designed for technical documents (e.g., adult training manuals).
@@ -2953,9 +2945,8 @@ namespace readability
             {
             throw std::domain_error("invalid word/sentence count.");
             }
-        const double normalizationFactor =
-            safe_divide<double>(PSK_WORD_COEFFICIENT, number_of_words);
-        const double ASL = safe_divide<double>(number_of_words, number_of_sentences);
+        const auto normalizationFactor = safe_divide<double>(PSK_WORD_COEFFICIENT, number_of_words);
+        const auto ASL = safe_divide<double>(number_of_words, number_of_sentences);
         const double psk =
             (ASL * .0778) + (normalizationFactor * number_of_syllables * .0455) - 2.2029;
         return truncate_k12_plus_grade(psk);

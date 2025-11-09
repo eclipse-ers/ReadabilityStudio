@@ -434,7 +434,7 @@ void EditTextDlg::CreateControls()
     }
 
 //------------------------------------------------------
-void EditTextDlg::OnFindDialog(wxFindDialogEvent& event)
+void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
     {
     if (event.GetEventType() == wxEVT_FIND || event.GetEventType() == wxEVT_FIND_NEXT)
         {
@@ -659,7 +659,7 @@ void EditTextDlg::OnParagraphSpaceSelected([[maybe_unused]] wxCommandEvent& even
     }
 
 //------------------------------------------------------
-void EditTextDlg::OnLineSpaceSelected(wxCommandEvent& event)
+void EditTextDlg::OnLineSpaceSelected(const wxCommandEvent& event)
     {
     if (m_textEntry != nullptr)
         {
@@ -689,7 +689,7 @@ void EditTextDlg::OnLineSpaceSelected(wxCommandEvent& event)
     }
 
 //------------------------------------------------------
-void EditTextDlg::OnEditButtons(wxRibbonButtonBarEvent& event)
+void EditTextDlg::OnEditButtons(const wxRibbonButtonBarEvent& event)
     {
     if (m_textEntry != nullptr)
         {

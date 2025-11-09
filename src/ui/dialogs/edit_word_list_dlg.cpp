@@ -115,9 +115,9 @@ bool EditWordListDlg::Save(const wxString& filePath)
             }
         // save the new list back to the original file
         outputStr.reserve(outputWords.size() * 5);
-        for (size_t i = 0; i < outputWords.size(); ++i)
+        for (const auto& outputWord : outputWords)
             {
-            outputStr.append(outputWords[i].c_str()).append(L"\r\n");
+            outputStr.append(outputWord.c_str()).append(L"\r\n");
             }
         }
     else
