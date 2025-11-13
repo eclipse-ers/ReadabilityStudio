@@ -95,6 +95,7 @@
 /docs/coding-bible/.Rproj.user
 /docs/readability-studio-api/.Rproj.user
 /.vs
+/.idea
 CMakeSettings.json
 CMakeUserPresets.json
 .Rproj.user
