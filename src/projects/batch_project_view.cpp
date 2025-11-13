@@ -1038,7 +1038,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         return dynamic_cast<wxRibbonPanel*>(editButtonBarWindow);
     };
 
-    const auto getEditButtonBar = [](wxRibbonPanel* panel)
+    const auto getEditButtonBar = [](const wxRibbonPanel* panel)
     {
         auto* buttonBar = panel->FindWindow(MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
         assert(buttonBar != nullptr && buttonBar->IsKindOf(CLASSINFO(wxRibbonButtonBar)));
