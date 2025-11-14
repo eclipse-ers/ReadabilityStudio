@@ -90,11 +90,11 @@ class ProjectDoc final : public BaseProjectDoc
     std::vector<CustomReadabilityTestInterface>::iterator
     RemoveCustomReadabilityTest(const wxString& testName, const int Id) final;
 
-    bool AddFryTest(const bool setFocus = true) final;
-    bool AddRaygorTest(const bool setFocus = true) final;
-    bool AddGilliamPenaMountainFryTest(const bool setFocus = true) final;
-    bool AddFraseTest(const bool setFocus = true) final;
-    bool AddSchwartzTest(const bool setFocus = true) final;
+    bool AddFryTest(bool setFocus = true) final;
+    bool AddRaygorTest(bool setFocus = true) final;
+    bool AddGilliamPenaMountainFryTest(bool setFocus = true) final;
+    bool AddFraseTest(bool setFocus = true) final;
+    bool AddSchwartzTest(bool setFocus = true) final;
     bool AddDolchSightWords();
 
     void ExcludeAllCustomTestsTests() final;
