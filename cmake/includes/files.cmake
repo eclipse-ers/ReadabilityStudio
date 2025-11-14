@@ -77,12 +77,8 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/base/reportbuildercolors.cpp
     src/Wisteria-Dataviz/src/base/reportprintout.cpp
     src/Wisteria-Dataviz/src/base/shapes.cpp
-    src/Wisteria-Dataviz/src/data/clone.cpp
     src/Wisteria-Dataviz/src/data/dataset.cpp
     src/Wisteria-Dataviz/src/data/excelreader.cpp
-    src/Wisteria-Dataviz/src/data/join.cpp
-    src/Wisteria-Dataviz/src/data/pivot.cpp
-    src/Wisteria-Dataviz/src/data/subset.cpp
     src/Wisteria-Dataviz/src/debug/debug_profile.cpp
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
@@ -96,7 +92,6 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/graphs/heatmap.cpp
     src/Wisteria-Dataviz/src/graphs/histogram.cpp
     src/Wisteria-Dataviz/src/graphs/inflesz.cpp
-    src/Wisteria-Dataviz/src/graphs/likertchart.cpp
     src/Wisteria-Dataviz/src/graphs/lineplot.cpp
     src/Wisteria-Dataviz/src/graphs/lixgauge.cpp
     src/Wisteria-Dataviz/src/graphs/lixgaugegerman.cpp
