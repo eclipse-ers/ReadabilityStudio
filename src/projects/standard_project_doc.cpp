@@ -2838,6 +2838,8 @@ void ProjectDoc::DisplayWordCharts()
         syllablePieChart->SetInnerPieMidPointLabelDisplay(
             Wisteria::BinLabelDisplay::BinNameAndPercentage);
         syllablePieChart->SetOuterPieMidPointLabelDisplay(Wisteria::BinLabelDisplay::BinPercentage);
+        syllablePieChart->SetSelectable(false);
+
         syllablePieChart->SetData(m_syllableCounts, std::nullopt, GetWordTypeGroupColumnName(),
                                   GetSyllableCountsColumnName());
 
