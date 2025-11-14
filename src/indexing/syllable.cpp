@@ -48,7 +48,6 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "syllable.h"
-
 #include <utility>
 
 namespace grammar
