@@ -26,6 +26,7 @@ ribbon/blank-lines.svg
 ribbon/bottom-titles.svg
 ribbon/boxplot.svg
 ribbon/brush.svg
+ribbon/bullet-dark.svg
 ribbon/bullet.svg
 ribbon/bundles.svg
 ribbon/capital-letter.svg

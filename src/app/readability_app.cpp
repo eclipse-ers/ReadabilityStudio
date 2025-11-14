@@ -3750,7 +3750,9 @@ void ReadabilityApp::InitProjectSidebar()
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/histogram.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/boxplot.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/warning.svg"));
-    imgList.push_back(GetResourceManager().GetSVG(L"ribbon/bullet.svg"));
+    imgList.push_back(GetResourceManager().GetSVG(wxSystemSettings::GetAppearance().IsDark() ?
+                                                      L"ribbon/bullet-dark.svg" :
+                                                      L"ribbon/bullet.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/configure.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/project-settings.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/document-structure.svg"));
