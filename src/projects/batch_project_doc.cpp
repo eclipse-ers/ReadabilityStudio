@@ -4258,8 +4258,8 @@ void BatchProjectDoc::DisplayFleschChart()
             }
         }
 
-        // Flesch Chart
-        if (GetReadabilityTests().is_test_included(ReadabilityMessages::FLESCH()) && m_docs.size())
+    // Flesch Chart
+    if (GetReadabilityTests().is_test_included(ReadabilityMessages::FLESCH()) && m_docs.size())
         {
         std::shared_ptr<Wisteria::Graphs::FleschChart> fleschChart{ nullptr };
         auto* fleschChartCanvas = dynamic_cast<Wisteria::Canvas*>(

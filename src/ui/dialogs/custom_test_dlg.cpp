@@ -732,10 +732,9 @@ void CustomTestDlg::CreateControls()
 
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());
 
-    m_sideBarBook->GetImageList().push_back(
-    wxGetApp().GetResourceManager().GetSVG(wxSystemSettings::GetAppearance().IsDark() ?
-                                                  L"ribbon/bullet-dark.svg" :
-                                                  L"ribbon/bullet.svg"));
+    m_sideBarBook->GetImageList().push_back(wxGetApp().GetResourceManager().GetSVG(
+        wxSystemSettings::GetAppearance().IsDark() ? L"ribbon/bullet-dark.svg" :
+                                                     L"ribbon/bullet.svg"));
 
         // general page
         {
