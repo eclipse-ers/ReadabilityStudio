@@ -64,9 +64,9 @@ bool LuaInterpreter::m_isRunning = false;
 bool LuaInterpreter::m_quitRequested = false;
 
 //------------------------------------------------------
-LuaInterpreter::LuaInterpreter()
+LuaInterpreter::LuaInterpreter() : m_L(luaL_newstate())
     {
-    m_L = luaL_newstate();
+
     luaL_openlibs(m_L);
     luaL_newlib(m_L, LuaScripting::ScreenshotLib);
     lua_setglobal(m_L, "ScreenshotLib");

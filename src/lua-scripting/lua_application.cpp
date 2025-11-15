@@ -1095,14 +1095,14 @@ namespace LuaScripting
         phraseList.remove_duplicates();
 
         wxString outputStr;
-        for (auto pos = phraseList.get_phrases().cbegin(); pos != phraseList.get_phrases().cend();
-             ++pos)
+        for (const auto& phrase : phraseList.get_phrases())
             {
-            if (pos->first.get_word_count() == 1 &&
-                pos->first.get_type() == grammar::phrase_type::phrase_wordy && !pos->second.empty())
+            if (phrase.first.get_word_count() == 1 &&
+                phrase.first.get_type() == grammar::phrase_type::phrase_wordy &&
+                !phrase.second.empty())
                 {
-                outputStr += wxString::Format(L"%s\t%s\r\n", pos->first.to_string().c_str(),
-                                              pos->second.c_str());
+                outputStr += wxString::Format(L"%s\t%s\r\n", phrase.first.to_string().c_str(),
+                                              phrase.second.c_str());
                 }
             }
 

@@ -158,7 +158,7 @@ namespace LuaScripting
         // PROJECT SETTINGS
         int SetLanguage(lua_State* L /*Language lang*/); // Sets the project language. This will affect syllable counting and which tests are available.
         int /*Language*/ GetLanguage(lua_State* L); // Returns the project's language.
-        int SetReviewer(lua_State* L /*string reviewer*/); // Sets the user name for the software.
+        int SetReviewer(lua_State* L /*string reviewer*/); // Sets the username for the software.
         int /*string*/ GetReviewer(lua_State* L); // Returns the reviewer's name.
         int SetStatus(lua_State* L /*string status*/); // Sets the status of the project. This can be freeform text.
         int /*string*/ GetStatus(lua_State* L); // Returns the status of the project.

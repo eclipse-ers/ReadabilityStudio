@@ -628,25 +628,25 @@ void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas)
     graph->GetRightYAxis().GetTitle().GetFont() = GetYAxisFont();
     graph->GetRightYAxis().GetTitle().SetFontColor(GetYAxisFontColor());
 
-    for (size_t i = 0; i < graph->GetCustomAxes().size(); ++i)
+    for (auto& axis : graph->GetCustomAxes())
         {
-        graph->GetCustomAxes().at(i).GetFont() = GetYAxisFont();
-        graph->GetCustomAxes().at(i).SetFontColor(GetYAxisFontColor());
+        axis.GetFont() = GetYAxisFont();
+        axis.SetFontColor(GetYAxisFontColor());
         }
 
     // update the plot title's font also
     graph->GetTitle().GetFont() = GetGraphTopTitleFont();
     graph->GetTitle().SetFontColor(GetGraphTopTitleFontColor());
     // canvas title fonts
-    for (size_t i = 0; i < canvas->GetTopTitles().size(); ++i)
+    for (auto& topTitle : canvas->GetTopTitles())
         {
-        canvas->GetTopTitles().at(i).GetFont() = GetGraphTopTitleFont();
-        canvas->GetTopTitles().at(i).SetFontColor(GetGraphTopTitleFontColor());
+        topTitle.GetFont() = GetGraphTopTitleFont();
+        topTitle.SetFontColor(GetGraphTopTitleFontColor());
         }
-    for (size_t i = 0; i < canvas->GetBottomTitles().size(); ++i)
+    for (auto& bottomTitle : canvas->GetBottomTitles())
         {
-        canvas->GetBottomTitles().at(i).GetFont() = GetGraphBottomTitleFont();
-        canvas->GetBottomTitles().at(i).SetFontColor(GetGraphBottomTitleFontColor());
+        bottomTitle.GetFont() = GetGraphBottomTitleFont();
+        bottomTitle.SetFontColor(GetGraphBottomTitleFontColor());
         }
     for (size_t i = 0; i < canvas->GetLeftTitles().size(); ++i)
         {

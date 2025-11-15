@@ -72,28 +72,28 @@
 
 wxDECLARE_APP(ReadabilityApp);
 
-using namespace Wisteria;
-using namespace Wisteria::UI;
-
 namespace LuaScripting
     {
-    ToolsOptionsDlg* LuaOptionsDlg{ nullptr };
-    TestBundleDlg* LuaTestBundleDlg{ nullptr };
-    CustomTestDlg* LuaCustomTestDlg{ nullptr };
-    ProjectWizardDlg* LuaStandardProjectWizard{ nullptr };
-    ProjectWizardDlg* LuaBatchProjectWizard{ nullptr };
-    PrinterHeaderFooterDlg* LuaPrinterOptions{ nullptr };
-    GridExportDlg* LuaListExportDlg{ nullptr };
-    ListCtrlItemViewDlg* LuaListViewItemDlg{ nullptr };
-    GetDirFilterDialog* LuaGetDirDlg{ nullptr };
-    ArchiveDlg* LuaGetArchiveDlg{ nullptr };
-    RadioBoxDlg* LuaSelectProjectType{ nullptr };
-    WebHarvesterDlg* LuaWebHarvesterDlg{ nullptr };
-    FilteredTextPreviewDlg* LuaFilteredTextPreviewDlg{ nullptr };
-    ListCtrlSortDlg* LuaListCtrlSortDlg{ nullptr };
-    EditWordListDlg* LuaEditWordListDlg{ nullptr };
-    DocGroupSelectDlg* LuaDocGroupSelectDlg{ nullptr };
-    EditTextDlg* LuaEditTextDlg{ nullptr };
+    // NOLINTBEGIN
+    static ToolsOptionsDlg* LuaOptionsDlg{ nullptr };
+    static TestBundleDlg* LuaTestBundleDlg{ nullptr };
+    static CustomTestDlg* LuaCustomTestDlg{ nullptr };
+    static ProjectWizardDlg* LuaStandardProjectWizard{ nullptr };
+    static ProjectWizardDlg* LuaBatchProjectWizard{ nullptr };
+    static Wisteria::UI::PrinterHeaderFooterDlg* LuaPrinterOptions{ nullptr };
+    static Wisteria::UI::GridExportDlg* LuaListExportDlg{ nullptr };
+    static Wisteria::UI::ListCtrlItemViewDlg* LuaListViewItemDlg{ nullptr };
+    static Wisteria::UI::GetDirFilterDialog* LuaGetDirDlg{ nullptr };
+    static Wisteria::UI::ArchiveDlg* LuaGetArchiveDlg{ nullptr };
+    static Wisteria::UI::RadioBoxDlg* LuaSelectProjectType{ nullptr };
+    static WebHarvesterDlg* LuaWebHarvesterDlg{ nullptr };
+    static FilteredTextPreviewDlg* LuaFilteredTextPreviewDlg{ nullptr };
+    static Wisteria::UI::ListCtrlSortDlg* LuaListCtrlSortDlg{ nullptr };
+    static EditWordListDlg* LuaEditWordListDlg{ nullptr };
+    static DocGroupSelectDlg* LuaDocGroupSelectDlg{ nullptr };
+    static EditTextDlg* LuaEditTextDlg{ nullptr };
+
+    // NOLINTEND
 
     //-------------------------------------------------------------
     int ShowScriptEditor(lua_State* L)
@@ -675,9 +675,11 @@ namespace LuaScripting
             }
         if (LuaListCtrlSortDlg == nullptr)
             {
-            LuaListCtrlSortDlg = new ListCtrlSortDlg(wxGetApp().GetMainFrame(), columns);
+            LuaListCtrlSortDlg =
+                new Wisteria::UI::ListCtrlSortDlg(wxGetApp().GetMainFrame(), columns);
             }
         std::vector<std::pair<size_t, Wisteria::SortDirection>> sortInfo;
+        sortInfo.reserve(columns.size());
         for (size_t i = 0; i < columns.size(); ++i)
             {
             sortInfo.emplace_back(i, Wisteria::SortDirection::SortAscending);
@@ -1022,7 +1024,7 @@ namespace LuaScripting
                 new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
             }
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SelectPage(0);
         LuaBatchProjectWizard->FindWindow(wxID_FORWARD)->SetFocus();
         LuaBatchProjectWizard->Show();
@@ -1041,9 +1043,9 @@ namespace LuaScripting
             wxGetApp().GetMainFrame(), ProjectType::BatchProject,
             wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, wxID_ANY, _(L"New Project Wizard"),
             wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SelectPage(0);
         LuaBatchProjectWizard->FindWindow(wxID_FORWARD)->SetFocus();
         LuaBatchProjectWizard->Show();
@@ -1061,7 +1063,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         if (lua_gettop(L) > 0)
             {
             LuaBatchProjectWizard->SetTestSelectionMethod(lua_tonumber(L, 1) -
@@ -1084,7 +1086,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SetTestSelectionMethod(1);
         LuaBatchProjectWizard->SelectPage(2);
         if (lua_gettop(L) > 0)
@@ -1109,7 +1111,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SetTestSelectionMethod(0);
         LuaBatchProjectWizard->SelectPage(2);
         if (lua_gettop(L) > 0)
@@ -1134,7 +1136,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         if (lua_gettop(L) > 0)
             {
             const int selectedDocType = lua_tonumber(L, 1) - 1 /*make zero-indexed*/;
@@ -1171,7 +1173,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->SetTestSelectionMethod(2);
         LuaBatchProjectWizard->SelectPage(2);
         for (int i = 1; i <= lua_gettop(L); ++i)
@@ -1195,7 +1197,7 @@ namespace LuaScripting
         LuaBatchProjectWizard =
             new ProjectWizardDlg(wxGetApp().GetMainFrame(), ProjectType::BatchProject);
         LuaBatchProjectWizard->SetFileListTruncationMode(
-            ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
+            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::OnlyShowFileNames);
         LuaBatchProjectWizard->GetFileList()->DeleteAllItems();
         if (lua_gettop(L) > 0)
             {
@@ -1529,7 +1531,7 @@ namespace LuaScripting
         {
         if (LuaPrinterOptions == nullptr)
             {
-            LuaPrinterOptions = new PrinterHeaderFooterDlg(
+            LuaPrinterOptions = new Wisteria::UI::PrinterHeaderFooterDlg(
                 wxGetApp().GetMainFrame(), wxGetApp().GetAppOptions()->GetLeftPrinterHeader(),
                 wxGetApp().GetAppOptions()->GetCenterPrinterHeader(),
                 wxGetApp().GetAppOptions()->GetRightPrinterHeader(),
@@ -1559,8 +1561,9 @@ namespace LuaScripting
         {
         if (LuaListExportDlg == nullptr)
             {
-            LuaListExportDlg = new GridExportDlg(wxGetApp().GetMainFrame(), lua_tonumber(L, 1),
-                                                 lua_tonumber(L, 2), GridExportFormat::ExportHtml);
+            LuaListExportDlg = new Wisteria::UI::GridExportDlg(
+                wxGetApp().GetMainFrame(), lua_tonumber(L, 1), lua_tonumber(L, 2),
+                Wisteria::UI::GridExportFormat::ExportHtml);
             }
         LuaListExportDlg->IncludeColumnHeaders(int_to_bool(lua_toboolean(L, 3)));
         LuaListExportDlg->ExportSelectedRowsOnly(int_to_bool(lua_toboolean(L, 4)));
@@ -1600,7 +1603,7 @@ namespace LuaScripting
             {
             CloseListViewItemDlg(L);
             }
-        LuaListViewItemDlg = new ListCtrlItemViewDlg;
+        LuaListViewItemDlg = new Wisteria::UI::ListCtrlItemViewDlg;
         const FilePathResolver fileResolve;
         for (int i = 1; i < lua_gettop(L); i += 2)
             {
@@ -1619,8 +1622,8 @@ namespace LuaScripting
         {
         if (LuaGetArchiveDlg == nullptr)
             {
-            LuaGetArchiveDlg = new ArchiveDlg(wxGetApp().GetMainFrame(),
-                                              ReadabilityAppOptions::GetDocumentFilter());
+            LuaGetArchiveDlg = new Wisteria::UI::ArchiveDlg(
+                wxGetApp().GetMainFrame(), ReadabilityAppOptions::GetDocumentFilter());
             }
         LuaGetArchiveDlg->SetPath(wxString{ luaL_checkstring(L, 1), wxConvUTF8 });
         LuaGetArchiveDlg->Show();
@@ -1645,8 +1648,8 @@ namespace LuaScripting
         {
         if (LuaGetDirDlg == nullptr)
             {
-            LuaGetDirDlg = new GetDirFilterDialog(wxGetApp().GetMainFrame(),
-                                                  ReadabilityAppOptions::GetDocumentFilter());
+            LuaGetDirDlg = new Wisteria::UI::GetDirFilterDialog(
+                wxGetApp().GetMainFrame(), ReadabilityAppOptions::GetDocumentFilter());
             }
         LuaGetDirDlg->SetPath(wxString{ luaL_checkstring(L, 1), wxConvUTF8 });
         LuaGetDirDlg->Show();
@@ -1675,9 +1678,9 @@ namespace LuaScripting
             docNames.Add(_(L"Standard Project"));
             docNames.Add(_(L"Batch Project"));
             const wxArrayString docDescriptions;
-            LuaSelectProjectType =
-                new RadioBoxDlg(wxGetApp().GetMainFrame(), _(L"Select Project Type"), wxEmptyString,
-                                _(L"Project types:"), _(L"New Project"), docNames, docDescriptions);
+            LuaSelectProjectType = new Wisteria::UI::RadioBoxDlg(
+                wxGetApp().GetMainFrame(), _(L"Select Project Type"), wxEmptyString,
+                _(L"Project types:"), _(L"New Project"), docNames, docDescriptions);
             }
         LuaSelectProjectType->SetSelection(lua_tonumber(L, 1) - 1 /*make zero-indexed*/);
         LuaSelectProjectType->Show();

@@ -67,15 +67,13 @@
 #include "standard_project_doc.h"
 #include "wx/richmsgdlg.h"
 
-using namespace Wisteria::UI;
-
 wxDECLARE_APP(ReadabilityApp);
 
 wxIMPLEMENT_DYNAMIC_CLASS(ProjectView, BaseProjectView)
 
     //------------------------------------------------------
     ProjectView::ProjectView()
-    : m_statsListData(new ListCtrlExDataProvider)
+    : m_statsListData(new Wisteria::UI::ListCtrlExDataProvider)
     {
     Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, &ProjectView::OnListDblClick, this,
          SIDEBAR_CUSTOM_TESTS_START_ID, SIDEBAR_CUSTOM_TESTS_START_ID + 1000);
@@ -268,7 +266,7 @@ void ProjectView::OnRealTimeUpdate([[maybe_unused]] wxRibbonButtonBarEvent& even
 void ProjectView::OnSummation([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     const auto* doc = dynamic_cast<const ProjectDoc*>(GetDocument());
-    ListCtrlItemViewDlg viewDlg;
+    Wisteria::UI::ListCtrlItemViewDlg viewDlg;
     if (GetActiveProjectWindow()->GetId() == MISSPELLED_WORD_LIST_PAGE_ID)
         {
         viewDlg.AddValue(
@@ -368,12 +366,11 @@ void ProjectView::OnSummation([[maybe_unused]] wxRibbonButtonBarEvent& event)
     else
         {
         wxString customTestName;
-        for (size_t i = 0; i < BaseProject::m_custom_word_tests.size(); ++i)
+        for (auto& customWordTest : BaseProject::m_custom_word_tests)
             {
-            if (BaseProject::m_custom_word_tests[i].get_interface_id() ==
-                GetActiveProjectWindow()->GetId())
+            if (customWordTest.get_interface_id() == GetActiveProjectWindow()->GetId())
                 {
-                customTestName = BaseProject::m_custom_word_tests[i].get_name().c_str();
+                customTestName = customWordTest.get_name().c_str();
                 break;
                 }
             }
@@ -770,7 +767,7 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            const auto* listCtrl{ dynamic_cast<const ListCtrlEx*>(foundWindow) };
+            const auto* listCtrl{ dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow) };
             searchText = listCtrl->GetSelectedText();
             readSuggestionColumn(listCtrl);
             }
@@ -780,7 +777,7 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            const auto* listCtrl{ dynamic_cast<const ListCtrlEx*>(foundWindow) };
+            const auto* listCtrl{ dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow) };
             searchText = listCtrl->GetSelectedText();
             readSuggestionColumn(listCtrl);
             }
@@ -790,7 +787,7 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            const auto* listCtrl{ dynamic_cast<const ListCtrlEx*>(foundWindow) };
+            const auto* listCtrl{ dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow) };
             searchText = listCtrl->GetSelectedText();
             readSuggestionColumn(listCtrl);
             }
@@ -800,7 +797,7 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            const auto* listCtrl{ dynamic_cast<const ListCtrlEx*>(foundWindow) };
+            const auto* listCtrl{ dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow) };
             searchText = listCtrl->GetSelectedText();
             readSuggestionColumn(listCtrl);
             }
@@ -810,7 +807,7 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            const auto* listCtrl{ dynamic_cast<const ListCtrlEx*>(foundWindow) };
+            const auto* listCtrl{ dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow) };
             searchText = listCtrl->GetSelectedText();
             readSuggestionColumn(listCtrl);
             }
@@ -824,7 +821,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = HARD_WORDS_TEXT_PAGE_ID;
         break;
@@ -833,11 +831,11 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         if (foundWindow != nullptr)
             {
             const auto selectedItem =
-                dynamic_cast<const ListCtrlEx*>(foundWindow)->GetFirstSelected();
-            searchText =
-                (selectedItem == wxNOT_FOUND) ?
-                    wxString{} :
-                    dynamic_cast<const ListCtrlEx*>(foundWindow)->GetItemTextEx(selectedItem, 1);
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetFirstSelected();
+            searchText = (selectedItem == wxNOT_FOUND) ?
+                             wxString{} :
+                             dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)
+                                 ->GetItemTextEx(selectedItem, 1);
             }
         textId = HARD_WORDS_TEXT_PAGE_ID;
         break;
@@ -845,7 +843,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetSentencesBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID;
         break;
@@ -872,7 +871,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetGrammarView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID;
         break;
@@ -880,7 +880,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetDolchSightWordsView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = DOLCH_WORDS_TEXT_PAGE_ID;
         break;
@@ -888,7 +889,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetDolchSightWordsView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = NON_DOLCH_WORDS_TEXT_PAGE_ID;
         break;
@@ -897,7 +899,8 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         foundWindow = GetWordsBreakdownView().FindWindowById(event.GetId());
         if (foundWindow != nullptr)
             {
-            searchText = dynamic_cast<const ListCtrlEx*>(foundWindow)->GetSelectedText();
+            searchText =
+                dynamic_cast<const Wisteria::UI::ListCtrlEx*>(foundWindow)->GetSelectedText();
             }
         textId = event.GetId();
         }
@@ -914,20 +917,22 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         // Find the first occurrence of the selected word.
         // First, look in the word breakdown section for the respective test window,
         // then the grammar section and finally the Dolch section.
-        wxWindow* theWindow =
-            GetWordsBreakdownView().FindWindowById(textId, CLASSINFO(FormattedTextCtrl));
-        if (theWindow == nullptr)
-            {
-            theWindow = GetGrammarView().FindWindowById(textId, CLASSINFO(FormattedTextCtrl));
-            }
+        wxWindow* theWindow = GetWordsBreakdownView().FindWindowById(
+            textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
         if (theWindow == nullptr)
             {
             theWindow =
-                GetDolchSightWordsView().FindWindowById(textId, CLASSINFO(FormattedTextCtrl));
+                GetGrammarView().FindWindowById(textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
             }
-        if ((theWindow != nullptr) && theWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)))
+        if (theWindow == nullptr)
             {
-            auto* textWindow = dynamic_cast<FormattedTextCtrl*>(theWindow);
+            theWindow = GetDolchSightWordsView().FindWindowById(
+                textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
+            }
+        if ((theWindow != nullptr) &&
+            theWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
+            {
+            auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(theWindow);
             textWindow->SetSelection(0, 0);
             // If looking for an entire sentence, then don't use whole-word search.
             // Whole-word search behaves differently between platforms and won't work for
@@ -1099,11 +1104,11 @@ void ProjectView::UpdateSideBarIcons()
                                  SIDEBAR_STATS_SUMMARY_SECTION_ID, 2);
         for (const auto* window : GetSummaryView().GetWindows())
             {
-            GetSideBar()->InsertSubItemById(SIDEBAR_STATS_SUMMARY_SECTION_ID, window->GetName(),
-                                            window->GetId(),
-                                            window->IsKindOf(wxCLASSINFO(HtmlTableWindow)) ? 17 :
-                                            window->IsKindOf(wxCLASSINFO(ListCtrlEx))      ? 15 :
-                                                                                             9);
+            GetSideBar()->InsertSubItemById(
+                SIDEBAR_STATS_SUMMARY_SECTION_ID, window->GetName(), window->GetId(),
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)) ? 17 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))      ? 15 :
+                                                                               9);
             }
         }
 
@@ -1118,8 +1123,8 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_WORDS_BREAKDOWN_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(FormattedTextCtrl))                              ? 0 :
-                window->IsKindOf(wxCLASSINFO(ListCtrlEx))                                     ? 15 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl))                ? 0 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                       ? 15 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::Histogram))) ? 6 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart)))  ? 16 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::WordCloud))) ? 29 :
@@ -1139,7 +1144,7 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_SENTENCES_BREAKDOWN_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(ListCtrlEx))                                     ? 15 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                       ? 15 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BoxPlot)))   ? 7 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::Histogram))) ? 6 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::HeatMap)))   ? 24 :
@@ -1154,11 +1159,11 @@ void ProjectView::UpdateSideBarIcons()
                                  SIDEBAR_GRAMMAR_SECTION_ID, 4);
         for (const auto* window : GetGrammarView().GetWindows())
             {
-            GetSideBar()->InsertSubItemById(SIDEBAR_GRAMMAR_SECTION_ID, window->GetName(),
-                                            window->GetId(),
-                                            window->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) ? 0 :
-                                            window->IsKindOf(wxCLASSINFO(ListCtrlEx))        ? 15 :
-                                                                                               9);
+            GetSideBar()->InsertSubItemById(
+                SIDEBAR_GRAMMAR_SECTION_ID, window->GetName(), window->GetId(),
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ? 0 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))        ? 15 :
+                                                                                 9);
             }
         }
 
@@ -1173,10 +1178,10 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_DOLCH_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(FormattedTextCtrl))                             ? 0 :
-                window->IsKindOf(wxCLASSINFO(HtmlTableWindow))                               ? 17 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl))               ? 0 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow))                 ? 17 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart))) ? 16 :
-                window->IsKindOf(wxCLASSINFO(ListCtrlEx))                                    ? 15 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                      ? 15 :
                                                                                                9);
             }
         }
@@ -1305,8 +1310,8 @@ void ProjectView::OnGradeScale(wxCommandEvent& event)
 //---------------------------------------------------
 void ProjectView::OnAddToDictionary([[maybe_unused]] wxCommandEvent& event)
     {
-    const ListCtrlEx* listView =
-        dynamic_cast<ListCtrlEx*>(GetGrammarView().FindWindowById(MISSPELLED_WORD_LIST_PAGE_ID));
+    const Wisteria::UI::ListCtrlEx* listView = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
+        GetGrammarView().FindWindowById(MISSPELLED_WORD_LIST_PAGE_ID));
     if (listView != nullptr)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(MISSPELLED_WORD_LIST_PAGE_ID));
@@ -1423,9 +1428,9 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         }
 
     if ((GetActiveProjectWindow() != nullptr) &&
-        GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+        GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
         {
-        auto* list = dynamic_cast<ListCtrlEx*>(GetActiveProjectWindow());
+        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(GetActiveProjectWindow());
         /* just in case this is a print or preview command, update the window's headers
            and footer to whatever the global options currently are*/
         BaseProjectDoc::UpdateListOptions(list);
@@ -1548,9 +1553,9 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             }
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
-             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
         {
-        auto* html = dynamic_cast<HtmlTableWindow*>(GetActiveProjectWindow());
+        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(GetActiveProjectWindow());
         BaseProjectDoc::UpdatePrinterHeaderAndFooters(html);
         html->SetLabel(wxString::Format(L"%s [%s]", html->GetName(),
                                         wxFileName::StripExtension(doc->GetTitle())));
@@ -1558,9 +1563,9 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         html->ProcessWindowEvent(event);
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
-             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(FormattedTextCtrl)))
+             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
         {
-        auto* text = dynamic_cast<FormattedTextCtrl*>(GetActiveProjectWindow());
+        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(GetActiveProjectWindow());
         doc->UpdateTextWindowOptions(text);
         text->SetTitleName(wxString::Format(L"%s [%s]", text->GetName(),
                                             wxFileName::StripExtension(doc->GetTitle())));
@@ -1680,12 +1685,10 @@ bool ProjectView::OnCreate(wxDocument* doc, long flags)
 #endif
 
     // connect the test events
-    for (auto rTest =
-             dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests().begin();
-         rTest != dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests().end();
-         ++rTest)
+    for (const auto& rTest :
+         dynamic_cast<const BaseProjectDoc*>(doc)->GetReadabilityTests().get_tests())
         {
-        Connect(rTest->get_test().get_interface_id(), wxEVT_MENU,
+        Connect(rTest.get_test().get_interface_id(), wxEVT_MENU,
                 wxCommandEventHandler(ProjectView::OnAddTest));
         }
 
@@ -1768,12 +1771,12 @@ void ProjectView::UpdateStatistics()
                 statistics::median(grades), 1, wxNumberFormatter::Style::Style_NoTrailingZeroes);
             const std::set<double> modes = statistics::mode(grades, floor_value<double>{});
             gradeMode.Clear();
-            for (auto modesIter = modes.cbegin(); modesIter != modes.cend(); ++modesIter)
+            for (const double mode : modes)
                 {
                 gradeMode +=
                     doc->GetReadabilityMessageCatalog().GetFormattedValue(
                         wxNumberFormatter::ToString(
-                            *modesIter, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes),
+                            mode, 0, wxNumberFormatter::Style::Style_NoTrailingZeroes),
                         Wisteria::NumberFormatInfo{
                             Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting }) +
                     L"; ";
@@ -2318,7 +2321,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                                            ->GetReadabilityMessageCatalog()
                                            .IsUsingLongGradeScaleFormat());
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
                     editListButtonBarWindow->Show();
                     }
@@ -2454,7 +2457,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                             XRCID("ID_DROP_SHADOW"),
                             dynamic_cast<ProjectDoc*>(GetDocument())->IsDisplayingDropShadows());
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
                     editListButtonBarWindow->Show();
                     }
@@ -2475,11 +2478,12 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
 
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
                     editStatsListButtonBarWindow->Show();
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                else if (GetActiveProjectWindow()->IsKindOf(
+                             wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                     {
                     editStatsReportButtonBarWindow->Show();
                     }
@@ -2563,7 +2567,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                             XRCID("ID_DROP_SHADOW"),
                             dynamic_cast<ProjectDoc*>(GetDocument())->IsDisplayingDropShadows());
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
                     // compressed list of words combine stemmed words into a list,
                     // so it's not a list of individual words that a user can ignore
@@ -2576,7 +2580,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                         editSimpleListWithSummationAndExcludeButtonBarWindow->Show();
                         }
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(FormattedTextCtrl)))
+                else if (GetActiveProjectWindow()->IsKindOf(
+                             wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2597,7 +2602,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
 
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(FormattedTextCtrl)))
+                if (GetActiveProjectWindow()->IsKindOf(
+                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2638,15 +2644,17 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                 }
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(FormattedTextCtrl)))
+                if (GetActiveProjectWindow()->IsKindOf(
+                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
                     {
                     editReportButtonBarWindow->Show();
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                else if (GetActiveProjectWindow()->IsKindOf(
+                             wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                     {
                     editStatsReportButtonBarWindow->Show();
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
                     if (event.GetInt() == NON_DOLCH_WORDS_LIST_PAGE_ID ||
                         event.GetInt() == DOLCH_WORDS_LIST_PAGE_ID)
@@ -2791,9 +2799,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                 wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
                             graphOptions);
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                         {
-                        auto* reportWindow = dynamic_cast<HtmlTableWindow*>(activeWindow);
+                        auto* reportWindow =
+                            dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
                         reportWindow->SetLabel(
                             wxString::Format(L"%s [%s]", reportWindow->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
@@ -2801,16 +2810,16 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
                             wxFileName::GetPathSeparator() + reportWindow->GetLabel() + L".htm");
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() +
                                        _DT(L"Readability Scores") + wxFileName::GetPathSeparator() +
                                        list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
                     }
                 }
@@ -2833,9 +2842,9 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetSummaryView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                         {
-                        auto* html = dynamic_cast<HtmlTableWindow*>(activeWindow);
+                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
                         html->SetLabel(
                             wxString::Format(L"%s [%s]", html->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
@@ -2843,16 +2852,17 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                    _DT(L"Summary Statistics") + wxFileName::GetPathSeparator() +
                                    html->GetLabel() + L".htm");
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                             includeLists)
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() +
                                        _DT(L"Summary Statistics") + wxFileName::GetPathSeparator() +
                                        list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -2886,16 +2896,17 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetSentencesBreakdownView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                        includeLists)
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() +
                                        _DT(L"Sentences Breakdown") +
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -2929,16 +2940,17 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetWordsBreakdownView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                        includeLists)
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() +
                                        _DT(L"Words Breakdown") + wxFileName::GetPathSeparator() +
                                        list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -2951,10 +2963,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                 wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
                             graphOptions);
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                              includeTextReports)
                         {
-                        auto* text = dynamic_cast<FormattedTextCtrl*>(activeWindow);
+                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
                         text->SetTitleName(
                             wxString::Format(L"%s [%s]", text->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
@@ -2982,29 +2994,30 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetGrammarView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                        includeLists)
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                         {
-                        auto* html = dynamic_cast<HtmlTableWindow*>(activeWindow);
+                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
                         html->SetLabel(
                             wxString::Format(L"%s [%s]", html->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         html->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
                                    wxFileName::GetPathSeparator() + html->GetLabel() + L".htm");
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                              includeTextReports)
                         {
-                        auto* text = dynamic_cast<FormattedTextCtrl*>(activeWindow);
+                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
                         text->SetTitleName(
                             wxString::Format(L"%s [%s]", text->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
@@ -3032,29 +3045,30 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetDolchSightWordsView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                        includeLists)
                         {
-                        auto* list = dynamic_cast<ListCtrlEx*>(activeWindow);
+                        auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         list->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
-                                   GridExportOptions());
+                                   Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                         {
-                        auto* html = dynamic_cast<HtmlTableWindow*>(activeWindow);
+                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
                         html->SetLabel(
                             wxString::Format(L"%s [%s]", html->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
                         html->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
                                    wxFileName::GetPathSeparator() + html->GetLabel() + L".htm");
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                              includeTextReports)
                         {
-                        auto* text = dynamic_cast<FormattedTextCtrl*>(activeWindow);
+                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
                         text->SetTitleName(
                             wxString::Format(L"%s [%s]", text->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
@@ -3162,8 +3176,8 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                              htmlEncode({ canvas->GetName().wc_str() }, true).c_str()));
     };
 
-    const auto formatList = [&outputText, &htmlEncode, &sectionCounter, &tableCounter,
-                             pageBreak](ListCtrlEx* list, const bool includeLeadingPageBreak)
+    const auto formatList = [&outputText, &htmlEncode, &sectionCounter, &tableCounter, pageBreak](
+                                Wisteria::UI::ListCtrlEx* list, const bool includeLeadingPageBreak)
     {
         if (!list)
             {
@@ -3173,7 +3187,8 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         BaseProjectDoc::UpdateListOptions(list);
         wxString buffer;
         list->FormatToHtml(
-            buffer, true, ListCtrlEx::ExportRowSelection::ExportAll, 0, -1, 0, -1, true, false,
+            buffer, true, Wisteria::UI::ListCtrlEx::ExportRowSelection::ExportAll, 0, -1, 0, -1,
+            true, false,
             wxString::Format(_(L"Table %zu.%zu: %s"), sectionCounter, tableCounter++,
                              htmlEncode({ list->GetName().wc_str() }, true).c_str()));
         std::wstring htmlText{ buffer.wc_string() };
@@ -3185,7 +3200,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
 
     const auto formatTextWindow =
         [&outputText, &htmlEncode, &textWindowStyleCounter, &textWindowStyleSection,
-         pageBreak](FormattedTextCtrl* textWindow, const bool includeLeadingPageBreak)
+         pageBreak](Wisteria::UI::FormattedTextCtrl* textWindow, const bool includeLeadingPageBreak)
     {
         if (!textWindow)
             {
@@ -3204,8 +3219,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             htmlEncode({ textWindow->GetLabel().wc_str() }, true).c_str(), htmlText);
     };
 
-    const auto formatHTMLReport = [&outputText, &htmlEncode, pageBreak](
-                                      HtmlTableWindow* html, const bool includeLeadingPageBreak)
+    const auto formatHTMLReport =
+        [&outputText, &htmlEncode, pageBreak](Wisteria::UI::HtmlTableWindow* html,
+                                              const bool includeLeadingPageBreak)
     {
         if (!html)
             {
@@ -3253,15 +3269,16 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                       includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                     {
-                    formatHTMLReport(dynamic_cast<HtmlTableWindow*>(activeWindow),
+                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)))
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 }
@@ -3283,15 +3300,17 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetSummaryView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                     {
-                    formatHTMLReport(dynamic_cast<HtmlTableWindow*>(activeWindow),
+                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
+                         includeLists)
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3319,9 +3338,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetWordsBreakdownView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) && includeLists)
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3330,10 +3350,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                       includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                          includeTextReports)
                     {
-                    formatTextWindow(dynamic_cast<FormattedTextCtrl*>(activeWindow),
+                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
@@ -3356,9 +3376,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetSentencesBreakdownView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) && includeLists)
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3387,15 +3408,16 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetGrammarView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) && includeLists)
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                          includeTextReports)
                     {
-                    formatTextWindow(dynamic_cast<FormattedTextCtrl*>(activeWindow),
+                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
@@ -3417,21 +3439,22 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetDolchSightWordsView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(ListCtrlEx)) && includeLists)
+                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) && includeLists)
                     {
-                    formatList(dynamic_cast<ListCtrlEx*>(activeWindow), includeLeadingPageBreak);
+                    formatList(dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow),
+                               includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(HtmlTableWindow)))
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
                     {
-                    formatHTMLReport(dynamic_cast<HtmlTableWindow*>(activeWindow),
+                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(FormattedTextCtrl)) &&
+                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                          includeTextReports)
                     {
-                    formatTextWindow(dynamic_cast<FormattedTextCtrl*>(activeWindow),
+                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }

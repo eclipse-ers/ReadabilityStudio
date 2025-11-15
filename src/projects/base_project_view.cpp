@@ -621,9 +621,9 @@ void BaseProjectView::Present()
             {
             // remove all the submenus
             wxMenuItemList menuItems = readMenu->GetMenuItems();
-            for (wxMenuItemList::iterator iter = menuItems.begin(); iter != menuItems.end(); ++iter)
+            for (const auto& menuItem : menuItems)
                 {
-                readMenu->Destroy(*iter);
+                readMenu->Destroy(menuItem);
                 }
             // add all the submenus for the different groupings
             auto* primaryMenu = new wxMenu;
@@ -650,12 +650,12 @@ void BaseProjectView::Present()
 
             // remove any submenus that don't have anything in them
             menuItems = readMenu->GetMenuItems();
-            for (wxMenuItemList::iterator iter = menuItems.begin(); iter != menuItems.end(); ++iter)
+            for (const auto& menuItem : menuItems)
                 {
-                if ((*iter)->IsSubMenu() && (((*iter)->GetSubMenu() == nullptr) ||
-                                             (*iter)->GetSubMenu()->GetMenuItemCount() == 0))
+                if (menuItem->IsSubMenu() && ((menuItem->GetSubMenu() == nullptr) ||
+                                              menuItem->GetSubMenu()->GetMenuItemCount() == 0))
                     {
-                    readMenu->Destroy(*iter);
+                    readMenu->Destroy(menuItem);
                     }
                 }
             }
@@ -1276,7 +1276,8 @@ BaseProjectView::~BaseProjectView()
     }
 
 //-------------------------------------------------------
-void BaseProjectView::OnActivateView(bool activate, wxView*, wxView*)
+void BaseProjectView::OnActivateView(const bool activate, [[maybe_unused]] wxView* oldView,
+                                     [[maybe_unused]] wxView* newView)
     {
     // if the frame (and its views) are ready for showing then show it
     if (activate && m_presentedSuccessfully && (GetDocFrame() != nullptr))
