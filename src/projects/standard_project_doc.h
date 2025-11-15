@@ -90,11 +90,11 @@ class ProjectDoc final : public BaseProjectDoc
     std::vector<CustomReadabilityTestInterface>::iterator
     RemoveCustomReadabilityTest(const wxString& testName, const int Id) final;
 
-    bool AddFryTest(bool setFocus = true) final;
-    bool AddRaygorTest(bool setFocus = true) final;
-    bool AddGilliamPenaMountainFryTest(bool setFocus = true) final;
-    bool AddFraseTest(bool setFocus = true) final;
-    bool AddSchwartzTest(bool setFocus = true) final;
+    bool AddFryTest(bool setFocus) final;
+    bool AddRaygorTest(bool setFocus) final;
+    bool AddGilliamPenaMountainFryTest(bool setFocus) final;
+    bool AddFraseTest(bool setFocus) final;
+    bool AddSchwartzTest(bool setFocus) final;
     bool AddDolchSightWords();
 
     void ExcludeAllCustomTestsTests() final;
@@ -144,11 +144,11 @@ class ProjectDoc final : public BaseProjectDoc
         }
 
     void CalculateGraphData();
-    void AddDB2Plot(const bool setFocus = true) final;
-    void AddFleschChart(const bool setFocus = true) final;
+    void AddDB2Plot(const bool setFocus) final;
+    void AddFleschChart(const bool setFocus) final;
     void AddLixGermanGauge(const bool setFocus) final;
-    void AddLixGauge(const bool setFocus = true) final;
-    void AddCrawfordGraph(const bool setFocus = true) final;
+    void AddLixGauge(const bool setFocus) final;
+    void AddCrawfordGraph(const bool setFocus) final;
     void LoadManuallyEnteredText();
     bool LoadProjectFile(const char* projectFileText, const size_t textLength);
     void DisplayStatistics();

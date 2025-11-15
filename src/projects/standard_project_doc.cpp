@@ -6985,63 +6985,59 @@ void ProjectDoc::DisplayGrammar()
     m_clichePhraseData->DeleteAllItems();
     m_clichePhraseData->SetSize(GetWords()->get_known_phrase_indices().size(), 3);
     size_t wordyPhraseCount(0), redundantPhraseCount(0), wordingErrorCount(0), clicheCount(0);
-    for (size_t i = 0; i < wordyIndices.size(); ++i)
+    for (const auto& wordyIndex : wordyIndices)
         {
-        if (wordyPhrases[wordyIndices[i].second].first.get_type() ==
-            grammar::phrase_type::phrase_cliche)
+        if (wordyPhrases[wordyIndex.second].first.get_type() == grammar::phrase_type::phrase_cliche)
             {
             m_clichePhraseData->SetItemText(
-                clicheCount, 0, wordyPhrases[wordyIndices[i].second].first.to_string().c_str());
+                clicheCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
             m_clichePhraseData->SetItemText(clicheCount, 1,
-                                            wordyPhrases[wordyIndices[i].second].second.c_str());
+                                            wordyPhrases[wordyIndex.second].second.c_str());
             m_clichePhraseData->SetItemValue(
                 clicheCount++, 2,
                 // make 1-based index
-                GetWords()->get_words()[wordyIndices[i].first].get_sentence_index() + 1,
+                GetWords()->get_words()[wordyIndex.first].get_sentence_index() + 1,
                 Wisteria::NumberFormatInfo(
                     Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting, 0, true));
             }
-        else if (wordyPhrases[wordyIndices[i].second].first.get_type() ==
+        else if (wordyPhrases[wordyIndex.second].first.get_type() ==
                  grammar::phrase_type::phrase_redundant)
             {
             m_redundantPhraseData->SetItemText(
-                redundantPhraseCount, 0,
-                wordyPhrases[wordyIndices[i].second].first.to_string().c_str());
+                redundantPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
             m_redundantPhraseData->SetItemText(redundantPhraseCount, 1,
-                                               wordyPhrases[wordyIndices[i].second].second.c_str());
+                                               wordyPhrases[wordyIndex.second].second.c_str());
             m_redundantPhraseData->SetItemValue(
                 redundantPhraseCount++, 2,
                 // make 1-based index
-                GetWords()->get_words()[wordyIndices[i].first].get_sentence_index() + 1,
+                GetWords()->get_words()[wordyIndex.first].get_sentence_index() + 1,
                 Wisteria::NumberFormatInfo(
                     Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting, 0, true));
             }
-        else if (wordyPhrases[wordyIndices[i].second].first.get_type() ==
+        else if (wordyPhrases[wordyIndex.second].first.get_type() ==
                  grammar::phrase_type::phrase_error)
             {
             m_wordingErrorData->SetItemText(
-                wordingErrorCount, 0,
-                wordyPhrases[wordyIndices[i].second].first.to_string().c_str());
+                wordingErrorCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
             m_wordingErrorData->SetItemText(wordingErrorCount, 1,
-                                            wordyPhrases[wordyIndices[i].second].second.c_str());
+                                            wordyPhrases[wordyIndex.second].second.c_str());
             m_wordingErrorData->SetItemValue(
                 wordingErrorCount++, 2,
                 // make 1-based index
-                GetWords()->get_words()[wordyIndices[i].first].get_sentence_index() + 1,
+                GetWords()->get_words()[wordyIndex.first].get_sentence_index() + 1,
                 Wisteria::NumberFormatInfo(
                     Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting, 0, true));
             }
         else
             {
             m_wordyPhraseData->SetItemText(
-                wordyPhraseCount, 0,
-                wordyPhrases[wordyIndices[i].second].first.to_string().c_str());
+                wordyPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
             m_wordyPhraseData->SetItemText(wordyPhraseCount, 1,
-                                           wordyPhrases[wordyIndices[i].second].second.c_str());
+                                           wordyPhrases[wordyIndex.second].second.c_str());
             m_wordyPhraseData->SetItemValue(
                 wordyPhraseCount++, 2,
                 // make 1-based index
-                GetWords()->get_words()[wordyIndices[i].first].get_sentence_index() + 1,
+                GetWords()->get_words()[wordyIndex.first].get_sentence_index() + 1,
                 Wisteria::NumberFormatInfo(
                     Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting, 0, true));
             }
@@ -7097,9 +7093,9 @@ void ProjectDoc::DisplayGrammar()
         {
         frequency_set<traits::case_insensitive_wstring_ex> misspelledWords;
         const auto& misspelledWordIndices = GetWords()->get_misspelled_words();
-        for (size_t i = 0; i < misspelledWordIndices.size(); ++i)
+        for (const auto misspelledWordIndex : misspelledWordIndices)
             {
-            misspelledWords.insert(GetWords()->get_word(misspelledWordIndices[i]).c_str());
+            misspelledWords.insert(GetWords()->get_word(misspelledWordIndex).c_str());
             }
         m_misspelledWordData->DeleteAllItems();
         m_misspelledWordData->SetSize(misspelledWords.get_data().size(), 2);
@@ -7210,12 +7206,11 @@ void ProjectDoc::DisplayGrammar()
         {
         frequency_set<traits::case_insensitive_wstring_ex> articleMismatchesWords;
         const auto& incorrectArticleIndices = GetWords()->get_incorrect_article_indices();
-        for (size_t i = 0; i < incorrectArticleIndices.size(); ++i)
+        for (const auto incorrectArticleIndex : incorrectArticleIndices)
             {
-            articleMismatchesWords.insert(
-                GetWords()->get_word(incorrectArticleIndices[i]).c_str() +
-                traits::case_insensitive_wstring_ex(L" ") +
-                GetWords()->get_word(incorrectArticleIndices[i] + 1).c_str());
+            articleMismatchesWords.insert(GetWords()->get_word(incorrectArticleIndex).c_str() +
+                                          traits::case_insensitive_wstring_ex(L" ") +
+                                          GetWords()->get_word(incorrectArticleIndex + 1).c_str());
             }
         m_incorrectArticleData->DeleteAllItems();
         m_incorrectArticleData->SetSize(articleMismatchesWords.get_data().size(), 2);
@@ -7497,18 +7492,17 @@ void ProjectDoc::DisplayGrammar()
         {
         frequency_set<traits::case_insensitive_wstring_ex> passiveVoicePhrases;
         const auto& passiveVoiceIndices = GetWords()->get_passive_voice_indices();
-        for (size_t i = 0; i < passiveVoiceIndices.size(); ++i)
+        for (const auto& passiveVoiceIndex : passiveVoiceIndices)
             {
             traits::case_insensitive_wstring_ex currentPassivePhrase;
-            for (size_t wordCounter = 0; wordCounter < passiveVoiceIndices[i].second; ++wordCounter)
+            for (size_t wordCounter = 0; wordCounter < passiveVoiceIndex.second; ++wordCounter)
                 {
                 currentPassivePhrase +=
-                    (wordCounter == passiveVoiceIndices[i].second - 1) ?
+                    (wordCounter == passiveVoiceIndex.second - 1) ?
                         traits::case_insensitive_wstring_ex(
-                            GetWords()->get_word(passiveVoiceIndices[i].first + wordCounter)) :
+                            GetWords()->get_word(passiveVoiceIndex.first + wordCounter)) :
                         traits::case_insensitive_wstring_ex(
-                            GetWords()->get_word(passiveVoiceIndices[i].first + wordCounter) +
-                            L' ');
+                            GetWords()->get_word(passiveVoiceIndex.first + wordCounter) + L' ');
                 }
             passiveVoicePhrases.insert(currentPassivePhrase);
             }
