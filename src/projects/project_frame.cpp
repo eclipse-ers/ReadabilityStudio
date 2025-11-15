@@ -493,8 +493,8 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
         [this]([[maybe_unused]] wxCommandEvent&)
         {
             auto* projDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-            assert(projDoc && L"Failed to get document!");
-            if (!projDoc)
+            wxASSERT_MSG(projDoc, L"Failed to get document!");
+            if (projDoc == nullptr)
                 {
                 return;
                 }
@@ -811,14 +811,13 @@ void ProjectDocChildFrame::OnTestBundle(wxCommandEvent& event)
                                rTest->get_test().has_language(doc->GetProjectLanguage()));
                 }
             // custom tests
-            for (auto pos = ProjectDoc::m_custom_word_tests.begin();
-                 pos != ProjectDoc::m_custom_word_tests.end(); ++pos)
+            for (auto & customWordTest : ProjectDoc::m_custom_word_tests)
                 {
-                if ((basedOnIndustry && pos->has_industry_classification(selectedIndustry)) ||
-                    pos->has_document_classification(selectedDocument))
+                if ((basedOnIndustry && customWordTest.has_industry_classification(selectedIndustry)) ||
+                    customWordTest.has_document_classification(selectedDocument))
                     {
                     doc->RefreshRequired(ProjectRefresh::FullReindexing);
-                    doc->AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    doc->AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             // see if Dolch section should be added
@@ -864,14 +863,13 @@ void ProjectDocChildFrame::OnTestBundle(wxCommandEvent& event)
                                rTest->get_test().has_language(doc->GetProjectLanguage()));
                 }
             // custom tests
-            for (auto pos = BatchProjectDoc::m_custom_word_tests.begin();
-                 pos != BatchProjectDoc::m_custom_word_tests.end(); ++pos)
+            for (auto & customWordTest : BatchProjectDoc::m_custom_word_tests)
                 {
-                if ((basedOnIndustry && pos->has_industry_classification(selectedIndustry)) ||
-                    pos->has_document_classification(selectedDocument))
+                if ((basedOnIndustry && customWordTest.has_industry_classification(selectedIndustry)) ||
+                    customWordTest.has_document_classification(selectedDocument))
                     {
                     doc->RefreshRequired(ProjectRefresh::FullReindexing);
-                    doc->AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    doc->AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             // see if Dolch section should be added...

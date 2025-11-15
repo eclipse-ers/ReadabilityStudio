@@ -62,7 +62,6 @@
 #include "../indexing/romanize.h"
 #include "../results-format/project_report_format.h"
 #include "../results-format/word_collectiont_text_formatting.h"
-#include "base_project_doc.h"
 #include "base_project_view.h"
 #include <wx/richmsgdlg.h>
 
@@ -322,13 +321,12 @@ void BaseProject::FormatFilteredText(std::wstring& text, const bool romanizeText
 //-------------------------------------------------------
 bool BaseProject::IsIncludingClozeTest() const
     {
-    for (auto rTests = GetReadabilityTests().get_tests().begin();
-         rTests != GetReadabilityTests().get_tests().end(); ++rTests)
+    for (const auto& rTests : GetReadabilityTests().get_tests())
         {
-        if (rTests->is_included() &&
-            (rTests->get_test().get_test_type() ==
+        if (rTests.is_included() &&
+            (rTests.get_test().get_test_type() ==
                  readability::readability_test_type::predicted_cloze_score ||
-             rTests->get_test().get_test_type() ==
+             rTests.get_test().get_test_type() ==
                  readability::readability_test_type::grade_level_and_predicted_cloze_score))
             {
             return true;
@@ -348,15 +346,13 @@ bool BaseProject::IsIncludingClozeTest() const
 //-------------------------------------------------------
 bool BaseProject::IsIncludingGradeTest() const
     {
-    for (auto rTests = GetReadabilityTests().get_tests().begin();
-         rTests != GetReadabilityTests().get_tests().end(); ++rTests)
+    for (const auto& rTests : GetReadabilityTests().get_tests())
         {
-        if (rTests->is_included() &&
-            (rTests->get_test().get_test_type() ==
-                 readability::readability_test_type::grade_level ||
-             rTests->get_test().get_test_type() ==
+        if (rTests.is_included() &&
+            (rTests.get_test().get_test_type() == readability::readability_test_type::grade_level ||
+             rTests.get_test().get_test_type() ==
                  readability::readability_test_type::index_value_and_grade_level ||
-             rTests->get_test().get_test_type() ==
+             rTests.get_test().get_test_type() ==
                  readability::readability_test_type::grade_level_and_predicted_cloze_score))
             {
             return true;
@@ -2174,26 +2170,24 @@ void BaseProject::LoadHardWords()
             std::pair<size_t, size_t>(0, 0);
 
     // reset the custom tests
-    for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
-         pos != m_customTestsInUse.end(); ++pos)
+    for (auto& customTest : m_customTestsInUse)
         {
-        pos->Reset();
-        if (HasUI() && pos->GetIterator()->is_using_familiar_words())
+        customTest.Reset();
+        if (HasUI() && customTest.GetIterator()->is_using_familiar_words())
             {
-            pos->GetListViewData()->SetSize(m_word_frequency_map->get_data().size(), 2);
+            customTest.GetListViewData()->SetSize(m_word_frequency_map->get_data().size(), 2);
             }
         }
 
     // calculate the Dolch level completions
     std::set<readability::sight_word> unusedDolchWords;
-    for (auto dolchPos = BaseProjectDoc::m_dolch_word_list.get_words().cbegin();
-         dolchPos != BaseProjectDoc::m_dolch_word_list.get_words().cend(); ++dolchPos)
+    for (const auto& dolchPos : m_dolch_word_list.get_words())
         {
         if (!m_word_frequency_map->get_data().contains(word_case_insensitive_no_stem(
-                dolchPos->get_word().c_str(), dolchPos->get_word().length(),
+                dolchPos.get_word().c_str(), dolchPos.get_word().length(),
                 /* filler arguments not used*/ 0, 0, 0, false, false, false, false, 0, 0)))
             {
-            unusedDolchWords.insert(*dolchPos);
+            unusedDolchWords.insert(dolchPos);
             }
         }
 
@@ -2716,48 +2710,48 @@ void BaseProject::LoadHardWords()
             m_totalHardWordsSpache += nonProperCount;
             }
         // go through the custom tests
-        for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
-             pos != m_customTestsInUse.end(); ++pos)
+        for (auto& customTest : m_customTestsInUse)
             {
             /* if not using familiar word then skip. Also need to skip if using CustomHJ or
                CustomDC (if regular DC is excluding only list items)--
                in that case, it will be handled in next loop.*/
-            if (!pos->GetIterator()->is_using_familiar_words() ||
-                (pos->IsHarrisJacobsonFormula() &&
+            if (!customTest.GetIterator()->is_using_familiar_words() ||
+                (customTest.IsHarrisJacobsonFormula() &&
                  GetHarrisJacobsonTextExclusionMode() ==
                      SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings) ||
-                (pos->IsDaleChallFormula() &&
+                (customTest.IsDaleChallFormula() &&
                  GetDaleChallTextExclusionMode() ==
                      SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings))
                 {
                 continue;
                 }
-            if (!pos->GetIterator()->is_word_familiar(
-                    wordPos->first, false, pos->GetIterator()->is_including_numeric_as_familiar()))
+            if (!customTest.GetIterator()->is_word_familiar(
+                    wordPos->first, false,
+                    customTest.GetIterator()->is_including_numeric_as_familiar()))
                 {
                 if (allInstancesAreProper &&
-                    pos->GetIterator()->get_proper_noun_method() ==
+                    customTest.GetIterator()->get_proper_noun_method() ==
                         readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                     {
                     continue;
                     }
-                if (pos->GetIterator()->get_proper_noun_method() ==
+                if (customTest.GetIterator()->get_proper_noun_method() ==
                     readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                     {
                     // only load the data if user asked for this view
                     if (HasUI())
                         {
-                        pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(), 0,
-                                                            wordPos->first.c_str());
+                        customTest.GetListViewData()->SetItemText(
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
                         if (wordPos->second.first == nonProperCount)
                             {
-                            pos->GetListViewData()->SetItemValue(
-                                pos->GetUniqueUnfamiliarWordCount(), 1, nonProperCount);
+                            customTest.GetListViewData()->SetItemValue(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1, nonProperCount);
                             }
                         else
                             {
-                            pos->GetListViewData()->SetItemText(
-                                pos->GetUniqueUnfamiliarWordCount(), 1,
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1,
                                 wxString::Format(
                                     // TRANSLATORS: %zu are word total placeholders
                                     _(L"%zu (%zu total occurrences, %zu proper and familiar, "
@@ -2770,39 +2764,40 @@ void BaseProject::LoadHardWords()
                                 nonProperCount);
                             }
                         }
-                    pos->IncrementUnfamiliarWordCount(nonProperCount);
+                    customTest.IncrementUnfamiliarWordCount(nonProperCount);
                     }
-                else if (pos->GetIterator()->get_proper_noun_method() ==
+                else if (customTest.GetIterator()->get_proper_noun_method() ==
                          readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar)
                     {
                     // only load the data if user asked for this view
                     if (HasUI())
                         {
-                        pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(), 0,
-                                                            wordPos->first.c_str());
-                        pos->GetListViewData()->SetItemValue(pos->GetUniqueUnfamiliarWordCount(), 1,
-                                                             wordPos->second.first);
+                        customTest.GetListViewData()->SetItemText(
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
+                        customTest.GetListViewData()->SetItemValue(
+                            customTest.GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
                         }
-                    pos->IncrementUnfamiliarWordCount(wordPos->second.first);
+                    customTest.IncrementUnfamiliarWordCount(wordPos->second.first);
                     }
-                else if (pos->GetIterator()->get_proper_noun_method() ==
+                else if (customTest.GetIterator()->get_proper_noun_method() ==
                          readability::proper_noun_counting_method::
                              only_count_first_instance_of_proper_noun_as_unfamiliar)
                     {
                     // only load the data if user asked for this view
                     if (HasUI())
                         {
-                        pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(), 0,
-                                                            wordPos->first.c_str());
+                        customTest.GetListViewData()->SetItemText(
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
                         if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
                             {
-                            pos->GetListViewData()->SetItemValue(
-                                pos->GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
+                            customTest.GetListViewData()->SetItemValue(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                wordPos->second.first);
                             }
                         else if (nonProperCount == 0)
                             {
-                            pos->GetListViewData()->SetItemText(
-                                pos->GetUniqueUnfamiliarWordCount(), 1,
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1,
                                 wxString::Format(_(L"1 (%zu total occurrences, only first "
                                                    "occurrence unfamiliar)"),
                                                  wordPos->second.first),
@@ -2813,8 +2808,8 @@ void BaseProject::LoadHardWords()
                             }
                         else
                             {
-                            pos->GetListViewData()->SetItemText(
-                                pos->GetUniqueUnfamiliarWordCount(), 1,
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1,
                                 wxString::Format(
                                     // TRANSLATORS: %zu are word total placeholders
                                     _(L"%zu (%zu total occurrences. "
@@ -2827,11 +2822,11 @@ void BaseProject::LoadHardWords()
                                 nonProperCount + 1);
                             }
                         }
-                    pos->IncrementUnfamiliarWordCount((wordPos->second.first == nonProperCount) ?
-                                                          wordPos->second.first :
-                                                          nonProperCount + 1);
+                    customTest.IncrementUnfamiliarWordCount(
+                        (wordPos->second.first == nonProperCount) ? wordPos->second.first :
+                                                                    nonProperCount + 1);
                     }
-                pos->IncrementUniqueUnfamiliarWordCount();
+                customTest.IncrementUniqueUnfamiliarWordCount();
                 }
             }
         }
@@ -2922,8 +2917,7 @@ void BaseProject::LoadHardWords()
     m_totalNumeralsFromCompleteSentencesAndHeaders = 0;
     m_totalCharactersFromCompleteSentencesAndHeaders = 0;
     double_frequency_set<word_case_insensitive_no_stem> completeSentAndHeaderWordFrequencyMap;
-    for (std::vector<grammar::sentence_info>::const_iterator sentPos =
-             GetWords()->get_sentences().cbegin();
+    for (auto sentPos = GetWords()->get_sentences().cbegin();
          sentPos != GetWords()->get_sentences().cend(); ++sentPos)
         {
         if (sentPos->is_valid() || sentPos->get_type() == grammar::sentence_paragraph_type::header)
@@ -2970,20 +2964,19 @@ void BaseProject::LoadHardWords()
         GetDaleChallHardWordData()->SetSize(completeSentAndHeaderWordFrequencyMap.get_data().size(),
                                             3);
         }
-    for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
-         pos != m_customTestsInUse.end(); ++pos)
+    for (auto& customTest : m_customTestsInUse)
         {
-        if ((pos->IsHarrisJacobsonFormula() &&
+        if ((customTest.IsHarrisJacobsonFormula() &&
              GetHarrisJacobsonTextExclusionMode() ==
                  SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings) ||
-            (pos->IsDaleChallFormula() &&
+            (customTest.IsDaleChallFormula() &&
              GetDaleChallTextExclusionMode() ==
                  SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings))
             {
-            pos->Reset();
-            if (HasUI() && pos->GetIterator()->is_using_familiar_words())
+            customTest.Reset();
+            if (HasUI() && customTest.GetIterator()->is_using_familiar_words())
                 {
-                pos->GetListViewData()->SetSize(
+                customTest.GetListViewData()->SetSize(
                     completeSentAndHeaderWordFrequencyMap.get_data().size(), 2);
                 }
             }
@@ -3164,52 +3157,52 @@ void BaseProject::LoadHardWords()
                 }
             }
         // go through the custom tests
-        for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
-             pos != m_customTestsInUse.end(); ++pos)
+        for (auto& customTest : m_customTestsInUse)
             {
             // if not using familiar word then skip.
-            if (!pos->GetIterator()->is_using_familiar_words())
+            if (!customTest.GetIterator()->is_using_familiar_words())
                 {
                 continue;
                 }
 
             // If using CustomHJ or CustomDC (if regular DC/HJ are excluding only list items)
             // load hard words from this buffer
-            if ((pos->IsHarrisJacobsonFormula() &&
+            if ((customTest.IsHarrisJacobsonFormula() &&
                  GetHarrisJacobsonTextExclusionMode() ==
                      SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings) ||
-                (pos->IsDaleChallFormula() &&
+                (customTest.IsDaleChallFormula() &&
                  GetDaleChallTextExclusionMode() ==
                      SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings))
                 {
-                if (!pos->GetIterator()->is_word_familiar(
+                if (!customTest.GetIterator()->is_word_familiar(
                         wordPos->first,
                         // proper noun logic is handled separately below
-                        false, pos->GetIterator()->is_including_numeric_as_familiar()))
+                        false, customTest.GetIterator()->is_including_numeric_as_familiar()))
                     {
                     if (allInstancesAreProper &&
-                        pos->GetIterator()->get_proper_noun_method() ==
+                        customTest.GetIterator()->get_proper_noun_method() ==
                             readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                         {
                         continue;
                         }
-                    if (pos->GetIterator()->get_proper_noun_method() ==
+                    if (customTest.GetIterator()->get_proper_noun_method() ==
                         readability::proper_noun_counting_method::all_proper_nouns_are_familiar)
                         {
                         // only load the data if user asked for this view
                         if (HasUI())
                             {
-                            pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(),
-                                                                0, wordPos->first.c_str());
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 0,
+                                wordPos->first.c_str());
                             if (wordPos->second.first == nonProperCount)
                                 {
-                                pos->GetListViewData()->SetItemValue(
-                                    pos->GetUniqueUnfamiliarWordCount(), 1, nonProperCount);
+                                customTest.GetListViewData()->SetItemValue(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1, nonProperCount);
                                 }
                             else
                                 {
-                                pos->GetListViewData()->SetItemText(
-                                    pos->GetUniqueUnfamiliarWordCount(), 1,
+                                customTest.GetListViewData()->SetItemText(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
                                     wxString::Format(
                                         // TRANSLATORS: %zu are word total placeholders
                                         _(L"%zu (%zu total occurrences, %zu proper and familiar, "
@@ -3222,41 +3215,45 @@ void BaseProject::LoadHardWords()
                                     nonProperCount);
                                 }
                             }
-                        pos->IncrementUnfamiliarWordCount(nonProperCount);
+                        customTest.IncrementUnfamiliarWordCount(nonProperCount);
                         }
-                    else if (pos->GetIterator()->get_proper_noun_method() ==
+                    else if (customTest.GetIterator()->get_proper_noun_method() ==
                              readability::proper_noun_counting_method::
                                  all_proper_nouns_are_unfamiliar)
                         {
                         // only load the data if user asked for this view
                         if (HasUI())
                             {
-                            pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(),
-                                                                0, wordPos->first.c_str());
-                            pos->GetListViewData()->SetItemValue(
-                                pos->GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 0,
+                                wordPos->first.c_str());
+                            customTest.GetListViewData()->SetItemValue(
+                                customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                wordPos->second.first);
                             }
-                        pos->IncrementUnfamiliarWordCount(wordPos->second.first);
+                        customTest.IncrementUnfamiliarWordCount(wordPos->second.first);
                         }
-                    else if (pos->GetIterator()->get_proper_noun_method() ==
+                    else if (customTest.GetIterator()->get_proper_noun_method() ==
                              readability::proper_noun_counting_method::
                                  only_count_first_instance_of_proper_noun_as_unfamiliar)
                         {
                         // only load the data if user asked for this view
                         if (HasUI())
                             {
-                            pos->GetListViewData()->SetItemText(pos->GetUniqueUnfamiliarWordCount(),
-                                                                0, wordPos->first.c_str());
+                            customTest.GetListViewData()->SetItemText(
+                                customTest.GetUniqueUnfamiliarWordCount(), 0,
+                                wordPos->first.c_str());
                             if (wordPos->second.first == nonProperCount ||
                                 wordPos->second.first == 1)
                                 {
-                                pos->GetListViewData()->SetItemValue(
-                                    pos->GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
+                                customTest.GetListViewData()->SetItemValue(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                    wordPos->second.first);
                                 }
                             else if (nonProperCount == 0)
                                 {
-                                pos->GetListViewData()->SetItemText(
-                                    pos->GetUniqueUnfamiliarWordCount(), 1,
+                                customTest.GetListViewData()->SetItemText(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
                                     wxString::Format(
                                         // TRANSLATORS: %zu are word total placeholders
                                         _(L"1 (%zu total occurrences, only first "
@@ -3269,8 +3266,8 @@ void BaseProject::LoadHardWords()
                                 }
                             else
                                 {
-                                pos->GetListViewData()->SetItemText(
-                                    pos->GetUniqueUnfamiliarWordCount(), 1,
+                                customTest.GetListViewData()->SetItemText(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
                                     wxString::Format(
                                         // TRANSLATORS: %zu are word total placeholders
                                         _(L"%zu (%zu total occurrences. "
@@ -3283,11 +3280,11 @@ void BaseProject::LoadHardWords()
                                     nonProperCount + 1);
                                 }
                             }
-                        pos->IncrementUnfamiliarWordCount(
+                        customTest.IncrementUnfamiliarWordCount(
                             (wordPos->second.first == nonProperCount) ? wordPos->second.first :
                                                                         nonProperCount + 1);
                         }
-                    pos->IncrementUniqueUnfamiliarWordCount();
+                    customTest.IncrementUniqueUnfamiliarWordCount();
                     }
                 }
             }
@@ -3454,11 +3451,11 @@ void BaseProject::CalculateStatisticsIgnoringInvalidSentences()
             GetWords()->get_sentences().begin(), GetWords()->get_sentences().end(),
             grammar::complete_sentence_length_greater_than(m_difficultSentenceLength));
 
-        for (size_t i = 0; i < GetWords()->get_sentences().size(); ++i)
+        for (const auto& sent : GetWords()->get_sentences())
             {
-            if (GetWords()->get_sentences()[i].is_valid())
+            if (sent.is_valid())
                 {
-                const wchar_t endingChar = GetWords()->get_sentences()[i].get_ending_punctuation();
+                const wchar_t endingChar = sent.get_ending_punctuation();
                 if (endingChar == common_lang_constants::QUESTION_MARK ||
                     endingChar == common_lang_constants::QUESTION_MARK_FULL_WIDTH)
                     {
@@ -3474,7 +3471,7 @@ void BaseProject::CalculateStatisticsIgnoringInvalidSentences()
                     ++m_totalExclamatorySentences;
                     }
                 // count the sentence units
-                m_totalSentenceUnits += GetWords()->get_sentences()[i].get_unit_count();
+                m_totalSentenceUnits += sent.get_unit_count();
                 }
             }
 
@@ -3505,9 +3502,9 @@ void BaseProject::CalculateStatisticsIgnoringInvalidSentences()
     m_wordyPhraseCount = m_redundantPhraseCount = m_wordingErrorCount = m_clicheCount = 0;
     const auto& wordyIndices = GetWords()->get_known_phrase_indices();
     const auto& wordyPhrases = GetWords()->get_known_phrases().get_phrases();
-    for (size_t i = 0; i < wordyIndices.size(); ++i)
+    for (const auto& wordyIndex : wordyIndices)
         {
-        switch (wordyPhrases[wordyIndices[i].second].first.get_type())
+        switch (wordyPhrases[wordyIndex.second].first.get_type())
             {
         case grammar::phrase_type::phrase_wordy:
             ++m_wordyPhraseCount;
@@ -3588,8 +3585,7 @@ void BaseProject::CalculateStatistics()
 
     // load the unique words and their frequencies
     m_word_frequency_map = std::make_shared<double_frequency_set<word_case_insensitive_no_stem>>();
-    for (std::vector<grammar::sentence_info>::const_iterator sentPos =
-             GetWords()->get_sentences().cbegin();
+    for (auto sentPos = GetWords()->get_sentences().cbegin();
          sentPos != GetWords()->get_sentences().cend(); ++sentPos)
         {
         // go through the words in the current sentence and add them to the map
@@ -3631,9 +3627,9 @@ void BaseProject::CalculateStatistics()
             std::count_if(GetWords()->get_sentences().begin(), GetWords()->get_sentences().end(),
                           grammar::sentence_length_greater_than(m_difficultSentenceLength));
 
-        for (size_t i = 0; i < GetWords()->get_sentences().size(); ++i)
+        for (const auto& sent : GetWords()->get_sentences())
             {
-            const wchar_t endingChar = GetWords()->get_sentences()[i].get_ending_punctuation();
+            const wchar_t endingChar = sent.get_ending_punctuation();
             if (endingChar == common_lang_constants::QUESTION_MARK ||
                 endingChar == common_lang_constants::QUESTION_MARK_FULL_WIDTH)
                 {
@@ -3649,7 +3645,7 @@ void BaseProject::CalculateStatistics()
                 ++m_totalExclamatorySentences;
                 }
             // count the sentence units
-            m_totalSentenceUnits += GetWords()->get_sentences()[i].get_unit_count();
+            m_totalSentenceUnits += sent.get_unit_count();
             }
 
         auto longestSent = std::max_element(GetWords()->get_sentences().cbegin(),
@@ -3676,9 +3672,9 @@ void BaseProject::CalculateStatistics()
     m_wordyPhraseCount = m_redundantPhraseCount = m_wordingErrorCount = m_clicheCount = 0;
     const auto& wordyIndices = GetWords()->get_known_phrase_indices();
     const auto& wordyPhrases = GetWords()->get_known_phrases().get_phrases();
-    for (size_t i = 0; i < wordyIndices.size(); ++i)
+    for (const auto& wordyIndex : wordyIndices)
         {
-        switch (wordyPhrases[wordyIndices[i].second].first.get_type())
+        switch (wordyPhrases[wordyIndex.second].first.get_type())
             {
         case grammar::phrase_type::phrase_wordy:
             ++m_wordyPhraseCount;
@@ -4825,8 +4821,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
     // check for sentences that got broken up by paragraph breaks and warn if there are a lot of
     // them, this indicates a messed up file.
     size_t paragraphBrokenSentences = 0;
-    for (std::vector<size_t>::const_iterator pos =
-             GetWords()->get_lowercase_beginning_sentences().cbegin();
+    for (auto pos = GetWords()->get_lowercase_beginning_sentences().cbegin();
          pos != GetWords()->get_lowercase_beginning_sentences().cend(); ++pos)
         {
         // if there is a complete, 3-word or more sentence starting with a lowercased letter
@@ -4858,19 +4853,17 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
         }
     // Go through the sentences and see if any are not complete but considered valid because of
     // their length. If any are found, then mention it to the user.
-    size_t sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength = 0;
-    for (std::vector<grammar::sentence_info>::const_iterator sentPos =
-             GetWords()->get_sentences().cbegin();
-         sentPos != GetWords()->get_sentences().cend(); ++sentPos)
+    size_t sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength = 0;
+    for (const auto& sentPos : GetWords()->get_sentences())
         {
-        if (sentPos->is_valid() && !sentPos->ends_with_valid_punctuation() &&
-            sentPos->get_ending_punctuation() != common_lang_constants::SEMICOLON &&
-            sentPos->get_word_count() > GetIncludeIncompleteSentencesIfLongerThanValue())
+        if (sentPos.is_valid() && !sentPos.ends_with_valid_punctuation() &&
+            sentPos.get_ending_punctuation() != common_lang_constants::SEMICOLON &&
+            sentPos.get_word_count() > GetIncludeIncompleteSentencesIfLongerThanValue())
             {
-            ++sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength;
+            ++sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength;
             }
         }
-    if (sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength > 0)
+    if (sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength > 0)
         {
         if (WarningManager::HasWarning(_DT(L"incomplete-sentences-valid-from-length")))
             {
@@ -4882,7 +4875,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
                   "will be included in the analysis.\n\nTo change this, increase the "
                   "\"Include incomplete sentences containing more than...\" "
                   "option under \"Project Properties\"%s\"Document Indexing\"."),
-                sentencesMissingEndingPunctionsConsideredCompleteBecauseOfLength,
+                sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength,
                 GetIncludeIncompleteSentencesIfLongerThanValue(), L" \u00BB "));
             LogMessage(warningMsg);
             }
@@ -8241,8 +8234,7 @@ bool BaseProject::AddLixTest(const bool setFocus)
 //-------------------------------------------------------
 void BaseProject::SyncCustomTests()
     {
-    for (std::vector<CustomReadabilityTestInterface>::iterator pos = m_customTestsInUse.begin();
-         pos != m_customTestsInUse.end();
+    for (auto pos = m_customTestsInUse.begin(); pos != m_customTestsInUse.end();
          /* in loop*/)
         {
         auto testIter =
@@ -8558,7 +8550,7 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
 std::vector<CustomReadabilityTestInterface>::iterator
 BaseProject::RemoveCustomReadabilityTest(const wxString& testName, [[maybe_unused]] const int Id)
     {
-    auto testPos = std::find(m_customTestsInUse.begin(), m_customTestsInUse.end(), testName);
+    const auto testPos = std::find(m_customTestsInUse.begin(), m_customTestsInUse.end(), testName);
     if (testPos == m_customTestsInUse.end())
         {
         return testPos;

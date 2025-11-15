@@ -363,7 +363,7 @@ class BaseProject : public ProjectRefresh
             }
         }
 
-    void DeleteWords() { m_words.reset(); }
+    void DeleteWords() { m_words = nullptr; }
 
     void DeleteUniqueWordMap() { m_word_frequency_map.reset(); }
 

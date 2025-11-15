@@ -261,10 +261,10 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
         }
     else
         {
-        const int responseCode{ m_downloader.GetLastStatus() };
 
         // check the response code
-        if (QueueDownload::IsBadResponseCode(responseCode))
+        if (const int responseCode{ m_downloader.GetLastStatus() };
+            QueueDownload::IsBadResponseCode(responseCode))
             {
             wxLogWarning(L"%s: unable to connect to page, error code #%i (%s).", url, responseCode,
                          QueueDownload::GetResponseMessage(responseCode));

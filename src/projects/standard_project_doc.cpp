@@ -95,12 +95,10 @@ void ProjectDoc::RemoveMisspellings([[maybe_unused]] const wxArrayString& misspe
 void ProjectDoc::ExcludeAllCustomTestsTests()
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    for (std::vector<CustomReadabilityTestInterface>::const_iterator pos =
-             GetCustTestsInUse().begin();
-         pos != GetCustTestsInUse().end(); ++pos)
+    for (const auto& customTest : GetCustTestsInUse())
         {
-        while (
-            view->GetWordsBreakdownView().RemoveWindowById(pos->GetIterator()->get_interface_id()))
+        while (view->GetWordsBreakdownView().RemoveWindowById(
+            customTest.GetIterator()->get_interface_id()))
             {
             }
         }
@@ -328,7 +326,7 @@ void ProjectDoc::RefreshProject()
                                 .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
-        wxTheApp->Yield();
+        wxGetApp().Yield();
 #endif
 
         if (GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
@@ -463,25 +461,22 @@ bool ProjectDoc::LoadProjectFile(const char* projectFileText, const size_t textL
             // ...otherwise, external file was supposed to be embedded,
             // but internal copy of the text couldn't be found.
             // Try to reload it.
-            else
+
+            if (LoadExternalDocument())
                 {
-                if (LoadExternalDocument())
-                    {
-                    UpdateSourceFileModifiedTime();
-                    LogMessage(_(L"The document's content could not be found in the project file. "
-                                 "Original document will be reloaded."),
-                               _(L"Warning"), wxOK | wxICON_INFORMATION);
-                    Modify(true);
-                    return true;
-                    }
-                // Should not normally happen. File was supposed to be embedded, but wasn't in the
-                // project file and external file can't be found either.
-                wxMessageBox(
-                    _(L"Document content could not be found in the project file and "
-                      "external document could not be located.\nUnable to create project."),
-                    _(L"Error"), wxOK | wxICON_EXCLAMATION);
-                return false;
+                UpdateSourceFileModifiedTime();
+                LogMessage(_(L"The document's content could not be found in the project file. "
+                             "Original document will be reloaded."),
+                           _(L"Warning"), wxOK | wxICON_INFORMATION);
+                Modify(true);
+                return true;
                 }
+            // Should not normally happen. File was supposed to be embedded, but wasn't in the
+            // project file and external file can't be found either.
+            wxMessageBox(_(L"Document content could not be found in the project file and "
+                           "external document could not be located.\nUnable to create project."),
+                         _(L"Error"), wxOK | wxICON_EXCLAMATION);
+            return false;
             }
         }
     // project is set to always reload the file
@@ -503,13 +498,11 @@ bool ProjectDoc::LoadProjectFile(const char* projectFileText, const size_t textL
             }
         /* This should not happen because the entered text flag overrides the storage flag to force
            it to embed, but just for the sake of being verbose... */
-        else // TextSource::EnteredText
-            {
-            wxMessageBox(_(L"Manually entered text was not embedded previously.\n"
-                           "Unable to create project."),
-                         _(L"Error"), wxOK | wxICON_EXCLAMATION);
-            return false;
-            }
+        // TextSource::EnteredText
+        wxMessageBox(_(L"Manually entered text was not embedded previously.\n"
+                       "Unable to create project."),
+                     _(L"Error"), wxOK | wxICON_EXCLAMATION);
+        return false;
         }
 
     return true;
@@ -759,20 +752,18 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         if (wizard->GetSelectedDocumentType() ==
             readability::document_classification::general_document)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(rTest->get_test().has_document_classification(
-                                   readability::document_classification::general_document) &&
-                               rTest->get_test().has_language(GetProjectLanguage()));
+                rTest.include(rTest.get_test().has_document_classification(
+                                  readability::document_classification::general_document) &&
+                              rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_document_classification(
+                if (customWordTest.has_document_classification(
                         readability::document_classification::general_document))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
@@ -780,20 +771,18 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         else if (wizard->GetSelectedDocumentType() ==
                  readability::document_classification::technical_document)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(rTest->get_test().has_document_classification(
-                                   readability::document_classification::technical_document) &&
-                               rTest->get_test().has_language(GetProjectLanguage()));
+                rTest.include(rTest.get_test().has_document_classification(
+                                  readability::document_classification::technical_document) &&
+                              rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_document_classification(
+                if (customWordTest.has_document_classification(
                         readability::document_classification::technical_document))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
@@ -805,64 +794,58 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
             // is a form
             SetInvalidSentenceMethod(InvalidSentence::IncludeAsFullSentences);
 
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(rTest->get_test().has_document_classification(
-                                   readability::document_classification::nonnarrative_document) &&
-                               rTest->get_test().has_language(GetProjectLanguage()));
+                rTest.include(rTest.get_test().has_document_classification(
+                                  readability::document_classification::nonnarrative_document) &&
+                              rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_document_classification(
+                if (customWordTest.has_document_classification(
                         readability::document_classification::nonnarrative_document))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedDocumentType() ==
                  readability::document_classification::adult_literature_document)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_document_classification(
+                rTest.include(
+                    rTest.get_test().has_document_classification(
                         readability::document_classification::adult_literature_document) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_document_classification(
+                if (customWordTest.has_document_classification(
                         readability::document_classification::adult_literature_document))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedDocumentType() ==
                  readability::document_classification::childrens_literature_document)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_document_classification(
+                rTest.include(
+                    rTest.get_test().has_document_classification(
                         readability::document_classification::childrens_literature_document) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            IncludeDolchSightWords(
-                (GetProjectLanguage() == readability::test_language::english_test));
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            IncludeDolchSightWords(GetProjectLanguage() ==
+                                   readability::test_language::english_test);
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_document_classification(
+                if (customWordTest.has_document_classification(
                         readability::document_classification::childrens_literature_document))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
@@ -874,150 +857,136 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         if (wizard->GetSelectedIndustryType() ==
             readability::industry_classification::childrens_publishing_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::childrens_publishing_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            IncludeDolchSightWords(
-                (GetProjectLanguage() == readability::test_language::english_test));
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            IncludeDolchSightWords(GetProjectLanguage() ==
+                                   readability::test_language::english_test);
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::childrens_publishing_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::adult_publishing_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::adult_publishing_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::adult_publishing_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::secondary_language_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::secondary_language_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            IncludeDolchSightWords(
-                (GetProjectLanguage() == readability::test_language::english_test));
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            IncludeDolchSightWords(GetProjectLanguage() ==
+                                   readability::test_language::english_test);
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::secondary_language_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::childrens_healthcare_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::childrens_healthcare_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::childrens_healthcare_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::adult_healthcare_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::adult_healthcare_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::adult_healthcare_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::military_government_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(
-                    rTest->get_test().has_industry_classification(
+                rTest.include(
+                    rTest.get_test().has_industry_classification(
                         readability::industry_classification::military_government_industry) &&
-                    rTest->get_test().has_language(GetProjectLanguage()));
+                    rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::military_government_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
         else if (wizard->GetSelectedIndustryType() ==
                  readability::industry_classification::broadcasting_industry)
             {
-            for (auto rTest = GetReadabilityTests().get_tests().begin();
-                 rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                rTest->include(rTest->get_test().has_industry_classification(
-                                   readability::industry_classification::broadcasting_industry) &&
-                               rTest->get_test().has_language(GetProjectLanguage()));
+                rTest.include(rTest.get_test().has_industry_classification(
+                                  readability::industry_classification::broadcasting_industry) &&
+                              rTest.get_test().has_language(GetProjectLanguage()));
                 }
-            for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.cbegin();
-                 pos != m_custom_word_tests.cend(); ++pos)
+            for (const auto& customWordTest : m_custom_word_tests)
                 {
-                if (pos->has_industry_classification(
+                if (customWordTest.has_industry_classification(
                         readability::industry_classification::broadcasting_industry))
                     {
-                    AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                    AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                     }
                 }
             }
@@ -1028,13 +997,12 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         {
         // manually selected standard tests
         SetReadabilityTests(wizard->GetReadabilityTestsInfo());
-        for (auto rTest = GetReadabilityTests().get_tests().begin();
-             rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+        for (auto& rTest : GetReadabilityTests().get_tests())
             {
             // turn off any selected tests that don't belong to the project's language
-            if (!rTest->get_test().has_language(GetProjectLanguage()))
+            if (!rTest.get_test().has_language(GetProjectLanguage()))
                 {
-                rTest->include(false);
+                rTest.include(false);
                 }
             }
         wxGetApp().GetAppOptions()->SetReadabilityTests(wizard->GetReadabilityTestsInfo());
@@ -1102,13 +1070,12 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         // override how headers and lists are counted so that they are always
         // included if this is a form
         SetInvalidSentenceMethod(InvalidSentence::IncludeAsFullSentences);
-        for (CustomReadabilityTestCollection::const_iterator pos = m_custom_word_tests.begin();
-             pos != m_custom_word_tests.end(); ++pos)
+        for (const auto& customWordTest : m_custom_word_tests)
             {
-            if (pos->has_document_classification(
+            if (customWordTest.has_document_classification(
                     readability::document_classification::nonnarrative_document))
                 {
-                AddCustomReadabilityTest(wxString(pos->get_name().c_str()));
+                AddCustomReadabilityTest(wxString(customWordTest.get_name().c_str()));
                 }
             }
         }
@@ -1135,12 +1102,11 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
         view->GetReadabilityScoresList()->Clear();
         }
 
-    for (auto rTest = GetReadabilityTests().get_tests().begin();
-         rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+    for (auto& rTest : GetReadabilityTests().get_tests())
         {
-        if (rTest->is_included())
+        if (rTest.is_included())
             {
-            AddStandardReadabilityTest(rTest->get_test().get_id().c_str(), false);
+            AddStandardReadabilityTest(rTest.get_test().get_id().c_str(), false);
             }
         }
 
@@ -1483,7 +1449,7 @@ bool ProjectDoc::OnNewDocument()
                                 .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
-        wxTheApp->Yield();
+        wxGetApp().Yield();
 #endif
 
         if (GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
@@ -1554,8 +1520,7 @@ bool ProjectDoc::OnNewDocument()
     // them, this indicates a messed up file. We do this here so not to interrupt the creation of
     // the project too much.
     size_t paragraphBrokenSentences{ 0 };
-    for (std::vector<size_t>::const_iterator pos =
-             GetWords()->get_lowercase_beginning_sentences().begin();
+    for (auto pos = GetWords()->get_lowercase_beginning_sentences().begin();
          pos != GetWords()->get_lowercase_beginning_sentences().end(); ++pos)
         {
         // if there is a complete, 3-word or more sentence starting with a lowercased letter
@@ -1589,8 +1554,7 @@ bool ProjectDoc::OnNewDocument()
     // Go through the sentences and see if any are not complete but considered valid because of
     // their length. If any are found, then mention it to the user.
     size_t sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength{ 0 };
-    std::vector<punctuation::punctuation_mark>::const_iterator punctPos =
-        GetWords()->get_punctuation().cbegin();
+    auto punctPos = GetWords()->get_punctuation().cbegin();
     wxArrayString longIncompleteSentences;
     for (const auto& sent : GetWords()->get_sentences())
         {
@@ -1987,37 +1951,37 @@ void ProjectDoc::DisplayWordsBreakdown()
         }
 
     // custom hard words
-    for (std::vector<CustomReadabilityTestInterface>::iterator pos = GetCustTestsInUse().begin();
-         pos != GetCustTestsInUse().end(); ++pos)
+    for (auto& customWordTest : GetCustTestsInUse())
         {
         auto* listView =
             dynamic_cast<Wisteria::UI::ListCtrlEx*>(view->GetWordsBreakdownView().FindWindowById(
-                pos->GetIterator()->get_interface_id(), CLASSINFO(Wisteria::UI::ListCtrlEx)));
+                customWordTest.GetIterator()->get_interface_id(),
+                CLASSINFO(Wisteria::UI::ListCtrlEx)));
         if (GetWordsBreakdownInfo().IsCustomTestsUnfamiliarEnabled() &&
-            pos->GetIterator()->is_using_familiar_words() &&
-            pos->GetUniqueUnfamiliarWordCount() > 0 && pos->GetListViewData())
+            customWordTest.GetIterator()->is_using_familiar_words() &&
+            customWordTest.GetUniqueUnfamiliarWordCount() > 0 && customWordTest.GetListViewData())
             {
             if (listView != nullptr)
                 {
-                listView->SetVirtualDataProvider(pos->GetListViewData());
-                listView->SetVirtualDataSize(pos->GetUniqueUnfamiliarWordCount());
+                listView->SetVirtualDataProvider(customWordTest.GetListViewData());
+                listView->SetVirtualDataSize(customWordTest.GetUniqueUnfamiliarWordCount());
                 listView->Resort();
                 listView->DistributeColumns();
                 }
             else
                 {
                 listView = new Wisteria::UI::ListCtrlEx(
-                    view->GetSplitter(), pos->GetIterator()->get_interface_id(), wxDefaultPosition,
-                    wxDefaultSize, wxLC_VIRTUAL | wxLC_REPORT | wxBORDER_SUNKEN);
+                    view->GetSplitter(), customWordTest.GetIterator()->get_interface_id(),
+                    wxDefaultPosition, wxDefaultSize, wxLC_VIRTUAL | wxLC_REPORT | wxBORDER_SUNKEN);
                 listView->Hide();
-                listView->SetLabel(pos->GetIterator()->get_name().c_str());
-                listView->SetName(wxString::Format(_(L"%s (Unfamiliar) List"),
-                                                   pos->GetIterator()->get_name().c_str()));
+                listView->SetLabel(customWordTest.GetIterator()->get_name().c_str());
+                listView->SetName(wxString::Format(
+                    _(L"%s (Unfamiliar) List"), customWordTest.GetIterator()->get_name().c_str()));
                 listView->EnableGridLines();
                 listView->InsertColumn(0, _(L"Unfamiliar Word"));
                 listView->InsertColumn(1, _(L"Frequency"));
-                listView->SetVirtualDataProvider(pos->GetListViewData());
-                listView->SetVirtualDataSize(pos->GetUniqueUnfamiliarWordCount());
+                listView->SetVirtualDataProvider(customWordTest.GetListViewData());
+                listView->SetVirtualDataSize(customWordTest.GetUniqueUnfamiliarWordCount());
                 listView->DistributeColumns();
                 listView->AssignContextMenu(wxXmlResource::Get()->LoadMenu(L"IDM_LIST_MENU"));
                 UpdateListOptions(listView);
@@ -2036,7 +2000,8 @@ void ProjectDoc::DisplayWordsBreakdown()
             {
             resetListView(listView);
             // we are getting rid of this window (if it was included before)
-            view->GetWordsBreakdownView().RemoveWindowById(pos->GetIterator()->get_interface_id());
+            view->GetWordsBreakdownView().RemoveWindowById(
+                customWordTest.GetIterator()->get_interface_id());
             }
         }
 
@@ -6901,9 +6866,8 @@ void ProjectDoc::DisplayOverlyLongSentences()
         GetDifficultSentenceLength());
     // punctuation markers
     auto punctPos = GetWords()->get_punctuation().cbegin();
-    for (std::vector<grammar::sentence_info>::const_iterator pos =
-             GetWords()->get_sentences().begin();
-         pos != GetWords()->get_sentences().end(); ++pos)
+    for (auto pos = GetWords()->get_sentences().begin(); pos != GetWords()->get_sentences().end();
+         ++pos)
         {
         if ((GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis &&
              completeSentenceGreater(*pos)) ||
@@ -7140,11 +7104,10 @@ void ProjectDoc::DisplayGrammar()
         m_misspelledWordData->DeleteAllItems();
         m_misspelledWordData->SetSize(misspelledWords.get_data().size(), 2);
         size_t uniqueMisspellingCount = 0;
-        for (auto mIter = misspelledWords.get_data().cbegin();
-             mIter != misspelledWords.get_data().cend(); ++mIter)
+        for (const auto& mIter : misspelledWords.get_data())
             {
-            m_misspelledWordData->SetItemText(uniqueMisspellingCount, 0, mIter->first.c_str());
-            m_misspelledWordData->SetItemValue(uniqueMisspellingCount++, 1, mIter->second);
+            m_misspelledWordData->SetItemText(uniqueMisspellingCount, 0, mIter.first.c_str());
+            m_misspelledWordData->SetItemValue(uniqueMisspellingCount++, 1, mIter.second);
             }
 
         m_misspelledWordData->SetSize(misspelledWords.get_data().size());
@@ -7257,12 +7220,11 @@ void ProjectDoc::DisplayGrammar()
         m_incorrectArticleData->DeleteAllItems();
         m_incorrectArticleData->SetSize(articleMismatchesWords.get_data().size(), 2);
         size_t uniqueIncorrectArticleCount = 0;
-        for (auto mIter = articleMismatchesWords.get_data().cbegin();
-             mIter != articleMismatchesWords.get_data().cend(); ++mIter)
+        for (const auto& mIter : articleMismatchesWords.get_data())
             {
             m_incorrectArticleData->SetItemText(uniqueIncorrectArticleCount, 0,
-                                                mIter->first.c_str());
-            m_incorrectArticleData->SetItemValue(uniqueIncorrectArticleCount++, 1, mIter->second);
+                                                mIter.first.c_str());
+            m_incorrectArticleData->SetItemValue(uniqueIncorrectArticleCount++, 1, mIter.second);
             }
         auto* listView = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
             view->GetGrammarView().FindWindowById(BaseProjectView::INCORRECT_ARTICLE_PAGE_ID));
@@ -7374,11 +7336,9 @@ void ProjectDoc::DisplayGrammar()
                 GetWords()->get_punctuation().cend());
             // format the list of like words
             wxString theWords;
-            for (std::set<size_t>::const_iterator overusedWordsIter =
-                     overUsedWordsListsIter->second.begin();
-                 overusedWordsIter != overUsedWordsListsIter->second.end(); ++overusedWordsIter)
+            for (const auto overusedWords : overUsedWordsListsIter->second)
                 {
-                theWords.append(GetWords()->get_word((*overusedWordsIter)).c_str()).append(L"; ");
+                theWords.append(GetWords()->get_word(overusedWords).c_str()).append(L"; ");
                 }
             theWords.Trim();
             theWords.RemoveLast();
@@ -7555,11 +7515,10 @@ void ProjectDoc::DisplayGrammar()
         m_passiveVoiceData->DeleteAllItems();
         m_passiveVoiceData->SetSize(passiveVoicePhrases.get_data().size(), 2);
         size_t uniquePassiveVoiceCount = 0;
-        for (auto mIter = passiveVoicePhrases.get_data().cbegin();
-             mIter != passiveVoicePhrases.get_data().cend(); ++mIter)
+        for (const auto& mIter : passiveVoicePhrases.get_data())
             {
-            m_passiveVoiceData->SetItemText(uniquePassiveVoiceCount, 0, mIter->first.c_str());
-            m_passiveVoiceData->SetItemValue(uniquePassiveVoiceCount++, 1, mIter->second);
+            m_passiveVoiceData->SetItemText(uniquePassiveVoiceCount, 0, mIter.first.c_str());
+            m_passiveVoiceData->SetItemValue(uniquePassiveVoiceCount++, 1, mIter.second);
             }
         auto* listView = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
             view->GetGrammarView().FindWindowById(BaseProjectView::PASSIVE_VOICE_PAGE_ID));
@@ -7608,8 +7567,7 @@ void ProjectDoc::DisplayGrammar()
         // reset punctuation marker
         auto punctPos = GetWords()->get_punctuation().cbegin();
         wxString currentSentence;
-        for (std::vector<size_t>::const_iterator pos =
-                 GetWords()->get_conjunction_beginning_sentences().begin();
+        for (auto pos = GetWords()->get_conjunction_beginning_sentences().begin();
              pos != GetWords()->get_conjunction_beginning_sentences().end(); ++pos)
             {
             currentSentence =
@@ -7679,8 +7637,7 @@ void ProjectDoc::DisplayGrammar()
         // reset punctuation marker
         auto punctPos = GetWords()->get_punctuation().cbegin();
         wxString currentSentence;
-        for (std::vector<size_t>::const_iterator pos =
-                 GetWords()->get_lowercase_beginning_sentences().begin();
+        for (auto pos = GetWords()->get_lowercase_beginning_sentences().begin();
              pos != GetWords()->get_lowercase_beginning_sentences().end(); ++pos)
             {
             currentSentence =
@@ -7910,15 +7867,14 @@ void ProjectDoc::CalculateGraphData()
         GetWordTypeGroupColumnName(),
         { { 0, _(L"Simple Words\n(1-2 syllables)") }, { 1, _(L"Complex Words\n(3+ syllables)") } });
     m_syllableCounts->Reserve(GetTotalWords());
-    for (auto wordPos = GetWords()->get_words().cbegin(); wordPos != GetWords()->get_words().cend();
-         ++wordPos)
+    for (const auto& wordPos : GetWords()->get_words())
         {
         if (GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings)
             {
-            if (wordPos->is_valid())
+            if (wordPos.is_valid())
                 {
-                if (wordPos->is_numeric() &&
+                if (wordPos.is_numeric() &&
                     GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable)
                     {
                     m_syllableCounts->AddRow(
@@ -7928,20 +7884,20 @@ void ProjectDoc::CalculateGraphData()
                     {
                     m_syllableCounts->AddRow(
                         Wisteria::Data::RowInfo()
-                            .Continuous({ static_cast<double>(wordPos->get_syllable_count()) })
+                            .Continuous({ static_cast<double>(wordPos.get_syllable_count()) })
                             .
                         // simple or complex?
                         Categoricals({ static_cast<Wisteria::Data::GroupIdType>(
-                            (wordPos->get_syllable_count()) < 3 ? 0 : 1) })
+                            (wordPos.get_syllable_count()) < 3 ? 0 : 1) })
                             .
                         // add the word as a row ID so that it appears as a tooltip on the bin
-                        Id(wordPos->c_str()));
+                        Id(wordPos.c_str()));
                     }
                 }
             }
         else
             {
-            if (wordPos->is_numeric() &&
+            if (wordPos.is_numeric() &&
                 GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable)
                 {
                 m_syllableCounts->AddRow(
@@ -7951,10 +7907,10 @@ void ProjectDoc::CalculateGraphData()
                 {
                 m_syllableCounts->AddRow(
                     Wisteria::Data::RowInfo()
-                        .Continuous({ static_cast<double>(wordPos->get_syllable_count()) })
+                        .Continuous({ static_cast<double>(wordPos.get_syllable_count()) })
                         .Categoricals({ static_cast<Wisteria::Data::GroupIdType>(
-                            (wordPos->get_syllable_count()) < 3 ? 0 : 1) })
-                        .Id(wordPos->c_str()));
+                            (wordPos.get_syllable_count()) < 3 ? 0 : 1) })
+                        .Id(wordPos.c_str()));
                 }
             }
         }

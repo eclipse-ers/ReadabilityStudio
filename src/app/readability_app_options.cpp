@@ -437,10 +437,9 @@ void ReadabilityAppOptions::ResetSettings()
     m_spellcheck_ignore_file_addresses = true;
     m_spellcheck_ignore_programmer_code = false;
     m_allow_colloquialisms = true;
-    for (auto rTest = GetReadabilityTests().get_tests().begin();
-         rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+    for (auto& rTest : GetReadabilityTests().get_tests())
         {
-        rTest->include(false);
+        rTest.include(false);
         }
     m_includeDolchSightWords = false;
     m_testRecommendation = TestRecommendation::BasedOnDocumentType;
@@ -3112,17 +3111,16 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                     }
 
                 // read in the standard tests
-                for (auto rTest = GetReadabilityTests().get_tests().begin();
-                     rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+                for (auto& rTest : GetReadabilityTests().get_tests())
                     {
                     auto* test = readabilityTestsNode->FirstChildElement(
-                        wxString{ rTest->get_test().get_id().c_str() }.utf8_str());
+                        wxString{ rTest.get_test().get_id().c_str() }.utf8_str());
                     /* if attribute is not found then "includeValue" is set to zero for us,
                        so no need to check the return value here*/
                     if (test != nullptr)
                         {
-                        rTest->include(int_to_bool(test->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(rTest->is_included()))));
+                        rTest.include(int_to_bool(test->ToElement()->IntAttribute(
+                            XML_INCLUDE.data(), bool_to_int(rTest.is_included()))));
                         }
                     }
 
@@ -3758,13 +3756,10 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
 
     // exclusion block tags
     auto* excludeTagsSection = doc.NewElement(XML_EXCLUDE_BLOCK_TAGS.data());
-    for (std::vector<std::pair<wchar_t, wchar_t>>::const_iterator currentExcludeTag =
-             m_exclusionBlockTags.begin();
-         currentExcludeTag != m_exclusionBlockTags.end(); ++currentExcludeTag)
+    for (const auto& exclusionBlockTag : m_exclusionBlockTags)
         {
         auto* excludeTags = doc.NewElement(XML_EXCLUDE_BLOCK_TAG.data());
-        const wchar_t excludeTagsStr[3] = { currentExcludeTag->first, currentExcludeTag->second,
-                                            0 };
+        const wchar_t excludeTagsStr[3] = { exclusionBlockTag.first, exclusionBlockTag.second, 0 };
         const wxString excludeTagsEncoded = ENCODE({ excludeTagsStr, 2 }, false).c_str();
         excludeTags->SetAttribute(XML_VALUE.data(), excludeTagsEncoded.utf8_str());
         excludeTagsSection->InsertEndChild(excludeTags);
@@ -3830,7 +3825,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
 
     // test bundles
     auto* testBundlesSection = doc.NewElement(XML_TEST_BUNDLES.data());
-    for (std::set<TestBundle>::const_iterator currentBundle = BaseProject::m_testBundles.begin();
+    for (auto currentBundle = BaseProject::m_testBundles.begin();
          currentBundle != BaseProject::m_testBundles.end(); ++currentBundle)
         {
         // don't bother saving system bundles, those are dynamically added
@@ -3903,33 +3898,31 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     // custom tests
     auto* customTestsSection = doc.NewElement(XML_CUSTOM_TESTS.data());
     // add all global custom familiar word lists
-    for (CustomReadabilityTestCollection::const_iterator pos =
-             BaseProject::m_custom_word_tests.cbegin();
-         pos != BaseProject::m_custom_word_tests.cend(); ++pos)
+    for (const auto& customWordTest : BaseProject::m_custom_word_tests)
         {
         auto* customFamWordTest = doc.NewElement(XML_CUSTOM_FAMILIAR_WORD_TEST.data());
         // name
         auto* testName = doc.NewElement(XML_TEST_NAME.data());
-        wxString testNameEncoded(pos->get_name().c_str());
+        wxString testNameEncoded(customWordTest.get_name().c_str());
         testNameEncoded = ENCODE({ testNameEncoded.wc_str() }, false).c_str();
         testName->SetAttribute(XML_VALUE.data(), testNameEncoded.utf8_str());
         customFamWordTest->InsertEndChild(testName);
         // file path
         auto* filePath = doc.NewElement(XML_FAMILIAR_WORD_FILE_PATH.data());
-        wxString filePathEncoded(pos->get_familiar_word_list_file_path().c_str());
+        wxString filePathEncoded(customWordTest.get_familiar_word_list_file_path().c_str());
         filePathEncoded = ENCODE({ filePathEncoded.wc_str() }, false).c_str();
         filePath->SetAttribute(XML_VALUE.data(), filePathEncoded.utf8_str());
         customFamWordTest->InsertEndChild(filePath);
         // formula (needs to be stored in U.S. format for portability)
         auto* formula = doc.NewElement(XML_TEST_FORMULA.data());
         wxString formulaEncoded(
-            FormulaFormat::FormatMathExpressionToUS(pos->get_formula().c_str()));
+            FormulaFormat::FormatMathExpressionToUS(customWordTest.get_formula().c_str()));
         formulaEncoded = ENCODE({ formulaEncoded.wc_str() }, false).c_str();
         formula->SetAttribute(XML_VALUE.data(), formulaEncoded.utf8_str());
         customFamWordTest->InsertEndChild(formula);
         // formula type (this is just needed for forward compatibility)
         const int formulaTypeValue =
-            (wxString(pos->get_formula().c_str())
+            (wxString(customWordTest.get_formula().c_str())
                  .CmpNoCase(ReadabilityFormulaParser::GetCustomSpacheSignature()) == 0) ?
                 1 :
                 0;
@@ -3938,72 +3931,74 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         customFamWordTest->InsertEndChild(formulaType);
         // test type
         auto* testType = doc.NewElement(XML_TEST_TYPE.data());
-        testType->SetAttribute(XML_VALUE.data(), static_cast<int>(pos->get_test_type()));
+        testType->SetAttribute(XML_VALUE.data(), static_cast<int>(customWordTest.get_test_type()));
         customFamWordTest->InsertEndChild(testType);
         // stemming type
         auto* stemming = doc.NewElement(XML_STEMMING_TYPE.data());
-        stemming->SetAttribute(XML_VALUE.data(), static_cast<int>(pos->get_stemming_type()));
+        stemming->SetAttribute(XML_VALUE.data(),
+                               static_cast<int>(customWordTest.get_stemming_type()));
         customFamWordTest->InsertEndChild(stemming);
         // include proper nouns
         auto* includeProperNoun = doc.NewElement(XML_INCLUDE_PROPER_NOUNS.data());
         includeProperNoun->SetAttribute(XML_VALUE.data(),
-                                        static_cast<int>(pos->get_proper_noun_method()));
+                                        static_cast<int>(customWordTest.get_proper_noun_method()));
         customFamWordTest->InsertEndChild(includeProperNoun);
         // include numeric
         auto* includeNumeric = doc.NewElement(XML_INCLUDE_NUMERIC.data());
-        includeNumeric->SetAttribute(XML_VALUE.data(),
-                                     static_cast<int>(pos->is_including_numeric_as_familiar()));
+        includeNumeric->SetAttribute(
+            XML_VALUE.data(), static_cast<int>(customWordTest.is_including_numeric_as_familiar()));
         customFamWordTest->InsertEndChild(includeNumeric);
         // including custom list
         auto* customWordList = doc.NewElement(XML_INCLUDE_CUSTOM_WORD_LIST.data());
         customWordList->SetAttribute(
-            XML_VALUE.data(), static_cast<int>(pos->is_including_custom_familiar_word_list()));
+            XML_VALUE.data(),
+            static_cast<int>(customWordTest.is_including_custom_familiar_word_list()));
         customFamWordTest->InsertEndChild(customWordList);
         // including DC list
         auto* dcTest = doc.NewElement(XML_INCLUDE_DC_LIST.data());
         dcTest->SetAttribute(XML_VALUE.data(),
-                             static_cast<int>(pos->is_including_dale_chall_list()));
+                             static_cast<int>(customWordTest.is_including_dale_chall_list()));
         customFamWordTest->InsertEndChild(dcTest);
         // including Spache list
         auto* spacheTest = doc.NewElement(XML_INCLUDE_SPACHE_LIST.data());
         spacheTest->SetAttribute(XML_VALUE.data(),
-                                 static_cast<int>(pos->is_including_spache_list()));
+                                 static_cast<int>(customWordTest.is_including_spache_list()));
         customFamWordTest->InsertEndChild(spacheTest);
         // including Stocker list
         auto* stockerList = doc.NewElement(XML_INCLUDE_STOCKER_LIST.data());
         stockerList->SetAttribute(XML_VALUE.data(),
-                                  static_cast<int>(pos->is_including_stocker_list()));
+                                  static_cast<int>(customWordTest.is_including_stocker_list()));
         customFamWordTest->InsertEndChild(stockerList);
         // including HJ list
         auto* hjList = doc.NewElement(XML_INCLUDE_HARRIS_JACOBSON_LIST.data());
         hjList->SetAttribute(XML_VALUE.data(),
-                             static_cast<int>(pos->is_including_harris_jacobson_list()));
+                             static_cast<int>(customWordTest.is_including_harris_jacobson_list()));
         customFamWordTest->InsertEndChild(hjList);
         // whether familiar words have to be on each included list
         auto* famAllLists = doc.NewElement(XML_FAMILIAR_WORDS_ALL_LISTS.data());
         famAllLists->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->is_familiar_words_must_be_on_each_included_list()));
+            static_cast<int>(customWordTest.is_familiar_words_must_be_on_each_included_list()));
         customFamWordTest->InsertEndChild(famAllLists);
         // industry association
         auto* industryChildrenPub = doc.NewElement(XML_INDUSTRY_CHILDRENS_PUBLISHING.data());
         industryChildrenPub->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::childrens_publishing_industry)));
         customFamWordTest->InsertEndChild(industryChildrenPub);
 
         auto* industryAdultPublishing = doc.NewElement(XML_INDUSTRY_ADULTPUBLISHING.data());
         industryAdultPublishing->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::adult_publishing_industry)));
         customFamWordTest->InsertEndChild(industryAdultPublishing);
 
         auto* industrySecondaryLanguage = doc.NewElement(XML_INDUSTRY_SECONDARY_LANGUAGE.data());
         industrySecondaryLanguage->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::secondary_language_industry)));
         customFamWordTest->InsertEndChild(industrySecondaryLanguage);
 
@@ -4011,59 +4006,59 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
             doc.NewElement(XML_INDUSTRY_CHILDRENS_HEALTHCARE.data());
         industryChildrensHealthCare->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::childrens_healthcare_industry)));
         customFamWordTest->InsertEndChild(industryChildrensHealthCare);
 
         auto* industryAdultHealthCare = doc.NewElement(XML_INDUSTRY_ADULT_HEALTHCARE.data());
         industryAdultHealthCare->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::adult_healthcare_industry)));
         customFamWordTest->InsertEndChild(industryAdultHealthCare);
 
         auto* industryMilitary = doc.NewElement(XML_INDUSTRY_MILITARY_GOVERNMENT.data());
         industryMilitary->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_industry_classification(
+            static_cast<int>(customWordTest.has_industry_classification(
                 readability::industry_classification::military_government_industry)));
         customFamWordTest->InsertEndChild(industryMilitary);
 
         auto* industryBroadCasting = doc.NewElement(XML_INDUSTRY_BROADCASTING.data());
         industryBroadCasting->SetAttribute(
-            XML_VALUE.data(), static_cast<int>(pos->has_industry_classification(
+            XML_VALUE.data(), static_cast<int>(customWordTest.has_industry_classification(
                                   readability::industry_classification::broadcasting_industry)));
         customFamWordTest->InsertEndChild(industryBroadCasting);
 
         auto* industryGeneralDocument = doc.NewElement(XML_DOCUMENT_GENERAL.data());
         industryGeneralDocument->SetAttribute(
-            XML_VALUE.data(), static_cast<int>(pos->has_document_classification(
+            XML_VALUE.data(), static_cast<int>(customWordTest.has_document_classification(
                                   readability::document_classification::general_document)));
         customFamWordTest->InsertEndChild(industryGeneralDocument);
 
         auto* industryTechnicalDocument = doc.NewElement(XML_DOCUMENT_TECHNICAL.data());
         industryTechnicalDocument->SetAttribute(
-            XML_VALUE.data(), static_cast<int>(pos->has_document_classification(
+            XML_VALUE.data(), static_cast<int>(customWordTest.has_document_classification(
                                   readability::document_classification::technical_document)));
         customFamWordTest->InsertEndChild(industryTechnicalDocument);
 
         auto* industryForm = doc.NewElement(XML_DOCUMENT_FORM.data());
         industryForm->SetAttribute(
-            XML_VALUE.data(), static_cast<int>(pos->has_document_classification(
+            XML_VALUE.data(), static_cast<int>(customWordTest.has_document_classification(
                                   readability::document_classification::nonnarrative_document)));
         customFamWordTest->InsertEndChild(industryForm);
 
         auto* industryYoungAdultAndAdultLiterature = doc.NewElement(XML_DOCUMENT_YOUNGADULT.data());
         industryYoungAdultAndAdultLiterature->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_document_classification(
+            static_cast<int>(customWordTest.has_document_classification(
                 readability::document_classification::adult_literature_document)));
         customFamWordTest->InsertEndChild(industryYoungAdultAndAdultLiterature);
 
         auto* industryChildrensLiterature = doc.NewElement(XML_DOCUMENT_CHILDREN_LIT.data());
         industryChildrensLiterature->SetAttribute(
             XML_VALUE.data(),
-            static_cast<int>(pos->has_document_classification(
+            static_cast<int>(customWordTest.has_document_classification(
                 readability::document_classification::childrens_literature_document)));
         customFamWordTest->InsertEndChild(industryChildrensLiterature);
 
@@ -4599,11 +4594,10 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     dcOptions->InsertEndChild(dcProperNouns);
     readabilityTestSection->InsertEndChild(dcOptions);
 
-    for (auto rTest = GetReadabilityTests().get_tests().begin();
-         rTest != GetReadabilityTests().get_tests().end(); ++rTest)
+    for (auto& rTest : GetReadabilityTests().get_tests())
         {
-        auto* currentTest = doc.NewElement(wxString(rTest->get_test().get_id().c_str()).utf8_str());
-        currentTest->SetAttribute(XML_INCLUDE.data(), bool_to_int(rTest->is_included()));
+        auto* currentTest = doc.NewElement(wxString(rTest.get_test().get_id().c_str()).utf8_str());
+        currentTest->SetAttribute(XML_INCLUDE.data(), bool_to_int(rTest.is_included()));
         readabilityTestSection->InsertEndChild(currentTest);
         }
 
@@ -4612,13 +4606,12 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     dolch->SetAttribute(XML_INCLUDE.data(), bool_to_int(IsDolchSelected()));
     readabilityTestSection->InsertEndChild(dolch);
     // all the custom tests being included
-    for (size_t i = 0; i < GetIncludedCustomTests().size(); ++i)
+    for (const auto& includedCustomTest : GetIncludedCustomTests())
         {
         auto* customTest = doc.NewElement(XML_CUSTOM_TEST.data());
         customTest->SetAttribute(
             XML_VALUE.data(),
-            wxString(ENCODE({ GetIncludedCustomTests().at(i).wc_str() }, false).c_str())
-                .utf8_str());
+            wxString(ENCODE({ includedCustomTest.wc_str() }, false).c_str()).utf8_str());
         readabilityTestSection->InsertEndChild(customTest);
         }
     projectSettings->InsertEndChild(readabilityTestSection);
@@ -4945,29 +4938,29 @@ void ReadabilityAppOptions::UpdateGraphOptions(Wisteria::Canvas* graphCanvas)
     plot->GetBottomXAxis().SetFontColor(GetXAxisFontColor());
     plot->GetLeftYAxis().SetFont(GetYAxisFont());
     plot->GetLeftYAxis().SetFontColor(GetYAxisFontColor());
-    for (size_t i = 0; i < plot->GetCustomAxes().size(); ++i)
+    for (auto& customAxis : plot->GetCustomAxes())
         {
-        plot->GetCustomAxes().at(i).SetFont(GetYAxisFont());
-        plot->GetCustomAxes().at(i).SetFontColor(GetYAxisFontColor());
+        customAxis.SetFont(GetYAxisFont());
+        customAxis.SetFontColor(GetYAxisFontColor());
         }
-    for (size_t i = 0; i < graphCanvas->GetTopTitles().size(); ++i)
+    for (auto& topTitle : graphCanvas->GetTopTitles())
         {
-        graphCanvas->GetTopTitles().at(i).GetFont() = GetGraphTopTitleFont();
-        graphCanvas->GetTopTitles().at(i).SetFontColor(GetGraphTopTitleFontColor());
+        topTitle.GetFont() = GetGraphTopTitleFont();
+        topTitle.SetFontColor(GetGraphTopTitleFontColor());
         }
-    for (size_t i = 0; i < graphCanvas->GetBottomTitles().size(); ++i)
+    for (auto& bottomTitle : graphCanvas->GetBottomTitles())
         {
-        graphCanvas->GetBottomTitles().at(i).GetFont() = GetGraphBottomTitleFont();
-        graphCanvas->GetBottomTitles().at(i).SetFontColor(GetGraphBottomTitleFontColor());
+        bottomTitle.GetFont() = GetGraphBottomTitleFont();
+        bottomTitle.SetFontColor(GetGraphBottomTitleFontColor());
         }
-    for (size_t i = 0; i < graphCanvas->GetLeftTitles().size(); ++i)
+    for (auto& leftTitle : graphCanvas->GetLeftTitles())
         {
-        graphCanvas->GetLeftTitles().at(i).GetFont() = GetGraphLeftTitleFont();
-        graphCanvas->GetLeftTitles().at(i).SetFontColor(GetGraphLeftTitleFontColor());
+        leftTitle.GetFont() = GetGraphLeftTitleFont();
+        leftTitle.SetFontColor(GetGraphLeftTitleFontColor());
         }
-    for (size_t i = 0; i < graphCanvas->GetRightTitles().size(); ++i)
+    for (auto& rightTitle : graphCanvas->GetRightTitles())
         {
-        graphCanvas->GetRightTitles().at(i).GetFont() = GetGraphRightTitleFont();
-        graphCanvas->GetRightTitles().at(i).SetFontColor(GetGraphRightTitleFontColor());
+        rightTitle.GetFont() = GetGraphRightTitleFont();
+        rightTitle.SetFontColor(GetGraphRightTitleFontColor());
         }
     }
