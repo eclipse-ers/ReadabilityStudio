@@ -33,7 +33,7 @@ parse_arg <- function(key, fallback)
   # 3. Otherwise return the fallback default
   return(fallback)
   }
-# Command line from RSrcipt and override with manuals get built (and not built)
+# Command line from RScript and override with manuals get built (and not built)
 # Rscript build-help-projects.R --args buildReleaseNotes=FALSE buildTestReference=FALSE
 buildSysAdminManual <- as.logical(parse_arg("buildSysAdminManual", TRUE))
 buildReleaseNotes <- as.logical(parse_arg("buildReleaseNotes", TRUE))
@@ -357,7 +357,7 @@ if (buildProgrammingManual)
   thumbNail <- image_convert(image_read_pdf(glue("{docFolder}/readability-studio-api/docs/readability-studio-api.pdf"), 1),
                        format="png") %>%
     image_scale(thumbnailWidth)
-  image_write(thumbNail, glue("{docFolder}/readability-studio-api/docs/rreadability-studio-api-thumb.png"))
+  image_write(thumbNail, glue("{docFolder}/readability-studio-api/docs/readability-studio-api-thumb.png"))
   
   unlink(glue("{docFolder}/readability-studio-api/standard-project.qmd"))
   unlink(glue("{docFolder}/readability-studio-api/batch-project.qmd"))

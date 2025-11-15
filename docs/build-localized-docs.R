@@ -39,7 +39,7 @@ build_translated_docs <- function(docFolder, lang, exclude_pattern = NULL,
   message(glue::glue("🌐 Building documentation for language: {lang}"))
   message(glue::glue("PO output: {out_dir}/{lang}.po\n"))
 
-  # copy auxillary files
+  # copy auxiliary files
   file_copy(glue("{docFolder}/_variables.yml"),
             glue("{docFolder}/{lang}/_variables.yml"),
             TRUE)
