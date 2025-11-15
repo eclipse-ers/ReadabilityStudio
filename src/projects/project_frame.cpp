@@ -811,9 +811,10 @@ void ProjectDocChildFrame::OnTestBundle(wxCommandEvent& event)
                                rTest->get_test().has_language(doc->GetProjectLanguage()));
                 }
             // custom tests
-            for (auto & customWordTest : ProjectDoc::m_custom_word_tests)
+            for (auto& customWordTest : ProjectDoc::m_custom_word_tests)
                 {
-                if ((basedOnIndustry && customWordTest.has_industry_classification(selectedIndustry)) ||
+                if ((basedOnIndustry &&
+                     customWordTest.has_industry_classification(selectedIndustry)) ||
                     customWordTest.has_document_classification(selectedDocument))
                     {
                     doc->RefreshRequired(ProjectRefresh::FullReindexing);
@@ -863,9 +864,10 @@ void ProjectDocChildFrame::OnTestBundle(wxCommandEvent& event)
                                rTest->get_test().has_language(doc->GetProjectLanguage()));
                 }
             // custom tests
-            for (auto & customWordTest : BatchProjectDoc::m_custom_word_tests)
+            for (auto& customWordTest : BatchProjectDoc::m_custom_word_tests)
                 {
-                if ((basedOnIndustry && customWordTest.has_industry_classification(selectedIndustry)) ||
+                if ((basedOnIndustry &&
+                     customWordTest.has_industry_classification(selectedIndustry)) ||
                     customWordTest.has_document_classification(selectedDocument))
                     {
                     doc->RefreshRequired(ProjectRefresh::FullReindexing);

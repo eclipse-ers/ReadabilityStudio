@@ -706,8 +706,9 @@ void ProjectView::OnTestListDblClick([[maybe_unused]] wxListEvent& event)
     {
     const wxString selectedTest =
         GetReadabilityScoresList()->GetResultsListCtrl()->GetSelectedText();
-    const auto testIter = std::find(BaseProject::m_custom_word_tests.begin(), // NOLINT(*-use-ranges)
-                                    BaseProject::m_custom_word_tests.end(), selectedTest);
+    const auto testIter =
+        std::find(BaseProject::m_custom_word_tests.begin(), // NOLINT(*-use-ranges)
+                  BaseProject::m_custom_word_tests.end(), selectedTest);
     const std::pair<std::vector<readability::readability_test>::const_iterator, bool> testPos =
         BaseProject::GetDefaultReadabilityTestsTemplate().find_test(selectedTest);
 
