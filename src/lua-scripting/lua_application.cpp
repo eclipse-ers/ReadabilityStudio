@@ -1038,7 +1038,7 @@ namespace LuaScripting
             wordList.load_words(inputFileBuffer, true, false);
             }
 
-        wxString outputStr;
+        wxString outputStr; // NOLINT(misc-const-correctness)
         for (const auto& phrase : phraseList.get_phrases())
             {
             wxStringTokenizer tokenizer(phrase.second.c_str(), L",", wxTOKEN_STRTOK);
@@ -1094,7 +1094,7 @@ namespace LuaScripting
             }
         phraseList.remove_duplicates();
 
-        wxString outputStr;
+        wxString outputStr; // NOLINT(misc-const-correctness)
         for (const auto& phrase : phraseList.get_phrases())
             {
             if (phrase.first.get_word_count() == 1 &&

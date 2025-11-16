@@ -2177,7 +2177,7 @@ bool BatchProjectView::ExportAllToHtml(
     const wxBusyInfo bi(wxBusyInfoFlags().Text(_(L"Exporting project...")).Parent(GetDocFrame()));
 #ifdef __WXGTK__
     wxMilliSleep(100);
-    wxTheApp->Yield();
+    wxGetApp().Yield();
 #endif
 
     lily_of_the_valley::html_encode_text htmlEncode;

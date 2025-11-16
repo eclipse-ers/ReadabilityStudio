@@ -181,9 +181,11 @@ namespace LuaScripting
             }
         if (!lua_istable(L, 2))
             {
+            // NOLINTBEGIN(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
             return luaL_error(L, "%s",
                               static_cast<const char*>(
                                   wxString::Format(_(L"%s requires a table argument."), __func__)));
+            // NOLINTEND(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
             }
 
         const size_t fileCount{ lua_rawlen(L, 2) };
@@ -224,7 +226,7 @@ namespace LuaScripting
                 const wxBusyInfo wait(_(L"Retrieving files..."), m_project->GetDocumentWindow());
 #ifdef __WXGTK__
                 wxMilliSleep(100);
-                wxTheApp->Yield();
+                wxGetApp().Yield();
 #endif
                 wxDir::GetAllFiles(path, &files, wxString{},
                                    recursive ? (wxDIR_FILES | wxDIR_DIRS) : wxDIR_FILES);

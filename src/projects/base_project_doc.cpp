@@ -648,15 +648,15 @@ void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas)
         bottomTitle.GetFont() = GetGraphBottomTitleFont();
         bottomTitle.SetFontColor(GetGraphBottomTitleFontColor());
         }
-    for (size_t i = 0; i < canvas->GetLeftTitles().size(); ++i)
+    for (auto& leftTitle : canvas->GetLeftTitles())
         {
-        canvas->GetLeftTitles().at(i).GetFont() = GetGraphLeftTitleFont();
-        canvas->GetLeftTitles().at(i).SetFontColor(GetGraphLeftTitleFontColor());
+        leftTitle.GetFont() = GetGraphLeftTitleFont();
+        leftTitle.SetFontColor(GetGraphLeftTitleFontColor());
         }
-    for (size_t i = 0; i < canvas->GetRightTitles().size(); ++i)
+    for (auto& rightTitle : canvas->GetRightTitles())
         {
-        canvas->GetRightTitles().at(i).GetFont() = GetGraphRightTitleFont();
-        canvas->GetRightTitles().at(i).SetFontColor(GetGraphRightTitleFontColor());
+        rightTitle.GetFont() = GetGraphRightTitleFont();
+        rightTitle.SetFontColor(GetGraphRightTitleFontColor());
         }
     }
 
@@ -695,11 +695,9 @@ void BaseProjectDoc::RemoveAllGlobalCustomReadabilityTests()
         }
 
     wxArrayString testNames;
-    for (CustomReadabilityTestCollection::const_iterator pos =
-             BaseProject::m_custom_word_tests.cbegin();
-         pos != BaseProject::m_custom_word_tests.cend(); ++pos)
+    for (const auto& customWordTest : BaseProject::m_custom_word_tests)
         {
-        testNames.Add(pos->get_name().c_str());
+        testNames.Add(customWordTest.get_name().c_str());
         }
     // remove tests from all the projects' menus
     auto* mainFrame = dynamic_cast<MainFrame*>(wxGetApp().GetMainFrame());
@@ -2359,11 +2357,11 @@ wxString BaseProjectDoc::FormatProjectSettings() const
                              static_cast<int>(GetTextSource()), 2);
     fileText += sectionText;
     // path to original document and optional short description
-    for (size_t i = 0; i < GetSourceFilesInfo().size(); ++i)
+    for (const auto& srcFile : GetSourceFilesInfo())
         {
         fileText += XmlFormat::FormatSectionWithAttribute(
-            ReadabilityAppOptions::XML_DOCUMENT_PATH.data(), GetSourceFilesInfo().at(i).first,
-            ReadabilityAppOptions::XML_DESCRIPTION.data(), GetSourceFilesInfo().at(i).second, 2);
+            ReadabilityAppOptions::XML_DOCUMENT_PATH.data(), srcFile.first,
+            ReadabilityAppOptions::XML_DESCRIPTION.data(), srcFile.second, 2);
         }
     // storage/linking
     XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_DOCUMENT_STORAGE_METHOD.data(),
@@ -2595,40 +2593,39 @@ wxString BaseProjectDoc::FormatProjectSettings() const
 
     // custom tests settings
     fileText.append(L"\t<").append(ReadabilityAppOptions::XML_CUSTOM_TESTS.data()).append(L">\n");
-    for (std::vector<CustomReadabilityTestInterface>::const_iterator pos =
-             GetCustTestsInUse().begin();
-         pos != GetCustTestsInUse().end(); ++pos)
+    for (const auto& customTestInUse : GetCustTestsInUse())
         {
         fileText.append(L"\t\t<")
             .append(ReadabilityAppOptions::XML_CUSTOM_FAMILIAR_WORD_TEST.data())
             .append(L">\n");
         // name
-        const wxString testName = pos->GetIterator()->get_name().c_str();
+        const wxString testName = customTestInUse.GetIterator()->get_name().c_str();
         XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_TEST_NAME.data(),
                                  HTML_ENCODE({ testName.wc_str(), testName.length() }, false), 3);
         fileText += sectionText;
         // file path
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_FAMILIAR_WORD_FILE_PATH.data(),
-            wxString(pos->GetIterator()->get_familiar_word_list_file_path().c_str()), 3);
+            wxString(customTestInUse.GetIterator()->get_familiar_word_list_file_path().c_str()), 3);
         fileText += sectionText;
         // test type
         XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_TEST_TYPE.data(),
-                                 static_cast<int>(pos->GetIterator()->get_test_type()), 3);
+                                 static_cast<int>(customTestInUse.GetIterator()->get_test_type()),
+                                 3);
         fileText += sectionText;
         // stemming type
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_STEMMING_TYPE.data(),
-                                 static_cast<int>(pos->GetIterator()->get_stemming_type()), 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_STEMMING_TYPE.data(),
+            static_cast<int>(customTestInUse.GetIterator()->get_stemming_type()), 3);
         fileText += sectionText;
         // formula
-        const wxString formula(
-            FormulaFormat::FormatMathExpressionToUS(pos->GetIterator()->get_formula().c_str()));
+        const wxString formula(FormulaFormat::FormatMathExpressionToUS(customTestInUse.GetIterator()->get_formula().c_str()));
         XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_TEST_FORMULA.data(),
                                  HTML_ENCODE({ formula.wc_str(), formula.length() }, false), 3);
         fileText += sectionText;
         // formula type (this is just needed for forward compatibility)
         const int formulaType =
-            (wxString(pos->GetIterator()->get_formula().c_str())
+            (wxString(customTestInUse.GetIterator()->get_formula().c_str())
                  .CmpNoCase(ReadabilityFormulaParser::GetCustomSpacheSignature()) == 0) ?
                 1 :
                 0;
@@ -2636,7 +2633,8 @@ wxString BaseProjectDoc::FormatProjectSettings() const
                                  formulaType, 3);
         fileText += sectionText;
         // goals
-        const auto [minGoal, maxGoal] = GetGoalsForTest(pos->GetIterator()->get_name().c_str());
+        const auto [minGoal, maxGoal] =
+            GetGoalsForTest(customTestInUse.GetIterator()->get_name().c_str());
         const wxString minGoalStr =
             std::isnan(minGoal) ? wxString{} : wxString::FromCDouble(minGoal);
         const wxString maxGoalStr =
@@ -2648,106 +2646,112 @@ wxString BaseProjectDoc::FormatProjectSettings() const
                                  maxGoalStr, 3);
         fileText += sectionText;
         // inclusion of proper nouns and numbers
-        XmlFormat::FormatSection(sectionText,
-                                 ReadabilityAppOptions::XML_INCLUDE_PROPER_NOUNS.data(),
-                                 static_cast<int>(pos->GetIterator()->get_proper_noun_method()), 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_INCLUDE_PROPER_NOUNS.data(),
+            static_cast<int>(customTestInUse.GetIterator()->get_proper_noun_method()), 3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INCLUDE_NUMERIC.data(),
-            int_to_bool(pos->GetIterator()->is_including_numeric_as_familiar()), 3);
+            int_to_bool(customTestInUse.GetIterator()->is_including_numeric_as_familiar()), 3);
         fileText += sectionText;
         // include of other tests
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INCLUDE_CUSTOM_WORD_LIST.data(),
-            int_to_bool(pos->GetIterator()->is_including_custom_familiar_word_list()), 3);
+            int_to_bool(customTestInUse.GetIterator()->is_including_custom_familiar_word_list()),
+            3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_INCLUDE_DC_LIST.data(),
-                                 int_to_bool(pos->GetIterator()->is_including_dale_chall_list()),
-                                 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_INCLUDE_DC_LIST.data(),
+            int_to_bool(customTestInUse.GetIterator()->is_including_dale_chall_list()), 3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_INCLUDE_SPACHE_LIST.data(),
-                                 int_to_bool(pos->GetIterator()->is_including_spache_list()), 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_INCLUDE_SPACHE_LIST.data(),
+            int_to_bool(customTestInUse.GetIterator()->is_including_spache_list()), 3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INCLUDE_HARRIS_JACOBSON_LIST.data(),
-            int_to_bool(pos->GetIterator()->is_including_harris_jacobson_list()), 3);
+            int_to_bool(customTestInUse.GetIterator()->is_including_harris_jacobson_list()), 3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText,
-                                 ReadabilityAppOptions::XML_INCLUDE_STOCKER_LIST.data(),
-                                 int_to_bool(pos->GetIterator()->is_including_stocker_list()), 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_INCLUDE_STOCKER_LIST.data(),
+            int_to_bool(customTestInUse.GetIterator()->is_including_stocker_list()), 3);
         fileText += sectionText;
         // whether familiar words have to be on each included list
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_FAMILIAR_WORDS_ALL_LISTS.data(),
-            int_to_bool(pos->GetIterator()->is_familiar_words_must_be_on_each_included_list()), 3);
+            int_to_bool(customTestInUse.GetIterator()->is_familiar_words_must_be_on_each_included_list()),
+            3);
         fileText += sectionText;
         // industry association
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_CHILDRENS_PUBLISHING.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::childrens_publishing_industry)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_ADULTPUBLISHING.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::adult_publishing_industry)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_SECONDARY_LANGUAGE.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::secondary_language_industry)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_CHILDRENS_HEALTHCARE.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::childrens_healthcare_industry)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_ADULT_HEALTHCARE.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::adult_healthcare_industry)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_INDUSTRY_MILITARY_GOVERNMENT.data(),
-            int_to_bool(pos->GetIterator()->has_industry_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
                 readability::industry_classification::military_government_industry)),
             3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText,
-                                 ReadabilityAppOptions::XML_INDUSTRY_BROADCASTING.data(),
-                                 int_to_bool(pos->GetIterator()->has_industry_classification(
-                                     readability::industry_classification::broadcasting_industry)),
-                                 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_INDUSTRY_BROADCASTING.data(),
+            int_to_bool(customTestInUse.GetIterator()->has_industry_classification(
+                readability::industry_classification::broadcasting_industry)),
+            3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_DOCUMENT_GENERAL.data(),
-                                 int_to_bool(pos->GetIterator()->has_document_classification(
-                                     readability::document_classification::general_document)),
-                                 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_DOCUMENT_GENERAL.data(),
+            int_to_bool(customTestInUse.GetIterator()->has_document_classification(
+                readability::document_classification::general_document)),
+            3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_DOCUMENT_TECHNICAL.data(),
-                                 int_to_bool(pos->GetIterator()->has_document_classification(
-                                     readability::document_classification::technical_document)),
-                                 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_DOCUMENT_TECHNICAL.data(),
+            int_to_bool(customTestInUse.GetIterator()->has_document_classification(
+                readability::document_classification::technical_document)),
+            3);
         fileText += sectionText;
-        XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_DOCUMENT_FORM.data(),
-                                 int_to_bool(pos->GetIterator()->has_document_classification(
-                                     readability::document_classification::nonnarrative_document)),
-                                 3);
+        XmlFormat::FormatSection(
+            sectionText, ReadabilityAppOptions::XML_DOCUMENT_FORM.data(),
+            int_to_bool(customTestInUse.GetIterator()->has_document_classification(
+                readability::document_classification::nonnarrative_document)),
+            3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_DOCUMENT_YOUNGADULT.data(),
-            int_to_bool(pos->GetIterator()->has_document_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_document_classification(
                 readability::document_classification::adult_literature_document)),
             3);
         fileText += sectionText;
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_DOCUMENT_CHILDREN_LIT.data(),
-            int_to_bool(pos->GetIterator()->has_document_classification(
+            int_to_bool(customTestInUse.GetIterator()->has_document_classification(
                 readability::document_classification::childrens_literature_document)),
             3);
         fileText += sectionText;

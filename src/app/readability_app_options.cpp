@@ -656,291 +656,2551 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                      wxOK | wxICON_ERROR);
         return false;
         }
-    else
+
+    // general app information
+    auto* customColorsNode = configRootNode->FirstChildElement(XML_CUSTOM_COLORS.data());
+    if (customColorsNode != nullptr)
         {
-        // general app information
-        auto* customColorsNode = configRootNode->FirstChildElement(XML_CUSTOM_COLORS.data());
-        if (customColorsNode != nullptr)
+        GetCustomColors().clear();
+        const std::string colorStr{ "color" };
+        for (int i = 0; i < MAX_CUSTOM_COLORS; ++i)
             {
-            GetCustomColors().clear();
-            const std::string colorStr{ "color" };
-            for (int i = 0; i < MAX_CUSTOM_COLORS; ++i)
+            const auto currentColor{ std::string{ colorStr + std::to_string(i) } };
+            const auto* colorNode = customColorsNode->FirstChildElement(currentColor.c_str());
+            if (colorNode != nullptr)
                 {
-                const auto currentColor{ std::string{ colorStr + std::to_string(i) } };
-                const auto* colorNode = customColorsNode->FirstChildElement(currentColor.c_str());
-                if (colorNode != nullptr)
-                    {
-                    GetCustomColors().push_back(TiXmlNodeToColor(colorNode));
-                    }
-                else
-                    {
-                    break;
-                    }
+                GetCustomColors().push_back(TiXmlNodeToColor(colorNode));
+                }
+            else
+                {
+                break;
                 }
             }
+        }
 
-        // appearance of the program
-        auto* appearanceNode = configRootNode->FirstChildElement(XML_APPEARANCE.data());
-        LoadThemeNode(appearanceNode);
+    // appearance of the program
+    auto* appearanceNode = configRootNode->FirstChildElement(XML_APPEARANCE.data());
+    LoadThemeNode(appearanceNode);
 
-        auto* userAgentNode = configRootNode->FirstChildElement(XML_USER_AGENT.data());
-        if (userAgentNode != nullptr)
+    auto* userAgentNode = configRootNode->FirstChildElement(XML_USER_AGENT.data());
+    if (userAgentNode != nullptr)
+        {
+        const auto* userAgent = userAgentNode->ToElement()->Attribute(XML_VALUE.data());
+        if (userAgent != nullptr)
             {
-            const auto* userAgent = userAgentNode->ToElement()->Attribute(XML_VALUE.data());
-            if (userAgent != nullptr)
+            const auto userAgentStr =
+                Wisteria::TextStream::CharStreamToUnicode(userAgent, std::strlen(userAgent));
+            const wchar_t* convertedStr =
+                filterHtml(userAgentStr.c_str(), userAgentStr.length(), true, false);
+            if (convertedStr != nullptr)
                 {
-                const auto userAgentStr =
-                    Wisteria::TextStream::CharStreamToUnicode(userAgent, std::strlen(userAgent));
+                SetUserAgent(convertedStr);
+                wxGetApp().GetWebHarvester().SetUserAgent(convertedStr);
+                }
+            }
+        }
+
+    auto* downloadReplaceExistingNode =
+        configRootNode->FirstChildElement(XML_DOWNLOAD_REPLACE_EXISTING.data());
+    if (downloadReplaceExistingNode != nullptr)
+        {
+        wxGetApp().GetWebHarvester().ReplaceExistingFiles(
+            int_to_bool(downloadReplaceExistingNode->ToElement()->IntAttribute(
+                XML_VALUE.data(),
+                bool_to_int(wxGetApp().GetWebHarvester().IsReplacingExistingFiles()))));
+        }
+
+    auto* downloadWebFolderStructureNode =
+        configRootNode->FirstChildElement(XML_DOWNLOAD_KEEP_FOLDER_STRUCTURE.data());
+    if (downloadWebFolderStructureNode != nullptr)
+        {
+        wxGetApp().GetWebHarvester().KeepWebPathWhenDownloading(
+            int_to_bool(downloadWebFolderStructureNode->ToElement()->IntAttribute(
+                XML_VALUE.data(),
+                bool_to_int(wxGetApp().GetWebHarvester().IsKeepingWebPathWhenDownloading()))));
+        }
+
+    auto* downloadMinFileSizeNode =
+        configRootNode->FirstChildElement(XML_DOWNLOAD_MIN_FILESIZE.data());
+    if (downloadMinFileSizeNode != nullptr)
+        {
+        wxGetApp().GetWebHarvester().SetMinimumDownloadFileSizeInKilobytes(
+            downloadMinFileSizeNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+        }
+
+    auto* useJsCookiesNode = configRootNode->FirstChildElement(XML_USE_JS_COOKIES.data());
+    if (useJsCookiesNode != nullptr)
+        {
+        const int value = useJsCookiesNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
+        m_useJsCookies = int_to_bool(value);
+        wxGetApp().GetWebHarvester().UseJavaScriptCookies(m_useJsCookies);
+        }
+
+    auto* persistCookiesNode = configRootNode->FirstChildElement(XML_PERSIST_COOKIES.data());
+    if (persistCookiesNode != nullptr)
+        {
+        const int value = persistCookiesNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
+        m_persistJsCookies = int_to_bool(value);
+        wxGetApp().GetWebHarvester().PersistJavaScriptCookies(m_persistJsCookies);
+        }
+
+    auto* disablePeerVerifyNode = configRootNode->FirstChildElement(XML_DISABLE_PEER_VERIFY.data());
+    if (disablePeerVerifyNode != nullptr)
+        {
+        const int value = disablePeerVerifyNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
+        m_disablePeerVerify = int_to_bool(value);
+        wxGetApp().GetWebHarvester().DisablePeerVerify(m_disablePeerVerify);
+        }
+
+    auto* filePathsNode = configRootNode->FirstChildElement(XML_FILE_OPEN_PATHS.data());
+    if (filePathsNode != nullptr)
+        {
+        auto* wordlistPathNode =
+            filePathsNode->FirstChildElement(XML_FILE_OPEN_WORDLIST_PATH.data());
+        if (wordlistPathNode != nullptr)
+            {
+            const char* wordlistPathString =
+                wordlistPathNode->ToElement()->Attribute(XML_VALUE.data());
+            if (wordlistPathString != nullptr)
+                {
+                const auto wordlistPathStr = Wisteria::TextStream::CharStreamToUnicode(
+                    wordlistPathString, std::strlen(wordlistPathString));
                 const wchar_t* convertedStr =
-                    filterHtml(userAgentStr.c_str(), userAgentStr.length(), true, false);
+                    filterHtml(wordlistPathStr.c_str(), wordlistPathStr.length(), true, false);
                 if (convertedStr != nullptr)
                     {
-                    SetUserAgent(convertedStr);
-                    wxGetApp().GetWebHarvester().SetUserAgent(convertedStr);
+                    SetWordListPath(convertedStr);
+                    }
+                }
+            }
+        auto* projectPathNode = filePathsNode->FirstChildElement(XML_FILE_OPEN_PROJECT_PATH.data());
+        if (projectPathNode != nullptr)
+            {
+            const char* projectPathString =
+                projectPathNode->ToElement()->Attribute(XML_VALUE.data());
+            if (projectPathString != nullptr)
+                {
+                const auto projectPathStr = Wisteria::TextStream::CharStreamToUnicode(
+                    projectPathString, std::strlen(projectPathString));
+                const wchar_t* convertedStr =
+                    filterHtml(projectPathStr.c_str(), projectPathStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetProjectPath(convertedStr);
+                    }
+                }
+            }
+        SetImagePath(readString(filePathsNode, XML_FILE_OPEN_IMAGE_PATH,
+                                wxStandardPaths::Get().GetUserDir(wxStandardPaths::Dir_Pictures)));
+        SetDownloadsPath(
+            readString(filePathsNode, XML_DOWNLOADS_PATH,
+                       wxStandardPaths::Get().GetUserDir(wxStandardPaths::Dir_Downloads)));
+        }
+    // log report settings
+    auto* logSettingsNode = configRootNode->FirstChildElement(XML_LOG_SETTINGS.data());
+    if (logSettingsNode != nullptr)
+        {
+        auto* logVerboseNode = logSettingsNode->FirstChildElement(XML_LOG_VERBOSE.data());
+        if (logVerboseNode != nullptr)
+            {
+            LogFile::SetVerbose(
+                int_to_bool(logVerboseNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* logAppendNode = logSettingsNode->FirstChildElement(XML_LOG_APPEND_DAILY.data());
+        if (logAppendNode != nullptr)
+            {
+            AppendDailyLog(
+                int_to_bool(logAppendNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        }
+    // printer settings
+    auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
+    if (printerSettingsNode != nullptr)
+        {
+        int value = 0;
+        auto* printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_ID.data());
+        if (printerNode != nullptr)
+            {
+            value = printerNode->ToElement()->IntAttribute(XML_VALUE.data(), value);
+            SetPaperId(static_cast<wxPaperSize>(value));
+            }
+        value = 0;
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_ORIENTATION.data());
+        if (printerNode != nullptr)
+            {
+            value = printerNode->ToElement()->IntAttribute(XML_VALUE.data(), value);
+            SetPaperOrientation(static_cast<wxPrintOrientation>(value));
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_HEADER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetLeftPrinterHeader(convertedStr);
+                    }
+                }
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_HEADER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetCenterPrinterHeader(convertedStr);
+                    }
+                }
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_HEADER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetRightPrinterHeader(convertedStr);
+                    }
+                }
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_FOOTER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetLeftPrinterFooter(convertedStr);
+                    }
+                }
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_FOOTER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetCenterPrinterFooter(convertedStr);
+                    }
+                }
+            }
+        printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_FOOTER.data());
+        if (printerNode != nullptr)
+            {
+            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
+            if (printerString != nullptr)
+                {
+                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
+                    printerString, std::strlen(printerString));
+                const wchar_t* convertedStr =
+                    filterHtml(printStr.c_str(), printStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetRightPrinterFooter(convertedStr);
+                    }
+                }
+            }
+        }
+    // editor settings
+    auto* editorSettingsNode = configRootNode->FirstChildElement(XML_EDITOR.data());
+    if (editorSettingsNode != nullptr)
+        {
+        m_editorFontColor = TiXmlNodeToColor(
+            editorSettingsNode->FirstChildElement(XML_EDITOR_FONTCOLOR.data()), m_editorFontColor);
+        // font
+        auto* fontNode = editorSettingsNode->FirstChildElement(XML_EDITOR_FONT.data());
+        if (fontNode != nullptr)
+            {
+            const int pointSize = fontNode->ToElement()->IntAttribute(
+                XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+            const int style = fontNode->ToElement()->IntAttribute(XmlFormat::FONT_STYLE_TAG.data(),
+                                                                  wxFONTSTYLE_NORMAL);
+            const int weight = fontNode->ToElement()->IntAttribute(
+                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+            const int underlined =
+                fontNode->ToElement()->IntAttribute(XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+            // get the font point size
+            m_editorFont.SetPointSize(
+                (pointSize > 0) ? pointSize :
+                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+            // get the font style
+            m_editorFont.SetStyle(static_cast<wxFontStyle>(style));
+            // get the font weight
+            m_editorFont.SetWeight(static_cast<wxFontWeight>(weight));
+            // get the font underlining
+            m_editorFont.SetUnderlined(int_to_bool(underlined));
+            // get the font facename
+            const char* faceName =
+                fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+            if (faceName != nullptr)
+                {
+                const auto faceNameStr =
+                    Wisteria::TextStream::CharStreamToUnicode(faceName, std::strlen(faceName));
+                const wchar_t* filteredText =
+                    filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                if ((filteredText != nullptr) && wxFontEnumerator::IsValidFacename(filteredText))
+                    {
+                    m_editorFont.SetFaceName(wxString(filteredText));
+                    }
+                }
+            }
+        auto* indentNode = editorSettingsNode->FirstChildElement(XML_EDITOR_INDENT.data());
+        if (indentNode != nullptr)
+            {
+            IndentEditor(int_to_bool(indentNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* spaceAfterParagraphNode =
+            editorSettingsNode->FirstChildElement(XML_EDITOR_SPACE_AFTER_PARAGRAPH.data());
+        if (spaceAfterParagraphNode != nullptr)
+            {
+            AddParagraphSpaceInEditor(int_to_bool(
+                spaceAfterParagraphNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* textAlignNode =
+            editorSettingsNode->FirstChildElement(XML_EDITOR_TEXT_ALIGNMENT.data());
+        if (textAlignNode != nullptr)
+            {
+            SetEditorTextAlignment(static_cast<wxTextAttrAlignment>(
+                textAlignNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* lineSpacingNode =
+            editorSettingsNode->FirstChildElement(XML_EDITOR_LINE_SPACING.data());
+        if (lineSpacingNode != nullptr)
+            {
+            SetEditorLineSpacing(static_cast<wxTextAttrLineSpacing>(
+                lineSpacingNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        }
+    // just get the reviewer from project settings to be used for the start page
+    auto* projectSettingsForReview = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
+    if (projectSettingsForReview != nullptr)
+        {
+        auto* projectReviewer = projectSettingsForReview->FirstChildElement(XML_REVIEWER.data());
+        if (projectReviewer != nullptr)
+            {
+            const char* reviewerChars = projectReviewer->ToElement()->Attribute(XML_VALUE.data());
+            if (reviewerChars != nullptr)
+                {
+                const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
+                    reviewerChars, std::strlen(reviewerChars));
+                const wchar_t* convertedStr =
+                    filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetReviewer(convertedStr);
+                    }
+                }
+            }
+        }
+    if (GetReviewer().empty())
+        {
+        SetReviewer(wxGetUserName());
+        }
+
+    // if only loading general info, then quit after reading this node
+    if (loadOnlyGeneralOptions)
+        {
+        return true;
+        }
+    // warning settings
+    auto* warningSettingsNode =
+        configRootNode->FirstChildElement(XML_WARNING_MESSAGE_SETTINGS.data());
+    if (warningSettingsNode != nullptr)
+        {
+        auto* warningNode = warningSettingsNode->FirstChildElement(XML_WARNING_MESSAGE.data());
+        while (warningNode != nullptr)
+            {
+            const char* warningStringId = warningNode->ToElement()->Attribute(XML_VALUE.data());
+            if (warningStringId != nullptr)
+                {
+                auto id = Wisteria::TextStream::CharStreamToUnicode(warningStringId,
+                                                                    std::strlen(warningStringId));
+                auto warningIter = WarningManager::GetWarning(id);
+                if (warningIter != WarningManager::GetWarnings().end())
+                    {
+                    int value = warningNode->ToElement()->IntAttribute(XML_DISPLAY.data(), 1);
+                    warningIter->Show(int_to_bool(value));
+                    value = warningNode->ToElement()->IntAttribute(XML_PREVIOUS_RESPONSE.data(), 0);
+                    warningIter->SetPreviousResponse(value);
+                    }
+                }
+            warningNode = warningNode->NextSiblingElement(XML_WARNING_MESSAGE.data());
+            }
+        }
+
+    // export sections
+    auto* exportSettingsNode = configRootNode->FirstChildElement(XML_EXPORT.data());
+    if (exportSettingsNode != nullptr)
+        {
+        auto* exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_LIST_EXT.data());
+        if (exportExtNode != nullptr)
+            {
+            const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
+            if (extString != nullptr)
+                {
+                BaseProjectDoc::SetExportListExt(
+                    Wisteria::TextStream::CharStreamToUnicode(extString, std::strlen(extString)));
+                }
+            }
+        exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_TEXT_EXT.data());
+        if (exportExtNode != nullptr)
+            {
+            const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
+            if (extString != nullptr)
+                {
+                BaseProjectDoc::SetExportTextViewExt(
+                    Wisteria::TextStream::CharStreamToUnicode(extString, std::strlen(extString)));
+                }
+            }
+        exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAPH_EXT.data());
+        if (exportExtNode != nullptr)
+            {
+            const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
+            if (extString != nullptr)
+                {
+                BaseProjectDoc::SetExportGraphExt(
+                    Wisteria::TextStream::CharStreamToUnicode(extString, std::strlen(extString)));
+                }
+            }
+        auto* exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_LISTS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportHardWordLists(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_SENTENCES_BREAKDOWN.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportSentencesBreakdown(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAPHS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportGraphs(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_TEST_RESULTS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportTestResults(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_STATS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportStatistics(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAMMAR.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportWordiness(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_DOLCH_WORDS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportSightWords(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_WARNINGS.data());
+        if (exportNode != nullptr)
+            {
+            BaseProjectDoc::ExportWarnings(
+                int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        }
+    // New Project Settings section
+    auto* projectSettings = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
+    if (projectSettings != nullptr)
+        {
+        // reviewer and status
+        auto* projectReviewer = projectSettings->FirstChildElement(XML_REVIEWER.data());
+        if (projectReviewer != nullptr)
+            {
+            const char* reviewerChars = projectReviewer->ToElement()->Attribute(XML_VALUE.data());
+            if (reviewerChars != nullptr)
+                {
+                const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
+                    reviewerChars, std::strlen(reviewerChars));
+                const wchar_t* convertedStr =
+                    filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetReviewer(convertedStr);
+                    }
+                }
+            }
+        auto* realTimeRefresh = projectSettings->FirstChildElement(XML_REALTIME_UPDATE.data());
+        if (realTimeRefresh != nullptr)
+            {
+            UseRealTimeUpdate(
+                int_to_bool(realTimeRefresh->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* appendedDocPath = projectSettings->FirstChildElement(XML_APPENDED_DOC_PATH.data());
+        if (appendedDocPath != nullptr)
+            {
+            const char* appendedDocChars =
+                appendedDocPath->ToElement()->Attribute(XML_VALUE.data());
+            if (appendedDocChars != nullptr)
+                {
+                const auto appendedDocStr = Wisteria::TextStream::CharStreamToUnicode(
+                    appendedDocChars, std::strlen(appendedDocChars));
+                const wchar_t* convertedStr =
+                    filterHtml(appendedDocStr.c_str(), appendedDocStr.length(), true, false);
+                if (convertedStr != nullptr)
+                    {
+                    SetAppendedDocumentFilePath(convertedStr);
+                    }
+                }
+            }
+        // document storage/linking
+        auto* docStorageNode =
+            projectSettings->FirstChildElement(XML_DOCUMENT_STORAGE_METHOD.data());
+        if (docStorageNode != nullptr)
+            {
+            m_documentStorageMethod =
+                static_cast<TextStorage>(docStorageNode->ToElement()->IntAttribute(
+                    XML_METHOD.data(), static_cast<int>(m_documentStorageMethod)));
+            // verify that this is a sensical value
+            if (m_documentStorageMethod != TextStorage::EmbedText &&
+                m_documentStorageMethod != TextStorage::NoEmbedText)
+                {
+                m_documentStorageMethod = TextStorage::NoEmbedText;
+                }
+            }
+        auto* projectLang = projectSettings->FirstChildElement(XML_PROJECT_LANGUAGE.data());
+        if (projectLang != nullptr)
+            {
+            int value = projectLang->ToElement()->IntAttribute(XML_VALUE.data(),
+                                                               static_cast<int>(m_language));
+            if (value < 0 || value >= static_cast<decltype(value)>(
+                                          readability::test_language::TEST_LANGUAGE_COUNT))
+                {
+                value = static_cast<decltype(value)>(readability::test_language::english_test);
+                }
+            m_language = static_cast<readability::test_language>(value);
+            }
+        auto* randomSampleSizeNode =
+            projectSettings->FirstChildElement(XML_RANDOM_SAMPLE_SIZE.data());
+        if (randomSampleSizeNode != nullptr)
+            {
+            int value = randomSampleSizeNode->ToElement()->IntAttribute(
+                XML_VALUE.data(), GetBatchRandomSamplingSize());
+            // verify that this is a sensical value
+            if (value < 1 || value > 100)
+                {
+                value = 25;
+                }
+            SetBatchRandomSamplingSize(static_cast<size_t>(value));
+            }
+        auto* randomSampleEnabledNode =
+            projectSettings->FirstChildElement(XML_RANDOM_SAMPLE_ENABLED.data());
+        if (randomSampleEnabledNode != nullptr)
+            {
+            EnableRandomSampling(int_to_bool(randomSampleEnabledNode->ToElement()->IntAttribute(
+                XML_VALUE.data(), static_cast<int>(IsRandomSampling()))));
+            }
+        auto* minDocSizeNode =
+            projectSettings->FirstChildElement(XML_MIN_DOC_SIZE_FOR_BATCH.data());
+        if (minDocSizeNode != nullptr)
+            {
+            int value = minDocSizeNode->ToElement()->IntAttribute(XML_VALUE.data(),
+                                                                  GetMinDocWordCountForBatch());
+            // verify that this is a sensical value
+            value = std::max(value, 1);
+            SetMinDocWordCountForBatch(static_cast<size_t>(value));
+            }
+        auto* filePathTruncModeNode =
+            projectSettings->FirstChildElement(XML_FILE_PATH_TRUNC_MODE.data());
+        if (filePathTruncModeNode != nullptr)
+            {
+            int value = filePathTruncModeNode->ToElement()->IntAttribute(
+                XML_VALUE.data(), static_cast<int>(GetFilePathTruncationMode()));
+            // verify that this is a sensical value
+            if (value < 0 ||
+                value >= static_cast<decltype(value)>(
+                             Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::
+                                 COLUMN_FILE_PATHS_TRUNCATION_MODE_COUNT))
+                {
+                value = static_cast<decltype(value)>(
+                    Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::
+                        OnlyShowFileNames);
+                }
+            SetFilePathTruncationMode(
+                static_cast<Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode>(
+                    value));
+            }
+        // sentences breakdown
+        auto* sentencesBreakdownNode =
+            projectSettings->FirstChildElement(XML_SENTENCES_BREAKDOWN.data());
+        if (sentencesBreakdownNode != nullptr)
+            {
+            // which options are included
+            auto* sentencesBreakdownInfoNode =
+                sentencesBreakdownNode->FirstChildElement(XML_SENTENCES_BREAKDOWN_INFO.data());
+            if (sentencesBreakdownInfoNode != nullptr)
+                {
+                const char* infoChars =
+                    sentencesBreakdownInfoNode->ToElement()->Attribute(XML_VALUE.data());
+                if (infoChars != nullptr)
+                    {
+                    const auto infoStr = Wisteria::TextStream::CharStreamToUnicode(
+                        infoChars, std::strlen(infoChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(infoStr.c_str(), infoStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        GetSentencesBreakdownInfo().Set(convertedStr);
+                        }
+                    }
+                }
+            }
+        // words breakdown
+        auto* wordsBreakdownNode = projectSettings->FirstChildElement(XML_WORDS_BREAKDOWN.data());
+        if (wordsBreakdownNode != nullptr)
+            {
+            // which options are included
+            auto* wordsBreakdownInfoNode =
+                wordsBreakdownNode->FirstChildElement(XML_WORDS_BREAKDOWN_INFO.data());
+            if (wordsBreakdownInfoNode != nullptr)
+                {
+                const char* infoChars =
+                    wordsBreakdownInfoNode->ToElement()->Attribute(XML_VALUE.data());
+                if (infoChars != nullptr)
+                    {
+                    const auto infoStr = Wisteria::TextStream::CharStreamToUnicode(
+                        infoChars, std::strlen(infoChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(infoStr.c_str(), infoStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        GetWordsBreakdownInfo().Set(convertedStr);
+                        }
+                    }
+                }
+            }
+        // grammar
+        auto* grammarNode = projectSettings->FirstChildElement(XML_GRAMMAR.data());
+        if (grammarNode != nullptr)
+            {
+            // spell checking options
+            auto* spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_PROPER_NOUNS.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreProperNouns(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringProperNouns()))));
+                }
+            spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_UPPERCASED.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreUppercased(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringUppercased()))));
+                }
+            spellCheckNode = grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_NUMERALS.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreNumerals(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringNumerals()))));
+                }
+            spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_FILE_ADDRESSES.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreFileAddresses(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringFileAddresses()))));
+                }
+            spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_PROGRAMMER_CODE.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreProgrammerCode(
+                    int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringProgrammerCode()))));
+                }
+            spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_ALLOW_COLLOQUIALISMS.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckAllowColloquialisms(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(SpellCheckIsAllowingColloquialisms()))));
+                }
+            spellCheckNode =
+                grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_SOCIAL_MEDIA_TAGS.data());
+            if (spellCheckNode != nullptr)
+                {
+                SpellCheckIgnoreSocialMediaTags(
+                    int_to_bool(spellCheckNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringSocialMediaTags()))));
+                }
+            // which grammar options are included
+            auto* grammarInfoNode = grammarNode->FirstChildElement(XML_GRAMMAR_INFO.data());
+            if (grammarInfoNode != nullptr)
+                {
+                const char* grammarInfoChars =
+                    grammarInfoNode->ToElement()->Attribute(XML_VALUE.data());
+                if (grammarInfoChars != nullptr)
+                    {
+                    const auto grammarInfStr = Wisteria::TextStream::CharStreamToUnicode(
+                        grammarInfoChars, std::strlen(grammarInfoChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(grammarInfStr.c_str(), grammarInfStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        GetGrammarInfo().Set(convertedStr);
+                        }
+                    }
+                }
+            }
+        // wizard page defaults
+        auto* documentAnalysisNode =
+            projectSettings->FirstChildElement(XML_DOCUMENT_ANALYSIS_LOGIC.data());
+        if (documentAnalysisNode != nullptr)
+            {
+            // determinant for what a long sentence is
+            auto* longSentenceNode =
+                documentAnalysisNode->FirstChildElement(XML_LONG_SENTENCE_METHOD.data());
+            if (longSentenceNode != nullptr)
+                {
+                m_longSentenceMethod =
+                    static_cast<LongSentence>(longSentenceNode->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_longSentenceMethod)));
+                // verify that this is a sensical value
+                if (m_longSentenceMethod != LongSentence::LongerThanSpecifiedLength &&
+                    m_longSentenceMethod != LongSentence::OutlierLength)
+                    {
+                    m_longSentenceMethod = LongSentence::LongerThanSpecifiedLength;
+                    }
+                }
+            auto* longSentenceLengthNode =
+                documentAnalysisNode->FirstChildElement(XML_LONG_SENTENCE_LENGTH.data());
+            if (longSentenceLengthNode != nullptr)
+                {
+                m_difficultSentenceLength = longSentenceLengthNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), m_difficultSentenceLength);
+                // verify that this is a sensical value
+                if (m_difficultSentenceLength <= 0)
+                    {
+                    m_difficultSentenceLength = 22;
+                    }
+                }
+            // determinant for how to syllabize numerals
+            auto* numSyllNode =
+                documentAnalysisNode->FirstChildElement(XML_NUMERAL_SYLLABICATION_METHOD.data());
+            if (numSyllNode != nullptr)
+                {
+                m_numeralSyllabicationMethod =
+                    static_cast<NumeralSyllabize>(numSyllNode->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_numeralSyllabicationMethod)));
+                // verify that this is a sensical value
+                if (m_numeralSyllabicationMethod != NumeralSyllabize::WholeWordIsOneSyllable &&
+                    m_numeralSyllabicationMethod != NumeralSyllabize::SoundOutEachDigit)
+                    {
+                    m_numeralSyllabicationMethod = NumeralSyllabize::WholeWordIsOneSyllable;
+                    }
+                }
+            // whether we should ignore blank lines when parsing paragraphs
+            auto* ignoreBlankLines = documentAnalysisNode->FirstChildElement(
+                XML_IGNORE_BLANK_LINES_FOR_PARAGRAPH_PARSING.data());
+            if (ignoreBlankLines != nullptr)
+                {
+                m_ignoreBlankLinesForParagraphsParser =
+                    int_to_bool(ignoreBlankLines->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(m_ignoreBlankLinesForParagraphsParser)));
+                }
+            // whether we should ignore indenting when parsing paragraphs
+            auto* ignoreIndents = documentAnalysisNode->FirstChildElement(
+                XML_IGNORE_INDENTING_FOR_PARAGRAPH_PARSING.data());
+            if (ignoreIndents != nullptr)
+                {
+                m_ignoreIndentingForParagraphsParser =
+                    int_to_bool(ignoreIndents->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(m_ignoreIndentingForParagraphsParser)));
+                }
+            // whether sentences must start capitalized
+            auto* sentenceStartMustBeUppercased = documentAnalysisNode->FirstChildElement(
+                XML_SENTENCES_MUST_START_CAPITALIZED.data());
+            if (sentenceStartMustBeUppercased != nullptr)
+                {
+                m_sentenceStartMustBeUppercased =
+                    int_to_bool(sentenceStartMustBeUppercased->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(m_sentenceStartMustBeUppercased)));
+                }
+            // file path to phrases to exclude from analysis
+            auto* excludedPhrasesFilePath =
+                documentAnalysisNode->FirstChildElement(XML_EXCLUDED_PHRASES_PATH.data());
+            if (excludedPhrasesFilePath != nullptr)
+                {
+                const char* filePathChars =
+                    excludedPhrasesFilePath->ToElement()->Attribute(XML_VALUE.data());
+                if (filePathChars != nullptr)
+                    {
+                    const auto filePathStr = Wisteria::TextStream::CharStreamToUnicode(
+                        filePathChars, std::strlen(filePathChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(filePathStr.c_str(), filePathStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        SetExcludedPhrasesPath(convertedStr);
+                        }
+                    }
+                }
+            // whether to include first occurrence of excluded phrases
+            auto* includeExcludedPhraseFirstOccurrenceNode =
+                documentAnalysisNode->FirstChildElement(
+                    XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE.data());
+            if (includeExcludedPhraseFirstOccurrenceNode != nullptr)
+                {
+                IncludeExcludedPhraseFirstOccurrence(
+                    int_to_bool(includeExcludedPhraseFirstOccurrenceNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        bool_to_int(IsIncludingExcludedPhraseFirstOccurrence()))));
+                }
+            auto* excludedBlockTagsNode =
+                documentAnalysisNode->FirstChildElement(XML_EXCLUDE_BLOCK_TAGS.data());
+            if (excludedBlockTagsNode != nullptr)
+                {
+                auto* excludedBlockTagNode =
+                    excludedBlockTagsNode->FirstChildElement(XML_EXCLUDE_BLOCK_TAG.data());
+                while (excludedBlockTagNode != nullptr)
+                    {
+                    const wxString blockTags =
+                        TiXmlNodeToString(excludedBlockTagNode, XML_VALUE.data());
+                    if (blockTags.length() >= 2)
+                        {
+                        m_exclusionBlockTags.emplace_back(blockTags[0], blockTags[1]);
+                        }
+                    excludedBlockTagNode =
+                        excludedBlockTagNode->NextSiblingElement(XML_EXCLUDE_BLOCK_TAG.data());
+                    }
+                }
+            // whether to ignore proper nouns
+            auto* ignoreProperNounsNode =
+                documentAnalysisNode->FirstChildElement(XML_IGNORE_PROPER_NOUNS.data());
+            if (ignoreProperNounsNode != nullptr)
+                {
+                m_excludeProperNouns = int_to_bool(ignoreProperNounsNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(m_excludeProperNouns)));
+                }
+            // whether to ignore numerals
+            auto* ignoreNumerals =
+                documentAnalysisNode->FirstChildElement(XML_IGNORE_NUMERALS.data());
+            if (ignoreNumerals != nullptr)
+                {
+                m_excludeNumerals = int_to_bool(ignoreNumerals->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(m_excludeNumerals)));
+                }
+            // whether to ignore file address
+            auto* ignoreFileAddresses =
+                documentAnalysisNode->FirstChildElement(XML_IGNORE_FILE_ADDRESSES.data());
+            if (ignoreFileAddresses != nullptr)
+                {
+                m_excludeFileAddresses = int_to_bool(ignoreFileAddresses->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(m_excludeFileAddresses)));
+                }
+            // whether to ignore citations
+            auto* ignoreCitations =
+                documentAnalysisNode->FirstChildElement(XML_IGNORE_CITATIONS.data());
+            if (ignoreCitations != nullptr)
+                {
+                m_excludeTrailingCitations = int_to_bool(ignoreCitations->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(m_excludeTrailingCitations)));
+                }
+            // whether to aggressively exclude
+            auto* aggressivelyDeducingLists =
+                documentAnalysisNode->FirstChildElement(XML_AGGRESSIVE_EXCLUSION.data());
+            if (aggressivelyDeducingLists != nullptr)
+                {
+                m_aggressiveExclusion =
+                    int_to_bool(aggressivelyDeducingLists->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(m_aggressiveExclusion)));
+                }
+            // whether to ignore copyright notices
+            auto* ignoreCopyrightNotices =
+                documentAnalysisNode->FirstChildElement(XML_IGNORE_COPYRIGHT_NOTICES.data());
+            if (ignoreCopyrightNotices != nullptr)
+                {
+                m_excludeTrailingCopyrightNoticeParagraphs =
+                    int_to_bool(ignoreCopyrightNotices->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(m_excludeTrailingCopyrightNoticeParagraphs)));
+                }
+            // determinant for how to text is parsed into paragraphs
+            auto* paraParsingNode =
+                documentAnalysisNode->FirstChildElement(XML_PARAGRAPH_PARSING_METHOD.data());
+            if (paraParsingNode != nullptr)
+                {
+                m_paragraphsParsingMethod =
+                    static_cast<ParagraphParse>(paraParsingNode->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_paragraphsParsingMethod)));
+                // verify that this is a sensical value
+                if (m_paragraphsParsingMethod !=
+                        ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs &&
+                    m_paragraphsParsingMethod != ParagraphParse::EachNewLineIsAParagraph)
+                    {
+                    m_paragraphsParsingMethod =
+                        ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs;
+                    }
+                }
+
+            // determinant for how to handle headers, titles, bullet points, and lists
+            auto* invalidSentenceNode =
+                documentAnalysisNode->FirstChildElement(XML_INVALID_SENTENCE_METHOD.data());
+            if (invalidSentenceNode != nullptr)
+                {
+                m_invalidSentenceMethod =
+                    static_cast<InvalidSentence>(invalidSentenceNode->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_invalidSentenceMethod)));
+                if (static_cast<int>(m_invalidSentenceMethod) < 0 ||
+                    static_cast<int>(m_invalidSentenceMethod) >=
+                        static_cast<int>(InvalidSentence::INVALID_SENTENCE_METHOD_COUNT))
+                    {
+                    m_invalidSentenceMethod = InvalidSentence::ExcludeFromAnalysis;
+                    }
+                }
+
+            // Number of words that will make an incomplete sentence actually complete
+            auto* includeIncompleteSentencesIfLongerThanNode =
+                documentAnalysisNode->FirstChildElement(
+                    XML_INCLUDE_INCOMPLETE_SENTENCES_LONGER_THAN.data());
+            if (includeIncompleteSentencesIfLongerThanNode != nullptr)
+                {
+                m_includeIncompleteSentencesIfLongerThan =
+                    includeIncompleteSentencesIfLongerThanNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), m_includeIncompleteSentencesIfLongerThan);
+                }
+            }
+
+        // test bundles
+        auto* testBundlesNode = projectSettings->FirstChildElement(XML_TEST_BUNDLES.data());
+        if (testBundlesNode != nullptr)
+            {
+            auto* testBundleNode = testBundlesNode->FirstChildElement(XML_TEST_BUNDLE.data());
+            while (testBundleNode != nullptr)
+                {
+                // bundle name
+                auto* bundleNameNode =
+                    testBundleNode->FirstChildElement(XML_TEST_BUNDLE_NAME.data());
+                const wxString bundleName = TiXmlNodeToString(bundleNameNode, XML_VALUE.data());
+                if (bundleName.empty())
+                    {
+                    testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
+                    continue;
+                    }
+                TestBundle bundle(bundleName.wc_str());
+                // bundle description
+                auto* bundleDescriptionNode =
+                    testBundleNode->FirstChildElement(XML_TEST_BUNDLE_DESCRIPTION.data());
+                if (bundleDescriptionNode != nullptr)
+                    {
+                    bundle.SetDescription(
+                        TiXmlNodeToString(bundleDescriptionNode, XML_VALUE.data()).wc_str());
+                    }
+                // get the included tests
+                auto* testNamesNode = testBundleNode->FirstChildElement(XML_TEST_NAMES.data());
+                if (testNamesNode == nullptr)
+                    {
+                    testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
+                    continue;
+                    }
+                auto* testNameNode = testNamesNode->FirstChildElement(XML_TEST_NAME.data());
+                while (testNameNode != nullptr)
+                    {
+                    const wxString testName = TiXmlNodeToString(testNameNode, XML_VALUE.data());
+                    if (!testName.empty())
+                        {
+                        const auto minGoal =
+                            TiXmlNodeToDouble(testNameNode, XML_GOAL_MIN_VAL_GOAL.data());
+                        const auto maxGoal =
+                            TiXmlNodeToDouble(testNameNode, XML_GOAL_MAX_VAL_GOAL.data());
+                        bundle.GetTestGoals().insert({ testName.wc_str(), minGoal, maxGoal });
+                        }
+                    testNameNode = testNameNode->NextSiblingElement(XML_TEST_NAME.data());
+                    }
+                // get the included stats
+                auto* statsNode = testBundleNode->FirstChildElement(XML_BUNDLE_STATISTICS.data());
+                if (statsNode == nullptr)
+                    {
+                    testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
+                    continue;
+                    }
+                auto* statNode = statsNode->FirstChildElement(XML_BUNDLE_STATISTIC.data());
+                while (statNode != nullptr)
+                    {
+                    const wxString statName = TiXmlNodeToString(statNode, XML_VALUE.data());
+                    if (!statName.empty())
+                        {
+                        auto minGoal = TiXmlNodeToDouble(statNode, XML_GOAL_MIN_VAL_GOAL.data());
+                        auto maxGoal = TiXmlNodeToDouble(statNode, XML_GOAL_MAX_VAL_GOAL.data());
+                        bundle.GetStatGoals().insert({ statName.wc_str(), minGoal, maxGoal });
+                        }
+                    statNode = statNode->NextSiblingElement(XML_BUNDLE_STATISTIC.data());
+                    }
+                BaseProject::m_testBundles.insert(bundle);
+                dynamic_cast<MainFrame*>(wxGetApp().GetMainFrame())
+                    ->AddTestBundleToMenus(bundleName);
+
+                testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
+                }
+            }
+
+        // custom tests
+        auto* customTestsNode = projectSettings->FirstChildElement(XML_CUSTOM_TESTS.data());
+        if (customTestsNode != nullptr)
+            {
+            auto* customReadabilityTestNode =
+                customTestsNode->FirstChildElement(XML_CUSTOM_FAMILIAR_WORD_TEST.data());
+            while (customReadabilityTestNode != nullptr)
+                {
+                // test name
+                auto* testNameNode =
+                    customReadabilityTestNode->FirstChildElement(XML_TEST_NAME.data());
+                const char* testNameData = testNameNode->ToElement()->Attribute(XML_VALUE.data());
+                if (testNameData == nullptr)
+                    {
+                    customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
+                        XML_CUSTOM_FAMILIAR_WORD_TEST.data());
+                    continue;
+                    }
+                auto testNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                    testNameData, std::strlen(testNameData));
+                const wchar_t* filteredText =
+                    filterHtml(testNameStr.c_str(), testNameStr.length(), true, false);
+                if (filteredText == nullptr)
+                    {
+                    customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
+                        XML_CUSTOM_FAMILIAR_WORD_TEST.data());
+                    continue;
+                    }
+                const wxString testName(filteredText);
+                // file path
+                wxString filePath;
+                auto* filePathNode = customReadabilityTestNode->FirstChildElement(
+                    XML_FAMILIAR_WORD_FILE_PATH.data());
+                if (filePathNode != nullptr)
+                    {
+                    const char* filePathData =
+                        filePathNode->ToElement()->Attribute(XML_VALUE.data());
+                    if (filePathData != nullptr)
+                        {
+                        auto filePathStr = Wisteria::TextStream::CharStreamToUnicode(
+                            filePathData, std::strlen(filePathData));
+                        filteredText =
+                            filterHtml(filePathStr.c_str(), filePathStr.length(), true, false);
+                        if (filteredText != nullptr)
+                            {
+                            filePath = filteredText;
+                            }
+                        }
+                    }
+                // test type
+                int testType = 0;
+                auto* testTypeNode =
+                    customReadabilityTestNode->FirstChildElement(XML_TEST_TYPE.data());
+                if (testTypeNode != nullptr)
+                    {
+                    testType = testTypeNode->ToElement()->IntAttribute(XML_VALUE.data(), testType);
+                    }
+                if (testType < 0 ||
+                    testType >=
+                        static_cast<int>(readability::readability_test_type::TEST_TYPE_COUNT))
+                    {
+                    testType = 0;
+                    }
+                // stemming type
+                int stemmingType = 0;
+                auto* stemmingNode =
+                    customReadabilityTestNode->FirstChildElement(XML_STEMMING_TYPE.data());
+                if (stemmingNode != nullptr)
+                    {
+                    stemmingType = stemmingNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
+                    }
+                if (stemmingType < 0 ||
+                    stemmingType >= static_cast<int>(stemming::stemming_type::STEMMING_TYPE_COUNT))
+                    {
+                    stemmingType = 0;
+                    }
+                // formula type (for backward compatibility)
+                int formulaType = 0;
+                auto* formulaNode =
+                    customReadabilityTestNode->FirstChildElement(XML_TEST_FORMULA_TYPE.data());
+                if (formulaNode != nullptr)
+                    {
+                    formulaType = formulaNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
+                    }
+                if (formulaType != 0 && formulaType != 1)
+                    {
+                    formulaType = 0;
+                    }
+                // the formula
+                wxString formula;
+                formulaNode = customReadabilityTestNode->FirstChildElement(XML_TEST_FORMULA.data());
+                if (formulaNode != nullptr)
+                    {
+                    const char* formulaData = formulaNode->ToElement()->Attribute(XML_VALUE.data());
+                    if (formulaData != nullptr)
+                        {
+                        auto formulaStr = Wisteria::TextStream::CharStreamToUnicode(
+                            formulaData, std::strlen(formulaData));
+                        filteredText =
+                            filterHtml(formulaStr.c_str(), formulaStr.length(), true, false);
+                        if (filteredText != nullptr)
+                            {
+                            // need to format formula from U.S. format to current locale format
+                            // for the parser to understand it
+                            formula = FormulaFormat::FormatMathExpressionFromUS(filteredText);
+                            }
+                        }
+                    }
+                string_util::remove_blank_lines(formula);
+                // formula string not in the file, so fall back to old formula type value
+                if (formula.empty())
+                    {
+                    if (formulaType == 1)
+                        {
+                        formula = ReadabilityFormulaParser::GetCustomSpacheSignature();
+                        }
+                    else
+                        {
+                        formula = ReadabilityFormulaParser::GetCustomNewDaleChallSignature();
+                        }
+                    }
+                // whether proper nouns and numbers should be included
+                int includeProperNouns = 1;
+                bool includeNumeric = false;
+                auto* properNounNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INCLUDE_PROPER_NOUNS.data());
+                if (properNounNode != nullptr)
+                    {
+                    includeProperNouns = properNounNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), includeProperNouns);
+                    }
+                auto* numericNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INCLUDE_NUMERIC.data());
+                if (numericNode != nullptr)
+                    {
+                    includeNumeric =
+                        int_to_bool(numericNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                // whether DC and Spache lists should also be included with this test
+                bool includeCustomWordList = true /* best for backward compatibility */,
+                     includeDCTest = false, includeSpacheTest = false, includeHJList = false,
+                     includeStockerList = false, familiarWordsMustBeOnAllLists = false;
+                auto* otherTestNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INCLUDE_CUSTOM_WORD_LIST.data());
+                if (otherTestNode != nullptr)
+                    {
+                    includeCustomWordList =
+                        int_to_bool(otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                otherTestNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INCLUDE_DC_LIST.data());
+                if (otherTestNode != nullptr)
+                    {
+                    includeDCTest =
+                        int_to_bool(otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                otherTestNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INCLUDE_SPACHE_LIST.data());
+                if (otherTestNode != nullptr)
+                    {
+                    includeSpacheTest =
+                        int_to_bool(otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                otherTestNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INCLUDE_HARRIS_JACOBSON_LIST.data());
+                if (otherTestNode != nullptr)
+                    {
+                    includeHJList =
+                        int_to_bool(otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                otherTestNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INCLUDE_STOCKER_LIST.data());
+                if (otherTestNode != nullptr)
+                    {
+                    includeStockerList =
+                        int_to_bool(otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                auto* familiarWordsMustBeOnAllListsNode =
+                    customReadabilityTestNode->FirstChildElement(
+                        XML_FAMILIAR_WORDS_ALL_LISTS.data());
+                if (familiarWordsMustBeOnAllListsNode != nullptr)
+                    {
+                    familiarWordsMustBeOnAllLists =
+                        int_to_bool(familiarWordsMustBeOnAllListsNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), 0));
+                    }
+                // industry
+                bool industryChildrensPublishingSelected = false;
+                auto* industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_CHILDRENS_PUBLISHING.data());
+                if (industryNode != nullptr)
+                    {
+                    industryChildrensPublishingSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industryAdultPublishingSelected = false;
+                industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_ADULTPUBLISHING.data());
+                if (industryNode != nullptr)
+                    {
+                    industryAdultPublishingSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industrySecondaryLanguageSelected = false;
+                industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_SECONDARY_LANGUAGE.data());
+                if (industryNode != nullptr)
+                    {
+                    industrySecondaryLanguageSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industryChildrensHealthCareSelected = false;
+                industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_CHILDRENS_HEALTHCARE.data());
+                if (industryNode != nullptr)
+                    {
+                    industryChildrensHealthCareSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industryAdultHealthCareSelected = false;
+                industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_ADULT_HEALTHCARE.data());
+                if (industryNode != nullptr)
+                    {
+                    industryAdultHealthCareSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industryMilitaryGovernmentSelected = false;
+                industryNode = customReadabilityTestNode->FirstChildElement(
+                    XML_INDUSTRY_MILITARY_GOVERNMENT.data());
+                if (industryNode != nullptr)
+                    {
+                    industryMilitaryGovernmentSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
+                    }
+                bool industryBroadcastingSelected = false;
+                industryNode =
+                    customReadabilityTestNode->FirstChildElement(XML_INDUSTRY_BROADCASTING.data());
+                if (industryNode != nullptr)
+                    {
+                    industryBroadcastingSelected =
+                        int_to_bool(industryNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), static_cast<int>(industryBroadcastingSelected)));
+                    }
+                // document
+                bool documentGeneralSelected = false;
+                auto* documentNode =
+                    customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_GENERAL.data());
+                if (documentNode != nullptr)
+                    {
+                    documentGeneralSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(documentGeneralSelected)));
+                    }
+                bool documentTechSelected = false;
+                documentNode =
+                    customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_TECHNICAL.data());
+                if (documentNode != nullptr)
+                    {
+                    documentTechSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(documentTechSelected)));
+                    }
+                bool documentFormSelected = false;
+                documentNode =
+                    customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_FORM.data());
+                if (documentNode != nullptr)
+                    {
+                    documentFormSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(documentFormSelected)));
+                    }
+                bool documentYoungAdultSelected = false;
+                documentNode =
+                    customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_YOUNGADULT.data());
+                if (documentNode != nullptr)
+                    {
+                    documentYoungAdultSelected =
+                        int_to_bool(documentNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), static_cast<int>(documentYoungAdultSelected)));
+                    }
+                bool documentChildrenSelected = false;
+                documentNode =
+                    customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_CHILDREN_LIT.data());
+                if (documentNode != nullptr)
+                    {
+                    documentChildrenSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(documentChildrenSelected)));
+                    }
+                CustomReadabilityTest cTest(
+                    testName.wc_str(), formula.wc_str(),
+                    static_cast<readability::readability_test_type>(testType), filePath.wc_str(),
+                    static_cast<stemming::stemming_type>(stemmingType), includeCustomWordList,
+                    includeDCTest, &BaseProject::m_dale_chall_word_list, includeSpacheTest,
+                    &BaseProject::m_spache_word_list, includeHJList,
+                    &BaseProject::m_harris_jacobson_word_list, includeStockerList,
+                    &BaseProject::m_stocker_catholic_word_list, familiarWordsMustBeOnAllLists,
+                    static_cast<readability::proper_noun_counting_method>(includeProperNouns),
+                    includeNumeric, industryChildrensPublishingSelected,
+                    industryAdultPublishingSelected, industrySecondaryLanguageSelected,
+                    industryChildrensHealthCareSelected, industryAdultHealthCareSelected,
+                    industryMilitaryGovernmentSelected, industryBroadcastingSelected,
+                    documentGeneralSelected, documentTechSelected, documentFormSelected,
+                    documentYoungAdultSelected, documentChildrenSelected);
+                BaseProjectDoc::AddGlobalCustomReadabilityTest(cTest);
+
+                customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
+                    XML_CUSTOM_FAMILIAR_WORD_TEST.data());
+                }
+            }
+
+        // graph options
+        auto* graphDefaultsNode = projectSettings->FirstChildElement(XML_GRAPH_SETTINGS.data());
+        if (graphDefaultsNode != nullptr)
+            {
+            // graph backgrounds
+            auto* imagePathNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_PLOT_BACKGROUND_IMAGE_PATH.data());
+            if (imagePathNode != nullptr)
+                {
+                const char* imagePath = imagePathNode->ToElement()->Attribute(XML_VALUE.data());
+                if (imagePath != nullptr)
+                    {
+                    auto imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
+                        imagePath, std::strlen(imagePath));
+                    const wchar_t* filteredText =
+                        filterHtml(imagePathStr.c_str(), imagePathStr.length(), true, false);
+                    if (filteredText != nullptr)
+                        {
+                        SetPlotBackGroundImagePath(wxString(filteredText));
+                        }
+                    }
+                }
+            // color scheme
+            auto* colorSchemeNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_COLOR_SCHEME.data());
+            if (colorSchemeNode != nullptr)
+                {
+                const char* colorScheme = colorSchemeNode->ToElement()->Attribute(XML_VALUE.data());
+                if (colorScheme != nullptr)
+                    {
+                    auto colorSchemeStr = Wisteria::TextStream::CharStreamToUnicode(
+                        colorScheme, std::strlen(colorScheme));
+                    const wchar_t* filteredText =
+                        filterHtml(colorSchemeStr.c_str(), colorSchemeStr.length(), true, false);
+                    if (filteredText != nullptr)
+                        {
+                        SetGraphColorScheme(wxString(filteredText));
+                        }
+                    }
+                }
+            // graph background colors
+            SetBackGroundColor(TiXmlNodeToColor(
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_BACKGROUND_COLOR.data()),
+                GetBackGroundColor()));
+            auto* backgroundImageEffectNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_PLOT_BACKGROUND_IMAGE_EFFECT.data());
+            if (backgroundImageEffectNode != nullptr)
+                {
+                int value = backgroundImageEffectNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), static_cast<int>(GetPlotBackGroundImageEffect()));
+                if (value < 0 || value >= static_cast<decltype(value)>(
+                                              Wisteria::ImageEffect::IMAGE_EFFECTS_COUNT))
+                    {
+                    value = static_cast<decltype(value)>(Wisteria::ImageEffect::NoEffect);
+                    }
+                SetPlotBackGroundImageEffect(static_cast<Wisteria::ImageEffect>(value));
+                }
+            auto* backgroundImageFitNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_PLOT_BACKGROUND_IMAGE_FIT.data());
+            if (backgroundImageFitNode != nullptr)
+                {
+                int value = backgroundImageFitNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), static_cast<int>(GetPlotBackGroundImageFit()));
+                if (value < 0 ||
+                    value >= static_cast<decltype(value)>(Wisteria::ImageFit::IMAGE_FIT_COUNT))
+                    {
+                    value = static_cast<decltype(value)>(Wisteria::ImageFit::Shrink);
+                    }
+                SetPlotBackGroundImageFit(static_cast<Wisteria::ImageFit>(value));
+                }
+
+            SetBackGroundColor(TiXmlNodeToColor(
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_PLOT_BACKGROUND_COLOR.data()),
+                GetPlotBackGroundColor()));
+
+            auto* opacityNode = graphDefaultsNode->FirstChildElement(
+                XML_GRAPH_PLOT_BACKGROUND_IMAGE_OPACITY.data());
+            if (opacityNode != nullptr)
+                {
+                SetPlotBackGroundImageOpacity(
+                    static_cast<uint8_t>(opacityNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), GetPlotBackGroundImageOpacity())));
+                }
+            opacityNode = graphDefaultsNode->FirstChildElement(
+                XML_GRAPH_PLOT_BACKGROUND_COLOR_OPACITY.data());
+            if (opacityNode != nullptr)
+                {
+                SetPlotBackGroundColorOpacity(
+                    static_cast<uint8_t>(opacityNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), GetPlotBackGroundColorOpacity())));
+                }
+            // linear gradient of backgrounds
+            auto* gradientNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_BACKGROUND_LINEAR_GRADIENT.data());
+            if (gradientNode != nullptr)
+                {
+                SetGraphBackGroundLinearGradient(
+                    int_to_bool(gradientNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(GetGraphBackGroundLinearGradient()))));
+                }
+            // stipple image
+            auto* stipplePathNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_PATH.data());
+            if (stipplePathNode != nullptr)
+                {
+                const char* stipplePath = stipplePathNode->ToElement()->Attribute(XML_VALUE.data());
+                if (stipplePath != nullptr)
+                    {
+                    auto imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
+                        stipplePath, std::strlen(stipplePath));
+                    const wchar_t* filteredText =
+                        filterHtml(imagePathStr.c_str(), imagePathStr.length(), true, false);
+                    if (filteredText != nullptr)
+                        {
+                        SetStippleImagePath(wxString(filteredText));
+                        }
+                    }
+                }
+            // common image
+            auto* commonImagePathNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_COMMON_IMAGE_PATH.data());
+            if (commonImagePathNode != nullptr)
+                {
+                const char* commonImagePath =
+                    commonImagePathNode->ToElement()->Attribute(XML_VALUE.data());
+                if (commonImagePath != nullptr)
+                    {
+                    const wxString imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
+                        commonImagePath, std::strlen(commonImagePath));
+                    const wchar_t* filteredText =
+                        filterHtml(imagePathStr.wc_str(), imagePathStr.length(), true, false);
+                    if (filteredText != nullptr)
+                        {
+                        SetGraphCommonImagePath(wxString(filteredText));
+                        }
+                    }
+                }
+            // stipple shape
+            auto* stippleShapeNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_SHAPE.data());
+            if (stippleShapeNode != nullptr)
+                {
+                const char* stippleShape =
+                    stippleShapeNode->ToElement()->Attribute(XML_VALUE.data());
+                if (stippleShape != nullptr)
+                    {
+                    auto shapeStr = Wisteria::TextStream::CharStreamToUnicode(
+                        stippleShape, std::strlen(stippleShape));
+                    const wchar_t* filteredText =
+                        filterHtml(shapeStr.c_str(), shapeStr.length(), true, false);
+                    if (filteredText != nullptr)
+                        {
+                        SetStippleShape(wxString(filteredText));
+                        }
+                    }
+                }
+
+            SetStippleShapeColor(TiXmlNodeToColor(
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_COLOR.data()),
+                GetStippleShapeColor()));
+
+            // whether drop shadows should be shown
+            auto* dropShadowNode =
+                graphDefaultsNode->FirstChildElement(XML_DISPLAY_DROP_SHADOW.data());
+            if (dropShadowNode != nullptr)
+                {
+                DisplayDropShadows(int_to_bool(dropShadowNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(IsDisplayingDropShadows()))));
+                }
+            // whether to draw attention to the complex word groups in syllable graphs
+            auto* showcaseComplexWordsNode =
+                graphDefaultsNode->FirstChildElement(XML_SHOWCASE_KEY_ITEMS.data());
+            if (showcaseComplexWordsNode != nullptr)
+                {
+                ShowcaseKeyItems(int_to_bool(showcaseComplexWordsNode->ToElement()->IntAttribute(
+                    XML_VALUE.data(), bool_to_int(IsShowcasingKeyItems()))));
+                }
+            // watermark
+            auto* watermarkNode = graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK.data());
+            if (watermarkNode != nullptr)
+                {
+                const char* watermark = watermarkNode->ToElement()->Attribute(XML_VALUE.data());
+                if (watermark != nullptr)
+                    {
+                    const auto waterMarkStr = Wisteria::TextStream::CharStreamToUnicode(
+                        watermark, std::strlen(watermark));
+                    const wchar_t* convertedStr =
+                        filterHtml(waterMarkStr.c_str(), waterMarkStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        SetWatermark(convertedStr);
+                        }
+                    }
+                }
+            watermarkNode =
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data());
+            if (watermarkNode != nullptr)
+                {
+                const char* watermark = watermarkNode->ToElement()->Attribute(XML_VALUE.data());
+                if (watermark != nullptr)
+                    {
+                    const auto waterMarkStr = Wisteria::TextStream::CharStreamToUnicode(
+                        watermark, std::strlen(watermark));
+                    const wchar_t* convertedStr =
+                        filterHtml(waterMarkStr.c_str(), waterMarkStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        SetWatermarkLogo(convertedStr);
+                        }
+                    }
+                }
+            // histogram settings
+            auto* histogramNode =
+                graphDefaultsNode->FirstChildElement(XML_HISTOGRAM_SETTINGS.data());
+            if (histogramNode != nullptr)
+                {
+                auto* catNode = histogramNode->FirstChildElement(XML_GRAPH_BINNING_METHOD.data());
+                if (catNode != nullptr)
+                    {
+                    int value = catNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetHistogramBinningMethod()));
+                    if (value < 0 ||
+                        value >=
+                            static_cast<decltype(value)>(
+                                Wisteria::Graphs::Histogram::BinningMethod::BINNING_METHOD_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(
+                            Wisteria::Graphs::Histogram::BinningMethod::BinByIntegerRange);
+                        }
+                    SetHistogramBinningMethod(
+                        static_cast<Wisteria::Graphs::Histogram::BinningMethod>(value));
+                    }
+                auto* roundNode =
+                    histogramNode->FirstChildElement(XML_GRAPH_ROUNDING_METHOD.data());
+                if (roundNode != nullptr)
+                    {
+                    int value = roundNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        static_cast<decltype(value)>(GetHistogramRoundingMethod()));
+                    if (value < 0 || value >= static_cast<decltype(value)>(
+                                                  Wisteria::RoundingMethod::ROUNDING_METHOD_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::RoundingMethod::RoundDown);
+                        }
+                    SetHistogramRoundingMethod(static_cast<Wisteria::RoundingMethod>(value));
+                    }
+                auto* intervalNode =
+                    histogramNode->FirstChildElement(XML_GRAPH_INTERVAL_DISPLAY.data());
+                if (intervalNode != nullptr)
+                    {
+                    int value = intervalNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        static_cast<decltype(value)>(GetHistogramIntervalDisplay()));
+                    if (value < 0 || value >= static_cast<decltype(value)>(
+                                                  Wisteria::Graphs::Histogram::IntervalDisplay::
+                                                      INTERVAL_METHOD_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(
+                            Wisteria::Graphs::Histogram::IntervalDisplay::Cutpoints);
+                        }
+                    SetHistogramIntervalDisplay(
+                        static_cast<Wisteria::Graphs::Histogram::IntervalDisplay>(value));
+                    }
+                auto* catLabelNode =
+                    histogramNode->FirstChildElement(XML_GRAPH_BINNING_LABEL_DISPLAY.data());
+                if (catLabelNode != nullptr)
+                    {
+                    int value = catLabelNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        static_cast<decltype(value)>(GetHistogramBinLabelDisplay()));
+                    if (value < 0 ||
+                        value >= static_cast<decltype(value)>(
+                                     Wisteria::BinLabelDisplay::BIN_LABEL_DISPLAY_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::BinLabelDisplay::BinValue);
+                        }
+                    SetHistogramBinLabelDisplay(static_cast<Wisteria::BinLabelDisplay>(value));
+                    }
+
+                SetHistogramBarColor(
+                    TiXmlNodeToColor(histogramNode->FirstChildElement(XML_GRAPH_COLOR.data()),
+                                     GetHistogramBarColor()));
+
+                auto* opacityNodeHisto = histogramNode->FirstChildElement(XML_GRAPH_OPACITY.data());
+                if (opacityNodeHisto != nullptr)
+                    {
+                    SetHistogramBarOpacity(
+                        static_cast<uint8_t>(opacityNodeHisto->ToElement()->IntAttribute(
+                            XML_VALUE.data(), GetHistogramBarOpacity())));
+                    }
+                auto* barEffectNode = histogramNode->FirstChildElement(XML_BAR_EFFECT.data());
+                if (barEffectNode != nullptr)
+                    {
+                    int value = barEffectNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetHistogramBarEffect()));
+                    if (value < 0 ||
+                        value >= static_cast<decltype(value)>(Wisteria::BoxEffect::EFFECTS_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
+                        }
+                    SetHistogramBarEffect(static_cast<Wisteria::BoxEffect>(value));
+                    }
+                }
+            // bar chart settings
+            auto* barChartNode =
+                graphDefaultsNode->FirstChildElement(XML_BAR_CHART_SETTINGS.data());
+            if (barChartNode != nullptr)
+                {
+                SetBarChartBarColor(
+                    TiXmlNodeToColor(barChartNode->FirstChildElement(XML_GRAPH_COLOR.data()),
+                                     GetBarChartBarColor()));
+
+                auto* orientationNode = barChartNode->FirstChildElement(XML_BAR_ORIENTATION.data());
+                if (orientationNode != nullptr)
+                    {
+                    int value = orientationNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetBarChartOrientation()));
+                    if (value < 0 || value >= static_cast<decltype(value)>(
+                                                  Wisteria::Orientation::ORIENTATION_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::Orientation::Vertical);
+                        }
+                    SetBarChartOrientation(static_cast<Wisteria::Orientation>(value));
+                    }
+                auto* opacityNodeBarChart =
+                    barChartNode->FirstChildElement(XML_GRAPH_OPACITY.data());
+                if (opacityNodeBarChart != nullptr)
+                    {
+                    SetGraphBarOpacity(
+                        static_cast<uint8_t>(opacityNodeBarChart->ToElement()->IntAttribute(
+                            XML_VALUE.data(), GetGraphBarOpacity())));
+                    }
+                auto* barEffectNode = barChartNode->FirstChildElement(XML_BAR_EFFECT.data());
+                if (barEffectNode != nullptr)
+                    {
+                    int value = barEffectNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetGraphBarEffect()));
+                    if (value < 0 ||
+                        value >= static_cast<decltype(value)>(Wisteria::BoxEffect::EFFECTS_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
+                        }
+                    SetGraphBarEffect(static_cast<Wisteria::BoxEffect>(value));
+                    }
+                auto* barDisplayLabelNode =
+                    barChartNode->FirstChildElement(XML_BAR_DISPLAY_LABELS.data());
+                if (barDisplayLabelNode != nullptr)
+                    {
+                    DisplayBarChartLabels(
+                        int_to_bool(barDisplayLabelNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), bool_to_int(IsDisplayingBarChartLabels()))));
+                    }
+                }
+            // box plots settings
+            auto* boxPlotNode = graphDefaultsNode->FirstChildElement(XML_BOX_PLOT_SETTINGS.data());
+            if (boxPlotNode != nullptr)
+                {
+                SetGraphBoxColor(TiXmlNodeToColor(
+                    boxPlotNode->FirstChildElement(XML_GRAPH_COLOR.data()), GetGraphBoxColor()));
+
+                auto* opacityNodeBoxPlot = boxPlotNode->FirstChildElement(XML_GRAPH_OPACITY.data());
+                if (opacityNodeBoxPlot != nullptr)
+                    {
+                    SetGraphBoxOpacity(
+                        static_cast<uint8_t>(opacityNodeBoxPlot->ToElement()->IntAttribute(
+                            XML_VALUE.data(), GetGraphBoxOpacity())));
+                    }
+                auto* boxEffectNode = boxPlotNode->FirstChildElement(XML_BOX_EFFECT.data());
+                if (boxEffectNode != nullptr)
+                    {
+                    int value = boxEffectNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetGraphBoxEffect()));
+                    if (value < 0 ||
+                        value >= static_cast<decltype(value)>(Wisteria::BoxEffect::EFFECTS_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
+                        }
+                    SetGraphBoxEffect(static_cast<Wisteria::BoxEffect>(value));
+                    }
+                auto* boxPlotShowAllPointsNode =
+                    boxPlotNode->FirstChildElement(XML_BOX_PLOT_SHOW_ALL_POINTS.data());
+                if (boxPlotShowAllPointsNode != nullptr)
+                    {
+                    ShowAllBoxPlotPoints(
+                        int_to_bool(boxPlotShowAllPointsNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), bool_to_int(IsShowingAllBoxPlotPoints()))));
+                    }
+                auto* boxConnectMiddlePointsNode =
+                    boxPlotNode->FirstChildElement(XML_BOX_CONNECT_MIDDLE_POINTS.data());
+                if (boxConnectMiddlePointsNode != nullptr)
+                    {
+                    ConnectBoxPlotMiddlePoints(
+                        int_to_bool(boxConnectMiddlePointsNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(), bool_to_int(IsConnectingBoxPlotMiddlePoints()))));
+                    }
+                auto* boxDisplayLabelNode =
+                    boxPlotNode->FirstChildElement(XML_BOX_DISPLAY_LABELS.data());
+                if (boxDisplayLabelNode != nullptr)
+                    {
+                    DisplayBoxPlotLabels(int_to_bool(boxDisplayLabelNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(IsDisplayingBoxPlotLabels()))));
+                    }
+                }
+            // Readability graph options
+            // Flesch chart
+            auto* fleschChartSettingsNode =
+                graphDefaultsNode->FirstChildElement(XML_FLESCH_CHART_SETTINGS.data());
+            if (fleschChartSettingsNode != nullptr)
+                {
+                auto* connectionLine =
+                    fleschChartSettingsNode->FirstChildElement(XML_INCLUDE_CONNECTION_LINE.data());
+                if (connectionLine != nullptr)
+                    {
+                    ConnectFleschPoints(int_to_bool(connectionLine->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(IsConnectingFleschPoints()))));
+                    }
+                auto* rulerDocGroup =
+                    fleschChartSettingsNode->FirstChildElement(XML_FLESCH_RULER_DOC_GROUPS.data());
+                if (rulerDocGroup != nullptr)
+                    {
+                    IncludeFleschRulerDocGroups(
+                        int_to_bool(rulerDocGroup->ToElement()->IntAttribute(
+                            XML_VALUE.data(), bool_to_int(IsIncludingFleschRulerDocGroups()))));
+                    }
+                }
+            // Lix
+            auto* lixSettingsNode = graphDefaultsNode->FirstChildElement(XML_LIX_SETTINGS.data());
+            if (lixSettingsNode != nullptr)
+                {
+                auto* useEnglishLabels =
+                    lixSettingsNode->FirstChildElement(XML_USE_ENGLISH_LABELS.data());
+                if (useEnglishLabels != nullptr)
+                    {
+                    UseEnglishLabelsForGermanLix(
+                        int_to_bool(useEnglishLabels->ToElement()->IntAttribute(
+                            XML_INCLUDE.data(), bool_to_int(IsUsingEnglishLabelsForGermanLix()))));
+                    }
+                }
+            // Fry/Raygor/GPM/Schwartz
+            auto* fryRaygorNode =
+                graphDefaultsNode->FirstChildElement(XML_FRY_RAYGOR_SETTINGS.data());
+            if (fryRaygorNode != nullptr)
+                {
+                // invalid area colors
+                SetInvalidAreaColor(TiXmlNodeToColor(
+                    fryRaygorNode->FirstChildElement(XML_INVALID_AREA_COLOR.data()),
+                    GetInvalidAreaColor()));
+
+                // Raygor appearance
+                auto* raygorStyleNode = fryRaygorNode->FirstChildElement(XML_RAYGOR_STYLE.data());
+                if (raygorStyleNode != nullptr)
+                    {
+                    int value = raygorStyleNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetRaygorStyle()));
+                    if (value < 0 ||
+                        value >= static_cast<decltype(value)>(
+                                     Wisteria::Graphs::RaygorStyle::RAYGOR_STYLE_COUNT))
+                        {
+                        value = static_cast<decltype(value)>(
+                            Wisteria::Graphs::RaygorStyle::BaldwinKaufman);
+                        }
+                    SetRaygorStyle(static_cast<Wisteria::Graphs::RaygorStyle>(value));
+                    }
+                }
+            // axis options
+            auto* axisNode = graphDefaultsNode->FirstChildElement(XML_AXIS_SETTINGS.data());
+            if (axisNode != nullptr)
+                {
+                auto* xAxisNode = axisNode->FirstChildElement(XML_X_AXIS.data());
+                if (xAxisNode != nullptr)
+                    {
+                    // font color
+                    SetXAxisFontColor(TiXmlNodeToColor(
+                        xAxisNode->FirstChildElement(XML_FONT_COLOR.data()), GetXAxisFontColor()));
+
+                    // font
+                    auto* fontNode = xAxisNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_xAxisFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_xAxisFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_xAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_xAxisFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_xAxisFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                auto* yAxisNode = axisNode->FirstChildElement(XML_Y_AXIS.data());
+                if (yAxisNode != nullptr)
+                    {
+                    // font color
+                    SetYAxisFontColor(TiXmlNodeToColor(
+                        yAxisNode->FirstChildElement(XML_FONT_COLOR.data()), GetYAxisFontColor()));
+
+                    // font
+                    auto* fontNode = yAxisNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_yAxisFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_yAxisFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_yAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_yAxisFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_yAxisFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                }
+            // title options
+            auto* titleNode = graphDefaultsNode->FirstChildElement(XML_TITLE_SETTINGS.data());
+            if (titleNode != nullptr)
+                {
+                auto* topTitleNode = titleNode->FirstChildElement(XML_TOP_TITLE.data());
+                if (topTitleNode != nullptr)
+                    {
+                    // font color
+                    SetGraphTopTitleFontColor(
+                        TiXmlNodeToColor(topTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
+                                         GetGraphTopTitleFontColor()));
+
+                    // font
+                    auto* fontNode = topTitleNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_topTitleFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_topTitleFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_topTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_topTitleFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_topTitleFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                auto* bottomTitleNode = titleNode->FirstChildElement(XML_BOTTOM_TITLE.data());
+                if (bottomTitleNode != nullptr)
+                    {
+                    // font color
+                    SetGraphBottomTitleFontColor(
+                        TiXmlNodeToColor(bottomTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
+                                         GetGraphBottomTitleFontColor()));
+
+                    // font
+                    auto* fontNode = bottomTitleNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_bottomTitleFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_bottomTitleFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_bottomTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_bottomTitleFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_bottomTitleFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                auto* leftTitleNode = titleNode->FirstChildElement(XML_LEFT_TITLE.data());
+                if (leftTitleNode != nullptr)
+                    {
+                    // font color
+                    SetGraphLeftTitleFontColor(
+                        TiXmlNodeToColor(leftTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
+                                         GetGraphLeftTitleFontColor()));
+
+                    // font
+                    auto* fontNode = leftTitleNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_leftTitleFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_leftTitleFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_leftTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_leftTitleFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_leftTitleFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                auto* rightTitleNode = titleNode->FirstChildElement(XML_RIGHT_TITLE.data());
+                if (rightTitleNode != nullptr)
+                    {
+                    // font color
+                    SetGraphRightTitleFontColor(
+                        TiXmlNodeToColor(rightTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
+                                         GetGraphRightTitleFontColor()));
+
+                    // font
+                    auto* fontNode = rightTitleNode->FirstChildElement(XML_FONT.data());
+                    if (fontNode != nullptr)
+                        {
+                        const int pointSize = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_POINT_SIZE_TAG.data(),
+                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        const int style = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+                        const int weight = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+                        const int underlined = fontNode->ToElement()->IntAttribute(
+                            XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+                        // get the font point size
+                        m_rightTitleFont.SetPointSize(
+                            (pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+                        // get the font style
+                        m_rightTitleFont.SetStyle(static_cast<wxFontStyle>(style));
+                        // get the font weight
+                        m_rightTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
+                        // get the font underlining
+                        m_rightTitleFont.SetUnderlined(int_to_bool(underlined));
+                        // get the font facename
+                        const char* faceName =
+                            fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+                        if (faceName != nullptr)
+                            {
+                            const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                                faceName, std::strlen(faceName));
+                            const wchar_t* filteredText =
+                                filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+                            if ((filteredText != nullptr) &&
+                                wxFontEnumerator::IsValidFacename(filteredText))
+                                {
+                                m_rightTitleFont.SetFaceName(wxString(filteredText));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        // stats options
+        auto* statsDefaultsNode = projectSettings->FirstChildElement(XML_STATISTICS_SECTION.data());
+        if (statsDefaultsNode != nullptr)
+            {
+            // variance method
+            auto* varianceMethod = statsDefaultsNode->FirstChildElement(XML_VARIANCE_METHOD.data());
+            if (varianceMethod != nullptr)
+                {
+                SetVarianceMethod(
+                    static_cast<VarianceMethod>(varianceMethod->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(GetVarianceMethod()))));
+                }
+            // stats report
+            auto* statsNode = statsDefaultsNode->FirstChildElement(XML_STATISTICS_RESULTS.data());
+            if (statsNode != nullptr)
+                {
+                const char* statsChars = statsNode->ToElement()->Attribute(XML_VALUE.data());
+                if (statsChars != nullptr)
+                    {
+                    const auto statsStr = Wisteria::TextStream::CharStreamToUnicode(
+                        statsChars, std::strlen(statsChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(statsStr.c_str(), statsStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        GetStatisticsInfo().Set(convertedStr);
+                        }
+                    }
+                }
+            // stats report
+            auto* statsReportNode =
+                statsDefaultsNode->FirstChildElement(XML_STATISTICS_REPORT.data());
+            if (statsReportNode != nullptr)
+                {
+                const char* statsReportChars =
+                    statsReportNode->ToElement()->Attribute(XML_VALUE.data());
+                if (statsReportChars != nullptr)
+                    {
+                    const auto statsReportStr = Wisteria::TextStream::CharStreamToUnicode(
+                        statsReportChars, std::strlen(statsReportChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(statsReportStr.c_str(), statsReportStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        GetStatisticsReportInfo().Set(convertedStr);
+                        }
+                    }
+                }
+            }
+        // wizard page defaults
+        auto* wizardPageDefaultsNode =
+            projectSettings->FirstChildElement(XML_WIZARD_PAGES_SETTINGS.data());
+        if (wizardPageDefaultsNode != nullptr)
+            {
+            // batch grouping method
+            auto* batchGrouping =
+                wizardPageDefaultsNode->FirstChildElement(XML_WIZARD_BATCH_GROUP.data());
+            if (batchGrouping != nullptr)
+                {
+                m_batchGroupDefault = batchGrouping->ToElement()->IntAttribute(XML_METHOD.data(),
+                                                                               m_batchGroupDefault);
+                }
+            // Text Source
+            auto* textSource = wizardPageDefaultsNode->FirstChildElement(XML_TEXT_SOURCE.data());
+            if (textSource != nullptr)
+                {
+                m_textSource = static_cast<TextSource>(textSource->ToElement()->IntAttribute(
+                    XML_METHOD.data(), static_cast<int>(m_textSource)));
+                if (m_textSource != TextSource::FromFile && m_textSource != TextSource::EnteredText)
+                    {
+                    m_textSource = TextSource::FromFile;
+                    }
+                }
+            // Test Recommendation
+            auto* testRecommendation =
+                wizardPageDefaultsNode->FirstChildElement(XML_TEST_RECOMMENDATION.data());
+            if (testRecommendation != nullptr)
+                {
+                m_testRecommendation =
+                    static_cast<TestRecommendation>(testRecommendation->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_testRecommendation)));
+                if (m_testRecommendation >= TestRecommendation::TEST_RECOMMENDATION_COUNT)
+                    {
+                    m_testRecommendation = TestRecommendation::BasedOnDocumentType;
+                    }
+                }
+            // Tests by Industry
+            auto* testsByIndustry =
+                wizardPageDefaultsNode->FirstChildElement(XML_TEST_BY_INDUSTRY.data());
+            if (testsByIndustry != nullptr)
+                {
+                m_testsByIndustry = static_cast<readability::industry_classification>(
+                    testsByIndustry->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_testsByIndustry)));
+                if (m_testsByIndustry ==
+                    readability::industry_classification::INDUSTRY_CLASSIFICATION_COUNT)
+                    {
+                    m_testsByIndustry =
+                        readability::industry_classification::adult_publishing_industry;
+                    }
+                }
+            // Tests By Document Type
+            auto* testsByDocumentType =
+                wizardPageDefaultsNode->FirstChildElement(XML_TEST_BY_DOCUMENT_TYPE.data());
+            if (testsByDocumentType != nullptr)
+                {
+                m_testsByDocumentType = static_cast<readability::document_classification>(
+                    testsByDocumentType->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_testsByDocumentType)));
+                if (m_testsByDocumentType ==
+                    readability::document_classification::DOCUMENT_CLASSIFICATION_COUNT)
+                    {
+                    m_testsByDocumentType =
+                        readability::document_classification::adult_literature_document;
+                    }
+                }
+            // tests by bundle
+            auto* bundleNode =
+                wizardPageDefaultsNode->FirstChildElement(XML_SELECTED_TEST_BUNDLE.data());
+            if (bundleNode != nullptr)
+                {
+                const char* bundleChars = bundleNode->ToElement()->Attribute(XML_VALUE.data());
+                if (bundleChars != nullptr)
+                    {
+                    const auto bundleStr = Wisteria::TextStream::CharStreamToUnicode(
+                        bundleChars, std::strlen(bundleChars));
+                    const wchar_t* convertedStr =
+                        filterHtml(bundleStr.c_str(), bundleStr.length(), true, false);
+                    if (convertedStr != nullptr)
+                        {
+                        SetSelectedTestBundle(convertedStr);
+                        }
                     }
                 }
             }
 
-        auto* downloadReplaceExistingNode =
-            configRootNode->FirstChildElement(XML_DOWNLOAD_REPLACE_EXISTING.data());
-        if (downloadReplaceExistingNode != nullptr)
+        // readability tests
+        auto* readabilityTestsNode =
+            projectSettings->FirstChildElement(XML_READABILITY_TESTS_SECTION.data());
+        if (readabilityTestsNode != nullptr)
             {
-            wxGetApp().GetWebHarvester().ReplaceExistingFiles(
-                int_to_bool(downloadReplaceExistingNode->ToElement()->IntAttribute(
-                    XML_VALUE.data(),
-                    bool_to_int(wxGetApp().GetWebHarvester().IsReplacingExistingFiles()))));
-            }
+            // grade scale display
+            auto* gradeScaleNode = readabilityTestsNode->FirstChildElement(
+                XML_READABILITY_TEST_GRADE_SCALE_DISPLAY.data());
+            if (gradeScaleNode != nullptr)
+                {
+                GetReadabilityMessageCatalog().SetGradeScale(
+                    static_cast<readability::grade_scale>(gradeScaleNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        static_cast<int>(GetReadabilityMessageCatalog().GetGradeScale()))));
+                }
 
-        auto* downloadWebFolderStructureNode =
-            configRootNode->FirstChildElement(XML_DOWNLOAD_KEEP_FOLDER_STRUCTURE.data());
-        if (downloadWebFolderStructureNode != nullptr)
-            {
-            wxGetApp().GetWebHarvester().KeepWebPathWhenDownloading(
-                int_to_bool(downloadWebFolderStructureNode->ToElement()->IntAttribute(
-                    XML_VALUE.data(),
-                    bool_to_int(wxGetApp().GetWebHarvester().IsKeepingWebPathWhenDownloading()))));
-            }
+            auto* gradeScaleLongFormatNode = readabilityTestsNode->FirstChildElement(
+                XML_READABILITY_TEST_GRADE_SCALE_LONG_FORMAT.data());
+            if (gradeScaleLongFormatNode != nullptr)
+                {
+                GetReadabilityMessageCatalog().SetLongGradeScaleFormat(
+                    int_to_bool(gradeScaleLongFormatNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(),
+                        bool_to_int(
+                            GetReadabilityMessageCatalog().IsUsingLongGradeScaleFormat()))));
+                }
 
-        auto* downloadMinFileSizeNode =
-            configRootNode->FirstChildElement(XML_DOWNLOAD_MIN_FILESIZE.data());
-        if (downloadMinFileSizeNode != nullptr)
-            {
-            wxGetApp().GetWebHarvester().SetMinimumDownloadFileSizeInKilobytes(
-                downloadMinFileSizeNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-            }
+            auto* readingAgeFormatNode =
+                readabilityTestsNode->FirstChildElement(XML_READING_AGE_FORMAT.data());
+            if (readingAgeFormatNode != nullptr)
+                {
+                GetReadabilityMessageCatalog().SetReadingAgeDisplay(
+                    static_cast<ReadabilityMessages::ReadingAgeDisplay>(
+                        readingAgeFormatNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(),
+                            static_cast<int>(
+                                GetReadabilityMessageCatalog().GetReadingAgeDisplay()))));
+                }
 
-        auto* useJsCookiesNode = configRootNode->FirstChildElement(XML_USE_JS_COOKIES.data());
-        if (useJsCookiesNode != nullptr)
-            {
-            const int value = useJsCookiesNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
-            m_useJsCookies = int_to_bool(value);
-            wxGetApp().GetWebHarvester().UseJavaScriptCookies(m_useJsCookies);
-            }
+            auto* includeScoreSummaryReportNode =
+                readabilityTestsNode->FirstChildElement(XML_INCLUDE_SCORES_SUMMARY_REPORT.data());
+            if (includeScoreSummaryReportNode != nullptr)
+                {
+                IncludeScoreSummaryReport(
+                    int_to_bool(includeScoreSummaryReportNode->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(IsIncludingScoreSummaryReport()))));
+                }
 
-        auto* persistCookiesNode = configRootNode->FirstChildElement(XML_PERSIST_COOKIES.data());
-        if (persistCookiesNode != nullptr)
-            {
-            const int value = persistCookiesNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
-            m_persistJsCookies = int_to_bool(value);
-            wxGetApp().GetWebHarvester().PersistJavaScriptCookies(m_persistJsCookies);
-            }
+            // test-specific options
+            auto* fleschKincaidOptionsNode =
+                readabilityTestsNode->FirstChildElement(XML_FLESCH_KINCAID_OPTIONS.data());
+            if (fleschKincaidOptionsNode != nullptr)
+                {
+                auto* numeralMethod = fleschKincaidOptionsNode->FirstChildElement(
+                    XML_NUMERAL_SYLLABICATION_METHOD.data());
+                if (numeralMethod != nullptr)
+                    {
+                    SetFleschKincaidNumeralSyllabizeMethod(
+                        static_cast<FleschKincaidNumeralSyllabize>(
+                            numeralMethod->ToElement()->IntAttribute(
+                                XML_VALUE.data(),
+                                static_cast<int>(GetFleschKincaidNumeralSyllabizeMethod()))));
+                    }
+                }
 
-        auto* disablePeerVerifyNode =
-            configRootNode->FirstChildElement(XML_DISABLE_PEER_VERIFY.data());
-        if (disablePeerVerifyNode != nullptr)
-            {
-            const int value = disablePeerVerifyNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
-            m_disablePeerVerify = int_to_bool(value);
-            wxGetApp().GetWebHarvester().DisablePeerVerify(m_disablePeerVerify);
-            }
+            auto* fleschOptionsNode =
+                readabilityTestsNode->FirstChildElement(XML_FLESCH_OPTIONS.data());
+            if (fleschOptionsNode != nullptr)
+                {
+                auto* numeralMethod =
+                    fleschOptionsNode->FirstChildElement(XML_NUMERAL_SYLLABICATION_METHOD.data());
+                if (numeralMethod != nullptr)
+                    {
+                    SetFleschNumeralSyllabizeMethod(static_cast<FleschNumeralSyllabize>(
+                        numeralMethod->ToElement()->IntAttribute(
+                            XML_VALUE.data(),
+                            static_cast<int>(GetFleschNumeralSyllabizeMethod()))));
+                    }
+                }
 
-        auto* filePathsNode = configRootNode->FirstChildElement(XML_FILE_OPEN_PATHS.data());
-        if (filePathsNode != nullptr)
-            {
-            auto* wordlistPathNode =
-                filePathsNode->FirstChildElement(XML_FILE_OPEN_WORDLIST_PATH.data());
-            if (wordlistPathNode != nullptr)
+            auto* fogOptionsNode =
+                readabilityTestsNode->FirstChildElement(XML_GUNNING_FOG_OPTIONS.data());
+            if (fogOptionsNode != nullptr)
                 {
-                const char* wordlistPathString =
-                    wordlistPathNode->ToElement()->Attribute(XML_VALUE.data());
-                if (wordlistPathString != nullptr)
+                auto* useUnits = fogOptionsNode->FirstChildElement(XML_USE_SENTENCE_UNITS.data());
+                if (useUnits != nullptr)
                     {
-                    const auto wordlistPathStr = Wisteria::TextStream::CharStreamToUnicode(
-                        wordlistPathString, std::strlen(wordlistPathString));
-                    const wchar_t* convertedStr =
-                        filterHtml(wordlistPathStr.c_str(), wordlistPathStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetWordListPath(convertedStr);
-                        }
+                    FogUseSentenceUnits(int_to_bool(useUnits->ToElement()->IntAttribute(
+                        XML_VALUE.data(), bool_to_int(IsFogUsingSentenceUnits()))));
                     }
                 }
-            auto* projectPathNode =
-                filePathsNode->FirstChildElement(XML_FILE_OPEN_PROJECT_PATH.data());
-            if (projectPathNode != nullptr)
+
+            auto* hjOptionsNode =
+                readabilityTestsNode->FirstChildElement(XML_HARRIS_JACOBSON_OPTIONS.data());
+            if (hjOptionsNode != nullptr)
                 {
-                const char* projectPathString =
-                    projectPathNode->ToElement()->Attribute(XML_VALUE.data());
-                if (projectPathString != nullptr)
+                auto* hjTextExclusion = hjOptionsNode->FirstChildElement(XML_TEXT_EXCLUSION.data());
+                if (hjTextExclusion != nullptr)
                     {
-                    const auto projectPathStr = Wisteria::TextStream::CharStreamToUnicode(
-                        projectPathString, std::strlen(projectPathString));
-                    const wchar_t* convertedStr =
-                        filterHtml(projectPathStr.c_str(), projectPathStr.length(), true, false);
-                    if (convertedStr != nullptr)
+                    int value = hjTextExclusion->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetHarrisJacobsonTextExclusionMode()));
+                    if (value < 0 ||
+                        value >= static_cast<int>(SpecializedTestTextExclusion::
+                                                      SPECIALIZED_TEST_TEXT_EXCLUSION_COUNT))
                         {
-                        SetProjectPath(convertedStr);
+                        value = static_cast<int>(
+                            SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings);
                         }
+                    SetHarrisJacobsonTextExclusionMode(
+                        static_cast<SpecializedTestTextExclusion>(value));
                     }
                 }
-            SetImagePath(
-                readString(filePathsNode, XML_FILE_OPEN_IMAGE_PATH,
-                           wxStandardPaths::Get().GetUserDir(wxStandardPaths::Dir_Pictures)));
-            SetDownloadsPath(
-                readString(filePathsNode, XML_DOWNLOADS_PATH,
-                           wxStandardPaths::Get().GetUserDir(wxStandardPaths::Dir_Downloads)));
-            }
-        // log report settings
-        auto* logSettingsNode = configRootNode->FirstChildElement(XML_LOG_SETTINGS.data());
-        if (logSettingsNode != nullptr)
-            {
-            auto* logVerboseNode = logSettingsNode->FirstChildElement(XML_LOG_VERBOSE.data());
-            if (logVerboseNode != nullptr)
+
+            auto* dcOptionsNode =
+                readabilityTestsNode->FirstChildElement(XML_NEW_DALE_CHALL_OPTIONS.data());
+            if (dcOptionsNode != nullptr)
                 {
-                LogFile::SetVerbose(
-                    int_to_bool(logVerboseNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            auto* logAppendNode = logSettingsNode->FirstChildElement(XML_LOG_APPEND_DAILY.data());
-            if (logAppendNode != nullptr)
-                {
-                AppendDailyLog(
-                    int_to_bool(logAppendNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            }
-        // printer settings
-        auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
-        if (printerSettingsNode != nullptr)
-            {
-            int value = 0;
-            auto* printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_ID.data());
-            if (printerNode != nullptr)
-                {
-                value = printerNode->ToElement()->IntAttribute(XML_VALUE.data(), value);
-                SetPaperId(static_cast<wxPaperSize>(value));
-                }
-            value = 0;
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_ORIENTATION.data());
-            if (printerNode != nullptr)
-                {
-                value = printerNode->ToElement()->IntAttribute(XML_VALUE.data(), value);
-                SetPaperOrientation(static_cast<wxPrintOrientation>(value));
-                }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_HEADER.data());
-            if (printerNode != nullptr)
-                {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
+                auto* includeStockerListNode =
+                    dcOptionsNode->FirstChildElement(XML_STOCKER_LIST.data());
+                if (includeStockerListNode != nullptr)
                     {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
-                    const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
-                    if (convertedStr != nullptr)
+                    IncludeStockerCatholicSupplement(
+                        int_to_bool(includeStockerListNode->ToElement()->IntAttribute(
+                            XML_VALUE.data(),
+                            bool_to_int(IsIncludingStockerCatholicSupplement()))));
+                    }
+                auto* dcTextExclusion = dcOptionsNode->FirstChildElement(XML_TEXT_EXCLUSION.data());
+                if (dcTextExclusion != nullptr)
+                    {
+                    int value = dcTextExclusion->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetDaleChallTextExclusionMode()));
+                    if (value < 0 ||
+                        value >= static_cast<int>(SpecializedTestTextExclusion::
+                                                      SPECIALIZED_TEST_TEXT_EXCLUSION_COUNT))
                         {
-                        SetLeftPrinterHeader(convertedStr);
+                        value = static_cast<int>(
+                            SpecializedTestTextExclusion::ExcludeIncompleteSentencesExceptHeadings);
                         }
+                    SetDaleChallTextExclusionMode(static_cast<SpecializedTestTextExclusion>(value));
+                    }
+                auto* dcProperNoun =
+                    dcOptionsNode->FirstChildElement(XML_PROPER_NOUN_COUNTING_METHOD.data());
+                if (dcProperNoun != nullptr)
+                    {
+                    int value = dcProperNoun->ToElement()->IntAttribute(
+                        XML_VALUE.data(), static_cast<int>(GetDaleChallProperNounCountingMethod()));
+                    if (value < 0 ||
+                        value >= static_cast<int>(readability::proper_noun_counting_method::
+                                                      PROPERNOUNCOUNTINGMETHOD_COUNT))
+                        {
+                        value = static_cast<int>(
+                            readability::proper_noun_counting_method::
+                                only_count_first_instance_of_proper_noun_as_unfamiliar);
+                        }
+                    SetDaleChallProperNounCountingMethod(
+                        static_cast<readability::proper_noun_counting_method>(value));
                     }
                 }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_HEADER.data());
-            if (printerNode != nullptr)
+
+            // read in the standard tests
+            for (auto& rTest : GetReadabilityTests().get_tests())
                 {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
+                auto* test = readabilityTestsNode->FirstChildElement(
+                    wxString{ rTest.get_test().get_id().c_str() }.utf8_str());
+                /* if attribute is not found then "includeValue" is set to zero for us,
+                   so no need to check the return value here*/
+                if (test != nullptr)
                     {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
-                    const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetCenterPrinterHeader(convertedStr);
-                        }
+                    rTest.include(int_to_bool(test->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(rTest.is_included()))));
                     }
                 }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_HEADER.data());
-            if (printerNode != nullptr)
+
+            auto* test = readabilityTestsNode->FirstChildElement(XML_DOLCH_SUITE.data());
+            if (test != nullptr)
                 {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
-                    {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
-                    const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetRightPrinterHeader(convertedStr);
-                        }
-                    }
+                m_includeDolchSightWords = int_to_bool(test->ToElement()->IntAttribute(
+                    XML_INCLUDE.data(), bool_to_int(m_includeDolchSightWords)));
                 }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_FOOTER.data());
-            if (printerNode != nullptr)
+            // custom test
+            GetIncludedCustomTests().clear();
+            test = readabilityTestsNode->FirstChildElement(XML_CUSTOM_TEST.data());
+            while (test != nullptr)
                 {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
+                const char* testId = test->ToElement()->Attribute(XML_VALUE.data());
+                if (testId != nullptr)
                     {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
+                    const auto testStr =
+                        Wisteria::TextStream::CharStreamToUnicode(testId, std::strlen(testId));
                     const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
+                        filterHtml(testStr.c_str(), testStr.length(), true, false);
                     if (convertedStr != nullptr)
                         {
-                        SetLeftPrinterFooter(convertedStr);
+                        GetIncludedCustomTests().emplace_back(convertedStr);
                         }
                     }
-                }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_FOOTER.data());
-            if (printerNode != nullptr)
-                {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
-                    {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
-                    const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetCenterPrinterFooter(convertedStr);
-                        }
-                    }
-                }
-            printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_FOOTER.data());
-            if (printerNode != nullptr)
-                {
-                const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-                if (printerString != nullptr)
-                    {
-                    const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                        printerString, std::strlen(printerString));
-                    const wchar_t* convertedStr =
-                        filterHtml(printStr.c_str(), printStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetRightPrinterFooter(convertedStr);
-                        }
-                    }
+                test = test->NextSiblingElement(XML_CUSTOM_TEST.data());
                 }
             }
-        // editor settings
-        auto* editorSettingsNode = configRootNode->FirstChildElement(XML_EDITOR.data());
-        if (editorSettingsNode != nullptr)
+        // Text views
+        auto* textViewNode = projectSettings->FirstChildElement(XML_TEXT_VIEWS_SECTION.data());
+        if (textViewNode != nullptr)
             {
-            m_editorFontColor =
-                TiXmlNodeToColor(editorSettingsNode->FirstChildElement(XML_EDITOR_FONTCOLOR.data()),
-                                 m_editorFontColor);
+            // how highlighting is done
+            auto* highlightMethod = textViewNode->FirstChildElement(XML_HIGHLIGHT_METHOD.data());
+            if (highlightMethod != nullptr)
+                {
+                m_textHighlight =
+                    static_cast<TextHighlight>(highlightMethod->ToElement()->IntAttribute(
+                        XML_METHOD.data(), static_cast<int>(m_textHighlight)));
+                if (m_textHighlight != TextHighlight::HighlightBackground &&
+                    m_textHighlight != TextHighlight::HighlightForeground)
+                    {
+                    m_textHighlight = TextHighlight::HighlightBackground;
+                    }
+                }
+            // the highlight color
+            m_textHighlightColor = TiXmlNodeToColor(
+                textViewNode->FirstChildElement(XML_HIGHLIGHTCOLOR.data()), m_textHighlightColor);
+
+            // the highlight color for dolch words
+            auto* dolchConjunctionsColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_CONJUNCTIONS_HIGHLIGHTCOLOR.data());
+            if (dolchConjunctionsColorNode != nullptr)
+                {
+                SetDolchConjunctionsColor(
+                    TiXmlNodeToColor(dolchConjunctionsColorNode, GetDolchConjunctionsColor()));
+
+                m_highlightDolchConjunctions =
+                    int_to_bool(dolchConjunctionsColorNode->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(m_highlightDolchConjunctions)));
+                }
+            auto* dolchPrepositionsColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_PREPOSITIONS_HIGHLIGHTCOLOR.data());
+            if (dolchPrepositionsColorNode != nullptr)
+                {
+                SetDolchPrepositionsColor(
+                    TiXmlNodeToColor(dolchPrepositionsColorNode, GetDolchPrepositionsColor()));
+
+                m_highlightDolchPrepositions =
+                    int_to_bool(dolchPrepositionsColorNode->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(m_highlightDolchPrepositions)));
+                }
+            auto* dolchPronounsColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_PRONOUNS_HIGHLIGHTCOLOR.data());
+            if (dolchPronounsColorNode != nullptr)
+                {
+                SetDolchPronounsColor(
+                    TiXmlNodeToColor(dolchPronounsColorNode, GetDolchPronounsColor()));
+
+                m_highlightDolchPronouns =
+                    int_to_bool(dolchPronounsColorNode->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(m_highlightDolchPronouns)));
+                }
+            auto* dolchAdverbsColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_ADVERBS_HIGHLIGHTCOLOR.data());
+            if (dolchAdverbsColorNode != nullptr)
+                {
+                SetDolchAdverbsColor(
+                    TiXmlNodeToColor(dolchAdverbsColorNode, GetDolchAdverbsColor()));
+
+                m_highlightDolchAdverbs =
+                    int_to_bool(dolchAdverbsColorNode->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(m_highlightDolchAdverbs)));
+                }
+            auto* dolchAdjectivesColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_ADJECTIVES_HIGHLIGHTCOLOR.data());
+            if (dolchAdjectivesColorNode != nullptr)
+                {
+                SetDolchAdjectivesColor(
+                    TiXmlNodeToColor(dolchAdjectivesColorNode, GetDolchAdjectivesColor()));
+
+                m_highlightDolchAdjectives =
+                    int_to_bool(dolchAdjectivesColorNode->ToElement()->IntAttribute(
+                        XML_INCLUDE.data(), bool_to_int(m_highlightDolchAdjectives)));
+                }
+            auto* dolchVerbColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_VERBS_HIGHLIGHTCOLOR.data());
+            if (dolchVerbColorNode != nullptr)
+                {
+                SetDolchVerbsColor(TiXmlNodeToColor(dolchVerbColorNode, GetDolchVerbsColor()));
+
+                m_highlightDolchVerbs = int_to_bool(dolchVerbColorNode->ToElement()->IntAttribute(
+                    XML_INCLUDE.data(), bool_to_int(m_highlightDolchVerbs)));
+                }
+            auto* dolchNounColorNode =
+                textViewNode->FirstChildElement(XML_DOLCH_NOUNS_HIGHLIGHTCOLOR.data());
+            if (dolchNounColorNode != nullptr)
+                {
+                SetDolchNounsColor(TiXmlNodeToColor(dolchNounColorNode, GetDolchNounsColor()));
+
+                m_highlightDolchNouns = int_to_bool(dolchNounColorNode->ToElement()->IntAttribute(
+                    XML_INCLUDE.data(), bool_to_int(m_highlightDolchNouns)));
+                }
+            // the highlight color for wordy items
+            m_wordyPhraseHighlightColor = TiXmlNodeToColor(
+                textViewNode->FirstChildElement(XML_WORDY_PHRASE_HIGHLIGHTCOLOR.data()),
+                m_wordyPhraseHighlightColor);
+
+            // the highlight color for repeated words
+            m_duplicateWordHighlightColor = TiXmlNodeToColor(
+                textViewNode->FirstChildElement(XML_DUP_WORD_HIGHLIGHTCOLOR.data()),
+                m_duplicateWordHighlightColor);
+
+            // the highlight color for ignored sentences
+            m_excludedTextHighlightColor = TiXmlNodeToColor(
+                textViewNode->FirstChildElement(XML_EXCLUDED_HIGHLIGHTCOLOR.data()),
+                m_excludedTextHighlightColor);
+
+            // document display font information
+            m_fontColor = TiXmlNodeToColor(
+                textViewNode->FirstChildElement(XML_DOCUMENT_DISPLAY_FONTCOLOR.data()),
+                m_fontColor);
+
             // font
-            auto* fontNode = editorSettingsNode->FirstChildElement(XML_EDITOR_FONT.data());
+            auto* fontNode = textViewNode->FirstChildElement(XML_DOCUMENT_DISPLAY_FONT.data());
             if (fontNode != nullptr)
                 {
                 const int pointSize = fontNode->ToElement()->IntAttribute(
@@ -953,16 +3213,16 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                 const int underlined =
                     fontNode->ToElement()->IntAttribute(XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
                 // get the font point size
-                m_editorFont.SetPointSize(
+                m_textViewFont.SetPointSize(
                     (pointSize > 0) ?
                         pointSize :
                         wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
                 // get the font style
-                m_editorFont.SetStyle(static_cast<wxFontStyle>(style));
+                m_textViewFont.SetStyle(static_cast<wxFontStyle>(style));
                 // get the font weight
-                m_editorFont.SetWeight(static_cast<wxFontWeight>(weight));
+                m_textViewFont.SetWeight(static_cast<wxFontWeight>(weight));
                 // get the font underlining
-                m_editorFont.SetUnderlined(int_to_bool(underlined));
+                m_textViewFont.SetUnderlined(int_to_bool(underlined));
                 // get the font facename
                 const char* faceName =
                     fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
@@ -975,2338 +3235,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                     if ((filteredText != nullptr) &&
                         wxFontEnumerator::IsValidFacename(filteredText))
                         {
-                        m_editorFont.SetFaceName(wxString(filteredText));
-                        }
-                    }
-                }
-            auto* indentNode = editorSettingsNode->FirstChildElement(XML_EDITOR_INDENT.data());
-            if (indentNode != nullptr)
-                {
-                IndentEditor(
-                    int_to_bool(indentNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            auto* spaceAfterParagraphNode =
-                editorSettingsNode->FirstChildElement(XML_EDITOR_SPACE_AFTER_PARAGRAPH.data());
-            if (spaceAfterParagraphNode != nullptr)
-                {
-                AddParagraphSpaceInEditor(int_to_bool(
-                    spaceAfterParagraphNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            auto* textAlignNode =
-                editorSettingsNode->FirstChildElement(XML_EDITOR_TEXT_ALIGNMENT.data());
-            if (textAlignNode != nullptr)
-                {
-                SetEditorTextAlignment(static_cast<wxTextAttrAlignment>(
-                    textAlignNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            auto* lineSpacingNode =
-                editorSettingsNode->FirstChildElement(XML_EDITOR_LINE_SPACING.data());
-            if (lineSpacingNode != nullptr)
-                {
-                SetEditorLineSpacing(static_cast<wxTextAttrLineSpacing>(
-                    lineSpacingNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            }
-        // just get the reviewer from project settings to be used for the start page
-        auto* projectSettingsForReview =
-            configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
-        if (projectSettingsForReview != nullptr)
-            {
-            auto* projectReviewer =
-                projectSettingsForReview->FirstChildElement(XML_REVIEWER.data());
-            if (projectReviewer != nullptr)
-                {
-                const char* reviewerChars =
-                    projectReviewer->ToElement()->Attribute(XML_VALUE.data());
-                if (reviewerChars != nullptr)
-                    {
-                    const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
-                        reviewerChars, std::strlen(reviewerChars));
-                    const wchar_t* convertedStr =
-                        filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetReviewer(convertedStr);
-                        }
-                    }
-                }
-            }
-        if (GetReviewer().empty())
-            {
-            SetReviewer(wxGetUserName());
-            }
-
-        // if only loading general info, then quit after reading this node
-        if (loadOnlyGeneralOptions)
-            {
-            return true;
-            }
-        // warning settings
-        auto* warningSettingsNode =
-            configRootNode->FirstChildElement(XML_WARNING_MESSAGE_SETTINGS.data());
-        if (warningSettingsNode != nullptr)
-            {
-            auto* warningNode = warningSettingsNode->FirstChildElement(XML_WARNING_MESSAGE.data());
-            while (warningNode != nullptr)
-                {
-                const char* warningStringId = warningNode->ToElement()->Attribute(XML_VALUE.data());
-                if (warningStringId != nullptr)
-                    {
-                    auto id = Wisteria::TextStream::CharStreamToUnicode(
-                        warningStringId, std::strlen(warningStringId));
-                    auto warningIter = WarningManager::GetWarning(id);
-                    if (warningIter != WarningManager::GetWarnings().end())
-                        {
-                        int value = warningNode->ToElement()->IntAttribute(XML_DISPLAY.data(), 1);
-                        warningIter->Show(int_to_bool(value));
-                        value =
-                            warningNode->ToElement()->IntAttribute(XML_PREVIOUS_RESPONSE.data(), 0);
-                        warningIter->SetPreviousResponse(value);
-                        }
-                    }
-                warningNode = warningNode->NextSiblingElement(XML_WARNING_MESSAGE.data());
-                }
-            }
-
-        // export sections
-        auto* exportSettingsNode = configRootNode->FirstChildElement(XML_EXPORT.data());
-        if (exportSettingsNode != nullptr)
-            {
-            auto* exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_LIST_EXT.data());
-            if (exportExtNode != nullptr)
-                {
-                const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
-                if (extString != nullptr)
-                    {
-                    BaseProjectDoc::SetExportListExt(Wisteria::TextStream::CharStreamToUnicode(
-                        extString, std::strlen(extString)));
-                    }
-                }
-            exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_TEXT_EXT.data());
-            if (exportExtNode != nullptr)
-                {
-                const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
-                if (extString != nullptr)
-                    {
-                    BaseProjectDoc::SetExportTextViewExt(Wisteria::TextStream::CharStreamToUnicode(
-                        extString, std::strlen(extString)));
-                    }
-                }
-            exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAPH_EXT.data());
-            if (exportExtNode != nullptr)
-                {
-                const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
-                if (extString != nullptr)
-                    {
-                    BaseProjectDoc::SetExportGraphExt(Wisteria::TextStream::CharStreamToUnicode(
-                        extString, std::strlen(extString)));
-                    }
-                }
-            auto* exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_LISTS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportHardWordLists(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode =
-                exportSettingsNode->FirstChildElement(XML_EXPORT_SENTENCES_BREAKDOWN.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportSentencesBreakdown(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAPHS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportGraphs(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_TEST_RESULTS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportTestResults(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_STATS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportStatistics(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_GRAMMAR.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportWordiness(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_DOLCH_WORDS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportSightWords(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            exportNode = exportSettingsNode->FirstChildElement(XML_EXPORT_WARNINGS.data());
-            if (exportNode != nullptr)
-                {
-                BaseProjectDoc::ExportWarnings(
-                    int_to_bool(exportNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            }
-        // New Project Settings section
-        auto* projectSettings = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
-        if (projectSettings != nullptr)
-            {
-            // reviewer and status
-            auto* projectReviewer = projectSettings->FirstChildElement(XML_REVIEWER.data());
-            if (projectReviewer != nullptr)
-                {
-                const char* reviewerChars =
-                    projectReviewer->ToElement()->Attribute(XML_VALUE.data());
-                if (reviewerChars != nullptr)
-                    {
-                    const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
-                        reviewerChars, std::strlen(reviewerChars));
-                    const wchar_t* convertedStr =
-                        filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetReviewer(convertedStr);
-                        }
-                    }
-                }
-            auto* realTimeRefresh = projectSettings->FirstChildElement(XML_REALTIME_UPDATE.data());
-            if (realTimeRefresh != nullptr)
-                {
-                UseRealTimeUpdate(
-                    int_to_bool(realTimeRefresh->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
-                }
-            auto* appendedDocPath =
-                projectSettings->FirstChildElement(XML_APPENDED_DOC_PATH.data());
-            if (appendedDocPath != nullptr)
-                {
-                const char* appendedDocChars =
-                    appendedDocPath->ToElement()->Attribute(XML_VALUE.data());
-                if (appendedDocChars != nullptr)
-                    {
-                    const auto appendedDocStr = Wisteria::TextStream::CharStreamToUnicode(
-                        appendedDocChars, std::strlen(appendedDocChars));
-                    const wchar_t* convertedStr =
-                        filterHtml(appendedDocStr.c_str(), appendedDocStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        SetAppendedDocumentFilePath(convertedStr);
-                        }
-                    }
-                }
-            // document storage/linking
-            auto* docStorageNode =
-                projectSettings->FirstChildElement(XML_DOCUMENT_STORAGE_METHOD.data());
-            if (docStorageNode != nullptr)
-                {
-                m_documentStorageMethod =
-                    static_cast<TextStorage>(docStorageNode->ToElement()->IntAttribute(
-                        XML_METHOD.data(), static_cast<int>(m_documentStorageMethod)));
-                // verify that this is a sensical value
-                if (m_documentStorageMethod != TextStorage::EmbedText &&
-                    m_documentStorageMethod != TextStorage::NoEmbedText)
-                    {
-                    m_documentStorageMethod = TextStorage::NoEmbedText;
-                    }
-                }
-            auto* projectLang = projectSettings->FirstChildElement(XML_PROJECT_LANGUAGE.data());
-            if (projectLang != nullptr)
-                {
-                int value = projectLang->ToElement()->IntAttribute(XML_VALUE.data(),
-                                                                   static_cast<int>(m_language));
-                if (value < 0 || value >= static_cast<decltype(value)>(
-                                              readability::test_language::TEST_LANGUAGE_COUNT))
-                    {
-                    value = static_cast<decltype(value)>(readability::test_language::english_test);
-                    }
-                m_language = static_cast<readability::test_language>(value);
-                }
-            auto* randomSampleSizeNode =
-                projectSettings->FirstChildElement(XML_RANDOM_SAMPLE_SIZE.data());
-            if (randomSampleSizeNode != nullptr)
-                {
-                int value = randomSampleSizeNode->ToElement()->IntAttribute(
-                    XML_VALUE.data(), GetBatchRandomSamplingSize());
-                // verify that this is a sensical value
-                if (value < 1 || value > 100)
-                    {
-                    value = 25;
-                    }
-                SetBatchRandomSamplingSize(static_cast<size_t>(value));
-                }
-            auto* randomSampleEnabledNode =
-                projectSettings->FirstChildElement(XML_RANDOM_SAMPLE_ENABLED.data());
-            if (randomSampleEnabledNode != nullptr)
-                {
-                EnableRandomSampling(int_to_bool(randomSampleEnabledNode->ToElement()->IntAttribute(
-                    XML_VALUE.data(), static_cast<int>(IsRandomSampling()))));
-                }
-            auto* minDocSizeNode =
-                projectSettings->FirstChildElement(XML_MIN_DOC_SIZE_FOR_BATCH.data());
-            if (minDocSizeNode != nullptr)
-                {
-                int value = minDocSizeNode->ToElement()->IntAttribute(XML_VALUE.data(),
-                                                                      GetMinDocWordCountForBatch());
-                // verify that this is a sensical value
-                value = std::max(value, 1);
-                SetMinDocWordCountForBatch(static_cast<size_t>(value));
-                }
-            auto* filePathTruncModeNode =
-                projectSettings->FirstChildElement(XML_FILE_PATH_TRUNC_MODE.data());
-            if (filePathTruncModeNode != nullptr)
-                {
-                int value = filePathTruncModeNode->ToElement()->IntAttribute(
-                    XML_VALUE.data(), static_cast<int>(GetFilePathTruncationMode()));
-                // verify that this is a sensical value
-                if (value < 0 ||
-                    value >=
-                        static_cast<decltype(value)>(
-                            Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::
-                                COLUMN_FILE_PATHS_TRUNCATION_MODE_COUNT))
-                    {
-                    value = static_cast<decltype(value)>(
-                        Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::
-                            OnlyShowFileNames);
-                    }
-                SetFilePathTruncationMode(
-                    static_cast<Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode>(
-                        value));
-                }
-            // sentences breakdown
-            auto* sentencesBreakdownNode =
-                projectSettings->FirstChildElement(XML_SENTENCES_BREAKDOWN.data());
-            if (sentencesBreakdownNode != nullptr)
-                {
-                // which options are included
-                auto* sentencesBreakdownInfoNode =
-                    sentencesBreakdownNode->FirstChildElement(XML_SENTENCES_BREAKDOWN_INFO.data());
-                if (sentencesBreakdownInfoNode != nullptr)
-                    {
-                    const char* infoChars =
-                        sentencesBreakdownInfoNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (infoChars != nullptr)
-                        {
-                        const auto infoStr = Wisteria::TextStream::CharStreamToUnicode(
-                            infoChars, std::strlen(infoChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(infoStr.c_str(), infoStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetSentencesBreakdownInfo().Set(convertedStr);
-                            }
-                        }
-                    }
-                }
-            // words breakdown
-            auto* wordsBreakdownNode =
-                projectSettings->FirstChildElement(XML_WORDS_BREAKDOWN.data());
-            if (wordsBreakdownNode != nullptr)
-                {
-                // which options are included
-                auto* wordsBreakdownInfoNode =
-                    wordsBreakdownNode->FirstChildElement(XML_WORDS_BREAKDOWN_INFO.data());
-                if (wordsBreakdownInfoNode != nullptr)
-                    {
-                    const char* infoChars =
-                        wordsBreakdownInfoNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (infoChars != nullptr)
-                        {
-                        const auto infoStr = Wisteria::TextStream::CharStreamToUnicode(
-                            infoChars, std::strlen(infoChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(infoStr.c_str(), infoStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetWordsBreakdownInfo().Set(convertedStr);
-                            }
-                        }
-                    }
-                }
-            // grammar
-            auto* grammarNode = projectSettings->FirstChildElement(XML_GRAMMAR.data());
-            if (grammarNode != nullptr)
-                {
-                // spell checking options
-                auto* spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_PROPER_NOUNS.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreProperNouns(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringProperNouns()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_UPPERCASED.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreUppercased(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringUppercased()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_NUMERALS.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreNumerals(int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                        XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringNumerals()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_FILE_ADDRESSES.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreFileAddresses(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringFileAddresses()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_PROGRAMMER_CODE.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreProgrammerCode(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringProgrammerCode()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_ALLOW_COLLOQUIALISMS.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckAllowColloquialisms(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsAllowingColloquialisms()))));
-                    }
-                spellCheckNode =
-                    grammarNode->FirstChildElement(XML_SPELLCHECK_IGNORE_SOCIAL_MEDIA_TAGS.data());
-                if (spellCheckNode != nullptr)
-                    {
-                    SpellCheckIgnoreSocialMediaTags(
-                        int_to_bool(spellCheckNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(SpellCheckIsIgnoringSocialMediaTags()))));
-                    }
-                // which grammar options are included
-                auto* grammarInfoNode = grammarNode->FirstChildElement(XML_GRAMMAR_INFO.data());
-                if (grammarInfoNode != nullptr)
-                    {
-                    const char* grammarInfoChars =
-                        grammarInfoNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (grammarInfoChars != nullptr)
-                        {
-                        const auto grammarInfStr = Wisteria::TextStream::CharStreamToUnicode(
-                            grammarInfoChars, std::strlen(grammarInfoChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(grammarInfStr.c_str(), grammarInfStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetGrammarInfo().Set(convertedStr);
-                            }
-                        }
-                    }
-                }
-            // wizard page defaults
-            auto* documentAnalysisNode =
-                projectSettings->FirstChildElement(XML_DOCUMENT_ANALYSIS_LOGIC.data());
-            if (documentAnalysisNode != nullptr)
-                {
-                // determinant for what a long sentence is
-                auto* longSentenceNode =
-                    documentAnalysisNode->FirstChildElement(XML_LONG_SENTENCE_METHOD.data());
-                if (longSentenceNode != nullptr)
-                    {
-                    m_longSentenceMethod =
-                        static_cast<LongSentence>(longSentenceNode->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_longSentenceMethod)));
-                    // verify that this is a sensical value
-                    if (m_longSentenceMethod != LongSentence::LongerThanSpecifiedLength &&
-                        m_longSentenceMethod != LongSentence::OutlierLength)
-                        {
-                        m_longSentenceMethod = LongSentence::LongerThanSpecifiedLength;
-                        }
-                    }
-                auto* longSentenceLengthNode =
-                    documentAnalysisNode->FirstChildElement(XML_LONG_SENTENCE_LENGTH.data());
-                if (longSentenceLengthNode != nullptr)
-                    {
-                    m_difficultSentenceLength = longSentenceLengthNode->ToElement()->IntAttribute(
-                        XML_VALUE.data(), m_difficultSentenceLength);
-                    // verify that this is a sensical value
-                    if (m_difficultSentenceLength <= 0)
-                        {
-                        m_difficultSentenceLength = 22;
-                        }
-                    }
-                // determinant for how to syllabize numerals
-                auto* numSyllNode = documentAnalysisNode->FirstChildElement(
-                    XML_NUMERAL_SYLLABICATION_METHOD.data());
-                if (numSyllNode != nullptr)
-                    {
-                    m_numeralSyllabicationMethod =
-                        static_cast<NumeralSyllabize>(numSyllNode->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_numeralSyllabicationMethod)));
-                    // verify that this is a sensical value
-                    if (m_numeralSyllabicationMethod != NumeralSyllabize::WholeWordIsOneSyllable &&
-                        m_numeralSyllabicationMethod != NumeralSyllabize::SoundOutEachDigit)
-                        {
-                        m_numeralSyllabicationMethod = NumeralSyllabize::WholeWordIsOneSyllable;
-                        }
-                    }
-                // whether we should ignore blank lines when parsing paragraphs
-                auto* ignoreBlankLines = documentAnalysisNode->FirstChildElement(
-                    XML_IGNORE_BLANK_LINES_FOR_PARAGRAPH_PARSING.data());
-                if (ignoreBlankLines != nullptr)
-                    {
-                    m_ignoreBlankLinesForParagraphsParser =
-                        int_to_bool(ignoreBlankLines->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_ignoreBlankLinesForParagraphsParser)));
-                    }
-                // whether we should ignore indenting when parsing paragraphs
-                auto* ignoreIndents = documentAnalysisNode->FirstChildElement(
-                    XML_IGNORE_INDENTING_FOR_PARAGRAPH_PARSING.data());
-                if (ignoreIndents != nullptr)
-                    {
-                    m_ignoreIndentingForParagraphsParser =
-                        int_to_bool(ignoreIndents->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_ignoreIndentingForParagraphsParser)));
-                    }
-                // whether sentences must start capitalized
-                auto* sentenceStartMustBeUppercased = documentAnalysisNode->FirstChildElement(
-                    XML_SENTENCES_MUST_START_CAPITALIZED.data());
-                if (sentenceStartMustBeUppercased != nullptr)
-                    {
-                    m_sentenceStartMustBeUppercased =
-                        int_to_bool(sentenceStartMustBeUppercased->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_sentenceStartMustBeUppercased)));
-                    }
-                // file path to phrases to exclude from analysis
-                auto* excludedPhrasesFilePath =
-                    documentAnalysisNode->FirstChildElement(XML_EXCLUDED_PHRASES_PATH.data());
-                if (excludedPhrasesFilePath != nullptr)
-                    {
-                    const char* filePathChars =
-                        excludedPhrasesFilePath->ToElement()->Attribute(XML_VALUE.data());
-                    if (filePathChars != nullptr)
-                        {
-                        const auto filePathStr = Wisteria::TextStream::CharStreamToUnicode(
-                            filePathChars, std::strlen(filePathChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(filePathStr.c_str(), filePathStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            SetExcludedPhrasesPath(convertedStr);
-                            }
-                        }
-                    }
-                // whether to include first occurrence of excluded phrases
-                auto* includeExcludedPhraseFirstOccurrenceNode =
-                    documentAnalysisNode->FirstChildElement(
-                        XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE.data());
-                if (includeExcludedPhraseFirstOccurrenceNode != nullptr)
-                    {
-                    IncludeExcludedPhraseFirstOccurrence(int_to_bool(
-                        includeExcludedPhraseFirstOccurrenceNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            bool_to_int(IsIncludingExcludedPhraseFirstOccurrence()))));
-                    }
-                auto* excludedBlockTagsNode =
-                    documentAnalysisNode->FirstChildElement(XML_EXCLUDE_BLOCK_TAGS.data());
-                if (excludedBlockTagsNode != nullptr)
-                    {
-                    auto* excludedBlockTagNode =
-                        excludedBlockTagsNode->FirstChildElement(XML_EXCLUDE_BLOCK_TAG.data());
-                    while (excludedBlockTagNode != nullptr)
-                        {
-                        const wxString blockTags =
-                            TiXmlNodeToString(excludedBlockTagNode, XML_VALUE.data());
-                        if (blockTags.length() >= 2)
-                            {
-                            m_exclusionBlockTags.emplace_back(blockTags[0], blockTags[1]);
-                            }
-                        excludedBlockTagNode =
-                            excludedBlockTagNode->NextSiblingElement(XML_EXCLUDE_BLOCK_TAG.data());
-                        }
-                    }
-                // whether to ignore proper nouns
-                auto* ignoreProperNounsNode =
-                    documentAnalysisNode->FirstChildElement(XML_IGNORE_PROPER_NOUNS.data());
-                if (ignoreProperNounsNode != nullptr)
-                    {
-                    m_excludeProperNouns =
-                        int_to_bool(ignoreProperNounsNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_excludeProperNouns)));
-                    }
-                // whether to ignore numerals
-                auto* ignoreNumerals =
-                    documentAnalysisNode->FirstChildElement(XML_IGNORE_NUMERALS.data());
-                if (ignoreNumerals != nullptr)
-                    {
-                    m_excludeNumerals = int_to_bool(ignoreNumerals->ToElement()->IntAttribute(
-                        XML_VALUE.data(), bool_to_int(m_excludeNumerals)));
-                    }
-                // whether to ignore file address
-                auto* ignoreFileAddresses =
-                    documentAnalysisNode->FirstChildElement(XML_IGNORE_FILE_ADDRESSES.data());
-                if (ignoreFileAddresses != nullptr)
-                    {
-                    m_excludeFileAddresses =
-                        int_to_bool(ignoreFileAddresses->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_excludeFileAddresses)));
-                    }
-                // whether to ignore citations
-                auto* ignoreCitations =
-                    documentAnalysisNode->FirstChildElement(XML_IGNORE_CITATIONS.data());
-                if (ignoreCitations != nullptr)
-                    {
-                    m_excludeTrailingCitations =
-                        int_to_bool(ignoreCitations->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_excludeTrailingCitations)));
-                    }
-                // whether to aggressively exclude
-                auto* aggressivelyDeducingLists =
-                    documentAnalysisNode->FirstChildElement(XML_AGGRESSIVE_EXCLUSION.data());
-                if (aggressivelyDeducingLists != nullptr)
-                    {
-                    m_aggressiveExclusion =
-                        int_to_bool(aggressivelyDeducingLists->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(m_aggressiveExclusion)));
-                    }
-                // whether to ignore copyright notices
-                auto* ignoreCopyrightNotices =
-                    documentAnalysisNode->FirstChildElement(XML_IGNORE_COPYRIGHT_NOTICES.data());
-                if (ignoreCopyrightNotices != nullptr)
-                    {
-                    m_excludeTrailingCopyrightNoticeParagraphs =
-                        int_to_bool(ignoreCopyrightNotices->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            bool_to_int(m_excludeTrailingCopyrightNoticeParagraphs)));
-                    }
-                // determinant for how to text is parsed into paragraphs
-                auto* paraParsingNode =
-                    documentAnalysisNode->FirstChildElement(XML_PARAGRAPH_PARSING_METHOD.data());
-                if (paraParsingNode != nullptr)
-                    {
-                    m_paragraphsParsingMethod =
-                        static_cast<ParagraphParse>(paraParsingNode->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_paragraphsParsingMethod)));
-                    // verify that this is a sensical value
-                    if (m_paragraphsParsingMethod !=
-                            ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs &&
-                        m_paragraphsParsingMethod != ParagraphParse::EachNewLineIsAParagraph)
-                        {
-                        m_paragraphsParsingMethod =
-                            ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs;
-                        }
-                    }
-
-                // determinant for how to handle headers, titles, bullet points, and lists
-                auto* invalidSentenceNode =
-                    documentAnalysisNode->FirstChildElement(XML_INVALID_SENTENCE_METHOD.data());
-                if (invalidSentenceNode != nullptr)
-                    {
-                    m_invalidSentenceMethod =
-                        static_cast<InvalidSentence>(invalidSentenceNode->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_invalidSentenceMethod)));
-                    if (static_cast<int>(m_invalidSentenceMethod) < 0 ||
-                        static_cast<int>(m_invalidSentenceMethod) >=
-                            static_cast<int>(InvalidSentence::INVALID_SENTENCE_METHOD_COUNT))
-                        {
-                        m_invalidSentenceMethod = InvalidSentence::ExcludeFromAnalysis;
-                        }
-                    }
-
-                // Number of words that will make an incomplete sentence actually complete
-                auto* includeIncompleteSentencesIfLongerThanNode =
-                    documentAnalysisNode->FirstChildElement(
-                        XML_INCLUDE_INCOMPLETE_SENTENCES_LONGER_THAN.data());
-                if (includeIncompleteSentencesIfLongerThanNode != nullptr)
-                    {
-                    m_includeIncompleteSentencesIfLongerThan =
-                        includeIncompleteSentencesIfLongerThanNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), m_includeIncompleteSentencesIfLongerThan);
-                    }
-                }
-
-            // test bundles
-            auto* testBundlesNode = projectSettings->FirstChildElement(XML_TEST_BUNDLES.data());
-            if (testBundlesNode != nullptr)
-                {
-                auto* testBundleNode = testBundlesNode->FirstChildElement(XML_TEST_BUNDLE.data());
-                while (testBundleNode != nullptr)
-                    {
-                    // bundle name
-                    auto* bundleNameNode =
-                        testBundleNode->FirstChildElement(XML_TEST_BUNDLE_NAME.data());
-                    const wxString bundleName = TiXmlNodeToString(bundleNameNode, XML_VALUE.data());
-                    if (bundleName.empty())
-                        {
-                        testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
-                        continue;
-                        }
-                    TestBundle bundle(bundleName.wc_str());
-                    // bundle description
-                    auto* bundleDescriptionNode =
-                        testBundleNode->FirstChildElement(XML_TEST_BUNDLE_DESCRIPTION.data());
-                    if (bundleDescriptionNode != nullptr)
-                        {
-                        bundle.SetDescription(
-                            TiXmlNodeToString(bundleDescriptionNode, XML_VALUE.data()).wc_str());
-                        }
-                    // get the included tests
-                    auto* testNamesNode = testBundleNode->FirstChildElement(XML_TEST_NAMES.data());
-                    if (testNamesNode == nullptr)
-                        {
-                        testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
-                        continue;
-                        }
-                    auto* testNameNode = testNamesNode->FirstChildElement(XML_TEST_NAME.data());
-                    while (testNameNode != nullptr)
-                        {
-                        const wxString testName = TiXmlNodeToString(testNameNode, XML_VALUE.data());
-                        if (!testName.empty())
-                            {
-                            const auto minGoal =
-                                TiXmlNodeToDouble(testNameNode, XML_GOAL_MIN_VAL_GOAL.data());
-                            const auto maxGoal =
-                                TiXmlNodeToDouble(testNameNode, XML_GOAL_MAX_VAL_GOAL.data());
-                            bundle.GetTestGoals().insert({ testName.wc_str(), minGoal, maxGoal });
-                            }
-                        testNameNode = testNameNode->NextSiblingElement(XML_TEST_NAME.data());
-                        }
-                    // get the included stats
-                    auto* statsNode =
-                        testBundleNode->FirstChildElement(XML_BUNDLE_STATISTICS.data());
-                    if (statsNode == nullptr)
-                        {
-                        testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
-                        continue;
-                        }
-                    auto* statNode = statsNode->FirstChildElement(XML_BUNDLE_STATISTIC.data());
-                    while (statNode != nullptr)
-                        {
-                        const wxString statName = TiXmlNodeToString(statNode, XML_VALUE.data());
-                        if (!statName.empty())
-                            {
-                            auto minGoal =
-                                TiXmlNodeToDouble(statNode, XML_GOAL_MIN_VAL_GOAL.data());
-                            auto maxGoal =
-                                TiXmlNodeToDouble(statNode, XML_GOAL_MAX_VAL_GOAL.data());
-                            bundle.GetStatGoals().insert({ statName.wc_str(), minGoal, maxGoal });
-                            }
-                        statNode = statNode->NextSiblingElement(XML_BUNDLE_STATISTIC.data());
-                        }
-                    BaseProject::m_testBundles.insert(bundle);
-                    dynamic_cast<MainFrame*>(wxGetApp().GetMainFrame())
-                        ->AddTestBundleToMenus(bundleName);
-
-                    testBundleNode = testBundleNode->NextSiblingElement(XML_TEST_BUNDLE.data());
-                    }
-                }
-
-            // custom tests
-            auto* customTestsNode = projectSettings->FirstChildElement(XML_CUSTOM_TESTS.data());
-            if (customTestsNode != nullptr)
-                {
-                auto* customReadabilityTestNode =
-                    customTestsNode->FirstChildElement(XML_CUSTOM_FAMILIAR_WORD_TEST.data());
-                while (customReadabilityTestNode != nullptr)
-                    {
-                    // test name
-                    auto* testNameNode =
-                        customReadabilityTestNode->FirstChildElement(XML_TEST_NAME.data());
-                    const char* testNameData =
-                        testNameNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (testNameData == nullptr)
-                        {
-                        customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
-                            XML_CUSTOM_FAMILIAR_WORD_TEST.data());
-                        continue;
-                        }
-                    auto testNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                        testNameData, std::strlen(testNameData));
-                    const wchar_t* filteredText =
-                        filterHtml(testNameStr.c_str(), testNameStr.length(), true, false);
-                    if (filteredText == nullptr)
-                        {
-                        customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
-                            XML_CUSTOM_FAMILIAR_WORD_TEST.data());
-                        continue;
-                        }
-                    const wxString testName(filteredText);
-                    // file path
-                    wxString filePath;
-                    auto* filePathNode = customReadabilityTestNode->FirstChildElement(
-                        XML_FAMILIAR_WORD_FILE_PATH.data());
-                    if (filePathNode != nullptr)
-                        {
-                        const char* filePathData =
-                            filePathNode->ToElement()->Attribute(XML_VALUE.data());
-                        if (filePathData != nullptr)
-                            {
-                            auto filePathStr = Wisteria::TextStream::CharStreamToUnicode(
-                                filePathData, std::strlen(filePathData));
-                            filteredText =
-                                filterHtml(filePathStr.c_str(), filePathStr.length(), true, false);
-                            if (filteredText != nullptr)
-                                {
-                                filePath = filteredText;
-                                }
-                            }
-                        }
-                    // test type
-                    int testType = 0;
-                    auto* testTypeNode =
-                        customReadabilityTestNode->FirstChildElement(XML_TEST_TYPE.data());
-                    if (testTypeNode != nullptr)
-                        {
-                        testType =
-                            testTypeNode->ToElement()->IntAttribute(XML_VALUE.data(), testType);
-                        }
-                    if (testType < 0 ||
-                        testType >=
-                            static_cast<int>(readability::readability_test_type::TEST_TYPE_COUNT))
-                        {
-                        testType = 0;
-                        }
-                    // stemming type
-                    int stemmingType = 0;
-                    auto* stemmingNode =
-                        customReadabilityTestNode->FirstChildElement(XML_STEMMING_TYPE.data());
-                    if (stemmingNode != nullptr)
-                        {
-                        stemmingType = stemmingNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
-                        }
-                    if (stemmingType < 0 ||
-                        stemmingType >=
-                            static_cast<int>(stemming::stemming_type::STEMMING_TYPE_COUNT))
-                        {
-                        stemmingType = 0;
-                        }
-                    // formula type (for backward compatibility)
-                    int formulaType = 0;
-                    auto* formulaNode =
-                        customReadabilityTestNode->FirstChildElement(XML_TEST_FORMULA_TYPE.data());
-                    if (formulaNode != nullptr)
-                        {
-                        formulaType = formulaNode->ToElement()->IntAttribute(XML_VALUE.data(), 0);
-                        }
-                    if (formulaType != 0 && formulaType != 1)
-                        {
-                        formulaType = 0;
-                        }
-                    // the formula
-                    wxString formula;
-                    formulaNode =
-                        customReadabilityTestNode->FirstChildElement(XML_TEST_FORMULA.data());
-                    if (formulaNode != nullptr)
-                        {
-                        const char* formulaData =
-                            formulaNode->ToElement()->Attribute(XML_VALUE.data());
-                        if (formulaData != nullptr)
-                            {
-                            auto formulaStr = Wisteria::TextStream::CharStreamToUnicode(
-                                formulaData, std::strlen(formulaData));
-                            filteredText =
-                                filterHtml(formulaStr.c_str(), formulaStr.length(), true, false);
-                            if (filteredText != nullptr)
-                                {
-                                // need to format formula from U.S. format to current locale format
-                                // for the parser to understand it
-                                formula = FormulaFormat::FormatMathExpressionFromUS(filteredText);
-                                }
-                            }
-                        }
-                    string_util::remove_blank_lines(formula);
-                    // formula string not in the file, so fall back to old formula type value
-                    if (formula.empty())
-                        {
-                        if (formulaType == 1)
-                            {
-                            formula = ReadabilityFormulaParser::GetCustomSpacheSignature();
-                            }
-                        else
-                            {
-                            formula = ReadabilityFormulaParser::GetCustomNewDaleChallSignature();
-                            }
-                        }
-                    // whether proper nouns and numbers should be included
-                    int includeProperNouns = 1;
-                    bool includeNumeric = false;
-                    auto* properNounNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INCLUDE_PROPER_NOUNS.data());
-                    if (properNounNode != nullptr)
-                        {
-                        includeProperNouns = properNounNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), includeProperNouns);
-                        }
-                    auto* numericNode =
-                        customReadabilityTestNode->FirstChildElement(XML_INCLUDE_NUMERIC.data());
-                    if (numericNode != nullptr)
-                        {
-                        includeNumeric = int_to_bool(
-                            numericNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    // whether DC and Spache lists should also be included with this test
-                    bool includeCustomWordList = true /* best for backward compatibility */,
-                         includeDCTest = false, includeSpacheTest = false, includeHJList = false,
-                         includeStockerList = false, familiarWordsMustBeOnAllLists = false;
-                    auto* otherTestNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INCLUDE_CUSTOM_WORD_LIST.data());
-                    if (otherTestNode != nullptr)
-                        {
-                        includeCustomWordList = int_to_bool(
-                            otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    otherTestNode =
-                        customReadabilityTestNode->FirstChildElement(XML_INCLUDE_DC_LIST.data());
-                    if (otherTestNode != nullptr)
-                        {
-                        includeDCTest = int_to_bool(
-                            otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    otherTestNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INCLUDE_SPACHE_LIST.data());
-                    if (otherTestNode != nullptr)
-                        {
-                        includeSpacheTest = int_to_bool(
-                            otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    otherTestNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INCLUDE_HARRIS_JACOBSON_LIST.data());
-                    if (otherTestNode != nullptr)
-                        {
-                        includeHJList = int_to_bool(
-                            otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    otherTestNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INCLUDE_STOCKER_LIST.data());
-                    if (otherTestNode != nullptr)
-                        {
-                        includeStockerList = int_to_bool(
-                            otherTestNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    auto* familiarWordsMustBeOnAllListsNode =
-                        customReadabilityTestNode->FirstChildElement(
-                            XML_FAMILIAR_WORDS_ALL_LISTS.data());
-                    if (familiarWordsMustBeOnAllListsNode != nullptr)
-                        {
-                        familiarWordsMustBeOnAllLists = int_to_bool(
-                            familiarWordsMustBeOnAllListsNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), 0));
-                        }
-                    // industry
-                    bool industryChildrensPublishingSelected = false;
-                    auto* industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_CHILDRENS_PUBLISHING.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryChildrensPublishingSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industryAdultPublishingSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_ADULTPUBLISHING.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryAdultPublishingSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industrySecondaryLanguageSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_SECONDARY_LANGUAGE.data());
-                    if (industryNode != nullptr)
-                        {
-                        industrySecondaryLanguageSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industryChildrensHealthCareSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_CHILDRENS_HEALTHCARE.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryChildrensHealthCareSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industryAdultHealthCareSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_ADULT_HEALTHCARE.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryAdultHealthCareSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industryMilitaryGovernmentSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_MILITARY_GOVERNMENT.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryMilitaryGovernmentSelected = int_to_bool(
-                            industryNode->ToElement()->IntAttribute(XML_VALUE.data(), 0));
-                        }
-                    bool industryBroadcastingSelected = false;
-                    industryNode = customReadabilityTestNode->FirstChildElement(
-                        XML_INDUSTRY_BROADCASTING.data());
-                    if (industryNode != nullptr)
-                        {
-                        industryBroadcastingSelected =
-                            int_to_bool(industryNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), static_cast<int>(industryBroadcastingSelected)));
-                        }
-                    // document
-                    bool documentGeneralSelected = false;
-                    auto* documentNode =
-                        customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_GENERAL.data());
-                    if (documentNode != nullptr)
-                        {
-                        documentGeneralSelected =
-                            int_to_bool(documentNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), static_cast<int>(documentGeneralSelected)));
-                        }
-                    bool documentTechSelected = false;
-                    documentNode =
-                        customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_TECHNICAL.data());
-                    if (documentNode != nullptr)
-                        {
-                        documentTechSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(documentTechSelected)));
-                        }
-                    bool documentFormSelected = false;
-                    documentNode =
-                        customReadabilityTestNode->FirstChildElement(XML_DOCUMENT_FORM.data());
-                    if (documentNode != nullptr)
-                        {
-                        documentFormSelected = int_to_bool(documentNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(documentFormSelected)));
-                        }
-                    bool documentYoungAdultSelected = false;
-                    documentNode = customReadabilityTestNode->FirstChildElement(
-                        XML_DOCUMENT_YOUNGADULT.data());
-                    if (documentNode != nullptr)
-                        {
-                        documentYoungAdultSelected =
-                            int_to_bool(documentNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), static_cast<int>(documentYoungAdultSelected)));
-                        }
-                    bool documentChildrenSelected = false;
-                    documentNode = customReadabilityTestNode->FirstChildElement(
-                        XML_DOCUMENT_CHILDREN_LIT.data());
-                    if (documentNode != nullptr)
-                        {
-                        documentChildrenSelected =
-                            int_to_bool(documentNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), static_cast<int>(documentChildrenSelected)));
-                        }
-                    CustomReadabilityTest cTest(
-                        testName.wc_str(), formula.wc_str(),
-                        static_cast<readability::readability_test_type>(testType),
-                        filePath.wc_str(), static_cast<stemming::stemming_type>(stemmingType),
-                        includeCustomWordList, includeDCTest, &BaseProject::m_dale_chall_word_list,
-                        includeSpacheTest, &BaseProject::m_spache_word_list, includeHJList,
-                        &BaseProject::m_harris_jacobson_word_list, includeStockerList,
-                        &BaseProject::m_stocker_catholic_word_list, familiarWordsMustBeOnAllLists,
-                        static_cast<readability::proper_noun_counting_method>(includeProperNouns),
-                        includeNumeric, industryChildrensPublishingSelected,
-                        industryAdultPublishingSelected, industrySecondaryLanguageSelected,
-                        industryChildrensHealthCareSelected, industryAdultHealthCareSelected,
-                        industryMilitaryGovernmentSelected, industryBroadcastingSelected,
-                        documentGeneralSelected, documentTechSelected, documentFormSelected,
-                        documentYoungAdultSelected, documentChildrenSelected);
-                    BaseProjectDoc::AddGlobalCustomReadabilityTest(cTest);
-
-                    customReadabilityTestNode = customReadabilityTestNode->NextSiblingElement(
-                        XML_CUSTOM_FAMILIAR_WORD_TEST.data());
-                    }
-                }
-
-            // graph options
-            auto* graphDefaultsNode = projectSettings->FirstChildElement(XML_GRAPH_SETTINGS.data());
-            if (graphDefaultsNode != nullptr)
-                {
-                // graph backgrounds
-                auto* imagePathNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_PLOT_BACKGROUND_IMAGE_PATH.data());
-                if (imagePathNode != nullptr)
-                    {
-                    const char* imagePath = imagePathNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (imagePath != nullptr)
-                        {
-                        auto imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
-                            imagePath, std::strlen(imagePath));
-                        const wchar_t* filteredText =
-                            filterHtml(imagePathStr.c_str(), imagePathStr.length(), true, false);
-                        if (filteredText != nullptr)
-                            {
-                            SetPlotBackGroundImagePath(wxString(filteredText));
-                            }
-                        }
-                    }
-                // color scheme
-                auto* colorSchemeNode =
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_COLOR_SCHEME.data());
-                if (colorSchemeNode != nullptr)
-                    {
-                    const char* colorScheme =
-                        colorSchemeNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (colorScheme != nullptr)
-                        {
-                        auto colorSchemeStr = Wisteria::TextStream::CharStreamToUnicode(
-                            colorScheme, std::strlen(colorScheme));
-                        const wchar_t* filteredText = filterHtml(
-                            colorSchemeStr.c_str(), colorSchemeStr.length(), true, false);
-                        if (filteredText != nullptr)
-                            {
-                            SetGraphColorScheme(wxString(filteredText));
-                            }
-                        }
-                    }
-                // graph background colors
-                SetBackGroundColor(TiXmlNodeToColor(
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_BACKGROUND_COLOR.data()),
-                    GetBackGroundColor()));
-                auto* backgroundImageEffectNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_PLOT_BACKGROUND_IMAGE_EFFECT.data());
-                if (backgroundImageEffectNode != nullptr)
-                    {
-                    int value = backgroundImageEffectNode->ToElement()->IntAttribute(
-                        XML_VALUE.data(), static_cast<int>(GetPlotBackGroundImageEffect()));
-                    if (value < 0 || value >= static_cast<decltype(value)>(
-                                                  Wisteria::ImageEffect::IMAGE_EFFECTS_COUNT))
-                        {
-                        value = static_cast<decltype(value)>(Wisteria::ImageEffect::NoEffect);
-                        }
-                    SetPlotBackGroundImageEffect(static_cast<Wisteria::ImageEffect>(value));
-                    }
-                auto* backgroundImageFitNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_PLOT_BACKGROUND_IMAGE_FIT.data());
-                if (backgroundImageFitNode != nullptr)
-                    {
-                    int value = backgroundImageFitNode->ToElement()->IntAttribute(
-                        XML_VALUE.data(), static_cast<int>(GetPlotBackGroundImageFit()));
-                    if (value < 0 ||
-                        value >= static_cast<decltype(value)>(Wisteria::ImageFit::IMAGE_FIT_COUNT))
-                        {
-                        value = static_cast<decltype(value)>(Wisteria::ImageFit::Shrink);
-                        }
-                    SetPlotBackGroundImageFit(static_cast<Wisteria::ImageFit>(value));
-                    }
-
-                SetBackGroundColor(TiXmlNodeToColor(
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_PLOT_BACKGROUND_COLOR.data()),
-                    GetPlotBackGroundColor()));
-
-                auto* opacityNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_PLOT_BACKGROUND_IMAGE_OPACITY.data());
-                if (opacityNode != nullptr)
-                    {
-                    SetPlotBackGroundImageOpacity(
-                        static_cast<uint8_t>(opacityNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), GetPlotBackGroundImageOpacity())));
-                    }
-                opacityNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_PLOT_BACKGROUND_COLOR_OPACITY.data());
-                if (opacityNode != nullptr)
-                    {
-                    SetPlotBackGroundColorOpacity(
-                        static_cast<uint8_t>(opacityNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), GetPlotBackGroundColorOpacity())));
-                    }
-                // linear gradient of backgrounds
-                auto* gradientNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_BACKGROUND_LINEAR_GRADIENT.data());
-                if (gradientNode != nullptr)
-                    {
-                    SetGraphBackGroundLinearGradient(
-                        int_to_bool(gradientNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(GetGraphBackGroundLinearGradient()))));
-                    }
-                // stipple image
-                auto* stipplePathNode =
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_PATH.data());
-                if (stipplePathNode != nullptr)
-                    {
-                    const char* stipplePath =
-                        stipplePathNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (stipplePath != nullptr)
-                        {
-                        auto imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
-                            stipplePath, std::strlen(stipplePath));
-                        const wchar_t* filteredText =
-                            filterHtml(imagePathStr.c_str(), imagePathStr.length(), true, false);
-                        if (filteredText != nullptr)
-                            {
-                            SetStippleImagePath(wxString(filteredText));
-                            }
-                        }
-                    }
-                // common image
-                auto* commonImagePathNode =
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_COMMON_IMAGE_PATH.data());
-                if (commonImagePathNode != nullptr)
-                    {
-                    const char* commonImagePath =
-                        commonImagePathNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (commonImagePath != nullptr)
-                        {
-                        const wxString imagePathStr = Wisteria::TextStream::CharStreamToUnicode(
-                            commonImagePath, std::strlen(commonImagePath));
-                        const wchar_t* filteredText =
-                            filterHtml(imagePathStr.wc_str(), imagePathStr.length(), true, false);
-                        if (filteredText != nullptr)
-                            {
-                            SetGraphCommonImagePath(wxString(filteredText));
-                            }
-                        }
-                    }
-                // stipple shape
-                auto* stippleShapeNode =
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_SHAPE.data());
-                if (stippleShapeNode != nullptr)
-                    {
-                    const char* stippleShape =
-                        stippleShapeNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (stippleShape != nullptr)
-                        {
-                        auto shapeStr = Wisteria::TextStream::CharStreamToUnicode(
-                            stippleShape, std::strlen(stippleShape));
-                        const wchar_t* filteredText =
-                            filterHtml(shapeStr.c_str(), shapeStr.length(), true, false);
-                        if (filteredText != nullptr)
-                            {
-                            SetStippleShape(wxString(filteredText));
-                            }
-                        }
-                    }
-
-                SetStippleShapeColor(TiXmlNodeToColor(
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_STIPPLE_COLOR.data()),
-                    GetStippleShapeColor()));
-
-                // whether drop shadows should be shown
-                auto* dropShadowNode =
-                    graphDefaultsNode->FirstChildElement(XML_DISPLAY_DROP_SHADOW.data());
-                if (dropShadowNode != nullptr)
-                    {
-                    DisplayDropShadows(int_to_bool(dropShadowNode->ToElement()->IntAttribute(
-                        XML_VALUE.data(), bool_to_int(IsDisplayingDropShadows()))));
-                    }
-                // whether to draw attention to the complex word groups in syllable graphs
-                auto* showcaseComplexWordsNode =
-                    graphDefaultsNode->FirstChildElement(XML_SHOWCASE_KEY_ITEMS.data());
-                if (showcaseComplexWordsNode != nullptr)
-                    {
-                    ShowcaseKeyItems(
-                        int_to_bool(showcaseComplexWordsNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(IsShowcasingKeyItems()))));
-                    }
-                // watermark
-                auto* watermarkNode =
-                    graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK.data());
-                if (watermarkNode != nullptr)
-                    {
-                    const char* watermark = watermarkNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (watermark != nullptr)
-                        {
-                        const auto waterMarkStr = Wisteria::TextStream::CharStreamToUnicode(
-                            watermark, std::strlen(watermark));
-                        const wchar_t* convertedStr =
-                            filterHtml(waterMarkStr.c_str(), waterMarkStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            SetWatermark(convertedStr);
-                            }
-                        }
-                    }
-                watermarkNode = graphDefaultsNode->FirstChildElement(
-                    XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data());
-                if (watermarkNode != nullptr)
-                    {
-                    const char* watermark = watermarkNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (watermark != nullptr)
-                        {
-                        const auto waterMarkStr = Wisteria::TextStream::CharStreamToUnicode(
-                            watermark, std::strlen(watermark));
-                        const wchar_t* convertedStr =
-                            filterHtml(waterMarkStr.c_str(), waterMarkStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            SetWatermarkLogo(convertedStr);
-                            }
-                        }
-                    }
-                // histogram settings
-                auto* histogramNode =
-                    graphDefaultsNode->FirstChildElement(XML_HISTOGRAM_SETTINGS.data());
-                if (histogramNode != nullptr)
-                    {
-                    auto* catNode =
-                        histogramNode->FirstChildElement(XML_GRAPH_BINNING_METHOD.data());
-                    if (catNode != nullptr)
-                        {
-                        int value = catNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetHistogramBinningMethod()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::Graphs::Histogram::BinningMethod::
-                                                          BINNING_METHOD_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(
-                                Wisteria::Graphs::Histogram::BinningMethod::BinByIntegerRange);
-                            }
-                        SetHistogramBinningMethod(
-                            static_cast<Wisteria::Graphs::Histogram::BinningMethod>(value));
-                        }
-                    auto* roundNode =
-                        histogramNode->FirstChildElement(XML_GRAPH_ROUNDING_METHOD.data());
-                    if (roundNode != nullptr)
-                        {
-                        int value = roundNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            static_cast<decltype(value)>(GetHistogramRoundingMethod()));
-                        if (value < 0 ||
-                            value >= static_cast<decltype(value)>(
-                                         Wisteria::RoundingMethod::ROUNDING_METHOD_COUNT))
-                            {
-                            value =
-                                static_cast<decltype(value)>(Wisteria::RoundingMethod::RoundDown);
-                            }
-                        SetHistogramRoundingMethod(static_cast<Wisteria::RoundingMethod>(value));
-                        }
-                    auto* intervalNode =
-                        histogramNode->FirstChildElement(XML_GRAPH_INTERVAL_DISPLAY.data());
-                    if (intervalNode != nullptr)
-                        {
-                        int value = intervalNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            static_cast<decltype(value)>(GetHistogramIntervalDisplay()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::Graphs::Histogram::IntervalDisplay::
-                                                          INTERVAL_METHOD_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(
-                                Wisteria::Graphs::Histogram::IntervalDisplay::Cutpoints);
-                            }
-                        SetHistogramIntervalDisplay(
-                            static_cast<Wisteria::Graphs::Histogram::IntervalDisplay>(value));
-                        }
-                    auto* catLabelNode =
-                        histogramNode->FirstChildElement(XML_GRAPH_BINNING_LABEL_DISPLAY.data());
-                    if (catLabelNode != nullptr)
-                        {
-                        int value = catLabelNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            static_cast<decltype(value)>(GetHistogramBinLabelDisplay()));
-                        if (value < 0 ||
-                            value >= static_cast<decltype(value)>(
-                                         Wisteria::BinLabelDisplay::BIN_LABEL_DISPLAY_COUNT))
-                            {
-                            value =
-                                static_cast<decltype(value)>(Wisteria::BinLabelDisplay::BinValue);
-                            }
-                        SetHistogramBinLabelDisplay(static_cast<Wisteria::BinLabelDisplay>(value));
-                        }
-
-                    SetHistogramBarColor(
-                        TiXmlNodeToColor(histogramNode->FirstChildElement(XML_GRAPH_COLOR.data()),
-                                         GetHistogramBarColor()));
-
-                    auto* opacityNodeHisto =
-                        histogramNode->FirstChildElement(XML_GRAPH_OPACITY.data());
-                    if (opacityNodeHisto != nullptr)
-                        {
-                        SetHistogramBarOpacity(
-                            static_cast<uint8_t>(opacityNodeHisto->ToElement()->IntAttribute(
-                                XML_VALUE.data(), GetHistogramBarOpacity())));
-                        }
-                    auto* barEffectNode = histogramNode->FirstChildElement(XML_BAR_EFFECT.data());
-                    if (barEffectNode != nullptr)
-                        {
-                        int value = barEffectNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetHistogramBarEffect()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::BoxEffect::EFFECTS_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
-                            }
-                        SetHistogramBarEffect(static_cast<Wisteria::BoxEffect>(value));
-                        }
-                    }
-                // bar chart settings
-                auto* barChartNode =
-                    graphDefaultsNode->FirstChildElement(XML_BAR_CHART_SETTINGS.data());
-                if (barChartNode != nullptr)
-                    {
-                    SetBarChartBarColor(
-                        TiXmlNodeToColor(barChartNode->FirstChildElement(XML_GRAPH_COLOR.data()),
-                                         GetBarChartBarColor()));
-
-                    auto* orientationNode =
-                        barChartNode->FirstChildElement(XML_BAR_ORIENTATION.data());
-                    if (orientationNode != nullptr)
-                        {
-                        int value = orientationNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetBarChartOrientation()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::Orientation::ORIENTATION_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(Wisteria::Orientation::Vertical);
-                            }
-                        SetBarChartOrientation(static_cast<Wisteria::Orientation>(value));
-                        }
-                    auto* opacityNodeBarChart =
-                        barChartNode->FirstChildElement(XML_GRAPH_OPACITY.data());
-                    if (opacityNodeBarChart != nullptr)
-                        {
-                        SetGraphBarOpacity(
-                            static_cast<uint8_t>(opacityNodeBarChart->ToElement()->IntAttribute(
-                                XML_VALUE.data(), GetGraphBarOpacity())));
-                        }
-                    auto* barEffectNode = barChartNode->FirstChildElement(XML_BAR_EFFECT.data());
-                    if (barEffectNode != nullptr)
-                        {
-                        int value = barEffectNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetGraphBarEffect()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::BoxEffect::EFFECTS_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
-                            }
-                        SetGraphBarEffect(static_cast<Wisteria::BoxEffect>(value));
-                        }
-                    auto* barDisplayLabelNode =
-                        barChartNode->FirstChildElement(XML_BAR_DISPLAY_LABELS.data());
-                    if (barDisplayLabelNode != nullptr)
-                        {
-                        DisplayBarChartLabels(
-                            int_to_bool(barDisplayLabelNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), bool_to_int(IsDisplayingBarChartLabels()))));
-                        }
-                    }
-                // box plots settings
-                auto* boxPlotNode =
-                    graphDefaultsNode->FirstChildElement(XML_BOX_PLOT_SETTINGS.data());
-                if (boxPlotNode != nullptr)
-                    {
-                    SetGraphBoxColor(
-                        TiXmlNodeToColor(boxPlotNode->FirstChildElement(XML_GRAPH_COLOR.data()),
-                                         GetGraphBoxColor()));
-
-                    auto* opacityNodeBoxPlot =
-                        boxPlotNode->FirstChildElement(XML_GRAPH_OPACITY.data());
-                    if (opacityNodeBoxPlot != nullptr)
-                        {
-                        SetGraphBoxOpacity(
-                            static_cast<uint8_t>(opacityNodeBoxPlot->ToElement()->IntAttribute(
-                                XML_VALUE.data(), GetGraphBoxOpacity())));
-                        }
-                    auto* boxEffectNode = boxPlotNode->FirstChildElement(XML_BOX_EFFECT.data());
-                    if (boxEffectNode != nullptr)
-                        {
-                        int value = boxEffectNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetGraphBoxEffect()));
-                        if (value < 0 || value >= static_cast<decltype(value)>(
-                                                      Wisteria::BoxEffect::EFFECTS_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(Wisteria::BoxEffect::Solid);
-                            }
-                        SetGraphBoxEffect(static_cast<Wisteria::BoxEffect>(value));
-                        }
-                    auto* boxPlotShowAllPointsNode =
-                        boxPlotNode->FirstChildElement(XML_BOX_PLOT_SHOW_ALL_POINTS.data());
-                    if (boxPlotShowAllPointsNode != nullptr)
-                        {
-                        ShowAllBoxPlotPoints(
-                            int_to_bool(boxPlotShowAllPointsNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), bool_to_int(IsShowingAllBoxPlotPoints()))));
-                        }
-                    auto* boxConnectMiddlePointsNode =
-                        boxPlotNode->FirstChildElement(XML_BOX_CONNECT_MIDDLE_POINTS.data());
-                    if (boxConnectMiddlePointsNode != nullptr)
-                        {
-                        ConnectBoxPlotMiddlePoints(
-                            int_to_bool(boxConnectMiddlePointsNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), bool_to_int(IsConnectingBoxPlotMiddlePoints()))));
-                        }
-                    auto* boxDisplayLabelNode =
-                        boxPlotNode->FirstChildElement(XML_BOX_DISPLAY_LABELS.data());
-                    if (boxDisplayLabelNode != nullptr)
-                        {
-                        DisplayBoxPlotLabels(
-                            int_to_bool(boxDisplayLabelNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(), bool_to_int(IsDisplayingBoxPlotLabels()))));
-                        }
-                    }
-                // Readability graph options
-                // Flesch chart
-                auto* fleschChartSettingsNode =
-                    graphDefaultsNode->FirstChildElement(XML_FLESCH_CHART_SETTINGS.data());
-                if (fleschChartSettingsNode != nullptr)
-                    {
-                    auto* connectionLine = fleschChartSettingsNode->FirstChildElement(
-                        XML_INCLUDE_CONNECTION_LINE.data());
-                    if (connectionLine != nullptr)
-                        {
-                        ConnectFleschPoints(int_to_bool(connectionLine->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(IsConnectingFleschPoints()))));
-                        }
-                    auto* rulerDocGroup = fleschChartSettingsNode->FirstChildElement(
-                        XML_FLESCH_RULER_DOC_GROUPS.data());
-                    if (rulerDocGroup != nullptr)
-                        {
-                        IncludeFleschRulerDocGroups(
-                            int_to_bool(rulerDocGroup->ToElement()->IntAttribute(
-                                XML_VALUE.data(), bool_to_int(IsIncludingFleschRulerDocGroups()))));
-                        }
-                    }
-                // Lix
-                auto* lixSettingsNode =
-                    graphDefaultsNode->FirstChildElement(XML_LIX_SETTINGS.data());
-                if (lixSettingsNode != nullptr)
-                    {
-                    auto* useEnglishLabels =
-                        lixSettingsNode->FirstChildElement(XML_USE_ENGLISH_LABELS.data());
-                    if (useEnglishLabels != nullptr)
-                        {
-                        UseEnglishLabelsForGermanLix(
-                            int_to_bool(useEnglishLabels->ToElement()->IntAttribute(
-                                XML_INCLUDE.data(),
-                                bool_to_int(IsUsingEnglishLabelsForGermanLix()))));
-                        }
-                    }
-                // Fry/Raygor/GPM/Schwartz
-                auto* fryRaygorNode =
-                    graphDefaultsNode->FirstChildElement(XML_FRY_RAYGOR_SETTINGS.data());
-                if (fryRaygorNode != nullptr)
-                    {
-                    // invalid area colors
-                    SetInvalidAreaColor(TiXmlNodeToColor(
-                        fryRaygorNode->FirstChildElement(XML_INVALID_AREA_COLOR.data()),
-                        GetInvalidAreaColor()));
-
-                    // Raygor appearance
-                    auto* raygorStyleNode =
-                        fryRaygorNode->FirstChildElement(XML_RAYGOR_STYLE.data());
-                    if (raygorStyleNode != nullptr)
-                        {
-                        int value = raygorStyleNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetRaygorStyle()));
-                        if (value < 0 ||
-                            value >= static_cast<decltype(value)>(
-                                         Wisteria::Graphs::RaygorStyle::RAYGOR_STYLE_COUNT))
-                            {
-                            value = static_cast<decltype(value)>(
-                                Wisteria::Graphs::RaygorStyle::BaldwinKaufman);
-                            }
-                        SetRaygorStyle(static_cast<Wisteria::Graphs::RaygorStyle>(value));
-                        }
-                    }
-                // axis options
-                auto* axisNode = graphDefaultsNode->FirstChildElement(XML_AXIS_SETTINGS.data());
-                if (axisNode != nullptr)
-                    {
-                    auto* xAxisNode = axisNode->FirstChildElement(XML_X_AXIS.data());
-                    if (xAxisNode != nullptr)
-                        {
-                        // font color
-                        SetXAxisFontColor(
-                            TiXmlNodeToColor(xAxisNode->FirstChildElement(XML_FONT_COLOR.data()),
-                                             GetXAxisFontColor()));
-
-                        // font
-                        auto* fontNode = xAxisNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_xAxisFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_xAxisFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_xAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_xAxisFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_xAxisFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    auto* yAxisNode = axisNode->FirstChildElement(XML_Y_AXIS.data());
-                    if (yAxisNode != nullptr)
-                        {
-                        // font color
-                        SetYAxisFontColor(
-                            TiXmlNodeToColor(yAxisNode->FirstChildElement(XML_FONT_COLOR.data()),
-                                             GetYAxisFontColor()));
-
-                        // font
-                        auto* fontNode = yAxisNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_yAxisFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_yAxisFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_yAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_yAxisFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_yAxisFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                // title options
-                auto* titleNode = graphDefaultsNode->FirstChildElement(XML_TITLE_SETTINGS.data());
-                if (titleNode != nullptr)
-                    {
-                    auto* topTitleNode = titleNode->FirstChildElement(XML_TOP_TITLE.data());
-                    if (topTitleNode != nullptr)
-                        {
-                        // font color
-                        SetGraphTopTitleFontColor(
-                            TiXmlNodeToColor(topTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
-                                             GetGraphTopTitleFontColor()));
-
-                        // font
-                        auto* fontNode = topTitleNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_topTitleFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_topTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_topTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_topTitleFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_topTitleFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    auto* bottomTitleNode = titleNode->FirstChildElement(XML_BOTTOM_TITLE.data());
-                    if (bottomTitleNode != nullptr)
-                        {
-                        // font color
-                        SetGraphBottomTitleFontColor(TiXmlNodeToColor(
-                            bottomTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
-                            GetGraphBottomTitleFontColor()));
-
-                        // font
-                        auto* fontNode = bottomTitleNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_bottomTitleFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_bottomTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_bottomTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_bottomTitleFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_bottomTitleFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    auto* leftTitleNode = titleNode->FirstChildElement(XML_LEFT_TITLE.data());
-                    if (leftTitleNode != nullptr)
-                        {
-                        // font color
-                        SetGraphLeftTitleFontColor(TiXmlNodeToColor(
-                            leftTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
-                            GetGraphLeftTitleFontColor()));
-
-                        // font
-                        auto* fontNode = leftTitleNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_leftTitleFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_leftTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_leftTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_leftTitleFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_leftTitleFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    auto* rightTitleNode = titleNode->FirstChildElement(XML_RIGHT_TITLE.data());
-                    if (rightTitleNode != nullptr)
-                        {
-                        // font color
-                        SetGraphRightTitleFontColor(TiXmlNodeToColor(
-                            rightTitleNode->FirstChildElement(XML_FONT_COLOR.data()),
-                            GetGraphRightTitleFontColor()));
-
-                        // font
-                        auto* fontNode = rightTitleNode->FirstChildElement(XML_FONT.data());
-                        if (fontNode != nullptr)
-                            {
-                            const int pointSize = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                            const int style = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                            const int weight = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                            const int underlined = fontNode->ToElement()->IntAttribute(
-                                XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                            // get the font point size
-                            m_rightTitleFont.SetPointSize(
-                                (pointSize > 0) ? pointSize :
-                                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-                                                      .GetPointSize());
-                            // get the font style
-                            m_rightTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                            // get the font weight
-                            m_rightTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                            // get the font underlining
-                            m_rightTitleFont.SetUnderlined(int_to_bool(underlined));
-                            // get the font facename
-                            const char* faceName = fontNode->ToElement()->Attribute(
-                                XmlFormat::FONT_FACE_NAME_TAG.data());
-                            if (faceName != nullptr)
-                                {
-                                const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                                    faceName, std::strlen(faceName));
-                                const wchar_t* filteredText = filterHtml(
-                                    faceNameStr.c_str(), faceNameStr.length(), true, false);
-                                if ((filteredText != nullptr) &&
-                                    wxFontEnumerator::IsValidFacename(filteredText))
-                                    {
-                                    m_rightTitleFont.SetFaceName(wxString(filteredText));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            // stats options
-            auto* statsDefaultsNode =
-                projectSettings->FirstChildElement(XML_STATISTICS_SECTION.data());
-            if (statsDefaultsNode != nullptr)
-                {
-                // variance method
-                auto* varianceMethod =
-                    statsDefaultsNode->FirstChildElement(XML_VARIANCE_METHOD.data());
-                if (varianceMethod != nullptr)
-                    {
-                    SetVarianceMethod(
-                        static_cast<VarianceMethod>(varianceMethod->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(GetVarianceMethod()))));
-                    }
-                // stats report
-                auto* statsNode =
-                    statsDefaultsNode->FirstChildElement(XML_STATISTICS_RESULTS.data());
-                if (statsNode != nullptr)
-                    {
-                    const char* statsChars = statsNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (statsChars != nullptr)
-                        {
-                        const auto statsStr = Wisteria::TextStream::CharStreamToUnicode(
-                            statsChars, std::strlen(statsChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(statsStr.c_str(), statsStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetStatisticsInfo().Set(convertedStr);
-                            }
-                        }
-                    }
-                // stats report
-                auto* statsReportNode =
-                    statsDefaultsNode->FirstChildElement(XML_STATISTICS_REPORT.data());
-                if (statsReportNode != nullptr)
-                    {
-                    const char* statsReportChars =
-                        statsReportNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (statsReportChars != nullptr)
-                        {
-                        const auto statsReportStr = Wisteria::TextStream::CharStreamToUnicode(
-                            statsReportChars, std::strlen(statsReportChars));
-                        const wchar_t* convertedStr = filterHtml(
-                            statsReportStr.c_str(), statsReportStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetStatisticsReportInfo().Set(convertedStr);
-                            }
-                        }
-                    }
-                }
-            // wizard page defaults
-            auto* wizardPageDefaultsNode =
-                projectSettings->FirstChildElement(XML_WIZARD_PAGES_SETTINGS.data());
-            if (wizardPageDefaultsNode != nullptr)
-                {
-                // batch grouping method
-                auto* batchGrouping =
-                    wizardPageDefaultsNode->FirstChildElement(XML_WIZARD_BATCH_GROUP.data());
-                if (batchGrouping != nullptr)
-                    {
-                    m_batchGroupDefault = batchGrouping->ToElement()->IntAttribute(
-                        XML_METHOD.data(), m_batchGroupDefault);
-                    }
-                // Text Source
-                auto* textSource =
-                    wizardPageDefaultsNode->FirstChildElement(XML_TEXT_SOURCE.data());
-                if (textSource != nullptr)
-                    {
-                    m_textSource = static_cast<TextSource>(textSource->ToElement()->IntAttribute(
-                        XML_METHOD.data(), static_cast<int>(m_textSource)));
-                    if (m_textSource != TextSource::FromFile &&
-                        m_textSource != TextSource::EnteredText)
-                        {
-                        m_textSource = TextSource::FromFile;
-                        }
-                    }
-                // Test Recommendation
-                auto* testRecommendation =
-                    wizardPageDefaultsNode->FirstChildElement(XML_TEST_RECOMMENDATION.data());
-                if (testRecommendation != nullptr)
-                    {
-                    m_testRecommendation = static_cast<TestRecommendation>(
-                        testRecommendation->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_testRecommendation)));
-                    if (m_testRecommendation >= TestRecommendation::TEST_RECOMMENDATION_COUNT)
-                        {
-                        m_testRecommendation = TestRecommendation::BasedOnDocumentType;
-                        }
-                    }
-                // Tests by Industry
-                auto* testsByIndustry =
-                    wizardPageDefaultsNode->FirstChildElement(XML_TEST_BY_INDUSTRY.data());
-                if (testsByIndustry != nullptr)
-                    {
-                    m_testsByIndustry = static_cast<readability::industry_classification>(
-                        testsByIndustry->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_testsByIndustry)));
-                    if (m_testsByIndustry ==
-                        readability::industry_classification::INDUSTRY_CLASSIFICATION_COUNT)
-                        {
-                        m_testsByIndustry =
-                            readability::industry_classification::adult_publishing_industry;
-                        }
-                    }
-                // Tests By Document Type
-                auto* testsByDocumentType =
-                    wizardPageDefaultsNode->FirstChildElement(XML_TEST_BY_DOCUMENT_TYPE.data());
-                if (testsByDocumentType != nullptr)
-                    {
-                    m_testsByDocumentType = static_cast<readability::document_classification>(
-                        testsByDocumentType->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_testsByDocumentType)));
-                    if (m_testsByDocumentType ==
-                        readability::document_classification::DOCUMENT_CLASSIFICATION_COUNT)
-                        {
-                        m_testsByDocumentType =
-                            readability::document_classification::adult_literature_document;
-                        }
-                    }
-                // tests by bundle
-                auto* bundleNode =
-                    wizardPageDefaultsNode->FirstChildElement(XML_SELECTED_TEST_BUNDLE.data());
-                if (bundleNode != nullptr)
-                    {
-                    const char* bundleChars = bundleNode->ToElement()->Attribute(XML_VALUE.data());
-                    if (bundleChars != nullptr)
-                        {
-                        const auto bundleStr = Wisteria::TextStream::CharStreamToUnicode(
-                            bundleChars, std::strlen(bundleChars));
-                        const wchar_t* convertedStr =
-                            filterHtml(bundleStr.c_str(), bundleStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            SetSelectedTestBundle(convertedStr);
-                            }
-                        }
-                    }
-                }
-
-            // readability tests
-            auto* readabilityTestsNode =
-                projectSettings->FirstChildElement(XML_READABILITY_TESTS_SECTION.data());
-            if (readabilityTestsNode != nullptr)
-                {
-                // grade scale display
-                auto* gradeScaleNode = readabilityTestsNode->FirstChildElement(
-                    XML_READABILITY_TEST_GRADE_SCALE_DISPLAY.data());
-                if (gradeScaleNode != nullptr)
-                    {
-                    GetReadabilityMessageCatalog().SetGradeScale(
-                        static_cast<readability::grade_scale>(
-                            gradeScaleNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(),
-                                static_cast<int>(GetReadabilityMessageCatalog().GetGradeScale()))));
-                    }
-
-                auto* gradeScaleLongFormatNode = readabilityTestsNode->FirstChildElement(
-                    XML_READABILITY_TEST_GRADE_SCALE_LONG_FORMAT.data());
-                if (gradeScaleLongFormatNode != nullptr)
-                    {
-                    GetReadabilityMessageCatalog().SetLongGradeScaleFormat(
-                        int_to_bool(gradeScaleLongFormatNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            bool_to_int(
-                                GetReadabilityMessageCatalog().IsUsingLongGradeScaleFormat()))));
-                    }
-
-                auto* readingAgeFormatNode =
-                    readabilityTestsNode->FirstChildElement(XML_READING_AGE_FORMAT.data());
-                if (readingAgeFormatNode != nullptr)
-                    {
-                    GetReadabilityMessageCatalog().SetReadingAgeDisplay(
-                        static_cast<ReadabilityMessages::ReadingAgeDisplay>(
-                            readingAgeFormatNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(),
-                                static_cast<int>(
-                                    GetReadabilityMessageCatalog().GetReadingAgeDisplay()))));
-                    }
-
-                auto* includeScoreSummaryReportNode = readabilityTestsNode->FirstChildElement(
-                    XML_INCLUDE_SCORES_SUMMARY_REPORT.data());
-                if (includeScoreSummaryReportNode != nullptr)
-                    {
-                    IncludeScoreSummaryReport(
-                        int_to_bool(includeScoreSummaryReportNode->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(IsIncludingScoreSummaryReport()))));
-                    }
-
-                // test-specific options
-                auto* fleschKincaidOptionsNode =
-                    readabilityTestsNode->FirstChildElement(XML_FLESCH_KINCAID_OPTIONS.data());
-                if (fleschKincaidOptionsNode != nullptr)
-                    {
-                    auto* numeralMethod = fleschKincaidOptionsNode->FirstChildElement(
-                        XML_NUMERAL_SYLLABICATION_METHOD.data());
-                    if (numeralMethod != nullptr)
-                        {
-                        SetFleschKincaidNumeralSyllabizeMethod(
-                            static_cast<FleschKincaidNumeralSyllabize>(
-                                numeralMethod->ToElement()->IntAttribute(
-                                    XML_VALUE.data(),
-                                    static_cast<int>(GetFleschKincaidNumeralSyllabizeMethod()))));
-                        }
-                    }
-
-                auto* fleschOptionsNode =
-                    readabilityTestsNode->FirstChildElement(XML_FLESCH_OPTIONS.data());
-                if (fleschOptionsNode != nullptr)
-                    {
-                    auto* numeralMethod = fleschOptionsNode->FirstChildElement(
-                        XML_NUMERAL_SYLLABICATION_METHOD.data());
-                    if (numeralMethod != nullptr)
-                        {
-                        SetFleschNumeralSyllabizeMethod(static_cast<FleschNumeralSyllabize>(
-                            numeralMethod->ToElement()->IntAttribute(
-                                XML_VALUE.data(),
-                                static_cast<int>(GetFleschNumeralSyllabizeMethod()))));
-                        }
-                    }
-
-                auto* fogOptionsNode =
-                    readabilityTestsNode->FirstChildElement(XML_GUNNING_FOG_OPTIONS.data());
-                if (fogOptionsNode != nullptr)
-                    {
-                    auto* useUnits =
-                        fogOptionsNode->FirstChildElement(XML_USE_SENTENCE_UNITS.data());
-                    if (useUnits != nullptr)
-                        {
-                        FogUseSentenceUnits(int_to_bool(useUnits->ToElement()->IntAttribute(
-                            XML_VALUE.data(), bool_to_int(IsFogUsingSentenceUnits()))));
-                        }
-                    }
-
-                auto* hjOptionsNode =
-                    readabilityTestsNode->FirstChildElement(XML_HARRIS_JACOBSON_OPTIONS.data());
-                if (hjOptionsNode != nullptr)
-                    {
-                    auto* hjTextExclusion =
-                        hjOptionsNode->FirstChildElement(XML_TEXT_EXCLUSION.data());
-                    if (hjTextExclusion != nullptr)
-                        {
-                        int value = hjTextExclusion->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            static_cast<int>(GetHarrisJacobsonTextExclusionMode()));
-                        if (value < 0 ||
-                            value >= static_cast<int>(SpecializedTestTextExclusion::
-                                                          SPECIALIZED_TEST_TEXT_EXCLUSION_COUNT))
-                            {
-                            value = static_cast<int>(SpecializedTestTextExclusion::
-                                                         ExcludeIncompleteSentencesExceptHeadings);
-                            }
-                        SetHarrisJacobsonTextExclusionMode(
-                            static_cast<SpecializedTestTextExclusion>(value));
-                        }
-                    }
-
-                auto* dcOptionsNode =
-                    readabilityTestsNode->FirstChildElement(XML_NEW_DALE_CHALL_OPTIONS.data());
-                if (dcOptionsNode != nullptr)
-                    {
-                    auto* includeStockerListNode =
-                        dcOptionsNode->FirstChildElement(XML_STOCKER_LIST.data());
-                    if (includeStockerListNode != nullptr)
-                        {
-                        IncludeStockerCatholicSupplement(
-                            int_to_bool(includeStockerListNode->ToElement()->IntAttribute(
-                                XML_VALUE.data(),
-                                bool_to_int(IsIncludingStockerCatholicSupplement()))));
-                        }
-                    auto* dcTextExclusion =
-                        dcOptionsNode->FirstChildElement(XML_TEXT_EXCLUSION.data());
-                    if (dcTextExclusion != nullptr)
-                        {
-                        int value = dcTextExclusion->ToElement()->IntAttribute(
-                            XML_VALUE.data(), static_cast<int>(GetDaleChallTextExclusionMode()));
-                        if (value < 0 ||
-                            value >= static_cast<int>(SpecializedTestTextExclusion::
-                                                          SPECIALIZED_TEST_TEXT_EXCLUSION_COUNT))
-                            {
-                            value = static_cast<int>(SpecializedTestTextExclusion::
-                                                         ExcludeIncompleteSentencesExceptHeadings);
-                            }
-                        SetDaleChallTextExclusionMode(
-                            static_cast<SpecializedTestTextExclusion>(value));
-                        }
-                    auto* dcProperNoun =
-                        dcOptionsNode->FirstChildElement(XML_PROPER_NOUN_COUNTING_METHOD.data());
-                    if (dcProperNoun != nullptr)
-                        {
-                        int value = dcProperNoun->ToElement()->IntAttribute(
-                            XML_VALUE.data(),
-                            static_cast<int>(GetDaleChallProperNounCountingMethod()));
-                        if (value < 0 ||
-                            value >= static_cast<int>(readability::proper_noun_counting_method::
-                                                          PROPERNOUNCOUNTINGMETHOD_COUNT))
-                            {
-                            value = static_cast<int>(
-                                readability::proper_noun_counting_method::
-                                    only_count_first_instance_of_proper_noun_as_unfamiliar);
-                            }
-                        SetDaleChallProperNounCountingMethod(
-                            static_cast<readability::proper_noun_counting_method>(value));
-                        }
-                    }
-
-                // read in the standard tests
-                for (auto& rTest : GetReadabilityTests().get_tests())
-                    {
-                    auto* test = readabilityTestsNode->FirstChildElement(
-                        wxString{ rTest.get_test().get_id().c_str() }.utf8_str());
-                    /* if attribute is not found then "includeValue" is set to zero for us,
-                       so no need to check the return value here*/
-                    if (test != nullptr)
-                        {
-                        rTest.include(int_to_bool(test->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(rTest.is_included()))));
-                        }
-                    }
-
-                auto* test = readabilityTestsNode->FirstChildElement(XML_DOLCH_SUITE.data());
-                if (test != nullptr)
-                    {
-                    m_includeDolchSightWords = int_to_bool(test->ToElement()->IntAttribute(
-                        XML_INCLUDE.data(), bool_to_int(m_includeDolchSightWords)));
-                    }
-                // custom test
-                GetIncludedCustomTests().clear();
-                test = readabilityTestsNode->FirstChildElement(XML_CUSTOM_TEST.data());
-                while (test != nullptr)
-                    {
-                    const char* testId = test->ToElement()->Attribute(XML_VALUE.data());
-                    if (testId != nullptr)
-                        {
-                        const auto testStr =
-                            Wisteria::TextStream::CharStreamToUnicode(testId, std::strlen(testId));
-                        const wchar_t* convertedStr =
-                            filterHtml(testStr.c_str(), testStr.length(), true, false);
-                        if (convertedStr != nullptr)
-                            {
-                            GetIncludedCustomTests().emplace_back(convertedStr);
-                            }
-                        }
-                    test = test->NextSiblingElement(XML_CUSTOM_TEST.data());
-                    }
-                }
-            // Text views
-            auto* textViewNode = projectSettings->FirstChildElement(XML_TEXT_VIEWS_SECTION.data());
-            if (textViewNode != nullptr)
-                {
-                // how highlighting is done
-                auto* highlightMethod =
-                    textViewNode->FirstChildElement(XML_HIGHLIGHT_METHOD.data());
-                if (highlightMethod != nullptr)
-                    {
-                    m_textHighlight =
-                        static_cast<TextHighlight>(highlightMethod->ToElement()->IntAttribute(
-                            XML_METHOD.data(), static_cast<int>(m_textHighlight)));
-                    if (m_textHighlight != TextHighlight::HighlightBackground &&
-                        m_textHighlight != TextHighlight::HighlightForeground)
-                        {
-                        m_textHighlight = TextHighlight::HighlightBackground;
-                        }
-                    }
-                // the highlight color
-                m_textHighlightColor =
-                    TiXmlNodeToColor(textViewNode->FirstChildElement(XML_HIGHLIGHTCOLOR.data()),
-                                     m_textHighlightColor);
-
-                // the highlight color for dolch words
-                auto* dolchConjunctionsColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_CONJUNCTIONS_HIGHLIGHTCOLOR.data());
-                if (dolchConjunctionsColorNode != nullptr)
-                    {
-                    SetDolchConjunctionsColor(
-                        TiXmlNodeToColor(dolchConjunctionsColorNode, GetDolchConjunctionsColor()));
-
-                    m_highlightDolchConjunctions =
-                        int_to_bool(dolchConjunctionsColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchConjunctions)));
-                    }
-                auto* dolchPrepositionsColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_PREPOSITIONS_HIGHLIGHTCOLOR.data());
-                if (dolchPrepositionsColorNode != nullptr)
-                    {
-                    SetDolchPrepositionsColor(
-                        TiXmlNodeToColor(dolchPrepositionsColorNode, GetDolchPrepositionsColor()));
-
-                    m_highlightDolchPrepositions =
-                        int_to_bool(dolchPrepositionsColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchPrepositions)));
-                    }
-                auto* dolchPronounsColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_PRONOUNS_HIGHLIGHTCOLOR.data());
-                if (dolchPronounsColorNode != nullptr)
-                    {
-                    SetDolchPronounsColor(
-                        TiXmlNodeToColor(dolchPronounsColorNode, GetDolchPronounsColor()));
-
-                    m_highlightDolchPronouns =
-                        int_to_bool(dolchPronounsColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchPronouns)));
-                    }
-                auto* dolchAdverbsColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_ADVERBS_HIGHLIGHTCOLOR.data());
-                if (dolchAdverbsColorNode != nullptr)
-                    {
-                    SetDolchAdverbsColor(
-                        TiXmlNodeToColor(dolchAdverbsColorNode, GetDolchAdverbsColor()));
-
-                    m_highlightDolchAdverbs =
-                        int_to_bool(dolchAdverbsColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchAdverbs)));
-                    }
-                auto* dolchAdjectivesColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_ADJECTIVES_HIGHLIGHTCOLOR.data());
-                if (dolchAdjectivesColorNode != nullptr)
-                    {
-                    SetDolchAdjectivesColor(
-                        TiXmlNodeToColor(dolchAdjectivesColorNode, GetDolchAdjectivesColor()));
-
-                    m_highlightDolchAdjectives =
-                        int_to_bool(dolchAdjectivesColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchAdjectives)));
-                    }
-                auto* dolchVerbColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_VERBS_HIGHLIGHTCOLOR.data());
-                if (dolchVerbColorNode != nullptr)
-                    {
-                    SetDolchVerbsColor(TiXmlNodeToColor(dolchVerbColorNode, GetDolchVerbsColor()));
-
-                    m_highlightDolchVerbs =
-                        int_to_bool(dolchVerbColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchVerbs)));
-                    }
-                auto* dolchNounColorNode =
-                    textViewNode->FirstChildElement(XML_DOLCH_NOUNS_HIGHLIGHTCOLOR.data());
-                if (dolchNounColorNode != nullptr)
-                    {
-                    SetDolchNounsColor(TiXmlNodeToColor(dolchNounColorNode, GetDolchNounsColor()));
-
-                    m_highlightDolchNouns =
-                        int_to_bool(dolchNounColorNode->ToElement()->IntAttribute(
-                            XML_INCLUDE.data(), bool_to_int(m_highlightDolchNouns)));
-                    }
-                // the highlight color for wordy items
-                m_wordyPhraseHighlightColor = TiXmlNodeToColor(
-                    textViewNode->FirstChildElement(XML_WORDY_PHRASE_HIGHLIGHTCOLOR.data()),
-                    m_wordyPhraseHighlightColor);
-
-                // the highlight color for repeated words
-                m_duplicateWordHighlightColor = TiXmlNodeToColor(
-                    textViewNode->FirstChildElement(XML_DUP_WORD_HIGHLIGHTCOLOR.data()),
-                    m_duplicateWordHighlightColor);
-
-                // the highlight color for ignored sentences
-                m_excludedTextHighlightColor = TiXmlNodeToColor(
-                    textViewNode->FirstChildElement(XML_EXCLUDED_HIGHLIGHTCOLOR.data()),
-                    m_excludedTextHighlightColor);
-
-                // document display font information
-                m_fontColor = TiXmlNodeToColor(
-                    textViewNode->FirstChildElement(XML_DOCUMENT_DISPLAY_FONTCOLOR.data()),
-                    m_fontColor);
-
-                // font
-                auto* fontNode = textViewNode->FirstChildElement(XML_DOCUMENT_DISPLAY_FONT.data());
-                if (fontNode != nullptr)
-                    {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_textViewFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_textViewFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_textViewFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_textViewFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_textViewFont.SetFaceName(wxString(filteredText));
-                            }
+                        m_textViewFont.SetFaceName(wxString(filteredText));
                         }
                     }
                 }
@@ -3825,12 +3754,11 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
 
     // test bundles
     auto* testBundlesSection = doc.NewElement(XML_TEST_BUNDLES.data());
-    for (auto currentBundle = BaseProject::m_testBundles.begin();
-         currentBundle != BaseProject::m_testBundles.end(); ++currentBundle)
+    for (const auto& currentBundle : BaseProject::m_testBundles)
         {
         // don't bother saving system bundles, those are dynamically added
         // by the program when it starts up
-        if (currentBundle->IsLocked())
+        if (currentBundle.IsLocked())
             {
             continue;
             }
@@ -3838,19 +3766,19 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         // name
         auto* testBundleName = doc.NewElement(XML_TEST_BUNDLE_NAME.data());
         const wxString testBundleNameEncoded =
-            ENCODE({ currentBundle->GetName().c_str() }, false).c_str();
+            ENCODE({ currentBundle.GetName().c_str() }, false).c_str();
         testBundleName->SetAttribute(XML_VALUE.data(), testBundleNameEncoded.utf8_str());
         testBundle->InsertEndChild(testBundleName);
         // description
         auto* testBundleDescription = doc.NewElement(XML_TEST_BUNDLE_DESCRIPTION.data());
         const wxString testBundleDescriptionEncoded =
-            ENCODE({ currentBundle->GetDescription().c_str() }, false).c_str();
+            ENCODE({ currentBundle.GetDescription().c_str() }, false).c_str();
         testBundleDescription->SetAttribute(XML_VALUE.data(),
                                             testBundleDescriptionEncoded.utf8_str());
         testBundle->InsertEndChild(testBundleDescription);
         // included tests
         auto* testNames = doc.NewElement(XML_TEST_NAMES.data());
-        for (const auto& bundledTest : currentBundle->GetTestGoals())
+        for (const auto& bundledTest : currentBundle.GetTestGoals())
             {
             auto* testName = doc.NewElement(XML_TEST_NAME.data());
             const wxString testNameEncoded =
@@ -3871,7 +3799,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         testBundle->InsertEndChild(testNames);
         // stats goals
         auto* statGoals = doc.NewElement(XML_BUNDLE_STATISTICS.data());
-        for (const auto& bundledStat : currentBundle->GetStatGoals())
+        for (const auto& bundledStat : currentBundle.GetStatGoals())
             {
             auto* statGoal = doc.NewElement(XML_BUNDLE_STATISTIC.data());
             const wxString testNameEncoded =

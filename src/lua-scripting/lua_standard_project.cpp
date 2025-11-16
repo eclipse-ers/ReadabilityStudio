@@ -3690,7 +3690,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int StandardProject::Reload(lua_State*)
+    int StandardProject::Reload([[maybe_unused]] lua_State* L)
         {
         if (!VerifyProjectIsOpen(__func__))
             {
@@ -4674,7 +4674,7 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
-    int StandardProject::CloseProperties(lua_State*)
+    int StandardProject::CloseProperties([[maybe_unused]] lua_State* L)
         {
         if (m_settingsDlg)
             {

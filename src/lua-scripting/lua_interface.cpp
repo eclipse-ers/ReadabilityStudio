@@ -66,7 +66,7 @@ bool LuaInterpreter::m_quitRequested = false;
 //------------------------------------------------------
 LuaInterpreter::LuaInterpreter() : m_L(luaL_newstate())
     {
-
+    // NOLINTBEGIN(readability-math-missing-parentheses,cppcoreguidelines-pro-bounds-array-to-pointer-decay,hicpp-no-array-decay)
     luaL_openlibs(m_L);
     luaL_newlib(m_L, LuaScripting::ScreenshotLib);
     lua_setglobal(m_L, "ScreenshotLib");
@@ -76,6 +76,7 @@ LuaInterpreter::LuaInterpreter() : m_L(luaL_newstate())
     lua_setglobal(m_L, "Debug");
     Luna<LuaScripting::StandardProject>::Register(m_L);
     Luna<LuaScripting::BatchProject>::Register(m_L);
+    // NOLINTEND(readability-math-missing-parentheses,cppcoreguidelines-pro-bounds-array-to-pointer-decay,hicpp-no-array-decay)
     }
 
 //------------------------------------------------------
@@ -195,7 +196,9 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
     {
     if (m_quitRequested)
         {
+        // NOLINTBEGIN(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         luaL_error(L, "BREAK_LINE:%d", ar->currentline);
+        // NOLINTEND(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         }
     }
 

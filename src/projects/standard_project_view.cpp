@@ -2757,7 +2757,7 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
     const wxBusyInfo bi(wxBusyInfoFlags().Text(_(L"Exporting project...")).Parent(GetDocFrame()));
 #ifdef __WXGTK__
     wxMilliSleep(100);
-    wxTheApp->Yield();
+    wxGetApp().Yield();
 #endif
 
     // the results window
@@ -3133,7 +3133,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
     const wxBusyInfo bi(wxBusyInfoFlags().Text(_(L"Exporting project...")).Parent(GetDocFrame()));
 #ifdef __WXGTK__
     wxMilliSleep(100);
-    wxTheApp->Yield();
+    wwxGetApp().Yield();
 #endif
 
     lily_of_the_valley::html_encode_text htmlEncode;

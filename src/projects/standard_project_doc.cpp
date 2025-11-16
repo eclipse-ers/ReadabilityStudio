@@ -630,7 +630,7 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
                                 .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
-        wxTheApp->Yield();
+        wwxGetApp().Yield();
 #endif
 
         /* if they set this to exclude headers and such, make sure we actually have some
@@ -6984,7 +6984,8 @@ void ProjectDoc::DisplayGrammar()
     m_wordingErrorData->SetSize(GetWords()->get_known_phrase_indices().size(), 3);
     m_clichePhraseData->DeleteAllItems();
     m_clichePhraseData->SetSize(GetWords()->get_known_phrase_indices().size(), 3);
-    size_t wordyPhraseCount(0), redundantPhraseCount(0), wordingErrorCount(0), clicheCount(0);
+    size_t wordyPhraseCount(0), redundantPhraseCount(0), wordingErrorCount(0),
+        clicheCount(0); // NOLINT(misc-const-correctness)
     for (const auto& wordyIndex : wordyIndices)
         {
         if (wordyPhrases[wordyIndex.second].first.get_type() == grammar::phrase_type::phrase_cliche)
@@ -7099,7 +7100,7 @@ void ProjectDoc::DisplayGrammar()
             }
         m_misspelledWordData->DeleteAllItems();
         m_misspelledWordData->SetSize(misspelledWords.get_data().size(), 2);
-        size_t uniqueMisspellingCount = 0;
+        size_t uniqueMisspellingCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : misspelledWords.get_data())
             {
             m_misspelledWordData->SetItemText(uniqueMisspellingCount, 0, mIter.first.c_str());
@@ -7214,7 +7215,7 @@ void ProjectDoc::DisplayGrammar()
             }
         m_incorrectArticleData->DeleteAllItems();
         m_incorrectArticleData->SetSize(articleMismatchesWords.get_data().size(), 2);
-        size_t uniqueIncorrectArticleCount = 0;
+        size_t uniqueIncorrectArticleCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : articleMismatchesWords.get_data())
             {
             m_incorrectArticleData->SetItemText(uniqueIncorrectArticleCount, 0,

@@ -4535,7 +4535,8 @@ bool BaseProject::LoadExternalDocument()
             MemoryMappedFile sourceFile(GetOriginalDocumentFilePath(), true, true);
             std::pair<bool, std::wstring> extractResult = ExtractRawText(
                 { static_cast<const char*>(sourceFile.GetStream()), sourceFile.GetMapSize() },
-                wxFileName(GetOriginalDocumentFilePath()).GetExt());
+                wxFileName(GetOriginalDocumentFilePath())
+                    .GetExt()); // NOLINT(misc-const-correctness)
             if (extractResult.first)
                 {
                 SetDocumentText(std::move(extractResult.second));
@@ -4612,7 +4613,7 @@ bool BaseProject::LoadExternalDocument()
         std::pair<bool, std::wstring> extractResult = ExtractRawText(
             { static_cast<const char*>(memstream.GetOutputStreamBuffer()->GetBufferStart()),
               static_cast<size_t>(memstream.GetLength()) },
-            wxFileName(GetOriginalDocumentFilePath()).GetExt());
+            wxFileName(GetOriginalDocumentFilePath()).GetExt()); // NOLINT(misc-const-correctness)
         if (extractResult.first)
             {
             SetDocumentText(std::move(extractResult.second));

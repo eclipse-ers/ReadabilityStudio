@@ -263,7 +263,8 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
         {
 
         // check the response code
-        if (const int responseCode{ m_downloader.GetLastStatus() };
+        if (const int responseCode{
+                m_downloader.GetLastStatus() }; // NOLINT(cppcoreguidelines-init-variables)
             QueueDownload::IsBadResponseCode(responseCode))
             {
             wxLogWarning(L"%s: unable to connect to page, error code #%i (%s).", url, responseCode,
@@ -388,7 +389,7 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
         if (charSet.empty())
             {
             charSet = GetCharsetFromPageContent(
-                { &m_downloader.GetLastRead()[0], m_downloader.GetLastRead().size() });
+                { m_downloader.GetLastRead().data(), m_downloader.GetLastRead().size() });
             }
         // Watch out for embedded NULLs in stream.
         // It may be in the middle of the text, or just at the end of the zeroed-out stream
@@ -396,17 +397,17 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
         // In this situation, we need to split the stream into valid chunks, convert them,
         // and then piece them back together (or simply read the valid text up to the
         // zeroed-out region).
-        if (string_util::strnlen(&m_downloader.GetLastRead()[0],
+        if (string_util::strnlen(m_downloader.GetLastRead().data(),
                                  m_downloader.GetLastRead().size()) <
             m_downloader.GetLastRead().size())
             {
             webPageContent = Wisteria::TextStream::CharStreamWithEmbeddedNullsToUnicode(
-                &m_downloader.GetLastRead()[0], m_downloader.GetLastRead().size(), charSet);
+                m_downloader.GetLastRead().data(), m_downloader.GetLastRead().size(), charSet);
             }
         else
             {
             webPageContent = Wisteria::TextStream::CharStreamToUnicode(
-                &m_downloader.GetLastRead()[0], m_downloader.GetLastRead().size(), charSet);
+                m_downloader.GetLastRead().data(), m_downloader.GetLastRead().size(), charSet);
             }
         }
     else

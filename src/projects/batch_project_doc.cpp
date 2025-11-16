@@ -205,7 +205,7 @@ bool BatchProjectDoc::OnCreate(const wxString& path, long flags)
                                           .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
                 wxMilliSleep(100);
-                wxTheApp->Yield();
+                wxGetApp().Yield();
 #endif
                 wxDir::GetAllFiles(path, &files, wxString{}, wxDIR_FILES | wxDIR_DIRS);
                 files = FilterFiles(files, ExtractExtensionsFromFileFilter(
