@@ -6984,8 +6984,9 @@ void ProjectDoc::DisplayGrammar()
     m_wordingErrorData->SetSize(GetWords()->get_known_phrase_indices().size(), 3);
     m_clichePhraseData->DeleteAllItems();
     m_clichePhraseData->SetSize(GetWords()->get_known_phrase_indices().size(), 3);
-    size_t wordyPhraseCount(0), redundantPhraseCount(0), wordingErrorCount(0),
-        clicheCount(0); // NOLINT(misc-const-correctness)
+    // NOLINTBEGIN(misc-const-correctness)
+    size_t wordyPhraseCount(0), redundantPhraseCount(0), wordingErrorCount(0), clicheCount(0);
+    // NOLINTEND(misc-const-correctness)
     for (const auto& wordyIndex : wordyIndices)
         {
         if (wordyPhrases[wordyIndex.second].first.get_type() == grammar::phrase_type::phrase_cliche)
@@ -7509,7 +7510,7 @@ void ProjectDoc::DisplayGrammar()
             }
         m_passiveVoiceData->DeleteAllItems();
         m_passiveVoiceData->SetSize(passiveVoicePhrases.get_data().size(), 2);
-        size_t uniquePassiveVoiceCount = 0;
+        size_t uniquePassiveVoiceCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : passiveVoicePhrases.get_data())
             {
             m_passiveVoiceData->SetItemText(uniquePassiveVoiceCount, 0, mIter.first.c_str());

@@ -920,13 +920,13 @@ void ProjectWizardDlg::CreateControls()
                 customTestNames.Add(customTest.get_name().c_str());
                 }
             // go through the list of test IDs that were checked the last time this wizard was used
-            for (size_t i = 0; i < wxGetApp().GetAppOptions()->GetIncludedCustomTests().size(); ++i)
+            for (const auto& includedCustomTest :
+                 wxGetApp().GetAppOptions()->GetIncludedCustomTests())
                 {
                 // find the test in the global list of tests, searching by test id
                 auto testIter =
                     std::find(BaseProject::m_custom_word_tests.begin(),
-                              BaseProject::m_custom_word_tests.end(),
-                              wxGetApp().GetAppOptions()->GetIncludedCustomTests().at(i).c_str());
+                              BaseProject::m_custom_word_tests.end(), includedCustomTest.c_str());
                 // if the test was found, then check it in the list
                 if (testIter != BaseProject::m_custom_word_tests.end())
                     {
@@ -1341,10 +1341,10 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         m_fileData->SetSize(currentFileCount + cellCount, 2);
 
         size_t cellCounter = 0;
-        for (size_t i = 0; i < workSheets.size(); ++i)
+        for (auto& workSheet : workSheets)
             {
-            const wxString fullPath = excelPath + L"#" + workSheets[i].first.c_str() + L"#";
-            for (auto cellPos = workSheets[i].second.begin(); cellPos != workSheets[i].second.end();
+            const wxString fullPath = excelPath + L"#" + workSheet.first.c_str() + L"#";
+            for (auto cellPos = workSheet.second.begin(); cellPos != workSheet.second.end();
                  ++cellPos, ++cellCounter)
                 {
                 m_fileData->SetItemText(currentFileCount + cellCounter, 0,

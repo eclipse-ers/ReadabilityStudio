@@ -4533,10 +4533,11 @@ bool BaseProject::LoadExternalDocument()
         try
             {
             MemoryMappedFile sourceFile(GetOriginalDocumentFilePath(), true, true);
+            // NOLINTBEGIN(misc-const-correctness)
             std::pair<bool, std::wstring> extractResult = ExtractRawText(
                 { static_cast<const char*>(sourceFile.GetStream()), sourceFile.GetMapSize() },
-                wxFileName(GetOriginalDocumentFilePath())
-                    .GetExt()); // NOLINT(misc-const-correctness)
+                wxFileName(GetOriginalDocumentFilePath()).GetExt());
+            // NOLINTEND(misc-const-correctness)
             if (extractResult.first)
                 {
                 SetDocumentText(std::move(extractResult.second));
@@ -4610,10 +4611,12 @@ bool BaseProject::LoadExternalDocument()
             LogMessage(zc.GetMessages().back().m_message, poundFn.GetFullPath(),
                        zc.GetMessages().back().m_icon);
             }
+        // NOLINTBEGIN(misc-const-correctness)
         std::pair<bool, std::wstring> extractResult = ExtractRawText(
             { static_cast<const char*>(memstream.GetOutputStreamBuffer()->GetBufferStart()),
               static_cast<size_t>(memstream.GetLength()) },
-            wxFileName(GetOriginalDocumentFilePath()).GetExt()); // NOLINT(misc-const-correctness)
+            wxFileName(GetOriginalDocumentFilePath()).GetExt());
+        // NOLINTEND(misc-const-correctness)
         if (extractResult.first)
             {
             SetDocumentText(std::move(extractResult.second));

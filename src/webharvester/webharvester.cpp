@@ -263,13 +263,14 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
         {
 
         // check the response code
-        if (const int responseCode{
-                m_downloader.GetLastStatus() }; // NOLINT(cppcoreguidelines-init-variables)
+        // NOLINTBEGIN(cppcoreguidelines-init-variables)
+        if (const int responseCode{ m_downloader.GetLastStatus() };
             QueueDownload::IsBadResponseCode(responseCode))
             {
             wxLogWarning(L"%s: unable to connect to page, error code #%i (%s).", url, responseCode,
                          QueueDownload::GetResponseMessage(responseCode));
             }
+        // NOLINTEND(cppcoreguidelines-init-variables)
         wxLogWarning(L"Unable to download to '%s': %s", downloadPath,
                      m_downloader.GetLastStatusText());
         downloadPath.clear();

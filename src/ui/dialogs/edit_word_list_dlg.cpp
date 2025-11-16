@@ -314,11 +314,10 @@ void EditWordListDlg::OnFilePathChanged(wxCommandEvent& event)
             size_t rowCount = preview(buffer, L'\t', true, true);
             size_t maxColumnCount{ 1 };
             wxStringTokenizer tokenizer;
-            for (auto rowPos = preview.get_line_info().cbegin();
-                 rowPos != preview.get_line_info().cend(); ++rowPos)
+            for (auto rowPos : preview.get_line_info())
                 {
-                tokenizer.SetString(wxString(rowPos->first, (rowPos->second - rowPos->first)),
-                                    L'\t', wxTOKEN_RET_EMPTY_ALL);
+                tokenizer.SetString(wxString(rowPos.first, (rowPos.second - rowPos.first)), L'\t',
+                                    wxTOKEN_RET_EMPTY_ALL);
                 maxColumnCount =
                     std::min<size_t>(std::max(tokenizer.CountTokens(), maxColumnCount), 5);
                 }
