@@ -630,7 +630,7 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
                                 .Parent(wxGetApp().GetParentingWindow()));
 #ifdef __WXGTK__
         wxMilliSleep(100);
-        wwxGetApp().Yield();
+        wxGetApp().Yield();
 #endif
 
         /* if they set this to exclude headers and such, make sure we actually have some
