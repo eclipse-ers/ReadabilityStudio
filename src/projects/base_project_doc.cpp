@@ -2619,7 +2619,8 @@ wxString BaseProjectDoc::FormatProjectSettings() const
             static_cast<int>(customTestInUse.GetIterator()->get_stemming_type()), 3);
         fileText += sectionText;
         // formula
-        const wxString formula(FormulaFormat::FormatMathExpressionToUS(customTestInUse.GetIterator()->get_formula().c_str()));
+        const wxString formula(FormulaFormat::FormatMathExpressionToUS(
+            customTestInUse.GetIterator()->get_formula().c_str()));
         XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_TEST_FORMULA.data(),
                                  HTML_ENCODE({ formula.wc_str(), formula.length() }, false), 3);
         fileText += sectionText;
@@ -2679,7 +2680,8 @@ wxString BaseProjectDoc::FormatProjectSettings() const
         // whether familiar words have to be on each included list
         XmlFormat::FormatSection(
             sectionText, ReadabilityAppOptions::XML_FAMILIAR_WORDS_ALL_LISTS.data(),
-            int_to_bool(customTestInUse.GetIterator()->is_familiar_words_must_be_on_each_included_list()),
+            int_to_bool(
+                customTestInUse.GetIterator()->is_familiar_words_must_be_on_each_included_list()),
             3);
         fileText += sectionText;
         // industry association
