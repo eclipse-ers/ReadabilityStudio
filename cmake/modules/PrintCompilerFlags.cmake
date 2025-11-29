@@ -3,22 +3,18 @@
 #
 #  Purpose:
 #    Extracts and prints a human-readable summary of the *actual* compiler
-#    flags applied to a target. Generator expressions are ignored entirely to
-#    avoid configuration-time misinterpretation and platform-specific noise.
+#    flags applied to a target.
 #
 #  Features:
-#    • Skips all generator expressions (tokens starting with "$<" or ending ">")
 #    • Identifies and classifies real compiler flags (warnings, optimizations,
 #      security flags, MSVC extensions, OpenMP, etc.)
 #    • Prints a clean, annotated list of the meaningful flags used to build
 #      the target.
-#    • Produces an exportable multi-line string (COMPILE_FLAGS_SUMMARY) for
+#    • Produces an exportable multi-line string (COMPILE_FLAGS_SUMMARY_STR) for
 #      embedding in the application (e.g., About dialogs or diagnostic output).
 #
 #  Notes:
-#    • Only *concrete* flags are summarized. Generator expressions vary by
-#      configuration and compiler and cannot be evaluated reliably at configure
-#      time, so they are intentionally excluded.
+#    • Only *concrete* flags are summarized.
 #    • Safe to call after all target_compile_options() and related settings.
 #
 # Exports to parent scope:
@@ -33,46 +29,33 @@ set(COMPILE_FLAGS_SUMMARY_STR "")
 # ======================================================
 # Extracts the main flag from a compile option
 # ======================================================
-function(extract_flag_from_expression flag out_var)
-
-    # Remove surrounding single quotes added by 'message'
-    string(REGEX REPLACE "^'(.*)'$" "\\1" expr "${flag}")
-
-    # If not a generator expression, return as-is
-    if(NOT "${expr}" MATCHES "^\\$<.*>$")
-        set(${out_var} "${expr}" PARENT_SCOPE)
+function(extract_flag token out_var)
+    # Skip empty or punctuation tokens
+    if("${token}" STREQUAL "" OR "${token}" STREQUAL ">" OR "${token}" STREQUAL "<")
+        set(${out_var} "" PARENT_SCOPE)
         return()
     endif()
 
-    # Extract substring after last colon and before final >
-    string(REGEX REPLACE "^.*:([^>]+)>$" "\\1" payload_raw "${expr}")
-
-    # Split payload into tokens
-    separate_arguments(payload_tokens NATIVE_COMMAND "${payload_raw}")
-
-    # First flag token
-    list(GET payload_tokens 0 primary)
-
-    set(${out_var} "${primary}" PARENT_SCOPE)
-endfunction()
-
-# ======================================================
-# Detect generator expressions reliably
-# ======================================================
-function(is_generator_expression token result)
-    # Any token that *starts* with "$<" is part of a generator expression
-    if("${token}" MATCHES "^\\$<")
-        set(${result} TRUE PARENT_SCOPE)
+    # Normal flags (not generator expressions)
+    if(NOT "${token}" MATCHES "^\\$<")
+        set(${out_var} "${token}" PARENT_SCOPE)
         return()
     endif()
 
-    # Also skip if it is a dangling remainder of a split GE: "<", ">", "-g3>", etc.
-    if("${token}" MATCHES ".*>$" OR "${token}" STREQUAL ">" OR "${token}" STREQUAL "<")
-        set(${result} TRUE PARENT_SCOPE)
+    # If GE but NOT involving CXX_COMPILER_ID, skip
+    if(NOT "${token}" MATCHES "CXX_COMPILER_ID")
+        set(${out_var} "" PARENT_SCOPE)
         return()
     endif()
 
-    set(${result} FALSE PARENT_SCOPE)
+    # GE containing CXX_COMPILER_ID, extract payload
+    string(REGEX REPLACE "^.*:([^>]+)>$" "\\1" payload "${token}")
+
+    # Split payload and take first flag
+    separate_arguments(tokens NATIVE_COMMAND "${payload}")
+    list(GET tokens 0 first)
+
+    set(${out_var} "${first}" PARENT_SCOPE)
 endfunction()
 
 # ======================================================
@@ -91,13 +74,29 @@ function(print_compile_flags_summary TARGET_NAME)
 
     set(_summary_list "")
 
+    set(_skip_config_ge FALSE)
+
     foreach(flag IN LISTS _flags)
-        is_generator_expression("${flag}" is_genex)
-        if(is_genex)
+        # Detect CONFIG-generator-expression START
+        if("${flag}" MATCHES "^\\$<[^>]*CONFIG:")
+            set(_skip_config_ge TRUE)
             continue()
         endif()
 
-        extract_flag_from_expression("${flag}" clean_flag)
+        # If we are skipping a CONFIG GE, skip until ">"
+        if(_skip_config_ge)
+            if("${flag}" STREQUAL ">")
+                set(_skip_config_ge FALSE)
+            endif()
+            continue()  # skip -Og, -g3, :, >, etc.
+        endif()
+
+        # Handle normal flags OR CXX compiler-ID GEs
+        extract_flag("${flag}" clean_flag)
+
+        if("${clean_flag}" STREQUAL "")
+            continue()
+        endif()
 
         set(line "")
 
@@ -129,8 +128,9 @@ function(print_compile_flags_summary TARGET_NAME)
         elseif(clean_flag STREQUAL "/permissive-")
             set(line "• ${clean_flag}: Enforce strict ISO C++") # MSVC
 
-        elseif(clean_flag STREQUAL "/MP" OR clean_flag STREQUAL "/Zc:__cplusplus")
-            # intentionally ignored
+        # intentionally ignored flags
+        elseif(clean_flag STREQUAL "/MP" OR clean_flag STREQUAL "/Zc:__cplusplus" OR
+               clean_flag STREQUAL "/utf-8")
             continue()
 
         elseif(clean_flag STREQUAL "/wd6211")

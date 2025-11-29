@@ -141,12 +141,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     include(cmake/modules/EnableSanitizers.cmake)
 endif()
 
-# interproceduarl optimization
+# interprocedural optimization
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     include(CheckIPOSupported)
     check_ipo_supported(RESULT ipo_supported)
     if(${ipo_supported})
-      message(STATUS "Interproceduarl compiler optimization: enabled")
+      message(STATUS "Interprocedural compiler optimization: enabled")
       set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
     else()
       message(STATUS "Interprocedural compiler optimization: not enabled")
@@ -560,7 +560,7 @@ if(WIN32 OR APPLE)
     # and it is not signed.
     target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
 elseif(UNIX)
-    # Add OpenMP for mutlithreading.
+    # Add OpenMP for multithreading.
     # TBB is required for GCC linkage sometimes, although this app is not explicitly using it,
     # so try to link it in.
     find_package(OpenMP)
