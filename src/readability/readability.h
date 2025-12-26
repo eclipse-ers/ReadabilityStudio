@@ -145,29 +145,26 @@ namespace readability
                 return is_on_list(the_word);
                 }
             // if proper are always unfamiliar, then just return whether it is on the list
-            else if (m_properNounMethod ==
-                     proper_noun_counting_method::all_proper_nouns_are_unfamiliar)
+            if (m_properNounMethod == proper_noun_counting_method::all_proper_nouns_are_unfamiliar)
                 {
                 return is_on_list(the_word);
                 }
-            else // only_count_first_instance_of_proper_noun_as_unfamiliar
+            // only_count_first_instance_of_proper_noun_as_unfamiliar
+            // already on the list? then don't bother seeing if it is proper
+            if (is_on_list(the_word))
                 {
-                // already on the list? then don't bother seeing if it is proper
-                if (is_on_list(the_word))
-                    {
-                    return true;
-                    }
-                // not on the list, so if not proper then it's unfamiliar
-                if (!the_word.is_proper_noun())
-                    {
-                    return false;
-                    }
-                // ...or if it's proper, then add it to the proper nouns already encountered.
-                // If already encountered, then it is familiar.
-                auto pos = m_usedProperNouns.insert(the_word);
-                // this being false means that it was already in the set
-                return !pos.second;
+                return true;
                 }
+            // not on the list, so if not proper then it's unfamiliar
+            if (!the_word.is_proper_noun())
+                {
+                return false;
+                }
+            // ...or if it's proper, then add it to the proper nouns already encountered.
+            // If already encountered, then it is familiar.
+            auto pos = m_usedProperNouns.insert(the_word);
+            // this being false means that it was already in the set
+            return !pos.second;
             }
 
         /** @brief Call this to reset the list of known proper nouns encountered in the document.
@@ -254,7 +251,7 @@ namespace readability
         {
       public:
         /// @brief Constructor.
-        familiar_word_container() noexcept {}
+        familiar_word_container() noexcept = default;
 
         using word_type = string_typeT;
 

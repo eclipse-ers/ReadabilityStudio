@@ -47,8 +47,8 @@
 ||                                                                                              ||
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
-#ifndef __DOLCH_H__
-#define __DOLCH_H__
+#ifndef DOLCH_H
+#define DOLCH_H
 
 #include "../Wisteria-Dataviz/src/import/text_matrix.h"
 #include "../Wisteria-Dataviz/src/util/string_util.h"
@@ -146,7 +146,7 @@ namespace readability
         */
         void load_words(const wchar_t* text)
             {
-            if (!text)
+            if (text == nullptr)
                 {
                 return;
                 }
@@ -198,7 +198,7 @@ namespace readability
                     sightWord = sight_word_type::noun;
                     }
                 m_sight_words.insert(sight_word(rowStrings[0], sightWord));
-                } while (text);
+                } while (text != nullptr);
             }
 
         /// @private
@@ -273,4 +273,4 @@ namespace readability
         };
     } // namespace readability
 
-#endif //__DOLCH_H__
+#endif // DOLCH_H

@@ -4563,13 +4563,13 @@ void MainFrame::FillMenuWithCustomTests(wxMenu* customTestMenu, const BaseProjec
         if (includeDocMenuItems && !GetCustomTestMenuIds().empty())
             {
             // add all the global custom tests to this view's menu (if they aren't already on it)
-            for (std::map<int, wxString>::const_iterator pos = GetCustomTestMenuIds().begin();
-                 pos != GetCustomTestMenuIds().end(); ++pos)
+            for (const auto& customMenuId : GetCustomTestMenuIds())
                 {
-                if (customTestMenu->FindItem(pos->first) == nullptr)
+                if (customTestMenu->FindItem(customMenuId.first) == nullptr)
                     {
-                    auto testIter = std::find(BaseProject::m_custom_word_tests.begin(),
-                                              BaseProject::m_custom_word_tests.end(), pos->second);
+                    auto testIter =
+                        std::find(BaseProject::m_custom_word_tests.begin(),
+                                  BaseProject::m_custom_word_tests.end(), customMenuId.second);
                     if (testIter == BaseProject::m_custom_word_tests.end())
                         {
                         wxMessageBox(_(L"Unable to add custom test to menu: "
@@ -4577,8 +4577,8 @@ void MainFrame::FillMenuWithCustomTests(wxMenu* customTestMenu, const BaseProjec
                                      _(L"Error"), wxOK | wxICON_ERROR);
                         return;
                         }
-                    auto* item =
-                        new wxMenuItem(customTestMenu, pos->first, testIter->get_name().c_str());
+                    auto* item = new wxMenuItem(customTestMenu, customMenuId.first,
+                                                testIter->get_name().c_str());
                     customTestMenu->Append(item);
                     }
                 }

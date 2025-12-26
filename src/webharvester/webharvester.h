@@ -81,10 +81,8 @@ class WebPageExtension
     [[nodiscard]]
     bool operator()(const wxString& extension) const
         {
-        return (m_knownWebPageExtensions.find(extension.wc_str()) !=
-                    m_knownWebPageExtensions.cend() ||
-                m_knownWebPageExtensions.find(GetExtensionOrDomain(extension).wc_str()) !=
-                    m_knownWebPageExtensions.cend());
+        return (m_knownWebPageExtensions.contains(extension.wc_str()) ||
+                m_knownWebPageExtensions.contains(GetExtensionOrDomain(extension).wc_str()));
         }
 
     /** @returns @c true if @c extension is a dynamic webpage extension.
@@ -92,10 +90,8 @@ class WebPageExtension
     [[nodiscard]]
     bool IsDynamicExtension(const wxString& extension) const
         {
-        return (m_knownDynamicExtensions.find(extension.wc_str()) !=
-                    m_knownDynamicExtensions.cend() ||
-                m_knownDynamicExtensions.find(GetExtensionOrDomain(extension).wc_str()) !=
-                    m_knownDynamicExtensions.cend());
+        return (m_knownDynamicExtensions.contains(extension.wc_str()) ||
+                m_knownDynamicExtensions.contains(GetExtensionOrDomain(extension).wc_str()));
         }
 
   private:
@@ -119,8 +115,7 @@ class NonWebPageFileExtension
     [[nodiscard]]
     bool operator()(std::wstring_view extension) const
         {
-        return (m_nonWebPageFileExtensions.find(extension.data()) !=
-                m_nonWebPageFileExtensions.cend());
+        return (m_nonWebPageFileExtensions.contains(extension.data()));
         }
 
   private:
@@ -154,7 +149,7 @@ class ScriptFileExtension
     [[nodiscard]]
     bool operator()(std::wstring_view extension) const
         {
-        return (m_scriptFileExtensions.find(extension.data()) != m_scriptFileExtensions.cend());
+        return (m_scriptFileExtensions.contains(extension.data()));
         }
 
   private:
@@ -684,19 +679,19 @@ class WebHarvester
     [[nodiscard]]
     bool HasUrlAlreadyBeenHarvested(const wxString& url) const
         {
-        return (m_harvestedLinks.find(url) != m_harvestedLinks.cend());
+        return (m_harvestedLinks.contains(url));
         }
 
     [[nodiscard]]
     bool HasUrlAlreadyBeenCrawled(const wxString& url) const
         {
-        return (m_alreadyCrawledFiles.find(url) != m_alreadyCrawledFiles.cend());
+        return (m_alreadyCrawledFiles.contains(url));
         }
 
     [[nodiscard]]
     bool VerifyFileExtension(const wxString& fileExt) const
         {
-        return (m_fileExtensions.find(fileExt) != m_fileExtensions.cend());
+        return (m_fileExtensions.contains(fileExt));
         }
 
     class wxStringLessNoCase

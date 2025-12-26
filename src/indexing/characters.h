@@ -321,9 +321,7 @@ namespace characters
                     true :
                    (ch == 0x20A9) ? // Korean Won (currency)
                     true :
-                   (ch == 177) ? // plus/minus±
-                    true :
-                    false;
+                   (ch == 177); // plus/minus±
             // clang-format on
             }
 
@@ -352,9 +350,7 @@ namespace characters
                     true :
                    (ch == 0x20A9) ? // Korean Won (currency)
                     true :
-                   (ch == 177) ? // plus/minus
-                    true :
-                    false;
+                   (ch == 177); // plus/minus
             // clang-format on
             }
 
@@ -386,9 +382,7 @@ namespace characters
                     true :
                    is_either<wchar_t>(ch, 162, 0xFFE0) ? // cent
                     true :
-                   is_either<wchar_t>(ch, 176, 0xFFEE) ? // degree
-                    true :
-                    false;
+                   is_either<wchar_t>(ch, 176, 0xFFEE); // degree
             // clang-format on
             }
 
@@ -402,9 +396,7 @@ namespace characters
                     true :
                    is_either<wchar_t>(ch, 162, 0xFFE0) ? // cent
                     true :
-                   is_either<wchar_t>(ch, 176, 0xFFEE) ? // degree
-                    true :
-                    false;
+                   is_either<wchar_t>(ch, 176, 0xFFEE); // degree
             // clang-format on
             }
 
@@ -443,9 +435,7 @@ namespace characters
                     true :
                    is_either<wchar_t>(ch, 162, 0xFFE0) ? // cent
                     true :
-                   is_either<wchar_t>( ch, 176, 0xFFEE) ? // degree
-                    true :
-                    false;
+                   is_either<wchar_t>( ch, 176, 0xFFEE); // degree
             // clang-format on
             }
 
@@ -484,9 +474,7 @@ namespace characters
                     true :
                    (ch == 0x30A0) ? // Katakana-Hiragana double hyphen
                     true :
-                   (ch == 0x301C) ? // Japanese wave dash
-                    true :
-                    false;
+                   (ch == 0x301C); // Japanese wave dash
             // clang-format on
             }
 
@@ -504,9 +492,7 @@ namespace characters
                     true :
                    (ch == 0xFF07) ? // full-width apostrophe
                     true :
-                   (ch == 0x2019) ? // right single apostrophe
-                    true :
-                    false;
+                   (ch == 0x2019); // right single apostrophe
             // clang-format on
             }
 
@@ -544,9 +530,7 @@ namespace characters
                     true :
                    (ch == 0x20B1) ? // Cuban peso
                     true :
-                   (ch == 0x20A9) ? // Korean Won (currency)
-                    true :
-                    false;
+                   (ch == 0x20A9); // Korean Won (currency)
             // clang-format on
             }
 
@@ -590,9 +574,7 @@ namespace characters
                     true :
                    (ch >= 0xFF0C && ch <= 0xFF0F) ? // full-width ,-./
                     true :
-                   is_either<wchar_t>(ch, 58, 0xFF1A) ? // :
-                    true :
-                    false;
+                   is_either<wchar_t>(ch, 58, 0xFF1A); // :
             // clang-format on
             }
 
@@ -603,7 +585,7 @@ namespace characters
         constexpr static bool can_character_form_monetary(const wchar_t ch) noexcept
             {
             // ,. (includes full width)
-            return (ch == 44 || ch == 46 || ch == 0xFF0C || ch == 0xFF0E) ? true : false;
+            return ch == 44 || ch == 46 || ch == 0xFF0C || ch == 0xFF0E;
             }
 
         /** @returns @c true if a punctuation mark can appear between a word and
@@ -614,7 +596,7 @@ namespace characters
         constexpr static bool can_character_appear_between_word_and_eol(const wchar_t ch) noexcept
             {
             /* asterisk, copyright, registration, trademark*/
-            return (ch == 0x2A || ch == 0xA9 || ch == 0xAE || ch == 0x2122) ? true : false;
+            return (ch == 0x2A || ch == 0xA9 || ch == 0xAE || ch == 0x2122);
             }
 
         /** @returns @c true if a character is a quote
@@ -648,9 +630,7 @@ namespace characters
                     true :
                    (ch >= 0x2018 && ch <= 0x201B) ? // smart single quotes
                     true :
-                   (ch == 0x300C || ch == 0x300D) ? // Japanese single quotes
-                    true :
-                    false;
+                   (ch == 0x300C || ch == 0x300D); // Japanese single quotes
             // clang-format on
             }
 
@@ -670,9 +650,7 @@ namespace characters
                     true :
                    (ch >= 0x201C && ch <= 0x201F) ? // smart double quotes
                     true :
-                   (ch == 0x300E || ch == 0x300F) ? // Japanese double quotes
-                    true :
-                    false;
+                   (ch == 0x300E || ch == 0x300F); // Japanese double quotes
             // clang-format on
             }
 
@@ -693,29 +671,26 @@ namespace characters
                 {
                 return true;
                 }
-            else
+
+            // if at least half of the characters in the word are numbers,
+            // then mark the word as numeric
+            size_t numberCount = 0;
+            for (size_t i = 0; i < word.length(); ++i)
                 {
-                // if at least half of the characters in the word are numbers,
-                // then mark the word as numeric
-                size_t numberCount = 0;
-                for (size_t i = 0; i < word.length(); ++i)
+                assert(word[i]);
+                if (is_numeric(word[i]))
                     {
-                    assert(word[i]);
-                    if (is_numeric(word[i]))
-                        {
-                        ++numberCount;
-                        }
-                    // something like "10000-year" is an exception,
-                    // should be seen as a regular word
-                    else if (numberCount > 0 && is_dash_or_hyphen(word[i]) &&
-                             i + 2 < word.length() && is_alpha(word[i + 1]) &&
-                             is_alpha(word[i + 2]))
-                        {
-                        return false;
-                        }
+                    ++numberCount;
                     }
-                return (numberCount >= (word.length() / 2));
+                // something like "10000-year" is an exception,
+                // should be seen as a regular word
+                else if (numberCount > 0 && is_dash_or_hyphen(word[i]) && i + 2 < word.length() &&
+                         is_alpha(word[i + 1]) && is_alpha(word[i + 2]))
+                    {
+                    return false;
+                    }
                 }
+            return (numberCount >= (word.length() / 2));
             }
 
         /** @returns Whether a character is a number
@@ -727,7 +702,7 @@ namespace characters
             return is_numeric_simple(ch) ?
                        // superscripts and fractions
                        true :
-                       is_extended_numeric(ch) ? true : false;
+                       is_extended_numeric(ch);
             }
 
         /** @returns Whether a character is a superscript, subscript, or fraction.
@@ -735,10 +710,8 @@ namespace characters
         [[nodiscard]]
         constexpr static bool is_extended_numeric(const wchar_t ch) noexcept
             {
-            return (string_util::is_fraction(ch) || string_util::is_superscript_number(ch) ||
-                    string_util::is_subscript_number(ch)) ?
-                       true :
-                       false;
+            return string_util::is_fraction(ch) || string_util::is_superscript_number(ch) ||
+                   string_util::is_subscript_number(ch);
             }
 
         /** @returns Whether a character is a number
@@ -750,7 +723,7 @@ namespace characters
             return (ch >= L'0' && ch <= L'9') ?
                        // full-width Unicode numbers 0-9
                        true :
-                       (ch >= 0xFF10 && ch <= 0xFF19) ? true : false;
+                       ch >= 0xFF10 && ch <= 0xFF19;
             }
 
         /** @returns Whether a character is a space, tab, newline, carriage return, or form feed.
@@ -780,7 +753,7 @@ namespace characters
                                     // En quad, thin space, hair space, em space,
                                     // zero-width non-joiner (word separator), etc.
                     true :
-                   (ch >= 0x2000 && ch <= 0x200C) ? true : false;
+                   ch >= 0x2000 && ch <= 0x200C;
             // clang-format on
             }
 
@@ -799,7 +772,7 @@ namespace characters
                                     // En quad, thin space, hair space, em space,
                                     // zero-width non-joiner (word separator), etc.
                     true :
-                   (ch >= 0x2000 && ch <= 0x200C) ? true : false;
+                   ch >= 0x2000 && ch <= 0x200C;
             // clang-format on
             }
 
@@ -816,9 +789,7 @@ namespace characters
                     true :
                    (ch == 0x2028) ? // line separator
                     true :
-                   (ch == 0x2029) ? // paragraph separator
-                   true :
-                   false;
+                   (ch == 0x2029); // paragraph separator
             // clang-format on
             }
 

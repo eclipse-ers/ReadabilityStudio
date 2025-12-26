@@ -347,7 +347,7 @@ namespace grammar
                lowercased letter as a bullet point.
                Counting anything else could be a real word or (in the case of being uppercased)
                an initial.*/
-            else if (text.length() > 1 && characters::is_character::is_lower(text[0]))
+            if (text.length() > 1 && characters::is_character::is_lower(text[0]))
                 {
                 text.remove_prefix(1);
                 if (characters::is_character::is_period(text[0]) ||
@@ -563,13 +563,13 @@ namespace grammar
                     if (nextNonSpace + 1 < length &&
                         traits::case_insensitive_ex::eq(text[nextNonSpace], L'('))
                         {
-                        return !(
-                            isAbbreviation({ text + previous_word_position,
-                                             (originalPosition - previous_word_position) + 1 }) ||
-                            isAcronym({ text + previous_word_position,
-                                        (current_position - previous_word_position) + 1 }) ||
-                            ((current_position - previous_word_position) == 1 &&
-                             characters::is_character::is_alpha(text[previous_word_position])));
+                        return !isAbbreviation(
+                                   { text + previous_word_position,
+                                     (originalPosition - previous_word_position) + 1 }) &&
+                               !isAcronym({ text + previous_word_position,
+                                            (current_position - previous_word_position) + 1 }) &&
+                               ((current_position - previous_word_position) != 1 ||
+                                !characters::is_character::is_alpha(text[previous_word_position]));
                         }
                     }
                 // citation (superscripted number) after a sentence? Skip over that.
@@ -628,16 +628,14 @@ namespace grammar
                             }
                         // it's followed by a space, then if followed by lowercased word then
                         // definitely part of the current sentence.
-                        else
+
+                        if ((current_position + 2 < length &&
+                             characters::is_character::is_lower(text[current_position + 2])) ||
+                            (current_position + 3 < length &&
+                             characters::is_character::is_space(text[current_position + 2]) &&
+                             characters::is_character::is_lower(text[current_position + 3])))
                             {
-                            if ((current_position + 2 < length &&
-                                 is_character.is_lower(text[current_position + 2])) ||
-                                (current_position + 3 < length &&
-                                 characters::is_character::is_space(text[current_position + 2]) &&
-                                 is_character.is_lower(text[current_position + 3])))
-                                {
-                                return false;
-                                }
+                            return false;
                             }
                         }
                     // Now verify that the next character can begin a sentence
@@ -888,9 +886,8 @@ namespace grammar
             }
 
       private:
-        grammar::is_abbreviation isAbbreviation;
-        grammar::is_acronym isAcronym;
-        characters::is_character is_character;
+        is_abbreviation isAbbreviation;
+        is_acronym isAcronym;
         bool m_sentence_start_must_be_uppercased{ true };
         };
 

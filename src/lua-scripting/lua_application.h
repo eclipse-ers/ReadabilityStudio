@@ -386,6 +386,7 @@ namespace LuaScripting
     // clang-format on
     // quneiform-suppress-end
 
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
     static const luaL_Reg ApplicationLib[] = {
         { _DT("Close"), Close },
         { "GetLuaConstantsPath", GetLuaConstantsPath },

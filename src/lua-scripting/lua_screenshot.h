@@ -106,7 +106,7 @@ namespace LuaScripting
     int ShowCustomTestDialogGeneralSettings(lua_State* L);
     int ShowCustomTestDialogFamiliarWords(lua_State* L);
     int ShowCustomTestDialogProperNounsAndNumbers(lua_State* L);
-    int ShowCustomTestDialogClassification(lua_State*);
+    int ShowCustomTestDialogClassification(lua_State* L);
     int SetCustomTestDialogDocumentTypes(lua_State* L);
     int SetCustomTestDialogIndustries(lua_State* L);
     int SetCustomTestDialogIncludedLists(lua_State* L);
@@ -134,10 +134,11 @@ namespace LuaScripting
     int ShowEditWordListDlg(lua_State* L);
     int CloseEditWordListDlg(lua_State* L);
     int ShowDocGroupSelectDlg(lua_State* L);
-    int CloseDocGroupSelectDlg(lua_State*);
+    int CloseDocGroupSelectDlg(lua_State* L);
     int ShowEditorTextDlg(lua_State* L);
     int CloseEditorTextDlg(lua_State* L);
 
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
     static const luaL_Reg ScreenshotLib[] = {
         { "ShowEditorTextDlg", ShowEditorTextDlg },
         { "CloseEditorTextDlg", CloseEditorTextDlg },

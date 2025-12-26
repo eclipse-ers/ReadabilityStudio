@@ -152,10 +152,8 @@ class valid_syllable_count_equals
                        (m_count == 1) :
                        the_word.get_syllable_count() == m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -231,10 +229,8 @@ class valid_syllable_count_greater_equal
                        (1 >= m_count) :
                        the_word.get_syllable_count() >= m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -291,10 +287,8 @@ class valid_syllable_count_greater_equal_ignore_numerals
             {
             return the_word.is_numeric() ? false : the_word.get_syllable_count() >= m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -348,10 +342,8 @@ class valid_syllable_count_greater_equal_ignore_numerals_and_proper_nouns
                        false :
                        the_word.get_syllable_count() >= m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -406,10 +398,8 @@ class valid_syllable_count_greater
                        (1 > m_count) :
                        the_word.get_syllable_count() > m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -464,10 +454,8 @@ class add_valid_syllable_size
                                            the_word.get_syllable_count()) +
                    result;
             }
-        else
-            {
-            return result;
-            }
+
+        return result;
         }
 
   private:
@@ -499,10 +487,8 @@ class add_valid_syllable_size_ignore_numerals
             return static_cast<size_t>(the_word.is_numeric() ? 0 : the_word.get_syllable_count()) +
                    result;
             }
-        else
-            {
-            return result;
-            }
+
+        return result;
         }
     };
 
@@ -535,10 +521,8 @@ class add_valid_syllable_size_ignore_numerals_and_proper_nouns
                                            the_word.get_syllable_count()) +
                    result;
             }
-        else
-            {
-            return result;
-            }
+
+        return result;
         }
     };
 
@@ -577,10 +561,8 @@ class is_valid_proper_noun
             {
             return the_word.is_proper_noun();
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
     };
 
@@ -617,10 +599,8 @@ class is_valid_numeric
             {
             return the_word.is_numeric();
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
     };
 
@@ -670,10 +650,8 @@ class valid_word_length_equals
             {
             return the_word.length() == m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -760,10 +738,8 @@ class valid_word_length_greater_equals
             {
             return the_word.length() >= m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -797,10 +773,8 @@ class valid_word_length_excluding_punctuation_greater_equals
             {
             return the_word.get_length_excluding_punctuation() >= m_count;
             }
-        else
-            {
-            return false;
-            }
+
+        return false;
         }
 
   private:
@@ -857,10 +831,8 @@ class add_valid_word_size
             {
             return static_cast<size_t>(the_word.length()) + result;
             }
-        else
-            {
-            return result;
-            }
+
+        return result;
         }
     };
 
@@ -882,10 +854,8 @@ class add_valid_word_size_excluding_punctuation
             {
             return static_cast<size_t>(the_word.get_length_excluding_punctuation()) + result;
             }
-        else
-            {
-            return result;
-            }
+
+        return result;
         }
     };
 
@@ -1392,11 +1362,11 @@ class is_correctly_spelled_word
                     }
                 // in case we have something like "one-", then the fact that there is no second word
                 // after the '-' shouldn't make it unfamiliar
-                else if (compValue.length() > 0 &&
-                         !std::binary_search(m_wordlist->get_words().begin(),
-                                             m_wordlist->get_words().end(), compValue) &&
-                         !std::binary_search(m_secondary_wordlist->get_words().begin(),
-                                             m_secondary_wordlist->get_words().end(), compValue))
+                if (compValue.length() > 0 &&
+                    !std::binary_search(m_wordlist->get_words().begin(),
+                                        m_wordlist->get_words().end(), compValue) &&
+                    !std::binary_search(m_secondary_wordlist->get_words().begin(),
+                                        m_secondary_wordlist->get_words().end(), compValue))
                     {
                     return false;
                     }
@@ -1425,7 +1395,7 @@ class is_correctly_spelled_word
 /** @brief Calls a member function of elements in a container for each
         element in another container.*/
 template<typename inT, typename outT, typename member_extract_functorT>
-inline outT copy_member(inT begin, inT end, outT dest, member_extract_functorT get_value)
+outT copy_member(inT begin, inT end, outT dest, member_extract_functorT get_value)
     {
     for (; begin != end; ++dest, ++begin)
         {
@@ -1435,9 +1405,9 @@ inline outT copy_member(inT begin, inT end, outT dest, member_extract_functorT g
     }
 
 /// @brief Copies a member value between objects based on specified criteria.
-template<typename inT, typename outT, typename _Pr, typename member_extract_functorT>
-inline outT copy_member_if(inT begin, inT end, outT dest, _Pr meets_criteria,
-                           member_extract_functorT get_value)
+template<typename inT, typename outT, typename Pr, typename member_extract_functorT>
+outT copy_member_if(inT begin, inT end, outT dest, Pr meets_criteria,
+                    member_extract_functorT get_value)
     {
     for (; begin != end; ++begin)
         {

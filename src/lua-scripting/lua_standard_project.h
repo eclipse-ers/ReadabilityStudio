@@ -125,9 +125,11 @@ namespace LuaScripting
 
         void SetProject(ProjectDoc* doc) noexcept { m_project = doc; }
 
+        // NOLINTBEGIN(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
         static const char className[];
         static Luna<StandardProject>::FunctionType methods[];
         static Luna<StandardProject>::PropertyType properties[];
+        // NOLINTEND(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
 
         // quneiform-suppress-begin
         // clang-format off

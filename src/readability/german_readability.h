@@ -78,38 +78,36 @@ namespace readability
             {
             return german_lix_difficulty::german_lix_very_easy;
             }
-        else if (index >= 30 && index <= 34)
+        if (index >= 30 && index <= 34)
             {
             return german_lix_difficulty::german_lix_children_and_youth;
             }
-        else if (index >= 35 && index <= 39)
+        if (index >= 35 && index <= 39)
             {
             return german_lix_difficulty::german_lix_easy;
             }
-        else if (index >= 40 && index <= 44)
+        if (index >= 40 && index <= 44)
             {
             return german_lix_difficulty::german_lix_adult_fiction;
             }
-        else if (index >= 45 && index <= 49)
+        if (index >= 45 && index <= 49)
             {
             return german_lix_difficulty::german_lix_average;
             }
-        else if (index >= 50 && index <= 54)
+        if (index >= 50 && index <= 54)
             {
             return german_lix_difficulty::german_lix_nonfiction;
             }
-        else if (index >= 55 && index <= 59)
+        if (index >= 55 && index <= 59)
             {
             return german_lix_difficulty::german_lix_difficult;
             }
-        else if (index >= 60 && index <= 64)
+        if (index >= 60 && index <= 64)
             {
             return german_lix_difficulty::german_lix_technical;
             }
-        else
-            {
-            return german_lix_difficulty::german_lix_very_difficult;
-            }
+
+        return german_lix_difficulty::german_lix_very_difficult;
         }
 
     /** @brief Recalculation of Rix for specific subgenres of German text.
@@ -153,60 +151,58 @@ namespace readability
             return 1;
             }
         // between 9 - 13.5
-        else if (is_within<double>(index, 9, 13.5))
+        if (is_within<double>(index, 9, 13.5))
             {
             return 1;
             }
         // between 13.51 - 17
-        else if (index <= 17)
+        if (index <= 17)
             {
             return 2;
             }
         // between 17.1 - 20.5
-        else if (index <= 20.5)
+        if (index <= 20.5)
             {
             return 3;
             }
         // between 20.51 = 24
-        else if (index <= 24)
+        if (index <= 24)
             {
             return 4;
             }
         // between 24.1 = 27.5
-        else if (index <= 27.5)
+        if (index <= 27.5)
             {
             return 5;
             }
         // between 27.51 - 31
-        else if (index <= 31)
+        if (index <= 31)
             {
             return 6;
             }
         // between 31.1 - 34.5
-        else if (index <= 34.5)
+        if (index <= 34.5)
             {
             return 7;
             }
         // between 34.51 - 38
-        else if (index <= 38)
+        if (index <= 38)
             {
             return 8;
             }
         // between 38.1 - 41.5
-        else if (index <= 41.5)
+        if (index <= 41.5)
             {
             return 9;
             }
         // between 41.51 - 45
-        else if (index <= 45)
+        if (index <= 45)
             {
             return 10;
             }
         // > 45
-        else
-            {
-            return 11;
-            }
+
+        return 11;
         }
 
     /** @brief Bamberger & Vanecek variation of Lix.
@@ -251,61 +247,59 @@ namespace readability
             return 4;
             }
         // between 20 - 26
-        else if (is_within<double>(index, 20, 26))
+        if (is_within<double>(index, 20, 26))
             {
             return 4;
             }
         // between 26.1 - 32
-        else if (index <= 32)
+        if (index <= 32)
             {
             return 5;
             }
         // between 32.1 - 38
-        else if (index <= 38)
+        if (index <= 38)
             {
             return 6;
             }
         // between 38.1 - 45
-        else if (index <= 45)
+        if (index <= 45)
             {
             return 7;
             }
         // between  45.1 - 52
-        else if (index <= 52)
+        if (index <= 52)
             {
             return 8;
             }
         // between 52.1 - 57
         // (typo in the book says "67," but that's clearly wrong)
-        else if (index <= 57)
+        if (index <= 57)
             {
             return 9;
             }
         // between 57.1 - 66
-        else if (index <= 66)
+        if (index <= 66)
             {
             return 10;
             }
         // between 66.1 - 75
-        else if (index <= 75)
+        if (index <= 75)
             {
             return 11;
             }
         // between 75.1- 84
-        else if (index <= 84)
+        if (index <= 84)
             {
             return 12;
             }
         // between 84.1 - 100
-        else if (index <= 100)
+        if (index <= 100)
             {
             return 13;
             }
         // between > 100
-        else
-            {
-            return 14;
-            }
+
+        return 14;
         }
 
     /** Specialized grade level calculation for Lix index value for
@@ -319,34 +313,32 @@ namespace readability
             {
             return 1;
             }
-        else if (is_within<size_t>(index, 24, 26))
+        if (is_within<size_t>(index, 24, 26))
             {
             return 2;
             }
-        else if (is_within<size_t>(index, 27, 29))
+        if (is_within<size_t>(index, 27, 29))
             {
             return 3;
             }
-        else if (is_within<size_t>(index, 30, 31))
+        if (is_within<size_t>(index, 30, 31))
             {
             return 4;
             }
-        else if (is_within<size_t>(index, 32, 33))
+        if (is_within<size_t>(index, 32, 33))
             {
             return 5;
             }
-        else if (is_within<size_t>(index, 34, 35))
+        if (is_within<size_t>(index, 34, 35))
             {
             return 6;
             }
-        else if (is_within<size_t>(index, 36, 37))
+        if (is_within<size_t>(index, 36, 37))
             {
             return 7;
             }
-        else
-            {
-            return 8;
-            }
+
+        return 8;
         }
 
     /** Specialized grade level calculation for Lix index value for
@@ -360,55 +352,53 @@ namespace readability
             {
             return 3;
             }
-        else if (is_within<size_t>(index, 31, 33))
+        if (is_within<size_t>(index, 31, 33))
             {
             return 4;
             }
-        else if (is_within<size_t>(index, 34, 37))
+        if (is_within<size_t>(index, 34, 37))
             {
             return 5;
             }
-        else if (is_within<size_t>(index, 38, 40))
+        if (is_within<size_t>(index, 38, 40))
             {
             return 6;
             }
-        else if (is_within<size_t>(index, 41, 43))
+        if (is_within<size_t>(index, 41, 43))
             {
             return 7;
             }
-        else if (is_within<size_t>(index, 44, 47))
+        if (is_within<size_t>(index, 44, 47))
             {
             return 8;
             }
-        else if (is_within<size_t>(index, 48, 50))
+        if (is_within<size_t>(index, 48, 50))
             {
             return 9;
             }
-        else if (is_within<size_t>(index, 51, 53))
+        if (is_within<size_t>(index, 51, 53))
             {
             return 10;
             }
-        else if (is_within<size_t>(index, 54, 56))
+        if (is_within<size_t>(index, 54, 56))
             {
             return 11;
             }
-        else if (is_within<size_t>(index, 57, 59))
+        if (is_within<size_t>(index, 57, 59))
             {
             return 12;
             }
-        else if (is_within<size_t>(index, 60, 63))
+        if (is_within<size_t>(index, 60, 63))
             {
             return 13;
             }
-        else if (is_within<size_t>(index, 64, 69))
+        if (is_within<size_t>(index, 64, 69))
             {
             return 14;
             }
         // grade level 15 is mentioned on page 187 (Bamberger and Vanecek), but not page 64.
-        else
-            {
-            return 15;
-            }
+
+        return 15;
         }
 
     /** 1. Neue Wiener Sachtextformel (1.nWS), used for evaluating German non fiction
@@ -528,11 +518,9 @@ namespace readability
                                     10);
             return true;
             }
-        else
-            {
-            score = 0;
-            return false;
-            }
+
+        score = 0;
+        return false;
         }
 
     /** @brief German adaptation of Wheeler-Smith.
@@ -575,48 +563,46 @@ namespace readability
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 6.1, 9, 2, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 6.1, 9, 2, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 9.1, 12, 3, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 9.1, 12, 3, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 12.1, 16, 4, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 12.1, 16, 4, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 16.1, 20, 5, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 16.1, 20, 5, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 20.1, 24, 6, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 20.1, 24, 6, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 24.1, 29, 7, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 24.1, 29, 7, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 29.1, 34, 8, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 29.1, 34, 8, grade_score))
             {
             return grade_score;
             }
-        else if (wheeler_smith_get_score_from_range(index_score, 34.1, 38, 9, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 34.1, 38, 9, grade_score))
             {
             return grade_score;
             }
         // the highest index score will add a full year to the score of 10, so truncate it
         // to 10.9 to keep the score with the test's 1-10 grade level specification
-        else if (wheeler_smith_get_score_from_range(index_score, 38.1, 42, 10, grade_score))
+        if (wheeler_smith_get_score_from_range(index_score, 38.1, 42, 10, grade_score))
             {
             return std::clamp<double>(grade_score, 1, 10.9);
             }
-        else
-            {
-            throw std::domain_error("error in WS range check.");
-            }
+
+        throw std::domain_error("error in WS range check.");
         }
 
     /** @brief German variation of SMOG.

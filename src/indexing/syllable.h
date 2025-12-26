@@ -109,7 +109,7 @@ namespace grammar
                 {
                 return 0;
                 }
-            Tsyllabize_number syllabify_number{};
+            Tsyllabize_number syllabifyNumber{};
             const wchar_t* const start = numeral_string;
             size_t syllableCount{ 0 };
             while (numeral_string[0] && numeral_string < end_of_string)
@@ -129,7 +129,7 @@ namespace grammar
                     }
                 if (characters::is_character::is_numeric_simple(numeral_string[0]))
                     {
-                    syllableCount += syllabify_number(numeral_string[0]);
+                    syllableCount += syllabifyNumber(numeral_string[0]);
                     }
                 else
                     {
@@ -212,10 +212,8 @@ namespace grammar
                     }
                 return true;
                 }
-            else
-                {
-                return false;
-                }
+
+            return false;
             }
 
         /** @brief If there are any dashes in this word, then break it up into smaller words.
@@ -256,10 +254,8 @@ namespace grammar
                     (separateSectionsSyllableCount > 0) ? separateSectionsSyllableCount : 1;
                 return true;
                 }
-            else
-                {
-                return false;
-                }
+
+            return false;
             }
 
         /** @brief Determines if a 'y' is a consonant.
