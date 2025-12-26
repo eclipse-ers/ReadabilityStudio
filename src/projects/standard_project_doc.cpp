@@ -6947,7 +6947,11 @@ void ProjectDoc::DisplayOverlyLongSentences()
             const wxString currentSentence = ProjectReportFormat::FormatSentence(
                 this, *pos, punctPos, GetWords()->get_punctuation().cend());
 
-            m_overlyLongSentenceData->SetItemText(longSentenceCount, 0, currentSentence);
+            m_overlyLongSentenceData->SetItemText(
+                longSentenceCount, 0, currentSentence,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             if (GetInvalidSentenceMethod() == InvalidSentence::IncludeAsFullSentences)
                 {
                 m_overlyLongSentenceData->SetItemValue(longSentenceCount, 1, pos->get_word_count());
@@ -7060,9 +7064,15 @@ void ProjectDoc::DisplayGrammar()
         if (wordyPhrases[wordyIndex.second].first.get_type() == grammar::phrase_type::phrase_cliche)
             {
             m_clichePhraseData->SetItemText(
-                clicheCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
-            m_clichePhraseData->SetItemText(clicheCount, 1,
-                                            wordyPhrases[wordyIndex.second].second.c_str());
+                clicheCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_clichePhraseData->SetItemText(
+                clicheCount, 1, wordyPhrases[wordyIndex.second].second.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_clichePhraseData->SetItemValue(
                 clicheCount++, 2,
                 // make 1-based index
@@ -7074,9 +7084,15 @@ void ProjectDoc::DisplayGrammar()
                  grammar::phrase_type::phrase_redundant)
             {
             m_redundantPhraseData->SetItemText(
-                redundantPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
-            m_redundantPhraseData->SetItemText(redundantPhraseCount, 1,
-                                               wordyPhrases[wordyIndex.second].second.c_str());
+                redundantPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_redundantPhraseData->SetItemText(
+                redundantPhraseCount, 1, wordyPhrases[wordyIndex.second].second.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_redundantPhraseData->SetItemValue(
                 redundantPhraseCount++, 2,
                 // make 1-based index
@@ -7088,9 +7104,15 @@ void ProjectDoc::DisplayGrammar()
                  grammar::phrase_type::phrase_error)
             {
             m_wordingErrorData->SetItemText(
-                wordingErrorCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
-            m_wordingErrorData->SetItemText(wordingErrorCount, 1,
-                                            wordyPhrases[wordyIndex.second].second.c_str());
+                wordingErrorCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_wordingErrorData->SetItemText(
+                wordingErrorCount, 1, wordyPhrases[wordyIndex.second].second.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_wordingErrorData->SetItemValue(
                 wordingErrorCount++, 2,
                 // make 1-based index
@@ -7101,9 +7123,15 @@ void ProjectDoc::DisplayGrammar()
         else
             {
             m_wordyPhraseData->SetItemText(
-                wordyPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str());
-            m_wordyPhraseData->SetItemText(wordyPhraseCount, 1,
-                                           wordyPhrases[wordyIndex.second].second.c_str());
+                wordyPhraseCount, 0, wordyPhrases[wordyIndex.second].first.to_string().c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_wordyPhraseData->SetItemText(
+                wordyPhraseCount, 1, wordyPhrases[wordyIndex.second].second.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_wordyPhraseData->SetItemValue(
                 wordyPhraseCount++, 2,
                 // make 1-based index
@@ -7172,7 +7200,11 @@ void ProjectDoc::DisplayGrammar()
         size_t uniqueMisspellingCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : misspelledWords.get_data())
             {
-            m_misspelledWordData->SetItemText(uniqueMisspellingCount, 0, mIter.first.c_str());
+            m_misspelledWordData->SetItemText(
+                uniqueMisspellingCount, 0, mIter.first.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_misspelledWordData->SetItemValue(uniqueMisspellingCount++, 1, mIter.second);
             }
 
@@ -7226,7 +7258,10 @@ void ProjectDoc::DisplayGrammar()
             {
             const word_case_insensitive_no_stem& dupWord = GetWords()->get_word(dupWordIndices[i]);
             m_dupWordData->SetItemText(
-                i, 0, wxString::Format(L"%s %s", dupWord.c_str(), dupWord.c_str()));
+                i, 0, wxString::Format(L"%s %s", dupWord.c_str(), dupWord.c_str()),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_dupWordData->SetItemValue(
                 i, 1, dupWord.get_sentence_index() + 1,
                 // make it one-indexed
@@ -7287,8 +7322,11 @@ void ProjectDoc::DisplayGrammar()
         size_t uniqueIncorrectArticleCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : articleMismatchesWords.get_data())
             {
-            m_incorrectArticleData->SetItemText(uniqueIncorrectArticleCount, 0,
-                                                mIter.first.c_str());
+            m_incorrectArticleData->SetItemText(
+                uniqueIncorrectArticleCount, 0, mIter.first.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_incorrectArticleData->SetItemValue(uniqueIncorrectArticleCount++, 1, mIter.second);
             }
         auto* listView = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
@@ -7409,10 +7447,16 @@ void ProjectDoc::DisplayGrammar()
             theWords.RemoveLast();
             GetOverusedWordsBySentenceData()->SetItemText(
                 overUsedWordsListsIter - GetWords()->get_overused_words_by_sentence().begin(), 0,
-                theWords);
+                theWords,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetOverusedWordsBySentenceData()->SetItemText(
                 overUsedWordsListsIter - GetWords()->get_overused_words_by_sentence().begin(), 1,
-                currentSentence);
+                currentSentence,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetOverusedWordsBySentenceData()->SetItemValue(
                 overUsedWordsListsIter - GetWords()->get_overused_words_by_sentence().begin(), 2,
                 // Use word count (not valid word count) since this is for grammar analysis.
@@ -7581,7 +7625,11 @@ void ProjectDoc::DisplayGrammar()
         size_t uniquePassiveVoiceCount = 0; // NOLINT(misc-const-correctness)
         for (const auto& mIter : passiveVoicePhrases.get_data())
             {
-            m_passiveVoiceData->SetItemText(uniquePassiveVoiceCount, 0, mIter.first.c_str());
+            m_passiveVoiceData->SetItemText(
+                uniquePassiveVoiceCount, 0, mIter.first.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_passiveVoiceData->SetItemValue(uniquePassiveVoiceCount++, 1, mIter.second);
             }
         auto* listView = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
@@ -7639,7 +7687,10 @@ void ProjectDoc::DisplayGrammar()
                                                     punctPos, GetWords()->get_punctuation().cend());
 
             m_sentenceStartingWithConjunctionsData->SetItemText(
-                sentenceStartingWithConjunctionsCount, 0, currentSentence);
+                sentenceStartingWithConjunctionsCount, 0, currentSentence,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_sentenceStartingWithConjunctionsData->SetItemValue(
                 sentenceStartingWithConjunctionsCount++, 1,
                 // add 1 to make it one-indexed
@@ -7708,8 +7759,11 @@ void ProjectDoc::DisplayGrammar()
                 ProjectReportFormat::FormatSentence(this, GetWords()->get_sentences()[*pos],
                                                     punctPos, GetWords()->get_punctuation().cend());
 
-            m_sentenceStartingWithLowercaseData->SetItemText(sentenceStartingWithLowercaseCount, 0,
-                                                             currentSentence);
+            m_sentenceStartingWithLowercaseData->SetItemText(
+                sentenceStartingWithLowercaseCount, 0, currentSentence,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_sentenceStartingWithLowercaseData->SetItemValue(
                 sentenceStartingWithLowercaseCount++, 1,
                 // add 1 to make it one-indexed

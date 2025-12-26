@@ -370,7 +370,11 @@ void EditWordListDlg::OnFilePathChanged(wxCommandEvent& event)
                     {
                     m_wordData->SetSize(currentRow + 1);
                     }
-                m_wordData->SetItemText(currentRow++, 0, tkzr.get_next_token());
+                m_wordData->SetItemText(
+                    currentRow++, 0, tkzr.get_next_token(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             m_wordData->SetSize(currentRow, 1);

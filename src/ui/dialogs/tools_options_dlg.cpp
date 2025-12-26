@@ -187,10 +187,18 @@ void ToolsOptionsDlg::OnAddFilesClick([[maybe_unused]] wxCommandEvent& event)
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
-        m_fileData->SetItemText(currentFileCount + i, 0, files.Item(i));
+        m_fileData->SetItemText(
+            currentFileCount + i, 0, files.Item(i),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (selectLabelTypeDlg.GetSelection() == 1)
             {
-            m_fileData->SetItemText(currentFileCount + i, 1, selectLabelTypeDlg.GetGroupingLabel());
+            m_fileData->SetItemText(
+                currentFileCount + i, 1, selectLabelTypeDlg.GetGroupingLabel(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
     m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
@@ -3659,10 +3667,16 @@ void ToolsOptionsDlg::CreateControls()
             // fill the file info grid
             for (size_t i = 0; i < m_readabilityProjectDoc->GetSourceFilesInfo().size(); ++i)
                 {
-                m_fileData->SetItemText(i, 0,
-                                        m_readabilityProjectDoc->GetSourceFilesInfo()[i].first);
-                m_fileData->SetItemText(i, 1,
-                                        m_readabilityProjectDoc->GetSourceFilesInfo()[i].second);
+                m_fileData->SetItemText(
+                    i, 0, m_readabilityProjectDoc->GetSourceFilesInfo()[i].first,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_fileData->SetItemText(
+                    i, 1, m_readabilityProjectDoc->GetSourceFilesInfo()[i].second,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             m_fileList = new Wisteria::UI::ListCtrlEx(
                 projectSettingsPage, ID_FILE_LIST, wxDefaultPosition, wxDefaultSize,

@@ -5299,8 +5299,16 @@ void MainFrame::OnFindDuplicateFiles([[maybe_unused]] wxRibbonButtonBarEvent& ev
                                                      wxColour{ 0, 255, 0 }.ChangeLightness(160) :
                                                      wxColour{ 255, 255, 255 }));
                     fileListDlg.GetListCtrlData()->SetRowAttributes(rowCount, attribs);
-                    fileListDlg.GetListCtrlData()->SetItemText(rowCount, 0, fn.GetFullName());
-                    fileListDlg.GetListCtrlData()->SetItemText(rowCount, 1, fn.GetPath());
+                    fileListDlg.GetListCtrlData()->SetItemText(
+                        rowCount, 0, fn.GetFullName(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
+                    fileListDlg.GetListCtrlData()->SetItemText(
+                        rowCount, 1, fn.GetPath(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     fileListDlg.GetListCtrlData()->SetItemValue(rowCount++, 2, groupId);
                     }
                 // flip it for next group of duplicates

@@ -185,7 +185,10 @@ void WordListDlg::AddSingleColumnPage(
     list->SetVirtualDataSize(wordList.get_words().size(), 1);
     for (size_t i = 0; i < wordList.get_words().size(); ++i)
         {
-        data->SetItemText(i, 0, wxString(wordList.get_words().at(i).c_str()));
+        data->SetItemText(i, 0, wxString(wordList.get_words().at(i).c_str()),
+                          Wisteria::NumberFormatInfo{
+                              Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                          std::numeric_limits<double>::quiet_NaN());
         }
     list->DistributeColumns();
     BaseProjectDoc::UpdateListOptions(list);

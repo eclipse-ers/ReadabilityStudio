@@ -145,7 +145,11 @@ void BatchProjectDoc::RemoveMisspellings(const wxArrayString& misspellingsToRemo
             }
         GetMisspelledWordData()->SetItemValue(i, 2, totalCount);
         GetMisspelledWordData()->SetItemValue(i, 3, uniqueCount);
-        GetMisspelledWordData()->SetItemText(i, 4, reportStr.c_str());
+        GetMisspelledWordData()->SetItemText(
+            i, 4, reportStr.c_str(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         }
     // remove any blank rows
     for (size_t i = 0; i < GetMisspelledWordData()->GetItemCount(); /* handled in loop*/)
@@ -779,10 +783,16 @@ void BatchProjectDoc::LoadDolchSection()
         if (doc->LoadingOriginalTextSucceeded())
             {
             // completion stats
-            m_dolchCompletionData->SetItemText(dolchDocumentCount, 0,
-                                               doc->GetOriginalDocumentFilePath());
-            m_dolchCompletionData->SetItemText(dolchDocumentCount, 1,
-                                               doc->GetOriginalDocumentDescription());
+            m_dolchCompletionData->SetItemText(
+                dolchDocumentCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_dolchCompletionData->SetItemText(
+                dolchDocumentCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             const double dolchConjunctionPercentage =
                 safe_divide<double>((ProjectReportFormat::MAX_DOLCH_CONJUNCTION_WORDS -
                                      doc->GetUnusedDolchConjunctions()),
@@ -848,10 +858,16 @@ void BatchProjectDoc::LoadDolchSection()
                     Wisteria::NumberFormatInfo::NumberFormatType::PercentageFormatting, 1, true));
             // word stats
             size_t columnCount = 0;
-            m_dolchWordsBatchData->SetItemText(dolchDocumentCount, columnCount++,
-                                               doc->GetOriginalDocumentFilePath());
-            m_dolchWordsBatchData->SetItemText(dolchDocumentCount, columnCount++,
-                                               doc->GetOriginalDocumentDescription());
+            m_dolchWordsBatchData->SetItemText(
+                dolchDocumentCount, columnCount++, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_dolchWordsBatchData->SetItemText(
+                dolchDocumentCount, columnCount++, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_dolchWordsBatchData->SetItemValue(
                 dolchDocumentCount, columnCount++,
                 safe_divide<double>(doc->GetDolchConjunctionCounts().second, doc->GetTotalWords()) *
@@ -949,10 +965,16 @@ void BatchProjectDoc::LoadDolchSection()
                 }
 
             // non-word stats
-            m_NonDolchWordsData->SetItemText(dolchDocumentCount, 0,
-                                             doc->GetOriginalDocumentFilePath());
-            m_NonDolchWordsData->SetItemText(dolchDocumentCount, 1,
-                                             doc->GetOriginalDocumentDescription());
+            m_NonDolchWordsData->SetItemText(
+                dolchDocumentCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_NonDolchWordsData->SetItemText(
+                dolchDocumentCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             const size_t totalDolchWords =
                 doc->GetDolchConjunctionCounts().second +
                 doc->GetDolchPrepositionWordCounts().second + doc->GetDolchPronounCounts().second +
@@ -1011,10 +1033,16 @@ void BatchProjectDoc::LoadHardWordsSection()
         if (doc->LoadingOriginalTextSucceeded())
             {
             size_t columnIndex = 0;
-            m_hardWordsData->SetItemText(hardWordRowCount, columnIndex++,
-                                         doc->GetOriginalDocumentFilePath());
-            m_hardWordsData->SetItemText(hardWordRowCount, columnIndex++,
-                                         doc->GetOriginalDocumentDescription());
+            m_hardWordsData->SetItemText(
+                hardWordRowCount, columnIndex++, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_hardWordsData->SetItemText(
+                hardWordRowCount, columnIndex++, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             // total overall words
             m_hardWordsData->SetItemValue(
                 hardWordRowCount, columnIndex++, doc->GetTotalWords(),
@@ -1317,10 +1345,16 @@ void BatchProjectDoc::LoadSummaryStatsSection()
     for (const auto& doc : m_docs)
         {
         size_t columnCount{ 0 };
-        m_summaryStatsData->SetItemText(rowCount, columnCount++,
-                                        doc->GetOriginalDocumentFilePath());
-        m_summaryStatsData->SetItemText(rowCount, columnCount++,
-                                        doc->GetOriginalDocumentDescription());
+        m_summaryStatsData->SetItemText(
+            rowCount, columnCount++, doc->GetOriginalDocumentFilePath(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
+        m_summaryStatsData->SetItemText(
+            rowCount, columnCount++, doc->GetOriginalDocumentDescription(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (GetStatisticsReportInfo().IsParagraphEnabled())
             {
             assert(m_summaryStatsColumnNames[columnCount] == _(L"Number of paragraphs"));
@@ -1661,7 +1695,11 @@ void BatchProjectDoc::LoadWarningsSection()
             {
             m_warnings->SetSize(m_warnings->GetItemCount() * 1.5);
             }
-        m_warnings->SetItemText(warningCount, 0, message.GetMessage());
+        m_warnings->SetItemText(
+            warningCount, 0, message.GetMessage(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         ++warningCount;
         }
     for (const auto& doc : m_docs)
@@ -1675,9 +1713,21 @@ void BatchProjectDoc::LoadWarningsSection()
                     {
                     m_warnings->SetSize(m_warnings->GetItemCount() * 1.5);
                     }
-                m_warnings->SetItemText(warningCount, 0, doc->GetOriginalDocumentFilePath());
-                m_warnings->SetItemText(warningCount, 1, doc->GetOriginalDocumentDescription());
-                m_warnings->SetItemText(warningCount, 2, message.GetMessage());
+                m_warnings->SetItemText(
+                    warningCount, 0, doc->GetOriginalDocumentFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_warnings->SetItemText(
+                    warningCount, 1, doc->GetOriginalDocumentDescription(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_warnings->SetItemText(
+                    warningCount, 2, message.GetMessage(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 ++warningCount;
                 }
             }
@@ -1967,10 +2017,16 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
         // misspellings
         if (doc->LoadingOriginalTextSucceeded() && !doc->GetWords()->get_misspelled_words().empty())
             {
-            GetMisspelledWordData()->SetItemText(misspelledWordCount, 0,
-                                                 doc->GetOriginalDocumentFilePath());
-            GetMisspelledWordData()->SetItemText(misspelledWordCount, 1,
-                                                 doc->GetOriginalDocumentDescription());
+            GetMisspelledWordData()->SetItemText(
+                misspelledWordCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            GetMisspelledWordData()->SetItemText(
+                misspelledWordCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetMisspelledWordData()->SetItemValue(misspelledWordCount, 2,
                                                   doc->GetWords()->get_misspelled_words().size());
             wxString misspelledWordsStr;
@@ -2003,15 +2059,26 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 misspelledWordsStr.RemoveLast(2);
                 }
-            GetMisspelledWordData()->SetItemText(misspelledWordCount++, 4, misspelledWordsStr);
+            GetMisspelledWordData()->SetItemText(
+                misspelledWordCount++, 4, misspelledWordsStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // repeated (duplicate) words
         if (doc->LoadingOriginalTextSucceeded() &&
             !doc->GetWords()->get_duplicate_word_indices().empty())
             {
-            GetRepeatedWordData()->SetItemText(dupWordCount, 0, doc->GetOriginalDocumentFilePath());
-            GetRepeatedWordData()->SetItemText(dupWordCount, 1,
-                                               doc->GetOriginalDocumentDescription());
+            GetRepeatedWordData()->SetItemText(
+                dupWordCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            GetRepeatedWordData()->SetItemText(
+                dupWordCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetRepeatedWordData()->SetItemValue(
                 dupWordCount, 2, doc->GetWords()->get_duplicate_word_indices().size());
             wxString doubleWordsStr;
@@ -2056,16 +2123,26 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 doubleWordsStr.RemoveLast(2);
                 }
-            GetRepeatedWordData()->SetItemText(dupWordCount++, 3, doubleWordsStr);
+            GetRepeatedWordData()->SetItemText(
+                dupWordCount++, 3, doubleWordsStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // incorrect articles
         if (doc->LoadingOriginalTextSucceeded() &&
             !doc->GetWords()->get_incorrect_article_indices().empty())
             {
-            m_incorrectArticleData->SetItemText(incorrectArticleCount, 0,
-                                                doc->GetOriginalDocumentFilePath());
-            m_incorrectArticleData->SetItemText(incorrectArticleCount, 1,
-                                                doc->GetOriginalDocumentDescription());
+            m_incorrectArticleData->SetItemText(
+                incorrectArticleCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_incorrectArticleData->SetItemText(
+                incorrectArticleCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_incorrectArticleData->SetItemValue(
                 incorrectArticleCount, 2, doc->GetWords()->get_incorrect_article_indices().size());
             wxString incorrectArticleStr;
@@ -2105,16 +2182,26 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 incorrectArticleStr.RemoveLast(2);
                 }
-            m_incorrectArticleData->SetItemText(incorrectArticleCount++, 3, incorrectArticleStr);
+            m_incorrectArticleData->SetItemText(
+                incorrectArticleCount++, 3, incorrectArticleStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // overused words (by sentence)
         if (doc->LoadingOriginalTextSucceeded() &&
             !doc->GetWords()->get_overused_words_by_sentence().empty())
             {
-            m_overusedWordBySentenceData->SetItemText(overusedWordBySentenceCount, 0,
-                                                      doc->GetOriginalDocumentFilePath());
-            m_overusedWordBySentenceData->SetItemText(overusedWordBySentenceCount, 1,
-                                                      doc->GetOriginalDocumentDescription());
+            m_overusedWordBySentenceData->SetItemText(
+                overusedWordBySentenceCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_overusedWordBySentenceData->SetItemText(
+                overusedWordBySentenceCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_overusedWordBySentenceData->SetItemValue(
                 overusedWordBySentenceCount, 2,
                 doc->GetWords()->get_overused_words_by_sentence().size());
@@ -2138,16 +2225,26 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 theWords.RemoveLast(2);
                 }
-            m_overusedWordBySentenceData->SetItemText(overusedWordBySentenceCount++, 3, theWords);
+            m_overusedWordBySentenceData->SetItemText(
+                overusedWordBySentenceCount++, 3, theWords,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // passive Voice
         if (doc->LoadingOriginalTextSucceeded() &&
             !doc->GetWords()->get_passive_voice_indices().empty())
             {
-            m_passiveVoiceData->SetItemText(passiveVoiceCount, 0,
-                                            doc->GetOriginalDocumentFilePath());
-            m_passiveVoiceData->SetItemText(passiveVoiceCount, 1,
-                                            doc->GetOriginalDocumentDescription());
+            m_passiveVoiceData->SetItemText(
+                passiveVoiceCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_passiveVoiceData->SetItemText(
+                passiveVoiceCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_passiveVoiceData->SetItemValue(passiveVoiceCount, 2,
                                              doc->GetWords()->get_passive_voice_indices().size());
             wxString passiveVoiceStr;
@@ -2203,15 +2300,25 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 passiveVoiceStr.RemoveLast(2);
                 }
-            m_passiveVoiceData->SetItemText(passiveVoiceCount++, 3, passiveVoiceStr);
+            m_passiveVoiceData->SetItemText(
+                passiveVoiceCount++, 3, passiveVoiceStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // overly long sentences
         if (doc->LoadingOriginalTextSucceeded() && doc->GetTotalOverlyLongSentences() > 0)
             {
-            m_overlyLongSentenceData->SetItemText(longSenteceCount, 0,
-                                                  doc->GetOriginalDocumentFilePath());
-            m_overlyLongSentenceData->SetItemText(longSenteceCount, 1,
-                                                  doc->GetOriginalDocumentDescription());
+            m_overlyLongSentenceData->SetItemText(
+                longSenteceCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_overlyLongSentenceData->SetItemText(
+                longSenteceCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_overlyLongSentenceData->SetItemValue(longSenteceCount, 2,
                                                    doc->GetTotalOverlyLongSentences());
             m_overlyLongSentenceData->SetItemValue(longSenteceCount, 3, doc->GetLongestSentence());
@@ -2223,16 +2330,26 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
             const wxString currentSentence =
                 ProjectReportFormat::FormatSentence(doc, sentence, punctPos, punctEnd);
 
-            m_overlyLongSentenceData->SetItemText(longSenteceCount++, 4, currentSentence);
+            m_overlyLongSentenceData->SetItemText(
+                longSenteceCount++, 4, currentSentence,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // sentences that start with conjunctions
         if (doc->LoadingOriginalTextSucceeded() &&
             doc->GetSentenceStartingWithConjunctionsCount() > 0)
             {
-            m_sentenceStartingWithConjunctionsData->SetItemText(conjunctionSentencesCount, 0,
-                                                                doc->GetOriginalDocumentFilePath());
             m_sentenceStartingWithConjunctionsData->SetItemText(
-                conjunctionSentencesCount, 1, doc->GetOriginalDocumentDescription());
+                conjunctionSentencesCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_sentenceStartingWithConjunctionsData->SetItemText(
+                conjunctionSentencesCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_sentenceStartingWithConjunctionsData->SetItemValue(
                 conjunctionSentencesCount, 2, doc->GetSentenceStartingWithConjunctionsCount());
             wxString conjunctionsStr;
@@ -2263,16 +2380,25 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 conjunctionsStr.RemoveLast(2);
                 }
-            m_sentenceStartingWithConjunctionsData->SetItemText(conjunctionSentencesCount++, 3,
-                                                                conjunctionsStr);
+            m_sentenceStartingWithConjunctionsData->SetItemText(
+                conjunctionSentencesCount++, 3, conjunctionsStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // sentences that start with lowercase words
         if (doc->LoadingOriginalTextSucceeded() && doc->GetSentenceStartingWithLowercaseCount() > 0)
             {
-            m_sentenceStartingWithLowercaseData->SetItemText(lowercaseSentencesCount, 0,
-                                                             doc->GetOriginalDocumentFilePath());
-            m_sentenceStartingWithLowercaseData->SetItemText(lowercaseSentencesCount, 1,
-                                                             doc->GetOriginalDocumentDescription());
+            m_sentenceStartingWithLowercaseData->SetItemText(
+                lowercaseSentencesCount, 0, doc->GetOriginalDocumentFilePath(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_sentenceStartingWithLowercaseData->SetItemText(
+                lowercaseSentencesCount, 1, doc->GetOriginalDocumentDescription(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             m_sentenceStartingWithLowercaseData->SetItemValue(
                 lowercaseSentencesCount, 2, doc->GetSentenceStartingWithLowercaseCount());
             wxString lowercasesStr;
@@ -2303,8 +2429,11 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 {
                 lowercasesStr.RemoveLast(2);
                 }
-            m_sentenceStartingWithLowercaseData->SetItemText(lowercaseSentencesCount++, 3,
-                                                             lowercasesStr);
+            m_sentenceStartingWithLowercaseData->SetItemText(
+                lowercaseSentencesCount++, 3, lowercasesStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // wordy items & clichés
         if (doc->LoadingOriginalTextSucceeded() &&
@@ -2398,13 +2527,27 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                     {
                     suggestions.RemoveLast(2);
                     }
-                m_wordingErrorData->SetItemText(wordingErrorCount, 0,
-                                                doc->GetOriginalDocumentFilePath());
-                m_wordingErrorData->SetItemText(wordingErrorCount, 1,
-                                                doc->GetOriginalDocumentDescription());
+                m_wordingErrorData->SetItemText(
+                    wordingErrorCount, 0, doc->GetOriginalDocumentFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_wordingErrorData->SetItemText(
+                    wordingErrorCount, 1, doc->GetOriginalDocumentDescription(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 m_wordingErrorData->SetItemValue(wordingErrorCount, 2, totalCount);
-                m_wordingErrorData->SetItemText(wordingErrorCount, 3, values);
-                m_wordingErrorData->SetItemText(wordingErrorCount++, 4, suggestions);
+                m_wordingErrorData->SetItemText(
+                    wordingErrorCount, 3, values,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_wordingErrorData->SetItemText(
+                    wordingErrorCount++, 4, suggestions,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             if (!wordyPhrasesAndSuggestions.get_data().empty())
                 {
@@ -2449,13 +2592,27 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                     {
                     suggestions.RemoveLast(2);
                     }
-                m_wordyPhraseData->SetItemText(wordyPhraseCount, 0,
-                                               doc->GetOriginalDocumentFilePath());
-                m_wordyPhraseData->SetItemText(wordyPhraseCount, 1,
-                                               doc->GetOriginalDocumentDescription());
+                m_wordyPhraseData->SetItemText(
+                    wordyPhraseCount, 0, doc->GetOriginalDocumentFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_wordyPhraseData->SetItemText(
+                    wordyPhraseCount, 1, doc->GetOriginalDocumentDescription(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 m_wordyPhraseData->SetItemValue(wordyPhraseCount, 2, totalCount);
-                m_wordyPhraseData->SetItemText(wordyPhraseCount, 3, values);
-                m_wordyPhraseData->SetItemText(wordyPhraseCount++, 4, suggestions);
+                m_wordyPhraseData->SetItemText(
+                    wordyPhraseCount, 3, values,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_wordyPhraseData->SetItemText(
+                    wordyPhraseCount++, 4, suggestions,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             if (!redundantPhrasesAndSuggestions.get_data().empty())
                 {
@@ -2500,13 +2657,27 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                     {
                     suggestions.RemoveLast(2);
                     }
-                m_redundantPhraseData->SetItemText(redundantPhraseCount, 0,
-                                                   doc->GetOriginalDocumentFilePath());
-                m_redundantPhraseData->SetItemText(redundantPhraseCount, 1,
-                                                   doc->GetOriginalDocumentDescription());
+                m_redundantPhraseData->SetItemText(
+                    redundantPhraseCount, 0, doc->GetOriginalDocumentFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_redundantPhraseData->SetItemText(
+                    redundantPhraseCount, 1, doc->GetOriginalDocumentDescription(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 m_redundantPhraseData->SetItemValue(redundantPhraseCount, 2, totalCount);
-                m_redundantPhraseData->SetItemText(redundantPhraseCount, 3, values);
-                m_redundantPhraseData->SetItemText(redundantPhraseCount++, 4, suggestions);
+                m_redundantPhraseData->SetItemText(
+                    redundantPhraseCount, 3, values,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_redundantPhraseData->SetItemText(
+                    redundantPhraseCount++, 4, suggestions,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             if (!clichesAndSuggestions.get_data().empty())
                 {
@@ -2551,12 +2722,27 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                     {
                     suggestions.RemoveLast(2);
                     }
-                m_clichePhraseData->SetItemText(clicheCount, 0, doc->GetOriginalDocumentFilePath());
-                m_clichePhraseData->SetItemText(clicheCount, 1,
-                                                doc->GetOriginalDocumentDescription());
+                m_clichePhraseData->SetItemText(
+                    clicheCount, 0, doc->GetOriginalDocumentFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_clichePhraseData->SetItemText(
+                    clicheCount, 1, doc->GetOriginalDocumentDescription(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 m_clichePhraseData->SetItemValue(clicheCount, 2, totalCount);
-                m_clichePhraseData->SetItemText(clicheCount, 3, values);
-                m_clichePhraseData->SetItemText(clicheCount++, 4, suggestions);
+                m_clichePhraseData->SetItemText(
+                    clicheCount, 3, values,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_clichePhraseData->SetItemText(
+                    clicheCount++, 4, suggestions,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -2589,7 +2775,11 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
     for (auto wordPos = wordsFromAllDocs.get_data().cbegin();
          wordPos != wordsFromAllDocs.get_data().cend(); ++wordPos, ++i)
         {
-        GetAllWordsBatchData()->SetItemText(i, 0, wordPos->first.c_str());
+        GetAllWordsBatchData()->SetItemText(
+            i, 0, wordPos->first.c_str(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         GetAllWordsBatchData()->SetItemValue(i, 1, wordPos->second.first);
         GetAllWordsBatchData()->SetItemValue(i, 2, wordPos->second.second);
 
@@ -2638,7 +2828,11 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 }
             allValuesStr.Trim().RemoveLast();
 
-            GetKeyWordsBatchData()->SetItemText(uniqueImportWordsCount, 0, allValuesStr);
+            GetKeyWordsBatchData()->SetItemText(
+                uniqueImportWordsCount, 0, allValuesStr,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetKeyWordsBatchData()->SetItemValue(uniqueImportWordsCount++, 1,
                                                  keyWordFreqInfo.second);
 
@@ -2807,8 +3001,16 @@ void BatchProjectDoc::LoadScoresSection()
             continue;
             }
         long currentColumn = 0;
-        m_scoreRawData->SetItemText(i, currentColumn++, doc->GetOriginalDocumentFilePath());
-        m_scoreRawData->SetItemText(i, currentColumn++, doc->GetOriginalDocumentDescription());
+        m_scoreRawData->SetItemText(
+            i, currentColumn++, doc->GetOriginalDocumentFilePath(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
+        m_scoreRawData->SetItemText(
+            i, currentColumn++, doc->GetOriginalDocumentDescription(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         double value = 0;
 
         // if using groups for the documents
@@ -2843,7 +3045,8 @@ void BatchProjectDoc::LoadScoresSection()
                                 fryGraph->GetScores().at(i).GetScore(), 0,
                                 wxNumberFormatter::Style::Style_NoTrailingZeroes),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(
                             fryGraph->GetScores().at(i).GetScore());
                         doc->ReviewTestGoal(ReadabilityMessages::FRY(),
@@ -2851,8 +3054,11 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else if (fryGraph->GetScores().at(i).IsScoreInvalid())
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++,
-                                                    _(L"Text is too difficult to be plotted."));
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, _(L"Text is too difficult to be plotted."),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2864,13 +3070,21 @@ void BatchProjectDoc::LoadScoresSection()
                                   "level because it contains too many high syllable words.") :
                                 _(L"Text is too difficult to be classified to a specific grade "
                                   "level because it contains too many long sentences.");
-                        m_scoreRawData->SetItemText(i, currentColumn++, tooDifficultDescription);
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, tooDifficultDescription,
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2894,7 +3108,8 @@ void BatchProjectDoc::LoadScoresSection()
                                 fryGraph->GetScores().at(i).GetScore(), 0,
                                 wxNumberFormatter::Style::Style_NoTrailingZeroes),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(
                             fryGraph->GetScores().at(i).GetScore());
                         doc->ReviewTestGoal(ReadabilityMessages::GPM_FRY(),
@@ -2902,8 +3117,11 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else if (fryGraph->GetScores().at(i).IsScoreInvalid())
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++,
-                                                    _(L"Text is too difficult to be plotted."));
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, _(L"Text is too difficult to be plotted."),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::GPM_FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2916,13 +3134,21 @@ void BatchProjectDoc::LoadScoresSection()
                                 _(L"Text is too difficult to be classified to a specific "
                                   "grade level because it contains too many long sentences.");
 
-                        m_scoreRawData->SetItemText(i, currentColumn++, tooDifficultDescription);
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, tooDifficultDescription,
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::GPM_FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::GPM_FRY(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2946,7 +3172,8 @@ void BatchProjectDoc::LoadScoresSection()
                                 schwartzGraph->GetScores().at(i).GetScoreAverage(), 1,
                                 wxNumberFormatter::Style::Style_NoTrailingZeroes),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(
                             schwartzGraph->GetScores().at(i).GetScoreAverage());
                         doc->ReviewTestGoal(ReadabilityMessages::SCHWARTZ(),
@@ -2954,8 +3181,11 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else if (schwartzGraph->GetScores().at(i).IsScoreInvalid())
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++,
-                                                    _(L"Text is too difficult to be plotted."));
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, _(L"Text is too difficult to be plotted."),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::SCHWARTZ(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2967,13 +3197,21 @@ void BatchProjectDoc::LoadScoresSection()
                                   "level because it contains too many high syllable words.") :
                                 _(L"Text is too difficult to be classified to a specific grade "
                                   "level because it contains too many long sentences.");
-                        m_scoreRawData->SetItemText(i, currentColumn++, tooDifficultDescription);
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, tooDifficultDescription,
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::SCHWARTZ(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::SCHWARTZ(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -2998,7 +3236,8 @@ void BatchProjectDoc::LoadScoresSection()
                                 raygorGraph->GetScores().at(i).GetScore(), 0,
                                 wxNumberFormatter::Style::Style_NoTrailingZeroes),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(
                             raygorGraph->GetScores().at(i).GetScore());
                         doc->ReviewTestGoal(ReadabilityMessages::RAYGOR(),
@@ -3006,8 +3245,11 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else if (raygorGraph->GetScores().at(i).IsScoreInvalid())
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++,
-                                                    _(L"Text is too difficult to be plotted."));
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, _(L"Text is too difficult to be plotted."),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::RAYGOR(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -3020,13 +3262,21 @@ void BatchProjectDoc::LoadScoresSection()
                                 _(L"Text is too difficult to be classified to a specific "
                                   "grade level because it contains too many long sentences.");
 
-                        m_scoreRawData->SetItemText(i, currentColumn++, tooDifficultDescription);
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, tooDifficultDescription,
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::RAYGOR(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::RAYGOR(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -3042,12 +3292,17 @@ void BatchProjectDoc::LoadScoresSection()
                     m_scoreRawData->SetItemText(
                         i, currentColumn++, doc->GetLastGradeLevel(),
                         Wisteria::NumberFormatInfo(
-                            Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                            Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                        std::numeric_limits<double>::quiet_NaN());
                     doc->GetAggregatedGradeScores().push_back(value);
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // index tests
@@ -3072,20 +3327,28 @@ void BatchProjectDoc::LoadScoresSection()
                                 fraseGraph->GetScores().at(i).GetScore(), 0,
                                 wxNumberFormatter::Style::Style_NoTrailingZeroes),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRASE(),
                                             fraseGraph->GetScores().at(i).GetScore());
                         }
                     else if (fraseGraph->GetScores().at(i).IsScoreInvalid())
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++,
-                                                    _(L"Text is too difficult to be plotted."));
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, _(L"Text is too difficult to be plotted."),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRASE(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->ReviewTestGoal(ReadabilityMessages::FRASE(),
                                             std::numeric_limits<double>::quiet_NaN());
                         }
@@ -3105,7 +3368,11 @@ void BatchProjectDoc::LoadScoresSection()
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // cloze tests
@@ -3126,7 +3393,11 @@ void BatchProjectDoc::LoadScoresSection()
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // grade and index test
@@ -3151,7 +3422,11 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     if (ReadabilityMessages::GetScoreValue(doc->GetLastGradeLevel(), value))
                         {
@@ -3163,18 +3438,31 @@ void BatchProjectDoc::LoadScoresSection()
                         m_scoreRawData->SetItemText(
                             i, currentColumn++, doc->GetLastGradeLevel(),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(value);
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // grade and cloze score
@@ -3194,12 +3482,17 @@ void BatchProjectDoc::LoadScoresSection()
                         m_scoreRawData->SetItemText(
                             i, currentColumn++, doc->GetLastGradeLevel(),
                             Wisteria::NumberFormatInfo(
-                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                                Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                            std::numeric_limits<double>::quiet_NaN());
                         doc->GetAggregatedGradeScores().push_back(value);
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     if (!std::isnan(doc->GetLastClozeScore()))
                         {
@@ -3213,13 +3506,25 @@ void BatchProjectDoc::LoadScoresSection()
                         }
                     else
                         {
-                        m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                        m_scoreRawData->SetItemText(
+                            i, currentColumn++, wxString{},
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             }
@@ -3241,7 +3546,8 @@ void BatchProjectDoc::LoadScoresSection()
                     m_scoreRawData->SetItemText(
                         i, currentColumn++, doc->GetLastGradeLevel(),
                         Wisteria::NumberFormatInfo(
-                            Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1));
+                            Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting, 1),
+                        std::numeric_limits<double>::quiet_NaN());
                     doc->GetAggregatedGradeScores().push_back(value);
                     }
                 else if (testPos->GetIterator()->get_test_type() ==
@@ -3272,12 +3578,20 @@ void BatchProjectDoc::LoadScoresSection()
                     }
                 else
                     {
-                    m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                    m_scoreRawData->SetItemText(
+                        i, currentColumn++, wxString{},
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             else
                 {
-                m_scoreRawData->SetItemText(i, currentColumn++, wxString{});
+                m_scoreRawData->SetItemText(
+                    i, currentColumn++, wxString{},
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         // increment this here because our current index into the score data will not be the same
@@ -3373,10 +3687,18 @@ void BatchProjectDoc::LoadScoresSection()
         }
     if (IsIncludingDolchSightWords())
         {
-        m_scoreStatsData->SetItemText(currentRow, 0, ReadabilityMessages::GetDolchLabel());
+        m_scoreStatsData->SetItemText(
+            currentRow, 0, ReadabilityMessages::GetDolchLabel(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         for (size_t j = 1; j < m_scoreStatsData->GetColumnCount(); ++j)
             {
-            m_scoreStatsData->SetItemText(currentRow, j, _(L"N/A"));
+            m_scoreStatsData->SetItemText(
+                currentRow, j, _(L"N/A"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         ++currentRow;
         }
@@ -7628,10 +7950,17 @@ void BatchProjectDoc::SetScoreStatsRow(
     {
     PROFILE();
     size_t currentColumn = 0;
-    dataGrid->SetItemText(rowNum, currentColumn++, rowName);
+    dataGrid->SetItemText(rowNum, currentColumn++, rowName,
+                          Wisteria::NumberFormatInfo{
+                              Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                          std::numeric_limits<double>::quiet_NaN());
     if (!optionalDescription.empty())
         {
-        dataGrid->SetItemText(rowNum, currentColumn++, optionalDescription);
+        dataGrid->SetItemText(
+            rowNum, currentColumn++, optionalDescription,
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         }
     if (!data.empty())
         {
@@ -7724,7 +8053,11 @@ void BatchProjectDoc::SetScoreStatsRow(
             }
         else // shouldn't happen
             {
-            dataGrid->SetItemText(rowNum, currentColumn++, wxString{});
+            dataGrid->SetItemText(
+                rowNum, currentColumn++, wxString{},
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         dataGrid->SetItemValue(
@@ -7744,8 +8077,12 @@ void BatchProjectDoc::SetScoreStatsRow(
 
         if (sortedData.size() < 3)
             {
-            dataGrid->SetItemText(rowNum, currentColumn++,
-                                  _(L"More than two values are required to calculate skewness."));
+            dataGrid->SetItemText(
+                rowNum, currentColumn++,
+                _(L"More than two values are required to calculate skewness."),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         else
             {
@@ -7758,8 +8095,12 @@ void BatchProjectDoc::SetScoreStatsRow(
 
         if (sortedData.size() < 4)
             {
-            dataGrid->SetItemText(rowNum, currentColumn++,
-                                  _(L"More than three values are required to calculate Kurtosis."));
+            dataGrid->SetItemText(
+                rowNum, currentColumn++,
+                _(L"More than three values are required to calculate Kurtosis."),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         else
             {
@@ -7772,11 +8113,19 @@ void BatchProjectDoc::SetScoreStatsRow(
 
         if (sortedData.size() < 2)
             {
-            dataGrid->SetItemText(rowNum, currentColumn++,
-                                  // TRANSLATORS: "std. dev." is standard deviation.
-                                  _(L"More than one value is required to calculate std. dev."));
-            dataGrid->SetItemText(rowNum, currentColumn++,
-                                  _(L"More than one value is required to calculate variance."));
+            dataGrid->SetItemText(
+                rowNum, currentColumn++,
+                // TRANSLATORS: "std. dev." is standard deviation.
+                _(L"More than one value is required to calculate std. dev."),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            dataGrid->SetItemText(
+                rowNum, currentColumn++,
+                _(L"More than one value is required to calculate variance."),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         else
             {
@@ -7812,7 +8161,11 @@ void BatchProjectDoc::SetScoreStatsRow(
         dataGrid->SetItemValue(rowNum, 1, 0);
         for (size_t i = 2; i <= CUMULATIVE_STATS_COUNT; ++i)
             {
-            dataGrid->SetItemText(rowNum, i, _(L"N/A"));
+            dataGrid->SetItemText(
+                rowNum, i, _(L"N/A"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
     }

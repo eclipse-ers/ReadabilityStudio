@@ -2304,8 +2304,16 @@ void BaseProject::LoadHardWords()
             };
         if (HasUI())
             {
-            GetUnusedDolchWordData()->SetItemText(wordCounter, 0, pos->get_word().c_str());
-            GetUnusedDolchWordData()->SetItemText(wordCounter, 1, classificationLabel);
+            GetUnusedDolchWordData()->SetItemText(
+                wordCounter, 0, pos->get_word().c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            GetUnusedDolchWordData()->SetItemText(
+                wordCounter, 1, classificationLabel,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
 
@@ -2371,7 +2379,11 @@ void BaseProject::LoadHardWords()
                 {
                 theWord[0] = std::towupper(theWord[0]);
                 }
-            GetProperNounsData()->SetItemText(uniqueProperNouns, 0, theWord);
+            GetProperNounsData()->SetItemText(
+                uniqueProperNouns, 0, theWord,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             // if proper occurrences are less than the total occurrences, then there must be
             // non-proper instances
             if (wordPos->second.first > wordPos->second.second)
@@ -2389,20 +2401,31 @@ void BaseProject::LoadHardWords()
                 {
                 GetProperNounsData()->SetItemValue(uniqueProperNouns, 1, wordPos->second.second);
                 }
-            GetProperNounsData()->SetItemText(uniqueProperNouns, 2,
-                                              wordPos->first.is_personal() ? _(L"Yes") : _(L"No"));
+            GetProperNounsData()->SetItemText(
+                uniqueProperNouns, 2, wordPos->first.is_personal() ? _(L"Yes") : _(L"No"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             ++uniqueProperNouns;
             }
         if (HasUI() && wordPos->first.is_contraction())
             {
-            GetContractionsData()->SetItemText(uniqueContractions, 0, wordPos->first.c_str());
+            GetContractionsData()->SetItemText(
+                uniqueContractions, 0, wordPos->first.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetContractionsData()->SetItemValue(uniqueContractions, 1, wordPos->second.first);
             ++uniqueContractions;
             }
         // all words
         if (HasUI())
             {
-            GetAllWordsBaseData()->SetItemText(i, 0, wordPos->first.c_str());
+            GetAllWordsBaseData()->SetItemText(
+                i, 0, wordPos->first.c_str(),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             GetAllWordsBaseData()->SetItemValue(i, 1, wordPos->second.first);
             /* if a numeric string then check to see if we are supposed to
                treat numerals as monosyllabic*/
@@ -2478,9 +2501,17 @@ void BaseProject::LoadHardWords()
                 };
             if (HasUI())
                 {
-                GetDolchWordData()->SetItemText(uniqueDolchWords, 0, wordPos->first.c_str());
+                GetDolchWordData()->SetItemText(
+                    uniqueDolchWords, 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 GetDolchWordData()->SetItemValue(uniqueDolchWords, 1, wordPos->second.first);
-                GetDolchWordData()->SetItemText(uniqueDolchWords, 2, classificationLabel);
+                GetDolchWordData()->SetItemText(
+                    uniqueDolchWords, 2, classificationLabel,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             ++uniqueDolchWords;
             }
@@ -2488,7 +2519,11 @@ void BaseProject::LoadHardWords()
             {
             if (HasUI())
                 {
-                GetNonDolchWordData()->SetItemText(nonUniqueDolchWords, 0, wordPos->first.c_str());
+                GetNonDolchWordData()->SetItemText(
+                    nonUniqueDolchWords, 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 GetNonDolchWordData()->SetItemValue(nonUniqueDolchWords, 1, wordPos->second.first);
                 }
             ++nonUniqueDolchWords;
@@ -2504,8 +2539,11 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    Get3SyllablePlusData()->SetItemText(GetTotalUnique3PlusSyllableWords(), 0,
-                                                        wordPos->first.c_str());
+                    Get3SyllablePlusData()->SetItemText(
+                        GetTotalUnique3PlusSyllableWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     Get3SyllablePlusData()->SetItemValue(GetTotalUnique3PlusSyllableWords(), 1,
                                                          wordPos->first.get_syllable_count());
                     Get3SyllablePlusData()->SetItemValue(GetTotalUnique3PlusSyllableWords(), 2,
@@ -2514,8 +2552,11 @@ void BaseProject::LoadHardWords()
                         difficult_word_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        Get3SyllablePlusData()->SetItemText(GetTotalUnique3PlusSyllableWords(), 3,
-                                                            replacement.second.c_str());
+                        Get3SyllablePlusData()->SetItemText(
+                            GetTotalUnique3PlusSyllableWords(), 3, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_unique3PlusSyllableWords;
@@ -2552,8 +2593,11 @@ void BaseProject::LoadHardWords()
             // only load the data for standard projects
             if (HasUI())
                 {
-                Get6CharacterPlusData()->SetItemText(GetTotalUnique6CharsPlusWords(), 0,
-                                                     wordPos->first.c_str());
+                Get6CharacterPlusData()->SetItemText(
+                    GetTotalUnique6CharsPlusWords(), 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 Get6CharacterPlusData()->SetItemValue(
                     GetTotalUnique6CharsPlusWords(), 1,
                     wordPos->first.get_length_excluding_punctuation());
@@ -2562,8 +2606,11 @@ void BaseProject::LoadHardWords()
                 auto replacement = difficult_word_replacement_list.find(wordPos->first.c_str());
                 if (replacement.first)
                     {
-                    Get6CharacterPlusData()->SetItemText(GetTotalUnique6CharsPlusWords(), 3,
-                                                         replacement.second.c_str());
+                    Get6CharacterPlusData()->SetItemText(
+                        GetTotalUnique6CharsPlusWords(), 3, replacement.second.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             ++m_unique6CharsPlusWords;
@@ -2587,7 +2634,10 @@ void BaseProject::LoadHardWords()
             if (HasUI())
                 {
                 GetHarrisJacobsonHardWordDataData()->SetItemText(
-                    GetTotalUniqueHarrisJacobsonHardWords(), 0, wordPos->first.c_str());
+                    GetTotalUniqueHarrisJacobsonHardWords(), 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 if (wordPos->second.first == nonProperCount)
                     {
                     GetHarrisJacobsonHardWordDataData()->SetItemValue(
@@ -2611,7 +2661,10 @@ void BaseProject::LoadHardWords()
                 if (replacement.first)
                     {
                     GetHarrisJacobsonHardWordDataData()->SetItemText(
-                        GetTotalUniqueHarrisJacobsonHardWords(), 2, replacement.second.c_str());
+                        GetTotalUniqueHarrisJacobsonHardWords(), 2, replacement.second.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             ++m_uniqueHarrisJacobsonHardWords;
@@ -2634,8 +2687,11 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     if (wordPos->second.first == nonProperCount)
                         {
                         GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
@@ -2658,8 +2714,11 @@ void BaseProject::LoadHardWords()
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -2671,15 +2730,21 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
                                                              wordPos->second.first);
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -2692,8 +2757,11 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
                         {
                         GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
@@ -2726,8 +2794,11 @@ void BaseProject::LoadHardWords()
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -2741,8 +2812,11 @@ void BaseProject::LoadHardWords()
             // only load the data for standard projects
             if (HasUI())
                 {
-                GetSpacheHardWordData()->SetItemText(GetTotalUniqueHardWordsSpache(), 0,
-                                                     wordPos->first.c_str());
+                GetSpacheHardWordData()->SetItemText(
+                    GetTotalUniqueHardWordsSpache(), 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 if (wordPos->second.first == nonProperCount)
                     {
                     GetSpacheHardWordData()->SetItemValue(GetTotalUniqueHardWordsSpache(), 1,
@@ -2765,8 +2839,11 @@ void BaseProject::LoadHardWords()
                 auto replacement = spache_replacement_list.find(wordPos->first.c_str());
                 if (replacement.first)
                     {
-                    GetSpacheHardWordData()->SetItemText(GetTotalUniqueHardWordsSpache(), 2,
-                                                         replacement.second.c_str());
+                    GetSpacheHardWordData()->SetItemText(
+                        GetTotalUniqueHardWordsSpache(), 2, replacement.second.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             ++m_uniqueSpacheHardWords;
@@ -2805,7 +2882,10 @@ void BaseProject::LoadHardWords()
                     if (HasUI())
                         {
                         customTest.GetListViewData()->SetItemText(
-                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         if (wordPos->second.first == nonProperCount)
                             {
                             customTest.GetListViewData()->SetItemValue(
@@ -2836,7 +2916,10 @@ void BaseProject::LoadHardWords()
                     if (HasUI())
                         {
                         customTest.GetListViewData()->SetItemText(
-                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         customTest.GetListViewData()->SetItemValue(
                             customTest.GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
                         }
@@ -2850,7 +2933,10 @@ void BaseProject::LoadHardWords()
                     if (HasUI())
                         {
                         customTest.GetListViewData()->SetItemText(
-                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str());
+                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
                             {
                             customTest.GetListViewData()->SetItemValue(
@@ -2937,7 +3023,11 @@ void BaseProject::LoadHardWords()
                 allValuesStr.Trim().RemoveLast();
                 assert(!allValuesStr.empty() && L"Empty word list from stemmed word?!");
 
-                GetKeyWordsBaseData()->SetItemText(uniqueImportWordsCount, 0, allValuesStr);
+                GetKeyWordsBaseData()->SetItemText(
+                    uniqueImportWordsCount, 0, allValuesStr,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 GetKeyWordsBaseData()->SetItemValue(uniqueImportWordsCount++, 1,
                                                     keyWordFreqInfo.second);
                 }
@@ -3065,7 +3155,10 @@ void BaseProject::LoadHardWords()
             if (HasUI())
                 {
                 GetHarrisJacobsonHardWordDataData()->SetItemText(
-                    GetTotalUniqueHarrisJacobsonHardWords(), 0, wordPos->first.c_str());
+                    GetTotalUniqueHarrisJacobsonHardWords(), 0, wordPos->first.c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 if (wordPos->second.first == nonProperCount)
                     {
                     GetHarrisJacobsonHardWordDataData()->SetItemValue(
@@ -3089,7 +3182,10 @@ void BaseProject::LoadHardWords()
                 if (replacement.first)
                     {
                     GetHarrisJacobsonHardWordDataData()->SetItemText(
-                        GetTotalUniqueHarrisJacobsonHardWords(), 2, replacement.second.c_str());
+                        GetTotalUniqueHarrisJacobsonHardWords(), 2, replacement.second.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             ++m_uniqueHarrisJacobsonHardWords;
@@ -3113,8 +3209,11 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     if (wordPos->second.first == nonProperCount)
                         {
                         GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
@@ -3137,8 +3236,11 @@ void BaseProject::LoadHardWords()
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -3150,15 +3252,21 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
                                                              wordPos->second.first);
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -3171,8 +3279,11 @@ void BaseProject::LoadHardWords()
                 // only load the data for standard projects
                 if (HasUI())
                     {
-                    GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 0,
-                                                            wordPos->first.c_str());
+                    GetDaleChallHardWordData()->SetItemText(
+                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
                         {
                         GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
@@ -3207,8 +3318,11 @@ void BaseProject::LoadHardWords()
                     auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
                     if (replacement.first)
                         {
-                        GetDaleChallHardWordData()->SetItemText(GetTotalUniqueDCHardWords(), 2,
-                                                                replacement.second.c_str());
+                        GetDaleChallHardWordData()->SetItemText(
+                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            Wisteria::NumberFormatInfo{
+                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                            std::numeric_limits<double>::quiet_NaN());
                         }
                     }
                 ++m_uniqueDCHardWords;
@@ -3254,7 +3368,11 @@ void BaseProject::LoadHardWords()
                             {
                             customTest.GetListViewData()->SetItemText(
                                 customTest.GetUniqueUnfamiliarWordCount(), 0,
-                                wordPos->first.c_str());
+                                wordPos->first.c_str(),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                std::numeric_limits<double>::quiet_NaN());
                             if (wordPos->second.first == nonProperCount)
                                 {
                                 customTest.GetListViewData()->SetItemValue(
@@ -3287,7 +3405,11 @@ void BaseProject::LoadHardWords()
                             {
                             customTest.GetListViewData()->SetItemText(
                                 customTest.GetUniqueUnfamiliarWordCount(), 0,
-                                wordPos->first.c_str());
+                                wordPos->first.c_str(),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                std::numeric_limits<double>::quiet_NaN());
                             customTest.GetListViewData()->SetItemValue(
                                 customTest.GetUniqueUnfamiliarWordCount(), 1,
                                 wordPos->second.first);
@@ -3303,7 +3425,11 @@ void BaseProject::LoadHardWords()
                             {
                             customTest.GetListViewData()->SetItemText(
                                 customTest.GetUniqueUnfamiliarWordCount(), 0,
-                                wordPos->first.c_str());
+                                wordPos->first.c_str(),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                std::numeric_limits<double>::quiet_NaN());
                             if (wordPos->second.first == nonProperCount ||
                                 wordPos->second.first == 1)
                                 {

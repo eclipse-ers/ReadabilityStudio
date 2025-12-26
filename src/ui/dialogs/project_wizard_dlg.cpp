@@ -454,7 +454,11 @@ void ProjectWizardDlg::CreateControls()
             else
                 {
                 m_fileData->SetSize(1, 2);
-                m_fileData->SetItemText(0, 0, GetFilePath());
+                m_fileData->SetItemText(
+                    0, 0, GetFilePath(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         else
@@ -1159,10 +1163,18 @@ void ProjectWizardDlg::LoadArchive(const wxString& archivePath /*= wxString{}*/)
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
-        m_fileData->SetItemText(currentFileCount + i, 0, dlg.GetPath() + L"#" + files[i]);
+        m_fileData->SetItemText(
+            currentFileCount + i, 0, dlg.GetPath() + L"#" + files[i],
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (!groupLabel.empty())
             {
-            m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
+            m_fileData->SetItemText(
+                currentFileCount + i, 1, groupLabel,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
 
@@ -1348,11 +1360,18 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
             for (auto cellPos = workSheet.second.begin(); cellPos != workSheet.second.end();
                  ++cellPos, ++cellCounter)
                 {
-                m_fileData->SetItemText(currentFileCount + cellCounter, 0,
-                                        fullPath + cellPos->c_str());
+                m_fileData->SetItemText(
+                    currentFileCount + cellCounter, 0, fullPath + cellPos->c_str(),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 if (!groupLabel.empty())
                     {
-                    m_fileData->SetItemText(currentFileCount + cellCounter, 1, groupLabel);
+                    m_fileData->SetItemText(
+                        currentFileCount + cellCounter, 1, groupLabel,
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             }
@@ -1704,10 +1723,18 @@ void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent& 
 
         const size_t currentFileCount = m_fileData->GetItemCount();
         m_fileData->SetSize(currentFileCount + 1, 2);
-        m_fileData->SetItemText(currentFileCount, 0, resolver.GetResolvedPath());
+        m_fileData->SetItemText(
+            currentFileCount, 0, resolver.GetResolvedPath(),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (!groupLabel.empty())
             {
-            m_fileData->SetItemText(currentFileCount, 1, groupLabel);
+            m_fileData->SetItemText(
+                currentFileCount, 1, groupLabel,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
         m_fileList->SetColumnWidth(0, m_fileList->GetClientSize().GetWidth() * .75);
@@ -1778,11 +1805,19 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
                 currentFileCount + wxGetApp().GetWebHarvester().GetDownloadedFilePaths().size(), 2);
             for (const auto& path : wxGetApp().GetWebHarvester().GetDownloadedFilePaths())
                 {
-                m_fileData->SetItemText(currentFileCount + i, 0, path);
+                m_fileData->SetItemText(
+                    currentFileCount + i, 0, path,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 files.push_back(path);
                 if (!groupLabel.empty())
                     {
-                    m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
+                    m_fileData->SetItemText(
+                        currentFileCount + i, 1, groupLabel,
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 // if they chose to use the documents' descriptions as the labels,
                 // then those are loaded on import
@@ -1795,11 +1830,19 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
                 currentFileCount + wxGetApp().GetWebHarvester().GetHarvestedLinks().size(), 2);
             for (const auto& path : wxGetApp().GetWebHarvester().GetHarvestedLinks())
                 {
-                m_fileData->SetItemText(currentFileCount + i, 0, path);
+                m_fileData->SetItemText(
+                    currentFileCount + i, 0, path,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 files.push_back(path);
                 if (!groupLabel.empty())
                     {
-                    m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
+                    m_fileData->SetItemText(
+                        currentFileCount + i, 1, groupLabel,
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 ++i;
                 }
@@ -1884,10 +1927,18 @@ void ProjectWizardDlg::OnAddFolderButtonClick([[maybe_unused]] wxCommandEvent& e
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
-        m_fileData->SetItemText(currentFileCount + i, 0, files.Item(i));
+        m_fileData->SetItemText(
+            currentFileCount + i, 0, files.Item(i),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (!groupLabel.empty())
             {
-            m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
+            m_fileData->SetItemText(
+                currentFileCount + i, 1, groupLabel,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // if they chose to use the documents' descriptions as the labels,
         // then those are loaded on import later
@@ -1920,16 +1971,32 @@ void ProjectWizardDlg::LoadGroupFromLastCommonFolder(const size_t currentFileCou
             // is a longer path
             if (!commonFolder.first.empty() && lastMatch.second <= commonFolder.second)
                 {
-                m_fileData->SetItemText(currentFileCount + i, 1, commonFolder.first);
-                m_fileData->SetItemText(currentFileCount + i + 1, 1, commonFolder.first);
+                m_fileData->SetItemText(
+                    currentFileCount + i, 1, commonFolder.first,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_fileData->SetItemText(
+                    currentFileCount + i + 1, 1, commonFolder.first,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             continue;
             }
         commonFolder = GetCommonFolder(files[i], files[i + 1]);
         if (!commonFolder.first.empty())
             {
-            m_fileData->SetItemText(currentFileCount + i, 1, commonFolder.first);
-            m_fileData->SetItemText(currentFileCount + i + 1, 1, commonFolder.first);
+            m_fileData->SetItemText(
+                currentFileCount + i, 1, commonFolder.first,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
+            m_fileData->SetItemText(
+                currentFileCount + i + 1, 1, commonFolder.first,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
     }
@@ -1995,10 +2062,18 @@ void ProjectWizardDlg::OnAddFileButtonClick([[maybe_unused]] wxCommandEvent& eve
     m_fileData->SetSize(currentFileCount + files.GetCount(), 2);
     for (size_t i = 0; i < files.GetCount(); ++i)
         {
-        m_fileData->SetItemText(currentFileCount + i, 0, files.Item(i));
+        m_fileData->SetItemText(
+            currentFileCount + i, 0, files.Item(i),
+            Wisteria::NumberFormatInfo{
+                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+            std::numeric_limits<double>::quiet_NaN());
         if (!groupLabel.empty())
             {
-            m_fileData->SetItemText(currentFileCount + i, 1, groupLabel);
+            m_fileData->SetItemText(
+                currentFileCount + i, 1, groupLabel,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // if they chose to use the documents' descriptions as the labels,
         // then those are loaded on import
