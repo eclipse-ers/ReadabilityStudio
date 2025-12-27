@@ -60,6 +60,7 @@
 #include <functional>
 #include <set>
 #include <stdexcept>
+#include <string_view>
 #include <vector>
 
 namespace readability

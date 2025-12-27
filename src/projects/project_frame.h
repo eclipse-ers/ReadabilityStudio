@@ -81,10 +81,12 @@ class ProjectDocChildFrame : public wxDocChildFrame
     ProjectDocChildFrame(const ProjectDocChildFrame&) = delete;
     ProjectDocChildFrame& operator=(const ProjectDocChildFrame&) = delete;
 
-    ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFrame* parent, wxWindowID id,
-                         const wxString& title, const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE,
-                         const wxString& name = wxASCII_STR(wxFrameNameStr));
+    ProjectDocChildFrame(
+        wxDocument* doc, wxView* view, wxFrame* parent, wxWindowID id, const wxString& title,
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+        long style = wxDEFAULT_FRAME_STYLE,
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay,hicpp-no-array-decay)
+        const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     void OnCustomTest(wxCommandEvent& event);
 

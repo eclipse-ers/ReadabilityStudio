@@ -200,15 +200,9 @@ namespace readability
                                         documentChildrenSelected);
             }
 
-        test_with_classification(const test_with_classification& that) noexcept
-            {
-            copy_classifications(that);
-            }
+        test_with_classification(const test_with_classification&) noexcept = default;
 
-        void operator=(const test_with_classification& that) noexcept
-            {
-            copy_classifications(that);
-            }
+        test_with_classification& operator=(const test_with_classification&) noexcept = default;
 
         /// Manual assignment. Derived classed are advised to directly call this
         /// in its own assignment operations.
@@ -354,29 +348,9 @@ namespace readability
             m_interfaceId = interface_id;
             }
 
-        /// Copy CTOR.
-        readability_test(const readability_test& that)
-            : test_with_classification(that), m_id(that.m_id), m_short_name(that.m_short_name),
-              m_long_name(that.m_long_name), m_description(that.m_description),
-              m_formula(that.m_formula), m_readability_test_type(that.m_readability_test_type),
-              m_is_integral(that.m_is_integral)
-            {
-            m_interfaceId = that.m_interfaceId;
-            copy_classifications(that);
-            }
+        readability_test(const readability_test&) = default;
 
-        void operator=(const readability_test& that)
-            {
-            copy_classifications(that);
-            m_id = that.m_id;
-            m_interfaceId = that.m_interfaceId;
-            m_short_name = that.m_short_name;
-            m_long_name = that.m_long_name;
-            m_description = that.m_description;
-            m_formula = that.m_formula;
-            m_readability_test_type = that.m_readability_test_type;
-            m_is_integral = that.m_is_integral;
-            }
+        readability_test& operator=(const readability_test& that) = default;
 
         [[nodiscard]]
         bool operator<(const readability_test& that) const noexcept

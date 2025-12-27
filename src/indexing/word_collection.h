@@ -282,7 +282,7 @@ class document
         if (m_current_sentence_begin < m_words.size())
             {
             m_sentences.push_back(grammar::sentence_info(
-                m_current_sentence_begin, (m_words.size() > 0) ? (m_words.size() - 1) : (0),
+                m_current_sentence_begin, !m_words.empty() ? (m_words.size() - 1) : (0),
                 sentence_ending_punctuation));
 
             m_paragraphs.emplace_back(
@@ -2766,7 +2766,7 @@ class document
     void update_citation_info()
         {
         PROFILE();
-        const size_t citationBlockStopPoint =
+        const auto citationBlockStopPoint =
             safe_divide<size_t>(m_words.size(), is_exclusion_aggressive() ? 4 : 2);
         // first, move to the last valid paragraph as our starting point. This will help us skip
         // trailing copyright notices or footers.

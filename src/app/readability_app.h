@@ -324,6 +324,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 class ReadabilityApp final : public Wisteria::UI::BaseApp
     {
   public:
+    // NOLINTNEXTLINE(cert-msc32-c,cert-msc51-cpp) RNG is initialized later correctly
     ReadabilityApp() { SetClassName(_READSTUDIO_APP_RDNS_IDENTIFIER); }
 
     ReadabilityApp(const ReadabilityApp&) = delete;

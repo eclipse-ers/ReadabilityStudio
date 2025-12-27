@@ -911,9 +911,11 @@ namespace grammar
               m_size((end_index - begin_index) + 1), m_valid_size((end_index - begin_index) + 1),
               m_ending_punctuation(ending_punctuation)
             {
+            // NOLINTBEGIN(cppcoreguidelines-prefer-member-initializer)
             m_is_valid = ends_with_valid_punctuation();
             m_sentence_type = m_is_valid ? sentence_paragraph_type::complete :
                                            sentence_paragraph_type::incomplete;
+            // NOLINTEND(cppcoreguidelines-prefer-member-initializer)
             }
 
         sentence_info() = delete;
