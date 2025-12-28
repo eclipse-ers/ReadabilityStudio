@@ -214,14 +214,14 @@ namespace readability
                     auto compValue = tkzr.get_next_token();
                     // if at least one chunk of text around a '-' is real,
                     // then set this flag to true
-                    if (compValue.length() > 0)
+                    if (!compValue.empty())
                         {
                         validTokenFound = true;
                         }
                     StemText(compValue);
                     // in case we have something like "one-", then the fact that there
                     // is no second word after the '-' shouldn't make it unfamiliar
-                    if (compValue.length() > 0 &&
+                    if (!compValue.empty() &&
                         !std::binary_search(m_wordlist->get_words().cbegin(),
                                             m_wordlist->get_words().cend(), compValue))
                         {

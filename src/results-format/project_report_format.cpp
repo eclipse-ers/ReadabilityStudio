@@ -193,7 +193,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     const bool includeExplanation, const wxColour& attentionColor,
     const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData)
     {
-    assert(project);
+    wxASSERT(project);
     if (project == nullptr)
         {
         return {};
@@ -202,7 +202,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
         {
         return {};
         }
-    size_t listDataItemCount = 0;
+    size_t listDataItemCount{ 0 };
     if (listData)
         {
         listDataItemCount = listData->GetItemCount();

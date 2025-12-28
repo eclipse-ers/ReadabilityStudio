@@ -671,8 +671,8 @@ class word_length_greater_equals
 
     word_length_greater_equals() = delete;
 
-    /** @returns @c true if a word is valid and its length is greater than or equals our specified
-       number.
+    /** @brief Return whether a word is valid and its length is greater than or equals
+            our specified number.
         @param the_word The word to review.
         @returns @c true if current word's length is greater than or equal to the seeded length.*/
     [[nodiscard]]
@@ -1082,9 +1082,9 @@ class is_correctly_spelled_word
             (is_allowing_colloquialisms() && is_colloquialisms(the_word)) ||
             // if initials (or dotted acronym) then always consider it spelled properly
             ((the_word.is_exclamatory() || the_word.is_acronym()) &&
-             ((the_word.length() == 2 && the_word.operator[](1) == common_lang_constants::PERIOD) ||
-              (the_word.length() >= 4 && the_word.operator[](1) == common_lang_constants::PERIOD &&
-               the_word.operator[](3) == common_lang_constants::PERIOD))))
+             ((the_word.length() == 2 && the_word[1] == common_lang_constants::PERIOD) ||
+              (the_word.length() >= 4 && the_word[1] == common_lang_constants::PERIOD &&
+               the_word[3] == common_lang_constants::PERIOD))))
             {
             return true;
             }
@@ -1256,30 +1256,28 @@ class is_correctly_spelled_word
         // [letter/number][:.][letter], [letter]-[UCASE][UCASE] pattern in it.
         for (size_t i = 0; i < the_word.length() - 1; ++i)
             {
-            if (characters::is_character::is_lower(the_word.operator[](i)) &&
-                characters::is_character::is_upper(the_word.operator[](i + 1)))
+            if (characters::is_character::is_lower(the_word[i]) &&
+                characters::is_character::is_upper(the_word[i + 1]))
                 {
                 return true;
                 }
-            if (characters::is_character::is_alpha(the_word.operator[](i)) &&
-                string_util::is_numeric_8bit(the_word.operator[](i + 1)))
+            if (characters::is_character::is_alpha(the_word[i]) &&
+                string_util::is_numeric_8bit(the_word[i + 1]))
                 {
                 return true;
                 }
             if (the_word.length() >= 3 && i < the_word.length() - 2 &&
-                (characters::is_character::is_alpha(the_word.operator[](i)) ||
-                 characters::is_character::is_numeric(the_word.operator[](i))) &&
-                characters::is_character::is_either<wchar_t>(the_word.operator[](i + 1), L'.',
-                                                             L':') &&
-                characters::is_character::is_alpha(the_word.operator[](i + 2)))
+                (characters::is_character::is_alpha(the_word[i]) ||
+                 characters::is_character::is_numeric(the_word[i])) &&
+                characters::is_character::is_either<wchar_t>(the_word[i + 1], L'.', L':') &&
+                characters::is_character::is_alpha(the_word[i + 2]))
                 {
                 return true;
                 }
             if (the_word.length() >= 4 && i < the_word.length() - 3 &&
-                characters::is_character::is_alpha(the_word.operator[](i)) &&
-                the_word.operator[](i + 1) == L'-' &&
-                characters::is_character::is_upper(the_word.operator[](i + 2)) &&
-                characters::is_character::is_upper(the_word.operator[](i + 3)))
+                characters::is_character::is_alpha(the_word[i]) && the_word[i + 1] == L'-' &&
+                characters::is_character::is_upper(the_word[i + 2]) &&
+                characters::is_character::is_upper(the_word[i + 3]))
                 {
                 return true;
                 }
@@ -1319,7 +1317,7 @@ class is_correctly_spelled_word
     [[nodiscard]]
     bool is_on_list(const T& the_word) const
         {
-        if (m_wordlist == nullptr || m_secondary_wordlist == nullptr || the_word.length() == 0)
+        if (m_wordlist == nullptr || m_secondary_wordlist == nullptr || the_word.empty())
             {
             return false;
             } // no list or word is blank, then don't bother looking
@@ -1336,16 +1334,20 @@ class is_correctly_spelled_word
 
         // see if the word is a hyphenated (or slashed) compound word
         string_util::string_tokenize<T> tkzr(
-            the_word, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(), true);
+            the_word,
+            std::basic_string_view<wchar_t, typename T::traits_type>{
+                common_lang_constants::COMPOUND_WORD_SEPARATORS.data(),
+                common_lang_constants::COMPOUND_WORD_SEPARATORS.size() },
+            true);
         if (tkzr.has_delimiters()) // don't bother splitting word into tokens if no delimiters
             {
             // makes sure that there is at least one valid block of text in the string
-            bool validTokenFound = false;
+            bool validTokenFound{ false };
             while (tkzr.has_more_tokens())
                 {
                 compValue = tkzr.get_next_token().c_str();
                 // if at least one chunk of text around a '-' is real, then set this flag to true
-                if (compValue.length() > 0)
+                if (!compValue.empty())
                     {
                     validTokenFound = true;
                     }
@@ -1362,7 +1364,7 @@ class is_correctly_spelled_word
                     }
                 // in case we have something like "one-", then the fact that there is no second word
                 // after the '-' shouldn't make it unfamiliar
-                if (compValue.length() > 0 &&
+                if (!compValue.empty() &&
                     !std::binary_search(m_wordlist->get_words().begin(),
                                         m_wordlist->get_words().end(), compValue) &&
                     !std::binary_search(m_secondary_wordlist->get_words().begin(),

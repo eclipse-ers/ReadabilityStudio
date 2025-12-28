@@ -580,13 +580,13 @@ namespace readability
                 currentToken = tkzr.get_next_token();
                 // if at least one chunk of text around a '-' is real,
                 // then set this flag to true
-                if (currentToken.length() > 0)
+                if (!currentToken.empty())
                     {
                     validTokenFound = true;
                     }
                 // in case we have something like "one-", then the fact that there is
                 // no second word after the '-' shouldn't make it unfamiliar
-                if (currentToken.length() > 0)
+                if (!currentToken.empty())
                     {
                     // if any token is an unfamiliar word, then fail immediately
                     if (is_familiar_words_must_be_on_each_included_list() &&
