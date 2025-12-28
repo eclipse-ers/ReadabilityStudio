@@ -317,19 +317,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of conjunctions used"));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of conjunctions used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount, 1,
                     wxNumberFormatter::ToString(
                         MAX_DOLCH_CONJUNCTION_WORDS - project->GetUnusedDolchConjunctions(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch conjunctions"),
                                      wxNumberFormatter::ToString(
                                          dolchConjunctionPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Prepositions
@@ -365,19 +375,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of prepositions used"));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of prepositions used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount, 1,
                     wxNumberFormatter::ToString(
                         MAX_DOLCH_PREPOSITION_WORDS - project->GetUnusedDolchPrepositions(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch prepositions"),
                                      wxNumberFormatter::ToString(
                                          dolchPrepositionsPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Pronouns
@@ -413,19 +433,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of pronouns used"));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of pronouns used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount, 1,
                     wxNumberFormatter::ToString(
                         MAX_DOLCH_PRONOUN_WORDS - project->GetUnusedDolchPronouns(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch pronouns"),
                                      wxNumberFormatter::ToString(
                                          dolchPronounsPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Adverbs
@@ -461,19 +491,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of adverbs used"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          MAX_DOLCH_ADVERB_WORDS - project->GetUnusedDolchAdverbs(),
-                                          0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of adverbs used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        MAX_DOLCH_ADVERB_WORDS - project->GetUnusedDolchAdverbs(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch adverbs"),
                                      wxNumberFormatter::ToString(
                                          dolchAdverbsPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Adjectives
@@ -509,19 +549,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of adjectives used"));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of adjectives used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount, 1,
                     wxNumberFormatter::ToString(
                         MAX_DOLCH_ADJECTIVE_WORDS - project->GetUnusedDolchAdjectives(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch adjectives"),
                                      wxNumberFormatter::ToString(
                                          dolchAdjectivesPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Verbs
@@ -557,18 +607,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of verbs used"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          MAX_DOLCH_VERBS - project->GetUnusedDolchVerbs(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of verbs used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        MAX_DOLCH_VERBS - project->GetUnusedDolchVerbs(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch verbs"),
                                      wxNumberFormatter::ToString(
                                          dolchVerbsPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Nouns
@@ -604,18 +665,29 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of nouns used"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          MAX_DOLCH_NOUNS - project->GetUnusedDolchNouns(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of nouns used"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        MAX_DOLCH_NOUNS - project->GetUnusedDolchNouns(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all Dolch nouns"),
                                      wxNumberFormatter::ToString(
                                          dolchNounPercentage, 1,
-                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)));
+                                         wxNumberFormatter::Style::Style_NoTrailingZeroes)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         htmlText += L"\n</table>";
@@ -711,19 +783,30 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch words"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          totalDolchWords, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        totalDolchWords, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
                                      wxNumberFormatter::ToString(
                                          totalDolchPercentage, 1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -762,13 +845,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of Dolch words (excluding nouns)"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          totalDolchWordsExcludingNouns, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch words (excluding nouns)"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        totalDolchWordsExcludingNouns, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     // TRANSLATORS: "%s%%" is a formatted number and % symbol.
@@ -777,7 +867,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                      wxNumberFormatter::ToString(
                                          totalDolchExcludingNounsPercentage, 1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -815,19 +908,30 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of non-Dolch words"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalWords() - totalDolchWords, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of non-Dolch words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalWords() - totalDolchWords, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
                                      wxNumberFormatter::ToString(
                                          100 - totalDolchPercentage, 1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -851,12 +955,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch conjunctions"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchConjunctionCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch conjunctions"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchConjunctionCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -867,7 +979,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -878,13 +993,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Dolch conjunctions"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchConjunctionCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch conjunctions"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchConjunctionCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Prepositions words
@@ -906,12 +1028,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                        _(L"Number of Dolch prepositions:"), valueStr, percentStr);
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch prepositions"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchPrepositionWordCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch prepositions"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchPrepositionWordCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -922,7 +1052,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -933,13 +1066,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Dolch prepositions"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchPrepositionWordCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch prepositions"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchPrepositionWordCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Pronouns
@@ -962,12 +1102,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch pronouns"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchPronounCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch pronouns"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchPronounCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -978,7 +1126,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -989,12 +1140,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique Dolch pronouns"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchPronounCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch pronouns"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchPronounCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // Adverbs
@@ -1017,12 +1176,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch adverbs"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchAdverbCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch adverbs"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchAdverbCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -1032,7 +1199,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -1043,12 +1213,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique Dolch adverbs"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchAdverbCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch adverbs"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchAdverbCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // adjectives
@@ -1071,12 +1249,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch adjectives"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchAdjectiveCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch adjectives"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchAdjectiveCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -1087,7 +1273,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -1098,13 +1287,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Dolch adjectives"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchAdjectiveCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch adjectives"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchAdjectiveCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // verbs
@@ -1127,12 +1323,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch verbs"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchVerbsCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch verbs"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchVerbsCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -1142,7 +1346,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -1153,12 +1360,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique Dolch verbs"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchVerbsCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch verbs"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchVerbsCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
             // nouns
@@ -1180,12 +1395,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                        _(L"Number of Dolch nouns:"), valueStr, percentStr);
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of Dolch nouns"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchNounCounts().second, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dolch nouns"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchNounCounts().second, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -1195,7 +1418,10 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             htmlText += FormatDolchRow(
@@ -1206,12 +1432,20 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
                 L"");
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique Dolch nouns"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDolchNounCounts().first, 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dolch nouns"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDolchNounCounts().first, 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         htmlText += L"\n</table>";
@@ -1389,12 +1623,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of paragraphs"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of paragraphs"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalParagraphs(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // average paragraph length
@@ -1408,15 +1649,21 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0,
-                                  _(L"Average number of sentences per paragraph"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Average number of sentences per paragraph"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(safe_divide<double>(project->GetTotalSentences(),
                                                                 project->GetTotalParagraphs()),
                                             1,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         }
 
@@ -1448,13 +1695,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
         if (listData)
             {
             currentLabel = _(L"Number of sentences");
-            listData->SetItemText(listDataItemCount, 0,
-                                  htmlStrip(currentLabel, currentLabel.length(), true, false));
+            listData->SetItemText(
+                listDataItemCount, 0, htmlStrip(currentLabel, currentLabel.length(), true, false),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalSentences(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // Number of sentence units
@@ -1486,13 +1739,21 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             if (listData)
                 {
                 currentLabel = _(L"Number of units/independent clauses");
-                listData->SetItemText(listDataItemCount, 0,
-                                      htmlStrip(currentLabel, currentLabel.length(), true, false));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalSentenceUnits(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0,
+                    htmlStrip(currentLabel, currentLabel.length(), true, false),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalSentenceUnits(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -1544,19 +1805,29 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 {
                 sentLabelForTable.RemoveLast(1);
                 }
-            listData->SetItemText(listDataItemCount, 0, sentLabelForTable);
+            listData->SetItemText(
+                listDataItemCount, 0, sentLabelForTable,
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalOverlyLongSentences(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all sentences"),
                                  wxNumberFormatter::ToString(
                                      overlyLongSentencePercentage, 1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // Longest sentence
@@ -1584,12 +1855,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Longest sentence"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetLongestSentence(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Longest sentence"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetLongestSentence(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         else
@@ -1618,13 +1897,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Average sentence length"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Average sentence length"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(
                     safe_divide<double>(project->GetTotalWords(), project->GetTotalSentences()), 1,
                     wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                        wxNumberFormatter::Style::Style_WithThousandsSep));
+                        wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // Number of interrogative sentences
         const double interrogativeSentencePercentage =
@@ -1646,20 +1932,29 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0,
-                                  _(L"Number of interrogative sentences (questions)"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of interrogative sentences (questions)"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalInterrogativeSentences(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all sentences"),
                                  wxNumberFormatter::ToString(
                                      interrogativeSentencePercentage, 1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // exclamatory sentences
@@ -1693,19 +1988,29 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of exclamatory sentences"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of exclamatory sentences"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalExclamatorySentences(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all sentences"),
                                  wxNumberFormatter::ToString(
                                      exclamatorySentencePercentage, 1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // add any necessary notes
         if (overlyLongSentencePercentage >= 40)
@@ -1741,12 +2046,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // Number of unique words
         htmlText += formatRow(
@@ -1757,12 +2069,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of unique words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of unique words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalUniqueWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // Number of total syllables
         htmlText += formatRow(
@@ -1773,12 +2092,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of syllables"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of syllables"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalSyllables(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // Number of total characters
         htmlText += formatRow(
@@ -1789,13 +2115,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0,
-                                  _(L"Number of characters (punctuation excluded)"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of characters (punctuation excluded)"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalCharacters(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         htmlText += formatRow(
             _(L"Number of characters + punctuation:"),
@@ -1812,12 +2144,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of characters + punctuation"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of characters + punctuation"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalCharactersPlusPunctuation(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // average number of characters
         currentValue =
@@ -1835,12 +2174,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Average number of characters"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Average number of characters"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(averageCharacterCount, 1,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // average number of syllables
         currentValue =
@@ -1859,12 +2205,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Average number of syllables"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Average number of syllables"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(averageSyllableCount, 1,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // supplementary info about these stats
         if ((project->GetTotalWords() < 300) || (averageCharacterCount >= 6) ||
@@ -1915,12 +2268,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of numerals"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of numerals"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalNumerals(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(
@@ -1930,7 +2290,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                             100,
                         1,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep)));
+                            wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // Proper nouns (not supported by German)
@@ -1954,12 +2317,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of proper nouns"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalProperNouns(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of proper nouns"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalProperNouns(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -1969,7 +2340,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -1992,12 +2366,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of monosyllabic words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of monosyllabic words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalMonoSyllabicWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all words"),
@@ -2007,7 +2388,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                          100,
                                      1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // unique monosyllabic words
@@ -2020,12 +2404,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of unique monosyllabic words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of unique monosyllabic words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalUniqueMonoSyllabicWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // 3+ syllable
@@ -2054,13 +2445,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0,
-                                  _(L"Number of complex (3+ syllable) words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of complex (3+ syllable) words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotal3PlusSyllabicWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all words"),
@@ -2070,7 +2467,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                          100,
                                      1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // unique 3+ syllable words
         htmlText += formatRow(_(L"Number of unique 3+ syllable words:"),
@@ -2082,12 +2482,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of unique 3+ syllable words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of unique 3+ syllable words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalUnique3PlusSyllableWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         // long words (6 characters or more)
@@ -2116,12 +2523,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of long (6+ characters) words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of long (6+ characters) words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount, 1,
                 wxNumberFormatter::ToString(project->GetTotalLongWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 2,
                 wxString::Format(_(L"%s%% of all words"),
@@ -2131,7 +2545,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                          100,
                                      1,
                                      wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                         wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                         wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
         // unique long words
         htmlText += formatRow(_(L"Number of unique long words:"),
@@ -2142,12 +2559,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                     L"\n</table>";
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Number of unique long words"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Number of unique long words"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxNumberFormatter::ToString(project->GetTotalUnique6CharsPlusWords(), 0,
                                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             }
 
         if (project->IsSmogLikeTestIncluded())
@@ -2175,13 +2599,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 {
                 listData->SetItemText(
                     listDataItemCount, 0,
-                    _(L"Number of SMOG hard words (3+ syllables, numerals fully syllabized)"));
+                    _(L"Number of SMOG hard words (3+ syllables, numerals fully syllabized)"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount, 1,
                     wxNumberFormatter::ToString(
                         project->GetTotal3PlusSyllabicWordsNumeralsFullySyllabized(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -2193,7 +2623,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             // unique SMOG words
             htmlText +=
@@ -2205,13 +2638,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique SMOG hard words"));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique SMOG hard words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 1,
                     wxNumberFormatter::ToString(
                         project->GetUnique3PlusSyllabicWordsNumeralsFullySyllabized(), 0,
                         wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         if (project->GetReadabilityTests().is_test_included(ReadabilityMessages::GUNNING_FOG()))
@@ -2241,12 +2681,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 {
                 listData->SetItemText(
                     listDataItemCount, 0,
-                    _(L"Number of Fog hard words (3+ syllables, with exceptions)"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalHardWordsFog(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                    _(L"Number of Fog hard words (3+ syllables, with exceptions)"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalHardWordsFog(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -2256,7 +2703,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             // unique fog words
             htmlText += formatRow(_(L"Number of unique Fog hard words:"),
@@ -2268,12 +2718,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             if (listData)
                 {
                 // TRANSLATORS: "Fog" is a test name; don't translate it.
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of unique Fog hard words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalUniqueHardFogWords(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Fog hard words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalUniqueHardFogWords(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -2330,13 +2788,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of Dale-Chall unfamiliar words"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalHardWordsDaleChall(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Dale-Chall unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalHardWordsDaleChall(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -2346,7 +2811,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             // unique Dale Chall hard words
             htmlText += formatRow(_(L"Number of unique Dale-Chall unfamiliar words:"),
@@ -2357,13 +2825,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                         L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Dale-Chall unfamiliar words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalUniqueDCHardWords(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Dale-Chall unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalUniqueDCHardWords(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             if (project->GetDaleChallTextExclusionMode() ==
@@ -2426,13 +2901,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of Harris-Jacobson unfamiliar words"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalHardWordsHarrisJacobson(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Harris-Jacobson unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalHardWordsHarrisJacobson(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(
@@ -2443,7 +2925,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                 100,
                             1,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             // unique Harris-Jacobson hard words
@@ -2455,13 +2940,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                         L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Harris-Jacobson unfamiliar words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalUniqueHarrisJacobsonHardWords(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Harris-Jacobson unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalUniqueHarrisJacobsonHardWords(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             if (project->GetHarrisJacobsonTextExclusionMode() ==
@@ -2506,13 +2998,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of Spache unfamiliar words"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalHardWordsSpache(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of Spache unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalHardWordsSpache(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -2522,7 +3021,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             // unique Spache hard words
@@ -2534,13 +3036,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                         L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique Spache unfamiliar words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalUniqueHardWordsSpache(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique Spache unfamiliar words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalUniqueHardWordsSpache(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         if (project->GetReadabilityTests().is_test_included(ReadabilityMessages::EFLAW()))
@@ -2565,12 +3074,19 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 {
                 listData->SetItemText(
                     listDataItemCount, 0,
-                    _(L"Number of McAlpine EFLAW miniwords (1-3 characters, except for numerals)"));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalMiniWords(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                    _(L"Number of McAlpine EFLAW miniwords (1-3 characters, except for numerals)"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalMiniWords(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -2580,7 +3096,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             // unique EFLAW miniwords words
@@ -2592,13 +3111,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                         L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of unique McAlpine EFLAW miniwords words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetTotalUniqueMiniWords(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of unique McAlpine EFLAW miniwords words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetTotalUniqueMiniWords(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -2638,14 +3164,22 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      wxString::Format(_(L"Number of %s unfamiliar words"),
-                                                       pos->GetIterator()->get_name().c_str()));
-                listData->SetItemText(listDataItemCount, 1,
-                                      wxNumberFormatter::ToString(
-                                          pos->GetUnfamiliarWordCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0,
+                    wxString::Format(_(L"Number of %s unfamiliar words"),
+                                     pos->GetIterator()->get_name().c_str()),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount, 1,
+                    wxNumberFormatter::ToString(
+                        pos->GetUnfamiliarWordCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 listData->SetItemText(
                     listDataItemCount++, 2,
                     wxString::Format(_(L"%s%% of all words"),
@@ -2655,7 +3189,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                              100,
                                          1,
                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                             wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                             wxNumberFormatter::Style::Style_WithThousandsSep)),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
 
             // unique unfamiliar words
@@ -2668,14 +3205,22 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 L"\n</table>";
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      wxString::Format(_(L"Number of unique %s unfamiliar words"),
-                                                       pos->GetIterator()->get_name().c_str()));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          pos->GetUniqueUnfamiliarWordCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0,
+                    wxString::Format(_(L"Number of unique %s unfamiliar words"),
+                                     pos->GetIterator()->get_name().c_str()),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        pos->GetUniqueUnfamiliarWordCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         }
@@ -2706,12 +3251,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of possible misspellings"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetMisspelledWordCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of possible misspellings"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetMisspelledWordCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         // repeated words
@@ -2735,12 +3288,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Number of repeated words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetDuplicateWordCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of repeated words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetDuplicateWordCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         /// @todo Need to add these grammar features to other languages too
@@ -2767,13 +3328,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0, _(L"Number of article mismatches"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of article mismatches"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetMismatchedArticleCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // Wording Errors & Known Misspellings
@@ -2797,14 +3365,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0,
-                                          _(L"Number of wording errors & misspellings"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of wording errors & misspellings"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetWordingErrorCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // redundant phrase count
@@ -2828,13 +3402,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0, _(L"Number of redundant phrases"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of redundant phrases"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetRedundantPhraseCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // overused words (by sentence)
@@ -2858,14 +3439,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0,
-                                          _(L"Number of overused words (x sentence)"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of overused words (x sentence)"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetOverusedWordsBySentenceCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // wordiness
@@ -2889,13 +3476,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0, _(L"Number of wordy items"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of wordy items"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetWordyPhraseCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // cliches
@@ -2919,13 +3513,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0, _(L"Number of clich\u00E9s"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of clich\u00E9s"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetClicheCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             // passive voice
@@ -2949,13 +3550,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
                 if (listData)
                     {
-                    listData->SetItemText(listDataItemCount, 0, _(L"Number of passive voices"));
+                    listData->SetItemText(
+                        listDataItemCount, 0, _(L"Number of passive voices"),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     listData->SetItemText(
                         listDataItemCount++, 1,
                         wxNumberFormatter::ToString(
                             project->GetPassiveVoicesCount(), 0,
                             wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                wxNumberFormatter::Style::Style_WithThousandsSep));
+                                wxNumberFormatter::Style::Style_WithThousandsSep),
+                        Wisteria::NumberFormatInfo{
+                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                        std::numeric_limits<double>::quiet_NaN());
                     }
                 }
             }
@@ -2980,13 +3588,20 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of sentences that begin with conjunctions"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetSentenceStartingWithConjunctionsCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Number of sentences that begin with conjunctions"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetSentenceStartingWithConjunctionsCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         // lowercased sentences
@@ -3014,13 +3629,21 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
             if (listData)
                 {
-                listData->SetItemText(listDataItemCount, 0,
-                                      _(L"Number of Sentences that begin with lowercased words"));
-                listData->SetItemText(listDataItemCount++, 1,
-                                      wxNumberFormatter::ToString(
-                                          project->GetSentenceStartingWithLowercaseCount(), 0,
-                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                              wxNumberFormatter::Style::Style_WithThousandsSep));
+                listData->SetItemText(
+                    listDataItemCount, 0,
+                    _(L"Number of Sentences that begin with lowercased words"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1,
+                    wxNumberFormatter::ToString(
+                        project->GetSentenceStartingWithLowercaseCount(), 0,
+                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                            wxNumberFormatter::Style::Style_WithThousandsSep),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
 
@@ -3105,19 +3728,34 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
         if (listData)
             {
-            listData->SetItemText(listDataItemCount, 0, _(L"Text size"));
+            listData->SetItemText(
+                listDataItemCount, 0, _(L"Text size"),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
             listData->SetItemText(
                 listDataItemCount++, 1,
                 wxString::Format( // TRANSLATORS: %s is a file size
                     _(L"%s Kbs."), wxNumberFormatter::ToString(
                                        safe_divide<double>(project->GetTextSize(), 1024), 2,
                                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                           wxNumberFormatter::Style::Style_WithThousandsSep)));
+                                           wxNumberFormatter::Style::Style_WithThousandsSep)),
+                Wisteria::NumberFormatInfo{
+                    Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                std::numeric_limits<double>::quiet_NaN());
 
             if (!fileModDate.empty())
                 {
-                listData->SetItemText(listDataItemCount, 0, _(L"Last modified"));
-                listData->SetItemText(listDataItemCount++, 1, fileModDate);
+                listData->SetItemText(
+                    listDataItemCount, 0, _(L"Last modified"),
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                listData->SetItemText(
+                    listDataItemCount++, 1, fileModDate,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
                 }
             }
         }
