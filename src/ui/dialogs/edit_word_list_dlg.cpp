@@ -359,8 +359,9 @@ void EditWordListDlg::OnFilePathChanged(wxCommandEvent& event)
             {
             m_wordData->DeleteAllItems();
 
-            string_util::string_tokenize<wxString> tkzr(buffer, L" \t\n\r;,", true);
-            const auto tokenCount = tkzr.count_tokens(buffer);
+            const std::wstring_view view{ buffer.wc_str(), buffer.length() };
+            string_util::string_tokenize<std::wstring> tkzr(view, L" \t\n\r;,", true);
+            const auto tokenCount = tkzr.count_tokens(view);
             m_wordData->SetSize(tokenCount);
 
             size_t currentRow{ 0 };

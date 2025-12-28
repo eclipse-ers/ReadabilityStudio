@@ -1337,7 +1337,7 @@ class is_correctly_spelled_word
         // see if the word is a hyphenated (or slashed) compound word
         string_util::string_tokenize<T> tkzr(
             the_word, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(), true);
-        if (tkzr.has_more_delimiters()) // don't bother splitting word into tokens if no delimiters
+        if (tkzr.has_delimiters()) // don't bother splitting word into tokens if no delimiters
             {
             // makes sure that there is at least one valid block of text in the string
             bool validTokenFound = false;

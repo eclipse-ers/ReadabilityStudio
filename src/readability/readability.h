@@ -205,7 +205,7 @@ namespace readability
             // see if the word is a hyphenated (or slashed) compound word
             string_util::string_tokenize<word_typeT> tkzr(
                 the_word, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(), true);
-            if (tkzr.has_more_delimiters())
+            if (tkzr.has_delimiters())
                 {
                 // makes sure that there is at least one valid block of text in the string
                 bool validTokenFound = false;
