@@ -963,64 +963,64 @@ TEST_CASE("Fog tests", "[fog][readability-tests]")
         }
     SECTION("HardWords")
         {
-        CHECK(readability::is_easy_gunning_fog_word(L"reallybigword", 13, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"reallybigword", 4) == false);
         }
     SECTION("Easy Words")
         {
-        CHECK(readability::is_easy_gunning_fog_word(L"simple", 6, 2));
-        CHECK(readability::is_easy_gunning_fog_word(L"easy", 4, 2));
+        CHECK(readability::is_easy_gunning_fog_word(L"simple", 2));
+        CHECK(readability::is_easy_gunning_fog_word(L"easy", 2));
         // from the book
-        CHECK(readability::is_easy_gunning_fog_word(L"created", 7, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"trespasses", 10, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"created", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"trespasses", 3));
         // es rules
-        CHECK(readability::is_easy_gunning_fog_word(L"ashashes", 8, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"araces", 6, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"enrages", 7, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"ahexes", 6, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"amazes", 6, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"azases", 6, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"amazases", 8, 4) == false);//4 syllables fail
+        CHECK(readability::is_easy_gunning_fog_word(L"ashashes", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"araces", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"enrages", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"ahexes", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"amazes", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"azases", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"amazases", 4) == false);//4 syllables fail
                                                                                  //ed rule
-        CHECK(readability::is_easy_gunning_fog_word(L"ahated", 6, 3));
-        CHECK(readability::is_easy_gunning_fog_word(L"ahaded", 6, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"ahated", 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"ahaded", 3));
         // 4 syllables fail
-        CHECK(readability::is_easy_gunning_fog_word(L"adahaded", 8, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"adahaded", 4) == false);
         }
     SECTION("Hyphenated Words")
         {
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"high-roller", 11, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"high-roller", 3));
         // 1, 1, and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"rock-of-ages", 12, 4));
+        CHECK(readability::is_easy_gunning_fog_word(L"rock-of-ages", 4));
         // 3 and 2 syllables, should be hard
-        CHECK(readability::is_easy_gunning_fog_word(L"highroller-man", 14, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"highroller-man", 4) == false);
         // 2 and 3 syllables, should be hard
-        CHECK(readability::is_easy_gunning_fog_word(L"man-highroller", 14, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"man-highroller", 4) == false);
         }
     SECTION("Hyphenated Words Stray Hyphens")
         {
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"high-roller-", 12, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"high-roller-", 3));
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"-high-roller", 12, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"-high-roller", 3));
         }
     SECTION("Slashed Words")
         {
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"high/roller", 11, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"high/roller", 3));
         // 1, 1, and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"rock/of-ages", 12, 4));
+        CHECK(readability::is_easy_gunning_fog_word(L"rock/of-ages", 4));
         // 3 and 2 syllables, should be hard
-        CHECK(readability::is_easy_gunning_fog_word(L"highroller/man", 14, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"highroller/man", 4) == false);
         // 2 and 3 syllables, should be hard
-        CHECK(readability::is_easy_gunning_fog_word(L"man/highroller", 14, 4) == false);
+        CHECK(readability::is_easy_gunning_fog_word(L"man/highroller", 4) == false);
         }
     SECTION("Slashed Words Stray Hyphens")
         {
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"high/roller/", 12, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"high/roller/", 3));
         // 1 and 2 syllables, should be easy
-        CHECK(readability::is_easy_gunning_fog_word(L"/high/roller", 12, 3));
+        CHECK(readability::is_easy_gunning_fog_word(L"/high/roller", 3));
         }
     }
 

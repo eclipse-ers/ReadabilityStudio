@@ -2601,64 +2601,60 @@ namespace readability
         }
 
     /** @brief Helper function to determine if a words is "easy" according to Gunning Fog.
-        @param fog_word The word to review.
-        @param length The length of the word.
-        @param syllable_count The number of syllables in the word.
+        @param fogWord The word to review.
+        @param syllableCount The number of syllables in the word.
         @returns @c true if words is easy.*/
     [[nodiscard]]
-    inline bool is_easy_gunning_fog_word(const wchar_t* fog_word, const size_t length,
-                                         const size_t syllable_count)
+    inline bool is_easy_gunning_fog_word(const std::wstring_view fogWord,
+                                         const size_t syllableCount)
         {
-        assert(fog_word);
-        assert(fog_word && std::wcslen(fog_word) >= length);
-        if (fog_word == nullptr)
+        if (fogWord.empty())
             {
             return false;
             }
-        if (syllable_count >= 3)
+        if (syllableCount >= 3)
             {
-            const wchar_t* dashPos = string_util::strcspn_pointer(
-                fog_word, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(),
-                common_lang_constants::COMPOUND_WORD_SEPARATORS.length());
-            if (dashPos != nullptr)
+            const std::wstring_view separators = common_lang_constants::COMPOUND_WORD_SEPARATORS;
+
+            const std::size_t dashPos = fogWord.find_first_of(separators);
+
+            if (dashPos != std::wstring_view::npos)
                 {
-                grammar::english_syllabize syllabize;
-                const wchar_t* lastPos = fog_word;
-                while (dashPos != nullptr)
+                static grammar::english_syllabize syllabize;
+
+                std::wstring_view remaining{ fogWord };
+
+                while (true)
                     {
-                    size_t syllableCount = syllabize(lastPos, dashPos - lastPos);
-                    if (syllableCount >= 3)
+                    const std::size_t pos = remaining.find_first_of(separators);
+
+                    if (pos == std::wstring_view::npos)
                         {
-                        return false;
-                        }
-                    lastPos = ++dashPos;
-                    dashPos = string_util::strcspn_pointer(
-                        lastPos, common_lang_constants::COMPOUND_WORD_SEPARATORS.c_str(),
-                        common_lang_constants::COMPOUND_WORD_SEPARATORS.length());
-                    if (dashPos == nullptr)
-                        {
-                        // we are at the word after the last hyphen
-                        syllableCount = syllabize(lastPos, (fog_word + length) - lastPos);
-                        if (syllableCount >= 3)
+                        // final segment after last separator
+                        if (syllabize(remaining.data(), remaining.size()) >= 3)
                             {
                             return false;
                             }
+
+                        // all parts are less than 3 syllables
+                        return true;
                         }
+
+                    // segment before separator
+                    if (syllabize(remaining.data(), pos) >= 3)
+                        {
+                        return false;
+                        }
+
+                    // skip the separator and continue
+                    remaining.remove_prefix(pos + 1);
                     }
-                // all parts are less than 3 syllables
-                return true;
                 }
-            if (syllable_count == 3 &&
-                //"ed"
-                (string_util::has_suffix(fog_word, length, L"ded", 3) ||
-                 string_util::has_suffix(fog_word, length, L"ted", 3) ||
-                 //"es"
-                 string_util::has_suffix(fog_word, length, L"shes", 4) ||
-                 string_util::has_suffix(fog_word, length, L"ces", 3) ||
-                 string_util::has_suffix(fog_word, length, L"ges", 3) ||
-                 string_util::has_suffix(fog_word, length, L"xes", 3) ||
-                 string_util::has_suffix(fog_word, length, L"zes", 3) ||
-                 string_util::has_suffix(fog_word, length, L"ses", 3)))
+
+            if (syllableCount == 3 && (fogWord.ends_with(L"ded") || fogWord.ends_with(L"ted") ||
+                                       fogWord.ends_with(L"shes") || fogWord.ends_with(L"ces") ||
+                                       fogWord.ends_with(L"ges") || fogWord.ends_with(L"xes") ||
+                                       fogWord.ends_with(L"zes") || fogWord.ends_with(L"ses")))
                 {
                 return true;
                 }

@@ -2574,9 +2574,9 @@ void BaseProject::LoadHardWords()
                 GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable)
                 { /* NOOP*/
                 }
-            else if (!readability::is_easy_gunning_fog_word(wordPos->first.c_str(),
-                                                            wordPos->first.length(),
-                                                            wordPos->first.get_syllable_count()))
+            else if (!readability::is_easy_gunning_fog_word(
+                         { wordPos->first.c_str(), wordPos->first.length() },
+                         wordPos->first.get_syllable_count()))
                 {
                 ++m_uniqueHardFogWords;
                 m_totalHardWordsFog += nonProperCount;
