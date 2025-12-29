@@ -92,8 +92,7 @@ if(ENABLE_SANITIZERS)
             "MSVC AddressSanitizer notes:"
             "The MSVC ASan runtime does not use ASAN_OPTIONS/UBSAN_OPTIONS env vars."
             "Leak detection is not available with MSVC ASan."
-            "Keep PDBs and /Zi for better stack traces. Consider /DEBUG:FULL for richer info."
-        )
+            "Keep PDBs and /Zi for better stack traces. Consider /DEBUG:FULL for richer info.")
     endif()
 
     # Build human-readable help block
@@ -101,7 +100,7 @@ if(ENABLE_SANITIZERS)
     if(_env_hints)
         # Pretty bullets
         string(REPLACE ";" "\n  • " SANITIZER_ENV_HINTS_SUMMARY "${_env_hints}")
-        set(SANITIZER_ENV_HINTS_SUMMARY "${SANITIZER_ENV_HINTS_SUMMARY}")
+        set(SANITIZER_ENV_HINTS_SUMMARY "  ${SANITIZER_ENV_HINTS_SUMMARY}")
     endif()
 
     # Verbose summary

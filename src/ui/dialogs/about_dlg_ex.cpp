@@ -269,14 +269,30 @@ void AboutDialogEx::CreateControls()
 #if defined(ENABLED_SANITIZERS_STR) && defined(SANITIZER_ENV_HINTS_STR)
             wxString sanitizerInfo = wxString::FromUTF8(ENABLED_SANITIZERS_STR) + L"\n" +
                                      wxString::FromUTF8(SANITIZER_ENV_HINTS_STR);
+
             sanitizerInfo.Replace(L"\\n", L"\n");
             sanitizerInfo.Trim();
             sanitizerInfo.Trim(false);
-            buildInfo +=
-                sanitizerInfo.empty() ?
-                    wxString{} :
-                    // TRANSLATORS: AddressSanitizer options used to compile the program.
-                    _(L"\n\nAddressSanitizer options:\n--------------------\n") + sanitizerInfo;
+
+            if (!sanitizerInfo.empty())
+                {
+                if (const size_t subSectionStart = sanitizerInfo.find(L"\n  ");
+                    subSectionStart != wxString::npos)
+                    {
+                    sanitizerInfo.insert(subSectionStart, 1, L'\n');
+                    if (size_t subSectionEnd = sanitizerInfo.find(L'\n', subSectionStart + 4);
+                        subSectionEnd != wxString::npos)
+                        {
+                        sanitizerInfo.insert(++subSectionEnd, L"  --------------------\n");
+                        }
+                    }
+
+                buildInfo
+                    .append(
+                        // TRANSLATORS: AddressSanitizer options used to compile the program.
+                        _(L"\n\nAddressSanitizer options:\n--------------------\n"))
+                    .append(sanitizerInfo);
+                }
 #endif
             productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY, buildInfo));
             }
