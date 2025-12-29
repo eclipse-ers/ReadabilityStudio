@@ -414,7 +414,6 @@ class word<Tchar_traits, stemming::no_op_stem<std::basic_string<wchar_t, Tchar_t
         {
         }
 
-
     /// @private
     word() noexcept = default;
 
