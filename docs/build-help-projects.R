@@ -56,11 +56,11 @@ source(glue("{scriptFolder}/cover-art.R"))
 source(glue("{scriptFolder}/build-enum-files.R"))
 source(glue("{scriptFolder}/readability-studio-manual/R/appdown.r"))
 
-createCover(glue("{scriptFolder}/../resources/images/splash/splashscreen2.jpg"),
-            glue("{scriptFolder}/../resources/images/splash/splashscreen3.jpg"),
-            glue("{scriptFolder}/../resources/images/splash/splashscreen1.jpg"),
-            glue("{scriptFolder}/readability-studio-manual/images/non-generated/cover.png"),
-            c("Bookstore trip", "Saturday storytime!", "Reading at the café"))
+createPolaroidCover(glue("{scriptFolder}/../resources/images/splash/splashscreen2.jpg"),
+                    glue("{scriptFolder}/../resources/images/splash/splashscreen3.jpg"),
+                    glue("{scriptFolder}/../resources/images/splash/splashscreen1.jpg"),
+                    glue("{scriptFolder}/readability-studio-manual/images/non-generated/cover.png"),
+                    c("Bookstore trip", "Saturday storytime!", "Reading at the café"))
 
 thumbnailWidth <- "256"
 
