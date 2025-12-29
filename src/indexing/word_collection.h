@@ -163,29 +163,27 @@ class document
                 PROFILE_SECTION_START("document::load(): split word");
                 // Review versions of the word with and without hyphens to see which one we should
                 // use. Also strip out newlines.
-                auto* currentWord = new wchar_t[tokenizeText.get_current_word_length() + 1];
-                std::wmemset(currentWord, 0, tokenizeText.get_current_word_length() + 1);
+                Tword_type currentWord{};
+                currentWord.reserve(tokenizeText.get_current_word_length());
 
-                auto* currentWordNoHyphens =
-                    new wchar_t[tokenizeText.get_current_word_length() + 1];
-                std::wmemset(currentWordNoHyphens, 0, tokenizeText.get_current_word_length() + 1);
-                size_t currentWordSize = 0, currentWordNoHyphensSize = 0;
+                Tword_type currentWordNoHyphens{};
+                currentWordNoHyphens.reserve(tokenizeText.get_current_word_length());
                 for (size_t i = 0; i < tokenizeText.get_current_word_length(); ++i)
                     {
                     if (!characters::is_character::is_space(currentChar[i]))
                         {
-                        currentWord[currentWordSize++] = currentChar[i];
+                        currentWord.push_back(currentChar[i]);
                         }
                     if (!characters::is_character::is_space(currentChar[i]) &&
                         !characters::is_character::is_hyphen(currentChar[i]))
                         {
-                        currentWordNoHyphens[currentWordNoHyphensSize++] = currentChar[i];
+                        currentWordNoHyphens.push_back(currentChar[i]);
                         }
                     }
-                if (is_correctly_spelled(Tword_type(currentWordNoHyphens)))
+                if (is_correctly_spelled(currentWordNoHyphens))
                     {
                     m_words.emplace_back(
-                        currentWordNoHyphens, currentWordNoHyphensSize,
+                        currentWordNoHyphens.c_str(), currentWordNoHyphens.length(),
                         tokenizeText.get_current_sentence_index(),
                         tokenizeText.get_sentence_position(),
                         tokenizeText.get_current_paragraph_index(), tokenizeText.is_numeric(),
@@ -198,7 +196,8 @@ class document
                 else
                     {
                     m_words.emplace_back(
-                        currentWord, currentWordSize, tokenizeText.get_current_sentence_index(),
+                        currentWord.c_str(), currentWord.length(),
+                        tokenizeText.get_current_sentence_index(),
                         tokenizeText.get_sentence_position(),
                         tokenizeText.get_current_paragraph_index(), tokenizeText.is_numeric(),
                         // these are really calculated after the entire document is loaded,
@@ -207,8 +206,6 @@ class document
                         countSyllables(currentChar, tokenizeText.get_current_word_length()),
                         countPunctuation({ currentChar, tokenizeText.get_current_word_length() }));
                     }
-                delete[] currentWord;
-                delete[] currentWordNoHyphens;
                 PROFILE_SECTION_END();
                 }
             update_sentence_paragraph_info(tokenizeText.get_current_sentence_index(),
@@ -222,8 +219,8 @@ class document
         finalize(tokenizeText.get_current_sentence_ending_punctuation());
         }
 
-    /** Allocates space for the information structures. Their sizes are
-        approximated based on the size of the document.*/
+    /** Allocates space for the information structures.
+        Their sizes are approximated based on the size of the document.*/
     void reserve_word_size(const size_t size)
         {
         m_words.reserve(size);
@@ -267,8 +264,9 @@ class document
             }
         }
 
-    /** Call this after loading all the words into the document. This will catalog
-        all the grammar errors and proper nouns, update sentence information, etc.*/
+    /** Call this after loading all the words into the document.
+        This will catalog all the grammar errors and proper nouns,
+        update sentence information, etc.*/
     void finalize(const wchar_t sentence_ending_punctuation)
         {
         PROFILE();
@@ -2408,10 +2406,11 @@ class document
         {
         PROFILE();
         std::wstring stemmedWord;
+        multi_value_aggregate_map<traits::case_insensitive_wstring_ex, size_t> uncommonWords;
         // go through the sentences
         for (auto sentIter = m_sentences.cbegin(); sentIter != m_sentences.cend(); ++sentIter)
             {
-            multi_value_aggregate_map<traits::case_insensitive_wstring_ex, size_t> uncommonWords;
+            uncommonWords.clear();
             // go through each word in the sentence
             for (size_t wordCounter = sentIter->get_first_word_index();
                  wordCounter <= sentIter->get_last_word_index(); ++wordCounter)
@@ -2424,7 +2423,8 @@ class document
                     !currentWord.is_numeric() && !currentWord.is_proper_noun() &&
                     !currentWord.is_acronym() &&
                     !is_double_word_allowed({ currentWord.c_str(), currentWord.length() }) &&
-                    ((m_stop_list == nullptr) || !m_stop_list->contains(currentWord.c_str())))
+                    ((m_stop_list == nullptr) ||
+                     !m_stop_list->contains({ currentWord.c_str(), currentWord.length() })))
                     {
                     if (stem_word != nullptr)
                         {
