@@ -1241,6 +1241,11 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
 #endif
         const std::wstring workbookFileText = archive.ReadTextFile(L"xl/workbook.xml");
         excelExtract.read_worksheet_names(workbookFileText.c_str(), workbookFileText.length());
+        // read workbook relationships
+        const std::wstring workbookRels = archive.ReadTextFile(L"xl/_rels/workbook.xml.rels");
+        excelExtract.read_relative_paths(workbookRels.c_str(), workbookRels.length());
+        // resolve worksheet names to XML paths
+        excelExtract.map_workbook_paths();
         // read the string table
         const std::wstring sharedStrings = archive.ReadTextFile(L"xl/sharedStrings.xml");
         if (!sharedStrings.empty())
@@ -1252,11 +1257,14 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
     std::vector<std::pair<std::wstring, std::vector<std::wstring>>> workSheets;
     wxArrayString worksheets;
     wxArrayInt workSheetSelections;
-    for (size_t i = 0; i < excelExtract.get_worksheet_names().size(); ++i)
+
+    const auto& worksheetPaths = excelExtract.get_worksheet_paths();
+    for (size_t i = 0; i < worksheetPaths.size(); ++i)
         {
-        worksheets.push_back(excelExtract.get_worksheet_names().at(i).c_str());
+        worksheets.push_back(worksheetPaths[i].first.c_str());
         workSheetSelections.push_back(i);
         }
+
     // only ask for which worksheets to select if there is more than one in the workbook
     if (worksheets.size() > 1)
         {
@@ -1269,6 +1277,7 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
             }
         workSheetSelections = chooseWorksheetsDlg.GetSelections();
         }
+
     for (size_t i = 0; i < workSheetSelections.size(); ++i)
         {
         lily_of_the_valley::xlsx_extract_text::worksheet wrk;
@@ -1279,8 +1288,9 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
             wxMilliSleep(100);
             wxGetApp().Yield();
 #endif
-            const std::wstring sheetFile = archive.ReadTextFile(
-                wxString::Format(L"xl/worksheets/sheet%d.xml", workSheetSelections.Item(i) + 1));
+            const std::wstring sheetFile =
+                archive.ReadTextFile(worksheetPaths[workSheetSelections.Item(i)].second);
+
             if (!sheetFile.empty())
                 {
                 excelExtract(sheetFile.c_str(), sheetFile.length(), wrk);
@@ -1293,9 +1303,9 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
 
         Wisteria::UI::ExcelPreviewDlg excelPreview(
             this, &wrk, &excelExtract, wxID_ANY,
-            wxString::Format(
-                _(L"\"%s\" Preview"),
-                excelExtract.get_worksheet_names().at(workSheetSelections.Item(i)).c_str()));
+            wxString::Format(_(L"\"%s\" Preview"),
+                             worksheetPaths[workSheetSelections.Item(i)].first.c_str()));
+
         excelPreview.SetHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(),
                                   L"online/additional-features.html");
         if (excelPreview.ShowModal() == wxID_OK)
@@ -1325,14 +1335,14 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
             Wisteria::UI::ExcelPreviewDlg excelPreviewFilterDEBUG(
                 this, &wrk, &excelExtract, wxID_ANY,
                 wxString(_DT(L"DEBUG CHECK ")) +
-                    excelExtract.get_worksheet_names().at(workSheetSelections.Item(i)).c_str());
+                    worksheetPaths[workSheetSelections.Item(i)].first.c_str());
             excelPreviewFilterDEBUG.ShowModal();
 #endif
-            workSheets.emplace_back(
-                excelExtract.get_worksheet_names().at(workSheetSelections.Item(i)),
-                std::vector<std::wstring>());
-            lily_of_the_valley::xlsx_extract_text::get_text_cell_names(
-                wrk, workSheets[workSheets.size() - 1].second);
+            workSheets.emplace_back(worksheetPaths[workSheetSelections.Item(i)].first,
+                                    std::vector<std::wstring>());
+
+            lily_of_the_valley::xlsx_extract_text::get_text_cell_names(wrk,
+                                                                       workSheets.back().second);
             }
         }
 

@@ -4852,6 +4852,11 @@ bool BaseProject::LoadExternalDocument()
             // read in the worksheets
             const std::wstring workBookFileText = zc.ReadTextFile(L"xl/workbook.xml");
             filterXlsx.read_worksheet_names(workBookFileText.c_str(), workBookFileText.length());
+            // read workbook relationships
+            const std::wstring workbookRels = zc.ReadTextFile(L"xl/_rels/workbook.xml.rels");
+            filterXlsx.read_relative_paths(workbookRels.c_str(), workbookRels.length());
+            // resolve worksheet names to XML paths
+            filterXlsx.map_workbook_paths();
             // read in the string table
             const std::wstring sharedStrings = zc.ReadTextFile(L"xl/sharedStrings.xml");
             if (sharedStrings.empty())
@@ -4859,13 +4864,13 @@ bool BaseProject::LoadExternalDocument()
                 return false;
                 }
             // find the sheet to get the cells from
-            auto sheetPos =
-                std::ranges::find(filterXlsx.get_worksheet_names(), worksheetName.wc_str());
-            if (sheetPos != filterXlsx.get_worksheet_names().end())
+            const auto& worksheetPaths = filterXlsx.get_worksheet_paths();
+            const auto sheetPos =
+                std::ranges::find_if(worksheetPaths, [&](const auto& wsPath)
+                                     { return wsPath.first == worksheetName.wc_string(); });
+            if (sheetPos != worksheetPaths.end())
                 {
-                const std::wstring sheetFile = zc.ReadTextFile(
-                    wxString::Format(L"xl/worksheets/sheet%zu.xml",
-                                     (sheetPos - filterXlsx.get_worksheet_names().begin()) + 1));
+                const std::wstring sheetFile = zc.ReadTextFile(sheetPos->second);
                 SetDocumentText(filterXlsx.get_cell_text(cellName.wc_str(), sharedStrings.c_str(),
                                                          sharedStrings.length(), sheetFile.c_str(),
                                                          sheetFile.length()));

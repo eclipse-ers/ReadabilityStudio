@@ -1843,6 +1843,13 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                             excelFilePos->second->m_zip.ReadTextFile(L"xl/workbook.xml");
                         excelFilePos->second->m_xlsx_extract.read_worksheet_names(
                             workBookFileText.c_str(), workBookFileText.length());
+                        // read workbook relationships
+                        const std::wstring workbookRels =
+                            excelFilePos->second->m_zip.ReadTextFile(L"xl/_rels/workbook.xml.rels");
+                        excelFilePos->second->m_xlsx_extract.read_relative_paths(
+                            workbookRels.c_str(), workbookRels.length());
+                        // resolve worksheet names to XML paths
+                        excelFilePos->second->m_xlsx_extract.map_workbook_paths();
                         // read in the string table
                         const std::wstring sharedStrings =
                             excelFilePos->second->m_zip.ReadTextFile(L"xl/sharedStrings.xml");
@@ -1854,21 +1861,21 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                         }
 
                     // find the sheet to get the cells from
-                    auto sheetPos = std::find(
-                        excelFilePos->second->m_xlsx_extract.get_worksheet_names().begin(),
-                        excelFilePos->second->m_xlsx_extract.get_worksheet_names().end(),
-                        worksheetName.wc_str());
-                    if (sheetPos !=
-                        excelFilePos->second->m_xlsx_extract.get_worksheet_names().end())
+                    const auto& worksheetPaths =
+                        excelFilePos->second->m_xlsx_extract.get_worksheet_paths();
+
+                    auto sheetPos =
+                        std::ranges::find_if(worksheetPaths, [&](const auto& wsPath)
+                                             { return wsPath.first == worksheetName.wc_str(); });
+
+                    if (sheetPos != worksheetPaths.end())
                         {
-                        const wxString internalSheetName = wxString::Format(
-                            L"xl/worksheets/sheet%zu.xml",
-                            (sheetPos -
-                             excelFilePos->second->m_xlsx_extract.get_worksheet_names().begin()) +
-                                1);
+                        const wxString internalSheetName = sheetPos->second;
+
                         // see if this worksheet is already loaded
                         auto internalSheetPos =
                             excelFilePos->second->m_worksheets.find(internalSheetName);
+
                         // wasn't loaded before, so load it now
                         if (internalSheetPos == excelFilePos->second->m_worksheets.end())
                             {
@@ -1879,8 +1886,10 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                                         internalSheetName,
                                         lily_of_the_valley::xlsx_extract_text::worksheet()));
                             internalSheetPos = insertPos.first;
+
                             const std::wstring sheetFile =
                                 excelFilePos->second->m_zip.ReadTextFile(internalSheetName);
+
                             if (!sheetFile.empty())
                                 {
                                 excelFilePos->second->m_xlsx_extract(sheetFile.c_str(),
@@ -1888,9 +1897,11 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                                                                      internalSheetPos->second);
                                 }
                             }
+
                         const wxString cellText =
                             lily_of_the_valley::xlsx_extract_text::get_cell_text(
                                 cellName.wc_str(), internalSheetPos->second);
+
                         fileResolver.ResolvePath(cellText, false);
                         if (!fileResolver.IsInvalidFile())
                             {
