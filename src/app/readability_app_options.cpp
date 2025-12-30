@@ -817,7 +817,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
     if (printerSettingsNode != nullptr)
         {
-        int value = 0;
+        int value{ 0 };
         auto* printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_ID.data());
         if (printerNode != nullptr)
             {
@@ -834,98 +834,32 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_HEADER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetLeftPrinterHeader(convertedStr);
-                    }
-                }
+            SetLeftPrinterHeader(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_HEADER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetCenterPrinterHeader(convertedStr);
-                    }
-                }
+            SetCenterPrinterHeader(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_HEADER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetRightPrinterHeader(convertedStr);
-                    }
-                }
+            SetRightPrinterHeader(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_LEFT_FOOTER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetLeftPrinterFooter(convertedStr);
-                    }
-                }
+            SetLeftPrinterFooter(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_CENTER_FOOTER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetCenterPrinterFooter(convertedStr);
-                    }
-                }
+            SetCenterPrinterFooter(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         printerNode = printerSettingsNode->FirstChildElement(XML_PRINTER_RIGHT_FOOTER.data());
         if (printerNode != nullptr)
             {
-            const char* printerString = printerNode->ToElement()->Attribute(XML_VALUE.data());
-            if (printerString != nullptr)
-                {
-                const auto printStr = Wisteria::TextStream::CharStreamToUnicode(
-                    printerString, std::strlen(printerString));
-                const wchar_t* convertedStr =
-                    filterHtml(printStr.c_str(), printStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetRightPrinterFooter(convertedStr);
-                    }
-                }
+            SetRightPrinterFooter(TiXmlNodeToString(printerNode, XML_VALUE.data()));
             }
         }
     // editor settings
@@ -1006,18 +940,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
         auto* projectReviewer = projectSettingsForReview->FirstChildElement(XML_REVIEWER.data());
         if (projectReviewer != nullptr)
             {
-            const char* reviewerChars = projectReviewer->ToElement()->Attribute(XML_VALUE.data());
-            if (reviewerChars != nullptr)
-                {
-                const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
-                    reviewerChars, std::strlen(reviewerChars));
-                const wchar_t* convertedStr =
-                    filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetReviewer(convertedStr);
-                    }
-                }
+            SetReviewer(TiXmlNodeToString(projectReviewer, XML_VALUE.data()));
             }
         }
     if (GetReviewer().empty())
@@ -1143,23 +1066,6 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     auto* projectSettings = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
     if (projectSettings != nullptr)
         {
-        // reviewer and status
-        auto* projectReviewer = projectSettings->FirstChildElement(XML_REVIEWER.data());
-        if (projectReviewer != nullptr)
-            {
-            const char* reviewerChars = projectReviewer->ToElement()->Attribute(XML_VALUE.data());
-            if (reviewerChars != nullptr)
-                {
-                const auto reviewerStr = Wisteria::TextStream::CharStreamToUnicode(
-                    reviewerChars, std::strlen(reviewerChars));
-                const wchar_t* convertedStr =
-                    filterHtml(reviewerStr.c_str(), reviewerStr.length(), true, false);
-                if (convertedStr != nullptr)
-                    {
-                    SetReviewer(convertedStr);
-                    }
-                }
-            }
         auto* realTimeRefresh = projectSettings->FirstChildElement(XML_REALTIME_UPDATE.data());
         if (realTimeRefresh != nullptr)
             {
@@ -4777,7 +4683,7 @@ wxString ReadabilityAppOptions::TiXmlNodeToString(const tinyxml2::XMLNode* node,
         {
         return {};
         }
-    return wxString{ filteredText };
+    return { filteredText };
     }
 
 //------------------------------------------------

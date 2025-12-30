@@ -414,6 +414,12 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     Wisteria::UI::SideBar* CreateSideBar(wxWindow* frame, const wxWindowID id);
     wxRibbonBar* CreateRibbon(wxWindow* frame, const wxDocument* doc);
     void LoadRibbonHomePage(wxRibbonBar* ribbon, RibbonType rtype, const wxDocument* doc);
+    void LoadRibbonHomePageListSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePageExplanationListSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePageHtmlReportSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, const wxDocument* doc);
     void LoadRibbonDocumentPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype);

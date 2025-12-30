@@ -251,7 +251,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     if (statsInfo.IsDolchCoverageEnabled())
         {
         // list completions
-        htmlText += tableStart + FormatDolchHeader(_(L"Dolch Word Coverage"));
+        htmlText.append(tableStart).append(FormatDolchHeader(_(L"Dolch Word Coverage")));
 
         const double dolchConjunctionPercentage =
             safe_divide<double>(
@@ -747,7 +747,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     // total words
     if (statsInfo.IsDolchWordsEnabled())
         {
-        htmlText += tableStart + FormatDolchHeader(_(L"Dolch Words"));
+        htmlText.append(tableStart).append(FormatDolchHeader(_(L"Dolch Words")));
 
             // number of Dolch words
             {

@@ -3323,409 +3323,10 @@ void ToolsOptionsDlg::OnResetSettings([[maybe_unused]] wxCommandEvent& event)
     }
 
 //-------------------------------------------------------------
-void ToolsOptionsDlg::CreateControls()
+void ToolsOptionsDlg::CreateDocumentIndexingSection()
     {
-    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
-    if (GetSectionsBeingShown() == TextSection || GetSectionsBeingShown() == GraphsSection ||
-        GetSectionsBeingShown() == Statistics)
-        {
-        mainSizer->SetMinSize(FromDIP(wxSize{ 500, 700 }));
-        }
-    else
-        {
-        mainSizer->SetMinSize(FromDIP(wxSize{ 650, 700 }));
-        }
-
     const int optionIndentSize = wxSizerFlags::GetDefaultBorder() * 3;
 
-    m_sideBar = new Wisteria::UI::SideBarBook(this, wxID_ANY);
-    mainSizer->Add(m_sideBar, wxSizerFlags{ 1 }.Expand().Border());
-
-    wxGetApp().UpdateSideBarTheme(m_sideBar->GetSideBar());
-
-    const auto fontImage = wxArtProvider::GetBitmapBundle(L"ID_FONT", wxART_BUTTON);
-    const auto openImage = wxArtProvider::GetBitmapBundle(wxART_FILE_OPEN, wxART_BUTTON);
-
-    if (GetSectionsBeingShown() == AllSections)
-        {
-        if (IsGeneralSettings())
-            {
-            auto* generalSettingsPage =
-                new wxPanel(m_sideBar, GENERAL_SETTINGS_PAGE, wxDefaultPosition, wxDefaultSize,
-                            wxTAB_TRAVERSAL);
-            auto* docPanelSizer = new wxBoxSizer(wxVERTICAL);
-            generalSettingsPage->SetSizer(docPanelSizer);
-            m_sideBar->AddPage(generalSettingsPage, GetGeneralSettingsLabel(),
-                               GENERAL_SETTINGS_PAGE, true, 10);
-
-            auto* optionsSizer = new wxBoxSizer(wxHORIZONTAL);
-            docPanelSizer->Add(optionsSizer, wxSizerFlags{}.Expand());
-
-            optionsSizer->Add(new wxStaticText(generalSettingsPage, wxID_STATIC,
-                                               _(L"UI language (requires restart):")),
-                              wxSizerFlags{}.Border(wxLEFT).CenterVertical());
-
-            const wxArrayString choiceStrings = {
-                _(L"System Default"), wxString{ _DT(L"English", DTExplanation::Constant) },
-                wxString{ _DT(L"Español", DTExplanation::Constant,
-                              L"This should be in the native language so that users can recognize "
-                              "it when selecting which language to use.") }
-            };
-            auto* uiLangCombo =
-                new wxComboBox(generalSettingsPage, wxID_ANY, wxString{}, wxDefaultPosition,
-                               wxDefaultSize, choiceStrings, wxCB_DROPDOWN | wxCB_READONLY);
-            uiLangCombo->SetValidator(wxGenericValidator(&m_uiLanguage.get_value()));
-            optionsSizer->Add(uiLangCombo, wxSizerFlags{}.Expand().Border());
-
-            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Settings:"), true);
-
-            optionsSizer = new wxBoxSizer(wxVERTICAL);
-            docPanelSizer->Add(optionsSizer,
-                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            auto* loadSettingsButton =
-                new wxButton(generalSettingsPage, ID_LOAD_SETTINGS_BUTTON, _(L"Import..."));
-            optionsSizer->Add(loadSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
-
-            auto* exportSettingsButton =
-                new wxButton(generalSettingsPage, ID_EXPORT_SETTINGS_BUTTON, _(L"Export..."));
-            optionsSizer->Add(exportSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
-
-            auto* resetSettingsButton =
-                new wxButton(generalSettingsPage, ID_RESET_SETTINGS_BUTTON, _(L"Reset"));
-            optionsSizer->Add(resetSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
-
-            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Internet:"), true);
-
-            optionsSizer = new wxBoxSizer(wxVERTICAL);
-            docPanelSizer->Add(optionsSizer,
-                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            auto* userAgentSizer = new wxBoxSizer(wxHORIZONTAL);
-            optionsSizer->Add(userAgentSizer, wxSizerFlags{}.Expand());
-
-            userAgentSizer->Add(
-                new wxStaticText(generalSettingsPage, wxID_STATIC, _(L"User agent:")),
-                wxSizerFlags{}.CenterVertical());
-            auto* userAgentEdit = new wxTextCtrl(generalSettingsPage, wxID_ANY, wxString{},
-                                                 wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
-                                                 wxGenericValidator(&m_userAgent.get_value()));
-            userAgentSizer->Add(userAgentEdit, wxSizerFlags{ 1 }.Expand().Border(wxLEFT | wxRIGHT));
-
-            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY,
-                                             _(L"Disable SSL certificate verification"),
-                                             wxDefaultPosition, wxDefaultSize, 0,
-                                             wxGenericValidator(&m_disablePeerVerify.get_value())),
-                              wxSizerFlags{}.Expand().Border(wxTOP));
-
-            optionsSizer->Add(new wxCheckBox(generalSettingsPage, ID_JS_COOKIES_CHECKBOX,
-                                             _(L"Use JavaScript cookies"), wxDefaultPosition,
-                                             wxDefaultSize, 0,
-                                             wxGenericValidator(&m_useJsCookies.get_value())),
-                              wxSizerFlags{}.Expand().Border(wxTOP));
-
-            m_persistCookiesCheck = new wxCheckBox(
-                generalSettingsPage, wxID_ANY, _(L"Persist cookies during each harvest"),
-                wxDefaultPosition, wxDefaultSize, 0,
-                wxGenericValidator(&m_persistJsCookies.get_value()));
-            optionsSizer->Add(m_persistCookiesCheck, wxSizerFlags{}.Expand().Border(wxTOP));
-            m_persistCookiesCheck->Enable(m_useJsCookies.get_value());
-
-            optionsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Warnings && Prompts:"), true);
-
-            optionsSizer = new wxBoxSizer(wxVERTICAL);
-            docPanelSizer->Add(optionsSizer,
-                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            auto* warningsButton =
-                new wxButton(generalSettingsPage, ID_WARNING_MESSAGES_BUTTON, _(L"Customize..."));
-            optionsSizer->Add(warningsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
-
-            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Log:"), true);
-
-            optionsSizer = new wxBoxSizer(wxVERTICAL);
-            docPanelSizer->Add(optionsSizer,
-                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Verbose logging"),
-                                             wxDefaultPosition, wxDefaultSize, 0,
-                                             wxGenericValidator(&m_logVerbose.get_value())),
-                              wxSizerFlags{}.Expand().Border(wxTOP));
-
-            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Append daily log"),
-                                             wxDefaultPosition, wxDefaultSize, 0,
-                                             wxGenericValidator(&m_logAppendDailyLog.get_value())),
-                              wxSizerFlags{}.Expand().Border(wxTOP));
-            }
-        }
-
-    // Project settings
-    if ((GetSectionsBeingShown() & ProjectSection) != 0)
-        {
-        auto* projectSettingsPage = new wxPanel(m_sideBar, PROJECT_SETTINGS_PAGE, wxDefaultPosition,
-                                                wxDefaultSize, wxTAB_TRAVERSAL);
-        auto* panelSizer = new wxBoxSizer(wxVERTICAL);
-        m_sideBar->AddPage(projectSettingsPage, GetProjectSettingsLabel(), PROJECT_SETTINGS_PAGE,
-                           // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == ProjectSection), 11);
-
-        // project properties
-        CreateLabelHeader(projectSettingsPage, panelSizer, _(L"Project:"), true);
-
-        auto* projectExtraInfoSizer = new wxFlexGridSizer(2, 5, 5);
-        projectExtraInfoSizer->Add(
-            new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Reviewer:")),
-            wxSizerFlags{}.CenterVertical());
-        auto* reviewerEdit = new wxTextCtrl(projectSettingsPage, wxID_ANY, wxEmptyString,
-                                            wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
-                                            wxGenericValidator(&m_reviewer.get_value()));
-        projectExtraInfoSizer->Add(reviewerEdit, wxSizerFlags{ 1 }.Expand());
-
-        if (!IsGeneralSettings())
-            {
-            projectExtraInfoSizer->Add(
-                new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Status:")),
-                wxSizerFlags{}.CenterVertical());
-            auto* statusEdit = new wxTextCtrl(projectSettingsPage, wxID_ANY, wxEmptyString,
-                                              wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
-                                              wxGenericValidator(&m_status.get_value()));
-            projectExtraInfoSizer->Add(statusEdit, wxSizerFlags{ 1 }.Expand());
-            }
-
-        panelSizer->Add(projectExtraInfoSizer,
-                        wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-        if (IsGeneralSettings() || IsBatchProjectSettings())
-            {
-            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-            auto* batchOptionsBox =
-                new wxStaticBoxSizer(wxVERTICAL, projectSettingsPage, _(L"Batch options"));
-
-            auto* minDocSizeBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-            batchOptionsBox->Add(minDocSizeBoxSizer, wxSizerFlags{}.Expand().Border(wxLEFT));
-
-            auto* minDocSizeLabel = new wxStaticText(
-                batchOptionsBox->GetStaticBox(), wxID_STATIC, _(L"Minimum document word count:"),
-                wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-            minDocSizeBoxSizer->Add(minDocSizeLabel,
-                                    wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
-
-            auto* minDocWordCountForBatchSpinCtrl = new wxSpinCtrl(
-                batchOptionsBox->GetStaticBox(), wxID_ANY,
-                std::to_wstring(m_minDocWordCountForBatch.get_value()), wxDefaultPosition,
-                wxDefaultSize, wxSP_ARROW_KEYS, 1, std::numeric_limits<int>::max(), 0);
-            minDocWordCountForBatchSpinCtrl->SetValidator(
-                wxGenericValidator(&m_minDocWordCountForBatch.get_value()));
-            minDocSizeBoxSizer->Add(minDocWordCountForBatchSpinCtrl,
-                                    wxSizerFlags{}.CenterVertical());
-
-            auto* fileTruncSizer = new wxBoxSizer(wxHORIZONTAL);
-            fileTruncSizer->Add(new wxStaticText(batchOptionsBox->GetStaticBox(), wxID_STATIC,
-                                                 _(L"File path display:")),
-                                wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
-
-            wxArrayString truncModes;
-            truncModes.Add(_(L"Partially truncate the file path"));
-            truncModes.Add(_(L"Show only the file name"));
-            truncModes.Add(_(L"Show the full file path"));
-            auto* fileTruncCombo = new wxChoice(
-                batchOptionsBox->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                truncModes, 0, wxGenericValidator(&m_filePathTruncationMode.get_value()));
-            fileTruncSizer->Add(fileTruncCombo, wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
-            batchOptionsBox->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            batchOptionsBox->Add(fileTruncSizer, wxSizerFlags{}.Expand().Border(wxLEFT));
-
-            panelSizer->Add(batchOptionsBox, wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
-            }
-
-        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-        CreateLabelHeader(projectSettingsPage, panelSizer, _(L"Document:"), true);
-
-            {
-            wxArrayString languages;
-            languages.Add(_(L"English"));
-            languages.Add(_(L"Spanish"));
-            languages.Add(_(L"German"));
-
-            auto* langSizer = new wxBoxSizer(wxHORIZONTAL);
-            auto* langLabel = new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Language:"),
-                                               wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-            langSizer->Add(langLabel, wxSizerFlags{}.CenterVertical().Left());
-            langSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            langSizer->Add(new wxChoice(projectSettingsPage, wxID_ANY, wxDefaultPosition,
-                                        wxDefaultSize, languages, 0,
-                                        wxGenericValidator(&m_projectLanguage.get_value())));
-            panelSizer->Add(langSizer, wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            }
-
-            // Document origin settings
-            {
-            // document storage/linking section
-            wxArrayString docLinking;
-            docLinking.Add(_(L"&Embed the document's text into the project"));
-            docLinking.Add(_(L"&Reload the document when opening project"));
-            m_docStorageRadioBox = new wxRadioBox(
-                projectSettingsPage, ID_DOCUMENT_STORAGE_RADIO_BOX, _(L"Linking and embedding"),
-                wxDefaultPosition, wxDefaultSize, docLinking, 0, wxRA_SPECIFY_ROWS,
-                wxGenericValidator(&m_documentStorageMethod.get_value()));
-            panelSizer->Add(m_docStorageRadioBox, wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
-
-            // not relevant with batch projects
-            if (IsGeneralSettings() || IsStandardProjectSettings())
-                {
-                panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-                m_realTimeUpdateCheckBox =
-                    new wxCheckBox(projectSettingsPage, ID_REALTIME_UPDATE_BUTTON,
-                                   _(L"Real-time update"), wxDefaultPosition, wxDefaultSize, 0,
-                                   wxGenericValidator(&m_realTimeUpdate.get_value()));
-                m_realTimeUpdateCheckBox->Enable(
-                    static_cast<TextStorage>(m_documentStorageMethod.get_value()) ==
-                    TextStorage::NoEmbedText);
-                panelSizer->Add(m_realTimeUpdateCheckBox,
-                                wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
-                }
-
-            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-            }
-
-        if (IsStandardProjectSettings())
-            {
-            auto* fileBrowseBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-            panelSizer->Add(fileBrowseBoxSizer,
-                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            m_filePathEdit = new wxTextCtrl(
-                projectSettingsPage, ID_DOCUMENT_PATH_FIELD, wxEmptyString, wxDefaultPosition,
-                wxDefaultSize, wxBORDER_THEME, wxGenericValidator(&m_filePath.get_value()));
-            m_filePathEdit->AutoCompleteFileNames();
-            fileBrowseBoxSizer->Add(m_filePathEdit, wxSizerFlags{ 1 }.Expand());
-
-            m_fileBrowseButton =
-                new wxBitmapButton(projectSettingsPage, ID_FILE_BROWSE_BUTTON, openImage);
-            fileBrowseBoxSizer->Add(m_fileBrowseButton, wxSizerFlags{}.CenterVertical());
-            // only enable these if document linking is selected
-            m_filePathEdit->Enable(m_documentStorageMethod ==
-                                   static_cast<int>(TextStorage::NoEmbedText));
-            m_fileBrowseButton->Enable(m_documentStorageMethod ==
-                                       static_cast<int>(TextStorage::NoEmbedText));
-
-            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-            auto* docDescriptionSizer = new wxBoxSizer(wxHORIZONTAL);
-            panelSizer->Add(docDescriptionSizer,
-                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            docDescriptionSizer->Add(
-                new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Document description:")),
-                wxSizerFlags{}.CenterVertical());
-            auto* descriptionEdit =
-                new wxTextCtrl(projectSettingsPage, ID_DOCUMENT_DESCRIPTION_FIELD, wxEmptyString,
-                               wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
-                               wxGenericValidator(&m_description.get_value()));
-            docDescriptionSizer->Add(descriptionEdit, wxSizerFlags{ 1 }.Expand().Border(wxLEFT));
-            }
-        else if (IsBatchProjectSettings())
-            {
-            auto* filesSizer = new wxBoxSizer(wxVERTICAL);
-            auto* filesButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
-            // add files (uses file browser)
-            m_addFilesButton =
-                new wxBitmapButton(projectSettingsPage, ID_ADD_FILES_BUTTON,
-                                   wxArtProvider::GetBitmapBundle(L"ID_DOCUMENTS", wxART_BUTTON));
-            m_addFilesButton->SetToolTip(_(L"Browse for documents to add"));
-            m_addFilesButton->Enable(m_documentStorageMethod ==
-                                     static_cast<int>(TextStorage::NoEmbedText));
-            filesButtonsSizer->Add(m_addFilesButton);
-
-            // add row to file list
-            m_addFileButton =
-                new wxBitmapButton(projectSettingsPage, ID_ADD_FILE_BUTTON,
-                                   wxArtProvider::GetBitmapBundle(L"ID_ADD", wxART_BUTTON));
-            m_addFileButton->SetToolTip(_(L"Enter a document"));
-            m_addFileButton->Enable(m_documentStorageMethod ==
-                                    static_cast<int>(TextStorage::NoEmbedText));
-            filesButtonsSizer->Add(m_addFileButton);
-
-            m_deleteFileButton =
-                new wxBitmapButton(projectSettingsPage, ID_DELETE_FILE_BUTTON,
-                                   wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_BUTTON));
-            m_deleteFileButton->SetToolTip(_(L"Remove selected document"));
-            m_deleteFileButton->Enable(m_documentStorageMethod ==
-                                       static_cast<int>(TextStorage::NoEmbedText));
-            filesButtonsSizer->Add(m_deleteFileButton);
-            filesSizer->Add(filesButtonsSizer, 0, wxALIGN_RIGHT);
-
-            m_fileData->SetSize(m_readabilityProjectDoc->GetSourceFilesInfo().size(), 2);
-            // fill the file info grid
-            for (size_t i = 0; i < m_readabilityProjectDoc->GetSourceFilesInfo().size(); ++i)
-                {
-                m_fileData->SetItemText(
-                    i, 0, m_readabilityProjectDoc->GetSourceFilesInfo()[i].first,
-                    Wisteria::NumberFormatInfo{
-                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                    std::numeric_limits<double>::quiet_NaN());
-                m_fileData->SetItemText(
-                    i, 1, m_readabilityProjectDoc->GetSourceFilesInfo()[i].second,
-                    Wisteria::NumberFormatInfo{
-                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                    std::numeric_limits<double>::quiet_NaN());
-                }
-            m_fileList = new Wisteria::UI::ListCtrlEx(
-                projectSettingsPage, ID_FILE_LIST, wxDefaultPosition, wxDefaultSize,
-                wxLC_VIRTUAL | wxLC_EDIT_LABELS | wxLC_REPORT | wxLC_ALIGN_LEFT);
-            m_fileList->EnableGridLines();
-            m_fileList->EnableItemDeletion();
-            m_fileList->InsertColumn(0, _(L"Files"));
-            m_fileList->InsertColumn(1, _(L"Labels"));
-            m_fileList->SetColumnEditable(0);
-            m_fileList->SetColumnEditable(1);
-            m_fileList->SetVirtualDataProvider(m_fileData);
-            m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
-            m_fileList->Enable(m_documentStorageMethod ==
-                               static_cast<int>(TextStorage::NoEmbedText));
-            filesSizer->Add(m_fileList,
-                            wxSizerFlags{ 1 }.Expand().Border(wxLEFT, optionIndentSize));
-
-            panelSizer->Add(filesSizer, wxSizerFlags{ 1 }.Expand());
-            }
-
-        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-            // additional template file to append
-            {
-            CreateLabelHeader(
-                projectSettingsPage, panelSizer,
-                _(L"Append Additional Document (e.g., policies, license agreements, addendums):"),
-                true);
-
-            auto* fileBrowseBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-            panelSizer->Add(fileBrowseBoxSizer,
-                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
-
-            auto* filePathEdit =
-                new wxTextCtrl(projectSettingsPage, ID_ADDITIONAL_FILE_FIELD, wxEmptyString,
-                               wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
-                               wxGenericValidator(&m_appendedDocumentFilePath.get_value()));
-            filePathEdit->AutoCompleteFileNames();
-            fileBrowseBoxSizer->Add(filePathEdit, wxSizerFlags{ 1 }.Expand());
-
-            fileBrowseBoxSizer->Add(new wxBitmapButton(projectSettingsPage,
-                                                       ID_ADDITIONAL_FILE_BROWSE_BUTTON, openImage),
-                                    wxSizerFlags{}.CenterVertical());
-            }
-
-        projectSettingsPage->SetSizer(panelSizer);
-        }
-
-    // Document parsing page
     if ((GetSectionsBeingShown() & DocumentIndexing) != 0)
         {
         auto* analysisIndexingPage = new wxPanel(m_sideBar, ANALYSIS_INDEXING_PAGE,
@@ -4044,8 +3645,11 @@ void ToolsOptionsDlg::CreateControls()
         syllableSizer->Add(m_syllableCombo, wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
         panelSizer->Add(syllableSizer, wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
         }
+    }
 
-    // readability settings
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateReadabilitySection()
+    {
     if ((GetSectionsBeingShown() & ScoresSection) != 0)
         {
         auto* scoreTestOptionsPage = new wxPanel(m_sideBar, SCORES_TEST_OPTIONS_PAGE,
@@ -4361,8 +3965,11 @@ void ToolsOptionsDlg::CreateControls()
             panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
             }
         }
+    }
 
-    // Statistics page
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateStatisticsSection()
+    {
     if ((GetSectionsBeingShown() & Statistics) != 0)
         {
         auto* panel = new wxPanel(m_sideBar, ANALYSIS_STATISTICS_PAGE, wxDefaultPosition,
@@ -4531,8 +4138,11 @@ void ToolsOptionsDlg::CreateControls()
 
         panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
         }
+    }
 
-    // words breakdown page (these options only apply to general options and standard projects)
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateWordsBreakdownSection()
+    {
     if (((GetSectionsBeingShown() & WordsBreakdown) != 0) && !IsBatchProjectSettings())
         {
         auto* panel = new wxPanel(m_sideBar, WORDS_BREAKDOWN_PAGE, wxDefaultPosition, wxDefaultSize,
@@ -4691,8 +4301,11 @@ void ToolsOptionsDlg::CreateControls()
 
         panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
         }
+    }
 
-    // sentences breakdown page (these options only apply to general options and standard projects)
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateSentencesBreakdownSection()
+    {
     if (((GetSectionsBeingShown() & SentencesBreakdown) != 0) && !IsBatchProjectSettings())
         {
         auto* panel = new wxPanel(m_sideBar, SENTENCES_BREAKDOWN_PAGE, wxDefaultPosition,
@@ -4776,8 +4389,11 @@ void ToolsOptionsDlg::CreateControls()
 
         panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
         }
+    }
 
-    // Grammar page
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateGrammarSection()
+    {
     if ((GetSectionsBeingShown() & Grammar) != 0)
         {
         auto* panel =
@@ -5028,8 +4644,14 @@ void ToolsOptionsDlg::CreateControls()
 
         panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
         }
+    }
 
-    // text window options page (these options only apply to general options and standard projects)
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateTextWindowSection()
+    {
+    const auto fontImage = wxArtProvider::GetBitmapBundle(L"ID_FONT", wxART_BUTTON);
+    const int optionIndentSize = wxSizerFlags::GetDefaultBorder() * 3;
+
     if (((GetSectionsBeingShown() & TextSection) != 0) && !IsBatchProjectSettings())
         {
         auto* panel = new wxPanel(m_sideBar, DOCUMENT_DISPLAY_GENERAL_PAGE, wxDefaultPosition,
@@ -5265,8 +4887,439 @@ void ToolsOptionsDlg::CreateControls()
                 }
             }
         }
+    }
 
-    // graphs options page
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateProjectSection()
+    {
+    const auto openImage = wxArtProvider::GetBitmapBundle(wxART_FILE_OPEN, wxART_BUTTON);
+    const int optionIndentSize = wxSizerFlags::GetDefaultBorder() * 3;
+
+    if ((GetSectionsBeingShown() & ProjectSection) != 0)
+        {
+        auto* projectSettingsPage = new wxPanel(m_sideBar, PROJECT_SETTINGS_PAGE, wxDefaultPosition,
+                                                wxDefaultSize, wxTAB_TRAVERSAL);
+        auto* panelSizer = new wxBoxSizer(wxVERTICAL);
+        m_sideBar->AddPage(projectSettingsPage, GetProjectSettingsLabel(), PROJECT_SETTINGS_PAGE,
+                           // if the only section being shown, then show this page
+                           (GetSectionsBeingShown() == ProjectSection), 11);
+
+        // project properties
+        CreateLabelHeader(projectSettingsPage, panelSizer, _(L"Project:"), true);
+
+        auto* projectExtraInfoSizer = new wxFlexGridSizer(2, 5, 5);
+        projectExtraInfoSizer->Add(
+            new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Reviewer:")),
+            wxSizerFlags{}.CenterVertical());
+        auto* reviewerEdit = new wxTextCtrl(projectSettingsPage, wxID_ANY, wxEmptyString,
+                                            wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
+                                            wxGenericValidator(&m_reviewer.get_value()));
+        projectExtraInfoSizer->Add(reviewerEdit, wxSizerFlags{ 1 }.Expand());
+
+        if (!IsGeneralSettings())
+            {
+            projectExtraInfoSizer->Add(
+                new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Status:")),
+                wxSizerFlags{}.CenterVertical());
+            auto* statusEdit = new wxTextCtrl(projectSettingsPage, wxID_ANY, wxEmptyString,
+                                              wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
+                                              wxGenericValidator(&m_status.get_value()));
+            projectExtraInfoSizer->Add(statusEdit, wxSizerFlags{ 1 }.Expand());
+            }
+
+        panelSizer->Add(projectExtraInfoSizer,
+                        wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+        if (IsGeneralSettings() || IsBatchProjectSettings())
+            {
+            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+            auto* batchOptionsBox =
+                new wxStaticBoxSizer(wxVERTICAL, projectSettingsPage, _(L"Batch options"));
+
+            auto* minDocSizeBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+            batchOptionsBox->Add(minDocSizeBoxSizer, wxSizerFlags{}.Expand().Border(wxLEFT));
+
+            auto* minDocSizeLabel = new wxStaticText(
+                batchOptionsBox->GetStaticBox(), wxID_STATIC, _(L"Minimum document word count:"),
+                wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+            minDocSizeBoxSizer->Add(minDocSizeLabel,
+                                    wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
+
+            auto* minDocWordCountForBatchSpinCtrl = new wxSpinCtrl(
+                batchOptionsBox->GetStaticBox(), wxID_ANY,
+                std::to_wstring(m_minDocWordCountForBatch.get_value()), wxDefaultPosition,
+                wxDefaultSize, wxSP_ARROW_KEYS, 1, std::numeric_limits<int>::max(), 0);
+            minDocWordCountForBatchSpinCtrl->SetValidator(
+                wxGenericValidator(&m_minDocWordCountForBatch.get_value()));
+            minDocSizeBoxSizer->Add(minDocWordCountForBatchSpinCtrl,
+                                    wxSizerFlags{}.CenterVertical());
+
+            auto* fileTruncSizer = new wxBoxSizer(wxHORIZONTAL);
+            fileTruncSizer->Add(new wxStaticText(batchOptionsBox->GetStaticBox(), wxID_STATIC,
+                                                 _(L"File path display:")),
+                                wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
+
+            wxArrayString truncModes;
+            truncModes.Add(_(L"Partially truncate the file path"));
+            truncModes.Add(_(L"Show only the file name"));
+            truncModes.Add(_(L"Show the full file path"));
+            auto* fileTruncCombo = new wxChoice(
+                batchOptionsBox->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                truncModes, 0, wxGenericValidator(&m_filePathTruncationMode.get_value()));
+            fileTruncSizer->Add(fileTruncCombo, wxSizerFlags{}.Border(wxRIGHT).CenterVertical());
+            batchOptionsBox->AddSpacer(wxSizerFlags::GetDefaultBorder());
+            batchOptionsBox->Add(fileTruncSizer, wxSizerFlags{}.Expand().Border(wxLEFT));
+
+            panelSizer->Add(batchOptionsBox, wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
+            }
+
+        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+        CreateLabelHeader(projectSettingsPage, panelSizer, _(L"Document:"), true);
+
+            {
+            wxArrayString languages;
+            languages.Add(_(L"English"));
+            languages.Add(_(L"Spanish"));
+            languages.Add(_(L"German"));
+
+            auto* langSizer = new wxBoxSizer(wxHORIZONTAL);
+            auto* langLabel = new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Language:"),
+                                               wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+            langSizer->Add(langLabel, wxSizerFlags{}.CenterVertical().Left());
+            langSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+            langSizer->Add(new wxChoice(projectSettingsPage, wxID_ANY, wxDefaultPosition,
+                                        wxDefaultSize, languages, 0,
+                                        wxGenericValidator(&m_projectLanguage.get_value())));
+            panelSizer->Add(langSizer, wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+            }
+
+            // Document origin settings
+            {
+            // document storage/linking section
+            wxArrayString docLinking;
+            docLinking.Add(_(L"&Embed the document's text into the project"));
+            docLinking.Add(_(L"&Reload the document when opening project"));
+            m_docStorageRadioBox = new wxRadioBox(
+                projectSettingsPage, ID_DOCUMENT_STORAGE_RADIO_BOX, _(L"Linking and embedding"),
+                wxDefaultPosition, wxDefaultSize, docLinking, 0, wxRA_SPECIFY_ROWS,
+                wxGenericValidator(&m_documentStorageMethod.get_value()));
+            panelSizer->Add(m_docStorageRadioBox, wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
+
+            // not relevant with batch projects
+            if (IsGeneralSettings() || IsStandardProjectSettings())
+                {
+                panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+                m_realTimeUpdateCheckBox =
+                    new wxCheckBox(projectSettingsPage, ID_REALTIME_UPDATE_BUTTON,
+                                   _(L"Real-time update"), wxDefaultPosition, wxDefaultSize, 0,
+                                   wxGenericValidator(&m_realTimeUpdate.get_value()));
+                m_realTimeUpdateCheckBox->Enable(
+                    static_cast<TextStorage>(m_documentStorageMethod.get_value()) ==
+                    TextStorage::NoEmbedText);
+                panelSizer->Add(m_realTimeUpdateCheckBox,
+                                wxSizerFlags{}.Border(wxLEFT, optionIndentSize));
+                }
+
+            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+            }
+
+        if (IsStandardProjectSettings())
+            {
+            auto* fileBrowseBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+            panelSizer->Add(fileBrowseBoxSizer,
+                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            m_filePathEdit = new wxTextCtrl(
+                projectSettingsPage, ID_DOCUMENT_PATH_FIELD, wxEmptyString, wxDefaultPosition,
+                wxDefaultSize, wxBORDER_THEME, wxGenericValidator(&m_filePath.get_value()));
+            m_filePathEdit->AutoCompleteFileNames();
+            fileBrowseBoxSizer->Add(m_filePathEdit, wxSizerFlags{ 1 }.Expand());
+
+            m_fileBrowseButton =
+                new wxBitmapButton(projectSettingsPage, ID_FILE_BROWSE_BUTTON, openImage);
+            fileBrowseBoxSizer->Add(m_fileBrowseButton, wxSizerFlags{}.CenterVertical());
+            // only enable these if document linking is selected
+            m_filePathEdit->Enable(m_documentStorageMethod ==
+                                   static_cast<int>(TextStorage::NoEmbedText));
+            m_fileBrowseButton->Enable(m_documentStorageMethod ==
+                                       static_cast<int>(TextStorage::NoEmbedText));
+
+            panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+            auto* docDescriptionSizer = new wxBoxSizer(wxHORIZONTAL);
+            panelSizer->Add(docDescriptionSizer,
+                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            docDescriptionSizer->Add(
+                new wxStaticText(projectSettingsPage, wxID_STATIC, _(L"Document description:")),
+                wxSizerFlags{}.CenterVertical());
+            auto* descriptionEdit =
+                new wxTextCtrl(projectSettingsPage, ID_DOCUMENT_DESCRIPTION_FIELD, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
+                               wxGenericValidator(&m_description.get_value()));
+            docDescriptionSizer->Add(descriptionEdit, wxSizerFlags{ 1 }.Expand().Border(wxLEFT));
+            }
+        else if (IsBatchProjectSettings())
+            {
+            auto* filesSizer = new wxBoxSizer(wxVERTICAL);
+            auto* filesButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
+            // add files (uses file browser)
+            m_addFilesButton =
+                new wxBitmapButton(projectSettingsPage, ID_ADD_FILES_BUTTON,
+                                   wxArtProvider::GetBitmapBundle(L"ID_DOCUMENTS", wxART_BUTTON));
+            m_addFilesButton->SetToolTip(_(L"Browse for documents to add"));
+            m_addFilesButton->Enable(m_documentStorageMethod ==
+                                     static_cast<int>(TextStorage::NoEmbedText));
+            filesButtonsSizer->Add(m_addFilesButton);
+
+            // add row to file list
+            m_addFileButton =
+                new wxBitmapButton(projectSettingsPage, ID_ADD_FILE_BUTTON,
+                                   wxArtProvider::GetBitmapBundle(L"ID_ADD", wxART_BUTTON));
+            m_addFileButton->SetToolTip(_(L"Enter a document"));
+            m_addFileButton->Enable(m_documentStorageMethod ==
+                                    static_cast<int>(TextStorage::NoEmbedText));
+            filesButtonsSizer->Add(m_addFileButton);
+
+            m_deleteFileButton =
+                new wxBitmapButton(projectSettingsPage, ID_DELETE_FILE_BUTTON,
+                                   wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_BUTTON));
+            m_deleteFileButton->SetToolTip(_(L"Remove selected document"));
+            m_deleteFileButton->Enable(m_documentStorageMethod ==
+                                       static_cast<int>(TextStorage::NoEmbedText));
+            filesButtonsSizer->Add(m_deleteFileButton);
+            filesSizer->Add(filesButtonsSizer, 0, wxALIGN_RIGHT);
+
+            m_fileData->SetSize(m_readabilityProjectDoc->GetSourceFilesInfo().size(), 2);
+            // fill the file info grid
+            for (size_t i = 0; i < m_readabilityProjectDoc->GetSourceFilesInfo().size(); ++i)
+                {
+                m_fileData->SetItemText(
+                    i, 0, m_readabilityProjectDoc->GetSourceFilesInfo()[i].first,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                m_fileData->SetItemText(
+                    i, 1, m_readabilityProjectDoc->GetSourceFilesInfo()[i].second,
+                    Wisteria::NumberFormatInfo{
+                        Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
+                    std::numeric_limits<double>::quiet_NaN());
+                }
+            m_fileList = new Wisteria::UI::ListCtrlEx(
+                projectSettingsPage, ID_FILE_LIST, wxDefaultPosition, wxDefaultSize,
+                wxLC_VIRTUAL | wxLC_EDIT_LABELS | wxLC_REPORT | wxLC_ALIGN_LEFT);
+            m_fileList->EnableGridLines();
+            m_fileList->EnableItemDeletion();
+            m_fileList->InsertColumn(0, _(L"Files"));
+            m_fileList->InsertColumn(1, _(L"Labels"));
+            m_fileList->SetColumnEditable(0);
+            m_fileList->SetColumnEditable(1);
+            m_fileList->SetVirtualDataProvider(m_fileData);
+            m_fileList->SetVirtualDataSize(m_fileData->GetItemCount());
+            m_fileList->Enable(m_documentStorageMethod ==
+                               static_cast<int>(TextStorage::NoEmbedText));
+            filesSizer->Add(m_fileList,
+                            wxSizerFlags{ 1 }.Expand().Border(wxLEFT, optionIndentSize));
+
+            panelSizer->Add(filesSizer, wxSizerFlags{ 1 }.Expand());
+            }
+
+        panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+            // additional template file to append
+            {
+            CreateLabelHeader(
+                projectSettingsPage, panelSizer,
+                _(L"Append Additional Document (e.g., policies, license agreements, addendums):"),
+                true);
+
+            auto* fileBrowseBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+            panelSizer->Add(fileBrowseBoxSizer,
+                            wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            auto* filePathEdit =
+                new wxTextCtrl(projectSettingsPage, ID_ADDITIONAL_FILE_FIELD, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
+                               wxGenericValidator(&m_appendedDocumentFilePath.get_value()));
+            filePathEdit->AutoCompleteFileNames();
+            fileBrowseBoxSizer->Add(filePathEdit, wxSizerFlags{ 1 }.Expand());
+
+            fileBrowseBoxSizer->Add(new wxBitmapButton(projectSettingsPage,
+                                                       ID_ADDITIONAL_FILE_BROWSE_BUTTON, openImage),
+                                    wxSizerFlags{}.CenterVertical());
+            }
+
+        projectSettingsPage->SetSizer(panelSizer);
+        }
+    }
+
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateControls()
+    {
+    auto* mainSizer = new wxBoxSizer(wxVERTICAL);
+    if (GetSectionsBeingShown() == TextSection || GetSectionsBeingShown() == GraphsSection ||
+        GetSectionsBeingShown() == Statistics)
+        {
+        mainSizer->SetMinSize(FromDIP(wxSize{ 500, 700 }));
+        }
+    else
+        {
+        mainSizer->SetMinSize(FromDIP(wxSize{ 650, 700 }));
+        }
+
+    const int optionIndentSize = wxSizerFlags::GetDefaultBorder() * 3;
+
+    m_sideBar = new Wisteria::UI::SideBarBook(this, wxID_ANY);
+    mainSizer->Add(m_sideBar, wxSizerFlags{ 1 }.Expand().Border());
+
+    wxGetApp().UpdateSideBarTheme(m_sideBar->GetSideBar());
+
+    if (GetSectionsBeingShown() == AllSections)
+        {
+        if (IsGeneralSettings())
+            {
+            auto* generalSettingsPage =
+                new wxPanel(m_sideBar, GENERAL_SETTINGS_PAGE, wxDefaultPosition, wxDefaultSize,
+                            wxTAB_TRAVERSAL);
+            auto* docPanelSizer = new wxBoxSizer(wxVERTICAL);
+            generalSettingsPage->SetSizer(docPanelSizer);
+            m_sideBar->AddPage(generalSettingsPage, GetGeneralSettingsLabel(),
+                               GENERAL_SETTINGS_PAGE, true, 10);
+
+            auto* optionsSizer = new wxBoxSizer(wxHORIZONTAL);
+            docPanelSizer->Add(optionsSizer, wxSizerFlags{}.Expand());
+
+            optionsSizer->Add(new wxStaticText(generalSettingsPage, wxID_STATIC,
+                                               _(L"UI language (requires restart):")),
+                              wxSizerFlags{}.Border(wxLEFT).CenterVertical());
+
+            const wxArrayString choiceStrings = {
+                _(L"System Default"), wxString{ _DT(L"English", DTExplanation::Constant) },
+                wxString{ _DT(L"Español", DTExplanation::Constant,
+                              L"This should be in the native language so that users can recognize "
+                              "it when selecting which language to use.") }
+            };
+            auto* uiLangCombo =
+                new wxComboBox(generalSettingsPage, wxID_ANY, wxString{}, wxDefaultPosition,
+                               wxDefaultSize, choiceStrings, wxCB_DROPDOWN | wxCB_READONLY);
+            uiLangCombo->SetValidator(wxGenericValidator(&m_uiLanguage.get_value()));
+            optionsSizer->Add(uiLangCombo, wxSizerFlags{}.Expand().Border());
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Settings:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            auto* loadSettingsButton =
+                new wxButton(generalSettingsPage, ID_LOAD_SETTINGS_BUTTON, _(L"Import..."));
+            optionsSizer->Add(loadSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
+
+            auto* exportSettingsButton =
+                new wxButton(generalSettingsPage, ID_EXPORT_SETTINGS_BUTTON, _(L"Export..."));
+            optionsSizer->Add(exportSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
+
+            auto* resetSettingsButton =
+                new wxButton(generalSettingsPage, ID_RESET_SETTINGS_BUTTON, _(L"Reset"));
+            optionsSizer->Add(resetSettingsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Internet:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            auto* userAgentSizer = new wxBoxSizer(wxHORIZONTAL);
+            optionsSizer->Add(userAgentSizer, wxSizerFlags{}.Expand());
+
+            userAgentSizer->Add(
+                new wxStaticText(generalSettingsPage, wxID_STATIC, _(L"User agent:")),
+                wxSizerFlags{}.CenterVertical());
+            auto* userAgentEdit = new wxTextCtrl(generalSettingsPage, wxID_ANY, wxString{},
+                                                 wxDefaultPosition, wxDefaultSize, wxBORDER_THEME,
+                                                 wxGenericValidator(&m_userAgent.get_value()));
+            userAgentSizer->Add(userAgentEdit, wxSizerFlags{ 1 }.Expand().Border(wxLEFT | wxRIGHT));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY,
+                                             _(L"Disable SSL certificate verification"),
+                                             wxDefaultPosition, wxDefaultSize, 0,
+                                             wxGenericValidator(&m_disablePeerVerify.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, ID_JS_COOKIES_CHECKBOX,
+                                             _(L"Use JavaScript cookies"), wxDefaultPosition,
+                                             wxDefaultSize, 0,
+                                             wxGenericValidator(&m_useJsCookies.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
+
+            m_persistCookiesCheck = new wxCheckBox(
+                generalSettingsPage, wxID_ANY, _(L"Persist cookies during each harvest"),
+                wxDefaultPosition, wxDefaultSize, 0,
+                wxGenericValidator(&m_persistJsCookies.get_value()));
+            optionsSizer->Add(m_persistCookiesCheck, wxSizerFlags{}.Expand().Border(wxTOP));
+            m_persistCookiesCheck->Enable(m_useJsCookies.get_value());
+
+            optionsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Warnings && Prompts:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            auto* warningsButton =
+                new wxButton(generalSettingsPage, ID_WARNING_MESSAGES_BUTTON, _(L"Customize..."));
+            optionsSizer->Add(warningsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Log:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Verbose logging"),
+                                             wxDefaultPosition, wxDefaultSize, 0,
+                                             wxGenericValidator(&m_logVerbose.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Append daily log"),
+                                             wxDefaultPosition, wxDefaultSize, 0,
+                                             wxGenericValidator(&m_logAppendDailyLog.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
+            }
+        }
+
+    // Project settings
+    CreateProjectSection();
+
+    // Document parsing page
+    CreateDocumentIndexingSection();
+
+    // Readability settings
+    CreateReadabilitySection();
+
+    // Statistics page
+    CreateStatisticsSection();
+
+    // Words breakdown page (these options only apply to general options and standard projects)
+    CreateWordsBreakdownSection();
+
+    // Sentences breakdown page (these options only apply to general options and standard projects)
+    CreateSentencesBreakdownSection();
+
+    // Grammar page
+    CreateGrammarSection();
+
+    // Text window options page (these options only apply to general options and standard projects)
+    CreateTextWindowSection();
+
+    // Graphs options page
     CreateGraphSection();
 
     mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL | wxHELP), wxSizerFlags{}.Expand().Border());

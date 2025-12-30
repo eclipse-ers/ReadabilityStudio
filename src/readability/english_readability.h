@@ -2631,13 +2631,7 @@ namespace readability
                     if (pos == std::wstring_view::npos)
                         {
                         // final segment after last separator
-                        if (syllabize(remaining.data(), remaining.size()) >= 3)
-                            {
-                            return false;
-                            }
-
-                        // all parts are less than 3 syllables
-                        return true;
+                        return syllabize(remaining.data(), remaining.size()) < 3;
                         }
 
                     // segment before separator

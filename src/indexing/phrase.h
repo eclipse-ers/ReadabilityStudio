@@ -413,8 +413,7 @@ namespace grammar
                 {
                 return npos;
                 }
-            while (foundPhrase != m_phrases.end() &&
-                   foundPhrase->first.get_words()[0].compare(words[0].c_str()) == 0)
+            while (foundPhrase != m_phrases.end() && foundPhrase->first.get_words()[0] == words[0])
                 {
                 if (foundPhrase->first.equal_to_words(words, position, max_word_count).first)
                     {
@@ -422,7 +421,7 @@ namespace grammar
                     // words before returning this index
                     auto nextPhrase = foundPhrase + 1;
                     while (nextPhrase != m_phrases.end() &&
-                           nextPhrase->first.get_words()[0].compare(words[0].c_str()) == 0)
+                           nextPhrase->first.get_words()[0] == words[0])
                         {
                         const auto nextPhraseCompareResult =
                             nextPhrase->first.equal_to_words(words, position, max_word_count);

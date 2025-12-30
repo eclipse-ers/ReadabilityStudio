@@ -85,6 +85,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <ranges>
 #include <set>
 #include <unordered_map>
 #include <vector>
@@ -1444,17 +1445,16 @@ class BaseProject : public ProjectRefresh
     [[nodiscard]]
     bool HasCustomTest(const wxString& testName) const
         {
-        for (const auto& pos : m_customTestsInUse)
-            {
-            // can't use the interface's internal iterator's comparison because it might be out of
-            // sync when this is called. We need to do the comparison ourselves, so just make be
-            // sure that this is the same type of comparison done by the iterator.
-            if (pos.GetTestName().CmpNoCase(testName) == 0)
-                {
-                return true;
-                }
-            }
-        return false;
+        return std::ranges::any_of(m_customTestsInUse,
+                                   [&](const auto& pos)
+                                   {
+                                       // Can't use the interface's internal iterator's comparison
+                                       // because it might be out of sync when this is called.
+                                       // We need to do the comparison ourselves, so just make
+                                       // sure that this is the same type of comparison done by the
+                                       // iterator.
+                                       return pos.GetTestName().CmpNoCase(testName) == 0;
+                                   });
         }
 
     /// @note Call HasCustomTest() before calling this to verify that the test will be available.

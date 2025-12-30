@@ -69,6 +69,8 @@ TEST_CASE("Custom familiar words tests", "[custom][readability-tests]")
 
         cTest.set_proper_noun_method(readability::proper_noun_counting_method::only_count_first_instance_of_proper_noun_as_unfamiliar);
         CHECK(cTest.is_word_familiar(mac));
+
+        CHECK(cTest == L"myDC");
         }
     SECTION("Stocker")
         {

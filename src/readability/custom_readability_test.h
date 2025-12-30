@@ -244,7 +244,7 @@ namespace readability
         [[nodiscard]]
         bool operator==(const wchar_t* name) const noexcept
             {
-            return (m_name.compare(name) == 0);
+            return m_name == name;
             }
 
         /// @private

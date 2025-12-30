@@ -278,6 +278,14 @@ class ToolsOptionsDlg final : public wxDialog
 
     /// Creates the controls and sizers
     void CreateControls();
+    void CreateProjectSection();
+    void CreateDocumentIndexingSection();
+    void CreateReadabilitySection();
+    void CreateStatisticsSection();
+    void CreateWordsBreakdownSection();
+    void CreateSentencesBreakdownSection();
+    void CreateGrammarSection();
+    void CreateTextWindowSection();
     void CreateGraphSection();
     void CreateGraphGeneralSection();
     void CreateGraphAxesSection();
