@@ -124,8 +124,7 @@ class LuaEditorDlg final : public wxFrame
         // close any call tip and auto-completion windows
         if (m_notebook != nullptr && m_notebook->GetPageCount() > 0)
             {
-            auto* codeEditor =
-                dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+            auto* codeEditor = GetCurrentEditor();
             if (codeEditor != nullptr)
                 {
                 if (codeEditor->CallTipActive())
@@ -160,6 +159,25 @@ class LuaEditorDlg final : public wxFrame
     void OnShowFindDialog([[maybe_unused]] wxCommandEvent& event);
     void OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event);
     void OnFindDialog(wxFindDialogEvent& event);
+
+    [[nodiscard]]
+    Wisteria::UI::CodeEditor* GetCurrentEditor()
+        {
+        const wxWindow* page = m_notebook->GetCurrentPage();
+        if (page == nullptr)
+            {
+            return nullptr;
+            }
+
+        auto* codeEditor = static_cast<Wisteria::UI::CodeEditor*>(page->GetClientData());
+        wxASSERT_MSG(codeEditor != nullptr, L"Code editor in tab has not been set!");
+        wxASSERT_MSG(codeEditor->IsKindOf(wxCLASSINFO(Wisteria::UI::CodeEditor)),
+                     L"Data in tab is not a code editor?!");
+        return (codeEditor != nullptr &&
+                codeEditor->IsKindOf(wxCLASSINFO(Wisteria::UI::CodeEditor))) ?
+                   codeEditor :
+                   nullptr;
+        }
 
     [[nodiscard]]
     Wisteria::UI::CodeEditor* CreateLuaScript(wxWindow* parent);

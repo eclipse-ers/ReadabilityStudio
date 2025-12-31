@@ -52,6 +52,7 @@
 #include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../app/readability_app.h"
 #include <utility>
+#include <wx/stc/minimap.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -89,7 +90,11 @@ LuaEditorDlg::LuaEditorDlg(
                 return;
                 }
 
-            auto* editor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+            auto* editor = GetCurrentEditor();
+            if (editor == nullptr)
+                {
+                return;
+                }
             editor->AnnotationClearAll();
             wxString errorMessage;
 
@@ -187,8 +192,7 @@ LuaEditorDlg::LuaEditorDlg(
                  return;
                  }
 
-             auto* codeEditor =
-                 dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+             auto* codeEditor = GetCurrentEditor();
              if (codeEditor != nullptr && codeEditor->GetModify())
                  {
                  if (wxMessageBox(_(L"Do you wish to save your unsaved changes?"),
@@ -203,13 +207,20 @@ LuaEditorDlg::LuaEditorDlg(
         wxEVT_TOOL,
         [this]([[maybe_unused]] wxCommandEvent&)
         {
-            m_notebook->Freeze();
+            const wxWindowUpdateLocker lock(m_notebook);
+            auto* page = new wxPanel(m_notebook);
+            auto* codeEditor = CreateLuaScript(page);
+            auto* miniMap = new wxStyledTextCtrlMiniMap(page, codeEditor);
+            auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+            sizer->Add(codeEditor, 1, wxEXPAND);
+            sizer->Add(miniMap, 0, wxEXPAND);
+            page->SetSizer(sizer);
+            page->SetClientData(codeEditor);
             m_notebook->AddPage(
-                CreateLuaScript(m_notebook), _(L"(unnamed)"), true,
+                page, _(L"(unnamed)"), true,
                 wxGetApp().GetResourceManager().GetSVG(wxSystemSettings::GetAppearance().IsDark() ?
                                                            L"ribbon/lua-dark-mode.svg" :
                                                            L"ribbon/lua.svg"));
-            m_notebook->Thaw();
         },
         XRCID("ID_NEW"));
 
@@ -226,15 +237,15 @@ LuaEditorDlg::LuaEditorDlg(
                 }
             const wxString filePath = dialogOpen.GetPath();
 
-            auto* scriptCtrl = CreateLuaScript(m_notebook);
+            auto* page = new wxPanel(m_notebook);
+            auto* scriptCtrl = CreateLuaScript(page);
             if (scriptCtrl != nullptr)
                 {
                 // Just the generic default page open and nothing in it? Then get rid of it
                 // now that we are opening an existing script.
                 if (m_notebook->GetPageCount() == 1)
                     {
-                    auto* codeEditor =
-                        dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+                    auto* codeEditor = GetCurrentEditor();
                     if (codeEditor != nullptr && !codeEditor->GetModify() &&
                         codeEditor->GetScriptFilePath().empty())
                         {
@@ -245,7 +256,13 @@ LuaEditorDlg::LuaEditorDlg(
                 scriptCtrl->SetSelection(scriptCtrl->GetTextLength(), scriptCtrl->GetTextLength());
                 scriptCtrl->SetScriptFilePath(filePath);
 
-                m_notebook->AddPage(scriptCtrl, wxFileName(filePath).GetName(), true,
+                auto* miniMap = new wxStyledTextCtrlMiniMap(page, scriptCtrl);
+                auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+                sizer->Add(scriptCtrl, 1, wxEXPAND);
+                sizer->Add(miniMap, 0, wxEXPAND);
+                page->SetSizer(sizer);
+                page->SetClientData(scriptCtrl);
+                m_notebook->AddPage(page, wxFileName(filePath).GetName(), true,
                                     wxGetApp().GetResourceManager().GetSVG(
                                         wxSystemSettings::GetAppearance().IsDark() ?
                                             L"ribbon/lua-dark-mode.svg" :
@@ -298,8 +315,7 @@ LuaEditorDlg::LuaEditorDlg(
     Bind(wxEVT_SEARCH,
          [this](wxCommandEvent& evt)
          {
-             auto* codeEditor =
-                 dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+             auto* codeEditor = GetCurrentEditor();
              if (codeEditor != nullptr)
                  {
                  codeEditor->FindNext(evt.GetString());
@@ -460,20 +476,17 @@ void LuaEditorDlg::OnSave([[maybe_unused]] wxCommandEvent& event)
         return;
         }
 
-    if (dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage())->Save())
+    if (auto* codeEditor = GetCurrentEditor(); codeEditor != nullptr && codeEditor->Save())
         {
-        m_notebook->SetPageText(
-            m_notebook->GetSelection(),
-            wxFileName(dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage())
-                           ->GetScriptFilePath())
-                .GetName());
+        m_notebook->SetPageText(m_notebook->GetSelection(),
+                                wxFileName(codeEditor->GetScriptFilePath()).GetName());
         }
     }
 
 //------------------------------------------------------
 void LuaEditorDlg::OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event)
     {
-    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = GetCurrentEditor();
     if (currentScript != nullptr && m_findData.GetFindString().empty())
         {
         m_findData.SetFindString(currentScript->GetSelectedText());
@@ -497,7 +510,7 @@ void LuaEditorDlg::OnShowReplaceDialog([[maybe_unused]] wxCommandEvent& event)
 //------------------------------------------------------
 void LuaEditorDlg::OnShowFindDialog([[maybe_unused]] wxCommandEvent& event)
     {
-    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = GetCurrentEditor();
     if (currentScript != nullptr && m_findData.GetFindString().empty())
         {
         m_findData.SetFindString(currentScript->GetSelectedText());
@@ -525,7 +538,7 @@ void LuaEditorDlg::OnFindDialog(wxFindDialogEvent& event)
         return;
         }
 
-    auto* currentScript = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetCurrentPage());
+    auto* currentScript = GetCurrentEditor();
     if (currentScript == nullptr)
         {
         return;
@@ -769,8 +782,16 @@ void LuaEditorDlg::CreateControls()
                                        wxAUI_NB_MIDDLE_CLICK_CLOSE | wxAUI_NB_TAB_EXTERNAL_MOVE |
                                        wxNO_BORDER);
 
+    auto* page = new wxPanel(m_notebook);
+    auto* codeEditor = CreateLuaScript(page);
+    auto* miniMap = new wxStyledTextCtrlMiniMap(page, codeEditor);
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(codeEditor, 1, wxEXPAND);
+    sizer->Add(miniMap, 0, wxEXPAND);
+    page->SetSizer(sizer);
+    page->SetClientData(codeEditor);
     m_notebook->AddPage(
-        CreateLuaScript(m_notebook), _(L"(unnamed)"), true,
+        page, _(L"(unnamed)"), true,
         wxGetApp().GetResourceManager().GetSVG(wxSystemSettings::GetAppearance().IsDark() ?
                                                    L"ribbon/lua-dark-mode.svg" :
                                                    L"ribbon/lua.svg"));
@@ -831,14 +852,19 @@ void LuaEditorDlg::OnClose([[maybe_unused]] wxCloseEvent& event)
     // ask about any unsaved changes
     for (size_t i = 0; i < m_notebook->GetPageCount(); ++i)
         {
-        auto* codeEditor = dynamic_cast<Wisteria::UI::CodeEditor*>(m_notebook->GetPage(i));
-        if ((codeEditor != nullptr) && codeEditor->GetModify() &&
-            (wxMessageBox(_(L"Do you wish to save your unsaved changes?"), _(L"Save Script"),
-                          wxYES_NO | wxICON_QUESTION) == wxYES))
+        auto* page = m_notebook->GetPage(i);
+        if (page != nullptr)
             {
-            if (codeEditor->Save())
+            auto* codeEditor = static_cast<Wisteria::UI::CodeEditor*>(page->GetClientData());
+            if ((codeEditor != nullptr) && codeEditor->GetModify() &&
+                (wxMessageBox(_(L"Do you wish to save your unsaved changes?"), _(L"Save Script"),
+                              wxYES_NO | wxICON_QUESTION) == wxYES))
                 {
-                m_notebook->SetPageText(i, wxFileName{ codeEditor->GetScriptFilePath() }.GetName());
+                if (codeEditor->Save())
+                    {
+                    m_notebook->SetPageText(
+                        i, wxFileName{ codeEditor->GetScriptFilePath() }.GetName());
+                    }
                 }
             }
         }
