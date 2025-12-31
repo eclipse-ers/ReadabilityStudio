@@ -579,8 +579,12 @@ void ReadabilityAppOptions::LoadThemeNode(tinyxml2::XMLElement* appearanceNode)
             }
         m_uiLanguage = static_cast<UiLanguage>(appearanceNode->ToElement()->IntAttribute(
             XML_UI_LANGUAGE.data(), static_cast<int>(UiLanguage::Default)));
-        m_scriptEditorLayout =
+        const auto* editorLayout =
             appearanceNode->ToElement()->Attribute(XML_SCRIPT_EDITOR_LAYOUT.data());
+        if (editorLayout != nullptr)
+            {
+            m_scriptEditorLayout.assign(editorLayout);
+            }
         }
     }
 
@@ -810,7 +814,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
         if (logAppendNode != nullptr)
             {
             AppendDailyLog(
-                int_to_bool(logAppendNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+                int_to_bool(logAppendNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
             }
         }
     // printer settings
