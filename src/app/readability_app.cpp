@@ -2302,7 +2302,7 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         auto* editButtonBar =
             new wxRibbonButtonBar(editPanel, MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
 
-        if (doc->IsKindOf(wxCLASSINFO(ProjectDoc)))
+        if (doc != nullptr && doc->IsKindOf(wxCLASSINFO(ProjectDoc)))
             {
             editButtonBar->AddToggleButton(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"),
                                            _(L"Showcase"), ReadSvgIcon(L"ribbon/showcase.svg"),

@@ -2580,7 +2580,9 @@ class ReadabilityAppOptions
   private:
     void LoadThemeNode(tinyxml2::XMLElement* appearanceNode);
     [[nodiscard]]
-    static wxString TiXmlNodeToString(const tinyxml2::XMLNode* node, const wxString& tagToRead);
+    static wxString TiXmlNodeAttributeToString(const tinyxml2::XMLNode* node,
+                                               const wxString& tagToRead,
+                                               const wxString& fallbackValue = wxString{});
     /// @returns The value from the specified attribute from @c node as a double, or NaN on failure.
     /// @note This assumes the double is written in US format (and no thousands separator).
     [[nodiscard]]
