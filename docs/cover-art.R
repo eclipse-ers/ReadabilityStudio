@@ -46,17 +46,19 @@ createGridCover <- function(
     image4,
     outImage,
     width  = 1913,
-    height = 2200,
+    height = 2000,
     frame  = 20,
     gutter = 20,
     wide_frac = 0.6,
-    row_frac  = 0.5)
+    row_frac  = 0.5,
+    pad_top   = 0)
   {
+  # canvas with transparent padding at top
   canvas <- magick::image_blank(
     width  = width,
-    height = height)
+    height = height + pad_top  )
 
-  # inner drawable area
+  # inner drawable area (unchanged)
   inner_w <- width  - 2 * frame
   inner_h <- height - 2 * frame
 
@@ -66,13 +68,13 @@ createGridCover <- function(
   wide_w   <- round((inner_w - gutter) * wide_frac)
   narrow_w <- inner_w - gutter - wide_w
 
-  # read + fit
+  # read + fit helper
   fit <- function(x, w, h)
     {
     im <- if (inherits(x, "magick-image")) x else magick::image_read(x)
     im |>
       magick::image_resize(glue::glue("{w}x{h}^")) |>
-      magick::image_crop(glue::glue("{w}x{h}+0+0"), gravity = "center")
+      magick::image_crop(glue::glue("{w}x{h}+0+0"), gravity = "west")
     }
 
   # tiles
@@ -81,9 +83,9 @@ createGridCover <- function(
   i3 <- fit(image3, narrow_w, bottom_h)  # row 2 left (narrow)
   i4 <- fit(image4, wide_w,   bottom_h)  # row 2 right (wide)
 
-  # offsets
-  y_top    <- frame
-  y_bottom <- frame + top_h + gutter
+  # offsets (everything shifted down by pad_top)
+  y_top    <- frame + pad_top
+  y_bottom <- frame + pad_top + top_h + gutter
 
   # row 1: wide | narrow
   x1_left  <- frame

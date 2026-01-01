@@ -62,6 +62,13 @@ createPolaroidCover(glue("{scriptFolder}/../resources/images/splash/splashscreen
                     glue("{scriptFolder}/readability-studio-manual/images/non-generated/cover.png"),
                     c("Bookstore trip", "Saturday storytime!", "Reading at the café"))
 
+createGridCover(glue("{scriptFolder}/../resources/images/splash/splashscreen7.jpg"),
+                glue("{scriptFolder}/../resources/images/splash/splashscreen4.jpg"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/dashboard.png"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/nlm_nlmuid-101648240-img.jpg"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/sysadmin-cover.png"),
+                pad_top = 350)
+
 thumbnailWidth <- "256"
 
 # delete previous builds

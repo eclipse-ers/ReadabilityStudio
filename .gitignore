@@ -64,6 +64,7 @@
 /docs/readability-studio-manual/readability-studio-manual_files/figure-latex
 /docs/readability-studio-manual/readability-studio-manual.tex
 /docs/readability-studio-manual/images/non-generated/cover.png
+/docs/readability-studio-manual/images/non-generated/sysadmin-cover.png
 /docs/readability-studio-manual/site_libs
 /docs/readability-studio-manual/.quarto
 /docs/shortcuts-cheatsheet/.quarto
@@ -107,4 +108,3 @@ CMakeUserPresets.json
 /citations.apa
 /citations.bib
 /citations.mla
-
