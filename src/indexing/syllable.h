@@ -356,7 +356,7 @@ namespace grammar
                                           const size_t vowel_block_size,
                                           const bool is_first_vowel_block_in_word) const;
         /** @returns @c true if a consonant block can be joined with the
-                proceeding vowels to form a single syllable.*/
+                preceding vowels to form a single syllable.*/
         [[nodiscard]]
         static bool can_consonants_end_sound(const wchar_t* consonants, size_t block_length);
         //--------------------------------------------------

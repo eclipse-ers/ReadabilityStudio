@@ -62,7 +62,7 @@ namespace grammar
         /// @private
         virtual ~is_incorrect_article() = default;
 
-        /** @brief Determines if an article/proceeding word pair is a mismatch.
+        /** @brief Determines if an article and proceeding word is a mismatch.
             @param article The article.
             @param word The word following the article.
             @returns Whether an article/following word pair is a mismatch.*/
@@ -74,7 +74,7 @@ namespace grammar
     class is_incorrect_english_article final : public is_incorrect_article
         {
       public:
-        /** @brief Determines if an article/proceeding word pair is a mismatch.
+        /** @brief Determines if an article and proceeding word is a mismatch.
             @param article The article.
             @param word The word following the article.
             @returns Whether an article/following word pair is a mismatch.*/

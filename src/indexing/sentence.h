@@ -388,7 +388,7 @@ namespace grammar
             @param previous_word_position The position in the text of the start of the word in
                 front of the period we are analyzing.
             @param sentence_position_of_previous_word The position in the sentence
-                of the proceeding word.*/
+                of the preceding word.*/
         [[nodiscard]]
         bool operator()(const wchar_t* text, const size_t length, size_t current_position,
                         const size_t previous_word_position,
@@ -427,7 +427,7 @@ namespace grammar
                     return false;
                     }
                 /* special case with colon; treat it like the end of a sentence if followed
-                   by a newline. This is the assumption that it is proceeding a list of some sort.*/
+                   by a newline. This is the assumption that it is preceding a list of some sort.*/
                 if (traits::case_insensitive_ex::eq(text[current_position], L':'))
                     {
                     // eat up "regular" whitespace (space or tab) after colon first

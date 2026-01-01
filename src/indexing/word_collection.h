@@ -643,7 +643,7 @@ class document
                         // list items also (in case they were headers or incomplete sentences).
                         if (is_exclusion_aggressive())
                             {
-                            // proceeding sentence(s)
+                            // preceding sentence(s)
                             auto surroundingSentIter = (sentPos - 1);
                             while (!surroundingSentIter->is_valid())
                                 {
@@ -1556,7 +1556,7 @@ class document
                         if (otherWord->get_sentence_index() == wordPos->get_sentence_index() &&
                             IS_ACRONYM({ otherWord->c_str(), otherWord->length() }))
                             {
-                            // proceeding word is uppercased too, so don't treat this as
+                            // preceding word is uppercased too, so don't treat this as
                             // an acronym or proper
                             wordPos->set_exclamatory(true);
                             wordPos->set_acronym(false);
@@ -1572,7 +1572,7 @@ class document
                         if (otherWord->get_sentence_index() == wordPos->get_sentence_index() &&
                             otherWord->is_exclamatory())
                             {
-                            // proceeding word was uppercased too, so don't treat this as
+                            // preceding word was uppercased too, so don't treat this as
                             // an acronym or proper
                             wordPos->set_exclamatory(true);
                             wordPos->set_acronym(false);

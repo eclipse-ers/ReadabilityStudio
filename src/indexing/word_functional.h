@@ -118,8 +118,8 @@ class syllable_count_equals
     bool m_treat_numerals_as_monosyllabic{ false };
     };
 
-/** @brief Counting functor for `std::count_if` that verifies the syllables in a word match a given
-   count.
+/** @brief Counting functor for `std::count_if` that verifies the syllables in a
+        word match a given count.
     @details This always fails if the passed in word in invalid (i.e., excluded from the
    analysis).*/
 template<typename word_typeT>
@@ -1193,6 +1193,10 @@ class is_correctly_spelled_word
     [[nodiscard]]
     bool is_programmer_code(const word_typeT& the_word) const
         {
+        if (the_word.length() < 2)
+            {
+            return false;
+            }
         // Single uppercase word (not in a block of other uppercased words)
         // is probably a constant or macro command.
         // Ignore numbers explicitly too.

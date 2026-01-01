@@ -686,6 +686,12 @@ namespace tokenize
                         {
                         ++currentPeekChar;
                         }
+                    // If just spaces up until the end of the stream, then stop and have the
+                    // indexer pick this up in the next pass.
+                    if (currentPeekChar == m_text_block_end)
+                        {
+                        break;
+                        }
                     /* If what we moved to is a line or sentence terminator then move the
                        current char to where we scanned ahead to and set the line/sentence state for
                        the next call to this function. Otherwise, just stop and leave the current
@@ -884,7 +890,7 @@ namespace tokenize
         /** @returns @c true if the last parsed word is at the end of a line.
             @note If the word as at the end of a sentence, then the newline won't be seen until
                   the next tokenize. In this situation, call
-                  get_current_leading_end_of_line_count to see how many newlines are proceeding
+                  get_current_leading_end_of_line_count to see how many newlines are preceding
                   the next word.*/
         [[nodiscard]]
         bool is_at_eol() const noexcept
@@ -925,7 +931,7 @@ namespace tokenize
             return m_current_sentence_ending_punctuation;
             }
 
-        /** @returns The number of proceeding newlines in front of the last word parsed.*/
+        /** @returns The number of newlines in front of the last word parsed.*/
         [[nodiscard]]
         size_t get_current_leading_end_of_line_count() const noexcept
             {

@@ -172,13 +172,16 @@ namespace grammar
                     m_syllable_count += syllabify_numeral<syllabize_german_number>(
                         currentChar, end, charactersCounted, common_lang_constants::COMMA,
                         common_lang_constants::PERIOD);
+                    if (charactersCounted == 0)
+                        {
+                        break;
+                        }
                     currentChar += charactersCounted;
                     if (currentChar >= end)
                         {
                         break;
                         }
                     // else, we already moved to the next character to analyze, so just restart loop
-
                     continue;
                     }
                 // syllabize any pertinent symbols
@@ -287,7 +290,7 @@ namespace grammar
                 traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T) &&
                 traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_L) &&
                 traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A) &&
-                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_N) &&
                 traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_G))
                 {
                 return std::make_pair(2, 7);
@@ -492,7 +495,7 @@ namespace grammar
                 }
             if (length >= 2)
                 {
-                // Irish names with proceeding "Mc" is a separate syllable
+                // Irish names with preceding "Mc" is a separate syllable
                 if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_M) &&
                     traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_C))
                     {
@@ -548,6 +551,10 @@ namespace grammar
                                        const bool is_first_vowel_block_in_word) const noexcept
             {
             assert(word);
+            if (position + vowel_block_size > m_length)
+                {
+                return 1;
+                }
             // EOAU (a rare combination)
             if (vowel_block_size == 4 &&
                 traits::case_insensitive_ex::eq(word[position], common_lang_constants::LOWER_E) &&
@@ -560,7 +567,6 @@ namespace grammar
                 return 3;
                 }
             // other four consecutive vowels would be odd, so just return a syllable count of two
-
             if (vowel_block_size > 3)
                 {
                 return 2;

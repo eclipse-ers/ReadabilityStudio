@@ -666,7 +666,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     if (customColorsNode != nullptr)
         {
         GetCustomColors().clear();
-        const std::string colorStr{ "color" };
+        const std::string colorStr{ _DT("color") };
         for (int i = 0; i < MAX_CUSTOM_COLORS; ++i)
             {
             const auto currentColor{ std::string{ colorStr + std::to_string(i) } };
@@ -3030,7 +3030,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* configSection = doc.NewElement(XML_CONFIGURATIONS.data());
 
     auto* customColors = doc.NewElement(XML_CUSTOM_COLORS.data());
-    const std::string colorStr{ "color" };
+    const std::string colorStr{ _DT("color") };
     for (int i = 0; static_cast<size_t>(i) < GetCustomColors().size(); ++i)
         {
         const auto currentColor{ std::string{ colorStr + std::to_string(i) } };

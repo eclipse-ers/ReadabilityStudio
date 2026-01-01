@@ -148,7 +148,9 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
     const wxDateTime startTime(wxDateTime::Now());
     if (luaL_dostring(m_L, code.utf8_str()) != 0)
         {
-        constexpr std::wstring_view BREAK_LINE{ L"BREAK_LINE:" };
+        constexpr std::wstring_view BREAK_LINE{ _DT(
+            L"BREAK_LINE:", DTExplanation::InternalKeyword,
+            L"String is from Lua itself and always in English") };
         errorMessage = wxString{ luaL_checkstring(m_L, -1), wxConvUTF8 };
 
         // user stopped the script

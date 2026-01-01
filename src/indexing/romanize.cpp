@@ -211,7 +211,7 @@ namespace text_transform
                     const std::pair<bool, size_t> bullet = isBullet(text.substr(i));
                     if (bullet.first)
                         {
-                        // if there is not a proceeding character in front of this bullet
+                        // if there is not a preceding character in front of this bullet
                         // already, then replace the bullet with a tab
                         if (encodedText.empty() || encodedText[encodedText.length() - 1] != L'\t')
                             {

@@ -169,27 +169,28 @@ namespace readability
                     }
 
                 sight_word_type sightWord{ sight_word_type::noun };
-                if (string_util::stricmp(rowStrings[1].c_str(), L"CONJUNCTION") == 0)
+                if (string_util::stricmp(rowStrings[1].c_str(),
+                                         _DT(L"CONJUNCTION", DTExplanation::InternalKeyword)) == 0)
                     {
                     sightWord = sight_word_type::conjunction;
                     }
-                else if (string_util::stricmp(rowStrings[1].c_str(), L"PREPOSITION") == 0)
+                else if (string_util::stricmp(rowStrings[1].c_str(), _DT(L"PREPOSITION")) == 0)
                     {
                     sightWord = sight_word_type::preposition;
                     }
-                else if (string_util::stricmp(rowStrings[1].c_str(), L"PRONOUN") == 0)
+                else if (string_util::stricmp(rowStrings[1].c_str(), _DT(L"PRONOUN")) == 0)
                     {
                     sightWord = sight_word_type::pronoun;
                     }
-                else if (string_util::stricmp(rowStrings[1].c_str(), L"ADVERB") == 0)
+                else if (string_util::stricmp(rowStrings[1].c_str(), _DT(L"ADVERB")) == 0)
                     {
                     sightWord = sight_word_type::adverb;
                     }
-                else if (string_util::stricmp(rowStrings[1].c_str(), L"ADJECTIVE") == 0)
+                else if (string_util::stricmp(rowStrings[1].c_str(), _DT(L"ADJECTIVE")) == 0)
                     {
                     sightWord = sight_word_type::adjective;
                     }
-                else if (string_util::stricmp(rowStrings[1].c_str(), L"VERB") == 0)
+                else if (string_util::stricmp(rowStrings[1].c_str(), _DT(L"VERB")) == 0)
                     {
                     sightWord = sight_word_type::verb;
                     }

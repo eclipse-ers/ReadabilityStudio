@@ -5839,7 +5839,8 @@ ProjectDoc::BuildHeader(const wxColour& backgroundColor,
         L"<span background=\"%s\" foreground=\"%s\" face=\"%s\" "
         "size=\"%u\" style=\"%s\" weight=\"%s\" underline=\"%s\">\n",
         backgroundColor.GetAsString(wxC2S_HTML_SYNTAX),
-        ((backgroundColor.GetLuminance() < .5f) ? L"white" : L"black"), textViewFont.GetFaceName(),
+        ((backgroundColor.GetLuminance() < .5f) ? _DT(L"white") : _DT(L"black")),
+        textViewFont.GetFaceName(),
         // "size" in Pango is 1024th of a point
         textViewFont.GetPointSize() * 1024,
         (textViewFont.GetStyle() == wxFONTSTYLE_ITALIC) ? _DT(L"italic") : _DT(L"normal"),

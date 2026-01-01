@@ -113,7 +113,6 @@ namespace grammar
 
             m_length = length;
             adjust_length_if_possessive(start);
-            const wchar_t* end = start + m_length;
 
             const std::pair<bool, size_t> mathResult = is_special_math_word(start, m_length);
             if (mathResult.first)
@@ -121,7 +120,7 @@ namespace grammar
                 return m_syllable_count = mathResult.second;
                 }
 
-            if (syllabize_if_contains_periods<spanish_syllabize>(start, end))
+            if (syllabize_if_contains_periods<spanish_syllabize>(start, std::next(start, m_length)))
                 {
                 return m_syllable_count;
                 }
@@ -141,6 +140,7 @@ namespace grammar
 
             m_previous_block_vowel = m_previous_vowel = m_length;
             const wchar_t* currentChar = start;
+            const wchar_t* end = std::next(start, m_length);
 
             while (currentChar != end)
                 {
@@ -157,7 +157,7 @@ namespace grammar
                     {
                     nextCharIsVowel = false;
                     }
-                else
+                else if (std::next(currentChar) < end)
                     {
                     nextCharIsVowel = characters::is_character::is_vowel(currentChar[1]);
                     nextCharIsVowel = (traits::case_insensitive_ex::eq(
@@ -177,7 +177,8 @@ namespace grammar
                 else if (currentCharIsVowel && isInVowelBlock)
                     {
                     const wchar_t* startOfBlock = currentChar;
-                    while (currentChar != end && characters::is_character::is_vowel(currentChar[1]))
+                    while ((std::next(currentChar) < end) &&
+                           characters::is_character::is_vowel(currentChar[1]))
                         {
                         ++currentChar;
                         }
@@ -202,6 +203,10 @@ namespace grammar
                         currentChar, end, charactersCounted, common_lang_constants::COMMA,
                         common_lang_constants::PERIOD);
                     currentChar += charactersCounted;
+                    if (charactersCounted == 0)
+                        {
+                        break;
+                        }
                     if (currentChar >= end)
                         {
                         break;
@@ -229,7 +234,7 @@ namespace grammar
         void finalize_special_cases(const wchar_t* start) noexcept
             {
             assert(start);
-            // Irish names with proceeding "Mc" is a separate syllable
+            // Irish names with preceding "Mc" is a separate syllable
             if (m_length >= 2 &&
                 traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_M) &&
                 traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_C))
@@ -546,7 +551,7 @@ namespace grammar
             {
             return (traits::case_insensitive_ex::eq(vowel, common_lang_constants::LOWER_I) ||
                     traits::case_insensitive_ex::eq(vowel, common_lang_constants::LOWER_U) ||
-                    // although the umlaut is an accent, it doesn't make U strong
+                    // although the umlaut is an accent, it doesn't make 'U' strong
                     traits::case_insensitive_ex::eq(vowel, common_lang_constants::LOWER_U_UMLAUTS));
             }
 
@@ -560,6 +565,10 @@ namespace grammar
                                           size_t vowel_block_size) const noexcept
             {
             assert(word);
+            if (position + vowel_block_size > m_length)
+                {
+                return false;
+                }
             // four consecutive vowels would be odd, so just return true
             if (vowel_block_size > 3)
                 {

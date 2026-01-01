@@ -226,7 +226,6 @@ namespace grammar
 
         m_length = length;
         adjust_length_if_possessive(start);
-        const wchar_t* end = start + m_length;
 
         m_ends_with_nt_contraction =
             (m_length >= 4 &&
@@ -240,7 +239,7 @@ namespace grammar
             return m_syllable_count = mathResult.second;
             }
 
-        if (syllabize_if_contains_periods<english_syllabize>(start, end))
+        if (syllabize_if_contains_periods<english_syllabize>(start, std::next(start, m_length)))
             {
             return m_syllable_count;
             }
@@ -262,6 +261,7 @@ namespace grammar
         bool isInVowelBlock = false;
         bool currentCharIsVowel = false;
         const wchar_t* currentChar = start;
+        const wchar_t* end = std::next(start, m_length);
         bool wasLastVowelSilentE = false;
 
         while (currentChar != end)
@@ -284,7 +284,7 @@ namespace grammar
                 {
                 nextCharIsVowel = false;
                 }
-            else
+            else if (std::next(currentChar) < end)
                 {
                 nextCharIsVowel = characters::is_character::is_vowel(currentChar[1]);
                 nextCharIsVowel = (traits::case_insensitive_ex::eq(
@@ -330,7 +330,8 @@ namespace grammar
                 {
                 wasLastVowelSilentE = false;
                 const wchar_t* startOfBlock{ currentChar };
-                while (currentChar != end && characters::is_character::is_vowel(currentChar[1]))
+                while ((std::next(currentChar) < end) &&
+                       characters::is_character::is_vowel(currentChar[1]))
                     {
                     ++currentChar;
                     }
@@ -372,6 +373,10 @@ namespace grammar
                     currentChar, end, charactersCounted, common_lang_constants::COMMA,
                     common_lang_constants::PERIOD);
                 currentChar += charactersCounted;
+                if (charactersCounted == 0)
+                    {
+                    break;
+                    }
                 if (currentChar >= end)
                     {
                     break;
@@ -401,7 +406,7 @@ namespace grammar
             {
             return;
             }
-        // Irish names with proceeding "Mc" is a separate syllable
+        // Irish names with preceding "Mc" is a separate syllable
         if (m_length >= 2 &&
             traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_M) &&
             traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_C))

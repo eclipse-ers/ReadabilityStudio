@@ -339,7 +339,7 @@ void EditWordListDlg::OnFilePathChanged(wxCommandEvent& event)
                 {
                 // TRANSLATORS: An exception for a word before a phrase that negates
                 // a grammar check.
-                m_wordsList->InsertColumn(3, _(L"Proceeding Exception"));
+                m_wordsList->InsertColumn(3, _(L"Preceding Exception"));
                 }
             if (maxColumnCount > 4)
                 {

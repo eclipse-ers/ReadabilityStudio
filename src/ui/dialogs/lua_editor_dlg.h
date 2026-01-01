@@ -108,7 +108,7 @@ class LuaEditorDlg final : public wxFrame
         Show();
         for (auto& pn : m_mgr.GetAllPanes())
             {
-            if (pn.name == L"funcbrowser" && !m_isFunctionBrowserShown)
+            if (pn.name == _DT(L"funcbrowser") && !m_isFunctionBrowserShown)
                 {
                 continue;
                 }
@@ -141,7 +141,7 @@ class LuaEditorDlg final : public wxFrame
         Hide();
         for (auto& pn : m_mgr.GetAllPanes())
             {
-            if (pn.name == L"funcbrowser")
+            if (pn.name == _DT(L"funcbrowser"))
                 {
                 m_isFunctionBrowserShown = pn.IsShown();
                 }

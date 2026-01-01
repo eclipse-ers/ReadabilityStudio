@@ -53,6 +53,7 @@
 #include "../../app/readability_app.h"
 #include <utility>
 #include <wx/stc/minimap.h>
+#include <wx/display.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -212,8 +213,8 @@ LuaEditorDlg::LuaEditorDlg(
             auto* codeEditor = CreateLuaScript(page);
             auto* miniMap = new wxStyledTextCtrlMiniMap(page, codeEditor);
             auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-            sizer->Add(codeEditor, 1, wxEXPAND);
-            sizer->Add(miniMap, 0, wxEXPAND);
+            sizer->Add(codeEditor, wxSizerFlags{ 1 }.Expand());
+            sizer->Add(miniMap, wxSizerFlags{}.Expand());
             page->SetSizer(sizer);
             page->SetClientData(codeEditor);
             m_notebook->AddPage(
@@ -258,8 +259,8 @@ LuaEditorDlg::LuaEditorDlg(
 
                 auto* miniMap = new wxStyledTextCtrlMiniMap(page, scriptCtrl);
                 auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-                sizer->Add(scriptCtrl, 1, wxEXPAND);
-                sizer->Add(miniMap, 0, wxEXPAND);
+                sizer->Add(scriptCtrl, wxSizerFlags{ 1 }.Expand());
+                sizer->Add(miniMap, wxSizerFlags{}.Expand());
                 page->SetSizer(sizer);
                 page->SetClientData(scriptCtrl);
                 m_notebook->AddPage(page, wxFileName(filePath).GetName(), true,
@@ -278,7 +279,7 @@ LuaEditorDlg::LuaEditorDlg(
         wxEVT_TOOL,
         [this]([[maybe_unused]] wxCommandEvent&)
         {
-            m_mgr.GetPane(L"funcbrowser").Show(!m_mgr.GetPane(L"funcbrowser").IsShown());
+            m_mgr.GetPane(_DT(L"funcbrowser")).Show(!m_mgr.GetPane(_DT(L"funcbrowser")).IsShown());
             m_mgr.Update();
         },
         XRCID("ID_FUNCTION_BROWSER"));
@@ -769,14 +770,14 @@ void LuaEditorDlg::CreateControls()
 
     m_toolbar->Realize();
     m_mgr.AddPane(m_toolbar, wxAuiPaneInfo()
-                                 .Name(L"auitoolbar")
+                                 .Name(_DT(L"auitoolbar"))
                                  .Caption(_(L"Tools"))
                                  .ToolbarPane()
                                  .Top()
                                  .CloseButton(false)
                                  .Fixed());
 
-    m_notebook = new wxAuiNotebook(this, wxID_ANY, wxPoint{ 0, 0 }, FromDIP(wxSize{ 400, 200 }),
+    m_notebook = new wxAuiNotebook(this, wxID_ANY, wxPoint{ 0, 0 }, FromDIP(wxSize{ 500, 200 }),
                                    wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
                                        wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS |
                                        wxAUI_NB_MIDDLE_CLICK_CLOSE | wxAUI_NB_TAB_EXTERNAL_MOVE |
@@ -786,8 +787,8 @@ void LuaEditorDlg::CreateControls()
     auto* codeEditor = CreateLuaScript(page);
     auto* miniMap = new wxStyledTextCtrlMiniMap(page, codeEditor);
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(codeEditor, 1, wxEXPAND);
-    sizer->Add(miniMap, 0, wxEXPAND);
+    sizer->Add(codeEditor, wxSizerFlags{ 1 }.Expand());
+    sizer->Add(miniMap, wxSizerFlags{}.Expand());
     page->SetSizer(sizer);
     page->SetClientData(codeEditor);
     m_notebook->AddPage(
@@ -796,14 +797,19 @@ void LuaEditorDlg::CreateControls()
                                                    L"ribbon/lua-dark-mode.svg" :
                                                    L"ribbon/lua.svg"));
 
-    m_mgr.AddPane(m_notebook, wxAuiPaneInfo().Name(L"auinotebook").CenterPane().PaneBorder(false));
+    m_mgr.AddPane(m_notebook,
+                  wxAuiPaneInfo().Name(_DT(L"auinotebook")).CenterPane().PaneBorder(false));
 
     m_functionBrowser = new Wisteria::UI::FunctionBrowserCtrl(this, this);
     wxGetApp().UpdateSideBarTheme(m_functionBrowser->GetSidebar());
     m_functionBrowser->SetParameterSeparator(FormulaFormat::GetListSeparator());
-    m_functionBrowser->AddCategory(L"Libraries", 1000);
-    m_functionBrowser->AddCategory(L"Classes", 1001);
-    m_functionBrowser->AddCategory(L"Enumerations", 1002);
+    m_functionBrowser->AddCategory(
+        // TRANSLATORS: Libraries  in a programming language.
+        _(L"Libraries"), 1000);
+    m_functionBrowser->AddCategory(
+        // TRANSLATORS: Classes in a programming language.
+        _(L"Classes"), 1001);
+    m_functionBrowser->AddCategory(_(L"Enumerations"), 1002);
     for (const auto& theClass : m_classes)
         {
         m_functionBrowser->AddCategory(theClass.first, theClass.second, 1001);
@@ -818,30 +824,33 @@ void LuaEditorDlg::CreateControls()
         }
     m_functionBrowser->FinalizeCategories();
     m_mgr.AddPane(m_functionBrowser, wxAuiPaneInfo()
-                                         .Name(L"funcbrowser")
+                                         .Name(_DT(L"funcbrowser"))
                                          .Right()
                                          .MinimizeButton(true)
                                          .MaximizeButton(true)
                                          .Caption(_(L"Function Browser"))
-                                         .FloatingSize(FromDIP(wxSize{ 800, 800 }))
-                                         .BestSize(FromDIP(wxSize{ 800, 800 }))
+                                         .FloatingSize(FromDIP(wxSize{ 1000, 800 }))
+                                         .BestSize(FromDIP(wxSize{ 1000, 800 }))
                                          .PinButton(true)
                                          .CloseButton(true)
                                          .Hide());
 
     m_debugMessageWindow = new wxHtmlWindow(this);
     m_mgr.AddPane(m_debugMessageWindow, wxAuiPaneInfo()
-                                            .Name(L"auidebug")
+                                            .Name(_DT(L"auidebug"))
                                             .Bottom()
                                             .MinimizeButton(true)
                                             .MaximizeButton(true)
                                             .Caption(_(L"Debug Output"))
-                                            .FloatingSize(FromDIP(wxSize{ 800, 200 }))
-                                            .BestSize(FromDIP(wxSize{ 800, 100 }))
+                                            .FloatingSize(FromDIP(wxSize{ 1000, 200 }))
+                                            .BestSize(FromDIP(wxSize{ 1000, 100 }))
                                             .PinButton(true)
                                             .CloseButton(false));
 
-    SetSize(FromDIP(wxSize{ 800, 800 }));
+    wxSize sz = FromDIP(wxSize{ 1400, 800 });
+    sz.SetWidth(std::min(sz.GetWidth(), wxDisplay(this).GetClientArea().GetSize().GetWidth()));
+
+    SetSize(ToDIP(sz));
 
     m_mgr.Update();
     }

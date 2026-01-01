@@ -1098,7 +1098,7 @@ TEST_CASE("Phrases", "[phrase]")
         CHECK(phrases.get_phrases().at(0).first.to_string() == L"all rights reserved");
         CHECK(phrases.get_phrases().at(0).second == L"ARR");
         CHECK(phrases.get_phrases().at(0).first.get_type() == grammar::phrase_type::phrase_redundant);
-        CHECK(*phrases.get_phrases().at(0).first.get_proceeding_exceptions().cbegin() == L"Pexcept");
+        CHECK(*phrases.get_phrases().at(0).first.get_preceding_exceptions().cbegin() == L"Pexcept");
         CHECK(phrases.get_phrases().at(1).first.get_word_count() == 1);
         CHECK(phrases.get_phrases().at(1).first.to_string() == L"trademarks");
         CHECK(phrases.get_phrases().at(1).second == L"T");
@@ -1107,7 +1107,7 @@ TEST_CASE("Phrases", "[phrase]")
         CHECK(phrases.get_phrases().at(2).first.to_string() == L"copyright notice");
         CHECK(phrases.get_phrases().at(2).second == L"Notice");
         CHECK(phrases.get_phrases().at(2).first.get_type() == grammar::phrase_type::phrase_error);
-        CHECK(*phrases.get_phrases().at(2).first.get_proceeding_exceptions().cbegin() == L"pExt");
+        CHECK(*phrases.get_phrases().at(2).first.get_preceding_exceptions().cbegin() == L"pExt");
         CHECK(phrases.get_phrases().size() == 3);
         }
     SECTION("Loading Phrases With Trialing Exceptions")
@@ -1204,7 +1204,7 @@ TEST_CASE("Phrase comparison", "[phrass]")
         ph.add_word(L"I");
         ph.add_word(L"had");
         ph.add_word(L"had");
-        ph.set_proceeding_exceptions(std::set<std::basic_string<wchar_t, traits::case_insensitive_ex>>{L"WRONG"});
+        ph.set_preceding_exceptions(std::set<std::basic_string<wchar_t, traits::case_insensitive_ex>>{L"WRONG"});
         ph.set_trailing_exceptions(std::set<std::basic_string<wchar_t, traits::case_insensitive_ex>>{L"it"});
 
         std::vector<std::basic_string<wchar_t, traits::case_insensitive_ex>> positive;

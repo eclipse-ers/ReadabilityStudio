@@ -736,7 +736,7 @@ void WebHarvester::CrawlLink(const wxString& currentLink,
 
     if (anchorsToSkip.Matches(currentLink) ||
         // weird placeholders to ignore
-        currentLink == L"%link%")
+        currentLink == _DT(L"%link%"))
         {
         return;
         }

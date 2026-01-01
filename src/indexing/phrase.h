@@ -81,7 +81,7 @@ namespace grammar
         phrase_greater_than,  /*!< The phrase is greater than (lexicographically) the
                                    words it was compared to. */
         phrase_rule_exception /*!< The phrase doesn't equal the text because of trailing
-                                   or proceeding text rule. */
+                                   or preceding text rule. */
         };
 
     /** A class for storing a phrase (string of words), along with extended information about the
@@ -131,6 +131,7 @@ namespace grammar
             @param count The number of items from the source vector to copy over.*/
         void copy_words(const std::vector<word_typeT>& src, const size_t count)
             {
+            assert(count <= src.size());
             m_words.resize(count);
             std::copy(src.cbegin(), src.cbegin() + count, m_words.begin());
             }
@@ -204,7 +205,7 @@ namespace grammar
                 (should have the same interface as `std::basic_string`).
             @param position The position in the sentence of word sequence.\n
                 If this is zero (meaning the passed in sequence is the start of the sentence),
-                then the proceeding exception logic will not be used.
+                then the preceding exception logic will not be used.
             @param max_word_count The maximum number of words from the sequence to compare against.
                 This would usually be the number of words in the sequence until the
                 end of the sentence.
@@ -231,10 +232,10 @@ namespace grammar
                                                      phrase_comparison_result::phrase_greater_than);
                     }
                 }
-            // before returning true, make sure there isn't a proceeding word exception
-            if (get_proceeding_exceptions().size() && position > 0)
+            // before returning true, make sure there isn't a preceding word exception
+            if (get_preceding_exceptions().size() && position > 0)
                 {
-                if (get_proceeding_exceptions().contains((words - 1)->c_str()))
+                if (get_preceding_exceptions().contains((words - 1)->c_str()))
                     {
                     return std::make_pair(false, phrase_comparison_result::phrase_rule_exception);
                     }
@@ -298,7 +299,7 @@ namespace grammar
         /** @brief Sets the trailing exceptions, which are used in equal_to_words().
             @details If equal_to_words() determines if a sequence of strings
                 matches the phrase, then it will be equal unless the next word in
-                the sequence is one of these trailing exception.
+                the sequence is one of these trailing exceptions.
                 This helps prevent false positives when searching for grammar errors.
             @param except The trailing exception to use.*/
         void set_trailing_exceptions(const std::set<word_typeT>& except)
@@ -326,42 +327,42 @@ namespace grammar
             return m_trailing_exceptions;
             }
 
-        /** @brief Sets the proceeding exceptions, which are used in equal_to_words().
+        /** @brief Sets the preceding exceptions, which are used in equal_to_words().
             @details If equal_to_words() determines if a sequence of strings matches
                 the phrase, then it will be equal unless the word before the sequence
-                is one of these proceeding exceptions.
+                is one of these preceding exceptions.
                 This helps prevent false positives when searching for grammar errors.
-            @param except The proceeding exception to use.*/
-        void set_proceeding_exceptions(const std::set<word_typeT>& except)
+            @param except The preceding exception to use.*/
+        void set_preceding_exceptions(const std::set<word_typeT>& except)
             {
-            m_proceeding_exceptions = except;
+            m_preceding_exceptions = except;
             }
 
         /// @private
-        void set_proceeding_exceptions(std::set<word_typeT>&& except)
+        void set_preceding_exceptions(std::set<word_typeT>&& except)
             {
-            m_proceeding_exceptions = std::move(except);
+            m_preceding_exceptions = std::move(except);
             }
 
-        /** @returns The proceeding exception.*/
+        /** @returns The preceding exception.*/
         [[nodiscard]]
-        const std::set<word_typeT>& get_proceeding_exceptions() const noexcept
+        const std::set<word_typeT>& get_preceding_exceptions() const noexcept
             {
-            return m_proceeding_exceptions;
+            return m_preceding_exceptions;
             }
 
-        /** @returns The proceeding exception.*/
+        /** @returns The preceding exception.*/
         [[nodiscard]]
-        std::set<word_typeT>& get_proceeding_exceptions() noexcept
+        std::set<word_typeT>& get_preceding_exceptions() noexcept
             {
-            return m_proceeding_exceptions;
+            return m_preceding_exceptions;
             }
 
       private:
         std::vector<word_typeT> m_words;
         phrase_type m_phrase_type{ phrase_type::phrase_wordy };
         std::set<word_typeT> m_trailing_exceptions;
-        std::set<word_typeT> m_proceeding_exceptions;
+        std::set<word_typeT> m_preceding_exceptions;
         };
 
     /** Wrapper for a collection of phrases that can be easily searched,
@@ -380,7 +381,7 @@ namespace grammar
                 (should have the same interface as `std::basic_string`).
             @param position The position in the sentence of word sequence.
                 If this is zero (meaning the passed in sequence is the start of the sentence),
-                then the proceeding exception logic will not be used.
+                then the preceding exception logic will not be used.
             @param max_word_count The maximum number of words from the sequence to compare against.
                 This would usually be the number of words in the sequence until the
                 end of the sentence.
@@ -396,11 +397,15 @@ namespace grammar
                 {
                 return npos;
                 }
+            if (!allow_one_word_phrase && max_word_count < 2)
+                {
+                return std::string::npos;
+                }
             phrase<traits::case_insensitive_wstring_ex> searchPhrase;
             searchPhrase.set_type(phrase_type::phrase_wordy);
             searchPhrase.add_word(words[0].c_str());
-            // This is normally the case. Try to make the minimal search key from
-            // the first two words from the text.
+            // try to make the minimal search key from the first two words from the text
+            // if we are only looking for 2+ word phrases (instead of including single words)
             if (!allow_one_word_phrase)
                 {
                 searchPhrase.add_word(words[1].c_str());
@@ -467,7 +472,7 @@ namespace grammar
             - Phrase
             - Suggestion (optional)
             - Type (optional, should be the numeric equivalent of a phrase_type)
-            - Proceeding exceptions (optional, can be multiple values delimited by ';' or ',')
+            - Preceding exceptions (optional, can be multiple values delimited by ';' or ',')
             - Trailing exceptions (optional, can be multiple values delimited by ';' or ',')
             @param text The text stream to load the phrases from.
             @param sort_phrases Whether to sort the phrases after loading them.
@@ -498,7 +503,7 @@ namespace grammar
             m_phrases.reserve(m_phrases.size() + lineCount);
 
             // the phrase, the suggestion, its type (optional),
-            // and proceeding/trailing exceptions (optional)
+            // and preceding/trailing exceptions (optional)
             std::vector<traits::case_insensitive_wstring_ex> rowStrings(5);
             lily_of_the_valley::standard_delimited_character_column tabbedColumn(
                 lily_of_the_valley::text_column_delimited_character_parser{ L'\t' }, 5);
@@ -572,11 +577,11 @@ namespace grammar
                     {
                     newPhrasePair.first.set_type(phrase_type::phrase_wordy);
                     }
-                // Proceeding exception rule is optional.
+                // Preceding exception rule is optional.
                 // This would be a word before the phrase that would negate our
                 // normal comparison logic.
                 // For example, the phrase "I are" is normally wrong, but in the case of
-                // "and I are" it is correct. So "and" would be our proceeding word exception.
+                // "and I are" it is correct. So "and" would be our preceding word exception.
                 if (row.get_number_of_columns_last_read() > 3)
                     {
                     string_util::string_tokenize<traits::case_insensitive_wstring_ex> tkzr(
@@ -590,11 +595,11 @@ namespace grammar
                             expts.emplace(std::move(nTok));
                             }
                         }
-                    newPhrasePair.first.set_proceeding_exceptions(std::move(expts));
+                    newPhrasePair.first.set_preceding_exceptions(std::move(expts));
                     }
                 else
                     {
-                    newPhrasePair.first.get_proceeding_exceptions().clear();
+                    newPhrasePair.first.get_preceding_exceptions().clear();
                     }
                 // Trailing exception rule is optional.
                 // This would be a word after the phrase that would negate our
@@ -640,7 +645,7 @@ namespace grammar
                 {
                 outputStr += phrase.first.to_string().c_str();
                 // don't bother exporting blank columns
-                if (!phrase.second.empty() || !phrase.first.get_proceeding_exceptions().empty() ||
+                if (!phrase.second.empty() || !phrase.first.get_preceding_exceptions().empty() ||
                     !phrase.first.get_trailing_exceptions().empty())
                     {
                     outputStr += L'\t';
@@ -649,7 +654,7 @@ namespace grammar
                     outputStr += std::to_wstring(static_cast<int>(phrase.first.get_type()));
                     outputStr += L'\t';
                     expStr.clear();
-                    for (const auto& exp : phrase.first.get_proceeding_exceptions())
+                    for (const auto& exp : phrase.first.get_preceding_exceptions())
                         {
                         expStr.append(exp.c_str()).append(L";");
                         }

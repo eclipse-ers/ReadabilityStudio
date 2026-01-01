@@ -114,7 +114,7 @@ namespace punctuation
             @param wordPosition The position into the parent document of this
                 mark's following word.
             @param isConnectedToPreviousWord @c true if this mark is connected
-                to the word proceeding it (e.g., an apostrophe on a plural possessive word).*/
+                to the word preceding it (e.g., an apostrophe on a plural possessive word).*/
         punctuation_mark(const wchar_t mark, const size_t wordPosition,
                          const bool isConnectedToPreviousWord) noexcept
             : m_mark(mark), m_word_position(wordPosition),
