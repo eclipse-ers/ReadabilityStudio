@@ -45,25 +45,36 @@ createGridCover <- function(
     image3,
     image4,
     outImage,
-    width  = 1913,
+    width  = 1900,
     height = 2000,
     frame  = 20,
     gutter = 20,
     wide_frac = 0.6,
     row_frac  = 0.5,
-    pad_top   = 0)
+    pad_top   = 0,
+    row_shift_top    = 40,
+    row_shift_bottom = 60,
+    vertical_nudge   = 5,
+    row_gap_extra = 40)
   {
-  # canvas with transparent padding at top
+  # horizontal breathing room for row shifts
+  side_pad <- max(row_shift_top, row_shift_bottom)
+
+  # expanded canvas
   canvas <- magick::image_blank(
-    width  = width,
-    height = height + pad_top  )
+    width  = width + 2 * side_pad,
+    height = height + pad_top)
 
   # inner drawable area (unchanged)
   inner_w <- width  - 2 * frame
   inner_h <- height - 2 * frame
+  v_gutter <- gutter + row_gap_extra
 
-  top_h    <- round((inner_h - gutter) * row_frac)
-  bottom_h <- inner_h - gutter - top_h
+  # re-anchored frame X origin
+  frame_x <- frame + side_pad
+
+  top_h    <- round((inner_h - v_gutter) * row_frac)
+  bottom_h <- inner_h - v_gutter - top_h
 
   wide_w   <- round((inner_w - gutter) * wide_frac)
   narrow_w <- inner_w - gutter - wide_w
@@ -78,22 +89,23 @@ createGridCover <- function(
     }
 
   # tiles
-  i1 <- fit(image1, wide_w,   top_h)     # row 1 left (wide)
-  i2 <- fit(image2, narrow_w, top_h)     # row 1 right (narrow)
-  i3 <- fit(image3, narrow_w, bottom_h)  # row 2 left (narrow)
-  i4 <- fit(image4, wide_w,   bottom_h)  # row 2 right (wide)
+  i1 <- fit(image1, wide_w,   top_h)
+  i2 <- fit(image2, narrow_w, top_h)
+  i3 <- fit(image3, narrow_w, bottom_h)
+  i4 <- fit(image4, wide_w,   bottom_h)
 
-  # offsets (everything shifted down by pad_top)
-  y_top    <- frame + pad_top
-  y_bottom <- frame + pad_top + top_h + gutter
+  # vertical offsets (optical balance)
+  y_top    <- frame + pad_top + vertical_nudge
+  y_bottom <- frame + pad_top + top_h + v_gutter - vertical_nudge
 
-  # row 1: wide | narrow
-  x1_left  <- frame
-  x1_right <- frame + wide_w + gutter
+  # horizontal offsets with preserved gutters
+  # row 1 (top): shifted left
+  x1_left  <- frame_x - row_shift_top
+  x1_right <- frame_x + wide_w + gutter - row_shift_top
 
-  # row 2: narrow | wide
-  x2_left  <- frame
-  x2_right <- frame + narrow_w + gutter
+  # row 2 (bottom): shifted right
+  x2_left  <- frame_x + row_shift_bottom
+  x2_right <- frame_x + narrow_w + gutter + row_shift_bottom
 
   # composite
   cover <- canvas |>

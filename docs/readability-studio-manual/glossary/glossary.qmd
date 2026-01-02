@@ -30,7 +30,7 @@ Refer to @sec-cloze for an extended explanation.
 
 ::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
-diacritics\index{diacritics} test
+diacritic\index{diacritics}
 :::
 ::: {.glsdef data-latex=''}
 Accents combined with letters to produce a new letter.
@@ -352,7 +352,8 @@ An extreme (high or low) value that is numerically distant from the rest of the 
 :::
 ::::
 
-:::: {.glsentry data-latex=''}
+<!-- Do not put this in a glsentry becaust it acts as a minipage and causes this
+     to be cut off in the PDF. -->
 ::: {.glsterm data-latex=''}
 overplotting
 :::
@@ -376,7 +377,7 @@ stripchart(len ~ dose, data = ToothGrowth, method='overplot', add=T, pch=20, col
 Although we can interpret the quartile ranges, it is not obvious how the data clumps overall.
 
 To correct this, a technique called jittering\index{box plots!jittering} is used to adjust the x-axis values of overlapping points.
-Jittering\index{jittering|see{box plots,jittering}} uses randomness to move the points' position around both sides of the axis, as such:
+Traditionally, jittering\index{jittering|see{box plots,jittering}} uses randomness to move the points' position around both sides of the axis, as such:
 
 ```{r}
 #| label: fig-boxplot-random-jittering
@@ -409,7 +410,6 @@ boxplot(len ~ dose, data = ToothGrowth,
 beeswarm(len ~ dose, data = ToothGrowth, col = 2, add = TRUE)
 ```
 :::
-::::
 
 :::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
