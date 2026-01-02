@@ -1,9 +1,9 @@
 ## Degrees of Reading Power\index{Degrees of Reading Power|(idxit} {#sec-degrees-of-reading-power}
 
 The Degrees of Reading Power [@{kibby}416–27; @{carver:1985}303–16] formula calculates the difficulty level of a document in terms of DRP units.
-These units range from 0 (easy) to 100 difficult).
+(These units range from 0 (easy) to 100 difficult).
 
-The DRP difficulty score of document is used to match it to a student based on their DRP ability score.
+The DRP difficulty score of a document is used to match it to a student based on their DRP ability score.
 DRP ability tests are manual tests administered to students to gauge their reading levels.
 
 This test is based on the [Bormuth Cloze](#sec-bormuth-cloze-mean-machine-passage) test and uses the same criteria for its calculation.

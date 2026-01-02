@@ -4,7 +4,8 @@ The Amstad test is a recalculation of [Flesch Reading Ease](#sec-flesch-test)\in
 Its formula is adjusted from the original Flesch to take into account German's comparatively longer words.
 It also uses a lower weighting for the sentence-length factor, placing most of the influence on word length.
 
-The factors used for this test are syllables per word ("*Silben pro Wort*") and words per sentence ("*Wörter pro Satz*") [-@{amstad}81]. (The same factors used for Flesch Reading Ease).
+The factors used for this test are syllables per word ("*Silben pro Wort*") and words per sentence ("*Wörter pro Satz*") [-@{amstad}81].
+(These are the same factors used for Flesch Reading Ease).
 
 Amstad is best suited for school textbooks and technical manuals.
 Scores range from 0–100 (the higher the score, the easier to read) and average documents should be within the range of 60–70.

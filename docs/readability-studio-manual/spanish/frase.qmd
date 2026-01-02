@@ -6,7 +6,7 @@ These averages are plotted onto a chart where their intersection determines the 
 
 The test uses methodologies borrowed from the [Fry](#sec-fry-test) graph, such as using the same factors (sentence length and syllable count).
 However, it also includes adjustments which differentiate it.
-One adjustment is that is X axis begins at 182 (Fry begins at 108)—this is used to account for Spanish text having higher syllable counts compared to English.
+One adjustment is that the x-axis begins at 182 (Fry begins at 108)—this is used to account for Spanish text having higher syllable counts compared to English.
 The second adjustment is that it uses reading levels ("Beginning," "Intermediate," "Advanced Intermediate," and "Advanced"), rather than grade levels.
 By using reading levels, documents can be classified more broadly into reading groups, which makes this test ideal for SSL (Spanish as a second language) readers.
 
@@ -22,7 +22,7 @@ It was trained on eight textbooks representing the four levels of difficulty:
 - *Español: Curso Primero*
 - *Perspectivas*
 
-These textbooks "covered a variety of reading topics which dealt with family life, entertainment, customs, the hispanic people, history, and politics" [@{vari-cartier}143].
+These textbooks "covered a variety of reading topics which dealt with family life, entertainment, customs, the Hispanic people, history, and politics" [@{vari-cartier}143].
 300–350 word excerpts were randomly selected from each book, scored on a FRASE graph, and then objectively and subjectively validated.
 
 These validations involved correlating the FRASE scores against "teacher judgments, Spaulding formula ratings, cloze\index{cloze} test scores, and informal multiple choice tests" [@{vari-cartier}144].

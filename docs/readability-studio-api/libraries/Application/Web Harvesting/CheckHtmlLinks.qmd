@@ -15,7 +15,7 @@ CheckHtmlLinks(string folderPath,
 **Parameter** | **Description**
 | :-- | :-- |
 | `string` folderPath | The folder containing the HTML files to review. |
-| `boolean` followExternalLinks | Whether to verify links going outside of the folder being reviewed. |
+| `boolean` followExternalLinks | Whether to verify links going outside the folder being reviewed. |
 
 :::: {.notesection data-latex=""}
 Issues are recorded into the program's log.

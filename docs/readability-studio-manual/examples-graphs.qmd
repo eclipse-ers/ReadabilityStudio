@@ -51,7 +51,7 @@ Images and shapes can also be used to draw our bars, as demonstrated in a [later
 
 ::: {.minipage data-latex="{\textwidth}"}
 Finally, let's remove the labels to simplify the graph.
-Click the `r keys("Labels")` button on the ribbon so that is it unpressed.
+Click the `r keys("Labels")` button on the ribbon so that it is unpressed.
 Now the bars will be drawn without labels above them:
 
 ![](images/example-barchart-no-labels-changed.png){width=75% fig-align="center"}
@@ -141,7 +141,7 @@ Enabling the **Shadows** option on the ribbon will draw a shadow under each imag
 :::
 
 Note that images of any size can be used.
-If the image is larger than the bars' width, then it will be scaled downed to fit.
+If the image is larger than the bars' width, then it will be scaled down to fit.
 Images that are smaller will remain their original size (rather than being upscaled) to preserve their quality.
 
 Along with images, a set of predefined shapes are also available to choose from.

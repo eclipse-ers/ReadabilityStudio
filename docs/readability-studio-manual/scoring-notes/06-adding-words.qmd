@@ -2,7 +2,7 @@
 
 Although both [Dale-Chall](#sec-dale-chall-test) and [Spache](#sec-spache-test) were updated in recent years, some may find that these tests lack contemporary words known by young readers.
 For example, some computer terms that 4^th^ graders are fluent in are not considered familiar by these tests.
-Proper nouns such as *Microsoft* and *Macbook* will be considered familiar, but some non-proper computer words (e.g., *megabyte*) will not.
+Proper nouns such as *Microsoft* and *MacBook* will be considered familiar, but some non-proper computer words (e.g., *megabyte*) will not.
 
 *{{< var PROGRAM_NAME >}}* offers [custom tests](#sec-creating-custom-test) as a solution for extending these tests.
 You can create a new test with New Dale-Chall\index{New Dale-Chall!adding words}, Spache\index{Spache Revised!adding words}, or Harris-Jacobson\index{Harris-Jacobson Wide Range!adding words} as a template, and append your own word list to it.

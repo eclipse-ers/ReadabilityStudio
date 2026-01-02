@@ -19,7 +19,7 @@ The list of unfamiliar Harris-Jacobson words will report the following:
 
 This means that *Examiner* in the phrase *Daily Examiner* is proper and Harris-Jacobson\index{Harris-Jacobson Wide Range!proper nouns} treated it as familiar.
 Although the word *examiner* is not a familiar Harris-Jacobson word, a reader will recognize that it is proper.
-From there, he/she can deduct that it is the name of a specific person, place, or thing (e.g., a newspaper).
+From there, he/she can deduce that it is the name of a specific person, place, or thing (e.g., a newspaper).
 Therefore, it is somewhat familiar to the reader, even if he/she does not know the word.
 
 However, the other two instances of *examiner* are regular nouns.

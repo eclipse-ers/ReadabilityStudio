@@ -25,7 +25,7 @@ Next, you will be prompted to either create a new project or view the document; 
 Once the document is opened, note the text in the upper left corner.
 Here we have short descriptions about a job posting that we will want to preserve as separate lines when we import:
 
-![](images/non-generated/JostPostingViewDocument.png){width=75% fig-align="center"}
+![](images/non-generated/JobPostingViewDocument.png){width=75% fig-align="center"}
 
 Close this document and return to *{{< var PROGRAM_NAME >}}*.
 Click the `r keys('Example Documents')` button and again select "Job Posting."
@@ -57,7 +57,7 @@ As shown below, we can see a sentence that is partially on top of an image, and 
 
 ![](images/non-generated/peter-rabbit-browser.png){width=75% fig-align="center"}
 
-Close this document and return the **Help** tab.
+Close this document and return to the **Help** tab.
 Click the `r keys("Example Documents")` button and again select *The Tale of Peter Rabbit*.
 This time, select **Create a new project**.
 From the [project wizard](#sec-creating-standard-project), select the **Document Structure** page and note the option **Sentences are split**.
@@ -179,7 +179,7 @@ From the **Document Indexing** options, click the edit button in the **Words & p
 
 ![](images/exclusion-example-edit-list-button.png){width=75% fig-align="center"}
 
-In the **Edit Phrase List** dialog, either double click the grid or click the add item button to begin adding words or phrases to exclude.
+In the **Edit Phrase List** dialog, either double-click the grid or click the add item button to begin adding words or phrases to exclude.
 In one line enter *punctuation*, and in another line enter *sentence length*:
 
 ![](images/exclusion-example-custom-words.png){width=50% fig-align="center"}
@@ -232,7 +232,7 @@ For example, an indented list is being excluded, as shown below:
 
 ![](images/exclusion-tags-example-list-excluded.png){width=75% fig-align="center"}
 
-However, note that are a few placeholders in this file, such as *\<Product\>*:
+However, note that there are a few placeholders in this file, such as *\<Product\>*:
 
 ![](images/exclusion-tags-example-not-excluding.png){width=75% fig-align="center"}
 
@@ -241,7 +241,7 @@ However, because these are valid words and sentences (i.e., they are not headers
 Also, using a list of exclusion words may be too aggressive.
 For example, adding *product* to an exclusion list will remove the *\<Product\>*, but it will also exclude any other instance of *product*.
 Also, the last paragraph is valid, but because it is just a comment we will want to exclude this also.
-For these situations, will we need to use tagged-block exclusion.
+For these situations, we will need to use tagged-block exclusion.
 
 Open the **Properties** dialog and select **Document Indexing** (`r menu(c("Home", "Properties", "Document Indexing"))`).
 Set the option **Exclude text between** to **\< and \>**, as shown below:

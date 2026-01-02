@@ -90,7 +90,7 @@ Grades 5/6:
 Grades 7/8:
 
 <!--quneiform-suppress-begin-->
-- *Bayerisches Lesebuch für das seibte und achte Schuljahr*
+- *Bayerisches Lesebuch für das siebte und achte Schuljahr*
 - *Lesebuch für die Volksschulen, Vierter Band. 7. und 8. Schuljahr*
 - *Lesebuch. C 8 (8. Schuljahr)*
 <!--quneiform-suppress-end-->
@@ -126,7 +126,7 @@ Once you have found the average number of syllables and sentences per 100-words,
 The band that the point falls in will represent the grade-level score of the sample.\index{Schwartz German Readability Graph|)}
 
 ::: {.notesection data-latex=""}
-An item of interest when interpreting this graph is the x axis.
+An item of interest when interpreting this graph is the x-axis.
 Although the labels read *25*, *26*, etc., they actually represent *125*, *126*, etc.
 The *100+* with the arrow underneath it (to the left) indicates that the axis labels should have 100 added to them.
 This is done to make the labels more compact.

@@ -166,7 +166,7 @@ Edit selected item                      `r keys('F2')`
 
 &nbsp;                                  &nbsp;
 
-Accept edited item                      `r keys('Enter')`, `r keys('Tab')`, `r keys('\\arrowkeyup')`, `r keys('\\arrowkeydown')` (or mouse click outside of edit box)
+Accept edited item                      `r keys('Enter')`, `r keys('Tab')`, `r keys('\\arrowkeyup')`, `r keys('\\arrowkeydown')` (or mouse click outside the edit box)
 
 &nbsp;                                  &nbsp;
 

@@ -29,17 +29,17 @@ It was also trained on the following juvenile trade books:
 - *Aquí viene el ponchado*
 - *Osito*
 - *El caso del forastero hambriento*
-- *Leonardo el león y Ramon el ratón*
+- *Leonardo el león y Ramón el ratón*
 - *Jorge el curioso*
 - *Teresita y las orugas*
-- *Danielito y los dinosauros*
+- *Danielito y los dinosaurios*
 - *Johnny Lost (Juanito Perdito)*
 - *El niño que no creía en la primavera*
 
-Syllable and sentence statistics where calculated from these samples.
+Syllable and sentence statistics were calculated from these samples.
 Initially, the researchers noted that most of these statistics could not be plotted onto a Fry graph, because of the high syllable count.
 They deduced that a constant would need to be subtracted from this syllable count to be able to plot it on the graphs.
-Next, they determined where on the graph these materials should lie based on the either the grade level provided by the publisher or by plotting an English translation of the material onto a graph.
+Next, they determined where on the graph these materials should lie based on either the grade level provided by the publisher or by plotting an English translation of the material onto a graph.
 By comparing the differences between the actual and expected syllable counts, it was determined that subtracting 67 from the Spanish syllable counts would adjust the score to appear on the graph where it was expected to be.
 
 The Gilliam-Peña-Mountain graph is designed for both primary and secondary-age reading materials.
@@ -55,9 +55,9 @@ The Gilliam-Peña-Mountain graph formula is:
   Count a half sentence as .5.
 - Find the point on the chart.
 - Count the number of syllables in each passage and subtract 67 to adjust for the higher syllabic nature of Spanish text.
-[ A preferred alternative method is to shift the syllable-count axis by 67, rather than adjusting the actual syllable count.
+ [A preferred alternative method is to shift the syllable-count axis by 67, rather than adjusting the actual syllable count.
   This approach preserves the syllable count, while still being able to plot the score on the graph.]{.content-visible when-profile="reference"}
-[ However, note that *{{< var PROGRAM_NAME >}}* shifts the syllable-count axis by 67, rather than adjusting the actual syllable count.
+ [However, note that *{{< var PROGRAM_NAME >}}* shifts the syllable-count axis by 67, rather than adjusting the actual syllable count.
   This approach preserves the syllable count, while still being able to plot the score on the graph.]{.content-hidden when-profile="reference"}
 - If the sample's syllable or sentence count is too low or high for it to be plotted, then adjust that factor so that it can fit onto the chart.
   For example, if a sample has 261 syllables per 100 words, then this will need to be adjusted to 249.

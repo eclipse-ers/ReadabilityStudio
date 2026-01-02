@@ -1,6 +1,6 @@
 ## Harris-Jacobson Wide Range\index{Harris-Jacobson Wide Range|(idxit} {#sec-harris-jacobson}
 
-The Harris-Jacobson Wide Range Readability Formula readability test [-@{harris-jacobson}19–30] calculates the grade level of a document based on sentence length and number of unique unfamiliar words.
+The Harris-Jacobson Wide Range Readability Formula test [-@{harris-jacobson}19–30] calculates the grade level of a document based on sentence length and number of unique unfamiliar words.
 Words are unfamiliar if they do not appear on a list of common words that are known to most second-grade students.
 The following are also considered familiar:
 
@@ -40,7 +40,7 @@ kableExtra::kbl(list(primaryTable, secondaryTable),
 
 Using these new basal readers as the test's criterion, a new regression equation and expanded word list were built for the Wide Range formula.
 This new formula could significantly correlate samples from these books to their reported reading levels.
-Further, to predict readability scores for materials beyond the eighth-grade level, the look-up table used by the test (see below) was extrapolated to include secondary and adult-level materials.
+Further, to predict readability scores for materials beyond the eighth-grade level, the lookup table used by the test (see below) was extrapolated to include secondary and adult-level materials.
 
 ::: {.notesection data-latex=""}
 This test treats headers and subheaders as full sentences, but excludes lists and tables.
@@ -50,7 +50,7 @@ The default [text exclusion](#sec-options-text-exclusion) method\index{text excl
 ::: {.minipage data-latex="{\textwidth}"}
 Harris-Jacobson is calculated from the following steps:
 
-- Obtain the V1 score: (Number of unique hard words / Number of words) \* 100.
+- Obtain the V1 score: (Number of unique unfamiliar words / Number of words) \* 100.
 - Obtain the V2 score: Number of words / Number of sentences.
 - Multiply V1 by .245.
 - Multiply the V2 score by .160.

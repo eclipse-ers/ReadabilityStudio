@@ -13,7 +13,7 @@ In other words, sentences [units](#sec-glossary) should be used for the calculat
 (As for Lix, Björnsson did not define how sentences should end, so it is recommended to use the traditional *.*, *?*, and *!* markers for that test.)
 
 As for defining long words, Anderson recommended "excluding hyphens, punctuation marks, and brackets" [@{anderson:1983}495] when determining a word's length.
-Although Björnsson did not explicitly state this for Lix, it is a reasonable assumption that that was his original intention.
+Although Björnsson did not explicitly state this for Lix, it is a reasonable assumption that was his original intention.
 
 Prior to creating this formula, Anderson conducted a validation study for Lix, using a set of 36 prose passages.
 These 150-word passages were originally scored from a cloze\index{cloze} study [@{miller-coleman}851].

@@ -9,9 +9,9 @@ source('R/appdown.r')
 
 `r drop_cap('The')` first step to analyzing a document is to create a new project.
 A project is where you select your document, define how to parse it, and choose which tests to perform.
-Projects organize results (e.g., readability test, graphs, etc.) and settings into a single file that can be opened later.
+Projects organize results (e.g., readability tests, graphs, etc.) and settings into a single file that can be opened later.
 
-In this chapter, we will step through the process of creating a project, explaining all the options available along the way. 
+In this chapter, we will step through the process of creating a project, explaining all the options available along the way.
 
 \newpage
 
@@ -28,7 +28,7 @@ This dialog enables you to create either a [standard](#sec-creating-standard-pro
 
 To determine a document's readability you will need to create a new project.
 First, click the `r keys("New")` button on the **Home** tab to open the **New Project** wizard.
-Then select **Standard Project** and click `r keys("OK")`).
+Then select **Standard Project** and click `r keys("OK")`.
 On the first page of the wizard, the options for specifying the document and its language will be shown:
 
 ![](images/wizard1.png)
@@ -52,7 +52,7 @@ After you have selected your file, click the `r keys("Forward >")` button to con
 ![](images/wizarddocstructure.png)
 
 On this page, you will specify the format that best describes your document.
-The compositions that you can select are either narrative text or [non-narrative/fragmented text](#sec-fragmented-text).
+The composition types that you can select are either narrative text or [non-narrative/fragmented text](#sec-fragmented-text).
 These options describe the content of your document and will help the program select the appropriate [text exclusion](#sec-options-text-exclusion) method\index{text exclusion!specifying in project wizard}.
 The layout options are used to describe the format of the document and will help the program select the appropriate [sentence deduction](#sec-document-analysis) method.
 For example, if your document is formatted to fit a page and also wraps its text around illustrations, then it is recommended to check the first two **Layout** options.
@@ -93,7 +93,7 @@ Your final option is to select a [test bundle](#sec-test-bundles).
 
 ![](images/wizardbundles.png)
 
-Along with adding tests to a project, test bundles also can include [goals](#sec-reviewing-goals) to help with reviewing your scores.
+Along with adding tests to a project, test bundles can also include [goals](#sec-reviewing-goals) to help with reviewing your scores.
 
 Note that you can always add or remove tests from your project at any time.
 If you select either the document type or industry options, you are not bound to the tests that *{{< var PROGRAM_NAME >}}* recommends.
@@ -139,8 +139,8 @@ Like the **Select Directory** dialog, you can specify which documents to search 
 To add documents from an *Excel* (\*.xlsx) file, click the `r keys("Add spreadsheet")` button.
 After selecting an *Excel* file, you will be prompted for which cells to import.
 After specifying these, the cells will be imported one of two ways.
-The first way is if a cell's content is a filepath.
-In this case, the document referenced by this filepath will be loaded into the project.
+The first way is if a cell's content is a file path.
+In this case, the document referenced by this file path will be loaded into the project.
 Otherwise, if a cell is not a file path, then its content will be imported as a document itself.
 In this case, the cell's name (e.g., *B19*) will be used as the document's name.
 
@@ -156,7 +156,7 @@ You can also select local files to include in the project.
 Click the `r keys("Add file(s)")` button and then select the file(s) that you want to include.
 
 As you add files to the project, you can also include a helpful description next to any file.
-Double click in the **Description** column next to any filename, and then type a description to be attached to that file.
+Double-click in the **Description** column next to any filename, and then type a description to be attached to that file.
 When the batch project is loaded, this description will appear in any results window that displays filenames.
 (Note that for some file formats, the program will fill this field with the document's subject or title information if you leave it blank.)
 
@@ -167,7 +167,7 @@ For these situations, check the **% of documents to randomly sample** option and
 
 You can also filter documents based on content size.
 Enter into the field **Minimum document word count** the minimum number of words a document must have to be included in the batch.
-Any document which does not meet this threshold will be ignored during import.
+Any document that does not meet this threshold will be ignored during import.
 
 ![](images/randomsample.png)
 

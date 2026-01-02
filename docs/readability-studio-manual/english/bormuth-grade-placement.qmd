@@ -8,7 +8,7 @@ Because it uses both word familiarity and syntactic complexity for its analysis,
 For this formula, a study involving 2,600 students ranging from 4^th^-12^th^ grade [-@{bormuth:1969}97] was conducted.
 The students completed 330 110-word cloze passages, and their scores were correlated against numerous linguistic factors from the passages.
 After a series of factor analyses and multiple regressions, a series of formulas were created to predict cloze and grade-level scores for a passage.
-These formulas were then cross validated against 20 250–300 word passages [-@{bormuth:1969}105].
+These formulas were then cross-validated against 20 250–300 word passages [-@{bormuth:1969}105].
 These formulas correlated with between $r^2 = 0.81$ to $0.83$ with the original test data and between $r^2 = 0.92$ to $0.93$ with the cross validation data.
 
 Of these formulas, the grade-placement formula is as follows:
@@ -37,6 +37,6 @@ Where:
 +-----+--------------------------------------+
 
 Note that this particular grade-placement test uses the regression equation that best fit the passages with cloze scores averaging ~35%.
-There are also 45% and 55% cloze-score fitting Bormuth equations, but as Bormuth noted "35 per cent on a close readability test tentatively seemed to represent a criterion for deciding whether or not students are able to exhibit a maximum of information gain as a consequence of reading the passage" [-@{bormuth:1969}102].\index{Bormuth Grade Placement|)}
+There are also 45% and 55% cloze-score fitting Bormuth equations, but as Bormuth noted "35 per cent on a cloze readability test tentatively seemed to represent a criterion for deciding whether or not students are able to exhibit a maximum of information gain as a consequence of reading the passage" [-@{bormuth:1969}102].\index{Bormuth Grade Placement|)}
 
 \newpage

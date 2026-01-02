@@ -56,8 +56,8 @@ In this case, the valid 4 scores will be added and divided by 4 (not 5) to acqui
 Also, grade range scores–such as *5–6* from [New Dale-Chall](#sec-dale-chall-test)\index{New Dale-Chall!grade-range averaging}–will be converted to its own average (e.g., *5–6* will be 5.5).
 
 To remove any test from this list, select it and press `r keys(c('Ctrl', 'Del'))` (`r os_logo('windows')`, `r os_logo('linux')`) or `r keys(c('\\cmd', '\\backdel'))` (`r os_logo('apple')`) on your keyboard.
-To edit a [custom test](#sec-creating-custom-test), double click on it in this list.
-To view the help for a standard test, double click on it in this list.
+To edit a [custom test](#sec-creating-custom-test), double-click on it in this list.
+To view the help for a standard test, double-click on it in this list.
 
 There will also be readability graphs in this section if you included their respective tests.
 Refer to @sec-reviewing-readability-graphs for further information.
@@ -79,7 +79,7 @@ Note that there are numbers 1 through 17+ on this chart, each partitioned into s
 The band that the data point falls into is the grade level of this document.
 In the example above, the data point is inside of the 8^th^ grade slice (notice that the 8 is marked in blue).
 
-Running through each slice is a gray line, which is a separator to help show the most predominate cause of the document's difficulty.
+Running through each slice is a gray line, which is a separator to help show the most predominant cause of the document's difficulty.
 If the data point is above the gray line, then the strongest influence on the document's difficulty is high-syllable words.
 If it is below the line, then the strongest influence is long sentences.
 In the above example, it is above the line, implying that it is slightly more influenced by high-syllable words.
@@ -94,7 +94,7 @@ The document was almost classified as 12^th^ grade level material, but its long 
 At this point, you would want to review the document's lengthy sentences (select [**Highlighted Report**](#sec-reviewing-standard-grammar) under the **Grammar** sidebar item) and try to shorten some of them.
 
 The Gilliam-Peña-Mountain\index{Gilliam-Peña-Mountain} graph is a variation of Fry designed for Spanish text.
-It is identical to Fry, except that its X axis begins at 175 (instead of 108).
+It is identical to Fry, except that its x-axis begins at 175 (instead of 108).
 This enables this graph to plot Spanish text, which usually has a much higher syllable count than its English counterpart.
 Below is an example of a Gilliam-Peña-Mountain graph:
 
@@ -136,8 +136,8 @@ Below is an example of a Crawford graph:
 ![Crawford graph](images/crawford-graph.png){width=75% fig-align="center"}
 
 In the above graph, we can see that the intersection of the factors is 175 and 7.
-The number of syllables is 175 (Y axis). The number of sentences is approximately 7 (between 8.4 and 5.9 on the plot [corresponding to 175 on the Y axis]).
-From this intersection, the point's X axis value is 3.7. Hence, 3.7 is the grade-level score for this graph.
+The number of syllables is 175 (y-axis). The number of sentences is approximately 7 (between 8.4 and 5.9 on the plot [corresponding to 175 on the Y axis]).
+From this intersection, the point's x-axis value is 3.7. Hence, 3.7 is the grade-level score for this graph.
 
 The Flesch\index{Flesch Reading Ease!chart} chart plots a document's factors onto a pair of "rulers" and then connects them to determine the Flesch score.
 This score ranges from 0 ("very difficult") to 100 ("very easy"). Below is an example of a Flesch chart:
@@ -174,7 +174,7 @@ As a final note, [batch projects](#sec-creating-batch-project) include multi-doc
 
 ![Multiple documents on a Fry graph](images/multiple-fry.png){width=75% fig-align="center"}
 
-Here, we can see that an entire collection of documents are plotted onto a single Fry graph.
+Here, we can see that an entire collection of documents is plotted onto a single Fry graph.
 This is useful for visualizing the grade-level layout of a group of documents.
 In the above example, we can see that the documents are clustering in the high-school region.
 We can also interpret that complex words are heavily influencing the documents' difficulty.
@@ -403,15 +403,15 @@ Also, looking at the inner ring, we can see that ~two-thirds of the words are on
 
 A word cloud shows words from a document in a random layout with randomly assigned colors.
 The size of each word is based on its relative frequency within the document.
-In other words, the larger the word, the more often it is used compared to other words. \
+In other words, the larger the word, the more often it is used compared to other words.
 
 This particular word cloud displays the ~100 most frequently occurring key words appearing in the document.
 Like the **Key Words** list, these will be combined words with uncommon ones (e.g., *the*) removed.
 In the case of combined words, the most frequent instance of similar words will be shown.
 For example, if the word *report* appears more times than *reporting* and *reports*, then *report* will appear in the word cloud.
-Also, the size of the word *report* will be based on the number of times *report*, *reporting*, and *reports* all appear. \
+Also, the size of the word *report* will be based on the number of times *report*, *reporting*, and *reports* all appear.
 
-To focus on important topics, only words occurring two or more times will be shown (unless there are less than one unique hundred words). \
+To focus on important topics, only words occurring two or more times will be shown (unless there are fewer than one unique hundred words).
 
 In a batch project, this word cloud will show the key words across all documents.
 :::
@@ -456,11 +456,11 @@ In this case, the median is 12.5, which means that the middle sentence is 12.5 w
 This median line is almost equidistant, which implies that the sentence lengths in this range are evenly distributed.
 
 The last items to review are the whiskers, which represent the non-outlier range.
-The datapoints in this range are outside of the middle half the data, but still within a reasonable limit.
+The datapoints in this range are outside the middle half the data, but still within a reasonable limit.
 Above, we can see that the remaining sentences are skewed towards having longer sentences, with the largest being 33 words.
 Although 33 words is reasonable (compared to the box's range), you may want to review some of these longer sentences.
 
-Finally, any sentence lengths outside of the non-outlier range will be displayed as red dots.
+Finally, any sentence lengths outside the non-outlier range will be displayed as red dots.
 These points represent sentences which are significantly longer (or shorter) than the others.
 Clicking on an outlier will display the sentence's number, along with a preview of it.
 
@@ -861,7 +861,7 @@ Also, keep the percentage of non-Dolch words low so that readers can better focu
 
 *{{< var PROGRAM_NAME >}}* offers a suite of Dolch statistics and graphs as a tool for educators and writers targeting early readers.
 If you are creating material intended to help early readers practice Dolch words, then it is recommended to include this in your project.
-To add Dolch statistics to your project, go to the **Readability** tab and select either **Primary-age Reading** or **Second Language Reading** and select **Dolch Sight Words**.
+To add Dolch statistics to your project, go to the **Readability** tab and select either **Primary-age Reading** or **Second Language Reading** and then **Dolch Sight Words**.
 A **Dolch Sight Words** icon will appear at the bottom of the project sidebar—clicking on that will display all the Dolch information.
 
 [^DolchPronounsFootnote]: Pronouns, adjectives, adverbs, prepositions, conjunctions, and verbs.

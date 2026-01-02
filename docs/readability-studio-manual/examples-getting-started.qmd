@@ -48,8 +48,8 @@ Select the **3+ syllable words** subitem to view the list of complex words.
 
 Next, we will sort this list, going from highest to lowest syllable count.
 Click the `r keys("Sort")` button on the ribbon and select **Sort Descending** from the button's menu.
-On the **Sort Columns Descending** dialog, double click on the first row in the grid and select the column **Syllable Count**.
-Then double click on the row below that and select **Frequency**.
+On the **Sort Columns Descending** dialog, double-click on the first row in the grid and select the column **Syllable Count**.
+Then double-click on the row below that and select **Frequency**.
 These options will tell the program to sort the words from highest to lowest syllable count, and in the case of any ties to sort by frequency.
 Click `r keys("OK")` to sort the list.
 
@@ -245,7 +245,7 @@ As we can see below, our grade level scores now meet our target audience and thi
 ![](images/improvedscores.png)
 
 ::: {.tipsection data-latex=""}
-You can click the `r keys("Reload")` button at anytime to reanalyze the source document as you edit it externally.
+You can click the `r keys("Reload")` button at any time to reanalyze the source document as you edit it externally.
 Likewise, pressing **Real-time Update** will tell the program to reload automatically as the document is saved from another program.
 Finally, whenever you open this project, it will automatically reload the source document (in this case, the recipe file).
 :::
@@ -305,7 +305,7 @@ Here, we can see that **Reload the source document when opening project** is sel
 
 ![](images/reloadwebpage.png){width=75% fig-align="center"}
 
-By having this option selected, you will reload the page's content whenever you reopen the project (or at anytime by pressing `r keys("F5")`).
+By having this option selected, you will reload the page's content whenever you reopen the project (or at any time by pressing `r keys("F5")`).
 If you prefer to embed the current version of this page into the project, then select **Embed the source document's original text in the project file**.
 Refer to @sec-project-settings for more information about these options.
 
@@ -473,7 +473,7 @@ Create a new project with the defaults and select the heatmap when the project o
 ![](images/christmas-carol-sentencemap.png){width=75% fig-align="center"}
 
 Because this document contains more than 500 paragraphs, grouping will not be used.
-Instead, the sentences will appear in a single heatmap, where the all sentences are displayed left-to-right, top-to-bottom.
+Instead, the sentences will appear in a single heatmap, where all sentences are displayed left-to-right, top-to-bottom.
 In the above graph, we can see that the novel's sentences range from 1–19 words in length.
 Also, the sentence lengths are rather evenly distributed.
 In other words, the longer sentences are not clumping together within any particular section.
@@ -484,11 +484,11 @@ In other words, the longer sentences are not clumping together within any partic
 
 In this example, we will analyze a flyer for a summer program being offered by a local software company.
 This flyer consists of short text boxes designed to grab the attention of young adults interested in learning computer programming.
-Of interest is that this document contains a few sentences, but the bulk of its content are simple text boxes.
+Of interest is that this document contains a few sentences, but the bulk of its content is simple text boxes.
 
 Almost all readability formulas use sentence length as a factor.
 Because of this, short text blocks like these are traditionally excluded and only the full sentences are analyzed.
-For this document, however, we prefer to analyze everything since so much of its content are disjointed text boxes.
+For this document, however, we prefer to analyze everything since so much of its content is disjointed text boxes.
 
 First, let's view the document.
 From the **Help** tab on the ribbon, click the `r keys('Example Documents')` button, and select "Summer Code Camp."
@@ -518,7 +518,7 @@ Also, viewing any highlighted report will show that all text was included in the
 We will have a somewhat high FORCAST score, so we will want to review the lengthy words and see if we can make any improvements.
 
 An interesting aspect of this flyer is that it has two audiences: children and their parents.
-The eye-catching text boxes in the upper half of the flyer is targeted for children, while the lower half requires parental involvement.
+The eye-catching text boxes in the upper half of the flyer are targeted for children, while the lower half requires parental involvement.
 With this in mind, we will review both halves of the flyer from these perspectives.
 
 Select **Words Breakdown** on the sidebar and then select **3+ Syllables Report**.
@@ -559,7 +559,7 @@ Next, select **Create a new project**. When the **New Project Wizard** appears, 
 First, let's review the concepts of this document to get a broad idea of what it is about.
 Click **Words Breakdown** on the sidebar and then select **Key Word Cloud**.
 This word cloud shows the document's words, after they have been combined (via stemming) and common words (e.g., articles) have been removed.
-The size of the words are relative to their frequencies.
+The size of the words is relative to their frequencies.
 As an example, the words "Company" and "Customer" appear much more frequently than any other word:
 
 ![](images/example-difficult-words-wordcloud.png){width=75% fig-align="center"}
@@ -594,7 +594,7 @@ Next, let's review a visual layout of the sentence lengths.
 Click **Sentences Breakdown** on the sidebar and then select **Lengths (Density)**.
 Going from top-to-bottom, this graphic displays a row for each paragraph.
 Across each row is a box for each sentence in the respective paragraph.
-For each box, its length is shown as number at its center.
+For each box, its length is shown as a number at its center.
 Also, the darker the box, the longer its length is compared to the rest of the sentences in the document.
 In this example, we can see that the sixth paragraph has ten sentences in it:
 
@@ -602,7 +602,7 @@ In this example, we can see that the sixth paragraph has ten sentences in it:
 
 There are also a few lengthy sentences in this paragraph, judging from the numbers and dark colors across the row.
 
-Finally, let's review how word and sentence complexity affects readability showing.
+Finally, let's review how word and sentence complexity affects readability scoring.
 From the **Readability** tab, click `r menu(c('Secondary','Fry'))` to add a [Fry](#sec-fry-test) test.
 Click on the **Readability Scores** icon on the project sidebar and select **Fry Graph**.
 

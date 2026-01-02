@@ -51,7 +51,7 @@ For example:
 In any sentence, count each syllable above one per word.
 :::
 
-The above sentence contains three polysyllabic\index{polysyllabic} words: any (2), sentence (2), above (2), and syllable (3).
+The above sentence contains four polysyllabic\index{polysyllabic} words: any (2), sentence (2), above (2), and syllable (3).
 In this case, *any*, *sentence*, and *above* each have 1 syllable above 1, and *syllable* has 2 syllables above one.
 Adding these values will yield a score of 5.
 

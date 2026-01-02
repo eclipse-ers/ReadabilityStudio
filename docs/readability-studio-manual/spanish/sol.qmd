@@ -9,10 +9,10 @@ This adjustment is similar to what [Gilliam-Peña-Mountain](#sec-gilliam-pena-mo
 This test was trained on multiple blocks of 30-sentence samples from the following English, Spanish, and French materials:
 
 - *The Lancet* (Spanish and English)
-- *El Pais* (Spanish)
+- *El País* (Spanish)
 - *Le Monde* (French)
 - *International Herald Tribune* (English)
-- *The Quixote* (Spanish, English, and French)
+- *Don Quixote* (Spanish, English, and French)
 - *The Bible* (Spanish, English, and French)
 - *Snow White and the Seven Dwarfs* (Spanish, English, and French)
 - *The Three Bears* (Spanish, English, and French)
@@ -21,7 +21,7 @@ This test was trained on multiple blocks of 30-sentence samples from the followi
 - Story books (a set of story books) (Spanish, English, and French)
 
 SMOG scores for these samples (including available translations) were collected.
-Next, the scores between each language for every set of material were then correlated.
+Next, the scores between each language for every set of material were correlated.
 The researchers found significantly higher SMOG scores for French compared to English, and higher SMOG scores for Spanish compared to French.
 To adjust for these differences, the following regression equation was built to convert a Spanish SMOG calculation to English ($r^2 = 0.60$):
 
@@ -49,4 +49,4 @@ It also excludes lists and tables, but includes headers and footers [@{contreras
 Note that this test uses the high-precision version of the SMOG formula.
 This is recommended by the authors to avoid any rounding issues when converting scores between Spanish and English [@{contreras}24].
 
-This test requires 3 10-sentence samples, but [normalization](#sec-glossary) can be used to analyze larger samples or entire documents.\index{SOL|)}
+This test requires 3 ten-sentence samples, but [normalization](#sec-glossary) can be used to analyze larger samples or entire documents.\index{SOL|)}

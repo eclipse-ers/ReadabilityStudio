@@ -12,7 +12,7 @@ They help determine the minimum age group that can quickly process reading mater
 This approach uses factors such as sentence length, word difficulty, and word familiarity.
 
 Most readability scores represent the grade level of the youngest reader that can understand a document.
-They can also determine how easily a more broad audience can process it.
+They can also determine how easily a broader audience can process it.
 For example, most magazine and newspaper articles should aim for scores around the 14–16 age range.
 This is not because most readers of newspapers are in this age group.
 It is because this type of material should be easy to read for most age groups.
@@ -45,10 +45,10 @@ Most tests are performed using the following methods:
 
 The vast majority of tests use multiple linear regressions.
 Basically, multiple linear regression is a statistical method for modelling the relationship between a dependent variable and two or more independent variables (i.e., predictors).
-In the case of readability tests, the dependent is human-judged grade levels for a set of samples, while the independents are factors such as the samples' sentence lengths and syllable counts.
+In the case of readability tests, the dependent variable is human-judged grade levels for a set of samples, while the independents are factors such as the samples' sentence lengths and syllable counts.
 A multiple regression is performed to determine the strongest predictors (usually the top two), and the prediction equation created by the analysis will be the new readability formula.
 
-Another method is lookup tables, where the intersection of factors (e.g., number of sentences and number of syllables) are found in a table.
+Another method is lookup tables, where the intersection of factors (e.g., number of sentences and number of syllables) is found in a table.
 When located, the position in the table will indicate the grade level.
 Examples of table-based tests include Wheeler-Smith and New Dale-Chall.
 (Refer to @tbl-wheeler-smith-conversion-table for an example.)
@@ -67,7 +67,7 @@ Comparison of bands vs. brackets
 
 Once the intersection of two factors is located on the plot, the band or bracket that the intersection falls into will indicate the score.
 
-As a final note, there are a few hybrid tests which can be calculated via a regression equation or graph.
+As a final note, there are a few hybrid tests that can be calculated via a regression equation or graph.
 These tests were initially constructed as regression equations, and this is the preferred method for performing them.
 The tests' authors, however, would also offer a graphical version as a quicker and simpler way for performing these tests.
 Examples of these tests include Flesch Reading Ease and Crawford.
@@ -76,7 +76,7 @@ Examples of these tests include Flesch Reading Ease and Crawford.
 ## Grade-level Clamping {#sec-grade-level-clamping}
 
 A key difference between graph and table-based tests versus regression-based tests is how the former has defined upper limits for their scores.
-For example, graph-based tests acquire their scores by finding the intersection of certain factors (e.g., sentence length) within a set a bands.
+For example, graph-based tests acquire their scores by finding the intersection of certain factors (e.g., sentence length) within a set of bands.
 These bands represent grades, and there are a specific set of grade bands available.
 As an example, a [Fry](#sec-fry-test) graph has bands ranging from 1^st^ grade to 17^th^ (i.e., college):
 
@@ -86,9 +86,9 @@ Likewise, table-based tests take a set of factors and look up the score from a t
 These tables have a specific set of grade levels and will also have an upper limit.
 (Refer to @tbl-wheeler-smith-conversion-table for an example.)
 
-In contrast, tests which use regression equations do not have upper limits.
+In contrast, tests that use regression equations do not have upper limits.
 In theory, a document with extreme factors (e.g., abnormally long sentences) could yield scores above grade 19 (i.e., PhD level).
-To keep results sensical, such scores should be clamped to 19 and be displayed as 19+. This is done for a number of reasons.
+To keep results sensible, such scores should be clamped to 19 and be displayed as 19+. This is done for a number of reasons.
 
 First, scores such as 27^th^ grade do not reflect reality.
 To describe a document as only being understandable by a PhD is relatable.
@@ -108,10 +108,10 @@ Although not recommended, it is possible to create a copy of any regression-base
 (Refer to @sec-custom-test-no-clamping for an example.)
 :::
 
-## How Tests can Fail
+## How Tests Can Fail
 
 Most readability tests will return a result, even when the document being reviewed contains extreme difficulty factors.
-For example, with table-based tests, documents with long sentences and/or numerous unfamiliar words will fall within the top bracket of the look-up table.
+For example, with table-based tests, documents with long sentences and/or numerous unfamiliar words will fall within the top bracket of the lookup table.
 (Refer to @tbl-wheeler-smith-conversion-table for an example).
 Likewise, plugging a document's statistics into a regression-based test will also produce a result without issue (although extreme results may need to be clamped, see @sec-grade-level-clamping).
 
@@ -122,6 +122,6 @@ Once the intersection is found, the band that the point falls within will indica
 
 ![](../images/schwartz.png){width=75% fig-align="center" fig.cap='Example of a graph with grade-level bands' fig.scap='Graph with grade-level bands'}
 
-For most documents this will yield a result, but extreme documents may fall outside of the grade-level bands.
+For most documents this will yield a result, but extreme documents may fall outside the grade-level bands.
 (This can happen if there are too many difficult words or lengthy sentences.)
 [When this occurs, the program will indicate that the test failed and explain which factor (e.g., high syllable count) caused the failure.]{.content-hidden when-profile="reference"}

@@ -1,6 +1,6 @@
 ## Grade Scales {#sec-grade-scales}
 
-Grade-level scores are traditional displayed in U.S. (K–12+) format, be can be converted to other scales.
+Grade-level scores are traditionally displayed in U.S. (K–12+) format, be can be converted to other scales.
 The following grade scales are available to choose from:
 
 ```{r, echo=F}
@@ -159,8 +159,8 @@ canadaTable <- tibble(V1 = c(str_glue("K–12+ (Alberta){superscript('a')}"),
                             "Maternelle (Kindergarten)",
                             "École Primaire (grades 1–6)",
                             "École Secondaire (grades 7–11)",
-                            "CEGEP (two years of University prep)",
-                            "University (3 years for Bachelors Degree)",
+                            "CEGEP (two years of university prep)",
+                            "University (3 years for Bachelor's degree)",
                             "Graduate degree (2 years)",
                             "Doctoral degree")) %>%
   mutate("V1" = kableExtra::cell_spec(V1, bold = (row_number() %in% col1Indices), escape=F)) %>%

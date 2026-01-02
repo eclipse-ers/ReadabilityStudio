@@ -102,16 +102,16 @@ source('../R/appdown.r')
 - Printer [headers and footers](#sec-printing) are now more customizable.
 - Sidebar improvements:
   - Clicking an expanded folder will collapse it.
-    (Double clicking it is no longer necessary.)
+    (Double-clicking it is no longer necessary.)
   - Can now be shown/hidden with the `r keys('F2')` key or from the ribbon.
 - **Custom Test Editor** improvements:
   - The function browser is now embedded in this dialog (rather than being a separate window).
-  - Double clicking an item in the function browser will now insert it into the formula.
+  - Double-clicking an item in the function browser will now insert it into the formula.
 - **Log Report** window improvements:
   - Added **Clear**, **Refresh**, and **Verbose** options.
     - Verbose logging can now be toggled from this dialog via the **Verbose** button.
   - Dialog is now modeless; other windows can be accessed while this dialog is open.
-  - Added option to load the log report from the previous run of the program (if ran during the same day).
+  - Added option to load the log report from the previous run of the program (if run during the same day).
   - Log report options are now available on the **Options** dialog.
 - **Web Harvester** improvements:
   - The **User agent** option on the **Web Harvester** dialog is now available on the **General Settings** page of the **Options** dialog also.
@@ -124,7 +124,7 @@ source('../R/appdown.r')
     This allows for renaming files as they are downloaded to avoid overwriting existing ones.
   - A depth level of 0 can now be entered.
     This allows for only downloading the base webpage(s) and nothing else.
-  - Performance improvements; less requests are now sent to servers while crawling them.
+  - Performance improvements; fewer requests are now sent to servers while crawling them.
   - **Restricted to same folder** domain restriction will now include links from sub-directories of the specified folder.
 - Improved dark mode appearance (`r os_logo('windows')`)
   - Dark mode is automatically enabled if color mode is set to **Dark**
@@ -134,7 +134,7 @@ source('../R/appdown.r')
 - Folders can now be used as grouping labels when adding documents in the batch project wizard.
 - The **Readability Graphs** page on the **Options** dialog has been moved to be under the **Graphs** section.
 - **Ignore social media hashtags** feature of spell checker now recognizes handles, such as *\@AskLibreOffice*.
-- Projects that were created from manually entered text can now be changed to link to external documents.
+- Projects that were created from manually-entered text can now be changed to link to external documents.
 - Improved the view item dialog for list controls.
   It is now easier to select and copy individual cells.
 - Added button to the batch project wizard that applies a group label to the selected documents.
@@ -169,7 +169,7 @@ source('../R/appdown.r')
   - Include brackets to organize the grade levels into groups such as "Elementary School."
 - Box plots now use the Tukey hinges method for calculating quartiles.
   (This matches what *R* does.)
-- Removed box plot IQR coefficient option; blox plot now just use quartiles.
+- Removed box plot IQR coefficient option; blox plots now just use quartiles.
 - Added grouping support to box plots in batch projects.
 - Graph background images are now drawn in the plot area, instead of the entire background.
   This makes reading the axes and titles easier.
@@ -184,8 +184,8 @@ source('../R/appdown.r')
 - Aggressive exclusion will now exclude:
   - sentences that end with a semicolon at the end of a line.
   - sentences that contain only one word that end with a colon at the end of a line.
-- Lone *%* characters (unless proceeded by a number) are now treated as whole words (rather than punctuation).
-- If *%*, *¢*, or *°* characters are proceeded by a number, then they will now be connected to the previous word.
+- Lone *%* characters (unless preceded by a number) are now treated as whole words (rather than punctuation).
+- If *%*, *¢*, or *°* characters are preceded by a number, then they will now be connected to the previous word.
 - Trademark (™), registration (®), service mark (℠), official mark (Ⓜ), sound recording (℗), and copyright (©, Ⓒ) symbols after a sentence are now handled properly.
 - Custom-test formulas can now contain C/C^++^ style comments.
   This includes multi-line (text inside of `/*` and `*/`) and single-line (`//`) comments.
@@ -235,7 +235,7 @@ source('../R/appdown.r')
 
 - Fixed issue preventing the conversion of an embedded-text project to a linked-document project.
 - **Dolch** statistics will now only be shown in the summary report if Dolch Sight Words analysis is included in the project.
-- Fixed "APPROXIMATE GRADE LEVEL" label and left axis title from occasionally going outside of the Fry graph.
+- Fixed "APPROXIMATE GRADE LEVEL" label and left axis title from occasionally going outside the Fry graph.
 - Fixed sporadic message about a resource file needing to be buffered when opening the program.
 - Reviewer field is now preserved when resetting your settings or importing a settings file.
 - File search and random sampling of documents on the batch project wizard is exponentially faster now.
@@ -261,7 +261,7 @@ source('../R/appdown.r')
 - Added theming (`r os_logo('windows')`).
 - Improved program's appearance on high-resolution displays.
 - When selecting foreground text highlighting, the font color will be adjusted to contrast with the report's background.
-- Added browse button to **Project Settings** dialog to add document(s) to a batch project.
+- Added a browse button to **Project Settings** dialog to add document(s) to a batch project.
 - Redesigned **Test Bundle** dialog.
 - Reorganized test bundles menu and added icons.
 - Added buttons to add and delete items from the batch project wizard's file list.
@@ -312,7 +312,7 @@ source('../R/appdown.r')
 - Bins in the syllable, sentence-length, grade-level, and predicted cloze score histograms now begin at 1^st^ grade or Kindergarten.
 - Improved document indexing performance.
 - Improved detection of Unicode spaces and line separators when indexing sentences.
-- Improved detection of longer internet address.
+- Improved detection of longer internet addresses.
 - Triangle bullet points are now detected.
 - \@ can now be seen as a full word (or prefix/suffix of a word).
 - Improved detection of sentence endings when followed by a citation (e.g., *End of sentence.^17^ A new sentence.*).
@@ -359,7 +359,7 @@ source('../R/appdown.r')
   - Improved handling of malformed title, style, and script sections.
   - Added support for superscripts and subscripts.
   - Annotations are now removed from the text.
-  - `${}` Javascript placeholders are now removed from the text.
+  - `${}` JavaScript placeholders are now removed from the text.
 - Improvements to Word 97–2003 importer to better handle Unicode and corrupted files.
 - Improvements to RTF importer (improved Unicode and footnote support).
 - Improvements to C^++^ source file importer (improved handling of escaped quotes).
@@ -410,7 +410,7 @@ source('../R/appdown.r')
 - Fixed batch project **Export All** where graphs would appear duplicated in the report.
 - Office 2007 filepaths (e.g., *documents\\import.xlsx*) mentioned in a document are now seen as file names.
 - Fixed crash when trying to analyze a document that is on OneDrive but not properly synced on the local file system.
-- Fixed outdated menubar options on macOS (`r os_logo('apple')`).
+- Fixed outdated menu bar options on macOS (`r os_logo('apple')`).
 - **New Project from Clipboard** option will more intelligently determine whether the clipboard content is a file path or plain text.
 - Fixed crash in Word 97–2003 (\*.doc) importer.
 - Fixed custom-test word lists appearing twice when reloading project.
@@ -488,7 +488,7 @@ source('../R/appdown.r')
 - Selecting outliers in [sentence-length box plots](#sec-reviewing-sentences-breakdown) will now show a preview of the sentence.
 - Removed unnecessary axis information from box plots, offering a cleaner appearance.
 - Selecting a bar in a histogram will now show its first 25 observations.
-- Selecting a point on a score chart (e.g., Fry) in a batch project will show the corresponding documents name on the point.
+- Selecting a point on a score chart (e.g., Fry) in a batch project will show the corresponding document's name on the point.
 - Selecting an area in a score chart (e.g., grade or level areas in a Fry or Crawford chart) will show a descriptive label on that area.
 - Brackets in Flesch chart are now color coded.
 - Added instruction label to blank Flesch charts.
@@ -563,7 +563,7 @@ source('../R/appdown.r')
 - Icons are now included when exporting reports as HTML.
 - Underlining and italics are now included when exporting text reports to HTML.
 - **Export All** folder path will now be remembered by the project.
-- Performance improvements to the Open-Document Text importer.
+- Performance improvements to the OpenDocument Text importer.
 - Improvements to the Word 2007 importer.
 
 ### Graph Enhancements {-}
@@ -664,7 +664,7 @@ source('../R/appdown.r')
     - explanations for each test
     - tooltips in Fry and Raygor graphs
     - bin labels with grade histograms
-    - y axis of box plots
+    - y-axis of box plots
 - Added Spanish document analysis features.
   This includes specialized Spanish syllabizer and tests:
     - Added [Gilliam-Peña-Mountain Fry Graph](#sec-gilliam-pena-mountain-fry-graph).
@@ -724,7 +724,7 @@ source('../R/appdown.r')
 - Added GIF compression options.
 - Removed deprecated PNG bit-depth option.
 - Image size can now be customized.
-- Added ability to import macro enabled Word 2007 (\*.docm) files.
+- Added ability to import macro-enabled Word 2007 (\*.docm) files.
 - Added stand-alone **Web Harvester** feature to **Tools** menu.
 - Web harvester can now harvest more than one root website.
 

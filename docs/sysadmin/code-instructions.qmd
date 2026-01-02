@@ -32,7 +32,7 @@ If the option is used in projects also, do the following:
 Finally:
 
 - Add variable to `r file_path(c("src", "ui", "dialogs", "tools_options_dlg.h"))` (if not a value shown in a property grid)
-  - If a value in a property grid, then add a function that returns the string for the value in the property grid; this will be used also as a look-up key
+  - If a value in a property grid, then add a function that returns the string for the value in the property grid; this will be used also as a lookup key
 - Add variable initialization from `ReadabilityAppOptions` or project to `ToolsOptionsDlg`'s constructor
   - Note that if the option is in a property grid, then there is no direct variable and instead you use a string label to get and set the values from the property grid.
     Instead, the default value for this field is loaded in `ToolsOptionsDlg::CreateControls()`.

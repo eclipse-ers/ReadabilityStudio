@@ -58,7 +58,7 @@ Refer to @sec-document-analysis for a detailed explanation of these options.
 
 ## How Sentences\index{sentences!counting} are Counted {#sec-how-sentences-are-counted}
 
-*{{< var PROGRAM_NAME >}}* considers periods, question marks, exclamation points, and interabangs as the end of a sentence, although there are a few exceptions.
+*{{< var PROGRAM_NAME >}}* considers periods, question marks, exclamation points, and interabangs (!?) as the end of a sentence, although there are a few exceptions.
 
 The first exception is periods that are part of an abbreviation, acronym, or initial.
 For example, the following is seen as only one sentence:
@@ -75,7 +75,7 @@ For example, the following is seen as two sentences:
 "Where did it go? I can't find it anywhere!" he said.
 :::
 
-Because *he* is lowercase, the *!* will not be considered the end of the sentence and *he said* will be part of the proceeding sentence.
+Because *he* is lowercase, the *!* will not be considered the end of the sentence and *he said* will be part of the preceding sentence.
 However, if *He* is capitalized, then the *!* will be seen as the end of a sentence and the above will be counted as three sentences.
 
 There is also a special rule for ellipses.
@@ -116,7 +116,7 @@ result in injury.
 ::::
 <!--quneiform-suppress-end-->
 
-Although this is five lines of text, we would expect for this to be seen as three sentences.
+Although this is five lines of text, we would expect this to be seen as three sentences.
 By chaining lines 2, 3, and part of 4 into one sentence (from *Before* to *mower.*), we properly see the sentences (regardless of the line breaks).
 
 However, this can be a problem if your document contains headers, footers, and list items.
@@ -214,7 +214,7 @@ Before cleaning the blade...
 
 In this case, these two lines will be erroneously joined into one sentence.
 To completely disable all possible line chaining, select the option [**Line ends always begin a new paragraph**](#sec-document-analysis).
-Note that this option is only recommended if all line ends in your document represent new paragraphs.
+Note that this option is only recommended if all line endings in your document represent new paragraphs.
 If your document contains line ends to control the width of the text, then selecting this option will cause incorrect sentence deduction.
 
 ## Controlling How Sentences are Deduced\index{sentences!controlling deduction}
@@ -435,8 +435,8 @@ In contrast, *Point-of-Sale* will remain as a hyphenated compound word because *
 
 ## Special Characters
 
-When a *%* is proceeded by a space, the program will check if the character before the space is a number.
-If it is, then the *%* will be joined with the proceeding word; otherwise, it will be treated as the start of a new word.
+When a *%* is preceded by a space, the program will check if the character before the space is a number.
+If it is, then the *%* will be joined with the preceding word; otherwise, it will be treated as the start of a new word.
 Consider the following:
 
 ::: {.fancyquotes data-latex=''}
@@ -498,7 +498,7 @@ All diacritical combinations for European letters are supported, including the f
 ## Link Lists (HTML Importer)
 
 When importing HTML documents, three or more consecutive hyperlinks not separated by text will be treated as a link list.
-This will involve laying out each link on a separate line, with all them tabbed over.
+This will involve laying out each link on a separate line, with all of them tabbed over.
 This will prevent what would usually be a footer containing links from being seen as a sentence.
 For example:
 

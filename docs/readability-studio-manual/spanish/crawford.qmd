@@ -30,16 +30,16 @@ A chart visualizing this test's score is also available:
 
 ![Crawford chart](images/crawford-graph.png){width=75% fig-align="center"}
 
-In this chart, the Y axis and interior (i.e., plot area) represent the factors, and the X axis represents the final score.
-Specifically, the Y axis represents the sample's syllable count, and the interior area represents the sample's sentence count.
-After finding the intersection of these two factors, the position on the X axis respective to this intersection yields the grade-level score.
+In this chart, the y-axis and interior (i.e., plot area) represent the factors, and the x-axis represents the final score.
+Specifically, the y-axis represents the sample's syllable count, and the interior area represents the sample's sentence count.
+After finding the intersection of these two factors, the position on the x-axis respective to this intersection yields the grade-level score.
 
-Note that this differs from other graphs which use the X and Y axes to represent the factors and their intersection to represent the score.
+Note that this differs from other graphs which use the x- and y-axes to represent the factors and their intersection to represent the score.
 Instead, this chart displays the sentence-count values as a series of steps across the plot area.
 
 For example, in the above graph the number of syllables is 175.
-The number of sentences is approximately 7 (between 8.4 and 5.9 [on the plot, respective to 175 on the Y axis]).
-After finding the intersection of these factors, the point's X axis value is 3.7.
+The number of sentences is approximately 7 (between 8.4 and 5.9 [on the plot, respective to 175 on the y-axis]).
+After finding the intersection of these factors, the point's x-axis value is 3.7.
 Hence, 3.7 is the sample's grade-level score.
 
 This test is designed for 100-word samples and uses the same statistics as the [Fry](#sec-fry-test)\index{Fry} test. ([Normalization](#sec-glossary) can also be used to analyze larger samples or entire documents.)\index{Crawford|)}

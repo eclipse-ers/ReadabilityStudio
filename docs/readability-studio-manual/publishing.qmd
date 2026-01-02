@@ -14,19 +14,19 @@ This is useful for reviewing the results outside the program, as well as publish
 
 ## Exporting {#sec-exporting}
 
-To export any window, go to the **Home** tab and click the `r keys("Save")` button, or right click on the window and select **Save**.
+To export any window, go to the **Home** tab and click the `r keys("Save")` button, or right-click on the window and select **Save**.
 
 Numerous formats are available for each type of window:
 
 - [Highlighted text](#sec-text-window-export): HTML, RTF, and Pango (Pango is only available on Linux.)
-- Statistic summaries: HTML
+- Statistical summaries: HTML
 - [Test results](#sec-scores-export): HTML
 - Word, phrase, and sentence [lists](#sec-export-list): HTML, Text, and {{< latex >}}
 - [Graphs](#sec-image-export): PNG, BMP, TIFF, JPEG, GIF, TARGA, and SVG
 
 All windows can also be exported at once by clicking the arrow beneath `r keys("Save")` and selecting [**Export All...**](#sec-export-all-options).
 
-## Scores Export Options{#sec-scores-export}
+## Scores Export Options {#sec-scores-export}
 
 When [exporting](#sec-exporting)\index{exporting!scores} readability scores\index{scores!exporting} from a standard project, the following export options are available:
 
@@ -70,14 +70,14 @@ The image can be compressed to a smaller size without any loss of quality.
 **JPG**: A lossy-compressed image format.
 Some image quality may be lost, compared to other formats such as PNG.
 
-**BMP**: An uncompressed raster (i.e., pixel based) image format.
+**BMP**: An uncompressed raster (i.e., pixel-based) image format.
 
 **TIFF**: This format can either be compressed or uncompressed and offers both lossy and lossless compression.
 This format is generally preferred for desktop publishing.
 
-**TARGA**: A raster (i.e., pixel based) image format.
+**TARGA**: A raster (i.e., pixel-based) image format.
 
-**GIF**: A raster (i.e., pixel based) image format.
+**GIF**: A raster (i.e., pixel-based) image format.
 Note that this image format is limited to 256 colors.
 
 **SVG**: A format that uses vector (rather than raster) drawing.
@@ -340,7 +340,7 @@ will be exported as:
 Dr Jones has requested a copy of the S.W.O.T report.
 :::
 
-This option is recommended for other programs that may have difficulty deducing sentences properly because of these periods.
+This option is recommended for other programs that may have difficulty with deducing sentences properly because of these periods.
 
 **Narrow full-width characters**: Check this option to convert full-width characters to their narrow counterparts.
 For example:
@@ -355,7 +355,7 @@ will be exported as:
 
 ## Printing {#sec-printing}
 
-To print\index{printing} any window, go to the **Home** tab and click the `r keys("Print")` button, or right click on the window and select **Print**.
+To print\index{printing} any window, go to the **Home** tab and click the `r keys("Print")` button, or right-click on the window and select **Print**.
 
 :::  {.wrapfigure data-latex="{r}{0.5\\textwidth}" style="width: 48%;"}
 ![](images/printerheadersfooters.png){width=48%}

@@ -81,7 +81,7 @@ On this dialog, you will specify which columns to sort by and their order.
 Going from top to bottom in this grid, the columns specified here will act as the sorting criteria for the list.
 The list will be sorted by the first specified column (and its respective sorting order).
 In the case of a tie between two or more rows, the next specified column will become the sort criterion between those rows, and so on.
-To add a column as a sort criterion, double click a row in this grid and select the column name from the drop-down box.
+To add a column as a sort criterion, double-click a row in this grid and select the column name from the drop-down box.
 Once you have selected the columns to sort by, click the `r keys("OK")` button to sort the list.
 
 ## Graphs
@@ -90,7 +90,7 @@ When any graph is selected, options for customizing it are made available on the
 
 ![](../images/ribbon-edit-graphs.png)
 
-The options made available will be dependent on the graph type.
+The options made available will depend on the graph type.
 Refer to @sec-options-graphs for further discussions of these options.
 
 Refer to @sec-customizing-graphs for step-by-step tutorials on editing graphs.
@@ -104,7 +104,7 @@ To edit these options, click on the **Document** tab of the ribbon:
 ![](../images/ribbon-edit-document-options.png)
 
 ::: {.tipsection data-latex=""}
-With a standard project, you can review these changes in realtime by selecting any highlighted text report in the [**Words Breakdown**](#sec-reviewing-word-breakdowns) or [**Grammar**](#sec-reviewing-standard-grammar) sections.
+With a standard project, you can review these changes in real time by selecting any highlighted text report in the [**Words Breakdown**](#sec-reviewing-word-breakdowns) or [**Grammar**](#sec-reviewing-standard-grammar) sections.
 As you make changes, the program will reanalyze your document and these changes will be visible in this window.
 For example, changing how words are being excluded or how sentence endings are deduced will become apparent as you make changes from the ribbon.
 :::

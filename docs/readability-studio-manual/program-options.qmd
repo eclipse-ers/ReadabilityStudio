@@ -84,7 +84,7 @@ This dialog enables you to display or suppress various warnings and prompts, inc
   If a document contains a low amount of text, then some factors (e.g., word and syllable counts) will be standardized for some tests.
 - **Warn about documents that contain sentences split by paragraph breaks.**
   This warning is shown when a document being analyzed contains what appears to be sentences with paragraph breaks in them.
-  In this situation, the sentences will not be indexed properly, and it is recommended to fix to the document.
+  In this situation, the sentences will not be indexed properly, and it is recommended to fix the document.
 - **Warn about documents that contain long incomplete sentences that will be included in the analysis.**
     This warning is shown when a document being analyzed contains sentences that, although missing terminating punctuation, will be included in the analysis because of their length.
     To change this behavior, adjust the option [**Include incomplete sentences containing more than [15] words**](#sec-options-text-exclusion).
@@ -118,7 +118,7 @@ This dialog enables you to display or suppress various warnings and prompts, inc
   By default, a project will link to the document it is analyzing.
   When you click the `r keys("Edit Document")` button (on the **Home** tab), the document will be opened in its default editor.
   However, if you have chosen to embed the document into the project, then this prompt will appear.
-  It will ask you whether you want to change this setting to link to the document and then edit it, or it continue embedding the document and then edit the embedded text.
+  It will ask you whether you want to change this setting to link to the document and then edit it, or continue embedding the document and then edit the embedded text.
   Note that if you continue to embed the document and edit the embedded text, then your changes will only be reflected in your project—your changes will not appear in the original document.
 - **Prompt about failing to load a project that is missing its embedded text.**
   When opening a project which embeds the document's text, then an error message will be shown if the embedded text is not found within the project.
@@ -151,7 +151,7 @@ The options on this page customize your general project settings.
 
 ### Project {-}
 
-**Reviewer**: Enter in this field your name as it should appear in exported reports.
+**Reviewer**: Enter your name in this field as it should appear in exported reports.
 
 **Status**: Enter in this field the status of the document(s) that this project is reviewing (e.g., *DRAFT*).
 This information will appear in reports when you [export all](#sec-export-all-options).
@@ -295,7 +295,7 @@ Exclusion
 These options control how text is excluded from your documents.
 
 **Do not exclude any text**: Select this option to treat all incomplete sentences as regular sentences when calculating statistics.
-This is only recommended for forms that may contain numerous titles and lists items and little narrative text.
+This is only recommended for forms that may contain numerous titles and list items and little narrative text.
 Refer to @sec-fragmented-text for more information.
 
 **Exclude all incomplete sentences**: Select this option to ignore all incomplete sentences when calculating statistics.
@@ -366,7 +366,7 @@ A citation header will be any header which contains 5 (or less) words and any of
 - Related Publications
 - *Relación de los Trabajos Publicados*
 - Sources
-- Textbooks and Cirricula
+- Textbooks and Curricula
 - Works Cited
 
 ::: {.notesection data-latex=""}
@@ -971,7 +971,7 @@ Note that watermarks and logos will also appear when you [print](#sec-printing) 
 A stipple brush can be used to draw stacked images across [bars and boxes](#sec-options-graphs).
 
 **Stipple shape**: Select from here which shape to use for a stipple brush.
-A stipple brush can be used to draw stacked shape across [bars and boxes](#sec-options-graphs).
+A stipple brush can be used to draw stacked shapes across [bars and boxes](#sec-options-graphs).
 
 **Common image**: Enter into this field the file path to the image used for drawing underneath all the bars or boxes on the graphs.
 
@@ -1027,7 +1027,7 @@ Selects the layout style of the Raygor graph.
 These options include:
 
 **Original**: As the graph appeared in the original presentation [@{raygor}261].
-This will show grade labels being closer together, abbreviated, and with a san-serif font.
+This will show grade labels being closer together, abbreviated, and with a sans-serif font.
 Also, invalid region polygons are not included.
 
 **Baldwin-Kaufman**: As the graph appeared in the Baldwin-Kaufman article [-@{baldwin-kaufman}149].
@@ -1086,7 +1086,7 @@ This will appear as if bars are warped and look like they were filled in with wa
 
 **Thick watercolor**: This is the same as **Watercolor**, but will use a more opaque brush and apply a second coat of paint.
 
-**Common image**: Select this option to draw an image under the graph, with it only showing through were the bars are at.
+**Common image**: Select this option to draw an image under the graph, with it only showing through where the bars are at.
 ::::
 
 **Opacity**: Sets the transparency of the bars.
@@ -1174,7 +1174,7 @@ If you are not rounding down your scores, then a score of 2 will fall into the 1
 If you select this option, then it is recommended to set the rounding option to **Round down**.
 This will ensure that values such as 2 and 2.1 fall into the same bin.
 
-Also note that if data for a particular histogram contain four or less unique values, then unique value binning will be used.
+Also note that if data for a particular histogram contain four or fewer unique values, then unique value binning will be used.
 ::::
 
 :::: {.optionssection data-latex=""}
@@ -1265,7 +1265,7 @@ The shape for this brush is specified on the [**General**](#sec-options-graphs) 
 **Watercolor**: Select this option to draw a watercolor-like effect across the boxes.
 This will appear as if boxes are warped and look like they were filled in with watercolor paint (or a marker).
 
-**Common image**: Select this option to draw an image under the graph, with it only showing through were the boxes are at.
+**Common image**: Select this option to draw an image under the graph, with it only showing through where the boxes are at.
 ::::
 
 **Opacity**: Sets the transparency of the box.

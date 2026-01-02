@@ -17,7 +17,7 @@ The following are also considered familiar:
 - All proper nouns.\index{proper nouns!Spache Revised}
 - All numerals\index{numerals!Spache Revised}.
 
-Spache Revised is generally used for primary age (i.e., Kindergarten to 7^th^ grade) readers to help classify school textbooks and literature.
+Spache Revised is generally used for primary-age (i.e., Kindergarten to 7^th^ grade) readers to help classify school textbooks and literature.
 This differs from [New Dale-Chall](#sec-dale-chall-test)\index{New Dale-Chall!compared to Spache Revised}, which is better meant for secondary age readers.
 
 Because this formula uses familiar words (rather than syllable or letter counts), it is often regarded as a more accurate test for younger readers.

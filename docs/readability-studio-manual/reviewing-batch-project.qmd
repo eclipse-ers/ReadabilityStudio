@@ -69,7 +69,7 @@ If [**Extended Information**](#sec-options-statistics) is enabled, then these ad
 - [Median](#sec-stat-terms)\index{median}: the middle test score.
   This represents the middle point separating the lower and upper halves of the scores.
   This is calculated by sorting the scores and taking the score in middle if the number of scores is odd.
-  If the number of scores is even, then the means of the two middle points is taken.
+  If the number of scores is even, then the mean of the two middle points is taken.
 - [Skewness](#sec-stat-terms)\index{skewness}: the asymmetry of the scores' distribution.
 - [Kurtosis](#sec-stat-terms)\index{kurtosis}: the peakedness of the scores' distribution.
 - [Standard Deviation](#sec-stat-terms)\index{standard deviation}: the variability (or spread) of the scores.
@@ -94,7 +94,7 @@ The **Grade Score Summary (x Document)** subitem will display aggregated statist
 
 ![](images/batch-grade-scores-by-document.png)
 
-The **Valid N** column represents the number of grade-level tests that were successfully ran against each document.
+The **Valid N** column represents the number of grade-level tests that were successfully run against each document.
 After this column are additional columns displaying grade-level score statistics, document-by-document.
 In the above example, we can see that the document *CustomWordTest.html* had 5 different grade tests ran against it, with 9.5 being the lowest score and 10.9 being the highest.
 
@@ -176,7 +176,7 @@ Below is a box plot of [Flesch](#sec-flesch-test) scores from a batch:
 ![](images/boxindex.png){width=75% fig-align="center"}
 
 As we can see above, the middle half of the documents fall within a marginally acceptable range of 46–60.5 (60–80 is normally preferred).
-The upper whisker goes up to 75, meaning that there are a decent number of document in the 60.5–75 range.
+The upper whisker goes up to 75, meaning that there are a decent number of documents in the 60.5–75 range.
 Unfortunately, the lower whisker extends all the way to 33—this indicates a fair amount of difficult documents.
 As with the grade-level plot, this graph helps us conclude that some documents in this batch should be revised to lower their scores.
 
@@ -346,7 +346,7 @@ This search is applied to all sentences.
 If a wording error occurs more than once in a document, then a multiplication factor will be shown next to it.
 For example, if *other then* occurs two separate times in a given document, then this will be displayed as *other then\*2*.
 
-To view a specific document's errors, double click on its row.
+To view a specific document's errors, double-click on its row.
 A vertical display of that document's wording errors will be shown:
 
 ![](images/batchwordingerrorsviewitem.png){width=60% fig-align="center"}
@@ -364,12 +364,12 @@ This search is applied to all sentences.
 If a misspelling occurs more than once in a document, then a multiplication factor will be shown next to it.
 For example, if *specfy* occurs two separate times in a given document, then this will be displayed as *specfy\*2*.
 
-To view a specific document's misspellings, right click on its row and select **View Item**.
+To view a specific document's misspellings, right-click on its row and select **View Item**.
 A vertical display of that document's misspellings will be shown:
 
-![](images/batchmisspellingsviewitem.png)width=60% fig-align="center"}
+![](images/batchmisspellingsviewitem.png){width=60% fig-align="center"}
 
-To add any document's misspellings to your dictionary, double click on its row to show the **Add to Dictionary** dialog.
+To add any document's misspellings to your dictionary, double-click on its row to show the **Add to Dictionary** dialog.
 From here, you can add any (or all) reported misspellings to your dictionary.
 Afterwards, these words will no longer be reported as misspelled.
 
@@ -394,7 +394,7 @@ A vertical display of that document's redundant phrases will be shown:
 
 ![](images/batchredundantphrasesviewitem.png){width=75% fig-align="center"}
 
-Refer to @sec-reviewing-standard-grammar for an explanation of what redundant phrase are.
+Refer to @sec-reviewing-standard-grammar for an explanation of what redundant phrases are.
 
 ### Reviewing Wordy Items {-}
 
@@ -446,7 +446,7 @@ This window will display a list of all passive phrases from each document.
 If a passive phrase occurs more than once in a document, then a multiplication factor will be shown next to it.
 For example, if *be chosen* occurs twice in a given document, then this will be displayed as *be chosen\*2*.
 
-To view a specific document's passive phrases, right click on its row and select **View Item**.
+To view a specific document's passive phrases, right-click on its row and select **View Item**.
 A vertical display of that document's passive phrases will be shown:
 
 ![](images/batchpassivevoiceviewitem.png){width=25% fig-align="center"}
@@ -464,7 +464,7 @@ When reviewing these, it is recommended to change some of the repeated words to 
 
 Numeric words, proper nouns, words containing less than three letters, and common words (e.g., *the*) are excluded from this review.
 
-To view a specific document's overused words, right click on its row and select **View Item**.
+To view a specific document's overused words, right-click on its row and select **View Item**.
 A vertical display of that document's overused words will be shown.
 
 Refer to @sec-reviewing-standard-grammar for an explanation about overused words.

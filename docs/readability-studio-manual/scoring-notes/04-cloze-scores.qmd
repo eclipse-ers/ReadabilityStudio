@@ -6,9 +6,9 @@ This test consists of the following steps:
 
 - Take a 250 word passage from a document.
 - Delete every fifth word and replace it with a blank of equal length.
-  There should be a total 50 blanks when finished.
+  There should be a total of 50 blanks when finished.
 - Have the student fill in as many of the blanks as he/she can.
-- Count the number of blank words that he/she filled in correctly.
+- Count the number of blanks that he/she filled in correctly.
   Traditionally, synonyms are not accepted, but this can be at the discretion of the administrator.
   Misspellings are acceptable.
 - Multiply the number of correct answers by two.
@@ -17,16 +17,16 @@ This test consists of the following steps:
 
 Cloze procedures can also be used to gauge how easily a passage of text can be comprehended.
 In this context, a cloze procedure is given to a group of students, and the mean (average) of their scores is the level of comprehensibility for the passage.
-60% and higher is considered to be an acceptable level of comprehensibility.
+Sixty percent and higher are considered to be an acceptable levels of comprehensibility.
 Scores lower than 60% indicate that the passage may be too difficult to be comprehensible and should be rewritten.
 
 Cloze scores such as these are the criteria used to validate most readability formulas.
 Generally, researchers use the passages and results from published cloze procedures as their test data when creating a formula.
-This process usually involves a multiple regression with the cloze scores of the passages as the dependent variable and factors such as sentence lengths and syllable counts as the independent variables.
+This process usually involves multiple regression with the cloze scores of the passages as the dependent variable and factors such as sentence length and syllable count as the independent variables.
 This analysis will determine which factors most strongly affect the cloze scores.
 After finding the most effective factors, these factors are then incorporated into a formula.
-Through experimentation, the formula is adjusted to produce results that strongly correlate to the original cloze scores.
-The stronger this correlation, the more accurate the formula will be in predicting the readability of new text samples.
+Through experimentation, the formula is adjusted to produce results that strongly correlate with the original cloze scores.
+The stronger this correlation is, the more accurate the formula will be in predicting the readability of new text samples.
 
 Some readability formulas produce predicted cloze scores (rather than grade levels).
 A predicted cloze score represents an estimation of a passage's mean score if it were made into a cloze test and given to a group of students.

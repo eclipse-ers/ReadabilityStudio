@@ -8,7 +8,7 @@ Because it uses both word familiarity and syntactic complexity for its analysis,
 For this formula, a study involving 2,600 students ranging from 4^th^-12^th^ grade [-@{bormuth:1969}97] was conducted.
 The students completed 330 110-word cloze passages, and their scores were correlated against numerous linguistic factors from the passages.
 After a series of factor analyses and multiple regressions, a series of formulas were created to predict cloze and grade-level scores for a passage.
-These formulas were then cross validated against 20 250–300 word passages [-@{bormuth:1969}105].
+These formulas were then cross-validated against 20 250–300 word passages [-@{bormuth:1969}105].
 These formulas correlated with between $r^2 = 0.81$ to $0.83$ with the original test data and between $r^2 = 0.92$ to $0.93$ with the cross validation data.
 
 Of these formulas, the predicted cloze formula is as follows:
@@ -37,7 +37,7 @@ Where:
 +-----+---------------------------------------+
 
 ::: {.notesection data-latex=""}
-Cloze scores returned by this test should be in percentage format (e.g., 75) rather than fractal format (e.g., .75) to be consistent with other tests.
+Cloze scores returned by this test should be in percentage format (e.g., 75) rather than fractional format (e.g., .75) to be consistent with other tests.
 :::
 
 \index{Bormuth Cloze Mean|)}

@@ -92,6 +92,7 @@ Lengthy, complex sentences generally contain more than one unit.
 
 ## Statistical Terms {#sec-stat-terms}
 
+:::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
 box plots\index{box plots}
 :::
@@ -102,7 +103,7 @@ Box plots are used to display the distribution of data, where:
 - The box is the 25^th^-75^th^ percentile range.
 - The whiskers are the non-outlier range.
 
-Outlier values that do not fall within these areas are plotted outside of the whiskers.
+Outlier values that do not fall within these areas are plotted outside the whiskers.
 
 :::: {.notesection data-latex=""}
 *{{< var PROGRAM_NAME >}}* uses the Tukey hinges method for calculating quartiles.
@@ -234,10 +235,11 @@ ggplot_box_legend <- function(family = "serif"){
 plot(ggplot_box_legend())
 ```
 :::
+::::
 
 :::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
-IRQ
+IQR
 :::
 ::: {.glsdef data-latex=''}
 Interquartile range.
@@ -292,8 +294,8 @@ median\index{median}
 :::
 ::: {.glsdef data-latex=''}
 The middle point separating the lower and upper halves of a range of data.
-This is calculated by sorting the values and taking the value in middle if the number of values is odd.
-If the number of values is even, then the means of the two middle points is taken.
+This is calculated by sorting the values and taking the value in the middle if the number of values is odd.
+If the number of values is even, then the mean of the two middle points is taken.
 :::
 ::::
 
@@ -331,7 +333,7 @@ $$
 200 * 0.5 = 100
 $$
 
-Next, we multiply the 22 sentences by the same factor of 0.5 and arrive at a measure of 11 sentences.
+Next, we multiply the 22 sentences by the same factor of 0.5 and arrive at 11.
 
 $$
 22 * 0.5 = 11
@@ -350,11 +352,12 @@ An extreme (high or low) value that is numerically distant from the rest of the 
 :::
 ::::
 
+:::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
 overplotting
 :::
 ::: {.glsdef data-latex=''}
-When visualizing points along a single dimension (e.g., the y axis of a box plot), points with the same score will overlap each other.
+When visualizing points along a single dimension (e.g., the y-axis of a box plot), points with the same score will overlap each other.
 Because of this, it becomes difficult to fully see the distribution of the data.
 Considering the following box plot:
 
@@ -370,10 +373,10 @@ boxplot(len ~ dose, data = ToothGrowth,
 stripchart(len ~ dose, data = ToothGrowth, method='overplot', add=T, pch=20, col=2, vertical=T)
 ```
 
-Although we can interpret the quartile ranges, it is not obvious how the data clumps together overall.
+Although we can interpret the quartile ranges, it is not obvious how the data clumps overall.
 
-To correct this, a technique called jittering\index{box plots!jittering} is used to adjust the x axis values of overlapping points.
-Traditionally, jittering\index{jittering|see{box plots,jittering}} uses randomness to adjust the points' position around both sides of the axis, as such:
+To correct this, a technique called jittering\index{box plots!jittering} is used to adjust the x-axis values of overlapping points.
+Jittering\index{jittering|see{box plots,jittering}} uses randomness to move the points' position around both sides of the axis, as such:
 
 ```{r}
 #| label: fig-boxplot-random-jittering
@@ -388,9 +391,9 @@ stripchart(len ~ dose, data = ToothGrowth, method='jitter', add=T, pch=20, col=2
 ```
 
 Because of this randomness, some points may still overlap.
-To improve this, a newer technique known as beeswarm jittering instead adjusts points the minimal distance from the axis.
+To improve this, a newer technique known as beeswarm jittering instead adjusts points the minimum distance from the axis.
 This ensures that each point is seen and more tightly packed (offering a more accurate view of how the data are distributed).
-And example of this is as follows:
+An example of this is as follows:
 
 ```{r}
 #| label: fig-boxplot-beeswarm-jittering
@@ -406,7 +409,9 @@ boxplot(len ~ dose, data = ToothGrowth,
 beeswarm(len ~ dose, data = ToothGrowth, col = 2, add = TRUE)
 ```
 :::
+::::
 
+:::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
 *r*
 :::
@@ -414,14 +419,15 @@ beeswarm(len ~ dose, data = ToothGrowth, col = 2, add = TRUE)
 The correlation between two factors (e.g., sentence length vs. reading level).
 *r* values range from -1.0 to 1.0, where -1.0 is a perfect negative correlation and 1.0 is a perfect positive correlation.
 :::
-
+::::
 
 :::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
 *r²*
 :::
 ::: {.glsdef data-latex=''}
-The correlation between two factors (e.g., sentence length vs. reading level) when more than one independent factor is tested against the dependent (i.e., a multiple regression). *r²* values range from 0.0 to 1.0, where 0.0 indicates no correlation and 1.0 is a perfect positive correlation.
+The proportion of variation in a dependent variable explained by the independent variable(s).
+*r²* values range from 0.0 to 1.0, where 0.0 indicates no explanatory power and 1.0 indicates complete explanation.
 :::
 ::::
 
@@ -471,7 +477,7 @@ This is the value separating the upper quarter of the values from the rest of th
 
 :::: {.glsentry data-latex=''}
 ::: {.glsterm data-latex=''}
-valid n
+valid N
 :::
 ::: {.glsdef data-latex=''}
 The number of valid values in a range of data.

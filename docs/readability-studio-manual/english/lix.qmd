@@ -7,7 +7,7 @@ This difference is what allows it to be a more balanced "yardstick" that can be 
 
 The philosophy behind using one formula for multiple languages is that, at their core, most languages are similar in difficulty.
 This approach argues that a language having various idiosyncrasies and longer words is not why it scores at more difficult levels.
-The reason languages score higher is because of how they are used (i.e., word choice, writing style) and presented (e.g., longer paragraphs and sentences, less images).
+The reason languages score higher is because of how they are used (i.e., word choice, writing style) and presented (e.g., longer paragraphs and sentences, fewer images).
 This differs from the reasoning behind other tests based on adjusted English formulas.
 Those tests are designed under the assumption that non-English languages are inherently more difficult (because of comparatively longer words).
 For example, [Gilliam-Peña-Mountain](#sec-gilliam-pena-mountain-fry-graph)\index{Gilliam-Peña-Mountain} and the [German reinterpretation of Lix](#sec-lix-german-technical) follow this logic of adjusting English formulas for non-English text.

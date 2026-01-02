@@ -9,7 +9,7 @@ The intent of this test was to provide a quicker and simpler way to plot a reada
 To confirm this, a secondary study [@{baldwin-kaufman}148–53] conducted an experiment involving 155 students from the University of Tulsa.
 The students performed Fry and ELF tests on 6 100-word passages.
 Afterwards, an independent *t* test was performed to gauge the difference in time spent manually performing the two readability tests.
-What the researches found was a significant difference, where Raygor took an average of 250.26 seconds to complete versus 323.45 seconds for Fry.
+What the researchers found was a significant difference, where Raygor took an average of 250.26 seconds to complete versus 323.45 seconds for Fry.
 
 In another experiment, Baldwin and Kaufman compared the correlations between Fry\index{Fry!compared to Raygor} and Raygor scores.
 They collected three 100-word samples from 100 books from the Learning Resource Center at The University of Tulsa.
@@ -35,7 +35,7 @@ The Raygor Estimate instructions are:
 - Repeat this process for each sample, and then average the samples.
 :::
 
-This test is designed for three 100-word samples, with three samples being recommended for best results.
+This test is designed for 100-word samples, with three samples being recommended for best results.
 ([Normalization](#sec-glossary) can also be used to analyze larger samples or entire documents.)
 
 \index{Raygor Estimate|)}

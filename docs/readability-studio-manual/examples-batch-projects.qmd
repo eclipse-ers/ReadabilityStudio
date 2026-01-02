@@ -7,7 +7,7 @@ source('R/appdown.r')
 
 # Batch Projects
 
-`r drop_cap('Within')` this chapter, we will step through examples showing how to analyse batches of documents.
+`r drop_cap('Within')` this chapter, we will step through examples showing how to analyze batches of documents.
 This will involve gathering documents from folders, grouping them, and then processing them all at once.
 We will also discuss the batches' aggregated results and how to interpret them.
 
@@ -120,7 +120,7 @@ There are no longer any documents scoring above the 12^th^ grade, and only 10 do
 ## Adding Descriptive Labels to Documents {#sec-adding-labels-to-batch}
 
 Sometimes documents that we receive do not have descriptive names that are easily recognizable.
-An example of this are downloaded webpages that may have names such as "index.html" or "2A67B2H.html."
+An example of this is downloaded webpages that may have names such as "index.html" or "2A67B2H.html."
 In this example, we will show how to include descriptive labels next to our documents in a batch so that we can distinguish between them.
 
 :::{.wrapfigure data-latex="{r}{0.5\\textwidth}" style="width: 48%;"}
@@ -148,7 +148,7 @@ Click `r keys('Finish')` to begin the analysis, and once the project appears, se
 ![](images/batch-desc-labels-scores.png){width=50% fig-align="center"}
 
 Note how there is a **Label** column next to the **Document** column.
-Despite the documents all having the same name, we can use this column will help us differentiate between them.
+Despite the documents all having the same name, we can use this column to help us differentiate between them.
 
 \newpage
 

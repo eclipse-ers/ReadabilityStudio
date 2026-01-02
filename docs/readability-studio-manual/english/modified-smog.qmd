@@ -10,13 +10,13 @@ Modified SMOG differs from [SMOG](#sec-smog-test) in the following ways:
 
 Because of these adjustments, it will generally produce scores closer to other tests than SMOG does—in particular, the Fry graph [@{lsmith}129].
 
-The author's decision to not count repeated difficult words was a major factor in making this test more appropriate for primary readers.
+The author's decision not to count repeated difficult words was a major factor in making this test more appropriate for primary readers.
 As he explains, in a particular pre-primer book "the word 'kangaroo' appeared 52 times . . . it was the only polysyllabic word in the book.
 To count the word more than once would have inflated the readability score to an unrealistic level" [@{lsmith}130].
 
 The steps for calculating Modified SMOG are:
 
-- Take 3 10-sentence samples.
+- Take 3 ten-sentence samples.
 - Count the number of unique words containing 3 or more syllables.
 - Calculate the square root of this count and round it.
 - If this square root is 4 or more, then add 1. Otherwise, the square root should remain the same.

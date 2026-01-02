@@ -12,9 +12,9 @@ It was trained against samples from the following books:
 - *The Pearl*
 - *Shane*
 - *Death be Not Proud*
-- *Moon is Down*
+- *The Moon is Down*
 - *To Kill a Mockingbird*
-- *Tale of Two Cities*
+- *A Tale of Two Cities*
 - *Silas Marner*
 - *Act One*
 
@@ -25,7 +25,7 @@ The graph's results were compared to other tests, yielding the following correla
 - Botel: $r = 0.78$
 - SRA: $r = 0.98$
 
-In 1977, Fry extended the graph to include grades 13–16 by extrapolating the averages from the preceding 3 years on the graph [-@{fry:extensions:1977}251].
+In 1977, Fry extended the graph to include grades 13–17 by extrapolating the averages from the preceding 3 years on the graph [-@{fry:extensions:1977}251].
 
 The Fry graph is designed for both primary and secondary-age reading materials.
 Below is an example of a Fry graph:

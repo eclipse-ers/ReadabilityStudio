@@ -12,7 +12,7 @@ This adjustment was developed by Renström [-@{renstrom}152–153] and Bamberger
 Note that this test differs from the original Lix approach of using the same scoring for any document, regardless of language.
 Instead, this test is designed specifically for German materials, adjusting the grade-level score and classification of the index value.
 
-Regarding the index score, the following variation of the Lix gauge is used classify the difficulty [@{renstrom}153; @{bamberger-vanecek}65; @{schulz}53]:
+Regarding the index score, the following variation of the Lix gauge is used to classify the difficulty [@{renstrom}153; @{bamberger-vanecek}65; @{schulz}53]:
 
 ![German Lix gauge (children's literature)](images/german-lix-gauge.png){width=75% fig-align="center"}
 
@@ -43,7 +43,7 @@ This adjustment was developed by Renström [-@{renstrom}152–153] and Bamberger
 Note that this test differs from the original Lix approach of using the same scoring for any document, regardless of language.
 Instead, this test is designed specifically for German materials, adjusting the grade-level score and classification of the index value.
 
-Regarding the index score, the following variation of the Lix gauge is used classify the difficulty [@{renstrom}153; @{bamberger-vanecek}65; @{schulz}53]:
+Regarding the index score, the following variation of the Lix gauge is used to classify the difficulty [@{renstrom}153; @{bamberger-vanecek}65; @{schulz}53]:
 
 ![German Lix gauge (technical literature)](images/german-lix-gauge.png){width=75% fig-align="center"}
 

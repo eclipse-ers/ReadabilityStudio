@@ -104,7 +104,7 @@ For phrase files (in the `r file_path(c("wordy-phrases"))` folder), each row sho
 - Phrase
 - Suggestion (optional)
 - Type (wordy = 0, redundant = 1, cliché = 2, error = 3)
-- Word proceeding the phrase that will override the grammar checker\
+- Word preceding the phrase that will override the grammar checker\
   (optional, can be multiple values delimited by **;** or **,**)
 - Word following the phrase that will override the grammar checker\
   (optional, can be multiple values delimited by **;** or **,**)

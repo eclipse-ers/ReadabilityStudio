@@ -4,7 +4,7 @@ The Automated Readability Index–also called "ARI" or "auto"–[@{esmith}] was 
 As such, it was designed for technical reports and manuals.
 This test calculates the grade level of a document based on sentence length and character count.
 
-Kincaid et al. [-@{kincaid:1972}3, 6–15] also used this test for evaluating peered-prepared reading materials for three studies involving:
+Kincaid et al. [-@{kincaid:1972}3, 6–15] also used this test for evaluating peer-prepared reading materials for three studies involving:
 
 - 33 remedial high school students
 - 22 graduate students from Southern Georgia College

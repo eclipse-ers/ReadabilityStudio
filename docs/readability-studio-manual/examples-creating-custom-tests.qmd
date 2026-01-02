@@ -172,7 +172,7 @@ CustomNewDaleChall()
 
 This formula will instruct the program to use the standard New Dale-Chall formula with our familiar-word criteria, which we will define later.
 
-The next step is to specify the type of test that this is into the **Test result type** field.
+The next step is to specify the type of test that this is in the **Test result type** field.
 By default, new tests will be defined as grade-level tests, which means that the result will be truncated to be within the 0 (Kindergarten) to 19 (doctorate) range.
 New Dale-Chall is a grade-level test, so we will leave this option set to the default.
 
@@ -196,7 +196,7 @@ The advantage of this is that we will have precise control over which variations
 For example, we could add *glaze* and *glazes* to our list and only these variations of *glaze* would be counted as familiar.
 This way, other variations (e.g., *glazy*) will remain unfamiliar.
 The disadvantage of this method is that we must explicitly add every variation of *glaze* to our list that we want to be familiar.
-For larger lists, this can be tedious and error prone.
+For larger lists, this can be tedious and error-prone.
 
 The other option is to use stemming.
 Stemming will compare the roots of the words between our list and our recipe, rather than the words themselves.
@@ -244,7 +244,7 @@ As shown below, there are numerous unfamiliar New Dale-Chall words in this recip
 
 ![](images/custom-test-example2-dc-word-list.png)
 
-However, because our custom test is including some extra words not on the New Dale-Chall list, our test will have less unfamiliar words.
+However, because our custom test is including some extra words not on the New Dale-Chall list, our test will have fewer unfamiliar words.
 Select the **New Dale-Chall (Baking)** subitem to review the unfamiliar words from the recipe relative to our custom test:
 
 ![](images/custom-test-example2-custom-word-list.png)
@@ -322,7 +322,7 @@ First, it calculates this percentage in this line:
 
 `FamiliarWordCount()` represents the number of words in the document that are found from our buzzword list.
 Then this count is divided by the total number of words in the document (`WordCount()`).
-This will yield a floating precision value (e.g., *.17*), so we multiply that by 100 to change it to an integer (e.g., *17*).
+This will yield a floating-point value (e.g., *.17*), so we multiply that by 100 to change it to an integer (e.g., *17*).
 
 After getting the buzzword percentage, we will then classify the file within a scale of 1–3.
 Three means that there is an unacceptably high percentage of buzzwords, two means a high percentage, and one means an acceptable percentage.

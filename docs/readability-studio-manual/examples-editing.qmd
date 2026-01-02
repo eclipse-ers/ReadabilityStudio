@@ -35,7 +35,7 @@ In the **View** section of the ribbon are options for changing the appearance of
 
 ![](images/editorviewribbon.png)
 
-For example, we can toggle line spacing between new lines by selecting `r menu(c("Line Spacing", "Display space after hard returns"))`.
+For example, we can toggle line spacing after line breaks by selecting `r menu(c("Line Spacing", "Display space after hard returns"))`.
 
 As you edit the document, you can click the **Save** button on the editor:
 
@@ -59,13 +59,13 @@ With the project window selected, select the **Readability** tab on the ribbon a
 A Flesch test will now be available and can be viewed by selecting **Readability Scores** on the sidebar.
 Likewise, various parsing features (e.g., line-end handling, text exclusion) can be changed on the **Document** tab on the ribbon.
 
-You can also search for issues in the editor by double clicking on items in the project's lists.
+You can also search for issues in the editor by double-clicking on items in the project's lists.
 Click **Words Breakdown** on the sidebar and select any list in this section (e.g., **3+ Syllable List**).
-Double click any word in this list and it will become selected in the editor.
+Double-click any word in this list and it will become selected in the editor.
 (Clicking `r keys("F3")` on the keyboard will search for the next instance.)
 
 ::: {.notesection data-latex=""}
-If the editor is not open, then double clicking a list item will search for it in the respective text window within the project.
+If the editor is not open, then double-clicking a list item will search for it in the respective text window within the project.
 :::
 
 Once you are finished editing and ready to export your document, copy it and paste it into another program.

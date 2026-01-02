@@ -208,4 +208,4 @@ Finally, *{{< var PROGRAM_NAME >}}* is highly configurable.
 Many options, such as how documents are analyzed and how the results are displayed, are customizable.
 For example, you can specify how numeric words (e.g., *10/31/1974*) are [syllabized](#sec-document-analysis).
 Other programs either sound out each digit or treat the entire word as one syllable and you cannot change this.
-With *{{< var PROGRAM_NAME >}}*, you can toggle this behavior at anytime.
+With *{{< var PROGRAM_NAME >}}*, you can toggle this behavior at any time.

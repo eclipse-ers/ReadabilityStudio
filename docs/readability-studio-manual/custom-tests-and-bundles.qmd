@@ -46,7 +46,7 @@ This will display a function browser on the right side of the dialog:
 
 The left side of this browser shows the function categories, while the right side shows the functions from the selected category.
 Beneath, a description of the selected function will be shown.
-Note that double clicking a function on the right side will insert it into the formula.
+Note that double-clicking a function on the right side will insert it into the formula.
 
 Refer to @sec-custom-test-functions for a list of available functions.
 
@@ -138,7 +138,7 @@ The following functions and operators are available for use in [custom test](#se
 | \| | Logical alternative (OR). |
 | ( ) | Groups sub-expressions, overriding the order of operations. |
 
-: Operators {#tbl-formula-operatprs}
+: Operators {#tbl-formula-operators}
 :::
 
 ::: {.minipage data-latex="{\textwidth}"}
@@ -221,13 +221,13 @@ You can override it so that the additions happen first (resulting in `15`), foll
 | CustomNewDaleChall()\index{CustomNewDaleChall()@\texttt{CustomNewDaleChall()}} | Performs a New Dale-Chall test with a custom familiar word list.<br>\linebreak Note that this test will use the same text exclusion rules as New Dale-Chall (overriding your system defaults). |
 | CustomSpache()\index{CustomSpache()@\texttt{CustomSpache()}} | Performs a Spache Revised test with a custom familiar word list. |
 
-: Custom Familiar Word Tests Functions {#tbl-formula-fam-words}
+: Custom Familiar Word Test Functions {#tbl-formula-fam-words}
 :::
 
 ::: {.minipage data-latex="{\textwidth}"}
 <!--
 Using the proper footnote method causes the footnotes to be numbers instead of letters,
-and doesn't work in LaTeX because of the minipage.
+and does not work in LaTeX because of the minipage.
 (The minipage is to keep the footnotes under the table, and not the end of the page.)
 So, to create MLA footnotes, we have to create pseudo footnotes below the table.
 Also, can't use kable here because we have index tags embedded in the text.
@@ -254,7 +254,7 @@ This will be either traditional sentence counting or unit counting.
 | FamiliarDaleChallWordCount() | Returns the number of familiar New Dale-Chall words. |
 | FamiliarHarrisJacobsonWordCount() | Returns the number of familiar Harris-Jacobson words. |
 | FamiliarSpacheWordCount() | Returns the number of familiar Spache words. |
-| FamiliarWordCount() | Returns the number of familiar words (from a custom list) the document. |
+| FamiliarWordCount() | Returns the number of familiar words (based on a custom list) from the document. |
 | HardFogWordCount() | Returns the number of difficult Gunning Fog words. |
 | MiniWordCount() | Returns the number of miniwords (refer to @sec-eflaw-test). |
 | NumeralCount() | Returns the number of numerals\index{numerals}. |
@@ -266,7 +266,7 @@ This will be either traditional sentence counting or unit counting.
 | UnfamiliarDaleChallWordCount() | Returns the number of unfamiliar New Dale-Chall words. |
 | UnfamiliarHarrisJacobsonWordCount() | Returns the number of unfamiliar Harris-Jacobson words. |
 | UnfamiliarSpacheWordCount() | Returns the number of unfamiliar Spache words. |
-| UnfamiliarWordCount() | Returns the number of unfamiliar words (from a custom list) the document. |
+| UnfamiliarWordCount() | Returns the number of unfamiliar words (based on a custom list) from the document. |
 | UniqueOneSyllableWordCount() | Returns the number of unique monosyllabic words. |
 | UniqueSixCharacterPlusWordCount() | Returns the number of unique words consisting of six or more characters. |
 | UniqueUnfamiliarDaleChallWordCount() | Returns the number of unique unfamiliar New Dale-Chall words. |
@@ -519,7 +519,7 @@ Next, you will select all the tests that you wish to include in this bundle.
 
 Along with selecting tests, you can also specify the range of values that a document should score within for any given test.
 First, on the **Goals** page, click the add button to include a new goal.
-Next, double click in the **Test** column to select the test.
+Next, double-click in the **Test** column to select the test.
 Finally, click in either the **Recommended minimum score** or **Recommended maximum score** column and enter the acceptable score range.
 Now, when this bundle is applied to a project, the document's pass/fail status will be displayed in the [**Goals**](#sec-reviewing-goals) section.
 

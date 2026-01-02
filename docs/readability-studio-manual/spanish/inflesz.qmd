@@ -17,7 +17,7 @@ The INFLESZ Scale was validated using 210 Spanish-language publications drawn fr
 From each publication, three random text fragments of at least 500 words were selected, yielding a total of 630 analyzed fragments.
 
 ::: {.callout-note icon=false}
-## INFLESZ index formula
+## Szigriszt index formula
 
 $$
 I = 206.835 - (W/S) - (62.3 * (B/W))
@@ -26,15 +26,15 @@ $$
 
 Where:
 
-+:----+:---------------------+
-| I   | INFLESZ index score  |
-+-----+----------------------+
-| W   | Number of words      |
-+-----+----------------------+
-| B   | Number of syllables  |
-+-----+----------------------+
-| S   | Number of sentences  |
-+-----+----------------------+
++:----+:----------------------+
+| I   | Szigriszt index score |
++-----+-----------------------+
+| W   | Number of words       |
++-----+-----------------------+
+| B   | Number of syllables   |
++-----+-----------------------+
+| S   | Number of sentences   |
++-----+-----------------------+
 
 | INFLESZ Score | Description |
 |--------------:|-------------|
