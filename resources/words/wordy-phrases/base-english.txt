@@ -1152,6 +1152,7 @@ ancient relics	relics	1
 ancilliary	ancillary	3		
 and also	and, also	0		
 and etc.	etc.	0		
+and example of	an example of	3		
 and so on and so forth	and so on, and so forth	0		
 and so one	and so on	3		afternoon;can;could;couldn't;day;evening;last;morning;must;night;should;shouldn't;will;would;wouldn't
 and than	and then	3		
@@ -1941,6 +1942,7 @@ at a lose	at a loss	3
 at about	about	0		
 at all times	always	0		
 at an early date	soon	0		
+at anytime	at any time	3		
 at death's door	near death	2		
 at frequent intervals	frequently, periodically	0		
 at lease	at least	3		signing
@@ -2274,6 +2276,7 @@ battlegounds	battlegrounds	3
 bcak	back	3		
 be advised	(omit)	0		
 be bursted	burst	3		
+be dependent on	depend on	0		
 be in receipt of	have	0		
 be one in the same	be one and the same	3		
 be show	be shown	3		
@@ -3293,6 +3296,7 @@ circumvents	gets around, avoids	0
 circut	circuit	3		
 ciricuit	circuit	3		
 ciriculum	curriculum	3		
+cirricula	curricula	3		
 cirtcuit	circuit	3		
 city consul	city council	3		
 city consul's	city council's	3		
@@ -3349,6 +3353,7 @@ clonesd	clones, cloned	3
 close call	narrow escape	2		
 close calls	narrow escapes	2		
 close proximity	near	0		
+close readability test	cloze readability test	3		
 close scrutiny	scrutiny	1		
 close shave	narrow escape	2		
 close shaves	narrow escapes	2		
@@ -4022,6 +4027,7 @@ conservativeky	conservatively	3
 conservitive	conservative	3		
 consiciousness	consciousness	3		
 consicousness	consciousness	3		
+consider the follow	consider the following	3		
 considerable	much	0		
 considerd	considered	3		
 consideres	considered	3		
@@ -9454,6 +9460,7 @@ iresistibly	irresistibly	3
 iritable	irritable	3		
 iritated	irritated	3		
 ironicly	ironically	3		
+IRQ	IQR	3		
 irregardless	regardless	3		
 irrelevent	irrelevant	3		
 irreplacable	irreplaceable	3		
@@ -10740,6 +10747,7 @@ monthy	monthly	3
 monts	months	3		
 mor	more	3		
 mordant	biting, sarcastic	0		
+more broad audience	broader audience	3		
 more power to you	good luck, I fully encourage you	2		
 more than exceeded	exceeded	0		
 more than excepted	impressive	0		
@@ -10756,6 +10764,7 @@ mosquitos	mosquitoes	3
 most be	must be, most are	3	at	
 most of the time	usually	0		
 most of there	most of their	3		
+most predominate	most predominant	3		
 mosture	moisture	3		
 mothod	method	3		
 mothod's	method's	3		
@@ -14362,6 +14371,7 @@ salutation	greeting	0
 salutations	greetings	0		
 same identical	same	1		
 samller	smaller	3		
+san-serif	sans-serif	3		
 sanctionning	sanctioning	3		
 sandwhich	sandwich	3		
 sanitarily	cleanly, healthily	0		
@@ -14412,6 +14422,7 @@ saw the light	got the idea	2
 saw the light at the end of the tunnel	saw success drawing near	2		
 saxaphone	saxophone	3		
 scaleable	scalable	3		
+scaled downed	scaled down	3		
 scanable	scannable	3		
 scandalous	shocking	0		
 scandalously	shockingly	0		
@@ -15451,6 +15462,7 @@ sucessfull	successful	3
 sucessfully	successfully	3		
 sucession	succession	3		
 sucesss	success	3		
+such ass	such as	3		
 sucide	suicide	3		
 sucidial	suicidal	3		
 suddenly and without warning	suddenly, without warning	0		
@@ -17451,6 +17463,7 @@ whenver	whenever	3
 wheras	whereas	3		
 where as	whereas	3	moment;moments;time;times	
 where by	whereby, comma needed after 'where'	3		
+where calculated	were calculated	3		
 where taken	were taken	3		
 whereas	because, since	0		
 wherease	whereas	3		
