@@ -25,6 +25,7 @@ FOF = "FOF"
 ture = "ture"
 headerr = "headerr"
 # non-English words or odd spellings or false positives from code variables
+dinosaurios = "dinosaurios"
 recommande = "recommande"
 Persan = "Persan"
 ist = "ist"
