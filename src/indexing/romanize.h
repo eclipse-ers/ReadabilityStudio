@@ -106,7 +106,12 @@ namespace text_transform
                                 const bool narrowFullWidthCharacters) const;
 
       private:
-        static const romanization_conversion_table m_conversionTable;
+        static const romanization_conversion_table& conversion_table()
+            {
+            static const romanization_conversion_table table;
+            return table;
+            }
+
         grammar::is_end_of_sentence isEndOfSentence;
         grammar::is_bulleted_text isBullet;
         };

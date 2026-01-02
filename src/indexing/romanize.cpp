@@ -51,8 +51,6 @@
 
 namespace text_transform
     {
-    const romanization_conversion_table romanize::m_conversionTable;
-
     //------------------------------------------------
     romanization_conversion_table::romanization_conversion_table()
         : // German letters
@@ -263,8 +261,8 @@ namespace text_transform
                 }
             if (normalizeTypography)
                 {
-                const auto replacementPos = m_conversionTable.get_table().find(text[i]);
-                if (replacementPos != m_conversionTable.get_table().cend())
+                const auto replacementPos = conversion_table().get_table().find(text[i]);
+                if (replacementPos != conversion_table().get_table().cend())
                     {
                     encodedText += replacementPos->second;
                     }
