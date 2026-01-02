@@ -702,19 +702,10 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     auto* userAgentNode = configRootNode->FirstChildElement(XML_USER_AGENT.data());
     if (userAgentNode != nullptr)
         {
-        const auto* userAgent = userAgentNode->ToElement()->Attribute(XML_VALUE.data());
-        if (userAgent != nullptr)
-            {
-            const auto userAgentStr =
-                Wisteria::TextStream::CharStreamToUnicode(userAgent, std::strlen(userAgent));
-            const wchar_t* convertedStr =
-                filterHtml(userAgentStr.c_str(), userAgentStr.length(), true, false);
-            if (convertedStr != nullptr)
-                {
-                SetUserAgent(convertedStr);
-                wxGetApp().GetWebHarvester().SetUserAgent(convertedStr);
-                }
-            }
+        const wxString userAgent =
+            TiXmlNodeAttributeToString(userAgentNode, XML_VALUE.data(), GetUserAgent());
+        SetUserAgent(userAgent);
+        wxGetApp().GetWebHarvester().SetUserAgent(userAgent);
         }
 
     auto* downloadReplaceExistingNode =
@@ -1242,19 +1233,8 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             auto* grammarInfoNode = grammarNode->FirstChildElement(XML_GRAMMAR_INFO.data());
             if (grammarInfoNode != nullptr)
                 {
-                const char* grammarInfoChars =
-                    grammarInfoNode->ToElement()->Attribute(XML_VALUE.data());
-                if (grammarInfoChars != nullptr)
-                    {
-                    const auto grammarInfStr = Wisteria::TextStream::CharStreamToUnicode(
-                        grammarInfoChars, std::strlen(grammarInfoChars));
-                    const wchar_t* convertedStr =
-                        filterHtml(grammarInfStr.c_str(), grammarInfStr.length(), true, false);
-                    if (convertedStr != nullptr)
-                        {
-                        GetGrammarInfo().Set(convertedStr);
-                        }
-                    }
+                GetGrammarInfo().Set(TiXmlNodeAttributeToString(grammarInfoNode, XML_VALUE.data(),
+                                                                GetGrammarInfo().ToString()));
                 }
             }
         // wizard page defaults
