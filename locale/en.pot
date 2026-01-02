@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Readability Studio\n"
-"POT-Creation-Date: 2025-12-30 10:08-0500\n"
+"POT-Creation-Date: 2026-01-02 10:05-0500\n"
 "PO-Revision-Date: 2025-07-19 08:23-0400\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: \n"
@@ -81,7 +81,7 @@ msgstr ""
 #. '%%' can be changed and/or moved within string.
 #. TRANSLATORS: Percentage value (%s) and % symbol (%%).
 #. '%%' can be changed and/or moved elsewhere in the string.
-#: Wisteria-Dataviz/src/base/axis.cpp:3481
+#: Wisteria-Dataviz/src/base/axis.cpp:3482
 #: Wisteria-Dataviz/src/graphs/barchart.cpp:70
 #: Wisteria-Dataviz/src/graphs/histogram.cpp:607
 #: Wisteria-Dataviz/src/graphs/likertchart.cpp:1145
@@ -135,7 +135,7 @@ msgstr ""
 msgid "%s%%"
 msgstr ""
 
-#: Wisteria-Dataviz/src/base/axis.cpp:4008
+#: Wisteria-Dataviz/src/base/axis.cpp:4009
 #, c-format
 msgid "'%s': label column not found for line plot."
 msgstr ""
@@ -158,7 +158,7 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp:132
 #: Wisteria-Dataviz/src/ui/controls/listctrlex.cpp:1571
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:265
-#: app/readability_app.cpp:1857
+#: app/readability_app.cpp:2575
 #: ui/dialogs/word_list_dlg.cpp:228
 msgid "Print"
 msgstr ""
@@ -265,22 +265,22 @@ msgstr ""
 #: Wisteria-Dataviz/src/base/canvas.cpp:489
 #: Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h:70
 #: Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp:26
-#: app/readability_app.cpp:1878 app/readability_app.cpp:1903
-#: app/readability_app.cpp:1922 app/readability_app.cpp:1944
-#: app/readability_app.cpp:1945 app/readability_app.cpp:1960
-#: app/readability_app.cpp:1961 app/readability_app.cpp:1980
-#: app/readability_app.cpp:1981 app/readability_app.cpp:2002
-#: app/readability_app.cpp:2020 app/readability_app.cpp:2039
-#: app/readability_app.cpp:2040 app/readability_app.cpp:2056
-#: app/readability_app.cpp:2078 app/readability_app.cpp:2079
-#: app/readability_app.cpp:2117 app/readability_app.cpp:2118
-#: app/readability_app.cpp:2157 app/readability_app.cpp:2198
-#: app/readability_app.cpp:2233 app/readability_app.cpp:2274
-#: app/readability_app.cpp:2305 app/readability_app.cpp:2341
-#: app/readability_app.cpp:2371 app/readability_app.cpp:2403
-#: app/readability_app.cpp:2436 app/readability_app.cpp:2471
-#: app/readability_app.cpp:2500 app/readability_app.cpp:2531
-#: app/readability_app.cpp:2562 app/readability_app.cpp:2589
+#: app/readability_app.cpp:1820 app/readability_app.cpp:1845
+#: app/readability_app.cpp:1864 app/readability_app.cpp:1885
+#: app/readability_app.cpp:1886 app/readability_app.cpp:1901
+#: app/readability_app.cpp:1902 app/readability_app.cpp:1919
+#: app/readability_app.cpp:1920 app/readability_app.cpp:1942
+#: app/readability_app.cpp:1984 app/readability_app.cpp:1985
+#: app/readability_app.cpp:2022 app/readability_app.cpp:2061
+#: app/readability_app.cpp:2095 app/readability_app.cpp:2135
+#: app/readability_app.cpp:2165 app/readability_app.cpp:2200
+#: app/readability_app.cpp:2229 app/readability_app.cpp:2260
+#: app/readability_app.cpp:2291 app/readability_app.cpp:2325
+#: app/readability_app.cpp:2353 app/readability_app.cpp:2382
+#: app/readability_app.cpp:2411 app/readability_app.cpp:2437
+#: app/readability_app.cpp:2459 app/readability_app.cpp:2481
+#: app/readability_app.cpp:2482 app/readability_app.cpp:2501
+#: app/readability_app.cpp:2521
 #: projects/base_project_view.cpp:92
 #: ui/controls/explanation_listctrl.cpp:255
 #: ui/dialogs/edit_text_dlg.cpp:234
@@ -295,10 +295,10 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/dialogs/imagemergedlg.cpp:143
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:256
 #: app/readability_app.cpp:1692 app/readability_app.cpp:1716
-#: app/readability_app.cpp:1854
+#: app/readability_app.cpp:2572
 #: ui/controls/explanation_listctrl.cpp:231
 #: ui/dialogs/edit_text_dlg.cpp:211
-#: ui/dialogs/lua_editor_dlg.cpp:725
+#: ui/dialogs/lua_editor_dlg.cpp:739
 #: ui/dialogs/word_list_dlg.cpp:223
 msgid "Save"
 msgstr ""
@@ -519,11 +519,11 @@ msgstr ""
 #: projects/standard_project_doc.cpp:2088
 #: projects/standard_project_doc.cpp:2138
 #: projects/standard_project_doc.cpp:2189
-#: projects/standard_project_doc.cpp:7234
-#: projects/standard_project_doc.cpp:7354
-#: projects/standard_project_doc.cpp:7656
-#: projects/standard_project_doc.cpp:7862
-#: projects/standard_project_doc.cpp:7909
+#: projects/standard_project_doc.cpp:7235
+#: projects/standard_project_doc.cpp:7355
+#: projects/standard_project_doc.cpp:7657
+#: projects/standard_project_doc.cpp:7863
+#: projects/standard_project_doc.cpp:7910
 msgid "Frequency"
 msgstr ""
 
@@ -859,7 +859,7 @@ msgstr ""
 #: Wisteria-Dataviz/src/graphs/lixgauge.cpp:31
 #: Wisteria-Dataviz/src/graphs/lixgauge.cpp:32
 #: projects/base_project_view.h:492
-#: ui/dialogs/tools_options_dlg.h:654
+#: ui/dialogs/tools_options_dlg.h:662
 msgid "Lix Gauge"
 msgstr ""
 
@@ -1079,7 +1079,7 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/scalechart.cpp:36
 #: projects/standard_project_view.cpp:1654
-#: ui/dialogs/tools_options_dlg.h:928
+#: ui/dialogs/tools_options_dlg.h:936
 msgid "Scores"
 msgstr ""
 
@@ -1306,8 +1306,8 @@ msgid "Timestamp of this report"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/app.cpp:351
-#: app/readability_app.cpp:2647 app/readability_app.cpp:2851
-#: app/readability_app.cpp:3161
+#: app/readability_app.cpp:2646 app/readability_app.cpp:2850
+#: app/readability_app.cpp:3160
 msgid "Log Report"
 msgstr ""
 
@@ -1330,7 +1330,7 @@ msgid "Error Report"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:161
-#: ui/dialogs/lua_editor_dlg.cpp:221
+#: ui/dialogs/lua_editor_dlg.cpp:233
 msgid "Lua Scripts (*.lua)|*.lua"
 msgstr ""
 
@@ -1347,20 +1347,20 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:216
 #: ui/dialogs/edit_text_dlg.cpp:591
 #: ui/dialogs/edit_text_dlg.cpp:600
-#: ui/dialogs/lua_editor_dlg.cpp:194
-#: ui/dialogs/lua_editor_dlg.cpp:836
+#: ui/dialogs/lua_editor_dlg.cpp:199
+#: ui/dialogs/lua_editor_dlg.cpp:869
 msgid "Do you wish to save your unsaved changes?"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:197
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:216
-#: ui/dialogs/lua_editor_dlg.cpp:195
-#: ui/dialogs/lua_editor_dlg.cpp:836
+#: ui/dialogs/lua_editor_dlg.cpp:200
+#: ui/dialogs/lua_editor_dlg.cpp:869
 msgid "Save Script"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:222
-#: ui/dialogs/lua_editor_dlg.cpp:220
+#: ui/dialogs/lua_editor_dlg.cpp:232
 msgid "Select Script to Open"
 msgstr ""
 
@@ -1385,14 +1385,14 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp:282
 #: Wisteria-Dataviz/src/ui/dialogs/excelpreviewdlg.cpp:69
 #: app/readability_app.cpp:295 app/readability_app.cpp:895
-#: app/readability_app.cpp:4152 app/readability_app.cpp:4184
-#: app/readability_app.cpp:4478 app/readability_app.cpp:4577
-#: app/readability_app.cpp:5167
+#: app/readability_app.cpp:4151 app/readability_app.cpp:4183
+#: app/readability_app.cpp:4477 app/readability_app.cpp:4576
+#: app/readability_app.cpp:5166
 #: app/readability_app_options.cpp:83
 #: app/readability_app_options.cpp:91
-#: app/readability_app_options.cpp:648
-#: app/readability_app_options.cpp:655
-#: app/readability_app_options.cpp:4700
+#: app/readability_app_options.cpp:665
+#: app/readability_app_options.cpp:672
+#: app/readability_app_options.cpp:4465
 #: projects/base_project.cpp:4603
 #: projects/base_project.cpp:4619
 #: projects/base_project.cpp:4736
@@ -1473,7 +1473,7 @@ msgstr ""
 #: projects/standard_project_doc.cpp:4563
 #: projects/standard_project_doc.cpp:4694
 #: projects/standard_project_doc.cpp:4702
-#: projects/standard_project_doc.cpp:6579
+#: projects/standard_project_doc.cpp:6580
 #: projects/standard_project_view.cpp:499
 #: projects/standard_project_view.cpp:1455
 #: projects/standard_project_view.cpp:1470
@@ -1503,12 +1503,12 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:310
 #: Wisteria-Dataviz/src/ui/controls/formattedtextctrl.cpp:869
 #: Wisteria-Dataviz/src/ui/controls/listctrlex.cpp:1995
-#: ui/dialogs/lua_editor_dlg.cpp:578
+#: ui/dialogs/lua_editor_dlg.cpp:592
 msgid "No further occurrences found."
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/codeeditor.cpp:310
-#: ui/dialogs/lua_editor_dlg.cpp:578
+#: ui/dialogs/lua_editor_dlg.cpp:592
 msgid "Item Not Found"
 msgstr ""
 
@@ -1599,14 +1599,14 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h:73
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:297
-#: app/readability_app.cpp:1880 app/readability_app.cpp:1881
-#: app/readability_app.cpp:1905 app/readability_app.cpp:1906
-#: app/readability_app.cpp:1924 app/readability_app.cpp:1925
-#: app/readability_app.cpp:1946 app/readability_app.cpp:1947
-#: app/readability_app.cpp:1962 app/readability_app.cpp:1963
-#: app/readability_app.cpp:1982 app/readability_app.cpp:1983
-#: app/readability_app.cpp:2041 app/readability_app.cpp:2042
-#: app/readability_app.cpp:2058 app/readability_app.cpp:2059
+#: app/readability_app.cpp:1822 app/readability_app.cpp:1823
+#: app/readability_app.cpp:1847 app/readability_app.cpp:1848
+#: app/readability_app.cpp:1866 app/readability_app.cpp:1867
+#: app/readability_app.cpp:1887 app/readability_app.cpp:1888
+#: app/readability_app.cpp:1903 app/readability_app.cpp:1904
+#: app/readability_app.cpp:1921 app/readability_app.cpp:1922
+#: app/readability_app.cpp:2461 app/readability_app.cpp:2462
+#: app/readability_app.cpp:2522 app/readability_app.cpp:2523
 #: ui/dialogs/edit_text_dlg.cpp:268
 #: ui/dialogs/word_list_dlg.cpp:245
 msgid "Select All"
@@ -1623,8 +1623,8 @@ msgstr ""
 #: Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp:319
 #: ui/dialogs/edit_text_dlg.cpp:257
 #: ui/dialogs/edit_text_dlg.cpp:555
-#: ui/dialogs/lua_editor_dlg.cpp:514
-#: ui/dialogs/lua_editor_dlg.cpp:737
+#: ui/dialogs/lua_editor_dlg.cpp:528
+#: ui/dialogs/lua_editor_dlg.cpp:751
 msgid "Find"
 msgstr ""
 
@@ -1634,8 +1634,8 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/ui/controls/listctrlex.cpp:447
 #: Wisteria-Dataviz/src/ui/dialogs/listctrlitemviewdlg.h:107
-#: app/readability_app.cpp:1882 app/readability_app.cpp:1907
-#: app/readability_app.cpp:1926 app/readability_app.cpp:2060
+#: app/readability_app.cpp:1824 app/readability_app.cpp:1849
+#: app/readability_app.cpp:1868 app/readability_app.cpp:2463
 msgid "View Item"
 msgstr ""
 
@@ -1905,8 +1905,8 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h:233
 #: Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h:263
-#: ui/dialogs/lua_editor_dlg.cpp:747
-#: ui/dialogs/lua_editor_dlg.cpp:804
+#: ui/dialogs/lua_editor_dlg.cpp:761
+#: ui/dialogs/lua_editor_dlg.cpp:831
 msgid "Function Browser"
 msgstr ""
 
@@ -2119,19 +2119,19 @@ msgid "Print the list."
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:283
-#: app/readability_app.cpp:1872 app/readability_app.cpp:1891
-#: app/readability_app.cpp:1916 app/readability_app.cpp:1938
-#: app/readability_app.cpp:1954 app/readability_app.cpp:1974
-#: app/readability_app.cpp:1996 app/readability_app.cpp:2008
-#: app/readability_app.cpp:2028 app/readability_app.cpp:2047
-#: app/readability_app.cpp:2069 app/readability_app.cpp:2084
-#: app/readability_app.cpp:2125 app/readability_app.cpp:2165
-#: app/readability_app.cpp:2206 app/readability_app.cpp:2241
-#: app/readability_app.cpp:2282 app/readability_app.cpp:2313
-#: app/readability_app.cpp:2349 app/readability_app.cpp:2379
-#: app/readability_app.cpp:2411 app/readability_app.cpp:2444
-#: app/readability_app.cpp:2479 app/readability_app.cpp:2508
-#: app/readability_app.cpp:2539 app/readability_app.cpp:2570
+#: app/readability_app.cpp:1814 app/readability_app.cpp:1833
+#: app/readability_app.cpp:1858 app/readability_app.cpp:1879
+#: app/readability_app.cpp:1895 app/readability_app.cpp:1913
+#: app/readability_app.cpp:1937 app/readability_app.cpp:1952
+#: app/readability_app.cpp:1992 app/readability_app.cpp:2030
+#: app/readability_app.cpp:2069 app/readability_app.cpp:2103
+#: app/readability_app.cpp:2143 app/readability_app.cpp:2173
+#: app/readability_app.cpp:2208 app/readability_app.cpp:2237
+#: app/readability_app.cpp:2268 app/readability_app.cpp:2299
+#: app/readability_app.cpp:2333 app/readability_app.cpp:2361
+#: app/readability_app.cpp:2390 app/readability_app.cpp:2419
+#: app/readability_app.cpp:2450 app/readability_app.cpp:2472
+#: app/readability_app.cpp:2490 app/readability_app.cpp:2511
 #: ui/dialogs/edit_text_dlg.cpp:242
 #: ui/dialogs/word_list_dlg.cpp:236
 msgid "Edit"
@@ -2153,26 +2153,26 @@ msgid "Select the entire list."
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:306
-#: app/readability_app.cpp:1885 app/readability_app.cpp:1910
-#: app/readability_app.cpp:1929 app/readability_app.cpp:1948
-#: app/readability_app.cpp:1964 app/readability_app.cpp:1984
-#: app/readability_app.cpp:2022 app/readability_app.cpp:2063
-#: app/readability_app.cpp:2114
+#: app/readability_app.cpp:1827 app/readability_app.cpp:1852
+#: app/readability_app.cpp:1871 app/readability_app.cpp:1889
+#: app/readability_app.cpp:1905 app/readability_app.cpp:1923
+#: app/readability_app.cpp:1981 app/readability_app.cpp:2466
+#: app/readability_app.cpp:2503
 #: ui/dialogs/word_list_dlg.cpp:250
 msgid "Sort"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:311
-#: app/readability_app.cpp:1886 app/readability_app.cpp:1911
-#: app/readability_app.cpp:1930 app/readability_app.cpp:1949
-#: app/readability_app.cpp:1965 app/readability_app.cpp:1985
-#: app/readability_app.cpp:2023 app/readability_app.cpp:2064
+#: app/readability_app.cpp:1828 app/readability_app.cpp:1853
+#: app/readability_app.cpp:1872 app/readability_app.cpp:1890
+#: app/readability_app.cpp:1906 app/readability_app.cpp:1924
+#: app/readability_app.cpp:2467 app/readability_app.cpp:2504
 #: ui/dialogs/word_list_dlg.cpp:253
 msgid "Sort the list."
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp:316
-#: ui/dialogs/lua_editor_dlg.cpp:743
+#: ui/dialogs/lua_editor_dlg.cpp:757
 msgid "Clear"
 msgstr ""
 
@@ -2336,7 +2336,7 @@ msgid ""
 msgstr ""
 
 #: Wisteria-Dataviz/src/wxStartPage/startpage.cpp:93
-#: app/readability_app.cpp:1829
+#: app/readability_app.cpp:2547
 #: ui/dialogs/project_wizard_dlg.cpp:358
 msgid "Documents"
 msgstr ""
@@ -2452,7 +2452,7 @@ msgstr ""
 msgid "Custom English Dictionary"
 msgstr ""
 
-#. TRANSLATORS: "\U000000A92006-2025" should not be edited.
+#. TRANSLATORS: "©2006-2025" should not be edited.
 #: app/readability_app.cpp:244
 msgid "Copyright ©2006-2025 Oleander Software, Ltd., "
 msgstr ""
@@ -2466,7 +2466,7 @@ msgid "Sun"
 msgstr ""
 
 #: app/readability_app.cpp:422
-#: ui/dialogs/tools_options_dlg.cpp:5646
+#: ui/dialogs/tools_options_dlg.cpp:5699
 msgid "Book"
 msgstr ""
 
@@ -2620,7 +2620,7 @@ msgid "October"
 msgstr ""
 
 #: app/readability_app.cpp:472
-#: ui/dialogs/tools_options_dlg.cpp:5448
+#: ui/dialogs/tools_options_dlg.cpp:5501
 msgid "Campfire"
 msgstr ""
 
@@ -2759,7 +2759,7 @@ msgstr ""
 msgid "Open Project..."
 msgstr ""
 
-#: app/readability_app.cpp:1342 app/readability_app.cpp:2775
+#: app/readability_app.cpp:1342 app/readability_app.cpp:2774
 #: projects/base_project_view.cpp:612
 #: projects/base_project_view.cpp:616
 msgid "Readability"
@@ -2768,7 +2768,7 @@ msgstr ""
 #: app/readability_app.cpp:1351
 #: projects/base_project_view.cpp:644
 #: ui/dialogs/test_bundle_dlg.cpp:226
-#: ui/dialogs/tools_options_dlg.h:293
+#: ui/dialogs/tools_options_dlg.h:301
 msgid "Custom Tests"
 msgstr ""
 
@@ -2787,10 +2787,10 @@ msgstr ""
 msgid "Project Update"
 msgstr ""
 
-#: app/readability_app.cpp:1606 app/readability_app.cpp:4358
-#: app/readability_app.cpp:4366
+#: app/readability_app.cpp:1606 app/readability_app.cpp:4357
+#: app/readability_app.cpp:4365
 #: results-format/readability_messages.h:76
-#: ui/dialogs/tools_options_dlg.h:844
+#: ui/dialogs/tools_options_dlg.h:852
 #: ui/dialogs/word_list_dlg.cpp:284
 #: ui/dialogs/word_list_dlg.cpp:289
 msgid "Dolch Sight Words"
@@ -2806,62 +2806,62 @@ msgid "Edit Word List..."
 msgstr ""
 
 #: app/readability_app.cpp:1645
-#: ui/dialogs/tools_options_dlg.cpp:4276
+#: ui/dialogs/tools_options_dlg.cpp:3880
 msgid "K-12+ (United States of America)"
 msgstr ""
 
 #: app/readability_app.cpp:1648
-#: ui/dialogs/tools_options_dlg.cpp:4279
+#: ui/dialogs/tools_options_dlg.cpp:3883
 msgid "K-12+ (Newfoundland and Labrador)"
 msgstr ""
 
 #: app/readability_app.cpp:1649
-#: ui/dialogs/tools_options_dlg.cpp:4282
+#: ui/dialogs/tools_options_dlg.cpp:3886
 msgid "K-12+ (British Columbia/Yukon)"
 msgstr ""
 
 #: app/readability_app.cpp:1651
-#: ui/dialogs/tools_options_dlg.cpp:4284
+#: ui/dialogs/tools_options_dlg.cpp:3888
 msgid "K-12+ (New Brunswick)"
 msgstr ""
 
 #: app/readability_app.cpp:1653
-#: ui/dialogs/tools_options_dlg.cpp:4286
+#: ui/dialogs/tools_options_dlg.cpp:3890
 msgid "K-12+ (Nova Scotia)"
 msgstr ""
 
 #: app/readability_app.cpp:1655
-#: ui/dialogs/tools_options_dlg.cpp:4288
+#: ui/dialogs/tools_options_dlg.cpp:3892
 msgid "K-12+ (Ontario)"
 msgstr ""
 
 #: app/readability_app.cpp:1657
-#: ui/dialogs/tools_options_dlg.cpp:4290
+#: ui/dialogs/tools_options_dlg.cpp:3894
 msgid "K-12+ (Saskatchewan)"
 msgstr ""
 
 #: app/readability_app.cpp:1659
-#: ui/dialogs/tools_options_dlg.cpp:4293
+#: ui/dialogs/tools_options_dlg.cpp:3897
 msgid "K-12+ (Prince Edward Island)"
 msgstr ""
 
 #: app/readability_app.cpp:1661
-#: ui/dialogs/tools_options_dlg.cpp:4295
+#: ui/dialogs/tools_options_dlg.cpp:3899
 msgid "K-12+ (Manitoba)"
 msgstr ""
 
 #: app/readability_app.cpp:1663
-#: ui/dialogs/tools_options_dlg.cpp:4298
+#: ui/dialogs/tools_options_dlg.cpp:3902
 msgid "K-12+ (Northwest Territories)"
 msgstr ""
 
 #: app/readability_app.cpp:1665
-#: ui/dialogs/tools_options_dlg.cpp:4300
+#: ui/dialogs/tools_options_dlg.cpp:3904
 msgid "K-12+ (Alberta)"
 msgstr ""
 
 #: app/readability_app.cpp:1667
-#: ui/dialogs/tools_options_dlg.cpp:4302
+#: ui/dialogs/tools_options_dlg.cpp:3906
 msgid "K-12+ (Nunavut)"
 msgstr ""
 
@@ -2870,7 +2870,7 @@ msgid "Save As..."
 msgstr ""
 
 #: app/readability_app.cpp:1701 app/readability_app.cpp:1725
-#: ui/dialogs/tools_options_dlg.cpp:3391
+#: ui/dialogs/tools_options_dlg.cpp:5225
 msgid "Export..."
 msgstr ""
 
@@ -2910,576 +2910,576 @@ msgstr ""
 msgid "Headers && Footers..."
 msgstr ""
 
-#: app/readability_app.cpp:1812
+#: app/readability_app.cpp:1821 app/readability_app.cpp:1846
+#: app/readability_app.cpp:1865 app/readability_app.cpp:2460
+#: app/readability_app.cpp:2502
+msgid "Copy the selected rows."
+msgstr ""
+
+#: app/readability_app.cpp:1826 app/readability_app.cpp:1851
+#: app/readability_app.cpp:1870 app/readability_app.cpp:2465
+msgid "View the selected row in tabular format."
+msgstr ""
+
+#: app/readability_app.cpp:1839 app/readability_app.cpp:2495
+msgid "Long Format"
+msgstr ""
+
+#: app/readability_app.cpp:1841 app/readability_app.cpp:2497
+msgid "Display scores in long format."
+msgstr ""
+
+#: app/readability_app.cpp:1842 app/readability_app.cpp:2126
+#: app/readability_app.cpp:2498
+msgid "Grade Scale"
+msgstr ""
+
+#: app/readability_app.cpp:1844 app/readability_app.cpp:2128
+#: app/readability_app.cpp:2500
+msgid "Change the grade scale display of the scores."
+msgstr ""
+
+#: app/readability_app.cpp:1873 app/readability_app.cpp:1907
+#: app/readability_app.cpp:1928
+msgid "Sum"
+msgstr ""
+
+#: app/readability_app.cpp:1874 app/readability_app.cpp:1908
+#: app/readability_app.cpp:1929
+msgid "Total the values from the selected column."
+msgstr ""
+
+#: app/readability_app.cpp:1925
+msgid "Exclude Selected"
+msgstr ""
+
+#: app/readability_app.cpp:1927
+msgid "Exclude selected words."
+msgstr ""
+
+#: app/readability_app.cpp:1943
+msgid "Copy the report."
+msgstr ""
+
+#: app/readability_app.cpp:1958 app/readability_app.cpp:1998
+#: app/readability_app.cpp:2041 app/readability_app.cpp:2075
+#: app/readability_app.cpp:2112 app/readability_app.cpp:2153
+#: app/readability_app.cpp:2188 app/readability_app.cpp:2214
+#: app/readability_app.cpp:2246 app/readability_app.cpp:2274
+#: app/readability_app.cpp:2311 app/readability_app.cpp:2339
+#: app/readability_app.cpp:2370 app/readability_app.cpp:2399
+#: app/readability_app.cpp:2425
+#: ui/dialogs/tools_options_dlg.h:512
+#: ui/dialogs/tools_options_dlg.h:708
+msgid "Background"
+msgstr ""
+
+#: app/readability_app.cpp:1960 app/readability_app.cpp:2000
+#: app/readability_app.cpp:2043 app/readability_app.cpp:2077
+#: app/readability_app.cpp:2114 app/readability_app.cpp:2155
+#: app/readability_app.cpp:2190 app/readability_app.cpp:2216
+#: app/readability_app.cpp:2248 app/readability_app.cpp:2276
+#: app/readability_app.cpp:2313 app/readability_app.cpp:2341
+#: app/readability_app.cpp:2372 app/readability_app.cpp:2401
+#: app/readability_app.cpp:2427
+msgid "Set the graph's background."
+msgstr ""
+
+#: app/readability_app.cpp:1961 app/readability_app.cpp:2001
+#: app/readability_app.cpp:2044 app/readability_app.cpp:2078
+#: app/readability_app.cpp:2115 app/readability_app.cpp:2156
+#: app/readability_app.cpp:2191 app/readability_app.cpp:2217
+#: app/readability_app.cpp:2249 app/readability_app.cpp:2277
+#: app/readability_app.cpp:2314 app/readability_app.cpp:2342
+#: app/readability_app.cpp:2373 app/readability_app.cpp:2402
+#: app/readability_app.cpp:2428 app/readability_app.cpp:2516
+#: ui/dialogs/edit_text_dlg.cpp:284
+#: ui/dialogs/tools_options_dlg.cpp:4676
+msgid "Font"
+msgstr ""
+
+#: app/readability_app.cpp:1963 app/readability_app.cpp:2003
+#: app/readability_app.cpp:2046 app/readability_app.cpp:2080
+#: app/readability_app.cpp:2117 app/readability_app.cpp:2158
+#: app/readability_app.cpp:2193 app/readability_app.cpp:2219
+#: app/readability_app.cpp:2251 app/readability_app.cpp:2279
+#: app/readability_app.cpp:2316 app/readability_app.cpp:2344
+#: app/readability_app.cpp:2375 app/readability_app.cpp:2404
+#: app/readability_app.cpp:2430
+msgid "Change the graph's fonts."
+msgstr ""
+
+#: app/readability_app.cpp:1964 app/readability_app.cpp:2004
+#: app/readability_app.cpp:2047 app/readability_app.cpp:2081
+#: app/readability_app.cpp:2118 app/readability_app.cpp:2159
+#: app/readability_app.cpp:2194 app/readability_app.cpp:2220
+#: app/readability_app.cpp:2252 app/readability_app.cpp:2280
+#: app/readability_app.cpp:2317 app/readability_app.cpp:2345
+#: app/readability_app.cpp:2376 app/readability_app.cpp:2405
+#: app/readability_app.cpp:2431
+#: projects/project_frame.cpp:1678
+#: ui/dialogs/tools_options_dlg.h:482
+msgid "Watermark"
+msgstr ""
+
+#: app/readability_app.cpp:1966 app/readability_app.cpp:2006
+#: app/readability_app.cpp:2049 app/readability_app.cpp:2083
+#: app/readability_app.cpp:2120 app/readability_app.cpp:2161
+#: app/readability_app.cpp:2196 app/readability_app.cpp:2222
+#: app/readability_app.cpp:2254 app/readability_app.cpp:2282
+#: app/readability_app.cpp:2319 app/readability_app.cpp:2347
+#: app/readability_app.cpp:2378 app/readability_app.cpp:2407
+#: app/readability_app.cpp:2433
+msgid "Add a watermark to the graph."
+msgstr ""
+
+#: app/readability_app.cpp:1967 app/readability_app.cpp:2007
+#: app/readability_app.cpp:2050 app/readability_app.cpp:2084
+#: app/readability_app.cpp:2121 app/readability_app.cpp:2162
+#: app/readability_app.cpp:2197 app/readability_app.cpp:2223
+#: app/readability_app.cpp:2255 app/readability_app.cpp:2283
+#: app/readability_app.cpp:2320 app/readability_app.cpp:2348
+#: app/readability_app.cpp:2379 app/readability_app.cpp:2408
+#: app/readability_app.cpp:2434
+msgid "Logo"
+msgstr ""
+
+#: app/readability_app.cpp:1968 app/readability_app.cpp:2008
+#: app/readability_app.cpp:2051 app/readability_app.cpp:2085
+#: app/readability_app.cpp:2122 app/readability_app.cpp:2163
+#: app/readability_app.cpp:2198 app/readability_app.cpp:2224
+#: app/readability_app.cpp:2256 app/readability_app.cpp:2284
+#: app/readability_app.cpp:2321 app/readability_app.cpp:2349
+#: app/readability_app.cpp:2380 app/readability_app.cpp:2409
+#: app/readability_app.cpp:2435
+msgid "Add a logo to the graph."
+msgstr ""
+
+#: app/readability_app.cpp:1969 app/readability_app.cpp:2009
+#: app/readability_app.cpp:2052 app/readability_app.cpp:2086
+#: app/readability_app.cpp:2123 app/readability_app.cpp:2225
+msgid "Shadows"
+msgstr ""
+
+#: app/readability_app.cpp:1971 app/readability_app.cpp:2011
+#: app/readability_app.cpp:2054 app/readability_app.cpp:2088
+#: app/readability_app.cpp:2125 app/readability_app.cpp:2227
+msgid "Display drop shadows on the graphs."
+msgstr ""
+
+#: app/readability_app.cpp:1972 app/readability_app.cpp:2055
+#: app/readability_app.cpp:2089 app/readability_app.cpp:2129
+msgid "Bar Style"
+msgstr ""
+
+#: app/readability_app.cpp:1974 app/readability_app.cpp:2057
+#: app/readability_app.cpp:2091 app/readability_app.cpp:2131
+msgid "Changes the bar appearance."
+msgstr ""
+
+#: app/readability_app.cpp:1975 app/readability_app.cpp:2058
+#: app/readability_app.cpp:2092 app/readability_app.cpp:2132
+#: ui/dialogs/project_wizard_dlg.cpp:474
+#: ui/dialogs/tools_options_dlg.cpp:5120
+#: ui/dialogs/tools_options_dlg.h:439
+msgid "Labels"
+msgstr ""
+
+#: app/readability_app.cpp:1977
+msgid "Shows or hides the bars' labels."
+msgstr ""
+
+#: app/readability_app.cpp:1978
+#: ui/dialogs/tools_options_dlg.h:415
+msgid "Orientation"
+msgstr ""
+
+#: app/readability_app.cpp:1980
+msgid "Changes the axis orientation."
+msgstr ""
+
+#: app/readability_app.cpp:1983
+msgid "Sort the bars in the graph."
+msgstr ""
+
+#: app/readability_app.cpp:1986 app/readability_app.cpp:1987
+#: app/readability_app.cpp:2024 app/readability_app.cpp:2025
+#: app/readability_app.cpp:2063 app/readability_app.cpp:2064
+#: app/readability_app.cpp:2097 app/readability_app.cpp:2098
+#: app/readability_app.cpp:2137 app/readability_app.cpp:2138
+#: app/readability_app.cpp:2167 app/readability_app.cpp:2168
+#: app/readability_app.cpp:2202 app/readability_app.cpp:2203
+#: app/readability_app.cpp:2231 app/readability_app.cpp:2232
+#: app/readability_app.cpp:2262 app/readability_app.cpp:2263
+#: app/readability_app.cpp:2293 app/readability_app.cpp:2294
+#: app/readability_app.cpp:2327 app/readability_app.cpp:2328
+#: app/readability_app.cpp:2355 app/readability_app.cpp:2356
+#: app/readability_app.cpp:2384 app/readability_app.cpp:2385
+#: app/readability_app.cpp:2413 app/readability_app.cpp:2414
+#: app/readability_app.cpp:2439 app/readability_app.cpp:2440
+msgid "Zoom"
+msgstr ""
+
+#: app/readability_app.cpp:2012
+msgid "Box Style"
+msgstr ""
+
+#: app/readability_app.cpp:2014
+msgid "Changes the box appearance."
+msgstr ""
+
+#: app/readability_app.cpp:2015
+msgid "Display Labels"
+msgstr ""
+
+#: app/readability_app.cpp:2017
+msgid "Displays labels on the box and whiskers."
+msgstr ""
+
+#: app/readability_app.cpp:2019
+msgid "Display Points"
+msgstr ""
+
+#: app/readability_app.cpp:2021
+msgid "Displays all data points onto the plot."
+msgstr ""
+
+#: app/readability_app.cpp:2023 app/readability_app.cpp:2062
+#: app/readability_app.cpp:2096 app/readability_app.cpp:2136
+#: app/readability_app.cpp:2166 app/readability_app.cpp:2201
+#: app/readability_app.cpp:2230 app/readability_app.cpp:2261
+#: app/readability_app.cpp:2292 app/readability_app.cpp:2326
+#: app/readability_app.cpp:2354 app/readability_app.cpp:2383
+#: app/readability_app.cpp:2412 app/readability_app.cpp:2438
+msgid "Copy the graph."
+msgstr ""
+
+#. TRANSLATORS: Draw attention to.
+#: app/readability_app.cpp:2038 app/readability_app.cpp:2183
+#: app/readability_app.cpp:2243 app/readability_app.cpp:2308
+#: app/readability_app.cpp:2367 app/readability_app.cpp:2396
+msgid "Showcase"
+msgstr ""
+
+#: app/readability_app.cpp:2039
+msgid ""
+"Toggle whether complex word bars are being showcased."
+msgstr ""
+
+#: app/readability_app.cpp:2060 app/readability_app.cpp:2094
+#: app/readability_app.cpp:2134
+msgid "Changes what is displayed on the bars' labels."
+msgstr ""
+
+#: app/readability_app.cpp:2109 app/readability_app.cpp:2149
+#: app/readability_app.cpp:2179
+msgid "Colors"
+msgstr ""
+
+#: app/readability_app.cpp:2111
+msgid "Select the color scheme for the grouped histogram."
+msgstr ""
+
+#: app/readability_app.cpp:2151 app/readability_app.cpp:2181
+msgid "Select the color scheme for the pie chart."
+msgstr ""
+
+#. TRANSLATORS: Pie chart slices.
+#: app/readability_app.cpp:2186
+msgid ""
+"Toggle whether complex word slices are being showcased."
+msgstr ""
+
+#: app/readability_app.cpp:2245 app/readability_app.cpp:2309
+msgid "Toggle whether the score is being showcased."
+msgstr ""
+
+#: app/readability_app.cpp:2257
+msgid "English Labels"
+msgstr ""
+
+#: app/readability_app.cpp:2259
+msgid "Use translated (English) labels for the brackets."
+msgstr ""
+
+#: app/readability_app.cpp:2285 app/readability_app.cpp:2322
+msgid "Invalid Region"
+msgstr ""
+
+#: app/readability_app.cpp:2287 app/readability_app.cpp:2324
+msgid "Change the color of the invalid regions."
+msgstr ""
+
+#: app/readability_app.cpp:2288
+msgid "Raygor Style"
+msgstr ""
+
+#: app/readability_app.cpp:2290
+msgid "Change the layout style of the Raygor graph."
+msgstr ""
+
+#: app/readability_app.cpp:2350
+msgid "Connect Points"
+msgstr ""
+
+#: app/readability_app.cpp:2352
+msgid "Display the line through the factors and score."
+msgstr ""
+
+#: app/readability_app.cpp:2369 app/readability_app.cpp:2398
+msgid ""
+"Toggle whether areas with scores are being showcased."
+msgstr ""
+
+#: app/readability_app.cpp:2456 app/readability_app.cpp:2478
+msgid "Edit Report"
+msgstr ""
+
+#: app/readability_app.cpp:2458 app/readability_app.cpp:2480
+msgid "Select which statistics to include in the report."
+msgstr ""
+
+#: app/readability_app.cpp:2517
+msgid "Change the font."
+msgstr ""
+
+#: app/readability_app.cpp:2518
+msgid "Highlight"
+msgstr ""
+
+#: app/readability_app.cpp:2520
+msgid "Change the highlight colors."
+msgstr ""
+
+#: app/readability_app.cpp:2530
 msgid "Home"
 msgstr ""
 
-#: app/readability_app.cpp:1818
+#: app/readability_app.cpp:2536
 msgid "Project"
 msgstr ""
 
-#: app/readability_app.cpp:1822
-#: ui/dialogs/lua_editor_dlg.cpp:717
+#: app/readability_app.cpp:2540
+#: ui/dialogs/lua_editor_dlg.cpp:731
 msgid "New"
 msgstr ""
 
-#: app/readability_app.cpp:1823
+#: app/readability_app.cpp:2541
 msgid "Create a new project."
 msgstr ""
 
-#: app/readability_app.cpp:1824
-#: ui/dialogs/lua_editor_dlg.cpp:721
+#: app/readability_app.cpp:2542
+#: ui/dialogs/lua_editor_dlg.cpp:735
 msgid "Open"
 msgstr ""
 
-#: app/readability_app.cpp:1825
+#: app/readability_app.cpp:2543
 msgid "Open an existing project."
 msgstr ""
 
-#: app/readability_app.cpp:1832
+#: app/readability_app.cpp:2550
 msgid "Subproject"
 msgstr ""
 
-#: app/readability_app.cpp:1834
+#: app/readability_app.cpp:2552
 msgid ""
 "Create a standard project from the selected document."
 msgstr ""
 
-#: app/readability_app.cpp:1835
+#: app/readability_app.cpp:2553
 #: ui/dialogs/custom_test_dlg.cpp:852
-#: ui/dialogs/tools_options_dlg.h:832
+#: ui/dialogs/tools_options_dlg.h:840
 msgid "Statistics"
 msgstr ""
 
-#: app/readability_app.cpp:1837
+#: app/readability_app.cpp:2555
 msgid "Display statistics for the selected document."
 msgstr ""
 
-#: app/readability_app.cpp:1838
+#: app/readability_app.cpp:2556
 msgid "Remove Document"
 msgstr ""
 
-#: app/readability_app.cpp:1840
+#: app/readability_app.cpp:2558
 msgid "Remove the selected document from the project."
 msgstr ""
 
-#: app/readability_app.cpp:1844
+#: app/readability_app.cpp:2562
 msgid "Reload"
 msgstr ""
 
-#: app/readability_app.cpp:1846
+#: app/readability_app.cpp:2564
 msgid "Reanalyze the document."
 msgstr ""
 
-#: app/readability_app.cpp:1849
+#: app/readability_app.cpp:2567
 msgid "Real-time Update"
 msgstr ""
 
-#: app/readability_app.cpp:1851
+#: app/readability_app.cpp:2569
 msgid ""
 "Automatically reload the project as the source document "
 "is edited externally."
 msgstr ""
 
-#: app/readability_app.cpp:1856
+#: app/readability_app.cpp:2574
 msgid "Save the project."
 msgstr ""
 
-#: app/readability_app.cpp:1858
+#: app/readability_app.cpp:2576
 msgid "Print the selected window."
 msgstr ""
 
-#: app/readability_app.cpp:1859
+#: app/readability_app.cpp:2577
 msgid "Properties"
 msgstr ""
 
-#: app/readability_app.cpp:1861
+#: app/readability_app.cpp:2579
 msgid "Change the settings for this project."
 msgstr ""
 
-#: app/readability_app.cpp:1862
+#: app/readability_app.cpp:2580
 msgid "Sidebar"
 msgstr ""
 
-#: app/readability_app.cpp:1864
+#: app/readability_app.cpp:2582
 msgid "Shows or hides the sidebar."
 msgstr ""
 
-#: app/readability_app.cpp:1879 app/readability_app.cpp:1904
-#: app/readability_app.cpp:1923 app/readability_app.cpp:2021
-#: app/readability_app.cpp:2057
-msgid "Copy the selected rows."
-msgstr ""
-
-#: app/readability_app.cpp:1884 app/readability_app.cpp:1909
-#: app/readability_app.cpp:1928 app/readability_app.cpp:2062
-msgid "View the selected row in tabular format."
-msgstr ""
-
-#: app/readability_app.cpp:1897 app/readability_app.cpp:2014
-msgid "Long Format"
-msgstr ""
-
-#: app/readability_app.cpp:1899 app/readability_app.cpp:2016
-msgid "Display scores in long format."
-msgstr ""
-
-#: app/readability_app.cpp:1900 app/readability_app.cpp:2017
-#: app/readability_app.cpp:2265
-msgid "Grade Scale"
-msgstr ""
-
-#: app/readability_app.cpp:1902 app/readability_app.cpp:2019
-#: app/readability_app.cpp:2267
-msgid "Change the grade scale display of the scores."
-msgstr ""
-
-#: app/readability_app.cpp:1931 app/readability_app.cpp:1966
-#: app/readability_app.cpp:1989
-msgid "Sum"
-msgstr ""
-
-#: app/readability_app.cpp:1933 app/readability_app.cpp:1968
-#: app/readability_app.cpp:1991
-msgid "Total the values from the selected column."
-msgstr ""
-
-#: app/readability_app.cpp:1986
-msgid "Exclude Selected"
-msgstr ""
-
-#: app/readability_app.cpp:1988
-msgid "Exclude selected words."
-msgstr ""
-
-#: app/readability_app.cpp:2003
-msgid "Copy the report."
-msgstr ""
-
-#: app/readability_app.cpp:2034 app/readability_app.cpp:2093
-#: app/readability_app.cpp:2134 app/readability_app.cpp:2180
-#: app/readability_app.cpp:2215 app/readability_app.cpp:2253
-#: app/readability_app.cpp:2295 app/readability_app.cpp:2331
-#: app/readability_app.cpp:2358 app/readability_app.cpp:2391
-#: app/readability_app.cpp:2420 app/readability_app.cpp:2459
-#: app/readability_app.cpp:2488 app/readability_app.cpp:2521
-#: app/readability_app.cpp:2552 app/readability_app.cpp:2579
-#: ui/dialogs/edit_text_dlg.cpp:284
-#: ui/dialogs/tools_options_dlg.cpp:5054
-msgid "Font"
-msgstr ""
-
-#: app/readability_app.cpp:2035
-msgid "Change the font."
-msgstr ""
-
-#: app/readability_app.cpp:2036
-msgid "Highlight"
-msgstr ""
-
-#: app/readability_app.cpp:2038
-msgid "Change the highlight colors."
-msgstr ""
-
-#: app/readability_app.cpp:2053 app/readability_app.cpp:2075
-msgid "Edit Report"
-msgstr ""
-
-#: app/readability_app.cpp:2055 app/readability_app.cpp:2077
-msgid "Select which statistics to include in the report."
-msgstr ""
-
-#: app/readability_app.cpp:2090 app/readability_app.cpp:2131
-#: app/readability_app.cpp:2177 app/readability_app.cpp:2212
-#: app/readability_app.cpp:2250 app/readability_app.cpp:2292
-#: app/readability_app.cpp:2328 app/readability_app.cpp:2355
-#: app/readability_app.cpp:2388 app/readability_app.cpp:2417
-#: app/readability_app.cpp:2456 app/readability_app.cpp:2485
-#: app/readability_app.cpp:2518 app/readability_app.cpp:2549
-#: app/readability_app.cpp:2576
-#: ui/dialogs/tools_options_dlg.h:504
-#: ui/dialogs/tools_options_dlg.h:700
-msgid "Background"
-msgstr ""
-
-#: app/readability_app.cpp:2092 app/readability_app.cpp:2133
-#: app/readability_app.cpp:2179 app/readability_app.cpp:2214
-#: app/readability_app.cpp:2252 app/readability_app.cpp:2294
-#: app/readability_app.cpp:2330 app/readability_app.cpp:2357
-#: app/readability_app.cpp:2390 app/readability_app.cpp:2419
-#: app/readability_app.cpp:2458 app/readability_app.cpp:2487
-#: app/readability_app.cpp:2520 app/readability_app.cpp:2551
-#: app/readability_app.cpp:2578
-msgid "Set the graph's background."
-msgstr ""
-
-#: app/readability_app.cpp:2095 app/readability_app.cpp:2136
-#: app/readability_app.cpp:2182 app/readability_app.cpp:2217
-#: app/readability_app.cpp:2255 app/readability_app.cpp:2297
-#: app/readability_app.cpp:2333 app/readability_app.cpp:2360
-#: app/readability_app.cpp:2393 app/readability_app.cpp:2422
-#: app/readability_app.cpp:2461 app/readability_app.cpp:2490
-#: app/readability_app.cpp:2523 app/readability_app.cpp:2554
-#: app/readability_app.cpp:2581
-msgid "Change the graph's fonts."
-msgstr ""
-
-#: app/readability_app.cpp:2096 app/readability_app.cpp:2137
-#: app/readability_app.cpp:2183 app/readability_app.cpp:2218
-#: app/readability_app.cpp:2256 app/readability_app.cpp:2298
-#: app/readability_app.cpp:2334 app/readability_app.cpp:2361
-#: app/readability_app.cpp:2394 app/readability_app.cpp:2423
-#: app/readability_app.cpp:2462 app/readability_app.cpp:2491
-#: app/readability_app.cpp:2524 app/readability_app.cpp:2555
-#: app/readability_app.cpp:2582
-#: projects/project_frame.cpp:1678
-#: ui/dialogs/tools_options_dlg.h:474
-msgid "Watermark"
-msgstr ""
-
-#: app/readability_app.cpp:2098 app/readability_app.cpp:2139
-#: app/readability_app.cpp:2185 app/readability_app.cpp:2220
-#: app/readability_app.cpp:2258 app/readability_app.cpp:2300
-#: app/readability_app.cpp:2336 app/readability_app.cpp:2363
-#: app/readability_app.cpp:2396 app/readability_app.cpp:2425
-#: app/readability_app.cpp:2464 app/readability_app.cpp:2493
-#: app/readability_app.cpp:2526 app/readability_app.cpp:2557
-#: app/readability_app.cpp:2584
-msgid "Add a watermark to the graph."
-msgstr ""
-
-#: app/readability_app.cpp:2099 app/readability_app.cpp:2140
-#: app/readability_app.cpp:2186 app/readability_app.cpp:2221
-#: app/readability_app.cpp:2259 app/readability_app.cpp:2301
-#: app/readability_app.cpp:2337 app/readability_app.cpp:2364
-#: app/readability_app.cpp:2397 app/readability_app.cpp:2426
-#: app/readability_app.cpp:2465 app/readability_app.cpp:2494
-#: app/readability_app.cpp:2527 app/readability_app.cpp:2558
-#: app/readability_app.cpp:2585
-msgid "Logo"
-msgstr ""
-
-#: app/readability_app.cpp:2101 app/readability_app.cpp:2142
-#: app/readability_app.cpp:2188 app/readability_app.cpp:2223
-#: app/readability_app.cpp:2261 app/readability_app.cpp:2303
-#: app/readability_app.cpp:2339 app/readability_app.cpp:2366
-#: app/readability_app.cpp:2399 app/readability_app.cpp:2428
-#: app/readability_app.cpp:2467 app/readability_app.cpp:2496
-#: app/readability_app.cpp:2529 app/readability_app.cpp:2560
-#: app/readability_app.cpp:2587
-msgid "Add a logo to the graph."
-msgstr ""
-
-#: app/readability_app.cpp:2102 app/readability_app.cpp:2143
-#: app/readability_app.cpp:2189 app/readability_app.cpp:2224
-#: app/readability_app.cpp:2262 app/readability_app.cpp:2367
-msgid "Shadows"
-msgstr ""
-
-#: app/readability_app.cpp:2104 app/readability_app.cpp:2145
-#: app/readability_app.cpp:2191 app/readability_app.cpp:2226
-#: app/readability_app.cpp:2264 app/readability_app.cpp:2369
-msgid "Display drop shadows on the graphs."
-msgstr ""
-
-#: app/readability_app.cpp:2105 app/readability_app.cpp:2192
-#: app/readability_app.cpp:2227 app/readability_app.cpp:2268
-msgid "Bar Style"
-msgstr ""
-
-#: app/readability_app.cpp:2107 app/readability_app.cpp:2194
-#: app/readability_app.cpp:2229 app/readability_app.cpp:2270
-msgid "Changes the bar appearance."
-msgstr ""
-
-#: app/readability_app.cpp:2108 app/readability_app.cpp:2195
-#: app/readability_app.cpp:2230 app/readability_app.cpp:2271
-#: ui/dialogs/project_wizard_dlg.cpp:474
-#: ui/dialogs/tools_options_dlg.cpp:3687
-#: ui/dialogs/tools_options_dlg.h:431
-msgid "Labels"
-msgstr ""
-
-#: app/readability_app.cpp:2110
-msgid "Shows or hides the bars' labels."
-msgstr ""
-
-#: app/readability_app.cpp:2111
-#: ui/dialogs/tools_options_dlg.h:407
-msgid "Orientation"
-msgstr ""
-
-#: app/readability_app.cpp:2113
-msgid "Changes the axis orientation."
-msgstr ""
-
-#: app/readability_app.cpp:2116
-msgid "Sort the bars in the graph."
-msgstr ""
-
-#: app/readability_app.cpp:2119 app/readability_app.cpp:2120
-#: app/readability_app.cpp:2159 app/readability_app.cpp:2160
-#: app/readability_app.cpp:2200 app/readability_app.cpp:2201
-#: app/readability_app.cpp:2235 app/readability_app.cpp:2236
-#: app/readability_app.cpp:2276 app/readability_app.cpp:2277
-#: app/readability_app.cpp:2307 app/readability_app.cpp:2308
-#: app/readability_app.cpp:2343 app/readability_app.cpp:2344
-#: app/readability_app.cpp:2373 app/readability_app.cpp:2374
-#: app/readability_app.cpp:2405 app/readability_app.cpp:2406
-#: app/readability_app.cpp:2438 app/readability_app.cpp:2439
-#: app/readability_app.cpp:2473 app/readability_app.cpp:2474
-#: app/readability_app.cpp:2502 app/readability_app.cpp:2503
-#: app/readability_app.cpp:2533 app/readability_app.cpp:2534
-#: app/readability_app.cpp:2564 app/readability_app.cpp:2565
-#: app/readability_app.cpp:2591 app/readability_app.cpp:2592
-msgid "Zoom"
-msgstr ""
-
-#: app/readability_app.cpp:2146
-msgid "Box Style"
-msgstr ""
-
-#: app/readability_app.cpp:2148
-msgid "Changes the box appearance."
-msgstr ""
-
-#: app/readability_app.cpp:2150
-msgid "Display Labels"
-msgstr ""
-
-#: app/readability_app.cpp:2152
-msgid "Displays labels on the box and whiskers."
-msgstr ""
-
-#: app/readability_app.cpp:2154
-msgid "Display Points"
-msgstr ""
-
-#: app/readability_app.cpp:2156
-msgid "Displays all data points onto the plot."
-msgstr ""
-
-#: app/readability_app.cpp:2158 app/readability_app.cpp:2199
-#: app/readability_app.cpp:2234 app/readability_app.cpp:2275
-#: app/readability_app.cpp:2306 app/readability_app.cpp:2342
-#: app/readability_app.cpp:2372 app/readability_app.cpp:2404
-#: app/readability_app.cpp:2437 app/readability_app.cpp:2472
-#: app/readability_app.cpp:2501 app/readability_app.cpp:2532
-#: app/readability_app.cpp:2563 app/readability_app.cpp:2590
-msgid "Copy the graph."
-msgstr ""
-
-#. TRANSLATORS: Draw attention to.
-#: app/readability_app.cpp:2174 app/readability_app.cpp:2323
-#: app/readability_app.cpp:2386 app/readability_app.cpp:2453
-#: app/readability_app.cpp:2515 app/readability_app.cpp:2546
-msgid "Showcase"
-msgstr ""
-
-#: app/readability_app.cpp:2175
-msgid ""
-"Toggle whether complex word bars are being showcased."
-msgstr ""
-
-#: app/readability_app.cpp:2197 app/readability_app.cpp:2232
-#: app/readability_app.cpp:2273
-msgid "Changes what is displayed on the bars' labels."
-msgstr ""
-
-#: app/readability_app.cpp:2247 app/readability_app.cpp:2288
-#: app/readability_app.cpp:2319
-msgid "Colors"
-msgstr ""
-
-#: app/readability_app.cpp:2249
-msgid "Select the color scheme for the grouped histogram."
-msgstr ""
-
-#: app/readability_app.cpp:2290 app/readability_app.cpp:2321
-msgid "Select the color scheme for the pie chart."
-msgstr ""
-
-#. TRANSLATORS: Pie chart slices.
-#: app/readability_app.cpp:2326
-msgid ""
-"Toggle whether complex word slices are being showcased."
-msgstr ""
-
-#: app/readability_app.cpp:2387 app/readability_app.cpp:2454
-msgid "Toggle whether the score is being showcased."
-msgstr ""
-
-#: app/readability_app.cpp:2400
-msgid "English Labels"
-msgstr ""
-
-#: app/readability_app.cpp:2402
-msgid "Use translated (English) labels for the brackets."
-msgstr ""
-
-#: app/readability_app.cpp:2429 app/readability_app.cpp:2468
-msgid "Invalid Region"
-msgstr ""
-
-#: app/readability_app.cpp:2431 app/readability_app.cpp:2470
-msgid "Change the color of the invalid regions."
-msgstr ""
-
-#: app/readability_app.cpp:2433
-msgid "Raygor Style"
-msgstr ""
-
-#: app/readability_app.cpp:2435
-msgid "Change the layout style of the Raygor graph."
-msgstr ""
-
-#: app/readability_app.cpp:2497
-msgid "Connect Points"
-msgstr ""
-
-#: app/readability_app.cpp:2499
-msgid "Display the line through the factors and score."
-msgstr ""
-
-#: app/readability_app.cpp:2517 app/readability_app.cpp:2548
-msgid ""
-"Toggle whether areas with scores are being showcased."
-msgstr ""
-
-#: app/readability_app.cpp:2599
+#: app/readability_app.cpp:2598
 msgid "Settings"
 msgstr ""
 
-#: app/readability_app.cpp:2602
+#: app/readability_app.cpp:2601
 msgid "Printing"
 msgstr ""
 
-#: app/readability_app.cpp:2604
+#: app/readability_app.cpp:2603
 msgid "Change print settings."
 msgstr ""
 
-#: app/readability_app.cpp:2605 app/readability_app.cpp:2680
-#: ui/dialogs/tools_options_dlg.h:564
+#: app/readability_app.cpp:2604 app/readability_app.cpp:2679
+#: ui/dialogs/tools_options_dlg.h:572
 msgid "Spell Checker"
 msgstr ""
 
-#: app/readability_app.cpp:2607 app/readability_app.cpp:2682
+#: app/readability_app.cpp:2606 app/readability_app.cpp:2681
 msgid "Edit the spell checker's dictionary."
 msgstr ""
 
-#: app/readability_app.cpp:2608 app/readability_app.cpp:2848
+#: app/readability_app.cpp:2607 app/readability_app.cpp:2847
 #: ui/dialogs/tools_options_dlg.cpp:994
 #: ui/dialogs/tools_options_dlg.h:103
 msgid "Options"
 msgstr ""
 
-#: app/readability_app.cpp:2610 app/readability_app.cpp:2850
+#: app/readability_app.cpp:2609 app/readability_app.cpp:2849
 msgid "Change the program's general options."
 msgstr ""
 
-#: app/readability_app.cpp:2613
+#: app/readability_app.cpp:2612
 msgid "Readability Tests"
 msgstr ""
 
-#: app/readability_app.cpp:2616 app/readability_app.cpp:2794
+#: app/readability_app.cpp:2615 app/readability_app.cpp:2793
 msgid "Custom"
 msgstr ""
 
-#: app/readability_app.cpp:2618 app/readability_app.cpp:2796
+#: app/readability_app.cpp:2617 app/readability_app.cpp:2795
 msgid "Create or edit custom tests."
 msgstr ""
 
-#: app/readability_app.cpp:2619 app/readability_app.cpp:2797
+#: app/readability_app.cpp:2618 app/readability_app.cpp:2796
 #: projects/base_project_view.cpp:648
 msgid "Bundles"
 msgstr ""
 
-#: app/readability_app.cpp:2621 app/readability_app.cpp:2799
+#: app/readability_app.cpp:2620 app/readability_app.cpp:2798
 msgid "Add multiple tests to a project at once."
 msgstr ""
 
-#: app/readability_app.cpp:2622 app/readability_app.cpp:2808
+#: app/readability_app.cpp:2621 app/readability_app.cpp:2807
 msgid "Tests Overview"
 msgstr ""
 
-#: app/readability_app.cpp:2624 app/readability_app.cpp:2810
+#: app/readability_app.cpp:2623 app/readability_app.cpp:2809
 msgid "View information about each readability test."
 msgstr ""
 
-#: app/readability_app.cpp:2625 app/readability_app.cpp:2818
+#: app/readability_app.cpp:2624 app/readability_app.cpp:2817
 #: ui/dialogs/custom_test_dlg.cpp:880
 #: ui/dialogs/word_list_dlg.h:71
 msgid "Word Lists"
 msgstr ""
 
-#: app/readability_app.cpp:2627 app/readability_app.cpp:2820
+#: app/readability_app.cpp:2626 app/readability_app.cpp:2819
 msgid "View the word lists used by readability tests."
 msgstr ""
 
-#: app/readability_app.cpp:2629 app/readability_app.cpp:2822
+#: app/readability_app.cpp:2628 app/readability_app.cpp:2821
 msgid "Blank Graphs"
 msgstr ""
 
-#: app/readability_app.cpp:2630 app/readability_app.cpp:2823
+#: app/readability_app.cpp:2629 app/readability_app.cpp:2822
 msgid "Print or save blank readability graph templates."
 msgstr ""
 
-#: app/readability_app.cpp:2633 app/readability_app.cpp:2805
-#: app/readability_app.cpp:2832
-#: ui/dialogs/lua_editor_dlg.cpp:760
+#: app/readability_app.cpp:2632 app/readability_app.cpp:2804
+#: app/readability_app.cpp:2831
+#: ui/dialogs/lua_editor_dlg.cpp:774
 msgid "Tools"
 msgstr ""
 
-#: app/readability_app.cpp:2636 app/readability_app.cpp:2837
-#: app/readability_app.cpp:5454
+#: app/readability_app.cpp:2635 app/readability_app.cpp:2836
+#: app/readability_app.cpp:5453
 #: ui/dialogs/web_harvester_dlg.h:97
 #: webharvester/webharvester.cpp:508
 msgid "Web Harvester"
 msgstr ""
 
-#: app/readability_app.cpp:2638 app/readability_app.cpp:2839
+#: app/readability_app.cpp:2637 app/readability_app.cpp:2838
 msgid "Download and analyze multiple webpages."
 msgstr ""
 
-#: app/readability_app.cpp:2640 app/readability_app.cpp:2841
+#: app/readability_app.cpp:2639 app/readability_app.cpp:2840
 msgid "Chapter Split"
 msgstr ""
 
-#: app/readability_app.cpp:2642 app/readability_app.cpp:2843
+#: app/readability_app.cpp:2641 app/readability_app.cpp:2842
 msgid "Split a document into smaller documents."
 msgstr ""
 
-#: app/readability_app.cpp:2643 app/readability_app.cpp:2844
+#: app/readability_app.cpp:2642 app/readability_app.cpp:2843
 msgid "Find Duplicates"
 msgstr ""
 
-#: app/readability_app.cpp:2645
+#: app/readability_app.cpp:2644
 msgid "Search for (and remove) duplicate files."
 msgstr ""
 
-#: app/readability_app.cpp:2649
+#: app/readability_app.cpp:2648
 msgid ""
 "View diagnostic information being logged by the program."
 msgstr ""
 
-#: app/readability_app.cpp:2650 app/readability_app.cpp:2853
-#: app/readability_app.cpp:4131
+#: app/readability_app.cpp:2649 app/readability_app.cpp:2852
+#: app/readability_app.cpp:4130
 #: lua-scripting/lua_interface.cpp:96
 #: lua-scripting/lua_interface.cpp:139
 #: ui/dialogs/lua_editor_dlg.h:75
 msgid "Lua Script"
 msgstr ""
 
-#: app/readability_app.cpp:2654
+#: app/readability_app.cpp:2653
 msgid "Edit and run scripts to automate tasks."
 msgstr ""
 
-#: app/readability_app.cpp:2657 app/readability_app.cpp:2859
-#: app/readability_app.cpp:3086
+#: app/readability_app.cpp:2656 app/readability_app.cpp:2858
+#: app/readability_app.cpp:3085
 msgid "Profile Report"
 msgstr ""
 
-#: app/readability_app.cpp:2670
+#: app/readability_app.cpp:2669
 #: projects/batch_project_doc.cpp:1217
 #: projects/batch_project_doc.cpp:3784
 #: projects/batch_project_doc.cpp:3841
@@ -3506,347 +3506,347 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: app/readability_app.cpp:2673
+#: app/readability_app.cpp:2672
 msgid "Proofing"
 msgstr ""
 
-#: app/readability_app.cpp:2677
+#: app/readability_app.cpp:2676
 msgid "Edit Document"
 msgstr ""
 
-#: app/readability_app.cpp:2679
+#: app/readability_app.cpp:2678
 msgid "Edit the document that is being analyzed."
 msgstr ""
 
-#: app/readability_app.cpp:2685
+#: app/readability_app.cpp:2684
 #: results-format/project_report_format.cpp:1673
-#: ui/dialogs/tools_options_dlg.h:606
+#: ui/dialogs/tools_options_dlg.h:614
 msgid "Sentences"
 msgstr ""
 
-#: app/readability_app.cpp:2689
+#: app/readability_app.cpp:2688
 #: projects/base_project_view.h:456
 #: projects/project_frame.cpp:911
 msgid "Long Sentences"
 msgstr ""
 
-#: app/readability_app.cpp:2691
+#: app/readability_app.cpp:2690
 msgid "Control how overly long sentences are determined."
 msgstr ""
 
-#: app/readability_app.cpp:2694
+#: app/readability_app.cpp:2693
 msgid "Sentence & Paragraph Deduction"
 msgstr ""
 
-#: app/readability_app.cpp:2699
+#: app/readability_app.cpp:2698
 msgid "Line Ends"
 msgstr ""
 
-#: app/readability_app.cpp:2700
+#: app/readability_app.cpp:2699
 msgid "Control how line ends effect paragraph detection."
 msgstr ""
 
-#: app/readability_app.cpp:2702
+#: app/readability_app.cpp:2701
 msgid "Ignore Blank Lines"
 msgstr ""
 
-#: app/readability_app.cpp:2704
+#: app/readability_app.cpp:2703
 msgid ""
 "Control whether blank lines should affect how paragraph "
 "breaks are detected."
 msgstr ""
 
-#: app/readability_app.cpp:2706
+#: app/readability_app.cpp:2705
 msgid "Ignore Indenting"
 msgstr ""
 
-#: app/readability_app.cpp:2708
+#: app/readability_app.cpp:2707
 msgid ""
 "Control whether indenting should affect how paragraph "
 "breaks are detected."
 msgstr ""
 
-#: app/readability_app.cpp:2710
+#: app/readability_app.cpp:2709
 msgid "Strict Capitalization"
 msgstr ""
 
-#: app/readability_app.cpp:2712
+#: app/readability_app.cpp:2711
 msgid ""
 "Change whether sentences must begin with capital letters "
 "when determining sentence breaks."
 msgstr ""
 
-#: app/readability_app.cpp:2716
+#: app/readability_app.cpp:2715
 msgid "Text Exclusion"
 msgstr ""
 
-#: app/readability_app.cpp:2721
+#: app/readability_app.cpp:2720
 msgid "Exclusion"
 msgstr ""
 
-#: app/readability_app.cpp:2723
+#: app/readability_app.cpp:2722
 msgid ""
 "Select how text should be excluded from the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2724
+#: app/readability_app.cpp:2723
 msgid "Incomplete Threshold"
 msgstr ""
 
-#: app/readability_app.cpp:2726
+#: app/readability_app.cpp:2725
 msgid ""
 "Specify the minimum length of an incomplete sentence that "
 "should be considered valid."
 msgstr ""
 
-#: app/readability_app.cpp:2728
+#: app/readability_app.cpp:2727
 msgid "Aggressive"
 msgstr ""
 
-#: app/readability_app.cpp:2730
+#: app/readability_app.cpp:2729
 msgid ""
 "Aggressively excludes list items, citations, and "
 "copyright notices (if applicable)."
 msgstr ""
 
-#: app/readability_app.cpp:2733
+#: app/readability_app.cpp:2732
 msgid "Copyrights"
 msgstr ""
 
-#: app/readability_app.cpp:2735
+#: app/readability_app.cpp:2734
 msgid ""
 "Exclude trailing copyright statements from the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2736
+#: app/readability_app.cpp:2735
 msgid "Citations"
 msgstr ""
 
-#: app/readability_app.cpp:2738
+#: app/readability_app.cpp:2737
 msgid "Exclude trailing citations from the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2740
+#: app/readability_app.cpp:2739
 msgid "File Names"
 msgstr ""
 
-#: app/readability_app.cpp:2742
+#: app/readability_app.cpp:2741
 msgid ""
 "Exclude file names and website addresses from the "
 "analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2743 app/readability_app.cpp:2759
+#: app/readability_app.cpp:2742 app/readability_app.cpp:2758
 #: projects/base_project.cpp:8301
 #: ui/dialogs/custom_test_dlg.h:648
 msgid "Numerals"
 msgstr ""
 
-#: app/readability_app.cpp:2745
+#: app/readability_app.cpp:2744
 msgid "Exclude numbers from the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2746
+#: app/readability_app.cpp:2745
 #: projects/base_project_view.h:564
 #: results-format/project_report_format.cpp:2302
 #: ui/dialogs/custom_test_dlg.h:654
 msgid "Proper Nouns"
 msgstr ""
 
-#: app/readability_app.cpp:2748
+#: app/readability_app.cpp:2747
 msgid "Exclude proper names from the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2750
+#: app/readability_app.cpp:2749
 msgid "Exclude Words"
 msgstr ""
 
-#: app/readability_app.cpp:2752
+#: app/readability_app.cpp:2751
 msgid ""
 "Add a custom list of words and phrases to exclude from "
 "the analysis."
 msgstr ""
 
-#: app/readability_app.cpp:2754
+#: app/readability_app.cpp:2753
 msgid "Exclusion Tags"
 msgstr ""
 
-#: app/readability_app.cpp:2756
+#: app/readability_app.cpp:2755
 msgid ""
 "Specify tags that will exclude all text between them."
 msgstr ""
 
-#: app/readability_app.cpp:2764
+#: app/readability_app.cpp:2763
 msgid "Syllabication"
 msgstr ""
 
-#: app/readability_app.cpp:2766
+#: app/readability_app.cpp:2765
 msgid "Specify how syllables should be counted for numbers."
 msgstr ""
 
-#: app/readability_app.cpp:2777
+#: app/readability_app.cpp:2776
 msgid "Tests"
 msgstr ""
 
-#: app/readability_app.cpp:2781
+#: app/readability_app.cpp:2780
 msgid "Primary"
 msgstr ""
 
-#: app/readability_app.cpp:2783
+#: app/readability_app.cpp:2782
 msgid "Tests meant for primary-age materials."
 msgstr ""
 
-#: app/readability_app.cpp:2784
+#: app/readability_app.cpp:2783
 msgid "Secondary"
 msgstr ""
 
-#: app/readability_app.cpp:2786
+#: app/readability_app.cpp:2785
 msgid "Tests meant for secondary-age materials."
 msgstr ""
 
-#: app/readability_app.cpp:2787
+#: app/readability_app.cpp:2786
 msgid "Adult"
 msgstr ""
 
-#: app/readability_app.cpp:2789
+#: app/readability_app.cpp:2788
 msgid "Tests meant for adult-level materials."
 msgstr ""
 
-#: app/readability_app.cpp:2791
+#: app/readability_app.cpp:2790
 msgid "Second Language"
 msgstr ""
 
-#: app/readability_app.cpp:2793
+#: app/readability_app.cpp:2792
 msgid ""
 "Tests for materials designed for second-language readers."
 msgstr ""
 
-#: app/readability_app.cpp:2800
+#: app/readability_app.cpp:2799
 msgid "Remove"
 msgstr ""
 
-#: app/readability_app.cpp:2802
+#: app/readability_app.cpp:2801
 msgid "Remove the selected test from the project."
 msgstr ""
 
-#: app/readability_app.cpp:2814
+#: app/readability_app.cpp:2813
 #: projects/batch_project_view.cpp:611
 msgid "Test Explanations"
 msgstr ""
 
-#: app/readability_app.cpp:2816
+#: app/readability_app.cpp:2815
 msgid "Read an explanation of the selected test score."
 msgstr ""
 
-#: app/readability_app.cpp:2834
+#: app/readability_app.cpp:2833
 msgid "Tools & Settings"
 msgstr ""
 
-#: app/readability_app.cpp:2846
+#: app/readability_app.cpp:2845
 msgid "Search for and remove duplicate files."
 msgstr ""
 
-#: app/readability_app.cpp:2869
+#: app/readability_app.cpp:2868
 msgid "Help"
 msgstr ""
 
-#: app/readability_app.cpp:2871
+#: app/readability_app.cpp:2870
 msgid "Documentation"
 msgstr ""
 
-#: app/readability_app.cpp:2874
+#: app/readability_app.cpp:2873
 msgid "Electronic Help"
 msgstr ""
 
-#: app/readability_app.cpp:2876
+#: app/readability_app.cpp:2875
 msgid "Read the documentation in a browser."
 msgstr ""
 
-#: app/readability_app.cpp:2877
+#: app/readability_app.cpp:2876
 msgid "Manual"
 msgstr ""
 
-#: app/readability_app.cpp:2878
+#: app/readability_app.cpp:2877
 msgid "Read the manual."
 msgstr ""
 
-#: app/readability_app.cpp:2879
+#: app/readability_app.cpp:2878
 msgid "Tests Reference"
 msgstr ""
 
-#: app/readability_app.cpp:2881
+#: app/readability_app.cpp:2880
 msgid "Read the readability tests reference."
 msgstr ""
 
-#: app/readability_app.cpp:2882
+#: app/readability_app.cpp:2881
 #: ui/dialogs/custom_test_dlg.cpp:859
 msgid "Shortcuts"
 msgstr ""
 
-#: app/readability_app.cpp:2884
+#: app/readability_app.cpp:2883
 msgid "Read the keyboard shortcuts cheatsheet."
 msgstr ""
 
-#: app/readability_app.cpp:2885
+#: app/readability_app.cpp:2884
 msgid "Release Notes"
 msgstr ""
 
-#: app/readability_app.cpp:2886
+#: app/readability_app.cpp:2885
 msgid "Read the release notes."
 msgstr ""
 
-#: app/readability_app.cpp:2887
+#: app/readability_app.cpp:2886
 msgid "Programming Manual"
 msgstr ""
 
-#: app/readability_app.cpp:2891
+#: app/readability_app.cpp:2890
 msgid "Read the Lua programming manual."
 msgstr ""
 
-#: app/readability_app.cpp:2892
+#: app/readability_app.cpp:2891
 msgid "System Admin Manual"
 msgstr ""
 
-#: app/readability_app.cpp:2894
+#: app/readability_app.cpp:2893
 msgid "Read the system administrator manual."
 msgstr ""
 
-#: app/readability_app.cpp:2895
+#: app/readability_app.cpp:2894
 msgid "Example Documents"
 msgstr ""
 
-#: app/readability_app.cpp:2897
+#: app/readability_app.cpp:2896
 msgid "Analyze example documents from the help."
 msgstr ""
 
-#: app/readability_app.cpp:2899 app/readability_app.cpp:2903
+#: app/readability_app.cpp:2898 app/readability_app.cpp:2902
 msgid "Support"
 msgstr ""
 
-#: app/readability_app.cpp:2901
+#: app/readability_app.cpp:2900
 msgid "Updates"
 msgstr ""
 
-#: app/readability_app.cpp:2902
+#: app/readability_app.cpp:2901
 msgid "Check for updates."
 msgstr ""
 
-#: app/readability_app.cpp:2904
+#: app/readability_app.cpp:2903
 msgid "Contact support."
 msgstr ""
 
-#: app/readability_app.cpp:2905
+#: app/readability_app.cpp:2904
 msgid "About"
 msgstr ""
 
-#: app/readability_app.cpp:2906
+#: app/readability_app.cpp:2905
 msgid "Learn more about the program."
 msgstr ""
 
 #. TRANSLATORS: with "\U000000A9%s%d %s", "\U000000A9" should not be edited
 #. (it's a copyright symbol), "%s%d" is a range of years and " %s" is the
 #. software publisher.
-#: app/readability_app.cpp:3047
+#: app/readability_app.cpp:3046
 #, c-format
 msgid ""
 "Copyright ©2006-2025 Oleander Software, Ltd.\n"
@@ -3859,446 +3859,446 @@ msgid ""
 "Eclipse Foundation is a Trademark of %s."
 msgstr ""
 
-#: app/readability_app.cpp:3200
+#: app/readability_app.cpp:3199
 msgid "Readability Tests Overview"
 msgstr ""
 
-#: app/readability_app.cpp:3206
+#: app/readability_app.cpp:3205
 msgid "Name"
 msgstr ""
 
-#: app/readability_app.cpp:3207
+#: app/readability_app.cpp:3206
 msgid "Score Type"
 msgstr ""
 
-#: app/readability_app.cpp:3208
+#: app/readability_app.cpp:3207
 msgid "Languages"
 msgstr ""
 
-#: app/readability_app.cpp:3209
+#: app/readability_app.cpp:3208
 msgid "Word Complexity"
 msgstr ""
 
-#: app/readability_app.cpp:3210
+#: app/readability_app.cpp:3209
 msgid "Word Length"
 msgstr ""
 
-#: app/readability_app.cpp:3211
+#: app/readability_app.cpp:3210
 msgid "Word Familiarity"
 msgstr ""
 
-#: app/readability_app.cpp:3212
-#: projects/standard_project_doc.cpp:7496
+#: app/readability_app.cpp:3211
+#: projects/standard_project_doc.cpp:7497
 msgid "Sentence Length"
 msgstr ""
 
-#: app/readability_app.cpp:3213
+#: app/readability_app.cpp:3212
 msgid "Description"
 msgstr ""
 
-#: app/readability_app.cpp:3228 app/readability_app.cpp:3243
+#: app/readability_app.cpp:3227 app/readability_app.cpp:3242
 #: ui/dialogs/custom_test_dlg.h:626
 msgid "Grade level"
 msgstr ""
 
-#: app/readability_app.cpp:3231
+#: app/readability_app.cpp:3230
 msgid "Index score"
 msgstr ""
 
-#: app/readability_app.cpp:3234
+#: app/readability_app.cpp:3233
 msgid "Grade level and index score"
 msgstr ""
 
-#: app/readability_app.cpp:3237
+#: app/readability_app.cpp:3236
 msgid "Cloze score"
 msgstr ""
 
-#: app/readability_app.cpp:3240
+#: app/readability_app.cpp:3239
 msgid "Grade level and cloze score"
 msgstr ""
 
-#: app/readability_app.cpp:3249
+#: app/readability_app.cpp:3248
 #: results-format/project_report_format.cpp:69
 #: ui/dialogs/project_wizard_dlg.cpp:285
 #: ui/dialogs/project_wizard_dlg.cpp:370
-#: ui/dialogs/tools_options_dlg.cpp:3552
+#: ui/dialogs/tools_options_dlg.cpp:4985
 msgid "English"
 msgstr ""
 
-#: app/readability_app.cpp:3253
+#: app/readability_app.cpp:3252
 #: results-format/project_report_format.cpp:90
 #: ui/dialogs/project_wizard_dlg.cpp:286
 #: ui/dialogs/project_wizard_dlg.cpp:371
-#: ui/dialogs/tools_options_dlg.cpp:3553
+#: ui/dialogs/tools_options_dlg.cpp:4986
 msgid "Spanish"
 msgstr ""
 
-#: app/readability_app.cpp:3257
+#: app/readability_app.cpp:3256
 #: results-format/project_report_format.cpp:78
 #: ui/dialogs/project_wizard_dlg.cpp:287
 #: ui/dialogs/project_wizard_dlg.cpp:372
-#: ui/dialogs/tools_options_dlg.cpp:3554
+#: ui/dialogs/tools_options_dlg.cpp:4987
 msgid "German"
 msgstr ""
 
-#: app/readability_app.cpp:3268
+#: app/readability_app.cpp:3267
 msgid "X (2 or more syllables)"
 msgstr ""
 
-#: app/readability_app.cpp:3270
+#: app/readability_app.cpp:3269
 msgid "X (3 or more syllables)"
 msgstr ""
 
-#: app/readability_app.cpp:3272
+#: app/readability_app.cpp:3271
 msgid "X (syllable density)"
 msgstr ""
 
-#: app/readability_app.cpp:3279
+#: app/readability_app.cpp:3278
 msgid "X (3 or less characters)"
 msgstr ""
 
-#: app/readability_app.cpp:3281
+#: app/readability_app.cpp:3280
 msgid "X (6 or more characters)"
 msgstr ""
 
-#: app/readability_app.cpp:3283
+#: app/readability_app.cpp:3282
 msgid "X (7 or more characters)"
 msgstr ""
 
-#: app/readability_app.cpp:3290
+#: app/readability_app.cpp:3289
 msgid "X (Spache rules)"
 msgstr ""
 
-#: app/readability_app.cpp:3292
+#: app/readability_app.cpp:3291
 msgid "X (Dale-Chall rules)"
 msgstr ""
 
-#: app/readability_app.cpp:3294
+#: app/readability_app.cpp:3293
 msgid "X (Harris-Jacobson rules)"
 msgstr ""
 
-#: app/readability_app.cpp:3323 app/readability_app.cpp:3334
-#: app/readability_app.cpp:3345 app/readability_app.cpp:3355
-#: app/readability_app.cpp:3371 app/readability_app.cpp:3386
-#: app/readability_app.cpp:3401 app/readability_app.cpp:3414
-#: app/readability_app.cpp:3425
+#: app/readability_app.cpp:3322 app/readability_app.cpp:3333
+#: app/readability_app.cpp:3344 app/readability_app.cpp:3354
+#: app/readability_app.cpp:3370 app/readability_app.cpp:3385
+#: app/readability_app.cpp:3400 app/readability_app.cpp:3413
+#: app/readability_app.cpp:3424
 #, c-format
 msgid "Blank \"%s\" Graph"
 msgstr ""
 
-#: app/readability_app.cpp:3439
+#: app/readability_app.cpp:3438
 msgid "Blank Lix Gauge"
 msgstr ""
 
-#: app/readability_app.cpp:3449
+#: app/readability_app.cpp:3448
 msgid "Blank German Lix Gauge"
 msgstr ""
 
-#: app/readability_app.cpp:3817
+#: app/readability_app.cpp:3816
 msgid "Create a New Project"
 msgstr ""
 
-#: app/readability_app.cpp:3819
+#: app/readability_app.cpp:3818
 msgid "Open a Project"
 msgstr ""
 
-#: app/readability_app.cpp:3821
+#: app/readability_app.cpp:3820
 msgid "Read the Examples"
 msgstr ""
 
-#: app/readability_app.cpp:3823
+#: app/readability_app.cpp:3822
 msgid "Read the Notes"
 msgstr ""
 
-#: app/readability_app.cpp:3825
+#: app/readability_app.cpp:3824
 msgid "Read the Manual"
 msgstr ""
 
-#: app/readability_app.cpp:3827
+#: app/readability_app.cpp:3826
 msgid "What's New"
 msgstr ""
 
-#: app/readability_app.cpp:3829
+#: app/readability_app.cpp:3828
 msgid "Review Program Options"
 msgstr ""
 
-#: app/readability_app.cpp:3871
+#: app/readability_app.cpp:3870
 msgid "Select Project to Open"
 msgstr ""
 
 #. TRANSLATORS: %s is program name.
-#: app/readability_app.cpp:3874
+#: app/readability_app.cpp:3873
 #, c-format
 msgid "%s Project (*.rsp;*.rsbp)|*.rsp;*.rsbp"
 msgstr ""
 
-#: app/readability_app.cpp:3927
+#: app/readability_app.cpp:3926
 msgid "New Project..."
 msgstr ""
 
-#: app/readability_app.cpp:3930
+#: app/readability_app.cpp:3929
 msgid "New Project from Clipboard..."
 msgstr ""
 
-#: app/readability_app.cpp:3962
+#: app/readability_app.cpp:3961
 #: projects/project_frame.cpp:2537
 msgid "Edit Custom Dictionary..."
 msgstr ""
 
-#: app/readability_app.cpp:3963
+#: app/readability_app.cpp:3962
 msgid "Settings..."
 msgstr ""
 
-#: app/readability_app.cpp:4041
+#: app/readability_app.cpp:4040
 msgid "Create a new project"
 msgstr ""
 
-#: app/readability_app.cpp:4042
+#: app/readability_app.cpp:4041
 msgid "View document"
 msgstr ""
 
-#: app/readability_app.cpp:4044
+#: app/readability_app.cpp:4043
 msgid "Create a new project using the example document"
 msgstr ""
 
-#: app/readability_app.cpp:4045
+#: app/readability_app.cpp:4044
 msgid "View the document in your system's default editor"
 msgstr ""
 
-#: app/readability_app.cpp:4047
+#: app/readability_app.cpp:4046
 msgid "Select how to open the example document"
 msgstr ""
 
-#: app/readability_app.cpp:4048
+#: app/readability_app.cpp:4047
 msgid "Open Example Document"
 msgstr ""
 
-#: app/readability_app.cpp:4150
+#: app/readability_app.cpp:4149
 msgid ""
 "Unable to add custom test to menu: not enough menu IDs, "
 "please contact software vendor to remove this limitation."
 msgstr ""
 
-#: app/readability_app.cpp:4182
+#: app/readability_app.cpp:4181
 msgid ""
 "Unable to add test bundle to menu: not enough menu IDs, "
 "please contact software vendor to remove this limitation."
 msgstr ""
 
-#: app/readability_app.cpp:4437
+#: app/readability_app.cpp:4436
 msgid "Children's Publishing"
 msgstr ""
 
-#: app/readability_app.cpp:4439
+#: app/readability_app.cpp:4438
 msgid "Young Adult and Adult Publishing"
 msgstr ""
 
-#: app/readability_app.cpp:4441
+#: app/readability_app.cpp:4440
 msgid "Children's Healthcare"
 msgstr ""
 
-#: app/readability_app.cpp:4443
+#: app/readability_app.cpp:4442
 msgid "Adult Healthcare"
 msgstr ""
 
-#: app/readability_app.cpp:4445
+#: app/readability_app.cpp:4444
 msgid "Military & Government"
 msgstr ""
 
-#: app/readability_app.cpp:4447
+#: app/readability_app.cpp:4446
 msgid "Second Language Education"
 msgstr ""
 
-#: app/readability_app.cpp:4448
+#: app/readability_app.cpp:4447
 #: ui/dialogs/custom_test_dlg.h:642
 msgid "Broadcasting"
 msgstr ""
 
-#: app/readability_app.cpp:4449
+#: app/readability_app.cpp:4448
 msgid "Industry"
 msgstr ""
 
-#: app/readability_app.cpp:4451
+#: app/readability_app.cpp:4450
 msgid "General Document"
 msgstr ""
 
-#: app/readability_app.cpp:4453
+#: app/readability_app.cpp:4452
 msgid "Technical Document"
 msgstr ""
 
-#: app/readability_app.cpp:4455
+#: app/readability_app.cpp:4454
 msgid "Structured Form"
 msgstr ""
 
-#: app/readability_app.cpp:4457
+#: app/readability_app.cpp:4456
 #: ui/dialogs/custom_test_dlg.h:633
 msgid "Literature"
 msgstr ""
 
-#: app/readability_app.cpp:4459
+#: app/readability_app.cpp:4458
 msgid "Children's Literature"
 msgstr ""
 
-#: app/readability_app.cpp:4460
+#: app/readability_app.cpp:4459
 msgid "General Document Type"
 msgstr ""
 
-#: app/readability_app.cpp:4476
+#: app/readability_app.cpp:4475
 msgid ""
 "Unable to add test bundle to menu: internal error, please "
 "contact software vendor."
 msgstr ""
 
-#: app/readability_app.cpp:4522 app/readability_app.cpp:4590
+#: app/readability_app.cpp:4521 app/readability_app.cpp:4589
 msgid "Add..."
 msgstr ""
 
-#: app/readability_app.cpp:4537 app/readability_app.cpp:4624
+#: app/readability_app.cpp:4536 app/readability_app.cpp:4623
 msgid "Edit..."
 msgstr ""
 
-#: app/readability_app.cpp:4543 app/readability_app.cpp:4629
+#: app/readability_app.cpp:4542 app/readability_app.cpp:4628
 msgid "Remove..."
 msgstr ""
 
-#: app/readability_app.cpp:4575
+#: app/readability_app.cpp:4574
 msgid ""
 "Unable to add custom test to menu: internal error, please "
 "contact software vendor."
 msgstr ""
 
-#: app/readability_app.cpp:4595
+#: app/readability_app.cpp:4594
 msgid "Add Custom Test Based on..."
 msgstr ""
 
-#: app/readability_app.cpp:4603 app/readability_app.cpp:4609
-#: app/readability_app.cpp:4615
+#: app/readability_app.cpp:4602 app/readability_app.cpp:4608
+#: app/readability_app.cpp:4614
 #, c-format
 msgid "Add Custom \"%s\"..."
 msgstr ""
 
-#: app/readability_app.cpp:4654
+#: app/readability_app.cpp:4653
 msgid "Select test to remove:"
 msgstr ""
 
-#: app/readability_app.cpp:4655
+#: app/readability_app.cpp:4654
 #: projects/batch_project_view.cpp:904
 #: projects/standard_project_view.cpp:2172
 msgid "Remove Test"
 msgstr ""
 
-#: app/readability_app.cpp:4696
+#: app/readability_app.cpp:4695
 msgid "Select bundle to edit:"
 msgstr ""
 
-#: app/readability_app.cpp:4697
+#: app/readability_app.cpp:4696
 msgid "Edit Bundle"
 msgstr ""
 
-#: app/readability_app.cpp:4734
+#: app/readability_app.cpp:4733
 msgid "Select bundle to remove:"
 msgstr ""
 
-#: app/readability_app.cpp:4735
+#: app/readability_app.cpp:4734
 msgid "Remove Bundle"
 msgstr ""
 
-#: app/readability_app.cpp:4772 app/readability_app.cpp:4793
-#: app/readability_app.cpp:4877
+#: app/readability_app.cpp:4771 app/readability_app.cpp:4792
+#: app/readability_app.cpp:4876
 #, c-format
 msgid "Add Custom \"%s\""
 msgstr ""
 
-#: app/readability_app.cpp:4822
+#: app/readability_app.cpp:4821
 msgid ""
 "Select a linear-regression-based test to use as the basis "
 "for a new custom test:"
 msgstr ""
 
-#: app/readability_app.cpp:4823
+#: app/readability_app.cpp:4822
 msgid "Select a Test"
 msgstr ""
 
 #. TRANSLATORS: %s is a readability test name
-#: app/readability_app.cpp:4836
+#: app/readability_app.cpp:4835
 #, c-format
 msgid "Custom %s"
 msgstr ""
 
-#: app/readability_app.cpp:4867
+#: app/readability_app.cpp:4866
 #, c-format
 msgid "Internal error: unable to find '%s'."
 msgstr ""
 
-#: app/readability_app.cpp:4940
+#: app/readability_app.cpp:4939
 msgid "Select test to edit:"
 msgstr ""
 
-#: app/readability_app.cpp:4941
+#: app/readability_app.cpp:4940
 msgid "Edit Test"
 msgstr ""
 
-#: app/readability_app.cpp:5008
+#: app/readability_app.cpp:5007
 msgid "No text is currently on the clipboard."
 msgstr ""
 
-#: app/readability_app.cpp:5049
+#: app/readability_app.cpp:5048
 msgid ""
 "Project still processing. Please wait before closing."
 msgstr ""
 
-#: app/readability_app.cpp:5069
+#: app/readability_app.cpp:5068
 #: projects/base_project.cpp:4677
 #: ui/dialogs/project_wizard_dlg.cpp:1678
 #: ui/dialogs/tools_options_dlg.cpp:450
 msgid "Select Document to Analyze"
 msgstr ""
 
-#: app/readability_app.cpp:5148
+#: app/readability_app.cpp:5147
 #, c-format
 msgid ""
 "An error occurred while trying to connect to the website:"
 "\t%s"
 msgstr ""
 
-#: app/readability_app.cpp:5150
+#: app/readability_app.cpp:5149
 msgid "Connection Error"
 msgstr ""
 
-#: app/readability_app.cpp:5158
+#: app/readability_app.cpp:5157
 #, c-format
 msgid ""
 "There is a new version of %s currently available.\n"
 "Do you wish to go to the download page?"
 msgstr ""
 
-#: app/readability_app.cpp:5165
+#: app/readability_app.cpp:5164
 msgid ""
 "Unable to open default browser. Please make sure that you "
 "have an Internet browser installed and are connected to "
 "the Internet."
 msgstr ""
 
-#: app/readability_app.cpp:5173
+#: app/readability_app.cpp:5172
 msgid "There are no updates currently available."
 msgstr ""
 
-#: app/readability_app.cpp:5195
+#: app/readability_app.cpp:5194
 #: ui/controls/word_list_property.cpp:95
 #: ui/dialogs/custom_test_dlg.cpp:900
 msgid "Edit Word List"
 msgstr ""
 
-#: app/readability_app.cpp:5207
+#: app/readability_app.cpp:5206
 #: lua-scripting/lua_screenshot.cpp:647
 msgid "Edit Phrase List"
 msgstr ""
 
-#: app/readability_app.cpp:5220
+#: app/readability_app.cpp:5219
 msgid "All Files (*.*)|*.*"
 msgstr ""
 
-#: app/readability_app.cpp:5230
+#: app/readability_app.cpp:5229
 #: lua-scripting/lua_batch_project.cpp:226
 #: projects/batch_project_doc.cpp:209
 #: ui/dialogs/project_wizard_dlg.cpp:1150
@@ -4306,49 +4306,49 @@ msgstr ""
 msgid "Retrieving files..."
 msgstr ""
 
-#: app/readability_app.cpp:5243 app/readability_app.cpp:5277
+#: app/readability_app.cpp:5242 app/readability_app.cpp:5276
 msgid "Duplicate Files"
 msgstr ""
 
-#: app/readability_app.cpp:5243
+#: app/readability_app.cpp:5242
 msgid "Searching for duplicate files..."
 msgstr ""
 
-#: app/readability_app.cpp:5254
+#: app/readability_app.cpp:5253
 #, c-format
 msgid "Processing %s of %s files..."
 msgstr ""
 
-#: app/readability_app.cpp:5283
+#: app/readability_app.cpp:5282
 msgid "Loading duplicates..."
 msgstr ""
 
-#: app/readability_app.cpp:5323
+#: app/readability_app.cpp:5322
 #, c-format
 msgid ""
 "Found %lu duplicate files. You can select and delete "
 "duplicates from a group, leaving one file for the group."
 msgstr ""
 
-#: app/readability_app.cpp:5331
+#: app/readability_app.cpp:5330
 msgid "No duplicate files found."
 msgstr ""
 
-#: app/readability_app.cpp:5343
+#: app/readability_app.cpp:5342
 msgid "Select File to Split"
 msgstr ""
 
-#: app/readability_app.cpp:5366 app/readability_app.cpp:5372
+#: app/readability_app.cpp:5365 app/readability_app.cpp:5371
 msgid "Unable to split document."
 msgstr ""
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app.cpp:5385
+#: app/readability_app.cpp:5384
 #, c-format
 msgid "Documents & Images (%s;%s)|%s;%s|"
 msgstr ""
 
-#: app/readability_app.cpp:5435
+#: app/readability_app.cpp:5434
 #, c-format
 msgid ""
 "No files were downloaded from the following sites:\n"
@@ -4358,17 +4358,17 @@ msgid ""
 "issues."
 msgstr ""
 
-#: app/readability_app.cpp:5438
-#: app/readability_app_options.cpp:160
-#: app/readability_app_options.cpp:166
-#: app/readability_app_options.cpp:172
-#: app/readability_app_options.cpp:175
-#: app/readability_app_options.cpp:179
-#: app/readability_app_options.cpp:188
-#: app/readability_app_options.cpp:213
-#: app/readability_app_options.cpp:220
-#: app/readability_app_options.cpp:239
-#: app/readability_app_options.cpp:247
+#: app/readability_app.cpp:5437
+#: app/readability_app_options.cpp:171
+#: app/readability_app_options.cpp:177
+#: app/readability_app_options.cpp:183
+#: app/readability_app_options.cpp:186
+#: app/readability_app_options.cpp:190
+#: app/readability_app_options.cpp:199
+#: app/readability_app_options.cpp:224
+#: app/readability_app_options.cpp:231
+#: app/readability_app_options.cpp:250
+#: app/readability_app_options.cpp:258
 #: lua-scripting/lua_application.cpp:1247
 #: lua-scripting/lua_batch_project.h:82
 #: lua-scripting/lua_standard_project.h:82
@@ -4386,84 +4386,84 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: app/readability_app.cpp:5454
+#: app/readability_app.cpp:5453
 msgid "Web crawl complete."
 msgstr ""
 
 #: app/readability_app_options.cpp:82
-#: app/readability_app_options.cpp:647
+#: app/readability_app_options.cpp:664
 msgid ""
 "Invalid configuration file. Project header section not "
 "found."
 msgstr ""
 
 #: app/readability_app_options.cpp:91
-#: app/readability_app_options.cpp:655
+#: app/readability_app_options.cpp:672
 msgid "Invalid configuration file. No configurations found."
 msgstr ""
 
-#: app/readability_app_options.cpp:147
+#: app/readability_app_options.cpp:158
 msgid "Project file will be opened as read only."
 msgstr ""
 
-#: app/readability_app_options.cpp:148
+#: app/readability_app_options.cpp:159
 msgid "Warn about projects being opened as read-only."
 msgstr ""
 
-#: app/readability_app_options.cpp:152
+#: app/readability_app_options.cpp:163
 msgid "Prompt when removing a test from a project."
 msgstr ""
 
-#: app/readability_app_options.cpp:155
+#: app/readability_app_options.cpp:166
 msgid ""
 "Prompt when removing a document from a batch project."
 msgstr ""
 
-#: app/readability_app_options.cpp:158
+#: app/readability_app_options.cpp:169
 msgid ""
 "The text that you are analyzing does not contain any "
 "valid words. No calculations will be performed."
 msgstr ""
 
-#: app/readability_app_options.cpp:160
+#: app/readability_app_options.cpp:171
 msgid "Warn about documents that do not contain any words."
 msgstr ""
 
-#: app/readability_app_options.cpp:164
+#: app/readability_app_options.cpp:175
 msgid ""
 "The text that you are analyzing is less than 20 words. "
 "Most test results will not be meaningful with such a "
 "small sample."
 msgstr ""
 
-#: app/readability_app_options.cpp:166
+#: app/readability_app_options.cpp:177
 msgid "Warn about documents containing less than 20 words."
 msgstr ""
 
-#: app/readability_app_options.cpp:170
+#: app/readability_app_options.cpp:181
 msgid ""
 "The text that you are analyzing is less than 100 words. "
 "Factors, such as word and syllable counts, will be "
 "standardized for some tests."
 msgstr ""
 
-#: app/readability_app_options.cpp:172
+#: app/readability_app_options.cpp:183
 msgid "Warn about documents containing less than 100 words."
 msgstr ""
 
-#: app/readability_app_options.cpp:176
+#: app/readability_app_options.cpp:187
 msgid ""
 "Warn about documents that contain sentences split by "
 "paragraph breaks."
 msgstr ""
 
-#: app/readability_app_options.cpp:180
+#: app/readability_app_options.cpp:191
 msgid ""
 "Warn about documents that contain long incomplete "
 "sentences that will be included in the analysis."
 msgstr ""
 
-#: app/readability_app_options.cpp:185
+#: app/readability_app_options.cpp:196
 msgid ""
 "This document contains a large percentage of incomplete "
 "sentences that you have requested to ignore.\n"
@@ -4472,13 +4472,13 @@ msgid ""
 "in the analysis?"
 msgstr ""
 
-#: app/readability_app_options.cpp:189
+#: app/readability_app_options.cpp:200
 msgid ""
 "Prompt if a document should switch to include sentences "
 "in the analysis."
 msgstr ""
 
-#: app/readability_app_options.cpp:193
+#: app/readability_app_options.cpp:204
 msgid ""
 "This test's proper-noun settings differ from the standard "
 "New Dale-Chall test.\n"
@@ -4486,32 +4486,32 @@ msgid ""
 "test?"
 msgstr ""
 
-#: app/readability_app_options.cpp:195
+#: app/readability_app_options.cpp:206
 #: ui/dialogs/custom_test_dlg.cpp:131
 #: ui/dialogs/custom_test_dlg.cpp:147
 #: ui/dialogs/custom_test_dlg.cpp:163
 msgid "Settings Conflict"
 msgstr ""
 
-#: app/readability_app_options.cpp:196
+#: app/readability_app_options.cpp:207
 msgid ""
 "Prompt if a custom NDC test's proper noun settings differ "
 "from the standard NDC test."
 msgstr ""
 
-#: app/readability_app_options.cpp:201
+#: app/readability_app_options.cpp:212
 msgid ""
 "Prompt about New Dale-Chall using a different text "
 "exclusion method from the system default."
 msgstr ""
 
-#: app/readability_app_options.cpp:206
+#: app/readability_app_options.cpp:217
 msgid ""
 "Prompt about Harris-Jacobson using a different text "
 "exclusion method from the system default."
 msgstr ""
 
-#: app/readability_app_options.cpp:211
+#: app/readability_app_options.cpp:222
 msgid ""
 "Harris-Jacobson requires numerals to be excluded from the "
 "overall word count.\n"
@@ -4519,13 +4519,13 @@ msgid ""
 "this into account."
 msgstr ""
 
-#: app/readability_app_options.cpp:213
+#: app/readability_app_options.cpp:224
 msgid ""
 "Warn when a custom test's numeral settings will be "
 "adjusted."
 msgstr ""
 
-#: app/readability_app_options.cpp:217
+#: app/readability_app_options.cpp:228
 msgid ""
 "Because German capitalizes all nouns, the program will be "
 "unable to detect proper nouns.\n"
@@ -4533,63 +4533,63 @@ msgid ""
 "disabled for this test."
 msgstr ""
 
-#: app/readability_app_options.cpp:220
+#: app/readability_app_options.cpp:231
 msgid ""
 "Warn about German stemming not supporting proper noun "
 "detection."
 msgstr ""
 
-#: app/readability_app_options.cpp:224
+#: app/readability_app_options.cpp:235
 msgid ""
 "Note: sorting histogram bins by unique values requires "
 "midpoint interval display.\n"
 "Midpoint interval display will be enabled."
 msgstr ""
 
-#: app/readability_app_options.cpp:226
+#: app/readability_app_options.cpp:237
 msgid ""
 "Warn about unique-value histograms requiring midpoint "
 "axis labels."
 msgstr ""
 
-#: app/readability_app_options.cpp:229
+#: app/readability_app_options.cpp:240
 #: projects/batch_project_view.cpp:3160
 msgid "File Not Found"
 msgstr ""
 
-#: app/readability_app_options.cpp:230
+#: app/readability_app_options.cpp:241
 msgid "Prompt about auto-searching for missing files."
 msgstr ""
 
-#: app/readability_app_options.cpp:233
+#: app/readability_app_options.cpp:244
 msgid ""
 "This document is embedded in the project.\n"
 "Do you wish to link to the original document instead?"
 msgstr ""
 
-#: app/readability_app_options.cpp:235
+#: app/readability_app_options.cpp:246
 msgid "Link Document"
 msgstr ""
 
-#: app/readability_app_options.cpp:235
+#: app/readability_app_options.cpp:246
 msgid ""
 "Prompt about re-linking to a document that has been "
 "embedded."
 msgstr ""
 
-#: app/readability_app_options.cpp:239
+#: app/readability_app_options.cpp:250
 msgid ""
 "No embedded text found in the project. Project will not "
 "be created."
 msgstr ""
 
-#: app/readability_app_options.cpp:240
+#: app/readability_app_options.cpp:251
 msgid ""
 "Prompt about failing to load a project that is missing "
 "its embedded text."
 msgstr ""
 
-#: app/readability_app_options.cpp:244
+#: app/readability_app_options.cpp:255
 msgid ""
 "ClearType is currently turned off. Enabling this will "
 "make fonts appear smoother and easier to read.\n"
@@ -4597,56 +4597,56 @@ msgid ""
 "Do you wish to enable ClearType?"
 msgstr ""
 
-#: app/readability_app_options.cpp:247
+#: app/readability_app_options.cpp:258
 msgid "Check if ClearType is turned on (Windows only)."
 msgstr ""
 
-#: app/readability_app_options.cpp:251
+#: app/readability_app_options.cpp:262
 msgid ""
 "Any window can be exported by selecting \"Export\" from "
 "the \"Save\" button."
 msgstr ""
 
-#: app/readability_app_options.cpp:252
+#: app/readability_app_options.cpp:263
 msgid ""
 "Prompt about how windows can be exported from the Save "
 "button."
 msgstr ""
 
-#: app/readability_app_options.cpp:255
+#: app/readability_app_options.cpp:266
 msgid "Double click a test to view more information."
 msgstr ""
 
-#: app/readability_app_options.cpp:256
+#: app/readability_app_options.cpp:267
 msgid ""
 "Prompt about how double-clicking a test can show its help."
 msgstr ""
 
-#: app/readability_app_options.cpp:260
+#: app/readability_app_options.cpp:271
 msgid ""
 "When zooming, background images will not be stretched "
 "beyond their original sizes."
 msgstr ""
 
-#: app/readability_app_options.cpp:262
+#: app/readability_app_options.cpp:274
 msgid ""
 "Prompt about how background images will not be upscaled "
 "beyond their original size when zooming into a graph."
 msgstr ""
 
-#: app/readability_app_options.cpp:267
+#: app/readability_app_options.cpp:279
 msgid ""
 "Settings embedded in this project can be edited by "
 "clicking \"Home\" - \"Properties\"."
 msgstr ""
 
-#: app/readability_app_options.cpp:269
+#: app/readability_app_options.cpp:281
 msgid ""
 "Prompt about how settings are embedded in projects and "
 "how to edit them."
 msgstr ""
 
-#: app/readability_app_options.cpp:273
+#: app/readability_app_options.cpp:285
 msgid ""
 "Documents not passing the project's goals are shown in "
 "this window.\n"
@@ -4656,35 +4656,35 @@ msgid ""
 "passing these constraints."
 msgstr ""
 
-#: app/readability_app_options.cpp:276
+#: app/readability_app_options.cpp:288
 msgid ""
 "Prompt about how the Goals window works in a batch "
 "project."
 msgstr ""
 
-#: app/readability_app_options.cpp:280
+#: app/readability_app_options.cpp:292
 msgid ""
 "Would you like to use this word exclusion list for all "
 "future projects?"
 msgstr ""
 
-#: app/readability_app_options.cpp:281
+#: app/readability_app_options.cpp:293
 msgid "Set Global Word Exclusion List"
 msgstr ""
 
-#: app/readability_app_options.cpp:282
+#: app/readability_app_options.cpp:294
 msgid ""
 "Prompt about whether to set the application's word "
 "exclusion list from a project."
 msgstr ""
 
-#: app/readability_app_options.cpp:4699
+#: app/readability_app_options.cpp:4464
 #, c-format
 msgid "Unable to save configuration file: %s"
 msgstr ""
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4799
+#: app/readability_app_options.cpp:4566
 #, c-format
 msgid ""
 "Documents (%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s)|%s;%s;%s;%s;"
@@ -4692,7 +4692,7 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4806
+#: app/readability_app_options.cpp:4573
 #, c-format
 msgid ""
 "%s|Text files (%s)|%s|HTML files (%s)|%s|Word files (%s)|"
@@ -4975,7 +4975,7 @@ msgstr ""
 #: lua-scripting/lua_standard_project.cpp:4268
 #: lua-scripting/lua_standard_project.cpp:4426
 #: lua-scripting/lua_standard_project.h:107
-#: ui/dialogs/lua_editor_dlg.cpp:135
+#: ui/dialogs/lua_editor_dlg.cpp:141
 msgid "Script Error"
 msgstr ""
 
@@ -5115,19 +5115,19 @@ msgid "%sError%s: Line #%s"
 msgstr ""
 
 #: lua-scripting/lua_interface.cpp:125
-#: lua-scripting/lua_interface.cpp:184
+#: lua-scripting/lua_interface.cpp:186
 #, c-format
 msgid "Script ran for %s"
 msgstr ""
 
-#: lua-scripting/lua_interface.cpp:161
+#: lua-scripting/lua_interface.cpp:163
 #, c-format
 msgid "Script stopped by user at chunk line #%ld"
 msgstr ""
 
 #. TRANSLATORS: %s around "Error" are highlight
 #. tags. The last one is a line number.
-#: lua-scripting/lua_interface.cpp:178
+#: lua-scripting/lua_interface.cpp:180
 #, c-format
 msgid "%sError%s: Chunk line #%s"
 msgstr ""
@@ -6061,7 +6061,7 @@ msgid "A custom word list (that is using %s stemming):"
 msgstr ""
 
 #: projects/base_project.cpp:8289
-#: ui/dialogs/tools_options_dlg.h:796
+#: ui/dialogs/tools_options_dlg.h:804
 msgid "Proper nouns"
 msgstr ""
 
@@ -6129,7 +6129,7 @@ msgstr ""
 
 #: projects/base_project_doc.cpp:684
 #: projects/batch_project_doc.cpp:6580
-#: projects/standard_project_doc.cpp:6896
+#: projects/standard_project_doc.cpp:6897
 msgid "Project Error"
 msgstr ""
 
@@ -6279,7 +6279,7 @@ msgid "Color..."
 msgstr ""
 
 #: projects/base_project_view.cpp:119
-#: ui/dialogs/tools_options_dlg.h:492
+#: ui/dialogs/tools_options_dlg.h:500
 msgid "Fade"
 msgstr ""
 
@@ -6312,7 +6312,7 @@ msgid "No Effect"
 msgstr ""
 
 #: projects/base_project_view.cpp:162
-#: ui/dialogs/tools_options_dlg.cpp:5534
+#: ui/dialogs/tools_options_dlg.cpp:5587
 msgid "Grayscale"
 msgstr ""
 
@@ -6325,7 +6325,7 @@ msgid "Blur Vertically"
 msgstr ""
 
 #: projects/base_project_view.cpp:171
-#: ui/dialogs/tools_options_dlg.cpp:5537
+#: ui/dialogs/tools_options_dlg.cpp:5590
 msgid "Sepia"
 msgstr ""
 
@@ -6338,7 +6338,7 @@ msgid "Oil Painting"
 msgstr ""
 
 #: projects/base_project_view.cpp:179
-#: ui/dialogs/tools_options_dlg.h:718
+#: ui/dialogs/tools_options_dlg.h:726
 msgid "Effects"
 msgstr ""
 
@@ -6353,7 +6353,7 @@ msgstr ""
 #. TRANSLATORS: How an image is adjusted to fit
 #. inside an area
 #: projects/base_project_view.cpp:193
-#: ui/dialogs/tools_options_dlg.h:347
+#: ui/dialogs/tools_options_dlg.h:355
 msgid "Fit"
 msgstr ""
 
@@ -6366,22 +6366,22 @@ msgid "Plot Image"
 msgstr ""
 
 #: projects/base_project_view.cpp:205
-#: ui/dialogs/tools_options_dlg.cpp:5752
+#: ui/dialogs/tools_options_dlg.cpp:5805
 msgid "Original"
 msgstr ""
 
 #: projects/base_project_view.cpp:211
-#: ui/dialogs/tools_options_dlg.cpp:5754
+#: ui/dialogs/tools_options_dlg.cpp:5807
 msgid "Modern"
 msgstr ""
 
 #: projects/base_project_view.cpp:216
-#: ui/dialogs/tools_options_dlg.cpp:6037
+#: ui/dialogs/tools_options_dlg.cpp:6090
 msgid "Counts"
 msgstr ""
 
 #: projects/base_project_view.cpp:219
-#: ui/dialogs/tools_options_dlg.cpp:6038
+#: ui/dialogs/tools_options_dlg.cpp:6091
 msgid "Percentages"
 msgstr ""
 
@@ -6390,7 +6390,7 @@ msgid "Counts && Percentages"
 msgstr ""
 
 #: projects/base_project_view.cpp:225
-#: ui/dialogs/tools_options_dlg.cpp:6040
+#: ui/dialogs/tools_options_dlg.cpp:6093
 msgid "No labels"
 msgstr ""
 
@@ -6407,12 +6407,12 @@ msgid "Reset Zoom"
 msgstr ""
 
 #: projects/base_project_view.cpp:242
-#: ui/dialogs/tools_options_dlg.cpp:5881
+#: ui/dialogs/tools_options_dlg.cpp:5934
 msgid "Horizontal"
 msgstr ""
 
 #: projects/base_project_view.cpp:247
-#: ui/dialogs/tools_options_dlg.cpp:5883
+#: ui/dialogs/tools_options_dlg.cpp:5936
 msgid "Vertical"
 msgstr ""
 
@@ -6437,9 +6437,9 @@ msgstr ""
 #: projects/base_project_view.cpp:278
 #: projects/base_project_view.cpp:353
 #: projects/base_project_view.cpp:424
-#: ui/dialogs/tools_options_dlg.cpp:5839
-#: ui/dialogs/tools_options_dlg.cpp:5938
-#: ui/dialogs/tools_options_dlg.cpp:6080
+#: ui/dialogs/tools_options_dlg.cpp:5892
+#: ui/dialogs/tools_options_dlg.cpp:5991
+#: ui/dialogs/tools_options_dlg.cpp:6133
 msgid "Solid"
 msgstr ""
 
@@ -6473,9 +6473,9 @@ msgstr ""
 #: projects/base_project_view.cpp:308
 #: projects/base_project_view.cpp:383
 #: projects/base_project_view.cpp:454
-#: ui/dialogs/tools_options_dlg.cpp:5851
-#: ui/dialogs/tools_options_dlg.cpp:5949
-#: ui/dialogs/tools_options_dlg.cpp:6091
+#: ui/dialogs/tools_options_dlg.cpp:5904
+#: ui/dialogs/tools_options_dlg.cpp:6002
+#: ui/dialogs/tools_options_dlg.cpp:6144
 msgid "Watercolor"
 msgstr ""
 
@@ -6545,58 +6545,58 @@ msgid "Outside outlier range"
 msgstr ""
 
 #: projects/base_project_view.cpp:518
-#: ui/dialogs/tools_options_dlg.cpp:3836
+#: ui/dialogs/tools_options_dlg.cpp:3437
 msgid "Exclude all incomplete sentences"
 msgstr ""
 
 #: projects/base_project_view.cpp:521
-#: ui/dialogs/tools_options_dlg.cpp:3837
+#: ui/dialogs/tools_options_dlg.cpp:3438
 msgid "Do not exclude any text"
 msgstr ""
 
 #: projects/base_project_view.cpp:524
-#: ui/dialogs/tools_options_dlg.cpp:3838
+#: ui/dialogs/tools_options_dlg.cpp:3439
 msgid "Exclude all incomplete sentences, except headings"
 msgstr ""
 
 #: projects/base_project_view.cpp:528
-#: ui/dialogs/tools_options_dlg.cpp:4009
+#: ui/dialogs/tools_options_dlg.cpp:3610
 msgid "Not enabled"
 msgstr ""
 
 #: projects/base_project_view.cpp:531
-#: ui/dialogs/tools_options_dlg.cpp:4010
+#: ui/dialogs/tools_options_dlg.cpp:3611
 msgid "^ and ^"
 msgstr ""
 
 #: projects/base_project_view.cpp:534
-#: ui/dialogs/tools_options_dlg.cpp:4011
+#: ui/dialogs/tools_options_dlg.cpp:3612
 msgid "< and >"
 msgstr ""
 
 #: projects/base_project_view.cpp:537
-#: ui/dialogs/tools_options_dlg.cpp:4012
+#: ui/dialogs/tools_options_dlg.cpp:3613
 msgid "[ and ]"
 msgstr ""
 
 #: projects/base_project_view.cpp:540
-#: ui/dialogs/tools_options_dlg.cpp:4013
+#: ui/dialogs/tools_options_dlg.cpp:3614
 msgid "{ and }"
 msgstr ""
 
 #: projects/base_project_view.cpp:543
-#: ui/dialogs/tools_options_dlg.cpp:4014
+#: ui/dialogs/tools_options_dlg.cpp:3615
 msgid "( and )"
 msgstr ""
 
 #: projects/base_project_view.cpp:547
-#: ui/dialogs/tools_options_dlg.cpp:4033
+#: ui/dialogs/tools_options_dlg.cpp:3634
 msgid "Numerals are one syllable"
 msgstr ""
 
 #: projects/base_project_view.cpp:550
-#: ui/dialogs/tools_options_dlg.cpp:4034
-#: ui/dialogs/tools_options_dlg.cpp:4124
+#: ui/dialogs/tools_options_dlg.cpp:3635
+#: ui/dialogs/tools_options_dlg.cpp:3728
 msgid "Sound out each digit"
 msgstr ""
 
@@ -6653,7 +6653,7 @@ msgid "Difficult Words"
 msgstr ""
 
 #: projects/base_project_view.h:219
-#: ui/dialogs/tools_options_dlg.h:820
+#: ui/dialogs/tools_options_dlg.h:828
 msgid "Readability Scores"
 msgstr ""
 
@@ -6669,7 +6669,7 @@ msgstr ""
 
 #: projects/base_project_view.h:237
 #: results-format/project_report_format.cpp:3231
-#: ui/dialogs/tools_options_dlg.h:624
+#: ui/dialogs/tools_options_dlg.h:632
 msgid "Grammar"
 msgstr ""
 
@@ -6678,12 +6678,12 @@ msgid "Sight Words"
 msgstr ""
 
 #: projects/base_project_view.h:249
-#: ui/dialogs/tools_options_dlg.h:898
+#: ui/dialogs/tools_options_dlg.h:906
 msgid "Box Plots"
 msgstr ""
 
 #: projects/base_project_view.h:255
-#: ui/dialogs/tools_options_dlg.h:886
+#: ui/dialogs/tools_options_dlg.h:894
 msgid "Readability Graphs"
 msgstr ""
 
@@ -6730,7 +6730,7 @@ msgid "Summary Statistics"
 msgstr ""
 
 #: projects/base_project_view.h:322
-#: ui/dialogs/tools_options_dlg.h:904
+#: ui/dialogs/tools_options_dlg.h:912
 msgid "Histograms"
 msgstr ""
 
@@ -6829,7 +6829,7 @@ msgid "Repeated Words"
 msgstr ""
 
 #: projects/base_project_view.h:504
-#: ui/dialogs/tools_options_dlg.h:648
+#: ui/dialogs/tools_options_dlg.h:656
 msgid "Flesch Chart"
 msgstr ""
 
@@ -7604,7 +7604,7 @@ msgstr ""
 
 #: projects/batch_project_doc.cpp:6504
 #: projects/batch_project_doc.cpp:6530
-#: projects/standard_project_doc.cpp:6835
+#: projects/standard_project_doc.cpp:6836
 msgid ""
 "File appears to be open by another application. Cannot "
 "save project."
@@ -7613,14 +7613,14 @@ msgstr ""
 #: projects/batch_project_doc.cpp:6505
 #: projects/batch_project_doc.cpp:6519
 #: projects/batch_project_doc.cpp:6531
-#: projects/standard_project_doc.cpp:6808
-#: projects/standard_project_doc.cpp:6822
-#: projects/standard_project_doc.cpp:6836
+#: projects/standard_project_doc.cpp:6809
+#: projects/standard_project_doc.cpp:6823
+#: projects/standard_project_doc.cpp:6837
 msgid "Project Save"
 msgstr ""
 
 #: projects/batch_project_doc.cpp:6519
-#: projects/standard_project_doc.cpp:6822
+#: projects/standard_project_doc.cpp:6823
 msgid ""
 "Project file was opened as read only. Unable to save."
 msgstr ""
@@ -7631,7 +7631,7 @@ msgid "Saving \"%s\""
 msgstr ""
 
 #: projects/batch_project_doc.cpp:6579
-#: projects/standard_project_doc.cpp:6895
+#: projects/standard_project_doc.cpp:6896
 msgid ""
 "Unable to save project file. File may be locked by "
 "another process."
@@ -8375,7 +8375,7 @@ msgstr ""
 #: projects/project_frame.cpp:1471
 #: projects/project_frame.cpp:1538
 #: ui/dialogs/tools_options_dlg.cpp:1673
-#: ui/dialogs/tools_options_dlg.cpp:5626
+#: ui/dialogs/tools_options_dlg.cpp:5679
 msgid "Select Stipple Image"
 msgstr ""
 
@@ -8386,7 +8386,7 @@ msgstr ""
 #: projects/project_frame.cpp:1497
 #: projects/project_frame.cpp:1567
 #: ui/dialogs/tools_options_dlg.cpp:1700
-#: ui/dialogs/tools_options_dlg.cpp:5680
+#: ui/dialogs/tools_options_dlg.cpp:5733
 msgid "Select Common Image"
 msgstr ""
 
@@ -8407,7 +8407,7 @@ msgstr ""
 
 #: projects/project_frame.cpp:1656
 #: ui/dialogs/tools_options_dlg.cpp:1734
-#: ui/dialogs/tools_options_dlg.cpp:5602
+#: ui/dialogs/tools_options_dlg.cpp:5655
 msgid "Select Logo Image"
 msgstr ""
 
@@ -8426,7 +8426,7 @@ msgstr ""
 
 #: projects/project_frame.cpp:1935
 #: projects/project_frame.cpp:1978
-#: ui/dialogs/tools_options_dlg.cpp:5527
+#: ui/dialogs/tools_options_dlg.cpp:5580
 msgid "Select Plot Background Image"
 msgstr ""
 
@@ -8563,7 +8563,7 @@ msgid "No tests are currently in the project."
 msgstr ""
 
 #: projects/standard_project_doc.cpp:1161
-#: ui/dialogs/tools_options_dlg.h:594
+#: ui/dialogs/tools_options_dlg.h:602
 msgid "Summary Report"
 msgstr ""
 
@@ -8599,9 +8599,9 @@ msgstr ""
 #: projects/standard_project_doc.cpp:1824
 #: projects/standard_project_doc.cpp:1876
 #: projects/standard_project_doc.cpp:1929
-#: projects/standard_project_doc.cpp:7171
-#: projects/standard_project_doc.cpp:7396
-#: projects/standard_project_doc.cpp:7544
+#: projects/standard_project_doc.cpp:7172
+#: projects/standard_project_doc.cpp:7397
+#: projects/standard_project_doc.cpp:7545
 #: ui/dialogs/edit_word_list_dlg.cpp:332
 msgid "Suggestion"
 msgstr ""
@@ -8674,7 +8674,7 @@ msgstr ""
 
 #: projects/standard_project_doc.cpp:2401
 #: results-format/project_report_format.cpp:1617
-#: ui/dialogs/tools_options_dlg.h:600
+#: ui/dialogs/tools_options_dlg.h:608
 msgid "Paragraphs"
 msgstr ""
 
@@ -8925,121 +8925,121 @@ msgstr ""
 msgid "Non-Dolch words"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6246
+#: projects/standard_project_doc.cpp:6247
 #, c-format
 msgid "%s (Unfamiliar) Report"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6275
-#: projects/standard_project_doc.cpp:6388
+#: projects/standard_project_doc.cpp:6276
+#: projects/standard_project_doc.cpp:6389
 #, c-format
 msgid "Unfamiliar %s words"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6483
-#: ui/dialogs/tools_options_dlg.h:558
+#: projects/standard_project_doc.cpp:6484
+#: ui/dialogs/tools_options_dlg.h:566
 msgid "Highlighted Report"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6554
+#: projects/standard_project_doc.cpp:6555
 msgid "Highlighted Dolch Words"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6563
+#: projects/standard_project_doc.cpp:6564
 msgid "Highlighted Non-Dolch Words"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6577
+#: projects/standard_project_doc.cpp:6578
 msgid ""
 "An internal error occurred while formatting the "
 "highlighted text. Please contact the software vendor."
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6696
+#: projects/standard_project_doc.cpp:6697
 msgid "Spache (Unfamiliar) Report"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6727
+#: projects/standard_project_doc.cpp:6728
 msgid "Harris-Jacobson (Unfamiliar) Report"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6767
+#: projects/standard_project_doc.cpp:6768
 msgid "Dale-Chall (Unfamiliar) Report"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6807
+#: projects/standard_project_doc.cpp:6808
 msgid ""
 "Project appears to be open by another application. Cannot "
 "save project."
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6997
-#: projects/standard_project_doc.cpp:7495
-#: projects/standard_project_doc.cpp:7726
-#: projects/standard_project_doc.cpp:7798
+#: projects/standard_project_doc.cpp:6998
+#: projects/standard_project_doc.cpp:7496
+#: projects/standard_project_doc.cpp:7727
+#: projects/standard_project_doc.cpp:7799
 msgid "Sentence"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6998
+#: projects/standard_project_doc.cpp:6999
 msgid "Word Count"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:6999
-#: projects/standard_project_doc.cpp:7172
-#: projects/standard_project_doc.cpp:7292
-#: projects/standard_project_doc.cpp:7397
-#: projects/standard_project_doc.cpp:7497
-#: projects/standard_project_doc.cpp:7545
-#: projects/standard_project_doc.cpp:7587
-#: projects/standard_project_doc.cpp:7727
-#: projects/standard_project_doc.cpp:7799
+#: projects/standard_project_doc.cpp:7000
+#: projects/standard_project_doc.cpp:7173
+#: projects/standard_project_doc.cpp:7293
+#: projects/standard_project_doc.cpp:7398
+#: projects/standard_project_doc.cpp:7498
+#: projects/standard_project_doc.cpp:7546
+#: projects/standard_project_doc.cpp:7588
+#: projects/standard_project_doc.cpp:7728
+#: projects/standard_project_doc.cpp:7800
 msgid "Sentence #"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7233
+#: projects/standard_project_doc.cpp:7234
 msgid "Misspelling"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7291
+#: projects/standard_project_doc.cpp:7292
 msgid "Words that Appear Twice Adjacently"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7353
+#: projects/standard_project_doc.cpp:7354
 msgid "Article Mismatch"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7494
+#: projects/standard_project_doc.cpp:7495
 msgid "Repeated Word"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7586
+#: projects/standard_project_doc.cpp:7587
 msgid "Explanation/Suggestion"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7863
-#: projects/standard_project_doc.cpp:7954
+#: projects/standard_project_doc.cpp:7864
+#: projects/standard_project_doc.cpp:7955
 #: ui/dialogs/word_list_dlg.cpp:292
 msgid "Category"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7986
+#: projects/standard_project_doc.cpp:7987
 msgid ""
 "Simple Words\n"
 "(1-2 syllables)"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:7986
+#: projects/standard_project_doc.cpp:7987
 msgid ""
 "Complex Words\n"
 "(3+ syllables)"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:8115
+#: projects/standard_project_doc.cpp:8116
 #, c-format
 msgid "Sentence #%s (%s)"
 msgstr ""
 
-#: projects/standard_project_doc.cpp:8134
+#: projects/standard_project_doc.cpp:8135
 #, c-format
 msgid "Sentence #%s"
 msgstr ""
@@ -9533,7 +9533,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:1463
 #: ui/controls/explanation_listctrl.cpp:250
-#: ui/dialogs/tools_options_dlg.h:588
+#: ui/dialogs/tools_options_dlg.h:596
 msgid "Explanation"
 msgstr ""
 
@@ -9691,7 +9691,7 @@ msgid ""
 msgstr ""
 
 #: results-format/project_report_format.cpp:2032
-#: ui/dialogs/tools_options_dlg.h:612
+#: ui/dialogs/tools_options_dlg.h:620
 #: ui/dialogs/word_list_dlg.cpp:183
 msgid "Words"
 msgstr ""
@@ -10042,7 +10042,7 @@ msgid "Last modified"
 msgstr ""
 
 #: results-format/project_report_format.cpp:3771
-#: ui/dialogs/tools_options_dlg.h:630
+#: ui/dialogs/tools_options_dlg.h:638
 msgid "Notes"
 msgstr ""
 
@@ -11724,7 +11724,7 @@ msgid "Shortcut for %s."
 msgstr ""
 
 #: ui/dialogs/custom_test_dlg.cpp:747
-#: ui/dialogs/tools_options_dlg.h:826
+#: ui/dialogs/tools_options_dlg.h:834
 msgid "General Settings"
 msgstr ""
 
@@ -11842,12 +11842,12 @@ msgid "Proper Nouns & Numerals"
 msgstr ""
 
 #: ui/dialogs/custom_test_dlg.cpp:1004
-#: ui/dialogs/tools_options_dlg.cpp:4161
+#: ui/dialogs/tools_options_dlg.cpp:3765
 msgid "Count as unfamiliar"
 msgstr ""
 
 #: ui/dialogs/custom_test_dlg.cpp:1005
-#: ui/dialogs/tools_options_dlg.cpp:4162
+#: ui/dialogs/tools_options_dlg.cpp:3766
 msgid "Count as familiar"
 msgstr ""
 
@@ -12093,13 +12093,13 @@ msgstr ""
 
 #: ui/dialogs/edit_text_dlg.cpp:261
 #: ui/dialogs/edit_text_dlg.cpp:538
-#: ui/dialogs/lua_editor_dlg.cpp:491
-#: ui/dialogs/lua_editor_dlg.cpp:739
+#: ui/dialogs/lua_editor_dlg.cpp:505
+#: ui/dialogs/lua_editor_dlg.cpp:753
 msgid "Replace"
 msgstr ""
 
 #: ui/dialogs/edit_text_dlg.cpp:265
-#: ui/dialogs/lua_editor_dlg.cpp:741
+#: ui/dialogs/lua_editor_dlg.cpp:755
 msgid "Replace text."
 msgstr ""
 
@@ -12220,7 +12220,7 @@ msgstr ""
 #. TRANSLATORS: An exception for a word before a phrase that negates
 #. a grammar check.
 #: ui/dialogs/edit_word_list_dlg.cpp:342
-msgid "Proceeding Exception"
+msgid "Preceding Exception"
 msgstr ""
 
 #. TRANSLATORS: An exception for a word after a phrase that negates
@@ -12340,7 +12340,8 @@ msgid "Along with text exclusion, also:"
 msgstr ""
 
 #: ui/dialogs/filtered_text_export_options_dlg.cpp:64
-msgid "Romanize (replace special characters)"
+msgid ""
+"Romanize text (replace accented and special characters)"
 msgstr ""
 
 #: ui/dialogs/filtered_text_export_options_dlg.cpp:68
@@ -12427,86 +12428,100 @@ msgstr ""
 
 #. TRANSLATORS: placeholders are a line number and error message
 #. from a script
-#: ui/dialogs/lua_editor_dlg.cpp:134
+#: ui/dialogs/lua_editor_dlg.cpp:140
 #, c-format
 msgid "Line #%s: %s"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:138
+#: ui/dialogs/lua_editor_dlg.cpp:144
 msgid "Error:"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:208
-#: ui/dialogs/lua_editor_dlg.cpp:773
+#: ui/dialogs/lua_editor_dlg.cpp:221
+#: ui/dialogs/lua_editor_dlg.cpp:795
 msgid "(unnamed)"
 msgstr ""
 
 #. TRANSLATORS: %s is the program name
-#: ui/dialogs/lua_editor_dlg.cpp:685
+#: ui/dialogs/lua_editor_dlg.cpp:699
 #, c-format
 msgid "Imports %s specific enumerations"
 msgstr ""
 
 #. TRANSLATORS: A programming script.
-#: ui/dialogs/lua_editor_dlg.cpp:720
+#: ui/dialogs/lua_editor_dlg.cpp:734
 msgid "Create a new script."
 msgstr ""
 
 #. TRANSLATORS: A programming script.
-#: ui/dialogs/lua_editor_dlg.cpp:724
+#: ui/dialogs/lua_editor_dlg.cpp:738
 msgid "Open a script."
 msgstr ""
 
 #. TRANSLATORS: A programming script.
-#: ui/dialogs/lua_editor_dlg.cpp:728
+#: ui/dialogs/lua_editor_dlg.cpp:742
 msgid "Save the script."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:729
+#: ui/dialogs/lua_editor_dlg.cpp:743
 msgid "Run"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:731
+#: ui/dialogs/lua_editor_dlg.cpp:745
 msgid "Execute the script (or selection)."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:732
+#: ui/dialogs/lua_editor_dlg.cpp:746
 msgid "Stop"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:734
+#: ui/dialogs/lua_editor_dlg.cpp:748
 msgid "Stop the currently running script."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:738
+#: ui/dialogs/lua_editor_dlg.cpp:752
 msgid "Find text."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:745
+#: ui/dialogs/lua_editor_dlg.cpp:759
 msgid "Clear the log window."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:749
+#: ui/dialogs/lua_editor_dlg.cpp:763
 msgid "View the function browser."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:750
+#: ui/dialogs/lua_editor_dlg.cpp:764
 msgid "Content"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:752
+#: ui/dialogs/lua_editor_dlg.cpp:766
 msgid "View the documentation."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:753
+#: ui/dialogs/lua_editor_dlg.cpp:767
 msgid "Lua Reference"
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:755
+#: ui/dialogs/lua_editor_dlg.cpp:769
 msgid "View the Lua Reference Manual."
 msgstr ""
 
-#: ui/dialogs/lua_editor_dlg.cpp:817
+#. TRANSLATORS: Libraries  in a programming language.
+#: ui/dialogs/lua_editor_dlg.cpp:808
+msgid "Libraries"
+msgstr ""
+
+#. TRANSLATORS: Classes in a programming language.
+#: ui/dialogs/lua_editor_dlg.cpp:811
+msgid "Classes"
+msgstr ""
+
+#: ui/dialogs/lua_editor_dlg.cpp:812
+msgid "Enumerations"
+msgstr ""
+
+#: ui/dialogs/lua_editor_dlg.cpp:844
 msgid "Debug Output"
 msgstr ""
 
@@ -12601,7 +12616,7 @@ msgid "Add a document"
 msgstr ""
 
 #: ui/dialogs/project_wizard_dlg.cpp:420
-#: ui/dialogs/tools_options_dlg.cpp:3660
+#: ui/dialogs/tools_options_dlg.cpp:5093
 msgid "Remove selected document"
 msgstr ""
 
@@ -12610,12 +12625,12 @@ msgid "Group selected documents"
 msgstr ""
 
 #: ui/dialogs/project_wizard_dlg.cpp:473
-#: ui/dialogs/tools_options_dlg.cpp:3686
+#: ui/dialogs/tools_options_dlg.cpp:5119
 msgid "Files"
 msgstr ""
 
 #: ui/dialogs/project_wizard_dlg.cpp:486
-#: ui/dialogs/tools_options_dlg.cpp:3513
+#: ui/dialogs/tools_options_dlg.cpp:4946
 msgid "Minimum document word count:"
 msgstr ""
 
@@ -13007,7 +13022,7 @@ msgid "Edit \"%s\" Test Bundle"
 msgstr ""
 
 #: ui/dialogs/test_bundle_dlg.cpp:118
-#: ui/dialogs/tools_options_dlg.h:868
+#: ui/dialogs/tools_options_dlg.h:876
 msgid "General"
 msgstr ""
 
@@ -13147,14 +13162,14 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:136
-#: ui/dialogs/tools_options_dlg.cpp:4213
+#: ui/dialogs/tools_options_dlg.cpp:3817
 msgid ""
 "* Numeral syllabication system default: numerals are one "
 "syllable."
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:137
-#: ui/dialogs/tools_options_dlg.cpp:4214
+#: ui/dialogs/tools_options_dlg.cpp:3818
 msgid ""
 "* Numeral syllabication system default: sound out each "
 "digit."
@@ -13165,21 +13180,21 @@ msgid "Add Documents to Project"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:326
-#: ui/dialogs/tools_options_dlg.cpp:4229
+#: ui/dialogs/tools_options_dlg.cpp:3833
 msgid ""
 "** Text exclusion system default: exclude all incomplete "
 "sentences."
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:333
-#: ui/dialogs/tools_options_dlg.cpp:4230
+#: ui/dialogs/tools_options_dlg.cpp:3834
 msgid ""
 "** Text exclusion system default: exclude all incomplete "
 "sentences, except headings."
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:342
-#: ui/dialogs/tools_options_dlg.cpp:4227
+#: ui/dialogs/tools_options_dlg.cpp:3831
 msgid ""
 "** Text exclusion system default: do not exclude any text."
 msgstr ""
@@ -13273,258 +13288,121 @@ msgstr ""
 msgid "Reset Settings"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3365
-msgid "UI language (requires restart):"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3369
-msgid "System Default"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3380
-msgid "Settings:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3387
-msgid "Import..."
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3395
-msgid "Reset"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3398
-msgid "Internet:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3408
-#: ui/dialogs/web_harvester_dlg.cpp:387
-msgid "User agent:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3416
-#: ui/dialogs/web_harvester_dlg.cpp:398
-msgid "Disable SSL certificate verification"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3422
-#: ui/dialogs/web_harvester_dlg.cpp:405
-msgid "Use JavaScript cookies"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3428
-msgid "Persist cookies during each harvest"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3436
-msgid "Warnings && Prompts:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3443
-msgid "Customize..."
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3446
-msgid "Log:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3452
-msgid "Verbose logging"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3457
-msgid "Append daily log"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3475
-msgid "Project:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3479
-msgid "Reviewer:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3489
-msgid "Status:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3507
-msgid "Batch options"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3529
-msgid "File path display:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3533
-msgid "Partially truncate the file path"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3534
-msgid "Show only the file name"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3535
-msgid "Show the full file path"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3548
-msgid "Document:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3557
-msgid "Language:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3572
-msgid "&Embed the document's text into the project"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3573
-msgid "&Reload the document when opening project"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3575
-msgid "Linking and embedding"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3587
-msgid "Real-time update"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3627
-msgid "Document description:"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3643
-msgid "Browse for documents to add"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3652
-msgid "Enter a document"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3706
-msgid ""
-"Append Additional Document (e.g., policies, license "
-"agreements, addendums):"
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:3737
+#: ui/dialogs/tools_options_dlg.cpp:3338
 msgid "Document Indexing"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3743
+#: ui/dialogs/tools_options_dlg.cpp:3344
 msgid "Consider Sentences Overly Long If:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3752
+#: ui/dialogs/tools_options_dlg.cpp:3353
 msgid "&Longer than"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3765
-#: ui/dialogs/tools_options_dlg.cpp:3866
+#: ui/dialogs/tools_options_dlg.cpp:3366
+#: ui/dialogs/tools_options_dlg.cpp:3467
 msgid "words"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3771
+#: ui/dialogs/tools_options_dlg.cpp:3372
 msgid "Out&side sentence-length outlier range"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3778
+#: ui/dialogs/tools_options_dlg.cpp:3379
 msgid "Sentence/Paragraph Deduction:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3785
+#: ui/dialogs/tools_options_dlg.cpp:3386
 msgid "Line ends:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3789
+#: ui/dialogs/tools_options_dlg.cpp:3390
 msgid ""
 "only begin a new paragraph if following a valid sentence"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3790
+#: ui/dialogs/tools_options_dlg.cpp:3391
 msgid "always begin a new paragraph"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3799
+#: ui/dialogs/tools_options_dlg.cpp:3400
 msgid "Ignore &blank lines"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3809
+#: ui/dialogs/tools_options_dlg.cpp:3410
 msgid "&Ignore indenting"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3819
+#: ui/dialogs/tools_options_dlg.cpp:3420
 msgid "Sentences must begin with capitalized words"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3826
+#: ui/dialogs/tools_options_dlg.cpp:3427
 msgid "Text Exclusion:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3832
+#: ui/dialogs/tools_options_dlg.cpp:3433
 msgid "Exclusion:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3849
+#: ui/dialogs/tools_options_dlg.cpp:3450
 msgid "Include incomplete sentences containing more than"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3876
+#: ui/dialogs/tools_options_dlg.cpp:3477
 msgid "Aggressive exclusion"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3885
+#: ui/dialogs/tools_options_dlg.cpp:3486
 msgid "Also exclude Internet and file addresses"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3894
+#: ui/dialogs/tools_options_dlg.cpp:3495
 msgid "Also exclude &copyright notices"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3903
+#: ui/dialogs/tools_options_dlg.cpp:3504
 msgid "Also exclude numerals"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3912
+#: ui/dialogs/tools_options_dlg.cpp:3513
 msgid "Also exclude trailing citations"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3921
+#: ui/dialogs/tools_options_dlg.cpp:3522
 msgid "Also exclude proper nouns"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3930
+#: ui/dialogs/tools_options_dlg.cpp:3531
 msgid "Words && phrases to exclude:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:3950
+#: ui/dialogs/tools_options_dlg.cpp:3551
 msgid "Include first occurrence"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4001
+#: ui/dialogs/tools_options_dlg.cpp:3602
 msgid "Exclude text between:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4026
+#: ui/dialogs/tools_options_dlg.cpp:3627
 msgid "Numerals:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4029
+#: ui/dialogs/tools_options_dlg.cpp:3630
 msgid "Syllabication:"
 msgstr ""
 
 #. TRANSLATORS: "Gunning Fog" should not be translated; it is a test name.
-#: ui/dialogs/tools_options_dlg.cpp:4076
+#: ui/dialogs/tools_options_dlg.cpp:3680
 msgid ""
 "The options in this section customize how Gunning Fog "
 "related tests are calculated."
 msgstr ""
 
 #. TRANSLATORS: "Gunning Fog" should not be translated; it is a test name.
-#: ui/dialogs/tools_options_dlg.cpp:4089
+#: ui/dialogs/tools_options_dlg.cpp:3693
 msgid ""
 "Check this option to count independent clauses as "
 "separate sentences when calculating a Gunning Fog score. "
@@ -13532,414 +13410,414 @@ msgid ""
 "semicolons within a sentence."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4096
+#: ui/dialogs/tools_options_dlg.cpp:3700
 msgid ""
 "The options in this section customize how Flesch related "
 "tests are calculated."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4100
+#: ui/dialogs/tools_options_dlg.cpp:3704
 msgid "Count numerals as one syllable"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4101
-#: ui/dialogs/tools_options_dlg.cpp:4125
+#: ui/dialogs/tools_options_dlg.cpp:3705
+#: ui/dialogs/tools_options_dlg.cpp:3729
 msgid "System default*"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4111
+#: ui/dialogs/tools_options_dlg.cpp:3715
 msgid ""
 "Controls how numerals are syllabized for Flesch related "
 "tests."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4121
+#: ui/dialogs/tools_options_dlg.cpp:3725
 msgid ""
 "The options in this section customize how Flesch-Kincaid "
 "is calculated."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4136
+#: ui/dialogs/tools_options_dlg.cpp:3740
 msgid ""
 "Controls how numerals are syllabized for Flesch-Kincaid."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4145
+#: ui/dialogs/tools_options_dlg.cpp:3749
 msgid ""
 "The options in this section customize how Dale-Chall "
 "related tests are calculated."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4157
+#: ui/dialogs/tools_options_dlg.cpp:3761
 msgid ""
 "Check this option to include Stocker's supplementary word "
 "list for Catholic students."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4163
+#: ui/dialogs/tools_options_dlg.cpp:3767
 msgid "First occurrence of each is unfamiliar"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4173
+#: ui/dialogs/tools_options_dlg.cpp:3777
 msgid ""
 "Controls how proper nouns are treated by Dale-Chall "
 "related tests."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4176
+#: ui/dialogs/tools_options_dlg.cpp:3780
 msgid "Exclude incomplete sentences, except headings"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4177
+#: ui/dialogs/tools_options_dlg.cpp:3781
 msgid "System default**"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4186
+#: ui/dialogs/tools_options_dlg.cpp:3790
 msgid ""
 "Controls how text is excluded in Dale-Chall related tests."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4191
+#: ui/dialogs/tools_options_dlg.cpp:3795
 msgid ""
 "The options in this section customize how Harris-Jacobson "
 "is calculated."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4202
+#: ui/dialogs/tools_options_dlg.cpp:3806
 msgid "Controls how text is excluded in Harris-Jacobson."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4253
+#: ui/dialogs/tools_options_dlg.cpp:3857
 msgid ""
 "The options in this section customize which results to "
 "display in the Scores section."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4265
+#: ui/dialogs/tools_options_dlg.cpp:3869
 msgid ""
 "Check this option to include a summary report of the test "
 "scores in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4272
+#: ui/dialogs/tools_options_dlg.cpp:3876
 msgid ""
 "The options in this section customize how the grade "
 "scores are displayed."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4320
+#: ui/dialogs/tools_options_dlg.cpp:3924
 msgid ""
 "Select from this list the grade scale that you wish to "
 "use."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4335
+#: ui/dialogs/tools_options_dlg.cpp:3939
 msgid ""
 "Check this to display readability scores in long format "
 "(e.g., \"2nd grade\") within the score grid."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4341
+#: ui/dialogs/tools_options_dlg.cpp:3945
 msgid ""
 "The options in this section customize how reading ages "
 "are displayed."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4344
+#: ui/dialogs/tools_options_dlg.cpp:3948
 msgid "School-year range"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4345
+#: ui/dialogs/tools_options_dlg.cpp:3949
 msgid "Round to semester"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4357
+#: ui/dialogs/tools_options_dlg.cpp:3961
 msgid ""
 "Selects how reading ages should be calculated from grade "
 "scores."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4384
+#: ui/dialogs/tools_options_dlg.cpp:3991
 msgid ""
 "The options in this section customize which results to "
 "include in the Summary Statistics."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4395
+#: ui/dialogs/tools_options_dlg.cpp:4002
 msgid ""
 "Check this to include the statistics report in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4405
+#: ui/dialogs/tools_options_dlg.cpp:4012
 msgid ""
 "Check this to include the statistics (tabular format) in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4410
+#: ui/dialogs/tools_options_dlg.cpp:4017
 msgid ""
 "The options in this section customize which statistics "
 "are included in the report and results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4421
+#: ui/dialogs/tools_options_dlg.cpp:4028
 msgid ""
 "Check this to include the paragraph statistics in the "
 "report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4431
+#: ui/dialogs/tools_options_dlg.cpp:4038
 msgid ""
 "Check this to include the sentence statistics in the "
 "report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4440
-#: ui/dialogs/tools_options_dlg.cpp:4513
+#: ui/dialogs/tools_options_dlg.cpp:4047
+#: ui/dialogs/tools_options_dlg.cpp:4120
 msgid ""
 "Check this to include the word statistics in the report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4450
+#: ui/dialogs/tools_options_dlg.cpp:4057
 msgid ""
 "Check this to include extended word statistics (e.g., "
 "numerals) in the report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4459
+#: ui/dialogs/tools_options_dlg.cpp:4066
 msgid ""
 "Check this to include grammar statistics in the report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4468
+#: ui/dialogs/tools_options_dlg.cpp:4075
 msgid "Check this to include the notes in the report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4481
+#: ui/dialogs/tools_options_dlg.cpp:4088
 msgid ""
 "Check this to include more verbose statistics and notes "
 "in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4489
+#: ui/dialogs/tools_options_dlg.cpp:4096
 msgid ""
 "The options in this section customize which statistics "
 "are included in the Dolch report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4503
+#: ui/dialogs/tools_options_dlg.cpp:4110
 msgid ""
 "Check this to include the word coverage statistics in the "
 "report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4527
+#: ui/dialogs/tools_options_dlg.cpp:4134
 msgid ""
 "Check this to include the Dolch explanation in the report."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4554
+#: ui/dialogs/tools_options_dlg.cpp:4164
 msgid ""
 "The options on this page customize which results are "
 "included in the Words Breakdown section"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4566
+#: ui/dialogs/tools_options_dlg.cpp:4176
 msgid ""
 "Check this to include the word barchart in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4577
+#: ui/dialogs/tools_options_dlg.cpp:4187
 msgid ""
 "Check this to include the syllable histogram and pie "
 "chart in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4588
+#: ui/dialogs/tools_options_dlg.cpp:4198
 msgid ""
 "Check this to include the 3+ syllable words list in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4599
+#: ui/dialogs/tools_options_dlg.cpp:4209
 msgid ""
 "Check this to include the 6+ character words in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4610
+#: ui/dialogs/tools_options_dlg.cpp:4220
 msgid ""
 "Check this to include the key word cloud in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4621
+#: ui/dialogs/tools_options_dlg.cpp:4231
 msgid ""
 "Check this to include the Dale-Chall unfamiliar words "
 "list in the results. (If a Dale-Chall test is included in "
 "the project)."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4633
+#: ui/dialogs/tools_options_dlg.cpp:4243
 msgid ""
 "Check this to include the Spache unfamiliar words list in "
 "the results. (If Spache is included in the project)."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4648
+#: ui/dialogs/tools_options_dlg.cpp:4258
 msgid ""
 "Check this to include the Harris-Jacobson unfamiliar "
 "words list in the results. (If Harris-Jacobson is "
 "included in the project)."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4663
+#: ui/dialogs/tools_options_dlg.cpp:4273
 msgid ""
 "Check this to include any custom tests' unfamiliar words "
 "lists in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4674
+#: ui/dialogs/tools_options_dlg.cpp:4284
 msgid ""
 "Check this to include a list of all words in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4685
+#: ui/dialogs/tools_options_dlg.cpp:4295
 msgid ""
 "Check this to include a list of all words (in condensed "
 "form) in the results. Words with the same root (e.g., "
 "\"run\" and \"running\") will be combined into one row."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4715
+#: ui/dialogs/tools_options_dlg.cpp:4328
 msgid ""
 "The options on this page customize which results are "
 "included in the Sentences Breakdown section"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4730
+#: ui/dialogs/tools_options_dlg.cpp:4343
 msgid ""
 "Check this to include the overly-long sentences list in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4744
+#: ui/dialogs/tools_options_dlg.cpp:4357
 msgid ""
 "Check this to include the sentence-lengths box plot in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4758
+#: ui/dialogs/tools_options_dlg.cpp:4371
 msgid ""
 "Check this to include the sentence-lengths histogram in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4772
+#: ui/dialogs/tools_options_dlg.cpp:4385
 msgid ""
 "Check this to include the sentence-lengths heatmap in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4799
+#: ui/dialogs/tools_options_dlg.cpp:4415
 msgid ""
 "The options in this section customize which features are "
 "included in the grammar analysis."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4811
+#: ui/dialogs/tools_options_dlg.cpp:4427
 msgid ""
 "Check this to include the highlighted grammar report in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4822
+#: ui/dialogs/tools_options_dlg.cpp:4438
 msgid ""
 "Check this to include wording errors and known "
 "misspellings in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4833
+#: ui/dialogs/tools_options_dlg.cpp:4449
 msgid ""
 "Check this to include possible misspellings in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4844
+#: ui/dialogs/tools_options_dlg.cpp:4460
 msgid "Check this to include repeated words in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4855
+#: ui/dialogs/tools_options_dlg.cpp:4471
 msgid ""
 "Check this to include article mismatches in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4866
+#: ui/dialogs/tools_options_dlg.cpp:4482
 msgid ""
 "Check this to include redundant phrases in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4877
+#: ui/dialogs/tools_options_dlg.cpp:4493
 msgid ""
 "Check this to include overused words (by sentence) in the "
 "results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4888
+#: ui/dialogs/tools_options_dlg.cpp:4504
 msgid "Check this to include wordy phrases in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4899
+#: ui/dialogs/tools_options_dlg.cpp:4515
 msgid "Check this to include clichés in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4910
+#: ui/dialogs/tools_options_dlg.cpp:4526
 msgid "Check this to include passive voice in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4925
+#: ui/dialogs/tools_options_dlg.cpp:4541
 msgid ""
 "Check this to include conjunction-starting sentences in "
 "the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4937
+#: ui/dialogs/tools_options_dlg.cpp:4553
 msgid ""
 "Check this to include lowercased sentences in the results."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4943
+#: ui/dialogs/tools_options_dlg.cpp:4559
 msgid ""
 "The options in this section select what the spell checker "
 "should ignore."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4954
+#: ui/dialogs/tools_options_dlg.cpp:4570
 msgid ""
 "Check this to not spell check proper nouns. This is "
 "useful for excluding names and places that the spell "
 "checker may not recognize."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4965
+#: ui/dialogs/tools_options_dlg.cpp:4581
 msgid ""
 "Check this to not spell check uppercased words (e.g., "
 "\"FORTRAN\" or \"S.C.U.B.A.\")."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4977
+#: ui/dialogs/tools_options_dlg.cpp:4593
 msgid ""
 "Check this to not spell check numerals. Numerals are "
 "words that consist of 50% (or more) numbers."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:4989
+#: ui/dialogs/tools_options_dlg.cpp:4605
 msgid ""
 "Check this to not spell check file paths and website "
 "addresses."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5000
+#: ui/dialogs/tools_options_dlg.cpp:4616
 msgid ""
 "Check this to not spell check words with mixed upper and "
 "lower case words. This is useful for excluding "
@@ -13947,101 +13825,238 @@ msgid ""
 "documents."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5012
+#: ui/dialogs/tools_options_dlg.cpp:4628
 msgid ""
 "Check this to allow colloquialisms, such as \"ing\" at "
 "the end of a word being replaced with \"in'\"."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5024
+#: ui/dialogs/tools_options_dlg.cpp:4640
 msgid ""
 "Check this to ignore hashtags, such as "
 "#ReadabilityFormulasRock."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5047
+#: ui/dialogs/tools_options_dlg.cpp:4669
 msgid "Formatting"
 msgstr ""
 
 #. TRANSLATORS: How text is highlighted
-#: ui/dialogs/tools_options_dlg.cpp:5062
-#: ui/dialogs/tools_options_dlg.cpp:5133
+#: ui/dialogs/tools_options_dlg.cpp:4684
+#: ui/dialogs/tools_options_dlg.cpp:4755
 msgid "Highlighting"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5070
+#: ui/dialogs/tools_options_dlg.cpp:4692
 msgid "Excluded text color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5080
+#: ui/dialogs/tools_options_dlg.cpp:4702
 msgid "Difficult words and sentences color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5090
+#: ui/dialogs/tools_options_dlg.cpp:4712
 msgid "Grammar errors color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5100
+#: ui/dialogs/tools_options_dlg.cpp:4722
 msgid "Wordy items color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5109
+#: ui/dialogs/tools_options_dlg.cpp:4731
 msgid "Highlight text by changing its:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5113
+#: ui/dialogs/tools_options_dlg.cpp:4735
 msgid "Background color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5114
+#: ui/dialogs/tools_options_dlg.cpp:4736
 msgid "Font color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5151
+#: ui/dialogs/tools_options_dlg.cpp:4773
 msgid "Dolch conjunctions color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5169
+#: ui/dialogs/tools_options_dlg.cpp:4791
 msgid "Dolch prepositions color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5187
+#: ui/dialogs/tools_options_dlg.cpp:4809
 msgid "Dolch pronouns color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5205
+#: ui/dialogs/tools_options_dlg.cpp:4827
 msgid "Dolch adverbs color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5223
+#: ui/dialogs/tools_options_dlg.cpp:4845
 msgid "Dolch adjectives color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5241
+#: ui/dialogs/tools_options_dlg.cpp:4863
 msgid "Dolch verbs color:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5259
+#: ui/dialogs/tools_options_dlg.cpp:4881
 msgid "Dolch nouns color:"
 msgstr ""
 
+#: ui/dialogs/tools_options_dlg.cpp:4908
+msgid "Project:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4912
+msgid "Reviewer:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4922
+msgid "Status:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4940
+msgid "Batch options"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4962
+msgid "File path display:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4966
+msgid "Partially truncate the file path"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4967
+msgid "Show only the file name"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4968
+msgid "Show the full file path"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4981
+msgid "Document:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:4990
+msgid "Language:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5005
+msgid "&Embed the document's text into the project"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5006
+msgid "&Reload the document when opening project"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5008
+msgid "Linking and embedding"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5020
+msgid "Real-time update"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5060
+msgid "Document description:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5076
+msgid "Browse for documents to add"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5085
+msgid "Enter a document"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5139
+msgid ""
+"Append Additional Document (e.g., policies, license "
+"agreements, addendums):"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5199
+msgid "UI language (requires restart):"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5203
+msgid "System Default"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5214
+msgid "Settings:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5221
+msgid "Import..."
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5229
+msgid "Reset"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5232
+msgid "Internet:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5242
+#: ui/dialogs/web_harvester_dlg.cpp:387
+msgid "User agent:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5250
+#: ui/dialogs/web_harvester_dlg.cpp:398
+msgid "Disable SSL certificate verification"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5256
+#: ui/dialogs/web_harvester_dlg.cpp:405
+msgid "Use JavaScript cookies"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5262
+msgid "Persist cookies during each harvest"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5270
+msgid "Warnings && Prompts:"
+msgstr ""
+
 #: ui/dialogs/tools_options_dlg.cpp:5277
+msgid "Customize..."
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5280
+msgid "Log:"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5286
+msgid "Verbose logging"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5291
+msgid "Append daily log"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5330
 #, c-format
 msgid "%s Options"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5278
+#: ui/dialogs/tools_options_dlg.cpp:5331
 msgid ""
 "These options will only affect new projects.\n"
 "To change an existing project, click \"Properties\" on "
 "the Home tab."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5297
+#: ui/dialogs/tools_options_dlg.cpp:5350
 msgid "Project Properties"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5298
+#: ui/dialogs/tools_options_dlg.cpp:5351
 #, c-format
 msgid ""
 "These options only affect the current project (\"%s\").\n"
@@ -14049,55 +14064,55 @@ msgid ""
 "on the \"Tools\" tab."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5374
-#: ui/dialogs/tools_options_dlg.cpp:5412
+#: ui/dialogs/tools_options_dlg.cpp:5427
+#: ui/dialogs/tools_options_dlg.cpp:5465
 msgid "Fonts:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5376
+#: ui/dialogs/tools_options_dlg.cpp:5429
 msgid "Top titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5382
+#: ui/dialogs/tools_options_dlg.cpp:5435
 msgid "Bottom titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5388
+#: ui/dialogs/tools_options_dlg.cpp:5441
 msgid "Left titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5394
+#: ui/dialogs/tools_options_dlg.cpp:5447
 msgid "Right titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5413
+#: ui/dialogs/tools_options_dlg.cpp:5466
 msgid "X axis"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5417
+#: ui/dialogs/tools_options_dlg.cpp:5470
 msgid "Y axis"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5463
+#: ui/dialogs/tools_options_dlg.cpp:5516
 msgid ""
 "Select from here the color scheme to apply to pie charts, "
 "word clouds, and grouped histograms."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5469
+#: ui/dialogs/tools_options_dlg.cpp:5522
 msgid ""
 "The options in this section customize the backgrounds of "
 "the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5476
+#: ui/dialogs/tools_options_dlg.cpp:5529
 msgid ""
 "Selects the color for the graphs' background. Note that "
 "if you are displaying an image, then the image will be "
 "shown on top of this color."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5487
+#: ui/dialogs/tools_options_dlg.cpp:5540
 msgid ""
 "Check this to apply a downward fade to the background "
 "color of your graphs. The background of your graphs will "
@@ -14105,61 +14120,61 @@ msgid ""
 "have selected into white."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5494
+#: ui/dialogs/tools_options_dlg.cpp:5547
 msgid ""
 "The options in this section customize the plot area "
 "backgrounds of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5503
+#: ui/dialogs/tools_options_dlg.cpp:5556
 msgid ""
 "Selects the color for the plot area background of the "
 "graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5513
+#: ui/dialogs/tools_options_dlg.cpp:5566
 msgid ""
 "Sets the transparency of the plot background color. A "
 "value of 255 will set the background to be fully opaque, "
 "whereas 0 will set the background to be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5528
-#: ui/dialogs/tools_options_dlg.cpp:5603
-#: ui/dialogs/tools_options_dlg.cpp:5627
-#: ui/dialogs/tools_options_dlg.cpp:5681
+#: ui/dialogs/tools_options_dlg.cpp:5581
+#: ui/dialogs/tools_options_dlg.cpp:5656
+#: ui/dialogs/tools_options_dlg.cpp:5680
+#: ui/dialogs/tools_options_dlg.cpp:5734
 msgid "Select an image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5529
+#: ui/dialogs/tools_options_dlg.cpp:5582
 msgid "Selects the image for the graphs' background."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5533
+#: ui/dialogs/tools_options_dlg.cpp:5586
 msgid "No effect"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5535
+#: ui/dialogs/tools_options_dlg.cpp:5588
 msgid "Blur horizontally"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5536
+#: ui/dialogs/tools_options_dlg.cpp:5589
 msgid "Blur vertically"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5538
+#: ui/dialogs/tools_options_dlg.cpp:5591
 msgid "Frosted glass"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5539
+#: ui/dialogs/tools_options_dlg.cpp:5592
 msgid "Oil painting"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5545
+#: ui/dialogs/tools_options_dlg.cpp:5598
 msgid "Applies an effect to the plot background image."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5557
+#: ui/dialogs/tools_options_dlg.cpp:5610
 msgid ""
 "Sets the transparency of the plot background image. A "
 "value of 255 will set the image to be fully opaque, "
@@ -14167,224 +14182,224 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: "Crop" as in trimming an image. These are both verbs.
-#: ui/dialogs/tools_options_dlg.cpp:5564
+#: ui/dialogs/tools_options_dlg.cpp:5617
 msgid "Crop & center"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5565
+#: ui/dialogs/tools_options_dlg.cpp:5618
 msgid "Shrink to fit"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5571
+#: ui/dialogs/tools_options_dlg.cpp:5624
 msgid "How to fit the image within the plot background."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5583
+#: ui/dialogs/tools_options_dlg.cpp:5636
 msgid ""
 "The options in this section customize the watermarks and "
 "logo images of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5591
+#: ui/dialogs/tools_options_dlg.cpp:5644
 msgid "Enter text"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5593
+#: ui/dialogs/tools_options_dlg.cpp:5646
 msgid ""
 "Enter a label to be stamped across your graphs into this "
 "field. This label will be stamped diagonally, top left-"
 "hand corner to bottom right-hand corner."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5612
+#: ui/dialogs/tools_options_dlg.cpp:5665
 msgid ""
 "Enter the path to the image file used as your graphs' "
 "logo into this field. The logo will be displayed in the "
 "lower right-hand corner of each graph."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5618
+#: ui/dialogs/tools_options_dlg.cpp:5671
 msgid ""
 "The options in this section customize various visual "
 "effects of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5631
+#: ui/dialogs/tools_options_dlg.cpp:5684
 msgid ""
 "Enter into this field the file path to the image used for "
 "a stipple brush. A stipple brush can be used to draw "
 "stacked images across bars and boxes"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5662
+#: ui/dialogs/tools_options_dlg.cpp:5715
 msgid ""
 "Select from here which shape to use for a stipple brush. "
 "A stipple brush can be used to draw stacked shape across "
 "bars and boxes"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5670
+#: ui/dialogs/tools_options_dlg.cpp:5723
 msgid "Selects the color used for certain stipple shapes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5684
+#: ui/dialogs/tools_options_dlg.cpp:5737
 msgid ""
 "Enter into this field the file path to the common image "
 "used used to draw across all bars/boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5703
+#: ui/dialogs/tools_options_dlg.cpp:5756
 msgid ""
 "Check this to include shadows underneath items such as "
 "boxes, bars, and labels. Unchecking this option will give "
 "your graphs a more \"flat\" look."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5714
+#: ui/dialogs/tools_options_dlg.cpp:5767
 msgid ""
 "Check this to draw attention to the complex (i.e., 3+ "
 "syllable) word groups on syllable histograms and pie "
 "charts (standard projects)."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5740
+#: ui/dialogs/tools_options_dlg.cpp:5793
 msgid ""
 "The options in this section customize the Fry, Gilliam-"
 "Peña-Mountain, Raygor, and Schwartz graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5749
+#: ui/dialogs/tools_options_dlg.cpp:5802
 msgid ""
 "Selects the color for the invalid sentence/word regions."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5761
+#: ui/dialogs/tools_options_dlg.cpp:5814
 msgid "Selects the layout style of the Raygor graph."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5765
+#: ui/dialogs/tools_options_dlg.cpp:5818
 msgid ""
 "The options in this section customize the Flesch chart."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5775
+#: ui/dialogs/tools_options_dlg.cpp:5828
 msgid "Check this to connect the factor and score points."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5786
+#: ui/dialogs/tools_options_dlg.cpp:5839
 msgid ""
 "Check this to display document names grouped along the "
 "syllable ruler."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5791
+#: ui/dialogs/tools_options_dlg.cpp:5844
 msgid "The options in this section customize the Lix Gauge."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5801
+#: ui/dialogs/tools_options_dlg.cpp:5854
 msgid ""
 "Check this to display the English translated bracket "
 "labels on the German Lix gauge."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5827
-#: ui/dialogs/tools_options_dlg.cpp:5927
+#: ui/dialogs/tools_options_dlg.cpp:5880
+#: ui/dialogs/tools_options_dlg.cpp:5980
 msgid ""
 "The options in this section customize the display of the "
 "bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5836
-#: ui/dialogs/tools_options_dlg.cpp:5935
+#: ui/dialogs/tools_options_dlg.cpp:5889
+#: ui/dialogs/tools_options_dlg.cpp:5988
 msgid "Selects the color used for the bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5841
-#: ui/dialogs/tools_options_dlg.cpp:5939
-#: ui/dialogs/tools_options_dlg.cpp:6081
+#: ui/dialogs/tools_options_dlg.cpp:5894
+#: ui/dialogs/tools_options_dlg.cpp:5992
+#: ui/dialogs/tools_options_dlg.cpp:6134
 msgid "Glass effect"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5843
-#: ui/dialogs/tools_options_dlg.cpp:5941
+#: ui/dialogs/tools_options_dlg.cpp:5896
+#: ui/dialogs/tools_options_dlg.cpp:5994
 msgid "Color fade, bottom to top"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5845
-#: ui/dialogs/tools_options_dlg.cpp:5943
+#: ui/dialogs/tools_options_dlg.cpp:5898
+#: ui/dialogs/tools_options_dlg.cpp:5996
 msgid "Color fade, top to bottom"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5847
-#: ui/dialogs/tools_options_dlg.cpp:5945
-#: ui/dialogs/tools_options_dlg.cpp:6087
-#: ui/dialogs/tools_options_dlg.h:450
+#: ui/dialogs/tools_options_dlg.cpp:5900
+#: ui/dialogs/tools_options_dlg.cpp:5998
+#: ui/dialogs/tools_options_dlg.cpp:6140
+#: ui/dialogs/tools_options_dlg.h:458
 msgid "Stipple image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5849
-#: ui/dialogs/tools_options_dlg.cpp:5947
-#: ui/dialogs/tools_options_dlg.cpp:6089
-#: ui/dialogs/tools_options_dlg.h:456
-#: ui/dialogs/tools_options_dlg.h:462
+#: ui/dialogs/tools_options_dlg.cpp:5902
+#: ui/dialogs/tools_options_dlg.cpp:6000
+#: ui/dialogs/tools_options_dlg.cpp:6142
+#: ui/dialogs/tools_options_dlg.h:464
+#: ui/dialogs/tools_options_dlg.h:470
 msgid "Stipple shape"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5853
-#: ui/dialogs/tools_options_dlg.cpp:5950
-#: ui/dialogs/tools_options_dlg.cpp:6092
+#: ui/dialogs/tools_options_dlg.cpp:5906
+#: ui/dialogs/tools_options_dlg.cpp:6003
+#: ui/dialogs/tools_options_dlg.cpp:6145
 msgid "Thick watercolor"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5855
-#: ui/dialogs/tools_options_dlg.cpp:5952
-#: ui/dialogs/tools_options_dlg.cpp:6094
-#: ui/dialogs/tools_options_dlg.h:468
+#: ui/dialogs/tools_options_dlg.cpp:5908
+#: ui/dialogs/tools_options_dlg.cpp:6005
+#: ui/dialogs/tools_options_dlg.cpp:6147
+#: ui/dialogs/tools_options_dlg.h:476
 msgid "Common image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5863
-#: ui/dialogs/tools_options_dlg.cpp:5959
+#: ui/dialogs/tools_options_dlg.cpp:5916
+#: ui/dialogs/tools_options_dlg.cpp:6012
 msgid "Selects which effect to apply to the bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5877
-#: ui/dialogs/tools_options_dlg.cpp:5972
+#: ui/dialogs/tools_options_dlg.cpp:5930
+#: ui/dialogs/tools_options_dlg.cpp:6025
 msgid ""
 "Sets the transparency of the bars. A value of 255 will "
 "set the box to be fully opaque, whereas 0 will set the "
 "bars to be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5892
+#: ui/dialogs/tools_options_dlg.cpp:5945
 msgid ""
 "Selects whether to display the bars horizontally or "
 "vertically."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5903
+#: ui/dialogs/tools_options_dlg.cpp:5956
 msgid "Check this to display labels on the bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5980
+#: ui/dialogs/tools_options_dlg.cpp:6033
 msgid ""
 "The options in this section control how the data are "
 "categorized."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5985
+#: ui/dialogs/tools_options_dlg.cpp:6038
 msgid "Create a bin for each unique value"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5986
+#: ui/dialogs/tools_options_dlg.cpp:6039
 msgid "Sort by interval"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5987
+#: ui/dialogs/tools_options_dlg.cpp:6040
 msgid "Sort by neat interval"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5996
+#: ui/dialogs/tools_options_dlg.cpp:6049
 msgid ""
 "Binning refers to how values (e.g., index and grade "
 "scores) are categorized into separate classes. Each class "
@@ -14393,346 +14408,346 @@ msgid ""
 "and how your data are sorted into them."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6003
+#: ui/dialogs/tools_options_dlg.cpp:6056
 msgid "Round"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6004
+#: ui/dialogs/tools_options_dlg.cpp:6057
 msgid "Round down"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6005
+#: ui/dialogs/tools_options_dlg.cpp:6058
 msgid "Round up"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6006
+#: ui/dialogs/tools_options_dlg.cpp:6059
 msgid "Do not round"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6013
+#: ui/dialogs/tools_options_dlg.cpp:6066
 msgid ""
 "This option controls how floating-point values are "
 "rounded when being sorted into bins."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6019
+#: ui/dialogs/tools_options_dlg.cpp:6072
 msgid ""
 "The options in this section control how the bars are "
 "labeled."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6024
+#: ui/dialogs/tools_options_dlg.cpp:6077
 msgid "Cutpoints"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6025
+#: ui/dialogs/tools_options_dlg.cpp:6078
 msgid "Midpoints"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6033
+#: ui/dialogs/tools_options_dlg.cpp:6086
 msgid ""
 "Specifies how to display the bars' values range on the "
 "axis."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6039
+#: ui/dialogs/tools_options_dlg.cpp:6092
 msgid "Counts & percentages"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6047
+#: ui/dialogs/tools_options_dlg.cpp:6100
 msgid "Specifies what to display on the bars' labels."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6070
+#: ui/dialogs/tools_options_dlg.cpp:6123
 msgid ""
 "The options in this section customize the display of the "
 "boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6077
+#: ui/dialogs/tools_options_dlg.cpp:6130
 msgid "Selects the color used for the boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6083
+#: ui/dialogs/tools_options_dlg.cpp:6136
 msgid "Color fade, left to right"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6085
+#: ui/dialogs/tools_options_dlg.cpp:6138
 msgid "Color fade, right to left"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6101
+#: ui/dialogs/tools_options_dlg.cpp:6154
 msgid "Selects which effect to apply to the boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6112
+#: ui/dialogs/tools_options_dlg.cpp:6165
 msgid ""
 "Sets the transparency of the box. A value of 255 will set "
 "the box to be fully opaque, whereas 0 will set the box to "
 "be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6118
+#: ui/dialogs/tools_options_dlg.cpp:6171
 msgid ""
 "The options in this section customize the display of the "
 "labels and data."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6128
+#: ui/dialogs/tools_options_dlg.cpp:6181
 msgid ""
 "Check this to display labels on the middle points, upper/"
 "lower control limits, and whiskers."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6140
+#: ui/dialogs/tools_options_dlg.cpp:6193
 msgid ""
 "Check this to display a line connecting the middle points "
 "of each box. This only applies to plots with multiple "
 "boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6152
+#: ui/dialogs/tools_options_dlg.cpp:6205
 msgid ""
 "Check this to display all data points on the box and "
 "whiskers. If this is unchecked, then only outliers will "
 "be shown."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:299
+#: ui/dialogs/tools_options_dlg.h:307
 msgid "Invalid regions color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:305
+#: ui/dialogs/tools_options_dlg.h:313
 msgid "Raygor style"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:311
+#: ui/dialogs/tools_options_dlg.h:319
 msgid "Connect points"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:317
+#: ui/dialogs/tools_options_dlg.h:325
 msgid "Display grouped documents on syllable ruler"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:323
+#: ui/dialogs/tools_options_dlg.h:331
 msgid "Use English translations for German Lix gauge"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:329
+#: ui/dialogs/tools_options_dlg.h:337
 msgid "Color"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:341
+#: ui/dialogs/tools_options_dlg.h:349
 msgid "Effect"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:353
+#: ui/dialogs/tools_options_dlg.h:361
 msgid "Opacity"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:383
+#: ui/dialogs/tools_options_dlg.h:391
 msgid "Display labels on bars"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:389
+#: ui/dialogs/tools_options_dlg.h:397
 msgid "Display box & whisker labels"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:395
+#: ui/dialogs/tools_options_dlg.h:403
 msgid "Connect middle points"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:401
+#: ui/dialogs/tools_options_dlg.h:409
 msgid "Show all data points"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:413
+#: ui/dialogs/tools_options_dlg.h:421
 msgid "Sorting"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:419
+#: ui/dialogs/tools_options_dlg.h:427
 msgid "Grade level/index value rounding"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:425
+#: ui/dialogs/tools_options_dlg.h:433
 msgid "Interval display"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:437
+#: ui/dialogs/tools_options_dlg.h:445
 msgid "Display drop shadows"
 msgstr ""
 
 #. TRANSLATORS: "key" as in important.
-#: ui/dialogs/tools_options_dlg.h:444
+#: ui/dialogs/tools_options_dlg.h:452
 msgid "Showcase key items"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:480
+#: ui/dialogs/tools_options_dlg.h:488
 msgid "Logo image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:486
+#: ui/dialogs/tools_options_dlg.h:494
 msgid "Image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:510
+#: ui/dialogs/tools_options_dlg.h:518
 msgid "Ignore proper nouns"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:516
+#: ui/dialogs/tools_options_dlg.h:524
 msgid "Ignore UPPERCASED words"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:522
+#: ui/dialogs/tools_options_dlg.h:530
 msgid "Ignore numerals"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:528
+#: ui/dialogs/tools_options_dlg.h:536
 msgid "Ignore Internet and file addresses"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:534
+#: ui/dialogs/tools_options_dlg.h:542
 msgid "Ignore programmer code"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:540
+#: ui/dialogs/tools_options_dlg.h:548
 msgid "Allow colloquialisms"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:546
+#: ui/dialogs/tools_options_dlg.h:554
 msgid "Ignore social media hashtags"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:552
-#: ui/dialogs/tools_options_dlg.h:748
+#: ui/dialogs/tools_options_dlg.h:560
+#: ui/dialogs/tools_options_dlg.h:756
 msgid "Results"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:570
+#: ui/dialogs/tools_options_dlg.h:578
 msgid "Dolch Report"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:576
+#: ui/dialogs/tools_options_dlg.h:584
 msgid "Coverage"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:618
+#: ui/dialogs/tools_options_dlg.h:626
 msgid "Extended Words"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:636
+#: ui/dialogs/tools_options_dlg.h:644
 msgid "Extended Information"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:660
+#: ui/dialogs/tools_options_dlg.h:668
 msgid "Bar Appearance"
 msgstr ""
 
 #. TRANSLATORS: "Bins" are data ranges in a histogram that values fall into.
-#: ui/dialogs/tools_options_dlg.h:667
+#: ui/dialogs/tools_options_dlg.h:675
 msgid "Binning Options"
 msgstr ""
 
 #. TRANSLATORS: "Bins" are data ranges in a histogram that values fall into.
-#: ui/dialogs/tools_options_dlg.h:674
+#: ui/dialogs/tools_options_dlg.h:682
 msgid "Bin Display"
 msgstr ""
 
 #. TRANSLATORS: The boxes in a box plot.
-#: ui/dialogs/tools_options_dlg.h:681
+#: ui/dialogs/tools_options_dlg.h:689
 msgid "Box Appearance"
 msgstr ""
 
 #. TRANSLATORS: The boxes in a box plot.
-#: ui/dialogs/tools_options_dlg.h:688
+#: ui/dialogs/tools_options_dlg.h:696
 msgid "Box Options"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:694
+#: ui/dialogs/tools_options_dlg.h:702
 msgid "Color Scheme"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:706
+#: ui/dialogs/tools_options_dlg.h:714
 msgid "Plot Background"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:712
+#: ui/dialogs/tools_options_dlg.h:720
 msgid "Watermarks & Logos"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:724
+#: ui/dialogs/tools_options_dlg.h:732
 msgid "Grade scale"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:730
+#: ui/dialogs/tools_options_dlg.h:738
 msgid "Grade Display"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:736
+#: ui/dialogs/tools_options_dlg.h:744
 msgid "Display scores in long format"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:742
+#: ui/dialogs/tools_options_dlg.h:750
 msgid "Reading Age Display"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:754
+#: ui/dialogs/tools_options_dlg.h:762
 msgid "Include test-summary report"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:760
+#: ui/dialogs/tools_options_dlg.h:768
 msgid "Calculation"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:766
+#: ui/dialogs/tools_options_dlg.h:774
 msgid "Count independent clauses"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:772
+#: ui/dialogs/tools_options_dlg.h:780
 msgid "Numeral syllabication"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:790
+#: ui/dialogs/tools_options_dlg.h:798
 msgid "Include Catholic Supplement"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:802
+#: ui/dialogs/tools_options_dlg.h:810
 msgid "Text exclusion"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:838
+#: ui/dialogs/tools_options_dlg.h:846
 msgid "Analysis"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:850
+#: ui/dialogs/tools_options_dlg.h:858
 msgid "Document Views"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:856
+#: ui/dialogs/tools_options_dlg.h:864
 msgid "Difficult word lists"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:874
+#: ui/dialogs/tools_options_dlg.h:882
 msgid "Axes"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:880
+#: ui/dialogs/tools_options_dlg.h:888
 msgid "Titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:892
+#: ui/dialogs/tools_options_dlg.h:900
 msgid "Bar Charts"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:910
+#: ui/dialogs/tools_options_dlg.h:918
 msgid "Project Settings"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:916
+#: ui/dialogs/tools_options_dlg.h:924
 msgid "Sentences && Words"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.h:922
+#: ui/dialogs/tools_options_dlg.h:930
 msgid "Test Options"
 msgstr ""
 

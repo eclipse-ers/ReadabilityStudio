@@ -238,10 +238,10 @@ void ReadabilityApp::ShowSplashscreen()
                 {
                 // quneiform-suppress-begin
                 // (the concatenation here is OK, so ignore that)
-                bitmap = CreateSplashscreen(
-                    bitmap, GetAppName(), GetAppSubName(), GetVendorName(), true,
-                    // TRANSLATORS: "\U000000A92006-2025" should not be edited.
-                    _(L"Copyright \U000000A92006-2025 Oleander Software, Ltd., "));
+                bitmap =
+                    CreateSplashscreen(bitmap, GetAppName(), GetAppSubName(), GetVendorName(), true,
+                                       // TRANSLATORS: "©2006-2025" should not be edited.
+                                       _(L"Copyright ©2006-2025 Oleander Software, Ltd., "));
                 // quneiform-suppress-end
 
                 [[maybe_unused]]
