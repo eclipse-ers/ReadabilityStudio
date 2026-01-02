@@ -587,6 +587,7 @@ class PreAppInitOptions
     int m_appWindowHeight{ 700 };
     UiLanguage m_uiLanguage{ UiLanguage::Default };
     bool m_logAppendDailyLog{ false };
+    wxString m_userName;
     };
 
 class ReadabilityAppOptions
@@ -2577,12 +2578,13 @@ class ReadabilityAppOptions
     [[nodiscard]]
     static wxString GetDocumentFilter();
 
-  private:
-    void LoadThemeNode(tinyxml2::XMLElement* appearanceNode);
     [[nodiscard]]
     static wxString TiXmlNodeAttributeToString(const tinyxml2::XMLNode* node,
                                                const wxString& tagToRead,
                                                const wxString& fallbackValue = wxString{});
+
+  private:
+    void LoadThemeNode(tinyxml2::XMLElement* appearanceNode);
     /// @returns The value from the specified attribute from @c node as a double, or NaN on failure.
     /// @note This assumes the double is written in US format (and no thousands separator).
     [[nodiscard]]

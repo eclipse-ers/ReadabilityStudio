@@ -131,7 +131,18 @@ bool PreAppInitOptions::LoadOptionsFile(wxString optionsFile)
                 ReadabilityAppOptions::XML_VALUE.data(), 1));
             }
         }
-
+    auto* projectSettings =
+        configRootNode->FirstChildElement(ReadabilityAppOptions::XML_PROJECT_SETTINGS.data());
+    if (projectSettings != nullptr)
+        {
+        m_userName = ReadabilityAppOptions::TiXmlNodeAttributeToString(
+            projectSettings->FirstChildElement(ReadabilityAppOptions::XML_REVIEWER.data()),
+            ReadabilityAppOptions::XML_VALUE.data());
+        }
+    if (m_userName.empty())
+        {
+        m_userName = wxGetUserName();
+        }
     return true;
     }
 
@@ -257,7 +268,8 @@ ReadabilityAppOptions::ReadabilityAppOptions()
         true));
     WarningManager::AddWarning(WarningMessage(
         _DT(L"bkimage-zoomin-noupscale"),
-        _(L"When zooming, background images will not be stretched beyond their original sizes."),
+        _(L"When zooming, background images will not be stretched beyond their original "
+          L"sizes."),
         wxString{},
         _(L"Prompt about how background images will not be upscaled beyond their "
           "original size when zooming into a graph."),
@@ -296,7 +308,8 @@ void ReadabilityAppOptions::SetFonts()
     m_leftTitleFont = systemFont;
     m_rightTitleFont = systemFont;
     m_textViewFont = systemFont.Larger().Larger();
-    // fix font issues in case the system is using a hidden font for its default (happens on macOS)
+    // fix font issues in case the system is using a hidden font for its default (happens on
+    // macOS)
     Wisteria::GraphItems::Label::FixFont(m_editorFont);
     Wisteria::GraphItems::Label::FixFont(m_xAxisFont);
     Wisteria::GraphItems::Label::FixFont(m_yAxisFont);
@@ -926,20 +939,6 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                 lineSpacingNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
             }
         }
-    // just get the reviewer from project settings to be used for the start page
-    auto* projectSettingsForReview = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
-    if (projectSettingsForReview != nullptr)
-        {
-        auto* projectReviewer = projectSettingsForReview->FirstChildElement(XML_REVIEWER.data());
-        if (projectReviewer != nullptr)
-            {
-            SetReviewer(TiXmlNodeAttributeToString(projectReviewer, XML_VALUE.data()));
-            }
-        }
-    if (GetReviewer().empty())
-        {
-        SetReviewer(wxGetUserName());
-        }
 
     // if only loading general info, then quit after reading this node
     if (loadOnlyGeneralOptions)
@@ -1059,6 +1058,12 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     auto* projectSettings = configRootNode->FirstChildElement(XML_PROJECT_SETTINGS.data());
     if (projectSettings != nullptr)
         {
+        SetReviewer(TiXmlNodeAttributeToString(
+            projectSettings->FirstChildElement(XML_REVIEWER.data()), XML_VALUE.data()));
+        if (GetReviewer().empty())
+            {
+            SetReviewer(wxGetUserName());
+            }
         auto* realTimeRefresh = projectSettings->FirstChildElement(XML_REALTIME_UPDATE.data());
         if (realTimeRefresh != nullptr)
             {
