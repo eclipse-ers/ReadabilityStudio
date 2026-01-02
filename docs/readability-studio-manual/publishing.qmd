@@ -277,8 +277,8 @@ This removal will be based on your project's [text exclusion](#sec-options-text-
 After this text exclusion is applied, additional conversion options will be available from the **Additional Filtering Options** dialog.
 From this dialog, you can apply the following filters to the exported copy of your document.
 
-**Romanize (replace special characters)**: Check this option to replace accented and extended characters with their ASCII equivalents.
-This option is required if you are needing the filtered document to be in ASCII (7-bit) format.
+**Romanize text (replace accented and special characters)**: Check this option to simplify text for compatibility with other text analysis tools.
+This will convert accented characters, smart punctuation, bullets, and similar formatting to simpler equivalents.
 The following Romanization replacements are used:
 
 ```{r, echo=F}

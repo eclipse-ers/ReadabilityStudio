@@ -73,9 +73,9 @@ namespace text_transform
         };
 
     /** @brief Class to encode a string into Romanized text.
-
-        This includes replacing "fancy" punctuation and accented characters,
-        such as changing smart quotes to straight quotes, German eszetts to 'ss,' etc.*/
+        @details This includes replacing "fancy" punctuation and accented characters,
+            such as changing smart quotes to straight quotes, German eszetts to 'ss,' etc.
+        @note Legacy Windows-1252 character mappings are also supported.*/
     class romanize
         {
       public:
@@ -85,22 +85,25 @@ namespace text_transform
             {
             }
 
-        /** @brief Encodes a string into Romanized text.
-            @param text The text to encode.
-            @param replace_extended_ascii_characters Whether to replace accented letters
-                and other special symbols.
-            @param remove_ellipses Whether ellipses should be replaced with spaces.
-                If an ellipsis represents the end of a sentence,
-                then it will be replaced with a period.
-            @param remove_bullets Whether to remove bullets and list-item numbers.
-            @param narrow_full_width_characters Whether to convert full-width characters
-                to their narrow counterparts.
-            @returns A string encoded to simpler text.*/
+        /** @brief Normalizes text by Romanizing characters and simplifying typography.
+            @param text The input text to normalize.
+            @param normalizeTypography Whether to replace accented letters, ligatures,
+                smart punctuation, symbols, and other non-ASCII typography with simpler
+                Latin or ASCII equivalents.
+            @param removeEllipses Whether ellipses should be collapsed. If an ellipsis
+                represents the end of a sentence, it is replaced with a period;
+                otherwise it is replaced with a single space.
+            @param removeBullets Whether to normalize bulleted or numbered list markers.
+                Leading bullets are removed and replaced with a tab character to
+                preserve list structure.
+            @param narrowFullWidthCharacters Whether full-width Unicode characters
+                should be converted to their narrow (half-width) equivalents.
+            @returns A normalized string with simplified typography suitable for
+                plain-text processing.*/
         [[nodiscard]]
-        std::wstring operator()(std::wstring_view text,
-                                const bool replace_extended_ascii_characters,
-                                const bool remove_ellipses, const bool remove_bullets,
-                                const bool narrow_full_width_characters) const;
+        std::wstring operator()(std::wstring_view text, const bool normalizeTypography,
+                                const bool removeEllipses, const bool removeBullets,
+                                const bool narrowFullWidthCharacters) const;
 
       private:
         static const romanization_conversion_table m_conversionTable;

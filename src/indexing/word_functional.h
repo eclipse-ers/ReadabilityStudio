@@ -1064,8 +1064,11 @@ class is_correctly_spelled_word
     [[nodiscard]]
     bool operator()(const word_typeT& the_word) const
         {
-        // clang-format off
-        if ((is_ignoring_numerals() && the_word.is_numeric()) || // see if word is a number
+        // empty string certainly isn't "misspelled"
+        if (the_word.empty())
+            {
+            return false;
+            }
                                                                  // uppercased words
             (is_ignoring_uppercased() && (the_word.is_acronym() || the_word.is_exclamatory())) ||
             // file address

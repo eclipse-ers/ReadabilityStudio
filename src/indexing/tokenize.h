@@ -61,7 +61,7 @@
 
 namespace tokenize
     {
-    /** @brief Class for tokenizing a text block into words, sentences, and paragraphs.*/
+    /// @brief Tokenizes text while deducing sentence, paragraph, and punctuation structure.
     template<typename is_characterT = characters::is_character,
              typename is_punctuationT = punctuation::is_punctuation>
     class document_tokenize
@@ -898,7 +898,7 @@ namespace tokenize
             return m_at_eol;
             }
 
-        /// @returns @c true if the last read word has a tab in front of it.
+        /// @returns @c true if the last parsed word was preceded by a tab character.
         [[nodiscard]]
         bool is_tabbed() const noexcept
             {
@@ -976,8 +976,6 @@ namespace tokenize
 
         /** @brief Determines if text is a formatted line break (e.g., "Note***\n")
                 at the end of a line.
-            @details Three or more consecutive line break characters (followed by a newline)
-                will trigger this.
             @details Three or more consecutive line break characters (followed by a newline)
                 will trigger this.
             @param next_line The line of text to review.

@@ -61,7 +61,7 @@ void FilteredTextExportOptionsDlg::CreateControls()
     mainSizer->Add(itemBoxSizer, wxSizerFlags{}.Top().Border());
 
     itemBoxSizer->Add(new wxCheckBox(itemBoxSizer->GetStaticBox(), wxID_ANY,
-                                     _(L"Romanize (replace special characters)"), wxDefaultPosition,
+                                     _(L"Romanize text (replace accented and special characters)"), wxDefaultPosition,
                                      wxDefaultSize, wxCHK_2STATE,
                                      wxGenericValidator(&m_replaceCharacters)),
                       wxSizerFlags{}.Expand().Border(wxBOTTOM));

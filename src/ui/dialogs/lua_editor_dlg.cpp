@@ -52,8 +52,8 @@
 #include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../app/readability_app.h"
 #include <utility>
-#include <wx/stc/minimap.h>
 #include <wx/display.h>
+#include <wx/stc/minimap.h>
 
 wxDECLARE_APP(ReadabilityApp);
 

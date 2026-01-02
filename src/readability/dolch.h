@@ -51,6 +51,7 @@
 #define DOLCH_H
 
 #include "../Wisteria-Dataviz/src/import/text_matrix.h"
+#include "../Wisteria-Dataviz/src/util/donttranslate.h"
 #include "../Wisteria-Dataviz/src/util/string_util.h"
 #include "../indexing/character_traits.h"
 #include <algorithm>

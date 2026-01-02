@@ -184,10 +184,9 @@ namespace text_transform
         }
 
     //------------------------------------------------
-    std::wstring romanize::operator()(std::wstring_view text,
-                                      const bool replace_extended_ascii_characters,
-                                      const bool remove_ellipses, const bool remove_bullets,
-                                      const bool narrow_full_width_characters) const
+    std::wstring romanize::operator()(std::wstring_view text, const bool normalizeTypography,
+                                      const bool removeEllipses, const bool removeBullets,
+                                      const bool narrowFullWidthCharacters) const
         {
         std::wstring encodedText;
         if (text.empty())
@@ -199,7 +198,7 @@ namespace text_transform
         for (size_t i = 0; i < text.length(); ++i)
             {
             // this should be done before anything else because of how it scans ahead
-            if (remove_bullets)
+            if (removeBullets)
                 {
                 if (i == 0 || text[i] == L'\n' || text[i] == L'\r')
                     {
@@ -225,9 +224,9 @@ namespace text_transform
                         }
                     }
                 }
-            if (remove_ellipses)
+            if (removeEllipses)
                 {
-                size_t lookAhead = i;
+                size_t lookAhead{ i };
                 if (text[i] == 0x2026 || text[i] == 133)
                     {
                     lookAhead = i + 1;
@@ -262,14 +261,14 @@ namespace text_transform
                     continue;
                     }
                 }
-            if (replace_extended_ascii_characters)
+            if (normalizeTypography)
                 {
                 const auto replacementPos = m_conversionTable.get_table().find(text[i]);
                 if (replacementPos != m_conversionTable.get_table().cend())
                     {
                     encodedText += replacementPos->second;
                     }
-                else if (narrow_full_width_characters)
+                else if (narrowFullWidthCharacters)
                     {
                     encodedText += string_util::full_width_to_narrow(text[i]);
                     }
@@ -278,7 +277,7 @@ namespace text_transform
                     encodedText += text[i];
                     }
                 }
-            else if (narrow_full_width_characters)
+            else if (narrowFullWidthCharacters)
                 {
                 encodedText += string_util::full_width_to_narrow(text[i]);
                 }
