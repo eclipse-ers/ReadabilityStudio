@@ -55,6 +55,36 @@
 #include "abbreviation.h"
 #include "characters.h"
 #include <set>
+#include <unordered_set>
+
+/** @brief Transparent hash functor for wide strings.
+    @details Enables heterogeneous lookup of `std::wstring` keys using
+        `std::wstring_view`, avoiding temporary string allocations during
+        unordered container searches. */
+struct wstring_hash
+    {
+    /// @private
+    using is_transparent = void;
+
+    size_t operator()(std::wstring_view sv) const noexcept
+        {
+        return std::hash<std::wstring_view>{}(sv);
+        }
+    };
+
+/** @brief Transparent equality functor for wide strings.
+    @details Allows `std::wstring` keys to be compared directly with
+        `std::wstring_view` for allocation-free unordered container lookups. */
+struct wstring_equal
+    {
+    /// @private
+    using is_transparent = void;
+
+    bool operator()(std::wstring_view lhs, std::wstring_view rhs) const noexcept
+        {
+        return lhs == rhs;
+        }
+    };
 
 /** @brief Counting/Searching functor for `std::count_if` or `std::find`
         that counts punctuation marks, based on where punctuation mark is in the word.*/
@@ -895,7 +925,7 @@ class is_file_extension
 /** @brief Used for spell checking.
     @details Performs a binary search through a list of known words to see if the provided
         value is in there. Also takes into account whether the word is
-        proper, numeric, or uppercased.*/
+        proper, numeric, uppercased, etc.*/
 template<typename word_typeT, typename wordlistT>
 class is_correctly_spelled_word
     {
@@ -932,7 +962,11 @@ class is_correctly_spelled_word
 
     /** @brief Sets the list of known (spelled correctly) words.
         @param wlist The list of known words.*/
-    void set_word_list(const wordlistT* wlist) noexcept { m_wordlist = wlist; }
+    void set_word_list(const wordlistT* wlist) noexcept
+        {
+        m_wordlist = wlist;
+        invalidate_cache();
+        }
 
     /// @returns The list of known (spelled correctly) words.
     [[nodiscard]]
@@ -943,7 +977,11 @@ class is_correctly_spelled_word
 
     /** @brief Sets the user-defined list of known words.
         @param wlist The list of user-defined known words.*/
-    void set_secondary_word_list(const wordlistT* wlist) noexcept { m_secondary_wordlist = wlist; }
+    void set_secondary_word_list(const wordlistT* wlist) noexcept
+        {
+        m_secondary_wordlist = wlist;
+        invalidate_cache();
+        }
 
     /// @returns The list of user-defined known (spelled correctly) words.
     [[nodiscard]]
@@ -957,6 +995,7 @@ class is_correctly_spelled_word
     void set_programmer_word_list(const wordlistT* wlist) noexcept
         {
         m_programmer_wordlist = wlist;
+        invalidate_cache();
         }
 
     /// @returns The list of known (spelled correctly) programming words.
@@ -977,7 +1016,11 @@ class is_correctly_spelled_word
     /** @brief Set whether proper nouns are checked or not. If not, then
             proper nouns will always be considered spelled correctly.
         @param ignore Whether proper nouns should be checked.*/
-    void ignore_proper_nouns(const bool ignore) noexcept { m_ignore_proper_nouns = ignore; }
+    void ignore_proper_nouns(const bool ignore) noexcept
+        {
+        m_ignore_proper_nouns = ignore;
+        invalidate_cache();
+        }
 
     /** @returns Whether all uppercased words are checked or not. If not, then
             uppercased words will always be considered spelled correctly.*/
@@ -990,7 +1033,11 @@ class is_correctly_spelled_word
     /** @brief Set whether all uppercased words are checked or not. If not, then
             uppercased words will always be considered spelled correctly.
         @param ignore Whether uppercased words should be checked.*/
-    void ignore_uppercased(const bool ignore) noexcept { m_ignore_uppercased = ignore; }
+    void ignore_uppercased(const bool ignore) noexcept
+        {
+        m_ignore_uppercased = ignore;
+        invalidate_cache();
+        }
 
     /** @returns Whether numerals are checked or not. If not, then
             numerals will always be considered spelled correctly.*/
@@ -1003,7 +1050,11 @@ class is_correctly_spelled_word
     /** @brief Set whether numerals are checked or not. If not, then
             numerals will always be considered spelled correctly.
         @param ignore Whether numerals should be checked.*/
-    void ignore_numerals(const bool ignore) noexcept { m_ignore_numerals = ignore; }
+    void ignore_numerals(const bool ignore) noexcept
+        {
+        m_ignore_numerals = ignore;
+        invalidate_cache();
+        }
 
     /** @returns Whether file addresses are checked or not. If not, then
             file addresses will always be considered spelled correctly.*/
@@ -1016,7 +1067,11 @@ class is_correctly_spelled_word
     /** @brief Set whether file addresses are checked or not. If not, then
             file addresses will always be considered spelled correctly.
         @param ignore Whether file addresses should be checked.*/
-    void ignore_file_addresses(const bool ignore) noexcept { m_ignore_file_addresses = ignore; }
+    void ignore_file_addresses(const bool ignore) noexcept
+        {
+        m_ignore_file_addresses = ignore;
+        invalidate_cache();
+        }
 
     /** @returns Whether programmer code are checked or not. If not, then
             programmer code will always be considered spelled correctly.*/
@@ -1029,7 +1084,11 @@ class is_correctly_spelled_word
     /** @brief Set whether programmer code are checked or not. If not, then
             programmer code will always be considered spelled correctly.
         @param ignore Whether programmer code should be checked.*/
-    void ignore_programmer_code(const bool ignore) noexcept { m_ignore_programmer_code = ignore; }
+    void ignore_programmer_code(const bool ignore) noexcept
+        {
+        m_ignore_programmer_code = ignore;
+        invalidate_cache();
+        }
 
     /** @returns Whether colloquialisms are acceptable. If so, then things like
             "tryin'" would be considered spelled correctly.*/
@@ -1042,7 +1101,11 @@ class is_correctly_spelled_word
     /** Set whether colloquialisms are checked or not. If so, then things like
             "tryin'" will always be considered spelled correctly.
         @param allow Whether colloquialisms should be considered acceptable spelling.*/
-    void allow_colloquialisms(const bool allow) noexcept { m_allow_colloquialisms = allow; }
+    void allow_colloquialisms(const bool allow) noexcept
+        {
+        m_allow_colloquialisms = allow;
+        invalidate_cache();
+        }
 
     /** @returns Whether hashtagged words are being ignored.*/
     [[nodiscard]]
@@ -1056,6 +1119,7 @@ class is_correctly_spelled_word
     void ignore_social_media_tags(const bool ignore) noexcept
         {
         m_ignore_social_media_tags = ignore;
+        invalidate_cache();
         }
 
     /** @brief Main interface for determining if a word is spelled correctly.
@@ -1069,12 +1133,26 @@ class is_correctly_spelled_word
             {
             return false;
             }
-                                                                 // uppercased words
+
+        const std::wstring_view key{ the_word.c_str(), the_word.length() };
+
+        // check the cache before reviewing
+        if (m_recent_hits.contains(key))
+            {
+            return true;
+            }
+        if (m_recent_misses.contains(key))
+            {
+            return false;
+            }
+
+        if ( // see if word is a number
+            (is_ignoring_numerals() && the_word.is_numeric()) ||
+            // uppercased words
             (is_ignoring_uppercased() && (the_word.is_acronym() || the_word.is_exclamatory())) ||
             // file address
             (is_ignoring_file_addresses() &&
-             (the_word.is_file_address() ||
-              is_file_extension::is_extension(the_word.c_str()))) ||
+             (the_word.is_file_address() || is_file_extension::is_extension(the_word.c_str()))) ||
             // hashtags
             (is_ignoring_social_media_tags() && the_word.is_social_media_tag()) ||
             // proper noun
@@ -1089,10 +1167,26 @@ class is_correctly_spelled_word
               (the_word.length() >= 4 && the_word[1] == common_lang_constants::PERIOD &&
                the_word[3] == common_lang_constants::PERIOD))))
             {
+            m_recent_hits.emplace(key);
             return true;
             }
-        return is_on_list(the_word);
-        // clang-format on
+        if (is_on_list(the_word))
+            {
+            m_recent_hits.emplace(key);
+            return true;
+            }
+
+        m_recent_misses.emplace(key);
+        return false;
+        }
+
+    /** @brief Clears cached spell-check results.
+        @warning Word lists are referenced by pointer. If the contents of any
+            word list change externally, this function must be called to avoid stale results.*/
+    void invalidate_cache()
+        {
+        m_recent_hits.clear();
+        m_recent_misses.clear();
         }
 
   private:
@@ -1399,6 +1493,9 @@ class is_correctly_spelled_word
     bool m_allow_colloquialisms{ true };
     bool m_ignore_social_media_tags{ true };
     grammar::is_acronym isAcronym;
+
+    mutable std::unordered_set<std::wstring, wstring_hash, wstring_equal> m_recent_hits;
+    mutable std::unordered_set<std::wstring, wstring_hash, wstring_equal> m_recent_misses;
     };
 
 /** @brief Calls a member function of elements in a container for each

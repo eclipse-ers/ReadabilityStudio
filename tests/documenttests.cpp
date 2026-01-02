@@ -1706,6 +1706,8 @@ TEST_CASE("Document misspellings", "[document]")
         CHECK(doc.get_misspelled_words().at(1) == 7);
         // add the misspellings to the custom list of correct spellings
         Secondary_known_spellings.load_words(L"catz hadd", true, false);
+        // word list changed
+        doc.get_spell_checker().invalidate_cache();
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(doc.get_misspelled_words().size() == 0);
         Secondary_known_spellings.clear();
@@ -1725,6 +1727,8 @@ TEST_CASE("Document misspellings", "[document]")
         CHECK(doc.get_misspelled_words().at(1) == 3);
         // add the misspellings to the custom list of correct spellings
         Secondary_known_spellings.load_words(L"catz hadd", true, false);
+        // word list changed
+        doc.get_spell_checker().invalidate_cache();
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(doc.get_misspelled_words().size() == 0);
         Secondary_known_spellings.clear();
