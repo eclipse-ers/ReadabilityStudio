@@ -140,18 +140,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     include(cmake/modules/EnableSanitizers.cmake)
 endif()
 
-# Interprocedural optimization
-if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT ipo_supported)
-    if(${ipo_supported})
-      message(STATUS "Interprocedural compiler optimization: enabled")
-      set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
-    else()
-      message(STATUS "Interprocedural compiler optimization: not enabled")
-    endif()
-endif()
-
 # Read implementation of Snowball used by stemming library (this appears in the help)
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/src/OleanderStemmingLibrary/src/stemming.h" STEM_CONTENT)
 string(REGEX MATCH "SNOWBALL_MAJOR_VERSION = ([0-9]+)" _ ${STEM_CONTENT})

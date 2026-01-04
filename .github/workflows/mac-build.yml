@@ -25,8 +25,8 @@ jobs:
 
       - name: Build
         run: |
-             cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug
-             cmake --build ./build --target all --config Debug
+             cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+             cmake --build ./build --target all -j4 --config Release
 
       - name: Archive App Bundle
         uses: actions/upload-artifact@v4
