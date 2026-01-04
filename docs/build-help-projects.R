@@ -69,6 +69,13 @@ createGridCover(glue("{scriptFolder}/../resources/images/splash/splashscreen7.jp
                 glue("{scriptFolder}/readability-studio-manual/images/non-generated/sysadmin-cover.png"),
                 pad_top = 350)
 
+createGridCover(glue("{scriptFolder}/../resources/images/splash/splashscreen7.jpg"),
+                glue("{scriptFolder}/../resources/images/splash/splashscreen4.jpg"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/code-editor.png"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/nlm_nlmuid-101446141-img.jpg"),
+                glue("{scriptFolder}/readability-studio-manual/images/non-generated/api-cover.png"),
+                pad_top = 350)
+
 thumbnailWidth <- "256"
 
 # delete previous builds

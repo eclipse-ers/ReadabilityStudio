@@ -9,7 +9,7 @@ biblio-style: mla
 link-citations: true
 nocite: '@*'
 csl: modern-language-association.csl
-pdf-cover: "images/non-generated/cover.png"
+pdf-cover: "images/non-generated/api-cover.png"
 pdf-cover-font-color: "255, 255, 255"
 pdf-cover-author-color: "61, 60, 59"
 pdf-logo: "images/non-generated/cover-logo.png"
