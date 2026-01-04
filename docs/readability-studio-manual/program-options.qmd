@@ -904,7 +904,7 @@ The background of your graphs will fade (top-to-bottom) starting with the color 
 A value of 255 will set the background to be fully opaque, whereas 0 will set the background to be transparent.
 
 **Image**: Selects the image for the graphs' plot background.
-This image will be drawn within the area between X and Y axes of the graphs.
+This image will be drawn within the area between x- and y-axes of the graphs.
 
 :::: {.optionssection data-latex=""}
 ::: {.optionssectiontitle data-latex=""}
@@ -992,9 +992,9 @@ The options on this page customize the axis settings of your graphs.
 
 #### Fonts {-}
 
-**X axis**: Sets the font for the x axis labels in your graphs.
+**x-axis**: Sets the font for the x-axis labels in your graphs.
 
-**Y axis**: Sets the font for the y axis labels in your graphs.
+**y-axis**: Sets the font for the y-axis labels in your graphs.
 
 ### Titles {-}
 

@@ -306,8 +306,8 @@ namespace LuaScripting
     int ShowcaseKeyItems(lua_State* L /*boolean showcase*/); // Specifies whether important parts of certain graphs should be highlighted for new projects.
     int /*boolean*/ IsShowcasingKeyItems(lua_State* L); // Returns whether important parts of certain graphs should be highlighted for new projects.
 
-    int SetXAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' X axes for new projects.
-    int SetYAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' Y axes for new projects.
+    int SetXAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' x-axes for new projects.
+    int SetYAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' y-axes for new projects.
 
     int SetGraphTopTitleFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' top titles for new projects.
     int SetGraphBottomTitleFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' bottom titles.

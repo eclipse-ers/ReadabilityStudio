@@ -273,8 +273,8 @@ namespace LuaScripting
         int SetGraphCommonImage(lua_State* L /*string imagePath*/); // Sets the common image drawn across all bars.
         int /*string*/ GetGraphCommonImage(lua_State* L); // Returns the common image drawn across all bars.
 
-        int SetXAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' X axes.
-        int SetYAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' Y axes.
+        int SetXAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' x-axes.
+        int SetYAxisFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' y-axes.
 
         int SetGraphTopTitleFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' top titles.
         int SetGraphBottomTitleFont(lua_State* L /*string fontName, number pointSize, FontWeight weight, string color*/); // Sets the font for the graphs' bottom titles.

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Readability Studio\n"
-"POT-Creation-Date: 2026-01-02 10:05-0500\n"
-"PO-Revision-Date: 2026-01-02 10:07-0500\n"
+"POT-Creation-Date: 2026-01-04 09:21-0500\n"
+"PO-Revision-Date: 2026-01-04 09:23-0500\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -1366,7 +1366,7 @@ msgstr "No se puede guardar el archivo \"%s\"."
 #: app/readability_app.cpp:4477 app/readability_app.cpp:4576
 #: app/readability_app.cpp:5166 app/readability_app_options.cpp:83
 #: app/readability_app_options.cpp:91 app/readability_app_options.cpp:665
-#: app/readability_app_options.cpp:672 app/readability_app_options.cpp:4465
+#: app/readability_app_options.cpp:672 app/readability_app_options.cpp:4445
 #: projects/base_project.cpp:4603 projects/base_project.cpp:4619
 #: projects/base_project.cpp:4736 projects/base_project.cpp:4749
 #: projects/base_project.cpp:4756 projects/base_project.cpp:4765
@@ -4625,13 +4625,13 @@ msgstr ""
 "Preguntar si se debe establecer la lista de exclusión de palabras de la "
 "aplicación de un proyecto."
 
-#: app/readability_app_options.cpp:4464
+#: app/readability_app_options.cpp:4444
 #, c-format
 msgid "Unable to save configuration file: %s"
 msgstr "No se puede guardar el archivo de configuración: %s"
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4566
+#: app/readability_app_options.cpp:4546
 #, c-format
 msgid ""
 "Documents (%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s)|%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s"
@@ -4640,7 +4640,7 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4573
+#: app/readability_app_options.cpp:4553
 #, c-format
 msgid ""
 "%s|Text files (%s)|%s|HTML files (%s)|%s|Word files (%s)|%s|PowerPoint files "
@@ -14170,12 +14170,12 @@ msgid "Right titles"
 msgstr "Títulos del lado derecho"
 
 #: ui/dialogs/tools_options_dlg.cpp:5466
-msgid "X axis"
-msgstr "Eje X"
+msgid "x-axis"
+msgstr "eje x"
 
 #: ui/dialogs/tools_options_dlg.cpp:5470
-msgid "Y axis"
-msgstr "Eje Y"
+msgid "y-axis"
+msgstr "eje y"
 
 #: ui/dialogs/tools_options_dlg.cpp:5516
 msgid ""
@@ -15006,6 +15006,9 @@ msgstr "Búsqueda..."
 #, c-format
 msgid "Crawling \"%s\""
 msgstr "Búsqueda \"%s\""
+
+#~ msgid "Y axis"
+#~ msgstr "Eje Y"
 
 #~ msgid "Build Type:"
 #~ msgstr "Tipo de Compilación del Programa:"

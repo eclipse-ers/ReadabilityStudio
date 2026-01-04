@@ -2,7 +2,7 @@
 
 ### `SetXAxisFont`
 
-Sets the font\index{graphs!fonts} for the graphs' X axes.
+Sets the font\index{graphs!fonts} for the graphs' x-axes.
 
 #### Syntax {-}
 

@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `SetYAxisFont`
 
-Sets the font\index{graphs!fonts} for the graphs' Y axes.
+Sets the font\index{graphs!fonts} for the graphs' y-axes.
 
 #### Syntax {-}
 

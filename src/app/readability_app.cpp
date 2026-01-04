@@ -752,7 +752,7 @@ bool ReadabilityApp::OnInit()
     consentFormsBundle.GetTestGoals() =
         {
         TestGoal{ ReadabilityMessages::ELF().wc_str(), std::numeric_limits<double>::quiet_NaN(), 12 },
-        // intersection of 4.5 (Y axis) and 150 (X axis)
+        // intersection of 4.5 (y-axis) and 150 (x- axis)
         TestGoal{ ReadabilityMessages::FRY().wc_str(), std::numeric_limits<double>::quiet_NaN(), 10 },
         // Academic, Scientific, or Quality are too difficult (i.e., below 60)
         TestGoal{ ReadabilityMessages::FLESCH().wc_str(), 60, std::numeric_limits<double>::quiet_NaN() },

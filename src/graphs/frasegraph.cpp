@@ -76,7 +76,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
                 _(L"FRASE (Fry Readability Adaptation for Spanish Evaluation) Graph"))
                 .Pen(wxNullPen));
 
-        // set up the X axis
+        // set up the x-axis
         GetBottomXAxis().SetRange(182, 234, 0, 1, 1);
         GetBottomXAxis().SetDisplayInterval(4, 2);
         GetBottomXAxis().GetGridlinePen() = wxNullPen;
@@ -85,7 +85,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
         GetBottomXAxis().SetMajorTickMarkLength(10);
         GetBottomXAxis().SetMinorTickMarkLength(10);
 
-        // set up the Y axis
+        // set up the y-axis
         GetLeftYAxis().SetRange(0, 15, 0, 1, 1);
         GetLeftYAxis().ShowOuterLabels(false);
         GetLeftYAxis().GetGridlinePen() = wxNullPen;

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Readability Studio\n"
-"POT-Creation-Date: 2026-01-02 10:05-0500\n"
+"POT-Creation-Date: 2026-01-04 09:21-0500\n"
 "PO-Revision-Date: 2025-07-19 08:23-0400\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: \n"
@@ -1392,7 +1392,7 @@ msgstr ""
 #: app/readability_app_options.cpp:91
 #: app/readability_app_options.cpp:665
 #: app/readability_app_options.cpp:672
-#: app/readability_app_options.cpp:4465
+#: app/readability_app_options.cpp:4445
 #: projects/base_project.cpp:4603
 #: projects/base_project.cpp:4619
 #: projects/base_project.cpp:4736
@@ -4678,13 +4678,13 @@ msgid ""
 "exclusion list from a project."
 msgstr ""
 
-#: app/readability_app_options.cpp:4464
+#: app/readability_app_options.cpp:4444
 #, c-format
 msgid "Unable to save configuration file: %s"
 msgstr ""
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4566
+#: app/readability_app_options.cpp:4546
 #, c-format
 msgid ""
 "Documents (%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s)|%s;%s;%s;%s;"
@@ -4692,7 +4692,7 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: %s are file filters
-#: app/readability_app_options.cpp:4573
+#: app/readability_app_options.cpp:4553
 #, c-format
 msgid ""
 "%s|Text files (%s)|%s|HTML files (%s)|%s|Word files (%s)|"
@@ -14086,11 +14086,11 @@ msgid "Right titles"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5466
-msgid "X axis"
+msgid "x-axis"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5470
-msgid "Y axis"
+msgid "y-axis"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5516

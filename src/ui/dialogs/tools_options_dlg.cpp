@@ -5463,11 +5463,11 @@ void ToolsOptionsDlg::CreateGraphAxesSection()
     m_sideBar->AddSubPage(panel, GetAxisSettingsLabel(), GRAPH_AXIS_PAGE, false, 9);
 
     CreateLabelHeader(panel, panelSizer, _(L"Fonts:"), true);
-    m_xAxisFontButton = new wxButton(panel, ID_X_AXIS_FONT_BUTTON, _(L"X axis"));
+    m_xAxisFontButton = new wxButton(panel, ID_X_AXIS_FONT_BUTTON, _(L"x-axis"));
     m_xAxisFontButton->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/x-axis.svg"));
     optionsSizer->Add(m_xAxisFontButton, wxSizerFlags{}.Expand().DoubleBorder(wxLEFT));
 
-    m_yAxisFontButton = new wxButton(panel, ID_Y_AXIS_FONT_BUTTON, _(L"Y axis"));
+    m_yAxisFontButton = new wxButton(panel, ID_Y_AXIS_FONT_BUTTON, _(L"y-axis"));
     m_yAxisFontButton->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/y-axis.svg"));
     optionsSizer->Add(m_yAxisFontButton, wxSizerFlags{}.Expand().DoubleBorder(wxLEFT));
 

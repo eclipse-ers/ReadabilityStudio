@@ -6037,7 +6037,7 @@ void BatchProjectDoc::DisplayHistogram(const wxString& name, const wxWindowID Id
                             Wisteria::GraphItems::Label{
                                 GetReadabilityMessageCatalog().GetGradeScaleLongLabel(i) });
                     }
-                // if not too many bins, show the long grade labels on the X axis
+                // if not too many bins, show the long grade labels on the x-axis
                 histogram->GetBarAxis().SetLabelDisplay(
                     (histogram->GetBinsWithValuesCount() <= 5) ?
                         Wisteria::AxisLabelDisplay::DisplayOnlyCustomLabels :

@@ -136,7 +136,7 @@ Below is an example of a Crawford graph:
 ![Crawford graph](images/crawford-graph.png){width=75% fig-align="center"}
 
 In the above graph, we can see that the intersection of the factors is 175 and 7.
-The number of syllables is 175 (y-axis). The number of sentences is approximately 7 (between 8.4 and 5.9 on the plot [corresponding to 175 on the Y axis]).
+The number of syllables is 175 (y-axis). The number of sentences is approximately 7 (between 8.4 and 5.9 on the plot [corresponding to 175 on the y-axis]).
 From this intersection, the point's x-axis value is 3.7. Hence, 3.7 is the grade-level score for this graph.
 
 The Flesch\index{Flesch Reading Ease!chart} chart plots a document's factors onto a pair of "rulers" and then connects them to determine the Flesch score.
