@@ -2801,7 +2801,7 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
             (*stemmer)(stemmedWord);
             keyWordsStemmedWithCounts.insert(
                 // the stem and original word
-                stemmedWord, wordPos->first,
+                std::move(stemmedWord), wordPos->first,
                 // overall frequency of current word
                 wordPos->second.first);
             }
@@ -2815,8 +2815,8 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
     m_keyWordsDataset->Clear();
     m_keyWordsDataset->AddCategoricalColumn(GetWordsColumnName());
     m_keyWordsDataset->AddContinuousColumn(GetWordsCountsColumnName());
-    assert(m_keyWordsDataset->GetCategoricalColumns().size() == 1 && L"Hard word dataset invalid!");
-    assert(m_keyWordsDataset->GetRowCount() == 0 && L"Hard word dataset should be empty!");
+    wxASSERT_MSG(m_keyWordsDataset->GetCategoricalColumns().size() == 1, L"Hard word dataset invalid!");
+    wxASSERT_MSG(m_keyWordsDataset->GetRowCount() == 0,L"Hard word dataset should be empty!");
     m_keyWordsDataset->Resize(keyWordsStemmedWithCounts.get_data().size());
     auto keyWordsColumn = m_keyWordsDataset->GetCategoricalColumn(GetWordsColumnName());
     auto keydWordsFreqColumn = m_keyWordsDataset->GetContinuousColumn(GetWordsCountsColumnName());
@@ -2852,7 +2852,7 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
             auto mostFrequentWordVariation = std::max_element(
                 keyWordFreqInfo.first.get_data().cbegin(), keyWordFreqInfo.first.get_data().cend(),
                 [](const auto& lhv, const auto& rhv) noexcept { return lhv.second < rhv.second; });
-            assert(mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend() &&
+            wxASSERT_MSG(mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend(),
                    L"Empty word list for stemmed word?!");
             // add the next word to the dataset's string table
             const auto nextKey = keyWordsColumn->GetNextKey();

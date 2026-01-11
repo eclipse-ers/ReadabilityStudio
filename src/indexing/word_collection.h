@@ -1365,7 +1365,7 @@ class document
                 grammar::phrase<Tword_type> currentPhrase;
                 currentPhrase.copy_words(get_words().begin() + negatedPhrases->first,
                                          negatedPhrases->second);
-                m_aggregated_tokens.insert(currentPhrase, currentWordIndex);
+                m_aggregated_tokens.insert(std::move(currentPhrase), currentWordIndex);
                 wordPos += negatedPhrases->second;
                 }
             // or a known phrase that we are looking for
@@ -1379,7 +1379,7 @@ class document
                     is_known_phrase->get_phrases()[knownPhrases->second].first.get_word_count();
                 currentPhrase.copy_words(get_words().begin() + knownPhrases->first,
                                          phraseWordCount);
-                m_aggregated_tokens.insert(currentPhrase, currentWordIndex);
+                m_aggregated_tokens.insert(std::move(currentPhrase), currentWordIndex);
                 wordPos += phraseWordCount;
                 }
             // or a word not on the stop list

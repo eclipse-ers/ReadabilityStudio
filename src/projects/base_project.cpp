@@ -2452,7 +2452,7 @@ void BaseProject::LoadHardWords()
             (*stemmer)(stemmedWord);
             keyWordsStemmedWithCounts.insert(
                 // the stem and original word
-                stemmedWord, wordPos->first,
+                std::move(stemmedWord), wordPos->first,
                 // overall frequency of current word
                 wordPos->second.first);
             }
