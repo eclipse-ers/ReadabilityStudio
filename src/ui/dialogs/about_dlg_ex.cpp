@@ -341,19 +341,20 @@ void AboutDialogEx::CreateControls()
         auto* appLabelSizer = new wxBoxSizer(wxVERTICAL);
         auto* appLabel = new wxStaticText(mainPage, wxID_ANY, wxGetApp().GetAppName());
         appLabel->SetFont(wxFontInfo{ appLabel->GetFont().GetFractionalPointSize() * 2 }.FaceName(
-            Wisteria::GraphItems::Label::GetFirstAvailableFont({ DONTTRANSLATE(L"Roboto"),
-                                                                 DONTTRANSLATE(L"Orbitron"),
-                                                                 DONTTRANSLATE(L"Georgia") })));
+            Wisteria::GraphItems::Label::GetFirstAvailableFont(
+                { DONTTRANSLATE(L"Inter"), DONTTRANSLATE(L"Roboto"), DONTTRANSLATE(L"Orbitron"),
+                  DONTTRANSLATE(L"Georgia") })));
         appLabel->SetForegroundColour(
-            wxSystemSettings::SelectLightDark(wxColour{ L"#3D3C3B" }, wxColour{ L"#F89522" }));
+            wxSystemSettings::SelectLightDark(Wisteria::Colors::ColorBrewer::GetEclipseBlack(),
+                                              Wisteria::Colors::ColorBrewer::GetEclipseOrange()));
         appLabelSizer->Add(appLabel);
         appLabel = new wxStaticText(mainPage, wxID_ANY, wxGetApp().GetAppVersion());
         appLabel->SetFont(wxFontInfo{ appLabel->GetFont().GetFractionalPointSize() * 1.5 }.FaceName(
-            Wisteria::GraphItems::Label::GetFirstAvailableFont({ DONTTRANSLATE(L"Roboto"),
-                                                                 DONTTRANSLATE(L"Orbitron"),
-                                                                 DONTTRANSLATE(L"Georgia") })));
-        appLabel->SetForegroundColour(
-            wxSystemSettings::SelectLightDark(wxColour{ L"#F89522" }, wxColour{ 255, 255, 255 }));
+            Wisteria::GraphItems::Label::GetFirstAvailableFont(
+                { DONTTRANSLATE(L"Inter"), DONTTRANSLATE(L"Roboto"), DONTTRANSLATE(L"Orbitron"),
+                  DONTTRANSLATE(L"Georgia") })));
+        appLabel->SetForegroundColour(wxSystemSettings::SelectLightDark(
+            Wisteria::Colors::ColorBrewer::GetEclipseOrange(), *wxWHITE));
         appLabelSizer->Add(appLabel);
         auto* appTitleSizer = new wxBoxSizer(wxHORIZONTAL);
         appTitleSizer->Add(

@@ -31,21 +31,18 @@ crossref:
   sec-prefix: sec.
   tbl-prefix: tbl.
   fig-prefix: fig.
-fontfamilies:
-  - name: \brandfont
-    font: Roboto
-    options:
-      - Path=./fonts/Roboto/
+mainfont: Inter
+mainfontoptions:
+  - Path=./fonts/Inter/
       - Extension=.ttf
-      - UprightFont=*-VariableFontwdthwght
-      - ItalicFont=*-ItalicVariableFontwdthwght
-  - name: \covertitlefont
-    font: PlayfairDisplay
-    options:
-      - Path=./fonts/PlayfairDisplay/
+  - UprightFont=Inter-VariableFontopszwghtt
+  - ItalicFont=Inter-ItalicVariableFontopszwght
+monofont: Inconsolata
+monofontoptions:
+  - Path=./fonts/Inconsolata/
       - Extension=.ttf
-      - UprightFont=*-VariableFontwght
-      - ItalicFont=*-ItalicVariableFontwght
+  - UprightFont=Inconsolata-VariableFontwdthwght
+  - ItalicFont=Inconsolata-VariableFontwdthwght
 filters:
   - include-code-files
   - fontawesome

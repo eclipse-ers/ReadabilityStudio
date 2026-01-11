@@ -148,6 +148,8 @@ Download and upload SVG images with CC0 public domain license.
 
 #### Google Fonts {-}
 
+*Inter* designed by Rasmus Andersson.
+*Inconsolata* designed by  Raph Levien .
 *Roboto* designed by Christian Robertson, Paratype, Font Bureau.
 *Playfair Display* designed by Claus Eggers Sørensen.
 *Noto Sans Japanese* created by Google, inc.
