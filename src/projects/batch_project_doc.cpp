@@ -2797,13 +2797,51 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
         if (!wordPos->first.is_file_address() && !wordPos->first.is_numeric() &&
             !commonWords.contains(wordPos->first.c_str()))
             {
-            traits::case_insensitive_wstring_ex stemmedWord(wordPos->first.c_str());
-            (*stemmer)(stemmedWord);
-            keyWordsStemmedWithCounts.insert(
-                // the stem and original word
-                std::move(stemmedWord), wordPos->first,
-                // overall frequency of current word
-                wordPos->second.first);
+            auto knownStems = GetWords()->get_cached_stems().find(stemmer->get_language());
+            if (knownStems != GetWords()->get_cached_stems().cend())
+                {
+                // avoid re-stemming by looking for cached stems from the same stemmer
+                if (const auto foundStem = knownStems->second.find(
+                        std::wstring_view{ wordPos->first.c_str(), wordPos->first.length() });
+                    foundStem != knownStems->second.cend())
+                    {
+                    keyWordsStemmedWithCounts.insert(
+                        // the stem and original word
+                        traits::case_insensitive_wstring_ex{ foundStem->second.c_str(),
+                                                             foundStem->second.length() },
+                        wordPos->first,
+                        // overall frequency of current word
+                        wordPos->second.first);
+                    }
+                else
+                    {
+                    traits::case_insensitive_wstring_ex stemmedWord{ wordPos->first.c_str(),
+                                                                     wordPos->first.length() };
+                    (*stemmer)(stemmedWord);
+                    // wasn't stemmed and indexed before, so add it now
+                    knownStems->second.emplace(
+                        std::wstring{ wordPos->first.c_str(), wordPos->first.length() },
+                        std::wstring{ stemmedWord.c_str(), stemmedWord.length() });
+                    keyWordsStemmedWithCounts.insert(
+                        // the stem and original word
+                        std::move(stemmedWord), wordPos->first,
+                        // overall frequency of current word
+                        wordPos->second.first);
+                    }
+                }
+            // shouldn't happen, this means the stemmer wasn't connected to the document
+            // (just a sanity check fallback)
+            else
+                {
+                traits::case_insensitive_wstring_ex stemmedWord{ wordPos->first.c_str(),
+                                                                 wordPos->first.length() };
+                (*stemmer)(stemmedWord);
+                keyWordsStemmedWithCounts.insert(
+                    // the stem and original word
+                    std::move(stemmedWord), wordPos->first,
+                    // overall frequency of current word
+                    wordPos->second.first);
+                }
             }
         }
 
@@ -2815,8 +2853,9 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
     m_keyWordsDataset->Clear();
     m_keyWordsDataset->AddCategoricalColumn(GetWordsColumnName());
     m_keyWordsDataset->AddContinuousColumn(GetWordsCountsColumnName());
-    wxASSERT_MSG(m_keyWordsDataset->GetCategoricalColumns().size() == 1, L"Hard word dataset invalid!");
-    wxASSERT_MSG(m_keyWordsDataset->GetRowCount() == 0,L"Hard word dataset should be empty!");
+    wxASSERT_MSG(m_keyWordsDataset->GetCategoricalColumns().size() == 1,
+                 L"Hard word dataset invalid!");
+    wxASSERT_MSG(m_keyWordsDataset->GetRowCount() == 0, L"Hard word dataset should be empty!");
     m_keyWordsDataset->Resize(keyWordsStemmedWithCounts.get_data().size());
     auto keyWordsColumn = m_keyWordsDataset->GetCategoricalColumn(GetWordsColumnName());
     auto keydWordsFreqColumn = m_keyWordsDataset->GetContinuousColumn(GetWordsCountsColumnName());
@@ -2853,7 +2892,7 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                 keyWordFreqInfo.first.get_data().cbegin(), keyWordFreqInfo.first.get_data().cend(),
                 [](const auto& lhv, const auto& rhv) noexcept { return lhv.second < rhv.second; });
             wxASSERT_MSG(mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend(),
-                   L"Empty word list for stemmed word?!");
+                         L"Empty word list for stemmed word?!");
             // add the next word to the dataset's string table
             const auto nextKey = keyWordsColumn->GetNextKey();
             if (mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend())

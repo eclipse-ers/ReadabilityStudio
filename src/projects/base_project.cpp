@@ -2448,13 +2448,51 @@ void BaseProject::LoadHardWords()
             !wordPos->first.is_file_address() && !wordPos->first.is_numeric() &&
             !GetWords()->is_word_common(wordPos->first.c_str()))
             {
-            traits::case_insensitive_wstring_ex stemmedWord(wordPos->first.c_str());
-            (*stemmer)(stemmedWord);
-            keyWordsStemmedWithCounts.insert(
-                // the stem and original word
-                std::move(stemmedWord), wordPos->first,
-                // overall frequency of current word
-                wordPos->second.first);
+            auto knownStems = GetWords()->get_cached_stems().find(stemmer->get_language());
+            if (knownStems != GetWords()->get_cached_stems().cend())
+                {
+                // avoid re-stemming by looking for cached stems from the same stemmer
+                if (const auto foundStem = knownStems->second.find(
+                        std::wstring_view{ wordPos->first.c_str(), wordPos->first.length() });
+                    foundStem != knownStems->second.cend())
+                    {
+                    keyWordsStemmedWithCounts.insert(
+                        // the stem and original word
+                        traits::case_insensitive_wstring_ex{ foundStem->second.c_str(),
+                                                             foundStem->second.length() },
+                        wordPos->first,
+                        // overall frequency of current word
+                        wordPos->second.first);
+                    }
+                else
+                    {
+                    traits::case_insensitive_wstring_ex stemmedWord(wordPos->first.c_str(),
+                                                                    wordPos->first.length());
+                    (*stemmer)(stemmedWord);
+                    // wasn't stemmed and indexed before, so add it now
+                    knownStems->second.emplace(
+                        std::wstring{ wordPos->first.c_str(), wordPos->first.length() },
+                        std::wstring{ stemmedWord.c_str(), stemmedWord.length() });
+                    keyWordsStemmedWithCounts.insert(
+                        // the stem and original word
+                        std::move(stemmedWord), wordPos->first,
+                        // overall frequency of current word
+                        wordPos->second.first);
+                    }
+                }
+            // shouldn't happen, this means the stemmer wasn't connected to the document
+            // (just a sanity check fallback)
+            else
+                {
+                traits::case_insensitive_wstring_ex stemmedWord(wordPos->first.c_str(),
+                                                                wordPos->first.length());
+                (*stemmer)(stemmedWord);
+                keyWordsStemmedWithCounts.insert(
+                    // the stem and original word
+                    std::move(stemmedWord), wordPos->first,
+                    // overall frequency of current word
+                    wordPos->second.first);
+                }
             }
         // dolch sight words
         auto dolchIter = m_dolch_word_list(wordPos->first.c_str());

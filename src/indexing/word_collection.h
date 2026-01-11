@@ -88,6 +88,8 @@ template<typename Tword_type>
 class document
     {
   public:
+    using stem_cache = std::unordered_map<std::wstring, std::wstring, wstring_hash, wstring_equal>;
+
     document(const std::basic_string<wchar_t>& name, grammar::base_syllabize* syllabizer,
              stemming::stem<>* stemmer, const grammar::is_coordinating_conjunction* isConjunction,
              const grammar::phrase_collection* known_phrases,
@@ -104,6 +106,10 @@ class document
                                programming_known_spellings, false, true, true, true, false, true,
                                true)
         {
+        if (stem_word != nullptr)
+            {
+            m_knownStems.emplace(stem_word->get_language(), stem_cache{});
+            }
         }
 
 #ifdef __UNITTEST
@@ -1177,7 +1183,14 @@ class document
 
     void set_syllabizer(grammar::base_syllabize* syllabizer) noexcept { syllabize = syllabizer; }
 
-    void set_stemmer(stemming::stem<>* stemmer) { stem_word = stemmer; }
+    void set_stemmer(stemming::stem<>* stemmer)
+        {
+        stem_word = stemmer;
+        if (stem_word != nullptr)
+            {
+            m_knownStems.emplace(stem_word->get_language(), stem_cache{});
+            }
+        }
 
     void set_conjunction_function(const grammar::is_coordinating_conjunction* isConjunction)
         {
@@ -1321,6 +1334,12 @@ class document
     const grammar::phrase_collection& get_known_phrases() const noexcept
         {
         return *is_known_phrase;
+        }
+
+    [[nodiscard]]
+    static std::unordered_map<stemming::stemming_type, stem_cache>& get_cached_stems() noexcept
+        {
+        return m_knownStems;
         }
 
     /// @returns The aggregated set of tokens (words and known/negated phrases), along with their
@@ -2428,13 +2447,51 @@ class document
                     {
                     if (stem_word != nullptr)
                         {
-                        stemmedWord.assign(currentWord.c_str());
-                        (*stem_word)(stemmedWord);
-                        uncommonWords.insert(stemmedWord.c_str(), wordCounter);
+                        auto knowStems = m_knownStems.find(stem_word->get_language());
+                        if (knowStems != m_knownStems.cend())
+                            {
+                            // avoid re-stemming by looking for cached stems from the same stemmer
+                            if (const auto foundStem = knowStems->second.find(
+                                    std::wstring_view{ currentWord.c_str(), currentWord.length() });
+                                foundStem != knowStems->second.cend())
+                                {
+                                uncommonWords.insert(
+                                    traits::case_insensitive_wstring_ex{
+                                        foundStem->second.c_str(), foundStem->second.length() },
+                                    wordCounter);
+                                }
+                            else
+                                {
+                                stemmedWord.assign(currentWord.c_str());
+                                (*stem_word)(stemmedWord);
+                                uncommonWords.insert(
+                                    traits::case_insensitive_wstring_ex{ stemmedWord.c_str(),
+                                                                         stemmedWord.length() },
+                                    wordCounter);
+                                knowStems->second.emplace(
+                                    std::wstring{ currentWord.c_str(), currentWord.length() },
+                                    stemmedWord);
+                                }
+                            }
+                        // shouldn't happen (means stemmer in use is not in being cached),
+                        // just include as sanity check
+                        else
+                            {
+                            assert(false && "Stemmer not being cached in word collection ?!");
+                            stemmedWord.assign(currentWord.c_str());
+                            (*stem_word)(stemmedWord);
+                            uncommonWords.insert(
+                                traits::case_insensitive_wstring_ex{ stemmedWord.c_str(),
+                                                                     stemmedWord.length() },
+                                wordCounter);
+                            }
                         }
                     else
                         {
-                        uncommonWords.insert(currentWord.c_str(), wordCounter);
+                        uncommonWords.insert(
+                            traits::case_insensitive_wstring_ex{ currentWord.c_str(),
+                                                                 currentWord.length() },
+                            wordCounter);
                         }
                     }
                 }
@@ -2901,6 +2958,8 @@ class document
     std::shared_ptr<const grammar::phrase_collection> is_excluded_phrase{
         nullptr
     }; // this should be shared from a parent
+
+    inline static std::unordered_map<stemming::stemming_type, stem_cache> m_knownStems{};
 
     const word_list* m_stop_list{ nullptr };
     is_correctly_spelled_word<Tword_type, word_list> is_correctly_spelled;
