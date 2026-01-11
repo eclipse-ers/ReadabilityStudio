@@ -19,24 +19,12 @@ publisher-cities:
   - Brussels
   - Ottawa
   - Darmstadt
-theme-color: "248, 149, 34"
-page-side-decoration-color: "61, 60, 59"
+theme-color: "240, 108, 2"
+page-side-decoration-color: "255, 255, 255"
 chapter-image: "non-generated/banner.jpg"
 number-sections: true
 crossref:
   chapters: true
-mainfont: Inter
-mainfontoptions:
-  - Path=./fonts/Inter/
-      - Extension=.ttf
-  - UprightFont=Inter-VariableFontopszwghtt
-  - ItalicFont=Inter-ItalicVariableFontopszwght
-monofont: Inconsolata
-monofontoptions:
-  - Path=./fonts/Inconsolata/
-      - Extension=.ttf
-  - UprightFont=Inconsolata-VariableFontwdthwght
-  - ItalicFont=Inconsolata-VariableFontwdthwght
 book:
   title: "{{< var PROGRAM_NAME >}} {{< var VERSION >}}"
   subtitle: Programming Manual
@@ -75,6 +63,18 @@ format:
       - Path=./fonts/NotoSerifJP/
       - Extension=.ttf
       - UprightFont=*-VariableFontwght
+    mainfont: Inter
+    mainfontoptions:
+      - Path=./fonts/Inter/
+      - Extension=.ttf
+      - UprightFont=Inter-VariableFontopszwghtt
+      - ItalicFont=Inter-ItalicVariableFontopszwght
+    monofont: Inconsolata
+    monofontoptions:
+      - Path=./fonts/Inconsolata/
+      - Extension=.ttf
+      - UprightFont=Inconsolata-VariableFontwdthwght
+      - ItalicFont=Inconsolata-VariableFontwdthwght
     linkcolor: black
     citecolor: black
   html:

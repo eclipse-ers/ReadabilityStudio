@@ -1,8 +1,6 @@
 project:
   output-dir: "docs"
 bibliography: cites.bib
-theme-color: "26, 69, 135"
-page-side-decoration-color: "0, 128, 128"
 book:
   subtitle: Readability Test Reference
   output-file: "readability-test-reference"

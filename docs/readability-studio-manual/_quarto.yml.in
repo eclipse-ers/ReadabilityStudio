@@ -22,8 +22,8 @@ publisher-cities:
   - Ottawa
   - Darmstadt
 chapter-image: "non-generated/banner.jpg"
-theme-color: "0, 128, 128"
-page-side-decoration-color: "26, 69, 135"
+theme-color: "44, 28, 216"
+page-side-decoration-color: "84, 255, 212"
 watermark: "${DOCS_WATERMARK}"
 number-sections: true
 crossref:
@@ -31,18 +31,6 @@ crossref:
   sec-prefix: sec.
   tbl-prefix: tbl.
   fig-prefix: fig.
-mainfont: Inter
-mainfontoptions:
-  - Path=./fonts/Inter/
-      - Extension=.ttf
-  - UprightFont=Inter-VariableFontopszwghtt
-  - ItalicFont=Inter-ItalicVariableFontopszwght
-monofont: Inconsolata
-monofontoptions:
-  - Path=./fonts/Inconsolata/
-      - Extension=.ttf
-  - UprightFont=Inconsolata-VariableFontwdthwght
-  - ItalicFont=Inconsolata-VariableFontwdthwght
 filters:
   - include-code-files
   - fontawesome
@@ -76,6 +64,18 @@ format:
       - Path=./fonts/NotoSerifJP/
       - Extension=.ttf
       - UprightFont=*-VariableFontwght
+    mainfont: Inter
+    mainfontoptions:
+      - Path=./fonts/Inter/
+      - Extension=.ttf
+      - UprightFont=Inter-VariableFontopszwghtt
+      - ItalicFont=Inter-ItalicVariableFontopszwght
+    monofont: Inconsolata
+    monofontoptions:
+      - Path=./fonts/Inconsolata/
+      - Extension=.ttf
+      - UprightFont=Inconsolata-VariableFontwdthwght
+      - ItalicFont=Inconsolata-VariableFontwdthwght
     linkcolor: black
     citecolor: black
   html:

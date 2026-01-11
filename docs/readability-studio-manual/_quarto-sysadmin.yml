@@ -1,7 +1,8 @@
 project:
   output-dir: "docs"
-theme-color: "26, 69, 135"
-page-side-decoration-color: "0, 128, 128"
+theme-color: "44, 28, 216"
+pdf-cover-font-color: "255, 255, 255"
+page-side-decoration-color: "84, 255, 212"
 links-as-notes: false
 pdf-cover: "images/non-generated/sysadmin-cover.png"
 book:
