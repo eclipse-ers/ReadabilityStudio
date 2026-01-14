@@ -73,7 +73,7 @@ For options specific to a graph that needs to be added to the ribbon:
   `r file_path(c("src", "projects", "batch_project_doc.cpp"))`
 - If not already present, create a `wxRibbonPanel*` variable from calling\
   `hideEditPanel()` with the graph's ribbon panel ID in\
-  `BatchProjectView::OnItemSelected()` (`r file_path(c("src", "projects", "batch_project_view.cpp"))`).
+  `BatchProjectView::OnItemSelected()` (`r file_path(c("src", "projects", "batch_project_view.cpp"))`)
   - In the same function, (if not present) add code to show the graph's panel when the selected item is of that graph's type.
     Also, add code to toggle the button's state (if applicable)
 - Repeat the aforementioned steps, but in\
@@ -118,11 +118,12 @@ For options specific to a graph that needs to be added to the ribbon:
   `BaseProject::BaseProject()`
 - If an index test, add its score formatting logic to `BatchProjectView::UpdateStatAndTestPanes()`
 - Document it in the help:
-  - Add a topic for it in `r file_path(c("docs", "readability-studio-manual", "[language]"))`, where "[language]" is the language that the test is meant for
+  - Add a topic for it in `r file_path(c("docs", "readability-studio-manual", "[language]"))`,\
+    where "[language]" is the language that the test is meant for
   - Add it to the proper dataset in `r file_path(c("docs", "readability-studio-manual", "data"))`\
     (e.g., "EnglishTests.txt")
   - If a graphical test, automate making a screenshot of the graph for the help
-- Add an icon to `r file_path(c("resources", "images", "tests"))` in SVG format using the name of the test's string ID
+- Add an icon to `r file_path(c("resources", "images", "tests"))` in SVG format using the test's string ID
 
 ## Adding a New Familiar Word List {-}
 
@@ -202,7 +203,8 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
 - Add flag for including that list, along with getter and setter functions
   - These should be initialized to `false`
 - In `custom_test`'s constructor, set the `is_familiar_word` object to use the test's prescribed proper noun and number logic
-- Add logic for `operator==`, `is_using_familiar_words()`, `reset()`, `is_word_familiar_any_included_list()`, `is_word_familiar_all_included_list()`
+- Add logic for `operator==`, `is_using_familiar_words()`, `reset()`,\
+  `is_word_familiar_any_included_list()`, `is_word_familiar_all_included_list()`
 
 ### Custom Test Support (Higher-level) {-}
 
@@ -263,7 +265,8 @@ If it is a more complex word list (with categories, like Dolch), then that will 
 
 - Add a static function wrapper to the function you wish to call from the program in\
   `r file_path(c("src", "test_helpers", "readability_formula_parser.cpp"))` (e.g., `HardFogWordCount`)
-- Map the function (and shortcut, if applicable) in `ReadabilityFormulaParser::ReadabilityFormulaParser()`
+- Map the function (and shortcut, if applicable) in\
+  `ReadabilityFormulaParser::ReadabilityFormulaParser()`
 - Document the function in `CustomTestDlg::Create()`
 - Document the function in `r file_path(c("docs", "readability-studio-manual", "custom-tests-and-bundles.qmd"))`
 
@@ -292,7 +295,7 @@ This will re-generate the following files, which the build script will include:
 
 - `r file_path(c("cmake", "includes", "files.cmake"))`: the source files built into the program (including files from submodules)
 - `r file_path(c("cmake", "includes", "images.cmake"))`: the images to be packaged into "res.wad" (the distributable resource file)
-- `r file_path(c("cmake", "includes", "words.cmake"))`: the word lists to be packaged into "res.wad" (the distributable resource file)
+- `r file_path(c("cmake", "includes", "words.cmake"))`: the word lists to be packaged into "res.wad"
 
 The file `r file_path(c("cmake", "list-files.cmake"))` gathers and filters the that should be included.
 If you need to filter more files, edit the regular expressions in this script.

@@ -125,7 +125,8 @@ For the translations provided with *wxWidgets*:
 - rename the output to "wxstd.mo"
 - copy it into a folder with the language's canonical name in `r file_path(c("locale"))`.
 
-For example, if compiling `r file_path(c("wxWidgets", "locale", "es.po"))`, then copy the output "es.mo" to `r file_path(c("locale", "es", "wxstd.mo"))`.
+For example, if compiling `r file_path(c("wxWidgets", "locale", "es.po"))`, then copy the output "es.mo" to\
+`r file_path(c("locale", "es", "wxstd.mo"))`.
 
 The next time that the *CMake* build process is ran, all compiled \*.mo files will be copied into the build and installer folders.
 

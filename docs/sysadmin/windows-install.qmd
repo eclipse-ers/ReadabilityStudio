@@ -39,8 +39,6 @@ System Admins can run this program remotely to uninstall the program from workst
 "unins???.exe" can take parameters, such as `/VERYSILENT`.
 :::
 
-{{< pagebreak >}}
-
 ## Updating {-}
 
 To upgrade an installation, run the installer ("rssetup{{< var FULL_VERSION >}}.exe") as an administrator and follow the prompts.

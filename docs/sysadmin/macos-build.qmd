@@ -21,7 +21,7 @@ To install home-brew:
 
 ```{.bash}
 /bin/bash -c \
-    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 To install *CMake* and *create-dmg*:
@@ -65,7 +65,7 @@ Follow the instructions in `r menu(c('wxpatch', 'macOS', 'Instructions.txt'))` t
 
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
-```{.bash include="build-commands.txt" start-line=10 end-line=18}
+```{.bash include="build-commands.txt" start-line=11 end-line=20}
 ```
 
 ::: {.tipsection data-latex=""}
@@ -75,6 +75,8 @@ You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support 
 If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
 (This is currently necessary for macOS builds.)
 :::
+
+{{< pagebreak >}}
 
 ## Code sign {-}
 
