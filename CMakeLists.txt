@@ -41,9 +41,9 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 option(ALLOW_DIRTY_SUBMODULES "Allow building even if submodules have local changes" OFF)
-# Override it based on build type (for single-config generators)
+# Always allow dirty submodules for debug, but use user's selection for release.
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(ALLOW_DIRTY_SUBMODULES ON CACHE BOOL "Allow building even if submodules have local changes")
+    set(ALLOW_DIRTY_SUBMODULES ON CACHE BOOL "Allow building even if submodules have local changes" FORCE)
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(ALLOW_DIRTY_SUBMODULES OFF CACHE BOOL "Allow building even if submodules have local changes")
 endif()
