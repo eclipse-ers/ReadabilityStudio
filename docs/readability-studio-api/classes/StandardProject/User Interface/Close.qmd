@@ -18,7 +18,8 @@ Close(boolean saveChanges = false)
 #### Example {-}
 
 ``` {.lua}
--- Open a project from the user's "Documents" folder and save its scores summary
+-- Open a project from the user's "Documents" folder
+-- and save its scores summary
 consentForm = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
                               "Consent Form.rsp")
 consentForm:ExportReport(ReportType.ReadabilityScoresTabularReport,

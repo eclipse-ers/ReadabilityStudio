@@ -20,8 +20,9 @@ source('R/appdown.r')
 To install home-brew:
 
 ```{.bash}
-/bin/bash -c \
-"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c  \
+"$(curl -fsSL \
+   https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 To install *CMake* and *create-dmg*:
@@ -114,15 +115,15 @@ Go to  `r menu(c('installers', 'macos', 'release'))` and run the following:
 test -f ReadabilityStudio.dmg && rm ReadabilityStudio.dmg
 create-dmg \
   --volname "Readability Studio Installer" \
-  --volicon "../../app-logo.icns" \
-  --background "../../app-logo.png" \
-  --window-pos 200 120 \
-  --window-size 800 400 \
-  --icon-size 100 \
-  --icon "readstudio.app" 200 190 \
-  --hide-extension "readstudio.app" \
-  --app-drop-link 600 185 \
-  "ReadabilityStudio.dmg" \
+  --volicon "../../app-logo.icns"          \
+  --background "../../app-logo.png"        \
+  --window-pos 200 120                     \
+  --window-size 800 400                    \
+  --icon-size 100                          \
+  --icon "readstudio.app" 200 190          \
+  --hide-extension "readstudio.app"        \
+  --app-drop-link 600 185                  \
+  "ReadabilityStudio.dmg"                  \
   "release/"
 ```
 

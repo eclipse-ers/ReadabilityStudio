@@ -8,7 +8,7 @@ The following guidelines relate to all code:
 - Class member variables should be prefixed with an `m_`
 - Macros should be in all caps (although macros should be avoided as much as possible)
 - Global and class member constants should be in all caps
-- Meaningful names should always be used (only loop counters may have simple names like `i` and `j`)
+- Meaningful names should be used (only loop counters may have simple names like `i` and `j`)
 - Caps should not be used in function/variable/class names, even if it's an acronym
 
 ### Low-level Styles {-}
@@ -68,7 +68,7 @@ enum DebugSettings
 ## Best Practices {-}
 
 - Intrinsic-type (and enumeration) member variables should be brace initialized
-- Macros should be avoided when possible; prefer using functions, `constexpr`, `if constexpr`, etc.\
+- Macros should be avoided when possible; prefer using functions, `constexpr`, etc.\
   Macros should be limited to debugging and platform-defining sections (e.g., `_WIN32`).
 
 ## i18n Guidelines {-}
@@ -82,5 +82,5 @@ enum DebugSettings
   - Messages from low-level code (e.g., the *Excel* importer)
 - Exception messages should be translatable, unless in low-level code where *gettext* mechanisms aren't available
 - Strings consisting of only proper nouns (e.g., "Dale-Chall") should not be translatable
-- All other standard i18n guidelines apply (e.g., do not expose internal codes and numbers for translation)
+- All standard i18n guidelines apply (e.g., do not expose internal codes and numbers for translation)
 - Formatting code (e.g., HTML tags) should not in translatable strings when possible

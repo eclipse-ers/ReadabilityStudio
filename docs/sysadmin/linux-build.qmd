@@ -34,8 +34,8 @@ Install the following libraries:
 | *OpenSSL* | *libssl-dev* | *openssl-devel* |
 | *libxml2* | *libxml2-dev* | *libxml2-devel* |
 | *gspell* | *libgspell-1-dev* | *gspell-devel* |
-| *ImageMagick++* | *libmagick++-dev* | *ImageMagick-c++-devel* |
-| *Poppler* | *libpoppler-cpp-dev* | *poppler-cpp-devel* |
+| *ImageMagick++* (optional) | *libmagick++-dev* | *ImageMagick-c++-devel* |
+| *Poppler* (optional) | *libpoppler-cpp-dev* | *poppler-cpp-devel* |
 
 {{< pagebreak >}}
 
@@ -67,9 +67,9 @@ The following steps are only required if you are distributing builds outside CI,
 
 ```{.bash}
 linuxdeploy-x86_64.AppImage --appdir installers/unix/AppDir \
-  --executable installers/unix/AppDir/usr/bin/readstudio \
-  -d installers/unix/AppDir/readstudio.desktop \
-  -i installers/unix/AppDir/app-logo.svg \
+  --executable installers/unix/AppDir/usr/bin/readstudio    \
+  -d installers/unix/AppDir/readstudio.desktop              \
+  -i installers/unix/AppDir/app-logo.svg                    \
   --output appimage
 mv Readability_Studio*.AppImage ./installers/unix
 ```

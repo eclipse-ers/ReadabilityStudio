@@ -24,7 +24,8 @@ This can be optimized by placing it in between calls to [`DelayReloading()`](#st
 ``` {.lua}
 posting = StandardProject()
 posting:DelayReloading()
-posting:SetDocumentFilePath(Application.GetExamplesFolder() .. "Job Posting.odt")
+posting:SetDocumentFilePath(Application.GetExamplesFolder() ..
+    "Job Posting.odt")
 -- split the description section into separate lines and ignore them
 posting:SetParagraphsParsingMethod(ParagraphParse.EachNewLineIsAParagraph)
 posting:SetTextExclusion(TextExclusionType.ExcludeIncompleteSentences)

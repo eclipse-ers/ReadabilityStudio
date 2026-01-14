@@ -31,13 +31,14 @@ If the option is used in projects also, do the following:
 
 Finally:
 
-- Add variable to `r file_path(c("src", "ui", "dialogs", "tools_options_dlg.h"))` (if not a value shown in a property grid)
+- Add variable to `r file_path(c("src", "ui", "dialogs", "tools_options_dlg.h"))` (for values not shown in a property grid)
   - If a value in a property grid, then add a function that returns the string for the value in the property grid; this will be used also as a lookup key
 - Add variable initialization from `ReadabilityAppOptions` or project to `ToolsOptionsDlg`'s constructor
   - Note that if the option is in a property grid, then there is no direct variable and instead you use a string label to get and set the values from the property grid.
     Instead, the default value for this field is loaded in `ToolsOptionsDlg::CreateControls()`.
 - Add change watching logic for variable to `ToolsOptionsDlg::HaveXXXOptionsChanged()` if related to project settings (note there are different versions of these functions for each type of feature)
-- Add saving logic to `ToolsOptionsDlg::SaveOptions()` (and related `SaveProjectXXXOptions()` function, if applicable)
+- Add saving logic to `ToolsOptionsDlg::SaveOptions()`\
+  (and related `SaveProjectXXXOptions()` function, if applicable)
 - Attach variable to interface in `ToolsOptionsDlg::CreateControls()`
 - Use the variable in the program where applicable
 - Add it to the documentation
@@ -131,7 +132,7 @@ The following documents how to add a familiar word list (used by a test, such as
 These are extra steps in addendum to [adding a new test](#add-a-new-test).
 
 ::: {.notesection data-latex=""}
-This applies to full words lists (e.g., Dale-Chall), not supplements such as Stocker's Catholic words.
+This applies to full words lists (e.g., Dale-Chall), not supplements such as Stocker's Catholic word list.
 :::
 
 - Create a word list file and add to the resources (`r file_path(c("resources", "words", "word-lists"))`).\

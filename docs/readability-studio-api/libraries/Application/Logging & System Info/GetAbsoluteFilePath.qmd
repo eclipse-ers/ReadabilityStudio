@@ -26,8 +26,9 @@ The full file path.
 #### Example\index{examples!getting file paths} {-}
 
 ``` {.lua}
--- Assuming that there is a file "ProfileReport.txt" in the folder "Mizzie/Documents"
--- 2 levels up from where the current script is running, this will print the full
+-- Assuming that there is a file "ProfileReport.txt" in
+-- the folder "Mizzie/Documents" 2 levels up from where
+-- the current script is running, this will print the full
 -- path of where "ProfileReport.txt" is at.
 Debug.Print(
     Application.GetAbsoluteFilePath(

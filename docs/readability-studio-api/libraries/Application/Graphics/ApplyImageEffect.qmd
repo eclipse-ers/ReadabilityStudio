@@ -31,9 +31,11 @@ Returns `true` if image was successfully saved.
 
 ``` {.lua}
 Application.ApplyImageEffect(
-    Application.GetUserFolder(UserPath.Pictures) .. "Skating at Kettering.JPG",
+    Application.GetUserFolder(UserPath.Pictures) ..
+        "Skating at Kettering.JPG",
     -- output can be saved in a different format
-    Application.GetUserFolder(UserPath.Pictures) .. "Skating Oil Painting.png",
+    Application.GetUserFolder(UserPath.Pictures) ..
+        "Skating Oil Painting.png",
     -- apply an oil painting look to the new image
     ImageEffect.OilPainting)
 ```

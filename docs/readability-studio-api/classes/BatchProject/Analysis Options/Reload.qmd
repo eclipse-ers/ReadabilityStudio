@@ -28,8 +28,10 @@ docs:DelayReloading()
 docs:SetLanguage(Language.Spanish)
 docs:AddTest(Test.Frase)
 docs:AddTest(Test.GpmFry)
--- Add all supported documents from a "Client Agreements" folder and run all analyses.
-docs:LoadFolder(Application.GetUserFolder(UserPath.Documents) .. "Client Agreements")
+-- Add all supported documents from a "Client Agreements" folder and
+-- run all analyses.
+docs:LoadFolder(Application.GetUserFolder(UserPath.Documents) ..
+    "Client Agreements")
 docs:Reload()
 -- Save the graphs.
 docs:ExportGraph(SideBarSection.ReadabilityScores, GraphType.Frase,

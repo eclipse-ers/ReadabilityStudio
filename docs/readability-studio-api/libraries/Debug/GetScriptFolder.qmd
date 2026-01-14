@@ -23,8 +23,9 @@ A warning explaining this will also appear in the editor's debug window.
 ### Example {-}
 
 ``` {.lua}
--- Assuming that there is a file "ProfileReport.txt" in the folder "Mizzie/Documents"
--- 2 levels up from where the current script is running, this will print the full
+-- Assuming that there is a file "ProfileReport.txt" in
+-- the folder "Mizzie/Documents" 2 levels up from where
+-- the current script is running, this will print the full
 -- path of where "ProfileReport.txt" is at.
 Debug.Print(
     Application.GetAbsoluteFilePath(

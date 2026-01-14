@@ -20,8 +20,9 @@ SetBarChartBarColor(string colorName)
 ``` {.lua}
 symposium = StandardProject(Application.GetExamplesFolder() ..
                             "YA Enterprise Software Symposium.odt")
-symposium:SetPlotBackgroundImage(Application.GetUserFolder(UserPath.Pictures) ..
-                                 "Skating at Kettering.jpg")
+symposium:SetPlotBackgroundImage(
+                            Application.GetUserFolder(UserPath.Pictures) ..
+                            "Skating at Kettering.jpg")
 symposium:SetPlotBackgroundImageOpacity(100)
 symposium:SetPlotBackgroundImageEffect(ImageEffect.Sepia)
 symposium:SetPlotBackgroundImageFit(ImageFit.CropAndCenter)

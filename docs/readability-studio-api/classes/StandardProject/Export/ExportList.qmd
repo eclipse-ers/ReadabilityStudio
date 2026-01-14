@@ -44,8 +44,8 @@ ExportList(ListType type,
 consentForm = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
                               "Consent Form.rsp")
 -- Sort the "All Words" list.
--- Will sort by the third column (Z-A sorting), and in case of a tie, then sort
--- by the second then the first column.
+-- Will sort by the third column (Z-A sorting), and in case of a tie,
+-- then sort by the second then the first column.
 consentForm:SortList(ListType.AllWords,
             3, SortOrder.SortDescending,
             2, SortOrder.SortDescending,

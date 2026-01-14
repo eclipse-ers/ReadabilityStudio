@@ -19,8 +19,9 @@ The number of words consisting of three or more syllables from the document.
 #### Example {-}
 
 ``` {.lua}
-medInstructions = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
-                                  "Dex Instructions.rtf")
+medInstructions =
+    StandardProject(Application.GetUserFolder(UserPath.Documents) ..
+                    "Dex Instructions.rtf")
 
 difficultWordPercent =
     math.floor(((medInstructions:Get3SyllablePlusWordCount() /

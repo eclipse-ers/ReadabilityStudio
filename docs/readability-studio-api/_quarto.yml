@@ -20,7 +20,7 @@ publisher-cities:
   - Ottawa
   - Darmstadt
 theme-color: "240, 108, 2"
-page-side-decoration-color: "255, 255, 255"
+page-side-decoration-color: "0, 0, 0"
 chapter-image: "non-generated/banner.jpg"
 number-sections: true
 crossref:

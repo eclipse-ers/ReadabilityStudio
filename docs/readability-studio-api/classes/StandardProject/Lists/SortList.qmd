@@ -1,5 +1,4 @@
-{{< pagebreak >}}
-
+::: {.minipage data-latex="{\textwidth}"}
 ### `SortList` {#standard-sortlist}
 
 Sorts\index{lists!sorting} the specified list using a series of columns and sorting orders.
@@ -29,8 +28,8 @@ SortList(ListType list,
 consentForm = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
                               "Consent Form.rsp")
 -- Sort the "All Words" list.
--- Will sort by the third column (Z-A sorting), and in case of a tie, then sort
--- by the second then the first column.
+-- Will sort by the third column (Z-A sorting), and in case of a tie,
+-- then sort by the second then the first column.
 consentForm:SortList(ListType.AllWords,
             3, SortOrder.SortDescending,
             2, SortOrder.SortDescending,
@@ -42,3 +41,4 @@ consentForm:ExportList(ListType.AllWords,
 
 consentForm:Close()
 ```
+:::

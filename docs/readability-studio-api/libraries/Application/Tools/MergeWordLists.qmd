@@ -34,13 +34,19 @@ Returns `true` if files were successfully merged.
 
 ``` {.lua}
 Application.MergeWordLists(
-    Application.GetUserFolder(UserPath.Documents) .. "programming/assembly.txt",
-    Application.GetUserFolder(UserPath.Documents) .. "programming/cpp.txt",
-    Application.GetUserFolder(UserPath.Documents) .. "programming/html.txt",
-    Application.GetUserFolder(UserPath.Documents) .. "programming/sql.txt",
-    Application.GetUserFolder(UserPath.Documents) .. "programming/r.txt",
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/assembly.txt",
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/cpp.txt",
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/html.txt",
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/sql.txt",
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/r.txt",
     -- all proceeding files will be combined into "all-languages.txt"
-    Application.GetUserFolder(UserPath.Documents) .. "programming/all-languages.txt")
+    Application.GetUserFolder(UserPath.Documents) ..
+        "programming/all-languages.txt")
 ```
 
 ::: {.notesection data-latex=""}

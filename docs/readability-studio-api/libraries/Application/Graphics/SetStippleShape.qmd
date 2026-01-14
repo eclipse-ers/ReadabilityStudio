@@ -21,8 +21,8 @@ Available named shapes are:
 `"sun"`, `"book"`, `"fall-leaf"`, `"man"`, `"woman"`, `"business-woman"`, `"tire"`, `"flower"`,
 `"warning-road-sign"`, `"location-marker"`, `"graduation-cap"`, `"car"`, `"newspaper"`,
 `"snowflake"`, `"blackboard"`, `"clock"`, `"ruler"`, `"ivbag"`, `"cold-thermometer"`, `"hot-thermometer"`,
-`"apple"`, `"granny-smith-apple"`, `"heart"`, `"immaculate-heart"`, `"flame"`, `"office"`, `"factory"`,
-`"house"`, `"barn"`, `"farm"`.
+`"apple"`, `"granny-smith-apple"`, `"heart"`, `"immaculate-heart"`, `"immaculate-heart-with-sword"`, `"flame"`, `"office"`, `"factory"`,
+`"house"`, `"barn"`, `"farm"`, `"hundred-dollar-bill"`, `"pumpkin"`, `"jack-o-lantern"`, `"monitor"`.
 <!--translate:on-->
 :::
 

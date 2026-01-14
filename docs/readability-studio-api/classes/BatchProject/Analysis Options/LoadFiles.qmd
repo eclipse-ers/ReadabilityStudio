@@ -19,7 +19,8 @@ LoadFiles(table files)
 #### Example\index{examples!analyzing files} {-}
 
 ``` {.lua}
--- Add all files with "feline" in the title from the folder "X:\Clinics\med-instructions"
+-- Add all files with "feline" in the title from
+-- the folder "X:\Clinics\med-instructions"
 felineDocs = BatchProject();
 felineDocs:LoadFiles(Application.FindFiles(
                      "X:\\Clinics\\med-instructions", "*feline*", true)) -- <1>

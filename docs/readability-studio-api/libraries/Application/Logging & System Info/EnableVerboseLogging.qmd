@@ -32,9 +32,12 @@ if (summaries:ExportGraph(GraphType.Fry,
 else
   -- ...or log an error about it failing and save the log report to review.
   Application.LogError("Unable to save graph!")
-  Application.ExportLogReport(Application.GetUserFolder(UserPath.Desktop) .. "log.txt")
+  Application.ExportLogReport(
+      Application.GetUserFolder(UserPath.Desktop) .. "log.txt")
   Debug.Print(
-    "<span style='color:red; font-weight:bold'>Failed to save graph!</span> " ..  -- <1>
+    "<span style='color:red; font-weight:bold'>" .. -- <1>
+    "Failed to save graph!" ..
+    "</span> " ..
     "A copy of the log report has been copied to your desktop.")
 end
 summaries:Close()

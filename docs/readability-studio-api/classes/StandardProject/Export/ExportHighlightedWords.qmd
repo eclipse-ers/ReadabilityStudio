@@ -37,9 +37,9 @@ consentForm:ExportHighlightedWords(Application.GetTestId("Patient Test"),
 
 -- as well as a highlighted report of 3+ syllable words
 consentForm:ExportHighlightedWords(
-                          HighlightedReportType.ThreePlusSyllableHighlightedWords,
-                          Application.GetUserFolder(UserPath.Documents) ..
-                          "Review/ConsentLongWords.htm")
+                    HighlightedReportType.ThreePlusSyllableHighlightedWords,
+                    Application.GetUserFolder(UserPath.Documents) ..
+                    "Review/ConsentLongWords.htm")
 
 consentForm:Close()
 ```

@@ -445,6 +445,8 @@ bool ReadabilityApp::OnInit()
                    std::make_pair(_(L"Apple (Granny Smith)"), DONTTRANSLATE(L"granny-smith-apple")),
                    std::make_pair(_(L"Heart"), DONTTRANSLATE(L"heart")),
                    std::make_pair(_(L"Immaculate Heart"), DONTTRANSLATE(L"immaculate-heart")),
+                   std::make_pair(_(L"Immaculate Heart with sword"),
+                                  DONTTRANSLATE(L"immaculate-heart-with-sword")),
                    std::make_pair(_(L"Flame"), DONTTRANSLATE(L"flame")),
                    std::make_pair(_(L"Office"), DONTTRANSLATE(L"office")),
                    std::make_pair(_(L"Factory"), DONTTRANSLATE(L"factory")),

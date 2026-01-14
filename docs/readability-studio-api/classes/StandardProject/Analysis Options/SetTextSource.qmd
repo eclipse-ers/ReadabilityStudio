@@ -23,7 +23,8 @@ doc = StandardProject()
 doc:DelayReloading()
 doc:SetTextSource(TextSource.FromFile)
 doc:SetTextStorageMethod(TextStorage.LoadFromExternalDocument)
-doc:SetDocumentFilePath(Application.GetExamplesFolder() .. "Cocoa Desserts.rtf")
+doc:SetDocumentFilePath(Application.GetExamplesFolder() ..
+    "Cocoa Desserts.rtf")
 doc:Reload()
 ```
 :::

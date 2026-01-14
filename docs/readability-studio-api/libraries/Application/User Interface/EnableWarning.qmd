@@ -29,7 +29,7 @@ The following warning IDs are available:
 | `"ndc-proper-noun-conflict"`  |  Prompt if a custom NDC test's proper noun settings differ from the standard NDC test. |
 | `"new-dale-chall-text-exclusion-differs-note"`  |  Prompt about New Dale-Chall using a different text exclusion method from the system default. |
 | `"harris-jacobson-text-exclusion-differs-note"`  |  Prompt about Harris-Jacobson using a different text exclusion method from the system default. |
-| `"custom-test-numeral-settings-adjustment-required"`  |  \ \ \ \ \ \ \ \ Warn when a custom test's numeral settings will be adjusted. |
+| `"custom-test-numeral-settings-adjustment-required"`  |  Warn when a custom test's numeral settings will be adjusted. |
 | `"german-no-proper-noun-support"`  |  Warn about German stemming not supporting proper noun detection. |
 | `"histogram-unique-values-midpoints-required"`  |  Warn about unique-value histograms requiring midpoint axis labels. |
 | `"file-autosearch-from-project-directory"`  |  Prompt about auto-searching for missing files. |

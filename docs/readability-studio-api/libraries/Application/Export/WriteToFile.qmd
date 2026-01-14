@@ -27,8 +27,9 @@ Returns `true` if output was successfully written to the file.
 #### Example {-}
 
 ``` {.lua}
-medInstructions = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
-                                  "Dex Instructions.rtf")
+medInstructions =
+    StandardProject(Application.GetUserFolder(UserPath.Documents) ..
+                    "Dex Instructions.rtf")
 
 difficultWordPercent =
     math.floor(((medInstructions:Get3SyllablePlusWordCount() /
