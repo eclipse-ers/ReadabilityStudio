@@ -93,7 +93,7 @@ For options specific to a graph that needs to be added to the ribbon:
 - Add its `AddXXXTest()` function to `r file_path(c("src", "projects", "base_project.cpp"))`
 - If a graphical test (e.g., Fry), then also do the following:
   - If the graph calculates the score (e.g., Fry), then the `AddXXXTest()` function must be virtual and derived in `r file_path(c("src", "projects", "standard_project_doc.h"))` also
-  - Otherwise, if the score is calucalated by a formula and the graph is a supplement to visualize that score (e.g., Crawford), then add a virtual `AddXXXGraph()` function to `r file_path(c("src", "projects", "base_project.h"))` and call that from the test's `AddXXXTest()` function in `r file_path(c("src", "projects", "base_project.cpp"))`
+  - Otherwise, if the score is calculated by a formula and the graph is a supplement to visualize that score (e.g., Crawford), then add a virtual `AddXXXGraph()` function to `r file_path(c("src", "projects", "base_project.h"))` and call that from the test's `AddXXXTest()` function in `r file_path(c("src", "projects", "base_project.cpp"))`
   - Handle its exclusion in `ProjectDoc::DisplayReadabilityGraphs()`
   - Add its `GetXXXLabel()` function in `r file_path(c("src", "projects", "base_project_view.h"))`
   - Define its graph window ID in `r file_path(c("src", "projects", "base_project_view.h"))`
@@ -298,5 +298,5 @@ This will re-generate the following files, which the build script will include:
 - `r file_path(c("cmake", "includes", "images.cmake"))`: the images to be packaged into "res.wad" (the distributable resource file)
 - `r file_path(c("cmake", "includes", "words.cmake"))`: the word lists to be packaged into "res.wad"
 
-The file `r file_path(c("cmake", "list-files.cmake"))` gathers and filters the that should be included.
+The file `r file_path(c("cmake", "list-files.cmake"))` gathers and filters the files that should be included.
 If you need to filter more files, edit the regular expressions in this script.

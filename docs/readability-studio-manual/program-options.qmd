@@ -50,7 +50,7 @@ Disabling SSL verification makes the communication insecure.
 :::
 
 **Use JavaScript cookies**: Check this option to scan for any cookies meant to be sent via JavaScript when reading or downloading a page.
-If any cookies are found, then page will be re-read with the cookies being sent.
+If any cookies are found, then the page will be re-read with the cookies being sent.
 This is useful when connecting to pages that won't load as expected unless certain cookies are sent back to the server.
 
 ::: {.warningsection data-latex=""}
@@ -335,7 +335,7 @@ Ones that end with colons that only contain one word will be excluded.
 
 If **Also exclude trailing citations** is enabled, then checking this option will also cause citation deduction to be more aggressive.
 By default, only citation blocks in the lower half of the document are excluded.
-Enabling this option will tell the program to search for citations in the lower three-fourth of the document.
+Enabling this option will tell the program to search for citations in the lower three-fourths of the document.
 
 If **Also exclude copyright notices** is enabled, then checking this option will also cause that feature to include larger paragraphs in its analysis.
 
@@ -428,7 +428,7 @@ _____ are fluctuations of _____ within the quantum foam that appear _____ and an
 This would be seen as a 13-word sentence, with all the phrases from the exclusion list removed.
 Note that the first instance of *fluctuations* is removed from the analysis because it is part of the phrase *Quantum Fluctuations* (which is on the exclusion list).
 However, the second instance of *fluctuations* will be included because it is not part of the phrase that we requested to ignore.
-To exclude all instances of *fluctuations*, include in the list on a separate line.
+To exclude all instances of *fluctuations*, include it in the list on a separate line.
 
 This phrase list can be edited by clicking the button next to this field, which will open the [**Edit Word/Phrase List**](#sec-edit-word-list-dialog) dialog.
 
@@ -1126,7 +1126,7 @@ Effect
 **Color fade, top to bottom**: Select this option to apply a color fade across your bars (starting from the top).
 
 **Stipple image**: Select this option to draw a stack of images across your bars.
-The image for this brush is specified on the [General](#sec-options-graphs) page.
+The image for this brush is specified on the [**General**](#sec-options-graphs) page.
 
 **Stipple shape**: Select this option to draw a shape across your bars.
 The shape for this brush is specified on the [**General**](#sec-options-graphs) page.
@@ -1134,7 +1134,7 @@ The shape for this brush is specified on the [**General**](#sec-options-graphs) 
 **Watercolor**: Select this option to draw a watercolor-like effect across the bars.
 This will appear as if bars are warped and look like they were filled in with watercolor paint (or a marker).
 
-**Common image**: Select this option to draw an image under the graph, with it only showing through were the bars are at.
+**Common image**: Select this option to draw an image under the graph, with it only showing through where the bars are at.
 ::::
 
 **Opacity**: Sets the transparency of the bars.

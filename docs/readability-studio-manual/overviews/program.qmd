@@ -200,7 +200,7 @@ This enables you to easily share and publish your results.
 - Test results, statistics, and difficult word lists can all be exported as HTML, text, or {{< latex >}}.
 - Statistics summary report can be exported as HTML.
 - Highlighted document views can be exported as RTF or HTML.
-- Graphs can be exported as TIFF, JPG, BMP, PNG, SVG, GIF, or TARGA, WebP.
+- Graphs can be exported as TIFF, JPG, BMP, PNG, SVG, GIF, TARGA, or WebP.
 
 #### Flexibility {-}
 

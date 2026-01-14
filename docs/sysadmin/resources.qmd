@@ -58,8 +58,8 @@ Please refer to the following file & folder breakdown for reference:
   - "non-abbreviations.txt": list of words that should never been seen as abbreviations.
     This will be long words that contain no vowels, but are still an actual word.
 - `r file_path(c("articles"))`:
-  - "a-exceptions.txt": these are words that are correct to follow an **a** that the program word otherwise misclassify
-  - "an-exceptions.txt": these are words that are correct to follow an **an** that the program word otherwise misclassify
+  - "a-exceptions.txt": these are words that are correct to follow an **a** that the program would otherwise misclassify
+  - "an-exceptions.txt": these are words that are correct to follow an **an** that the program would otherwise misclassify
 - `r file_path(c("citation-headers"))`:
   - "citations.txt": list of phrases that would mark the beginning of a citation section in a document
 - `r file_path(c("copyright-notices"))`:

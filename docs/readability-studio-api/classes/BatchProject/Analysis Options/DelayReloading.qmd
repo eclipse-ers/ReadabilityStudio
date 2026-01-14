@@ -3,7 +3,7 @@
 
 Prevents a project from updating while settings are being changed.
 
-This will require an explicit call to [`Reload()`](#batch-reload) for the changes to take affect.
+This will require an explicit call to [`Reload()`](#batch-reload) for the changes to take effect.
 This is more efficient for when multiple settings are being altered at one time.
 
 #### Syntax {-}

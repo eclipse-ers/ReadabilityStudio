@@ -1,3 +1,10 @@
+```{r}
+#| include: false
+#| eval: true
+
+source('R/appdown.r')
+```
+
 # Getting Involved
 
 All are welcome to get involved with *{{< var PROGRAM_NAME >}}* by contributing to the code, documentation, word list, artwork, or simply by sharing feedback and ideas.

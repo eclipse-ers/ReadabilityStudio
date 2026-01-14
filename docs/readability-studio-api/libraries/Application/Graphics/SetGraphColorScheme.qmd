@@ -1,5 +1,5 @@
 ::: {.minipage data-latex="{\textwidth}"}
-### `SetGraphColorScheme`
+### `SetGraphColorScheme` {#app-setgraphcolorscheme}
 
 Sets the graph color scheme for new projects.
 

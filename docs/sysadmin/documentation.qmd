@@ -12,7 +12,7 @@ source('R/appdown.r')
 The following styles should be applied to all help projects:
 
 - Software and library names should be italicized
-- References to dialog/menu/button/tab names should in bold
+- References to dialog/menu/button/tab names should be in bold
 - File and folder names should be double quoted
 - File paths should be put in `file_path` blocks
 - Data types (programming docs) should be in typewriter font
@@ -60,8 +60,8 @@ All screenshots are generated from a script; they should never be created manual
 To generate screenshots, run the script `r file_path(c("docs", "generate-screenshots.lua"))` from *{{< var PROGRAM_NAME >}}*.
 This will generate all new screenshots in the folder `r file_path(c("docs", "readability-studio-manual", "images"))`.
 
-The subdirectory `r file_path("non-generated")` will not be effected, but does not need to be.
-The `r file_path("non-generated")` folder should not contain images effected by the program's UI changes.
+The subdirectory `r file_path("non-generated")` will not be affected, but does not need to be.
+The `r file_path("non-generated")` folder should not contain images affected by the program's UI changes.
 It also should not contain images with content that should be localized.
 
 ### Reviewing Screenshots {-}

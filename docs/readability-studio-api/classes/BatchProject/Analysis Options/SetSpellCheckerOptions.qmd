@@ -11,7 +11,7 @@ SetSpellCheckerOptions(boolean ignoreProperNouns,
                        boolean ignoreNumerals,
                        boolean ignoreFileAddresses,
                        boolean ignoreProgrammerCode,
-                       boolean ignoreSocialMediaTags
+                       boolean ignoreSocialMediaTags,
                        boolean ignoreColloquialisms)
 ```
 

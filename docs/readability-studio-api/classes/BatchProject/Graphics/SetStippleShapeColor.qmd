@@ -6,7 +6,7 @@ If using stipple shapes for bars, sets the color for certain shapes.
 #### Syntax {-}
 
 ``` {.lua}
-SetStippleShapeColor(string colorNamee)
+SetStippleShapeColor(string colorName)
 ```
 
 #### Parameters {-}

@@ -5,7 +5,7 @@ This test calculates the grade level of a document based on sentence length and 
 
 The test was derived from a multiple regression equation trained against 10 basal readers series collected from the United States, Latin America, and Spain.
 (These series represented grade levels 1–6 and contained 789 100-word passages in total.)
-Across these reader series, Crawford noted somewhat significant correlations for syllables per 100 word (an average of $r = 0.4152$) and a consistently stronger correlation for sentences per 100 words (an average of $r = 0.6395$).
+Across these reader series, Crawford noted somewhat significant correlations for syllables per 100 words (an average of $r = 0.4152$) and a consistently stronger correlation for sentences per 100 words (an average of $r = 0.6395$).
 Using these findings, the following equation was built:
 
 ::: {.callout-note icon=false}

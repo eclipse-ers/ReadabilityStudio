@@ -21,10 +21,10 @@ This can be done with the following syntax:
 chmod u+x <AppImage File>
 ```
 
-This can also be down by right-clicking the file, selecting `r menu(c('Properties', 'Permissions'))` and checking *Allow executing file as program*.
+This can also be done by right-clicking the file, selecting `r menu(c('Properties', 'Permissions'))` and checking *Allow executing file as program*.
 
 This only needs to be done once.
-Now "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" can be ran directly to launch the program.
+Now "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" can be run directly to launch the program.
 
 ## Updating {-}
 

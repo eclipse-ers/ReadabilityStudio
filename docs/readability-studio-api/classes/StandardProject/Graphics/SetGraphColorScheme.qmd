@@ -16,7 +16,7 @@ SetGraphColorScheme(string colorScheme)
 | :-- | :-- |
 | `string` colorScheme | The color scheme ID. |
 
-Refer to [`Application.SetGraphColorScheme()`](#app-setstippleshape) for a list of available IDs.
+Refer to [`Application.SetGraphColorScheme()`](#app-setgraphcolorscheme) for a list of available IDs.
 
 #### Example {-}
 

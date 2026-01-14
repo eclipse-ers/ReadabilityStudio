@@ -36,7 +36,7 @@ Disabling SSL verification makes the communication insecure.
 :::
 
 **Use JavaScript cookies**: Check this option to scan for any cookies meant to be sent via JavaScript when reading or downloading a page.
-If any cookies are found, then page will be re-read with the cookies being sent.
+If any cookies are found, then the page will be re-read with the cookies being sent.
 This is useful when connecting to pages that won't load as expected unless certain cookies are sent back to the server.
 
 ::: {.warningsection data-latex=""}

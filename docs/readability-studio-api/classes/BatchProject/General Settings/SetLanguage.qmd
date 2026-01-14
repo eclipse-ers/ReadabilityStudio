@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `SetLanguage` {#batch-setprojectlanguage}
 
-Changes the language for project.
+Changes the language for the project.
 This will affect syllable counting and which tests are available.
 
 #### Syntax {-}

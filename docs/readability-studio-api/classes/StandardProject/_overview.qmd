@@ -1,7 +1,7 @@
 # `StandardProject`
 
 Provides the functionality of a standard project.
-Standard projects analyze a single document and provides numerous results related to readability and other style metrics.
+Standard projects analyze a single document and provide numerous results related to readability and other style metrics.
 
 Note that changing various features of a project once it has been loaded will cause it to re-analyze its document.
 As an optimization, this analysis can be delayed until all these features have been changed.
