@@ -19,26 +19,6 @@ oldTimey <- function(image)
     image_blur(0, 0.4)
   }
 
-#' @brief Create a 4-image grid cover with alternating layout.
-#'
-#' Creates a fixed-size cover image composed of four input images arranged
-#' in a two-row grid. The top row allocates 60% of the width to the first image
-#' and 40% to the second; the bottom row reverses this allocation.
-#'
-#' Each image is scaled to completely fill its assigned tile while preserving
-#' aspect ratio, with any excess cropped from the center. The resulting grid is
-#' placed on a transparent background frame and written as an image.
-#'
-#' @param image1 Path to the top-left (wide) image.
-#' @param image2 Path to the top-right (narrow) image.
-#' @param image3 Path to the bottom-left (narrow) image.
-#' @param image4 Path to the bottom-right (wide) image.
-#' @param outImage Output file path for the generated PNG cover image.
-#' @param width Total width of the output image in pixels.
-#' @param height Total height of the output image in pixels.
-#' @param frame Thickness of the outer background frame in pixels.
-#' @param wide_frac Fraction of row width allocated to the wide tile.
-#' @param row_frac Fraction of height allocated to the top row.
 createGridCover <- function(
     image1,
     image2,
@@ -57,20 +37,22 @@ createGridCover <- function(
     vertical_nudge   = 5,
     row_gap_extra = 40)
   {
+  extra_h <- 60
+  pad_bottom <- extra_h
+
   # horizontal breathing room for row shifts
   side_pad <- max(row_shift_top, row_shift_bottom)
 
   # expanded canvas
   canvas <- magick::image_blank(
     width  = width + 2 * side_pad,
-    height = height + pad_top)
+    height = height + pad_top + pad_bottom)
 
-  # inner drawable area (unchanged)
+  # inner drawable area
   inner_w <- width  - 2 * frame
   inner_h <- height - 2 * frame
   v_gutter <- gutter + row_gap_extra
 
-  # re-anchored frame X origin
   frame_x <- frame + side_pad
 
   top_h    <- round((inner_h - v_gutter) * row_frac)
@@ -88,105 +70,46 @@ createGridCover <- function(
       magick::image_crop(glue::glue("{w}x{h}+0+0"), gravity = "west")
     }
 
-  # tiles
+  # tiles (mirrored tall ones)
   i1 <- fit(image1, wide_w,   top_h)
-  i2 <- fit(image2, narrow_w, top_h)
-  i3 <- fit(image3, narrow_w, bottom_h)
+  i2 <- fit(image2, narrow_w, top_h    + extra_h)  # top-right taller
+  i3 <- fit(image3, narrow_w, bottom_h + extra_h)  # bottom-left taller
   i4 <- fit(image4, wide_w,   bottom_h)
 
-  # vertical offsets (optical balance)
-  y_top    <- frame + pad_top + vertical_nudge
-  y_bottom <- frame + pad_top + top_h + v_gutter - vertical_nudge
+  # vertical offsets
+  y_top        <- frame + pad_top + vertical_nudge
+  y_top_i2     <- y_top - extra_h   # grow upward
+  y_bottom     <- frame + pad_top + top_h + v_gutter - vertical_nudge
+  # i3 grows downward, so no adjustment
 
-  # horizontal offsets with preserved gutters
-  # row 1 (top): shifted left
+  # horizontal offsets
   x1_left  <- frame_x - row_shift_top
   x1_right <- frame_x + wide_w + gutter - row_shift_top
-
-  # row 2 (bottom): shifted right
+  
   x2_left  <- frame_x + row_shift_bottom
   x2_right <- frame_x + narrow_w + gutter + row_shift_bottom
 
   # composite
   cover <- canvas |>
-    magick::image_composite(i1, offset = glue::glue("+{x1_left}+{y_top}"),    operator = "DstOver") |>
-    magick::image_composite(i2, offset = glue::glue("+{x1_right}+{y_top}"),   operator = "DstOver") |>
-    magick::image_composite(i3, offset = glue::glue("+{x2_left}+{y_bottom}"), operator = "DstOver") |>
-    magick::image_composite(i4, offset = glue::glue("+{x2_right}+{y_bottom}"),operator = "DstOver") |>
+    # row 1
+    magick::image_composite(i1,
+                            offset = glue::glue("+{x1_left}+{y_top}"),
+                            operator = "DstOver") |>
+    magick::image_composite(i2,
+                            offset = glue::glue("+{x1_right}+{y_top_i2}"),
+                            operator = "DstOver") |>
+
+    # row 2
+    magick::image_composite(i3,
+                            offset = glue::glue("+{x2_left}+{y_bottom}"),
+                            operator = "DstOver") |>
+    magick::image_composite(i4,
+                            offset = glue::glue("+{x2_right}+{y_bottom}"),
+                            operator = "DstOver") |>
+
     magick::image_convert(format = "png", depth = 8)
 
   magick::image_write(cover, outImage)
-  }
-
-# Make an image look like a Polaroid.
-createPolaroid <- function(image,
-                           caption = "Polaroid",
-                           rotate = 3,
-                           font_candidates = NULL)
-  {
-  # default handwritten candidates
-  if (is.null(font_candidates))
-    {
-    font_candidates <- c(
-      "Ink Free",
-      "Gabriola",
-      "Segoe Script",
-      "Lucida Handwriting",
-      "Bradley Hand",
-      "Chalkboard",
-      "Snell Roundhand")
-    }
-
-  matchedFont <- font_candidates[font_candidates %in% magick_fonts()$family]
-
-  captionFont <- "sans"
-  if (length(matchedFont) > 0)
-    {
-    captionFont <- matchedFont[1]
-    message(str_glue("✔ Using font family {captionFont} for Polaroid effect."))
-    }
-  else
-    {
-    message("⚠ No magick-compatible handwritten font found; falling back to 'sans' for Polaroid effect.")
-    }
-
-  # if a path, load it as an image
-  if (!inherits(image, "magick-image")) image <- image_read(image)
-  info <- image_info(image)
-  w <- info$width
-  h <- info$height
-
-  # borders (proportional)
-  sideBorder  <- round(w * 0.03)
-  topBorder   <- round(h * 0.02)
-  bottomExtra <- round(h * 0.15)
-
-  # caption sizing/offsets (proportional)
-  fontSize <- round(w * 0.05)           # 5% of width
-  xOffset  <- round(w * 0.10)           # offset from left inside white border
-  yOffset  <- round(bottomExtra * 0.6)  # lifted into bottom border
-
-  # render the Polaroid
-  image %>%
-    image_border("white", geometry = str_glue("{sideBorder}x{topBorder}")) %>%
-    image_extent(
-      geometry = str_glue("{w + 2*sideBorder}x{h + topBorder + sideBorder + bottomExtra}"),
-      gravity = "north",
-      color = "white"
-    ) %>%
-    image_border("gray40", "2x2") %>%
-    image_shadow() %>%
-    # add a caption
-    image_annotate(
-      text     = caption,
-      font     = captionFont,
-      size     = fontSize,
-      color    = "black",
-      gravity  = "southwest",
-      location = str_glue("+{xOffset}+{yOffset}")
-    ) %>%
-    # rotate
-    image_rotate(rotate)
   }
 
 # Creates a collage from a set of images for a manual cover.
