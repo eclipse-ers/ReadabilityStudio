@@ -3,7 +3,7 @@ git clone ${GIT_REPO} \
 cd ReadabilityStudio
 
 cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
-cmake --build ./build --target all -j $(nproc) --config Release
+cmake --build ./build --target readstudio -j $(nproc) --config Release
 
 # Uncomment to build the help manuals
 #cmake --build ./build --target manuals -j $(nproc) --config Release
@@ -14,7 +14,7 @@ cd ReadabilityStudio
 
 cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release \
       -DHAS_MAC_TEXT_PRINTING
-cmake --build ./build --target all -j $(nproc) --config Release
+cmake --build ./build --target readstudio -j $(nproc) --config Release
 
 # Uncomment to build the help manuals
 #cmake --build ./build --target manuals -j $(nproc) --config Release
