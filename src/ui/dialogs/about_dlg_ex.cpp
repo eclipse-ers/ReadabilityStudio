@@ -300,7 +300,9 @@ void AboutDialogEx::CreateControls()
         productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY, _(L"Build Date:")));
         wxDateTime buildDate;
         buildDate.ParseDate(__DATE__);
-        productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY, buildDate.Format(L"%B %d, %G")));
+        productInfoGrid->Add(new wxStaticText(
+            mainPage, wxID_ANY,
+            buildDate.Format(wxUILocale::GetCurrent().GetInfo(wxLOCALE_LONG_DATE_FMT))));
         productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY,
                                               // TRANSLATORS: Operating System
                                               _(L"Platform:")));

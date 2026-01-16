@@ -3701,10 +3701,10 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                     timeStr = modDate.Format(L"%H:%M");
                     }
 
-                // the default locale formatting is cryptic looking, so format
-                // it in a more readable way that most locales would still understand
                 fileModDate = wxString::Format( // TRANSLATORS: placeholders are date and time
-                    _(L"%s at %s"), modDate.Format(L"%B %d, %Y"), timeStr);
+                    _(L"%s at %s"),
+                    modDate.Format(wxUILocale::GetCurrent().GetInfo(wxLOCALE_LONG_DATE_FMT)),
+                    timeStr);
                 }
             }
         if (!project->GetAppendedDocumentFilePath().empty())
