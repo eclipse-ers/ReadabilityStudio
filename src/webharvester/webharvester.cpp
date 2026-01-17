@@ -50,6 +50,7 @@
 #include "webharvester.h"
 #include "filepathresolver.h"
 #include "wx/tokenzr.h"
+#include <utility>
 
 //----------------------------------
 bool wxStringLessWebPath::operator()(const wxString& first, const wxString& second) const
@@ -388,7 +389,6 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
             {
             wxLogWarning(L"Blocked redirect to non-HTTP(S) scheme: %s", url);
             m_alreadyCrawledFiles.insert(url);
-            --m_currentLevel;
             return false;
             }
         /* Convert from the file's charset to the application's charset.
@@ -574,7 +574,7 @@ bool WebHarvester::CrawlLinks(wxString& url,
         }
 
     ++m_currentLevel;
-    if (m_currentLevel > GetDepthLevel())
+    if (std::cmp_greater(m_currentLevel, GetDepthLevel()))
         {
         --m_currentLevel;
         return false;
@@ -733,7 +733,6 @@ void WebHarvester::CrawlLink(const wxString& currentLink,
                                       wxString::Format(_(L"Crawling \"%s\""), currentLink)))
             {
             m_isCancelled = true;
-            --m_currentLevel;
             return;
             }
         }
@@ -756,7 +755,7 @@ void WebHarvester::CrawlLink(const wxString& currentLink,
         {
         return;
         }
-    if ((m_currentLevel > GetDepthLevel() || HasUrlAlreadyBeenCrawled(fullUrl)) &&
+    if ((std::cmp_greater(m_currentLevel, GetDepthLevel()) || HasUrlAlreadyBeenCrawled(fullUrl)) &&
         HasUrlAlreadyBeenHarvested(fullUrl))
         {
         return;

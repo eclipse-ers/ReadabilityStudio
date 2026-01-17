@@ -721,7 +721,7 @@ class WebHarvester
     std::set<wxString> m_downloadedFiles;
     std::map<wxString, wxString> m_brokenLinks;
     std::set<wxString, wxStringLessWebPath> m_alreadyCrawledFiles;
-    size_t m_currentLevel{ 0 };
+    int m_currentLevel{ 0 };
     bool m_isCancelled{ false };
 
     wxString m_downloadDirectory;
