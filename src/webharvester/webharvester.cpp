@@ -382,6 +382,15 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
 
         // get redirect URL (if we got redirected)
         url = m_downloader.GetLastUrl();
+        // Block redirects to non-HTTP(S) schemes (SSRF protection)
+        const FilePathResolver redirectCheck(url, false);
+        if (!redirectCheck.IsHTTPFile() && !redirectCheck.IsHTTPSFile())
+            {
+            wxLogWarning(L"Blocked redirect to non-HTTP(S) scheme: %s", url);
+            m_alreadyCrawledFiles.insert(url);
+            --m_currentLevel;
+            return false;
+            }
         /* Convert from the file's charset to the application's charset.
            Try to get it from the response header first because that is more
            accurate when the file is really UTF-8 but the designer put something like
