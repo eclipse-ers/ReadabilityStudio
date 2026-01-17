@@ -688,6 +688,19 @@ class ReadabilityAppOptions
 
     void AppendDailyLog(const bool append) noexcept { m_logAppendDailyLog = append; }
 
+    /// @returns @c true if Lua unsafe mode is enabled (os, io, debug libraries available).
+    /// @warning Enabling this allows scripts to execute system commands and access files.
+    [[nodiscard]]
+    bool IsLuaUnsafeModeEnabled() const noexcept
+        {
+        return m_luaUnsafeMode;
+        }
+
+    /// @brief Enables or disables Lua unsafe mode.
+    /// @param enable @c true to enable os, io, and debug libraries in Lua scripts.
+    /// @warning Enabling this allows scripts to execute system commands and access files.
+    void EnableLuaUnsafeMode(const bool enable) noexcept { m_luaUnsafeMode = enable; }
+
     void SetTextHighlightMethod(const TextHighlight highlight) noexcept
         {
         m_textHighlight = highlight;
@@ -2605,6 +2618,9 @@ class ReadabilityAppOptions
 
     bool m_logAppendDailyLog{ false };
 
+    // Lua scripting - enables os, io, debug libraries (security risk)
+    bool m_luaUnsafeMode{ false };
+
     wxColour m_dolchConjunctionsColor{ wxColour{ 255, 255, 0 } };
     wxColour m_dolchPrepositionsColor{ wxColour{ 0, 245, 255 } };
     wxColour m_dolchPronounsColor{ wxColour{ 198, 226, 255 } };
@@ -2906,6 +2922,7 @@ class ReadabilityAppOptions
         "ignore-file-addresses") };
     inline constexpr static std::string_view XML_IGNORE_NUMERALS{ _DT("ignore-numerals") };
     inline constexpr static std::string_view XML_IGNORE_PROPER_NOUNS{ _DT("ignore-proper-nouns") };
+    inline constexpr static std::string_view XML_LUA_UNSAFE_MODE{ _DT("lua-unsafe-mode") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_PATH{ _DT(
         "excluded-phrases-filepath") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE{ _DT(

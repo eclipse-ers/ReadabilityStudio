@@ -722,6 +722,9 @@ bool ReadabilityApp::OnInit()
     // load the full set of user settings
     GetAppOptions()->LoadOptionsFile(appSettingFolderPath + L"Settings.xml", false);
 
+    // initialize Lua interpreter (after options are loaded so it can check unsafe mode setting)
+    m_LuaRunner.Initialize();
+
     // clang-format off
     // add some standard test bundles
     // PSK

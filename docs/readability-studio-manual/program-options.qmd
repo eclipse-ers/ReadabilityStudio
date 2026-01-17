@@ -143,6 +143,20 @@ The following are informational messages shown interactively in the program:
 **Append daily log**: Select this option to append to the previous log report (when running the program on the same day).
 The default behavior is to clear the log file every time the program starts.
 
+### Scripting {-}
+
+**Allow Lua scripts to access files and system commands**: Select this option to enable the `io`, `os`, and `debug` libraries in the Lua scripting environment.
+By default, these libraries are disabled for security reasons.
+
+::: {.warningsection data-latex=""}
+Enabling this option allows Lua scripts to read and write files, execute system commands, and access debugging features.
+Only enable this if you trust the scripts you are running.
+:::
+
+::: {.notesection data-latex=""}
+Changing this will take effect the next time the program is started.
+:::
+
 \newpage
 
 ## Project {#sec-project-settings}

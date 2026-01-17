@@ -1035,6 +1035,9 @@ class ToolsOptionsDlg final : public wxDialog
     BackupVariable<bool> m_logVerbose;
     BackupVariable<bool> m_logAppendDailyLog;
 
+    // scripting settings
+    BackupVariable<bool> m_luaUnsafeMode;
+
     // project settings
     BackupVariable<int> m_projectLanguage;
     BackupVariable<wxString> m_reviewer;

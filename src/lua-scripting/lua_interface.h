@@ -64,7 +64,10 @@ class LuaInterpreter
     {
   public:
     /// @brief Constructor.
-    LuaInterpreter();
+    LuaInterpreter() = default;
+    /// @brief Initializes the Lua state and registers custom libraries.
+    /// @note Must be called before running any Lua code.
+    void Initialize();
     /// @private
     ~LuaInterpreter();
     /// @private

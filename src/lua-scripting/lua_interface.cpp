@@ -64,10 +64,47 @@ bool LuaInterpreter::m_isRunning = false;
 bool LuaInterpreter::m_quitRequested = false;
 
 //------------------------------------------------------
-LuaInterpreter::LuaInterpreter() : m_L(luaL_newstate())
+void LuaInterpreter::Initialize()
     {
+    if (m_L != nullptr)
+        {
+        return;
+        }
+
+    m_L = luaL_newstate();
+
     // NOLINTBEGIN(readability-math-missing-parentheses,cppcoreguidelines-pro-bounds-array-to-pointer-decay,hicpp-no-array-decay)
-    luaL_openlibs(m_L);
+
+    // always load safe standard libraries
+    luaL_requiref(m_L, LUA_GNAME, luaopen_base, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_TABLIBNAME, luaopen_table, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_STRLIBNAME, luaopen_string, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_MATHLIBNAME, luaopen_math, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_UTF8LIBNAME, luaopen_utf8, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_COLIBNAME, luaopen_coroutine, 1);
+    lua_pop(m_L, 1);
+    luaL_requiref(m_L, LUA_LOADLIBNAME, luaopen_package, 1);
+    lua_pop(m_L, 1);
+
+    // only load potentially dangerous libraries if unsafe mode is enabled
+    wxASSERT_MSG(wxGetApp().GetAppOptions() != nullptr,
+                 L"App options must be loaded before initializing Lua interpreter!");
+    if (wxGetApp().GetAppOptions() != nullptr &&
+        wxGetApp().GetAppOptions()->IsLuaUnsafeModeEnabled())
+        {
+        luaL_requiref(m_L, LUA_IOLIBNAME, luaopen_io, 1);
+        lua_pop(m_L, 1);
+        luaL_requiref(m_L, LUA_OSLIBNAME, luaopen_os, 1);
+        lua_pop(m_L, 1);
+        luaL_requiref(m_L, LUA_DBLIBNAME, luaopen_debug, 1);
+        lua_pop(m_L, 1);
+        }
+
     luaL_newlib(m_L, LuaScripting::ScreenshotLib);
     lua_setglobal(m_L, "ScreenshotLib");
     luaL_newlib(m_L, LuaScripting::ApplicationLib);
@@ -82,8 +119,11 @@ LuaInterpreter::LuaInterpreter() : m_L(luaL_newstate())
 //------------------------------------------------------
 LuaInterpreter::~LuaInterpreter()
     {
-    lua_gc(m_L, LUA_GCCOLLECT, 0);
-    lua_close(m_L);
+    if (m_L != nullptr)
+        {
+        lua_gc(m_L, LUA_GCCOLLECT, 0);
+        lua_close(m_L);
+        }
     }
 
 //------------------------------------------------------

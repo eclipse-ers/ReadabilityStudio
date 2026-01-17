@@ -787,6 +787,8 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       // log options
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
       m_logAppendDailyLog(wxGetApp().GetAppOptions()->IsAppendingDailyLog()),
+      // scripting options
+      m_luaUnsafeMode(wxGetApp().GetAppOptions()->IsLuaUnsafeModeEnabled()),
       // project settings
       m_projectLanguage(static_cast<int>((project != nullptr) ?
                                              project->GetProjectLanguage() :
@@ -1797,6 +1799,10 @@ void ToolsOptionsDlg::SaveOptions()
     if (m_logAppendDailyLog.has_changed())
         {
         wxGetApp().GetAppOptions()->AppendDailyLog(m_logAppendDailyLog.get_value());
+        }
+    if (m_luaUnsafeMode.has_changed())
+        {
+        wxGetApp().GetAppOptions()->EnableLuaUnsafeMode(m_luaUnsafeMode.get_value());
         }
     if (m_userAgent.has_changed())
         {
@@ -5291,7 +5297,20 @@ void ToolsOptionsDlg::CreateControls()
             optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Append daily log"),
                                              wxDefaultPosition, wxDefaultSize, 0,
                                              wxGenericValidator(&m_logAppendDailyLog.get_value())),
-                              wxSizerFlags{}.Expand().Border(wxTOP));
+                              wxSizerFlags{}.Expand().Border(wxTOP | wxBOTTOM));
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Scripting:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            optionsSizer->Add(
+                new wxCheckBox(generalSettingsPage, wxID_ANY,
+                               _(L"Allow Lua scripts to access files and system commands"),
+                               wxDefaultPosition, wxDefaultSize, 0,
+                               wxGenericValidator(&m_luaUnsafeMode.get_value())),
+                wxSizerFlags{}.Expand().Border(wxTOP));
             }
         }
 

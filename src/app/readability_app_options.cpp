@@ -403,6 +403,7 @@ void ReadabilityAppOptions::ResetSettings()
         LogFile::SetVerbose(false);
         }
     m_logAppendDailyLog = false;
+    m_luaUnsafeMode = false;
 
     m_textHighlight = TextHighlight::HighlightBackground;
     m_dolchConjunctionsColor = wxColour(255, 255, 0);
@@ -819,6 +820,12 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             {
             AppendDailyLog(
                 int_to_bool(logAppendNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
+            }
+        auto* luaUnsafeModeNode = logSettingsNode->FirstChildElement(XML_LUA_UNSAFE_MODE.data());
+        if (luaUnsafeModeNode != nullptr)
+            {
+            EnableLuaUnsafeMode(
+                int_to_bool(luaUnsafeModeNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
             }
         }
     // printer settings
@@ -3176,6 +3183,10 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* logAppend = doc.NewElement(XML_LOG_APPEND_DAILY.data());
     logAppend->SetAttribute(XML_VALUE.data(), bool_to_int(IsAppendingDailyLog()));
     logSection->InsertEndChild(logAppend);
+
+    auto* luaUnsafeMode = doc.NewElement(XML_LUA_UNSAFE_MODE.data());
+    luaUnsafeMode->SetAttribute(XML_VALUE.data(), bool_to_int(IsLuaUnsafeModeEnabled()));
+    logSection->InsertEndChild(luaUnsafeMode);
 
     configSection->InsertEndChild(logSection);
 
