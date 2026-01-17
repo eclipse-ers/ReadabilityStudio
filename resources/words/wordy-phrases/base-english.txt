@@ -6696,6 +6696,7 @@ expatriot	expatriate	3
 expcted	expected	3		
 expeced	expected	3		
 expecially	especially	3		
+expect for when	except for when	3		
 expectes	expects	3		
 expedience	advisability	0		
 expedite	hurry, speed up, rush	0		
@@ -15727,6 +15728,7 @@ take a shine to	begin to like	2
 take action	act	0		
 take action to	(omit)	0		
 take advantage of	abuse, exploit, use	0		
+take affect	take effect	3		
 take aim	aim	0		
 take enjoyment in	enjoy	0		
 take exception to	challenge, disagree, dispute, object	0		
@@ -15764,6 +15766,7 @@ takes a listen	listens	0
 takes a shine to	begins to like	2		
 takes action	acts	0		
 takes advantage of	abuses, exploits, uses	0		
+takes affect	takes effect	3		
 takes aim	aims	0		
 takes enjoyment in	enjoys	0		
 takes exception to	challenges, disagrees, disputes, objects	0		
@@ -15786,6 +15789,7 @@ taking a listen	listening	0
 taking a shine to	beginning to like	2		
 taking action	acting	0		
 taking advantage of	abusing, exploiting, using	0		
+taking affect	taking effect	3		
 taking aim	aiming	0		
 taking enjoyment in	enjoying	0		
 taking exception to	challenging, disagreeing, disputing, objecting	0		
@@ -16002,6 +16006,7 @@ the sky's the limit	there is no limit	2
 the space of	(consider removing this)	0		
 the state of	(consider removing this)	0		
 the sum of	all	0		
+the that	A word is missing	3		
 the them	(strike one of these)	3		
 the these	(strike one of these)	3		
 the they	(strike one of these)	3		
@@ -16322,6 +16327,7 @@ took a listen	listened	0
 took a shine to	began to like	2		
 took action	acted	0		
 took advantage of	abused, exploited, used	0		
+took affect	took effect	3		
 took aim	aimed	0		
 took enjoyment in	enjoyed	0		
 took exception to	challenged, disagreed, disputed, objected	0		
@@ -17580,6 +17586,7 @@ wonderfull	wonderful	3
 wont	won't	3		
 wont't	won't	3		
 word of mouth	spreading information informally	2		
+word otherwise	would otherwise	3		
 wordlwide	worldwide	3		
 workaroung	workaround	3		
 workboos	workbooks	3		
