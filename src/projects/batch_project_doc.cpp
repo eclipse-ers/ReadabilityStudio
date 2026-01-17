@@ -6639,8 +6639,8 @@ bool BatchProjectDoc::OnOpenDocument(const wxString& filename)
     const wxList docs = wxGetApp().GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
-        const BaseProjectDoc* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (!doc->IsSafeToUpdate())
+        const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr && !doc->IsSafeToUpdate())
             {
             return false;
             }

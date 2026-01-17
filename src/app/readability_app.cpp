@@ -209,8 +209,11 @@ void ReadabilityApp::EditDictionary(const readability::test_language lang)
         for (size_t i = 0; i < docs.GetCount(); ++i)
             {
             auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-            doc->RefreshRequired(ProjectRefresh::FullReindexing);
-            doc->RefreshProject();
+            if (doc != nullptr)
+                {
+                doc->RefreshRequired(ProjectRefresh::FullReindexing);
+                doc->RefreshProject();
+                }
             }
         }
     }
@@ -1390,8 +1393,8 @@ void ReadabilityApp::EditCustomTest(CustomReadabilityTest& selectedTest)
     const auto& docs = GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
-        const BaseProjectDoc* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (!doc->IsSafeToUpdate())
+        const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr && !doc->IsSafeToUpdate())
             {
             return;
             }
@@ -4166,9 +4169,15 @@ void MainFrame::AddCustomTestToMenus(const wxString& testName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
-        FillMenuWithCustomTests(&view->GetDocFrame()->m_customTestsMenu, doc, true);
-        FillMenuWithCustomTests(view->GetDocFrame()->m_customTestsRegularMenu, doc, true);
+        if (doc != nullptr)
+            {
+            auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
+            if (view != nullptr)
+                {
+                FillMenuWithCustomTests(&view->GetDocFrame()->m_customTestsMenu, doc, true);
+                FillMenuWithCustomTests(view->GetDocFrame()->m_customTestsRegularMenu, doc, true);
+                }
+            }
         }
     FillMenuWithCustomTests(&m_customTestsMenu, nullptr, false);
     FillMenuWithCustomTests(m_customTestsRegularMenu, nullptr, false);
@@ -4191,9 +4200,15 @@ void MainFrame::AddTestBundleToMenus(const wxString& bundleName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
-        FillMenuWithTestBundles(&view->GetDocFrame()->m_testsBundleMenu, doc, true);
-        FillMenuWithTestBundles(view->GetDocFrame()->m_testsBundleRegularMenu, doc, true);
+        if (doc != nullptr)
+            {
+            auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
+            if (view != nullptr)
+                {
+                FillMenuWithTestBundles(&view->GetDocFrame()->m_testsBundleMenu, doc, true);
+                FillMenuWithTestBundles(view->GetDocFrame()->m_testsBundleRegularMenu, doc, true);
+                }
+            }
         }
     FillMenuWithTestBundles(&m_testsBundleMenu, nullptr, false);
     FillMenuWithTestBundles(m_testsBundleRegularMenu, nullptr, false);
@@ -4221,9 +4236,15 @@ void MainFrame::RemoveTestBundleFromMenus(const wxString& bundleName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
-        FillMenuWithTestBundles(&view->GetDocFrame()->m_testsBundleMenu, doc, true);
-        FillMenuWithTestBundles(view->GetDocFrame()->m_testsBundleRegularMenu, doc, true);
+        if (doc != nullptr)
+            {
+            auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
+            if (view != nullptr)
+                {
+                FillMenuWithTestBundles(&view->GetDocFrame()->m_testsBundleMenu, doc, true);
+                FillMenuWithTestBundles(view->GetDocFrame()->m_testsBundleRegularMenu, doc, true);
+                }
+            }
         }
     FillMenuWithTestBundles(&m_testsBundleMenu, nullptr, false);
     FillMenuWithTestBundles(m_testsBundleRegularMenu, nullptr, false);
@@ -4251,9 +4272,15 @@ void MainFrame::RemoveCustomTestFromMenus(const wxString& testName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
-        FillMenuWithCustomTests(&view->GetDocFrame()->m_customTestsMenu, doc, true);
-        FillMenuWithCustomTests(view->GetDocFrame()->m_customTestsRegularMenu, doc, true);
+        if (doc != nullptr)
+            {
+            auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
+            if (view != nullptr)
+                {
+                FillMenuWithCustomTests(&view->GetDocFrame()->m_customTestsMenu, doc, true);
+                FillMenuWithCustomTests(view->GetDocFrame()->m_customTestsRegularMenu, doc, true);
+                }
+            }
         }
     FillMenuWithCustomTests(&m_customTestsMenu, nullptr, false);
     FillMenuWithCustomTests(m_customTestsRegularMenu, nullptr, false);
@@ -4642,7 +4669,7 @@ void MainFrame::OnRemoveCustomTest([[maybe_unused]] wxCommandEvent& event)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (!doc->IsSafeToUpdate())
+        if (doc != nullptr && !doc->IsSafeToUpdate())
             {
             return;
             }
@@ -4760,8 +4787,8 @@ void MainFrame::OnAddCustomTest(const wxCommandEvent& event)
     const auto& docs = wxGetApp().GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
-        const BaseProjectDoc* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (!doc->IsSafeToUpdate())
+        const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr && !doc->IsSafeToUpdate())
             {
             return;
             }
@@ -4928,7 +4955,7 @@ void MainFrame::OnEditCustomTest([[maybe_unused]] wxCommandEvent& event)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (!doc->IsSafeToUpdate())
+        if (doc != nullptr && !doc->IsSafeToUpdate())
             {
             return;
             }
@@ -5045,7 +5072,7 @@ void MainFrame::OnClose(wxCloseEvent& event)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (doc->IsProcessing())
+        if (doc != nullptr && doc->IsProcessing())
             {
             wxMessageBox(_(L"Project still processing. Please wait before closing."),
                          wxFileName::StripExtension(doc->GetTitle()), wxOK | wxICON_EXCLAMATION);

@@ -500,7 +500,10 @@ void BatchProjectView::OnAddToDictionary([[maybe_unused]] wxCommandEvent& event)
             for (size_t i = 0; i < docs.GetCount(); ++i)
                 {
                 auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-                doc->RemoveMisspellings(misspellingDlg.GetSelectedItems());
+                if (doc != nullptr)
+                    {
+                    doc->RemoveMisspellings(misspellingDlg.GetSelectedItems());
+                    }
                 }
             }
         }
@@ -556,7 +559,10 @@ void BatchProjectView::OnDblClick(wxListEvent& event)
             for (size_t i = 0; i < docs.GetCount(); ++i)
                 {
                 auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-                doc->RemoveMisspellings(misspellingDlg.GetSelectedItems());
+                if (doc != nullptr)
+                    {
+                    doc->RemoveMisspellings(misspellingDlg.GetSelectedItems());
+                    }
                 }
             }
         }

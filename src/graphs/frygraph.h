@@ -134,9 +134,12 @@ namespace Wisteria::Graphs
       protected:
         void RecalcSizes(wxDC& dc) final;
         void CalculateScorePositions(wxDC& dc) final;
+        /// @brief Adds grade level labels to the graph regions.
         void AddLevelLabels();
+        /// @brief Adds bracket decorations around the graph title.
         void AddBrackets();
 
+        /// @returns The syllable axis offset used for language variations.
         [[nodiscard]]
         uint16_t GetSyllableAxisOffset() const noexcept
             {

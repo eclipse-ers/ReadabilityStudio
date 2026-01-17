@@ -1348,8 +1348,11 @@ void ProjectView::OnAddToDictionary([[maybe_unused]] wxCommandEvent& event)
         const wxList docs = wxGetApp().GetDocManager()->GetDocuments();
         for (size_t i = 0; i < docs.GetCount(); ++i)
             {
-            BaseProjectDoc* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-            doc->RemoveMisspellings(newWords);
+            auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+            if (doc != nullptr)
+                {
+                doc->RemoveMisspellings(newWords);
+                }
             }
         }
     else

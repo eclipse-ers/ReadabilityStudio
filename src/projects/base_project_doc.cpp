@@ -716,10 +716,12 @@ void BaseProjectDoc::RemoveAllGlobalCustomReadabilityTests()
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr)
         doc->ExcludeAllCustomTestsTests();
         doc->Modify(true);
         doc->RefreshRequired(ProjectRefresh::Minimal);
         doc->RefreshProject();
+        }
         }
 
     // finally, remove the global tests
@@ -741,7 +743,7 @@ void BaseProjectDoc::RemoveGlobalCustomReadabilityTest(const wxString& testName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (doc->HasCustomTest(testName))
+        if (doc != nullptr && doc->HasCustomTest(testName))
             {
             if (wxMessageBox(_(L"This test will need to be removed from any open projects "
                                "that are currently including it.\n"
@@ -769,6 +771,8 @@ void BaseProjectDoc::RemoveGlobalCustomReadabilityTest(const wxString& testName)
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr)
+            {
         if (doc->HasCustomTest(testName))
             {
             doc->RemoveCustomReadabilityTest(testName, testId);
@@ -782,6 +786,7 @@ void BaseProjectDoc::RemoveGlobalCustomReadabilityTest(const wxString& testName)
             doc->SyncCustomTests();
             }
         }
+    }
     }
 
 //-------------------------------------------------------
