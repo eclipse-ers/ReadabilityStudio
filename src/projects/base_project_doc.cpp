@@ -852,8 +852,8 @@ bool BaseProjectDoc::AddGlobalCustomReadabilityTest(CustomReadabilityTest& custo
                     return true;
                     }
                 wxTextEntryDialog dialog(wxGetApp().GetParentingWindow(),
-                    _(L"Please specify a different name:"),
-                    _(L"Enter New Test Name"), name);
+                                         _(L"Please specify a different name:"),
+                                         _(L"Enter New Test Name"), name);
                 if (dialog.ShowModal() != wxID_OK)
                     {
                     return false;

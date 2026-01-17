@@ -109,3 +109,6 @@ CMakeUserPresets.json
 /citations.apa
 /citations.bib
 /citations.mla
+
+# Garbage files from Claude
+nul
