@@ -1,41 +1,16 @@
 project:
-  type: book
   output-dir: "docs"
-toc: true
-toc-depth: 2
-biblio-title: References
 bibliography: cites.bib
-biblio-style: mla
-link-citations: true
-nocite: '@*'
-csl: modern-language-association.csl
-number-sections: true
 metadata:
   pdf-cover: "images/non-generated/api-cover.png"
   pdf-cover-font-color: "255, 255, 255"
   pdf-cover-author-color: "61, 60, 59"
-  pdf-logo: "images/non-generated/cover-logo.png"
-  trademark: "{{< var PROGRAM_LONGNAME >}}"
-  publisher: "{{< var PUBLISHER >}}"
-  publisher-cities:
-    - Brussels
-    - Ottawa
-    - Darmstadt
+  pdf-cover-background-color: "250, 244, 230"
   theme-color: "240, 108, 2"
   page-side-decoration-color: "0, 0, 0"
-  chapter-image: "non-generated/banner.jpg"
-crossref:
-  chapters: true
 book:
-  title: "{{< var PROGRAM_NAME >}} {{< var VERSION >}}"
   subtitle: Programming Manual
-  description: '{{< var PROGRAM_DESCRIPTION >}}'
-  author: '{{< var PROGRAM_AUTHOR >}}'
-  date: today
-  date-format: "YYYY"
   output-file: "readability-studio-api"
-  language: en
-  search: false
   chapters:
     - index.qmd
     - part: "Classes"
@@ -49,37 +24,3 @@ book:
     - part: "Support Types"
       chapters:
       - enums.qmd
-format:
-  pdf:
-    documentclass: LegrandOrangeBook
-    template: latex/default.tex
-    include-in-header: latex/preamble.tex
-    latex-engine: xelatex
-    keep-tex: true
-    citation-package: biblatex
-    lot: false
-    code-block-bg: false
-    CJKmainfont: NotoSerifJP
-    CJKoptions:
-      - Path=./fonts/NotoSerifJP/
-      - Extension=.ttf
-      - UprightFont=*-VariableFontwght
-    mainfont: Inter
-    mainfontoptions:
-      - Path=./fonts/Inter/
-      - Extension=.ttf
-      - UprightFont=Inter-VariableFontopszwghtt
-      - ItalicFont=Inter-ItalicVariableFontopszwght
-    monofont: Inconsolata
-    monofontoptions:
-      - Path=./fonts/Inconsolata/
-      - Extension=.ttf
-      - UprightFont=Inconsolata-VariableFontwdthwght
-      - ItalicFont=Inconsolata-VariableFontwdthwght
-    linkcolor: black
-    citecolor: black
-  html:
-    theme: cosmo
-    html-math-method: katex
-    css: style.css
-    smooth-scroll: true

@@ -346,8 +346,11 @@ if (buildProgrammingManual)
   file_copy(glue("{docFolder}/_variables.yml"),
             glue("{docFolder}/readability-studio-api/_variables.yml"),
             TRUE)
-  file_copy(glue("{docFolder}/readability-studio-manual/_quarto-api.yml"),
+  file_copy(glue("{docFolder}/readability-studio-manual/_quarto.yml"),
             glue("{docFolder}/readability-studio-api/_quarto.yml"),
+            TRUE)
+  file_copy(glue("{docFolder}/readability-studio-manual/_quarto-api.yml"),
+            glue("{docFolder}/readability-studio-api/_quarto-api.yml"),
             TRUE)
   dir_copy(glue("{docFolder}/readability-studio-manual/latex"),
            glue("{docFolder}/readability-studio-api/latex"),
@@ -371,7 +374,7 @@ if (buildProgrammingManual)
   combine_files("libdebug.qmd", "libraries/Debug")
   combine_files("enums.qmd", "enums")
 
-  quarto::quarto_render(output_format="pdf", as_job=F)
+  quarto::quarto_render(output_format="pdf", as_job=F, profile="api")
   thumbNail <- image_convert(image_read_pdf(glue("{docFolder}/readability-studio-api/docs/readability-studio-api.pdf"), 1),
                        format="png") %>%
     image_scale(thumbnailWidth)
@@ -384,6 +387,7 @@ if (buildProgrammingManual)
   unlink(glue("{docFolder}/readability-studio-api/enums.qmd"))
   unlink(glue("{docFolder}/readability-studio-api/_variables.yml"))
   unlink(glue("{docFolder}/readability-studio-api/_quarto.yml"))
+  unlink(glue("{docFolder}/readability-studio-api/_quarto-api.yml"))
   unlink(glue("{docFolder}/readability-studio-api/modern-language-association.csl"))
   unlink(glue("{docFolder}/readability-studio-api/LegrandOrangeBook.cls"))
   }

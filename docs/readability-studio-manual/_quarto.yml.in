@@ -19,7 +19,7 @@ metadata:
   pdf-logo: "images/non-generated/cover-logo.png"
   authorbio: >-
     \textsc{${PROGRAM_AUTHOR}} is the Director of Institutional Research at Edison State Community College.
-    He earned a Bachelor of Arts in English from the University of Dayton and has studied readability formulas for more than twenty years.
+    He earned a Bachelor of Arts in English from the University of Dayton and has researched readability formulas for more than twenty years.
     Before entering academia, he spent eighteen years working in the statistical software industry, primarily in localization engineering.
   trademark: "${PROGRAM_LONGNAME}"
   publisher: ${PUBLISHER}
@@ -27,6 +27,7 @@ metadata:
     - Brussels
     - Ottawa
     - Darmstadt
+  # Legrand Orange Book uses this and implicitly adds "images/" to the path
   chapter-image: "non-generated/banner.jpg"
   theme-color: "44, 28, 216"
   page-side-decoration-color: "240, 108, 2"
