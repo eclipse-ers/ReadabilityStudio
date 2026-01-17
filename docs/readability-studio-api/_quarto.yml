@@ -9,20 +9,21 @@ biblio-style: mla
 link-citations: true
 nocite: '@*'
 csl: modern-language-association.csl
-pdf-cover: "images/non-generated/api-cover.png"
-pdf-cover-font-color: "255, 255, 255"
-pdf-cover-author-color: "61, 60, 59"
-pdf-logo: "images/non-generated/cover-logo.png"
-trademark: "{{< var PROGRAM_LONGNAME >}}"
-publisher: "{{< var PUBLISHER >}}"
-publisher-cities:
-  - Brussels
-  - Ottawa
-  - Darmstadt
-theme-color: "240, 108, 2"
-page-side-decoration-color: "0, 0, 0"
-chapter-image: "non-generated/banner.jpg"
 number-sections: true
+metadata:
+  pdf-cover: "images/non-generated/api-cover.png"
+  pdf-cover-font-color: "255, 255, 255"
+  pdf-cover-author-color: "61, 60, 59"
+  pdf-logo: "images/non-generated/cover-logo.png"
+  trademark: "{{< var PROGRAM_LONGNAME >}}"
+  publisher: "{{< var PUBLISHER >}}"
+  publisher-cities:
+    - Brussels
+    - Ottawa
+    - Darmstadt
+  theme-color: "240, 108, 2"
+  page-side-decoration-color: "0, 0, 0"
+  chapter-image: "non-generated/banner.jpg"
 crossref:
   chapters: true
 book:

@@ -10,22 +10,27 @@ biblatexoptions: maxbibnames=4
 link-citations: true
 nocite: '@*'
 csl: modern-language-association.csl
-pdf-cover: "images/non-generated/cover.png"
-pdf-cover-font-color: "255, 255, 255"
-pdf-cover-author-color: "61, 60, 59"
-pdf-cover-background-color: "250, 244, 230"
-pdf-logo: "images/non-generated/cover-logo.png"
-trademark: "${PROGRAM_LONGNAME}"
-publisher: ${PUBLISHER}
-publisher-cities:
-  - Brussels
-  - Ottawa
-  - Darmstadt
-chapter-image: "non-generated/banner.jpg"
-theme-color: "44, 28, 216"
-page-side-decoration-color: "84, 255, 212"
-watermark: "${DOCS_WATERMARK}"
 number-sections: true
+metadata:
+  pdf-cover: "images/non-generated/cover.png"
+  pdf-cover-font-color: "255, 255, 255"
+  pdf-cover-author-color: "61, 60, 59"
+  pdf-cover-background-color: "250, 244, 230"
+  pdf-logo: "images/non-generated/cover-logo.png"
+  authorbio: >-
+    \textsc{${PROGRAM_AUTHOR}} is the Director of Institutional Research at Edison State Community College.
+    He earned a Bachelor of Arts in English from the University of Dayton and has studied readability formulas for more than twenty years.
+    Before entering academia, he spent eighteen years working in the statistical software industry, primarily in localization engineering.
+  trademark: "${PROGRAM_LONGNAME}"
+  publisher: ${PUBLISHER}
+  publisher-cities:
+    - Brussels
+    - Ottawa
+    - Darmstadt
+  chapter-image: "non-generated/banner.jpg"
+  theme-color: "44, 28, 216"
+  page-side-decoration-color: "240, 108, 2"
+  watermark: "${DOCS_WATERMARK}"
 crossref:
   chapters: true
   sec-prefix: sec.
