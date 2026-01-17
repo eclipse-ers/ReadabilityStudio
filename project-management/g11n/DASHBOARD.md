@@ -1,6 +1,6 @@
 # 🌐 Globalization Dashboard
 
-> **Project:** Readability Studio · **Last updated:** 2025-11-23
+> **Project:** Readability Studio · **Last updated:** 2026-01-17
 
 ## Legend
 
@@ -87,7 +87,7 @@ _Shipping the product in multiple languages. This section tracks per-language tr
 **File types**: `.qmd` / `.md` → `.po` → `.mo`
 
 **build-localized-docs.R**
-Updates `.po files and generates the localized help.
+Updates `.po` files and generates the localized help.
 
 **Status**
 

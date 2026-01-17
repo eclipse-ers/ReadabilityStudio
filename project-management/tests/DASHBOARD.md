@@ -1,6 +1,6 @@
 # 🧪 Testing & Quality Dashboard
 
-> **Project:** Readability Studio · **Last updated:** 2025-11-23
+> **Project:** Readability Studio · **Last updated:** 2026-01-17
 
 ---
 
