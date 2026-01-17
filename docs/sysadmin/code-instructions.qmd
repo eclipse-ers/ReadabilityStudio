@@ -236,7 +236,7 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
   `r file_path(c("src", "test_helpers", "readability_formula_parser.cpp"))` that handles a custom version of the original test\
   This function is what gets mapped to `"CustomXXX()."` (Refer to `CustomNewDaleChall()` as an example.)
 - Map this function in `ReadabilityFormulaParser::ReadabilityFormulaParser()`
-- Add the new `` function to `m_customFamiliarWords` in `CustomTestDlg::Create()`
+- Add the new `CustomXXX()` function to `m_customFamiliarWords` in `CustomTestDlg::Create()`
 - Add handling logic for this function to `CustomTestDlg::ValidateFormula()`
 - Add a menu option to create a new test based on `CustomXXX()`
   - Add a menu event mapping for adding a new test using this new formula in\
@@ -277,13 +277,13 @@ When a new stipple shape is added to the `r file_path("Wisteria-Dataviz")` submo
 
 - Add a mapping of the displayable name and internal *Wisteria* key in `m_shapeMap` in\
   `r file_path(c("src", "app", "readability_app.cpp"))`
-- In the API manual (`r file_path("readability-studio-api")`, add the new shape to the\
+- In the API manual (`r file_path("readability-studio-api")`), add the new shape to the\
   "SetStippleShape.qmd" topics.
   (This will need to be the internal keys, not the displayable name.)
 
 ## Adding a New Color Scheme {-}
 
-When a new color scheme is added to the `r file_path("Wisteria-Dataviz")`  submodule, it can be included in this program.
+When a new color scheme is added to the `r file_path("Wisteria-Dataviz")` submodule, it can be included in this program.
 
 - Add a mapping of the displayable name and internal *Wisteria* key in `m_colorSchemeMap` in\
   `r file_path(c("src", "app", "readability_app.cpp"))`.

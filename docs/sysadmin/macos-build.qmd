@@ -109,7 +109,7 @@ codesign --verify --verbose=2 ./"Readability Studio.app"
 If you build the "Release" version of *{{< var PROGRAM_NAME >}}*, then the *CMake* build process will copy "{{< var PROGRAM_NAME >}}.app" into `r menu(c('installers', 'macos', 'release'))`.
 :::
 
-Go to  `r menu(c('installers', 'macos', 'release'))` and run the following:
+Go to `r menu(c('installers', 'macos', 'release'))` and run the following:
 
 ```{.bash}
 test -f ReadabilityStudio.dmg && rm ReadabilityStudio.dmg

@@ -141,4 +141,4 @@ Splashscreens were created by the Author
 
 ### Legrand Orange Book
 
-* License: License: CC BY-NC-SA 4.0 (but with latextemplates.com exception clause for producing individual works [even commercial])
+* License: CC BY-NC-SA 4.0 (but with latextemplates.com exception clause for producing individual works [even commercial])
