@@ -5299,7 +5299,9 @@ void ToolsOptionsDlg::CreateControls()
                                              wxGenericValidator(&m_logAppendDailyLog.get_value())),
                               wxSizerFlags{}.Expand().Border(wxTOP | wxBOTTOM));
 
-            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Scripting:"), true);
+            CreateLabelHeader(generalSettingsPage, docPanelSizer,
+                              // TRANSLATORS: Automation scripting.
+                              _(L"Scripting:"), true);
 
             optionsSizer = new wxBoxSizer(wxVERTICAL);
             docPanelSizer->Add(optionsSizer,

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Readability Studio\n"
-"POT-Creation-Date: 2026-01-17 12:06-0500\n"
+"POT-Creation-Date: 2026-01-17 17:19-0500\n"
 "PO-Revision-Date: 2025-07-19 08:23-0400\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: \n"
@@ -2466,7 +2466,7 @@ msgid "Sun"
 msgstr ""
 
 #: app/readability_app.cpp:425
-#: ui/dialogs/tools_options_dlg.cpp:5718
+#: ui/dialogs/tools_options_dlg.cpp:5720
 msgid "Book"
 msgstr ""
 
@@ -2624,7 +2624,7 @@ msgid "October"
 msgstr ""
 
 #: app/readability_app.cpp:477
-#: ui/dialogs/tools_options_dlg.cpp:5520
+#: ui/dialogs/tools_options_dlg.cpp:5522
 msgid "Campfire"
 msgstr ""
 
@@ -6316,7 +6316,7 @@ msgid "No Effect"
 msgstr ""
 
 #: projects/base_project_view.cpp:162
-#: ui/dialogs/tools_options_dlg.cpp:5606
+#: ui/dialogs/tools_options_dlg.cpp:5608
 msgid "Grayscale"
 msgstr ""
 
@@ -6329,7 +6329,7 @@ msgid "Blur Vertically"
 msgstr ""
 
 #: projects/base_project_view.cpp:171
-#: ui/dialogs/tools_options_dlg.cpp:5609
+#: ui/dialogs/tools_options_dlg.cpp:5611
 msgid "Sepia"
 msgstr ""
 
@@ -6370,22 +6370,22 @@ msgid "Plot Image"
 msgstr ""
 
 #: projects/base_project_view.cpp:205
-#: ui/dialogs/tools_options_dlg.cpp:5824
+#: ui/dialogs/tools_options_dlg.cpp:5826
 msgid "Original"
 msgstr ""
 
 #: projects/base_project_view.cpp:211
-#: ui/dialogs/tools_options_dlg.cpp:5826
+#: ui/dialogs/tools_options_dlg.cpp:5828
 msgid "Modern"
 msgstr ""
 
 #: projects/base_project_view.cpp:216
-#: ui/dialogs/tools_options_dlg.cpp:6109
+#: ui/dialogs/tools_options_dlg.cpp:6111
 msgid "Counts"
 msgstr ""
 
 #: projects/base_project_view.cpp:219
-#: ui/dialogs/tools_options_dlg.cpp:6110
+#: ui/dialogs/tools_options_dlg.cpp:6112
 msgid "Percentages"
 msgstr ""
 
@@ -6394,7 +6394,7 @@ msgid "Counts && Percentages"
 msgstr ""
 
 #: projects/base_project_view.cpp:225
-#: ui/dialogs/tools_options_dlg.cpp:6112
+#: ui/dialogs/tools_options_dlg.cpp:6114
 msgid "No labels"
 msgstr ""
 
@@ -6411,12 +6411,12 @@ msgid "Reset Zoom"
 msgstr ""
 
 #: projects/base_project_view.cpp:242
-#: ui/dialogs/tools_options_dlg.cpp:5953
+#: ui/dialogs/tools_options_dlg.cpp:5955
 msgid "Horizontal"
 msgstr ""
 
 #: projects/base_project_view.cpp:247
-#: ui/dialogs/tools_options_dlg.cpp:5955
+#: ui/dialogs/tools_options_dlg.cpp:5957
 msgid "Vertical"
 msgstr ""
 
@@ -6441,9 +6441,9 @@ msgstr ""
 #: projects/base_project_view.cpp:278
 #: projects/base_project_view.cpp:353
 #: projects/base_project_view.cpp:424
-#: ui/dialogs/tools_options_dlg.cpp:5911
-#: ui/dialogs/tools_options_dlg.cpp:6010
-#: ui/dialogs/tools_options_dlg.cpp:6152
+#: ui/dialogs/tools_options_dlg.cpp:5913
+#: ui/dialogs/tools_options_dlg.cpp:6012
+#: ui/dialogs/tools_options_dlg.cpp:6154
 msgid "Solid"
 msgstr ""
 
@@ -6477,9 +6477,9 @@ msgstr ""
 #: projects/base_project_view.cpp:308
 #: projects/base_project_view.cpp:383
 #: projects/base_project_view.cpp:454
-#: ui/dialogs/tools_options_dlg.cpp:5923
-#: ui/dialogs/tools_options_dlg.cpp:6021
-#: ui/dialogs/tools_options_dlg.cpp:6163
+#: ui/dialogs/tools_options_dlg.cpp:5925
+#: ui/dialogs/tools_options_dlg.cpp:6023
+#: ui/dialogs/tools_options_dlg.cpp:6165
 msgid "Watercolor"
 msgstr ""
 
@@ -8379,7 +8379,7 @@ msgstr ""
 #: projects/project_frame.cpp:1473
 #: projects/project_frame.cpp:1540
 #: ui/dialogs/tools_options_dlg.cpp:1675
-#: ui/dialogs/tools_options_dlg.cpp:5698
+#: ui/dialogs/tools_options_dlg.cpp:5700
 msgid "Select Stipple Image"
 msgstr ""
 
@@ -8390,7 +8390,7 @@ msgstr ""
 #: projects/project_frame.cpp:1499
 #: projects/project_frame.cpp:1569
 #: ui/dialogs/tools_options_dlg.cpp:1702
-#: ui/dialogs/tools_options_dlg.cpp:5752
+#: ui/dialogs/tools_options_dlg.cpp:5754
 msgid "Select Common Image"
 msgstr ""
 
@@ -8411,7 +8411,7 @@ msgstr ""
 
 #: projects/project_frame.cpp:1658
 #: ui/dialogs/tools_options_dlg.cpp:1736
-#: ui/dialogs/tools_options_dlg.cpp:5674
+#: ui/dialogs/tools_options_dlg.cpp:5676
 msgid "Select Logo Image"
 msgstr ""
 
@@ -8430,7 +8430,7 @@ msgstr ""
 
 #: projects/project_frame.cpp:1937
 #: projects/project_frame.cpp:1980
-#: ui/dialogs/tools_options_dlg.cpp:5599
+#: ui/dialogs/tools_options_dlg.cpp:5601
 msgid "Select Plot Background Image"
 msgstr ""
 
@@ -14044,32 +14044,33 @@ msgstr ""
 msgid "Append daily log"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5302
+#. TRANSLATORS: Automation scripting.
+#: ui/dialogs/tools_options_dlg.cpp:5304
 msgid "Scripting:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5310
+#: ui/dialogs/tools_options_dlg.cpp:5312
 msgid ""
 "Allow Lua scripts to access files and system commands"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5349
+#: ui/dialogs/tools_options_dlg.cpp:5351
 #, c-format
 msgid "%s Options"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5350
+#: ui/dialogs/tools_options_dlg.cpp:5352
 msgid ""
 "These options will only affect new projects.\n"
 "To change an existing project, click \"Properties\" on "
 "the Home tab."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5369
+#: ui/dialogs/tools_options_dlg.cpp:5371
 msgid "Project Properties"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5370
+#: ui/dialogs/tools_options_dlg.cpp:5372
 #, c-format
 msgid ""
 "These options only affect the current project (\"%s\").\n"
@@ -14077,55 +14078,55 @@ msgid ""
 "on the \"Tools\" tab."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5446
-#: ui/dialogs/tools_options_dlg.cpp:5484
+#: ui/dialogs/tools_options_dlg.cpp:5448
+#: ui/dialogs/tools_options_dlg.cpp:5486
 msgid "Fonts:"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5448
+#: ui/dialogs/tools_options_dlg.cpp:5450
 msgid "Top titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5454
+#: ui/dialogs/tools_options_dlg.cpp:5456
 msgid "Bottom titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5460
+#: ui/dialogs/tools_options_dlg.cpp:5462
 msgid "Left titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5466
+#: ui/dialogs/tools_options_dlg.cpp:5468
 msgid "Right titles"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5485
+#: ui/dialogs/tools_options_dlg.cpp:5487
 msgid "x-axis"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5489
+#: ui/dialogs/tools_options_dlg.cpp:5491
 msgid "y-axis"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5535
+#: ui/dialogs/tools_options_dlg.cpp:5537
 msgid ""
 "Select from here the color scheme to apply to pie charts, "
 "word clouds, and grouped histograms."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5541
+#: ui/dialogs/tools_options_dlg.cpp:5543
 msgid ""
 "The options in this section customize the backgrounds of "
 "the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5548
+#: ui/dialogs/tools_options_dlg.cpp:5550
 msgid ""
 "Selects the color for the graphs' background. Note that "
 "if you are displaying an image, then the image will be "
 "shown on top of this color."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5559
+#: ui/dialogs/tools_options_dlg.cpp:5561
 msgid ""
 "Check this to apply a downward fade to the background "
 "color of your graphs. The background of your graphs will "
@@ -14133,61 +14134,61 @@ msgid ""
 "have selected into white."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5566
+#: ui/dialogs/tools_options_dlg.cpp:5568
 msgid ""
 "The options in this section customize the plot area "
 "backgrounds of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5575
+#: ui/dialogs/tools_options_dlg.cpp:5577
 msgid ""
 "Selects the color for the plot area background of the "
 "graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5585
+#: ui/dialogs/tools_options_dlg.cpp:5587
 msgid ""
 "Sets the transparency of the plot background color. A "
 "value of 255 will set the background to be fully opaque, "
 "whereas 0 will set the background to be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5600
-#: ui/dialogs/tools_options_dlg.cpp:5675
-#: ui/dialogs/tools_options_dlg.cpp:5699
-#: ui/dialogs/tools_options_dlg.cpp:5753
+#: ui/dialogs/tools_options_dlg.cpp:5602
+#: ui/dialogs/tools_options_dlg.cpp:5677
+#: ui/dialogs/tools_options_dlg.cpp:5701
+#: ui/dialogs/tools_options_dlg.cpp:5755
 msgid "Select an image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5601
+#: ui/dialogs/tools_options_dlg.cpp:5603
 msgid "Selects the image for the graphs' background."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5605
+#: ui/dialogs/tools_options_dlg.cpp:5607
 msgid "No effect"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5607
+#: ui/dialogs/tools_options_dlg.cpp:5609
 msgid "Blur horizontally"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5608
+#: ui/dialogs/tools_options_dlg.cpp:5610
 msgid "Blur vertically"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5610
+#: ui/dialogs/tools_options_dlg.cpp:5612
 msgid "Frosted glass"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5611
+#: ui/dialogs/tools_options_dlg.cpp:5613
 msgid "Oil painting"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5617
+#: ui/dialogs/tools_options_dlg.cpp:5619
 msgid "Applies an effect to the plot background image."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5629
+#: ui/dialogs/tools_options_dlg.cpp:5631
 msgid ""
 "Sets the transparency of the plot background image. A "
 "value of 255 will set the image to be fully opaque, "
@@ -14195,224 +14196,224 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: "Crop" as in trimming an image. These are both verbs.
-#: ui/dialogs/tools_options_dlg.cpp:5636
+#: ui/dialogs/tools_options_dlg.cpp:5638
 msgid "Crop & center"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5637
+#: ui/dialogs/tools_options_dlg.cpp:5639
 msgid "Shrink to fit"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5643
+#: ui/dialogs/tools_options_dlg.cpp:5645
 msgid "How to fit the image within the plot background."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5655
+#: ui/dialogs/tools_options_dlg.cpp:5657
 msgid ""
 "The options in this section customize the watermarks and "
 "logo images of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5663
+#: ui/dialogs/tools_options_dlg.cpp:5665
 msgid "Enter text"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5665
+#: ui/dialogs/tools_options_dlg.cpp:5667
 msgid ""
 "Enter a label to be stamped across your graphs into this "
 "field. This label will be stamped diagonally, top left-"
 "hand corner to bottom right-hand corner."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5684
+#: ui/dialogs/tools_options_dlg.cpp:5686
 msgid ""
 "Enter the path to the image file used as your graphs' "
 "logo into this field. The logo will be displayed in the "
 "lower right-hand corner of each graph."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5690
+#: ui/dialogs/tools_options_dlg.cpp:5692
 msgid ""
 "The options in this section customize various visual "
 "effects of the graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5703
+#: ui/dialogs/tools_options_dlg.cpp:5705
 msgid ""
 "Enter into this field the file path to the image used for "
 "a stipple brush. A stipple brush can be used to draw "
 "stacked images across bars and boxes"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5734
+#: ui/dialogs/tools_options_dlg.cpp:5736
 msgid ""
 "Select from here which shape to use for a stipple brush. "
 "A stipple brush can be used to draw stacked shape across "
 "bars and boxes"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5742
+#: ui/dialogs/tools_options_dlg.cpp:5744
 msgid "Selects the color used for certain stipple shapes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5756
+#: ui/dialogs/tools_options_dlg.cpp:5758
 msgid ""
 "Enter into this field the file path to the common image "
 "used used to draw across all bars/boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5775
+#: ui/dialogs/tools_options_dlg.cpp:5777
 msgid ""
 "Check this to include shadows underneath items such as "
 "boxes, bars, and labels. Unchecking this option will give "
 "your graphs a more \"flat\" look."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5786
+#: ui/dialogs/tools_options_dlg.cpp:5788
 msgid ""
 "Check this to draw attention to the complex (i.e., 3+ "
 "syllable) word groups on syllable histograms and pie "
 "charts (standard projects)."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5812
+#: ui/dialogs/tools_options_dlg.cpp:5814
 msgid ""
 "The options in this section customize the Fry, Gilliam-"
 "Peña-Mountain, Raygor, and Schwartz graphs."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5821
+#: ui/dialogs/tools_options_dlg.cpp:5823
 msgid ""
 "Selects the color for the invalid sentence/word regions."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5833
+#: ui/dialogs/tools_options_dlg.cpp:5835
 msgid "Selects the layout style of the Raygor graph."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5837
+#: ui/dialogs/tools_options_dlg.cpp:5839
 msgid ""
 "The options in this section customize the Flesch chart."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5847
+#: ui/dialogs/tools_options_dlg.cpp:5849
 msgid "Check this to connect the factor and score points."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5858
+#: ui/dialogs/tools_options_dlg.cpp:5860
 msgid ""
 "Check this to display document names grouped along the "
 "syllable ruler."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5863
+#: ui/dialogs/tools_options_dlg.cpp:5865
 msgid "The options in this section customize the Lix Gauge."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5873
+#: ui/dialogs/tools_options_dlg.cpp:5875
 msgid ""
 "Check this to display the English translated bracket "
 "labels on the German Lix gauge."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5899
-#: ui/dialogs/tools_options_dlg.cpp:5999
+#: ui/dialogs/tools_options_dlg.cpp:5901
+#: ui/dialogs/tools_options_dlg.cpp:6001
 msgid ""
 "The options in this section customize the display of the "
 "bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5908
-#: ui/dialogs/tools_options_dlg.cpp:6007
+#: ui/dialogs/tools_options_dlg.cpp:5910
+#: ui/dialogs/tools_options_dlg.cpp:6009
 msgid "Selects the color used for the bars."
-msgstr ""
-
-#: ui/dialogs/tools_options_dlg.cpp:5913
-#: ui/dialogs/tools_options_dlg.cpp:6011
-#: ui/dialogs/tools_options_dlg.cpp:6153
-msgid "Glass effect"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5915
 #: ui/dialogs/tools_options_dlg.cpp:6013
-msgid "Color fade, bottom to top"
+#: ui/dialogs/tools_options_dlg.cpp:6155
+msgid "Glass effect"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5917
 #: ui/dialogs/tools_options_dlg.cpp:6015
-msgid "Color fade, top to bottom"
+msgid "Color fade, bottom to top"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5919
 #: ui/dialogs/tools_options_dlg.cpp:6017
-#: ui/dialogs/tools_options_dlg.cpp:6159
-#: ui/dialogs/tools_options_dlg.h:458
-msgid "Stipple image"
+msgid "Color fade, top to bottom"
 msgstr ""
 
 #: ui/dialogs/tools_options_dlg.cpp:5921
 #: ui/dialogs/tools_options_dlg.cpp:6019
 #: ui/dialogs/tools_options_dlg.cpp:6161
+#: ui/dialogs/tools_options_dlg.h:458
+msgid "Stipple image"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5923
+#: ui/dialogs/tools_options_dlg.cpp:6021
+#: ui/dialogs/tools_options_dlg.cpp:6163
 #: ui/dialogs/tools_options_dlg.h:464
 #: ui/dialogs/tools_options_dlg.h:470
 msgid "Stipple shape"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5925
-#: ui/dialogs/tools_options_dlg.cpp:6022
-#: ui/dialogs/tools_options_dlg.cpp:6164
-msgid "Thick watercolor"
-msgstr ""
-
 #: ui/dialogs/tools_options_dlg.cpp:5927
 #: ui/dialogs/tools_options_dlg.cpp:6024
 #: ui/dialogs/tools_options_dlg.cpp:6166
+msgid "Thick watercolor"
+msgstr ""
+
+#: ui/dialogs/tools_options_dlg.cpp:5929
+#: ui/dialogs/tools_options_dlg.cpp:6026
+#: ui/dialogs/tools_options_dlg.cpp:6168
 #: ui/dialogs/tools_options_dlg.h:476
 msgid "Common image"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5935
-#: ui/dialogs/tools_options_dlg.cpp:6031
+#: ui/dialogs/tools_options_dlg.cpp:5937
+#: ui/dialogs/tools_options_dlg.cpp:6033
 msgid "Selects which effect to apply to the bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5949
-#: ui/dialogs/tools_options_dlg.cpp:6044
+#: ui/dialogs/tools_options_dlg.cpp:5951
+#: ui/dialogs/tools_options_dlg.cpp:6046
 msgid ""
 "Sets the transparency of the bars. A value of 255 will "
 "set the box to be fully opaque, whereas 0 will set the "
 "bars to be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5964
+#: ui/dialogs/tools_options_dlg.cpp:5966
 msgid ""
 "Selects whether to display the bars horizontally or "
 "vertically."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:5975
+#: ui/dialogs/tools_options_dlg.cpp:5977
 msgid "Check this to display labels on the bars."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6052
+#: ui/dialogs/tools_options_dlg.cpp:6054
 msgid ""
 "The options in this section control how the data are "
 "categorized."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6057
+#: ui/dialogs/tools_options_dlg.cpp:6059
 msgid "Create a bin for each unique value"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6058
+#: ui/dialogs/tools_options_dlg.cpp:6060
 msgid "Sort by interval"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6059
+#: ui/dialogs/tools_options_dlg.cpp:6061
 msgid "Sort by neat interval"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6068
+#: ui/dialogs/tools_options_dlg.cpp:6070
 msgid ""
 "Binning refers to how values (e.g., index and grade "
 "scores) are categorized into separate classes. Each class "
@@ -14421,105 +14422,105 @@ msgid ""
 "and how your data are sorted into them."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6075
+#: ui/dialogs/tools_options_dlg.cpp:6077
 msgid "Round"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6076
+#: ui/dialogs/tools_options_dlg.cpp:6078
 msgid "Round down"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6077
+#: ui/dialogs/tools_options_dlg.cpp:6079
 msgid "Round up"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6078
+#: ui/dialogs/tools_options_dlg.cpp:6080
 msgid "Do not round"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6085
+#: ui/dialogs/tools_options_dlg.cpp:6087
 msgid ""
 "This option controls how floating-point values are "
 "rounded when being sorted into bins."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6091
+#: ui/dialogs/tools_options_dlg.cpp:6093
 msgid ""
 "The options in this section control how the bars are "
 "labeled."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6096
+#: ui/dialogs/tools_options_dlg.cpp:6098
 msgid "Cutpoints"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6097
+#: ui/dialogs/tools_options_dlg.cpp:6099
 msgid "Midpoints"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6105
+#: ui/dialogs/tools_options_dlg.cpp:6107
 msgid ""
 "Specifies how to display the bars' values range on the "
 "axis."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6111
+#: ui/dialogs/tools_options_dlg.cpp:6113
 msgid "Counts & percentages"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6119
+#: ui/dialogs/tools_options_dlg.cpp:6121
 msgid "Specifies what to display on the bars' labels."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6142
+#: ui/dialogs/tools_options_dlg.cpp:6144
 msgid ""
 "The options in this section customize the display of the "
 "boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6149
+#: ui/dialogs/tools_options_dlg.cpp:6151
 msgid "Selects the color used for the boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6155
+#: ui/dialogs/tools_options_dlg.cpp:6157
 msgid "Color fade, left to right"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6157
+#: ui/dialogs/tools_options_dlg.cpp:6159
 msgid "Color fade, right to left"
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6173
+#: ui/dialogs/tools_options_dlg.cpp:6175
 msgid "Selects which effect to apply to the boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6184
+#: ui/dialogs/tools_options_dlg.cpp:6186
 msgid ""
 "Sets the transparency of the box. A value of 255 will set "
 "the box to be fully opaque, whereas 0 will set the box to "
 "be transparent."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6190
+#: ui/dialogs/tools_options_dlg.cpp:6192
 msgid ""
 "The options in this section customize the display of the "
 "labels and data."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6200
+#: ui/dialogs/tools_options_dlg.cpp:6202
 msgid ""
 "Check this to display labels on the middle points, upper/"
 "lower control limits, and whiskers."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6212
+#: ui/dialogs/tools_options_dlg.cpp:6214
 msgid ""
 "Check this to display a line connecting the middle points "
 "of each box. This only applies to plots with multiple "
 "boxes."
 msgstr ""
 
-#: ui/dialogs/tools_options_dlg.cpp:6224
+#: ui/dialogs/tools_options_dlg.cpp:6226
 msgid ""
 "Check this to display all data points on the box and "
 "whiskers. If this is unchecked, then only outliers will "
