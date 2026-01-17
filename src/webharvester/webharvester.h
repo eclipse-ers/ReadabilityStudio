@@ -721,6 +721,8 @@ class WebHarvester
     std::set<wxString> m_downloadedFiles;
     std::map<wxString, wxString> m_brokenLinks;
     std::set<wxString, wxStringLessWebPath> m_alreadyCrawledFiles;
+    std::map<wxString, int, wxStringLessWebPath> m_redirectTargetCount;
+    constexpr static int MAX_REDIRECT_TARGET_COUNT{ 5 };
     int m_currentLevel{ 0 };
     bool m_isCancelled{ false };
 

@@ -342,6 +342,7 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
         url.Truncate(bookMarkIndex);
         }
     url = NormalizeUrl(url);
+    const wxString originalUrl = url;
 
     wxLogVerbose(L"Preparing to read %s", url);
     if (!m_downloader.Read(url))
@@ -388,6 +389,14 @@ bool WebHarvester::ReadWebPage(wxString& url, wxString& webPageContent, wxString
         if (!redirectCheck.IsHTTPFile() && !redirectCheck.IsHTTPSFile())
             {
             wxLogWarning(L"Blocked redirect to non-HTTP(S) scheme: %s", url);
+            m_alreadyCrawledFiles.insert(url);
+            return false;
+            }
+        // detect redirect loops - if we keep landing on the same URL, abort
+        if (url != originalUrl && ++m_redirectTargetCount[url] > MAX_REDIRECT_TARGET_COUNT)
+            {
+            wxLogWarning(L"Redirect loop detected: %s has been a redirect target too many times",
+                         url);
             m_alreadyCrawledFiles.insert(url);
             return false;
             }
@@ -529,6 +538,7 @@ bool WebHarvester::CrawlLinks()
     m_downloadedFiles.clear();
     m_brokenLinks.clear();
     m_alreadyCrawledFiles.clear();
+    m_redirectTargetCount.clear();
     // depth level of zero means that we just want to download the root URL and don't actually
     // crawl anything
     if (GetDepthLevel() > 0)
