@@ -346,6 +346,9 @@ if (buildProgrammingManual)
   file_copy(glue("{docFolder}/_variables.yml"),
             glue("{docFolder}/readability-studio-api/_variables.yml"),
             TRUE)
+  file_copy(glue("{docFolder}/readability-studio-manual/_quarto-api.yml"),
+            glue("{docFolder}/readability-studio-api/_quarto.yml"),
+            TRUE)
   dir_copy(glue("{docFolder}/readability-studio-manual/latex"),
            glue("{docFolder}/readability-studio-api/latex"),
            TRUE)
@@ -380,6 +383,7 @@ if (buildProgrammingManual)
   unlink(glue("{docFolder}/readability-studio-api/libdebug.qmd"))
   unlink(glue("{docFolder}/readability-studio-api/enums.qmd"))
   unlink(glue("{docFolder}/readability-studio-api/_variables.yml"))
+  unlink(glue("{docFolder}/readability-studio-api/_quarto.yml"))
   unlink(glue("{docFolder}/readability-studio-api/modern-language-association.csl"))
   unlink(glue("{docFolder}/readability-studio-api/LegrandOrangeBook.cls"))
   }
