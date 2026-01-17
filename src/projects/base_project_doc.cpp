@@ -717,11 +717,12 @@ void BaseProjectDoc::RemoveAllGlobalCustomReadabilityTests()
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
         if (doc != nullptr)
-        doc->ExcludeAllCustomTestsTests();
-        doc->Modify(true);
-        doc->RefreshRequired(ProjectRefresh::Minimal);
-        doc->RefreshProject();
-        }
+            {
+            doc->ExcludeAllCustomTestsTests();
+            doc->Modify(true);
+            doc->RefreshRequired(ProjectRefresh::Minimal);
+            doc->RefreshProject();
+            }
         }
 
     // finally, remove the global tests
@@ -773,20 +774,20 @@ void BaseProjectDoc::RemoveGlobalCustomReadabilityTest(const wxString& testName)
         auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
         if (doc != nullptr)
             {
-        if (doc->HasCustomTest(testName))
-            {
-            doc->RemoveCustomReadabilityTest(testName, testId);
-            doc->SyncCustomTests();
-            doc->Modify(true);
-            doc->RefreshRequired(ProjectRefresh::Minimal);
-            doc->RefreshProject();
-            }
-        else
-            {
-            doc->SyncCustomTests();
+            if (doc->HasCustomTest(testName))
+                {
+                doc->RemoveCustomReadabilityTest(testName, testId);
+                doc->SyncCustomTests();
+                doc->Modify(true);
+                doc->RefreshRequired(ProjectRefresh::Minimal);
+                doc->RefreshProject();
+                }
+            else
+                {
+                doc->SyncCustomTests();
+                }
             }
         }
-    }
     }
 
 //-------------------------------------------------------
@@ -850,14 +851,14 @@ bool BaseProjectDoc::AddGlobalCustomReadabilityTest(CustomReadabilityTest& custo
                     // just replace the test in the project with the global one
                     return true;
                     }
-                name = wxGetTextFromUser(_(L"Please specify a different name:"),
-                                         _(L"Enter New Test Name"), name,
-                                         wxGetApp().GetParentingWindow());
-                // Cancel was pressed
-                if (name.empty())
+                wxTextEntryDialog dialog(wxGetApp().GetParentingWindow(),
+                    _(L"Please specify a different name:"),
+                    _(L"Enter New Test Name"), name);
+                if (dialog.ShowModal() != wxID_OK)
                     {
                     return false;
                     }
+                name = dialog.GetValue();
                 continue;
                 }
             // name is unique now, so stop prompting for a new name and change the name in the test

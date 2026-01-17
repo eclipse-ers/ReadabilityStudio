@@ -907,13 +907,14 @@ void ProjectDocChildFrame::OnLongSentencesOptions(wxCommandEvent& event)
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
     if (event.GetId() == XRCID("ID_LS_LONGER_THAN"))
         {
-        const long len = wxGetNumberFromUser(
+        wxNumberEntryDialog dialog(this,
             _(L"Consider sentences overly long if longer than:"), wxString{}, _(L"Long Sentences"),
             doc->GetDifficultSentenceLength(), 0, std::numeric_limits<int>::max());
-        if (len == -1)
+        if (dialog.ShowModal() != wxID_OK)
             {
             return;
             }
+        const long len = dialog.GetValue();
         doc->SetDifficultSentenceLength(len);
         }
     doc->SetLongSentenceMethod((event.GetId() == XRCID("ID_LS_LONGER_THAN")) ?
