@@ -38,10 +38,11 @@ createGridCover <- function(
     row_gap_extra = 40)
   {
   extra_h <- 60
-  pad_bottom <- extra_h
+  shadow_pad <- 35  # extra space for shadow overflow
+  pad_bottom <- extra_h + shadow_pad
 
   # horizontal breathing room for row shifts
-  side_pad <- max(row_shift_top, row_shift_bottom)
+  side_pad <- max(row_shift_top, row_shift_bottom) + shadow_pad
 
   # expanded canvas
   canvas <- magick::image_blank(
@@ -70,11 +71,19 @@ createGridCover <- function(
       magick::image_crop(glue::glue("{w}x{h}+0+0"), gravity = "west")
     }
 
-  # tiles (mirrored tall ones)
-  i1 <- fit(image1, wide_w,   top_h)
-  i2 <- fit(image2, narrow_w, top_h    + extra_h)  # top-right taller
-  i3 <- fit(image3, narrow_w, bottom_h + extra_h)  # bottom-left taller
-  i4 <- fit(image4, wide_w,   bottom_h)
+  # tiles (mirrored tall ones) with drop shadows
+  i1 <- fit(image1, wide_w,   top_h) |>
+    magick::image_border("gray50", "1x1") |>
+    magick::image_shadow()
+  i2 <- fit(image2, narrow_w, top_h    + extra_h) |>
+    magick::image_border("gray50", "1x1") |>
+    magick::image_shadow()
+  i3 <- fit(image3, narrow_w, bottom_h + extra_h) |>
+    magick::image_border("gray50", "1x1") |>
+    magick::image_shadow()
+  i4 <- fit(image4, wide_w,   bottom_h) |>
+    magick::image_border("gray50", "1x1") |>
+    magick::image_shadow()
 
   # vertical offsets
   y_top        <- frame + pad_top + vertical_nudge
@@ -85,7 +94,7 @@ createGridCover <- function(
   # horizontal offsets
   x1_left  <- frame_x - row_shift_top
   x1_right <- frame_x + wide_w + gutter - row_shift_top
-  
+ 
   x2_left  <- frame_x + row_shift_bottom
   x2_right <- frame_x + narrow_w + gutter + row_shift_bottom
 
