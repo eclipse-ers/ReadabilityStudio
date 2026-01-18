@@ -82,5 +82,5 @@ enum DebugSettings
   - Messages from low-level code (e.g., the *Excel* importer)
 - Exception messages should be translatable, unless in low-level code where *gettext* mechanisms aren't available
 - Strings consisting of only proper nouns (e.g., "Dale-Chall") should not be translatable
-- All standard i18n guidelines apply (e.g., do not expose internal codes and numbers for translation)
+- Standard i18n guidelines apply (e.g., do not expose internal codes or numbers to translation)
 - Formatting code (e.g., HTML tags) should not in translatable strings when possible

@@ -134,7 +134,7 @@ codesign --force --verbose=2 --sign ${ORG_ID} ./ReadabilityStudio.dmg
 codesign --verify --verbose=2 ./ReadabilityStudio.dmg
 hdiutil verify ./ReadabilityStudio.dmg
 xcrun notarytool submit ./ReadabilityStudio.dmg \
-  --keychain-profile ${KEYCHAIN_PROFILE} \
+  --keychain-profile ${KEYCHAIN_PROFILE}        \
   --wait
 
 xcrun stapler staple ./ReadabilityStudio.dmg
