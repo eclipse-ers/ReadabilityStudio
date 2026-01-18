@@ -618,7 +618,7 @@ msgid ""
 "SENTENCE"
 msgstr ""
 "PALABRAS POR\n"
-"ORACIONES"
+"ORACIÓN"
 
 #: Wisteria-Dataviz/src/graphs/fleschchart.cpp:78
 msgid "Very Easy"
@@ -661,7 +661,7 @@ msgid ""
 "SYLLABLES PER\n"
 "100 WORDS"
 msgstr ""
-"SILABAS POR CADA\n"
+"SÍLABAS POR CADA\n"
 "100 PALABRAS"
 
 #: Wisteria-Dataviz/src/graphs/fleschchart.cpp:303
@@ -1189,19 +1189,19 @@ msgstr "Nivel de control, satisfacción y efectividad"
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:110
 #, c-format
 msgid "First %s"
-msgstr "Primera %s"
+msgstr "Primer %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:113
 #, c-format
 msgid "Second %s"
-msgstr "Segunda %s"
+msgstr "Segundo %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:116
 #, c-format
 msgid "Third %s"
-msgstr "Tercera %s"
+msgstr "Tercer %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:119
@@ -1213,7 +1213,7 @@ msgstr "Cuarto %s"
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:122
 #, c-format
 msgid "Fifth %s"
-msgstr "Quinta %s"
+msgstr "Quinto %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:125
@@ -1225,7 +1225,7 @@ msgstr "Sexto %s"
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:128
 #, c-format
 msgid "Seventh %s"
-msgstr "Séptima %s"
+msgstr "Séptimo %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:131
@@ -1237,7 +1237,7 @@ msgstr "Octavo %s"
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:134
 #, c-format
 msgid "Ninth %s"
-msgstr "Novena %s"
+msgstr "Noveno %s"
 
 #. TRANSLATORS: %s is time interval (e.g., semester)
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:137
@@ -1255,7 +1255,7 @@ msgstr "Undécimo %s"
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:143
 #, c-format
 msgid "Twelfth %s"
-msgstr "Duodécima %s"
+msgstr "Duodécimo %s"
 
 #. TRANSLATORS: time interval shown in W-Curve title.
 #: Wisteria-Dataviz/src/graphs/wcurveplot.h:178
@@ -2402,7 +2402,7 @@ msgstr "Diccionario Personalizado de Español"
 
 #: app/readability_app.cpp:155
 msgid "Custom German Dictionary"
-msgstr "Diccionario Personalizado de dlemán"
+msgstr "Diccionario Personalizado de Alemán"
 
 #: app/readability_app.cpp:156
 msgid "Custom English Dictionary"
@@ -2479,7 +2479,7 @@ msgstr "Copo de nieve"
 
 #: app/readability_app.cpp:439
 msgid "Blackboard"
-msgstr "Blackboard"
+msgstr "Pizarra"
 
 #: app/readability_app.cpp:440
 msgid "Clock"

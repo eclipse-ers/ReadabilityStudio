@@ -7,5 +7,5 @@ Documentation=Documentación
 Translations=Traducciones
 Typical=Típica
 Custom=Personalizada
-ErrorCode=Código de erro: 
+ErrorCode=Código de error: 
 
