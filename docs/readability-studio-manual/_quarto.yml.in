@@ -21,6 +21,10 @@ metadata:
     \textsc{${PROGRAM_AUTHOR}} is the Director of Institutional Research at Edison State Community College.
     He earned a Bachelor of Arts in English from the University of Dayton and has researched readability formulas for more than twenty years.
     Before entering academia, he spent eighteen years working in the statistical software industry, primarily in localization engineering.
+  photography-credits: >-
+    Cover and interior photographs by the author and from the
+    \textit{Images from the History of Medicine} (IHM) collection,
+    National Library of Medicine.
   trademark: "${PROGRAM_LONGNAME}"
   publisher: ${PUBLISHER}
   publisher-cities:

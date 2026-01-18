@@ -551,6 +551,9 @@ $endif$
 \def\thepublisher{$for(publisher)$$publisher$$endfor$}
 \def\thepublishercities{$for(publisher-cities)$\hspace{1cm}$publisher-cities$$endfor$}
 \def\trademark{$for(trademark)$\textit{$trademark$}\textsuperscript{\tiny\textregistered}$endfor$}
+$if(photography-credits)$
+\newcommand{\photographycredits}{$photography-credits$}
+$endif$
 
 % Either shows a logo for the publisher or their name in bold
 $if(publisher-logo)$
