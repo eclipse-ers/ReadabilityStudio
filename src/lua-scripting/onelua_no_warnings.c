@@ -29,6 +29,8 @@
 #elif defined(__GNUC__)
     // You need to not use -Wpedantic with GCC
     #pragma GCC diagnostic ignored "-Wpedantic"
+    #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+    #pragma GCC diagnostic ignored "-Wuninitialized"
 #elif defined(_MSC_VER)
     #pragma warning(disable : 4701 4702 4310 4244 4334 4267)
 #endif
