@@ -87,9 +87,9 @@ namespace grammar
                 return;
                 }
 
-            const wchar_t* const originalStart = first;
+            const wchar_t* const originalStart{ first };
 
-            size_t lineFeedCount(0), carriageReturnCount(0), formFeedCount(0);
+            size_t lineFeedCount{ 0 }, carriageReturnCount{ 0 }, formFeedCount{ 0 };
             while (first != last)
                 {
                 if (first[0] == 10)
@@ -505,7 +505,7 @@ namespace grammar
                      can_character_end_sentence_strict(text[current_position + 2])))
                     {
                     // eat up any more sentence-ending punctuation
-                    size_t i(0);
+                    size_t i{ 0 };
                     size_t periodCount =
                         characters::is_character::is_period(text[current_position]) ? 1 : 0;
                     size_t ellipsesCount =
@@ -550,7 +550,7 @@ namespace grammar
                     // last one in the sequence
                     current_position = lastSentenceEndingPunctuation;
                     }
-                // "word1. (word2", will be an end of sentence
+                // "word1. (word2" or "word1. [word2", will be an end of sentence
                 // (regardless of case), unless word1 is an abbreviation/acronym/initial.
                 if (characters::is_character::is_space_horizontal(text[current_position + 1]))
                     {
@@ -561,7 +561,8 @@ namespace grammar
                         ++nextNonSpace;
                         }
                     if (nextNonSpace + 1 < length &&
-                        traits::case_insensitive_ex::eq(text[nextNonSpace], L'('))
+                        (traits::case_insensitive_ex::eq(text[nextNonSpace], L'(') ||
+                         traits::case_insensitive_ex::eq(text[nextNonSpace], L'[')))
                         {
                         return !isAbbreviation(
                                    { text + previous_word_position,
@@ -654,7 +655,7 @@ namespace grammar
                         ++current_position;
                         }
                     // eat up whitespace up to the next word
-                    size_t i(0);
+                    size_t i{ 0 };
                     bool nonWordPunctEncountered = false;
                     for (i = current_position + 2; i < length; ++i)
                         {
@@ -808,7 +809,7 @@ namespace grammar
                     (!m_sentence_start_must_be_uppercased &&
                      characters::is_character::can_character_begin_word(ch)) ||
                     // or is a left parenthesis (sometimes sentences start with these)
-                    traits::case_insensitive_ex::eq(ch, 40) ||
+                    traits::case_insensitive_ex::eq(ch, L'(') ||
                     // or various hyphens/dashes, sometimes follows a quote from a person
                     characters::is_character::is_dash_or_hyphen(ch) ||
                     // or if simply a quote symbol

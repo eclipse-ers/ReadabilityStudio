@@ -3196,6 +3196,14 @@ TEST_CASE("Document", "[document]")
         CHECK(doc.get_complete_sentence_count() == 1);
         CHECK(doc.get_punctuation().size() == 2);
         CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'?');
+
+        text = L"Document ave. [right pane] blah?";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        CHECK(doc.get_sentence_count() == 1);
+        CHECK(doc.get_complete_sentence_count() == 1);
+        CHECK(doc.get_punctuation().size() == 2);
+        CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'?');
         }
     SECTION("Paren Same Sentence Spaces")
         {
@@ -3207,11 +3215,27 @@ TEST_CASE("Document", "[document]")
         CHECK(doc.get_complete_sentence_count() == 1);
         CHECK(doc.get_punctuation().size() == 2);
         CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'?');
+
+        text = L"Document dr.    [right pane] blah?";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        CHECK(doc.get_sentence_count() == 1);
+        CHECK(doc.get_complete_sentence_count() == 1);
+        CHECK(doc.get_punctuation().size() == 2);
+        CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'?');
         }
     SECTION("Paren Same Sentence Initial")
         {
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
         const wchar_t* text = L"Spache G. (1955) article.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        CHECK(doc.get_sentence_count() == 1);
+        CHECK(doc.get_complete_sentence_count() == 1);
+        CHECK(doc.get_punctuation().size() == 2);
+        CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'.');
+
+        text = L"Spache G. [1955] article.";
         doc.load_document(text, wcslen(text), false, false, false, false);
 
         CHECK(doc.get_sentence_count() == 1);
@@ -3316,6 +3340,17 @@ TEST_CASE("Document", "[document]")
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(doc.get_passive_voice_indices().size() == 1);
         CHECK(doc.get_passive_voice_indices().at(0).first == 0);
+        }
+    SECTION("Brace Two Sentences")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        const wchar_t* text = L"Director of Digital Engagement for the company. [email protected]"; // "company" is not an abbreviation
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        CHECK(doc.get_sentence_count() == 2);
+        CHECK(doc.get_complete_sentence_count() == 1);
+        REQUIRE(!doc.get_punctuation().empty());
+        CHECK(doc.get_sentences().at(0).get_ending_punctuation() == L'.');
         }
     
     SECTION("Grammar")
