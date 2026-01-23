@@ -116,6 +116,8 @@ namespace characters
                 // charon, A with ogonek, O with double accent
                 (ch == 0x0106 || ch == 0x0154 || ch == 0x0141 || ch == 0x0158 || ch == 0x0102 ||
                  ch == 0x010C || ch == 0x0104 || ch == 0x0150) ||
+                // Vietnamese O with dot below
+                (ch == 0x1ECC) ||
                 // Russian
                 (ch >= 0x0410 && ch <= 0x042F) || (ch == 0x0401));
             }
@@ -146,6 +148,8 @@ namespace characters
                 // charon, A with ogonek, O with double accent
                 (ch == 0x0107 || ch == 0x0155 || ch == 0x0142 || ch == 0x0159 || ch == 0x0103 ||
                  ch == 0x010D || ch == 0x0105 || ch == 0x0151) ||
+                // Vietnamese o with dot below
+                (ch == 0x1ECD) ||
                 // Russian
                 (ch >= 0x0430 && ch <= 0x044F) || (ch == 0x0451));
             }
@@ -169,7 +173,8 @@ namespace characters
                 (ch == 0x0401) ? 0x0451 : // Russian E with umlaut
                 (ch == 0x0178) ? 0x00FF : // Y with umlaut
                 (ch == 0x0152) ? 0x0153 : // OE ligature
-                (ch == 0x0112) ? 0x0113 : // E with macro
+                (ch == 0x0112) ? 0x0113 : // E with macron
+                (ch == 0x1ECC) ? 0x1ECD : // Vietnamese O with dot below
                     ch;
             }
 
@@ -218,7 +223,9 @@ namespace characters
                     is_either<wchar_t>(letter, 0x042B, 0x044B) ||
                     is_either<wchar_t>(letter, 0x042D, 0x044D) ||
                     is_either<wchar_t>(letter, 0x042E, 0x044E) ||
-                    is_either<wchar_t>(letter, 0x042F, 0x044F));
+                    is_either<wchar_t>(letter, 0x042F, 0x044F) ||
+                    // Vietnamese O with dot below
+                    is_either<wchar_t>(letter, 0x1ECC, 0x1ECD));
             }
 
         /** @returns @c true if a character is a consonant.

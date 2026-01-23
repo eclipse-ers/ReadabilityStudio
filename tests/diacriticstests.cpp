@@ -93,6 +93,11 @@ TEST_CASE("Diacritics", "[diacritics]")
         CHECK(cld(L"z\u0307Z\u0307"));
         CHECK(cld.get_conversion() == std::wstring{ L"żŻ" });
         }
+    SECTION("dot below")
+        {
+        CHECK(cld(L"o\u0323O\u0323"));
+        CHECK(cld.get_conversion() == std::wstring{ L"\x1ECD\x1ECC" });
+        }
     }
 
 TEST_CASE("Ligatures", "[diacritics]")

@@ -294,6 +294,38 @@ TEST_CASE("ischaracter", "[ischaracter]")
             CHECK(is_character::is_upper(upperLettersEnglishFullWidth[i]));
             }
         }
+
+    SECTION("Vietnamese O With Dot Below")
+        {
+        // U+1ECD = ọ (lowercase o with dot below)
+        // U+1ECC = Ọ (uppercase O with dot below)
+        constexpr wchar_t LATIN_SMALL_O_DOT_BELOW = L'\x1ECD';
+        constexpr wchar_t LATIN_CAPITAL_O_DOT_BELOW = L'\x1ECC';
+
+        // is_lower
+        CHECK(is_character::is_lower(LATIN_SMALL_O_DOT_BELOW));
+        CHECK_FALSE(is_character::is_lower(LATIN_CAPITAL_O_DOT_BELOW));
+
+        // is_upper
+        CHECK_FALSE(is_character::is_upper(LATIN_SMALL_O_DOT_BELOW));
+        CHECK(is_character::is_upper(LATIN_CAPITAL_O_DOT_BELOW));
+
+        // is_vowel (both are variants of 'o')
+        CHECK(is_character::is_vowel(LATIN_SMALL_O_DOT_BELOW));
+        CHECK(is_character::is_vowel(LATIN_CAPITAL_O_DOT_BELOW));
+
+        // is_consonant (should be false for vowels)
+        CHECK_FALSE(is_character::is_consonant(LATIN_SMALL_O_DOT_BELOW));
+        CHECK_FALSE(is_character::is_consonant(LATIN_CAPITAL_O_DOT_BELOW));
+
+        // is_alpha
+        CHECK(is_character::is_alpha(LATIN_SMALL_O_DOT_BELOW));
+        CHECK(is_character::is_alpha(LATIN_CAPITAL_O_DOT_BELOW));
+
+        // to_lower (uppercase should convert to lowercase)
+        CHECK(is_character::to_lower(LATIN_CAPITAL_O_DOT_BELOW) == LATIN_SMALL_O_DOT_BELOW);
+        CHECK(is_character::to_lower(LATIN_SMALL_O_DOT_BELOW) == LATIN_SMALL_O_DOT_BELOW);
+        }
     }
 // NOLINTEND
 // clang-format on
