@@ -1,6 +1,7 @@
 % LaTeX packages that we will need
 
 % TOC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % make the space for numbers wide enough so that the section names
 % don't overlap the numbers.
 \makeatletter
@@ -11,7 +12,8 @@
 \let\l@table\l@figure
 \makeatother
 
-% index
+% Index
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{imakeidx}
 \makeindex[intoc=true,columnseprule=true,
            options= -s latex/indexstyles.ist]
@@ -22,6 +24,8 @@
 % \index{Main entry!zzzzz@\igobble|seealso{Other item}}
 \def\igobble#1{}
 
+% Text formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{changepage}
 \usepackage{mdframed}
 \usepackage{bbding}
@@ -43,7 +47,8 @@
 \usepackage{stringstrings}
 \usepackage{enumitem}
 
-% table packages
+% Table packages and formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{booktabs}
 \usepackage{longtable,tabu}
 \usepackage{makecell}
@@ -52,7 +57,8 @@
 \usepackage{colortbl}
 \usepackage{float}
 
-% fonts and graphics
+% Fonts and graphics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{fontawesome5}
 \usepackage{fontspec}
 \usepackage{adforn}
@@ -60,7 +66,8 @@
 \usepackage{tikz}
 \usepackage{ragged2e}
 
-% words to not hyphenate
+% Words to not hyphenate
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \hyphenation{Readability}
 \hyphenation{Studio}
 \hyphenation{LibreOffice}
@@ -73,6 +80,7 @@
 \hyphenation{otherwise}
 
 % MLA requirements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[letterpaper, margin=1in]{geometry}
 
 % make the page headers fancy
@@ -84,6 +92,8 @@
 \fancyhead[RE]{\nouppercase{\rightmark}}
 \fancyhead[LE,RO]{\thepage}
 
+% Decorations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % color box that displays a quote in fancy format
 % https://tex.stackexchange.com/questions/16964/block-quote-with-big-quotation-marks
 \usetikzlibrary{shadows,calc,scopes,backgrounds}
@@ -160,7 +170,7 @@
 \setcounter{bottomnumber}{3}
 \setcounter{totalnumber}{4}
 
-% the warning, note, and tip color boxes
+% Warning, note, and tip color boxes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % colors that can be used
