@@ -18,7 +18,7 @@ Low-level code should follow these guidelines:
 - Functions, enums, structs, classes, class member variables, and function parameters should be in `snake_case`
 - Local variables should be `camelCase`
 
-Examples of "low-level" code would be the stemmer, indexing, and document importing libraries
+Examples of "low-level" code would be the stemmer, indexing, and document importing libraries.
 
 ### High-level Code {-}
 
@@ -26,6 +26,8 @@ High-level code (i.e., code related to user-interfaces or libraries like *wxWidg
 
 - Functions, enums, structs, and classes should be in `PascalCase`
 - Class member variables, local variables, and function parameters should be `camelCase`
+
+Examples of "high-level" code would be the projects, web harvester, and graphics code.
 
 ## Styling {-}
 

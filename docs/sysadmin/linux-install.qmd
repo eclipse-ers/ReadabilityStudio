@@ -26,6 +26,14 @@ This can also be done by right-clicking the file, selecting `r menu(c('Propertie
 This only needs to be done once.
 Now "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" can be run directly to launch the program.
 
+::: {.notesection data-latex=""}
+An AppImage is a portable Linux app with all dependencies included, ready to run without installation.
+:::
+
+## Uninstalling {-}
+
+Drag "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" into the Trash.
+
 ## Updating {-}
 
 Replace your existing AppImage with the latest version.

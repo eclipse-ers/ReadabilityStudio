@@ -11,7 +11,7 @@ source('R/appdown.r')
 | :-- |
 | *{{< var MIN_MSVC_REQUIRED >}}* or higher |
 | *Inno Setup* |
-| *R* (optional) |
+| *R* from CRAN (optional) |
 | *Quarto* (optional) |
 | *POEdit* (optional) |
 
@@ -20,7 +20,7 @@ source('R/appdown.r')
 ## Download *wxWidgets* {-}
 
 - Open *Visual Studio* and select **Clone a Repository**
-  - Enter ["https://github.com/wxWidgets/wxWidgets.git"](https://github.com/wxWidgets/wxWidgets.git) and clone it
+  - Enter ["https://github.com/wxWidgets/wxWidgets.git"](https://github.com/wxWidgets/wxWidgets.git) and clone (i.e., download) it
 
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
