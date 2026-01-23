@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Claude Code Rules
 
 - Never perform any git operations
+- Never run builds or test runners - the user will do that
 - Only make edits to local files, and only after the user has approved each edit one-by-one
 
 ## Project Overview
@@ -27,7 +28,7 @@ cmake . -DCMAKE_BUILD_TYPE=Debug
 cmake --build . --target all -j $(nproc) --config Debug
 ```
 
-### macOS (Xcode)
+### macOS (XCode)
 ```bash
 cmake . -DCMAKE_BUILD_TYPE=Release -G Xcode
 cmake --build . --target readstudio --config Release
@@ -59,6 +60,13 @@ GUI tests are in `tests/gui-tests/` with runner `RSGuiTestRunner`.
 
 The project uses clang-format (v20) and clang-tidy. Key style rules:
 
+- **No C++ `<regex>` library:** Avoid using the C++ `<regex>` library in this project and instead use the hand-rolled parsing implementations in `src/indexing/`. This folder contains various text processing utilities including:
+  - Character handling (`character_traits.h`, `characters.h`, `diacritics.cpp`)
+  - Tokenization (`tokenize.h`)
+  - Syllabification (`syllable.cpp`, `german_syllabize.h`, `russian_syllabize.h`, `spanish_syllabize.h`)
+  - Word/phrase analysis (`word.h`, `phrase.h`, `word_functional.cpp`)
+  - Various linguistic helpers (abbreviations, contractions, conjunctions, pronouns, etc.)
+
 - **Indentation:** 4 spaces, no tabs
 - **Line length:** 100 characters max
 - **Brace style:** Whitesmiths
@@ -67,6 +75,7 @@ The project uses clang-format (v20) and clang-tidy. Key style rules:
   - Local variables: camelBack
   - Macros/constants: UPPER_CASE
 - **Pointers/references:** Left-aligned (`int* ptr`, not `int *ptr`)
+- **Comments:** First word lowercase, unless the comment contains multiple sentences
 - **Line endings:** LF (Unix-style)
 
 Run formatting check:
