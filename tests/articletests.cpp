@@ -57,6 +57,15 @@ TEST_CASE("English article", "[articles]")
         CHECK(artc(L"an", L"historic"));
         CHECK(artc(L"an", L"history"));
         }
+    SECTION("Honolulu")
+        {
+        // "Honolulu" has a pronounced H, unlike "honor/honour"
+        // So "a Honolulu-based" should be correct
+        CHECK_FALSE(artc(L"a", L"Honolulu"));
+        CHECK_FALSE(artc(L"a", L"Honolulu-based"));
+        CHECK(artc(L"an", L"Honolulu"));
+        CHECK(artc(L"an", L"Honolulu-based"));
+        }
     SECTION("are")
         {
         CHECK(artc(L"a", L"are"));

@@ -279,7 +279,8 @@ bool grammar::is_incorrect_english_article::is_an_exception(std::wstring_view wo
         {
         return true;
         }
-    if (traits::case_insensitive_ex::compare(word, L"hono", 4) == 0 ||
+    if (traits::case_insensitive_ex::compare(word, L"honor", 5) == 0 ||
+        traits::case_insensitive_ex::compare(word, L"honour", 6) == 0 ||
         traits::case_insensitive_ex::compare(word, L"hour", 4) == 0 ||
         traits::case_insensitive_ex::compare(word, L"heir", 4) == 0 ||
         traits::case_insensitive_ex::compare(word, L"html", 4) == 0 ||
