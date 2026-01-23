@@ -133,6 +133,90 @@ TEST_CASE("Spell checker", "[spellchecker]")
         CHECK(spellCheck(MYWORD(L"550e8400-e29b-41d4-a716-446655440000")));
         CHECK(spellCheck(MYWORD(L"550E8400-E29B-41D4-A716-446655440000")));
         }
+    SECTION("Time With Meridiem")
+        {
+        word_list knownWords;
+        word_list customKnownWords;
+        word_list programmerWords;
+        // Disable all other checks to isolate time meridiem testing
+        is_correctly_spelled_word<MYWORD,word_list> spellCheck(&knownWords, &customKnownWords, &programmerWords,
+            false, false, false, false, false, false, false);
+
+        // === VALID TIMES (should pass) ===
+        // Single digit hour
+        CHECK(spellCheck(MYWORD(L"4:00p.m.")));
+        CHECK(spellCheck(MYWORD(L"5:30a.m.")));
+        CHECK(spellCheck(MYWORD(L"1:00p.m.")));
+        CHECK(spellCheck(MYWORD(L"9:59a.m.")));
+        // Double digit hour
+        CHECK(spellCheck(MYWORD(L"10:00p.m.")));
+        CHECK(spellCheck(MYWORD(L"12:00a.m.")));
+        CHECK(spellCheck(MYWORD(L"11:59p.m.")));
+        // Leading zero on hour
+        CHECK(spellCheck(MYWORD(L"09:00a.m.")));
+        CHECK(spellCheck(MYWORD(L"01:30p.m.")));
+        // Case variations
+        CHECK(spellCheck(MYWORD(L"4:00P.M.")));
+        CHECK(spellCheck(MYWORD(L"4:00A.M.")));
+        CHECK(spellCheck(MYWORD(L"4:00p.M.")));
+        CHECK(spellCheck(MYWORD(L"4:00P.m.")));
+        CHECK(spellCheck(MYWORD(L"12:00A.M.")));
+        CHECK(spellCheck(MYWORD(L"12:00a.M.")));
+
+        // === INVALID - Wrong length (should fail) ===
+        // Too short (7 chars)
+        CHECK_FALSE(spellCheck(MYWORD(L"4:0p.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L":00p.m.")));
+        // Too long (10 chars)
+        CHECK_FALSE(spellCheck(MYWORD(L"123:00p.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:000p.m.")));
+
+        // === INVALID - Missing/wrong punctuation (should fail) ===
+        // Missing trailing period
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00p.m")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:00p.m")));
+        // Missing middle period
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00pm.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:00pm.")));
+        // Missing colon
+        CHECK_FALSE(spellCheck(MYWORD(L"400p.m..")));
+        CHECK_FALSE(spellCheck(MYWORD(L"1200p.m..")));
+
+        // === INVALID - Wrong characters (should fail) ===
+        // Invalid meridiem (not 'a' or 'p')
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00x.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00b.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:00z.m.")));
+        // Wrong final letter (not 'm')
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00p.x.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00a.n.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:00p.z.")));
+        // Letter instead of digit in hour
+        CHECK_FALSE(spellCheck(MYWORD(L"x:00p.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"ab:00p.m.")));
+        // Letter instead of digit in minutes
+        CHECK_FALSE(spellCheck(MYWORD(L"4:x0p.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"4:0xp.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"4:xxp.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12:abp.m.")));
+
+        // === INVALID - Boundary malformations (should fail) ===
+        // Colon in wrong position
+        CHECK_FALSE(spellCheck(MYWORD(L"40:0p.m.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"400:p.m.")));
+        // Period in wrong position
+        CHECK_FALSE(spellCheck(MYWORD(L"4:00.pm.")));
+        CHECK_FALSE(spellCheck(MYWORD(L"4:.00pm.")));
+        // Just meridiem, no time
+        CHECK_FALSE(spellCheck(MYWORD(L"p.m.....")));
+        CHECK_FALSE(spellCheck(MYWORD(L"a.m.....")));
+        // All periods
+        CHECK_FALSE(spellCheck(MYWORD(L"........")));
+        CHECK_FALSE(spellCheck(MYWORD(L".........")));
+        // All digits with periods
+        CHECK_FALSE(spellCheck(MYWORD(L"1234.5..")));
+        CHECK_FALSE(spellCheck(MYWORD(L"12345.6..")));
+        }
     }
 
 TEST_CASE("Social Media", "[social-media]")

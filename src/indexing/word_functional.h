@@ -1168,7 +1168,9 @@ class is_correctly_spelled_word
                the_word[3] == common_lang_constants::PERIOD))) ||
             // placeholder pattern consisting of only 'x' characters and hyphens
             // (e.g., "xxxxxxxx" or "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-            (the_word.find_first_not_of(L"xX-") == word_typeT::npos))
+            (the_word.find_first_not_of(L"xX-") == word_typeT::npos) ||
+            // time with meridiem indicator (e.g., "4:00p.m.")
+            is_time_with_meridiem(the_word))
             {
             m_recent_hits.emplace(key);
             return true;
@@ -1486,7 +1488,51 @@ class is_correctly_spelled_word
     const wordlistT* m_wordlist{ nullptr };
     // a user-supplied word list
     const wordlistT* m_secondary_wordlist{ nullptr };
+
     // a word list of programmer words (only used by is_programmer_code())
+    /// @returns @c true if @c the_word is a time with meridiem indicator (e.g., "4:00p.m.").
+    /// @param the_word The word to review.
+    [[nodiscard]]
+    static bool is_time_with_meridiem(const word_typeT& the_word) noexcept
+        {
+        // Pattern: H:MM(a/p).m. (8 chars) or HH:MM(a/p).m. (9 chars)
+        const auto len = the_word.length();
+        if (len != 8 && len != 9)
+            {
+            return false;
+            }
+        // Check ending: (a/p).m.
+        if (the_word[len - 1] != L'.' ||
+            !traits::case_insensitive_ex::eq(the_word[len - 2], L'm') ||
+            the_word[len - 3] != L'.' ||
+            (!traits::case_insensitive_ex::eq(the_word[len - 4], L'p') &&
+             !traits::case_insensitive_ex::eq(the_word[len - 4], L'a')))
+            {
+            return false;
+            }
+        // Check minutes: two digits before meridiem
+        if (!characters::is_character::is_numeric(the_word[len - 5]) ||
+            !characters::is_character::is_numeric(the_word[len - 6]))
+            {
+            return false;
+            }
+        // Check colon
+        if (the_word[len - 7] != L':')
+            {
+            return false;
+            }
+        // Check hour: one digit for length 8, two digits for length 9
+        if (!characters::is_character::is_numeric(the_word[len - 8]))
+            {
+            return false;
+            }
+        if (len == 9 && !characters::is_character::is_numeric(the_word[0]))
+            {
+            return false;
+            }
+        return true;
+        }
+
     const wordlistT* m_programmer_wordlist{ nullptr };
     bool m_ignore_proper_nouns{ false };
     bool m_ignore_uppercased{ true };

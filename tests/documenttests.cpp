@@ -2034,6 +2034,87 @@ TEST_CASE("Document misspellings 4", "[document]")
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(0 == doc.get_misspelled_words().size());
         }
+    SECTION("Misspellings Time With No Space Before Meridiem")
+        {
+        // "4:00p.m." should not be flagged as a misspelling
+        // The lack of space between '0' and 'p' should not cause "p.m." to be seen as misspelled
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        Known_spellings.load_words(L"the meeting is at", true, false);
+        const wchar_t text[] = L"The meeting is at 4:00p.m.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+        }
+    SECTION("Misspellings Time With Meridiem Valid Cases")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        Known_spellings.load_words(L"at", true, false);
+
+        // Single digit hour with p.m.
+        const wchar_t text1[] = L"at 4:00p.m.";
+        doc.load_document(text1, wcslen(text1), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Single digit hour with a.m.
+        const wchar_t text2[] = L"at 5:30a.m.";
+        doc.load_document(text2, wcslen(text2), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Double digit hour with p.m.
+        const wchar_t text3[] = L"at 12:00p.m.";
+        doc.load_document(text3, wcslen(text3), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Double digit hour with a.m.
+        const wchar_t text4[] = L"at 10:45a.m.";
+        doc.load_document(text4, wcslen(text4), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Uppercase P.M.
+        const wchar_t text5[] = L"at 4:00P.M.";
+        doc.load_document(text5, wcslen(text5), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Uppercase A.M.
+        const wchar_t text6[] = L"at 9:15A.M.";
+        doc.load_document(text6, wcslen(text6), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Mixed case p.M.
+        const wchar_t text7[] = L"at 3:30p.M.";
+        doc.load_document(text7, wcslen(text7), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Mixed case P.m.
+        const wchar_t text8[] = L"at 6:00P.m.";
+        doc.load_document(text8, wcslen(text8), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Leading zero on hour (09:00a.m.)
+        const wchar_t text9[] = L"at 09:00a.m.";
+        doc.load_document(text9, wcslen(text9), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Boundary: 1:00a.m. (smallest single digit)
+        const wchar_t text10[] = L"at 1:00a.m.";
+        doc.load_document(text10, wcslen(text10), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Boundary: 9:59p.m. (largest single digit hour, largest minutes)
+        const wchar_t text11[] = L"at 9:59p.m.";
+        doc.load_document(text11, wcslen(text11), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+
+        // Multiple times in one sentence
+        const wchar_t text12[] = L"at 9:00a.m. at 5:00p.m.";
+        doc.load_document(text12, wcslen(text12), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+        }
     }
 
 TEST_CASE("Document articles", "[document]")
