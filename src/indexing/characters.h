@@ -116,8 +116,25 @@ namespace characters
                 // charon, A with ogonek, O with double accent
                 (ch == 0x0106 || ch == 0x0154 || ch == 0x0141 || ch == 0x0158 || ch == 0x0102 ||
                  ch == 0x010C || ch == 0x0104 || ch == 0x0150) ||
+                // Polish/Lithuanian ogonek: Ą Ę Į Ų
+                (ch == 0x0118 || ch == 0x012E || ch == 0x0172) ||
+                // Macron vowels: Ā Ī Ō Ū (Ē already covered by 0x0112)
+                (ch == 0x0100 || ch == 0x012A || ch == 0x014C || ch == 0x016A) ||
+                // Hungarian double acute: Ű
+                (ch == 0x0170) ||
+                // Turkish/Romanian cedilla: Ş Ţ
+                (ch == 0x015E || ch == 0x0162) ||
+                // Romanian comma below: Ș Ț
+                (ch == 0x0218 || ch == 0x021A) ||
                 // Vietnamese O with dot below
                 (ch == 0x1ECC) ||
+                // Vietnamese dot below: Ạ Ẹ Ị Ụ
+                (ch == 0x1EA0 || ch == 0x1EB8 || ch == 0x1ECA || ch == 0x1EE4) ||
+                // Vietnamese hook above: Ả Ẻ Ỉ Ỏ Ủ Ỷ
+                (ch == 0x1EA2 || ch == 0x1EBA || ch == 0x1EC8 || ch == 0x1ECE ||
+                 ch == 0x1EE6 || ch == 0x1EF6) ||
+                // Vietnamese horn: Ơ Ư
+                (ch == 0x01A0 || ch == 0x01AF) ||
                 // Russian
                 (ch >= 0x0410 && ch <= 0x042F) || (ch == 0x0401));
             }
@@ -148,8 +165,25 @@ namespace characters
                 // charon, A with ogonek, O with double accent
                 (ch == 0x0107 || ch == 0x0155 || ch == 0x0142 || ch == 0x0159 || ch == 0x0103 ||
                  ch == 0x010D || ch == 0x0105 || ch == 0x0151) ||
+                // Polish/Lithuanian ogonek: ę į ų
+                (ch == 0x0119 || ch == 0x012F || ch == 0x0173) ||
+                // Macron vowels: ā ī ō ū (ē already covered by 0x0113)
+                (ch == 0x0101 || ch == 0x012B || ch == 0x014D || ch == 0x016B) ||
+                // Hungarian double acute: ű
+                (ch == 0x0171) ||
+                // Turkish/Romanian cedilla: ş ţ
+                (ch == 0x015F || ch == 0x0163) ||
+                // Romanian comma below: ș ț
+                (ch == 0x0219 || ch == 0x021B) ||
                 // Vietnamese o with dot below
                 (ch == 0x1ECD) ||
+                // Vietnamese dot below: ạ ẹ ị ụ
+                (ch == 0x1EA1 || ch == 0x1EB9 || ch == 0x1ECB || ch == 0x1EE5) ||
+                // Vietnamese hook above: ả ẻ ỉ ỏ ủ ỷ
+                (ch == 0x1EA3 || ch == 0x1EBB || ch == 0x1EC9 || ch == 0x1ECF ||
+                 ch == 0x1EE7 || ch == 0x1EF7) ||
+                // Vietnamese horn: ơ ư
+                (ch == 0x01A1 || ch == 0x01B0) ||
                 // Russian
                 (ch >= 0x0430 && ch <= 0x044F) || (ch == 0x0451));
             }
@@ -174,7 +208,44 @@ namespace characters
                 (ch == 0x0178) ? 0x00FF : // Y with umlaut
                 (ch == 0x0152) ? 0x0153 : // OE ligature
                 (ch == 0x0112) ? 0x0113 : // E with macron
-                (ch == 0x1ECC) ? 0x1ECD : // Vietnamese O with dot below
+                // Polish/Lithuanian ogonek
+                (ch == 0x0104) ? 0x0105 : // Ą -> ą
+                (ch == 0x0118) ? 0x0119 : // Ę -> ę
+                (ch == 0x012E) ? 0x012F : // Į -> į
+                (ch == 0x0172) ? 0x0173 : // Ų -> ų
+                // Macron vowels
+                (ch == 0x0100) ? 0x0101 : // Ā -> ā
+                (ch == 0x012A) ? 0x012B : // Ī -> ī
+                (ch == 0x014C) ? 0x014D : // Ō -> ō
+                (ch == 0x016A) ? 0x016B : // Ū -> ū
+                // Hungarian double acute
+                (ch == 0x0150) ? 0x0151 : // Ő -> ő
+                (ch == 0x0170) ? 0x0171 : // Ű -> ű
+                // Romanian breve
+                (ch == 0x0102) ? 0x0103 : // Ă -> ă
+                // Turkish/Romanian cedilla
+                (ch == 0x015E) ? 0x015F : // Ş -> ş
+                (ch == 0x0162) ? 0x0163 : // Ţ -> ţ
+                // Romanian comma below
+                (ch == 0x0218) ? 0x0219 : // Ș -> ș
+                (ch == 0x021A) ? 0x021B : // Ț -> ț
+                // Vietnamese O with dot below
+                (ch == 0x1ECC) ? 0x1ECD : // Ọ -> ọ
+                // Vietnamese dot below
+                (ch == 0x1EA0) ? 0x1EA1 : // Ạ -> ạ
+                (ch == 0x1EB8) ? 0x1EB9 : // Ẹ -> ẹ
+                (ch == 0x1ECA) ? 0x1ECB : // Ị -> ị
+                (ch == 0x1EE4) ? 0x1EE5 : // Ụ -> ụ
+                // Vietnamese hook above
+                (ch == 0x1EA2) ? 0x1EA3 : // Ả -> ả
+                (ch == 0x1EBA) ? 0x1EBB : // Ẻ -> ẻ
+                (ch == 0x1EC8) ? 0x1EC9 : // Ỉ -> ỉ
+                (ch == 0x1ECE) ? 0x1ECF : // Ỏ -> ỏ
+                (ch == 0x1EE6) ? 0x1EE7 : // Ủ -> ủ
+                (ch == 0x1EF6) ? 0x1EF7 : // Ỷ -> ỷ
+                // Vietnamese horn
+                (ch == 0x01A0) ? 0x01A1 : // Ơ -> ơ
+                (ch == 0x01AF) ? 0x01B0 : // Ư -> ư
                     ch;
             }
 
@@ -212,6 +283,39 @@ namespace characters
                     (letter >= 0x152 && letter <= 0x153) || // OE ligature
                     // e with macron
                     (letter == 0x0112 || letter == 0x0113) ||
+                    // Polish/Lithuanian ogonek vowels: ą Ą ę Ę į Į ų Ų
+                    is_either<wchar_t>(letter, 0x0104, 0x0105) ||
+                    is_either<wchar_t>(letter, 0x0118, 0x0119) ||
+                    is_either<wchar_t>(letter, 0x012E, 0x012F) ||
+                    is_either<wchar_t>(letter, 0x0172, 0x0173) ||
+                    // Macron vowels: ā Ā ī Ī ō Ō ū Ū
+                    is_either<wchar_t>(letter, 0x0100, 0x0101) ||
+                    is_either<wchar_t>(letter, 0x012A, 0x012B) ||
+                    is_either<wchar_t>(letter, 0x014C, 0x014D) ||
+                    is_either<wchar_t>(letter, 0x016A, 0x016B) ||
+                    // Romanian breve: ă Ă
+                    is_either<wchar_t>(letter, 0x0102, 0x0103) ||
+                    // Hungarian double acute: ő Ő ű Ű
+                    is_either<wchar_t>(letter, 0x0150, 0x0151) ||
+                    is_either<wchar_t>(letter, 0x0170, 0x0171) ||
+                    // Portuguese tilde: ã Ã õ Õ
+                    is_either<wchar_t>(letter, 0x00C3, 0x00E3) ||
+                    is_either<wchar_t>(letter, 0x00D5, 0x00F5) ||
+                    // Vietnamese dot below: ạ Ạ ẹ Ẹ ị Ị ụ Ụ
+                    is_either<wchar_t>(letter, 0x1EA0, 0x1EA1) ||
+                    is_either<wchar_t>(letter, 0x1EB8, 0x1EB9) ||
+                    is_either<wchar_t>(letter, 0x1ECA, 0x1ECB) ||
+                    is_either<wchar_t>(letter, 0x1EE4, 0x1EE5) ||
+                    // Vietnamese hook above: ả Ả ẻ Ẻ ỉ Ỉ ỏ Ỏ ủ Ủ ỷ Ỷ
+                    is_either<wchar_t>(letter, 0x1EA2, 0x1EA3) ||
+                    is_either<wchar_t>(letter, 0x1EBA, 0x1EBB) ||
+                    is_either<wchar_t>(letter, 0x1EC8, 0x1EC9) ||
+                    is_either<wchar_t>(letter, 0x1ECE, 0x1ECF) ||
+                    is_either<wchar_t>(letter, 0x1EE6, 0x1EE7) ||
+                    is_either<wchar_t>(letter, 0x1EF6, 0x1EF7) ||
+                    // Vietnamese horn: ơ Ơ ư Ư
+                    is_either<wchar_t>(letter, 0x01A0, 0x01A1) ||
+                    is_either<wchar_t>(letter, 0x01AF, 0x01B0) ||
                     // basic Russian alphabet
                     is_either<wchar_t>(letter, 0x0401, 0x0451) ||
                     is_either<wchar_t>(letter, 0x0410, 0x0430) ||
@@ -282,7 +386,13 @@ namespace characters
                 is_either<wchar_t>(letter, 0x042C, 0x044C) ||
                 (letter >= 0x0431 && letter <= 0x434) || (letter >= 0x0436 && letter <= 0x437) ||
                 (letter >= 0x043A && letter <= 0x043D) || (letter >= 0x043F && letter <= 0x0442) ||
-                (letter >= 0x0444 && letter <= 0x044A));
+                (letter >= 0x0444 && letter <= 0x044A) ||
+                // Turkish/Romanian cedilla: ş Ş ţ Ţ
+                is_either<wchar_t>(letter, 0x015E, 0x015F) ||
+                is_either<wchar_t>(letter, 0x0162, 0x0163) ||
+                // Romanian comma below: ș Ș ț Ț
+                is_either<wchar_t>(letter, 0x0218, 0x0219) ||
+                is_either<wchar_t>(letter, 0x021A, 0x021B));
             }
 
         /** @returns @c true if a character is a lowercased consonant.

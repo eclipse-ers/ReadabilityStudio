@@ -146,18 +146,83 @@ namespace grammar
             // long solidus
             { { L'o', 0x0338 }, L'ø' },
             { { L'O', 0x0338 }, L'Ø' },
-            // tilde
+            // tilde (Portuguese, Spanish)
+            { { L'a', 0x0303 }, L'ã' },
+            { { L'A', 0x0303 }, L'Ã' },
             { { L'n', 0x0303 }, L'ñ' },
             { { L'N', 0x0303 }, L'Ñ' },
-            // retroflex hook below
-            { { L'e', 0x0322 }, L'ę' },
-            { { L'E', 0x0322 }, L'Ę' },
+            { { L'o', 0x0303 }, L'õ' },
+            { { L'O', 0x0303 }, L'Õ' },
+            // ogonek (Polish, Lithuanian)
+            { { L'a', 0x0328 }, L'ą' },
+            { { L'A', 0x0328 }, L'Ą' },
+            { { L'e', 0x0328 }, L'ę' },
+            { { L'E', 0x0328 }, L'Ę' },
+            { { L'i', 0x0328 }, L'į' },
+            { { L'I', 0x0328 }, L'Į' },
+            { { L'u', 0x0328 }, L'ų' },
+            { { L'U', 0x0328 }, L'Ų' },
             // cedilla
             { { L'c', 0x0327 }, L'ç' },
             { { L'C', 0x0327 }, L'Ç' },
             // dot below (Vietnamese)
+            { { L'a', 0x0323 }, L'\x1EA1' },
+            { { L'A', 0x0323 }, L'\x1EA0' },
+            { { L'e', 0x0323 }, L'\x1EB9' },
+            { { L'E', 0x0323 }, L'\x1EB8' },
+            { { L'i', 0x0323 }, L'\x1ECB' },
+            { { L'I', 0x0323 }, L'\x1ECA' },
             { { L'o', 0x0323 }, L'\x1ECD' },
-            { { L'O', 0x0323 }, L'\x1ECC' }
+            { { L'O', 0x0323 }, L'\x1ECC' },
+            { { L'u', 0x0323 }, L'\x1EE5' },
+            { { L'U', 0x0323 }, L'\x1EE4' },
+            // macron (long vowels)
+            { { L'a', 0x0304 }, L'\x0101' },
+            { { L'A', 0x0304 }, L'\x0100' },
+            { { L'e', 0x0304 }, L'\x0113' },
+            { { L'E', 0x0304 }, L'\x0112' },
+            { { L'i', 0x0304 }, L'\x012B' },
+            { { L'I', 0x0304 }, L'\x012A' },
+            { { L'o', 0x0304 }, L'\x014D' },
+            { { L'O', 0x0304 }, L'\x014C' },
+            { { L'u', 0x0304 }, L'\x016B' },
+            { { L'U', 0x0304 }, L'\x016A' },
+            // breve (Romanian, Vietnamese)
+            { { L'a', 0x0306 }, L'\x0103' },
+            { { L'A', 0x0306 }, L'\x0102' },
+            // double acute (Hungarian)
+            { { L'o', 0x030B }, L'\x0151' },
+            { { L'O', 0x030B }, L'\x0150' },
+            { { L'u', 0x030B }, L'\x0171' },
+            { { L'U', 0x030B }, L'\x0170' },
+            // cedilla extended (Turkish, Romanian)
+            { { L's', 0x0327 }, L'\x015F' },
+            { { L'S', 0x0327 }, L'\x015E' },
+            { { L't', 0x0327 }, L'\x0163' },
+            { { L'T', 0x0327 }, L'\x0162' },
+            // comma below (Romanian)
+            { { L's', 0x0326 }, L'\x0219' },
+            { { L'S', 0x0326 }, L'\x0218' },
+            { { L't', 0x0326 }, L'\x021B' },
+            { { L'T', 0x0326 }, L'\x021A' },
+            // hook above (Vietnamese)
+            { { L'a', 0x0309 }, L'\x1EA3' },
+            { { L'A', 0x0309 }, L'\x1EA2' },
+            { { L'e', 0x0309 }, L'\x1EBB' },
+            { { L'E', 0x0309 }, L'\x1EBA' },
+            { { L'i', 0x0309 }, L'\x1EC9' },
+            { { L'I', 0x0309 }, L'\x1EC8' },
+            { { L'o', 0x0309 }, L'\x1ECF' },
+            { { L'O', 0x0309 }, L'\x1ECE' },
+            { { L'u', 0x0309 }, L'\x1EE7' },
+            { { L'U', 0x0309 }, L'\x1EE6' },
+            { { L'y', 0x0309 }, L'\x1EF7' },
+            { { L'Y', 0x0309 }, L'\x1EF6' },
+            // horn (Vietnamese)
+            { { L'o', 0x031B }, L'\x01A1' },
+            { { L'O', 0x031B }, L'\x01A0' },
+            { { L'u', 0x031B }, L'\x01B0' },
+            { { L'U', 0x031B }, L'\x01AF' }
         };
 
     //-------------------------------------------------------------
