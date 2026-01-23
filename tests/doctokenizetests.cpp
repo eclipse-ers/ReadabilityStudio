@@ -19,6 +19,7 @@
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "../src/indexing/tokenize.h"
+#include "../src/indexing/word_list.h"
 
 TEST_CASE("C++ tokenize", "[document]")
     {
@@ -83,6 +84,21 @@ TEST_CASE("Document tokenize", "[document]")
         CHECK(punct[2].is_connected_to_previous_word());
         CHECK(punct[3].is_connected_to_previous_word());
         CHECK(std::wstring(pos, tokenize.get_current_word_length()) == L"are");
+        }
+    SECTION("Single Apos Quoted Word")
+        {
+        // trailing apostrophe should be punctuation, not part of the word
+        word_list knownSpellings;
+        knownSpellings.add_word(L"main");
+        tokenize::document_tokenize<> tokenizer(L"from 'main' branch", 18, false, false, false, false);
+        tokenizer.set_known_spellings(&knownSpellings);
+        auto pos = tokenizer();
+        CHECK(std::wstring(pos, tokenizer.get_current_word_length()) == std::wstring{ L"from" });
+        pos = tokenizer();
+        // 'main' should be tokenized as just "main", not "main'"
+        CHECK(std::wstring(pos, tokenizer.get_current_word_length()) == std::wstring{ L"main" });
+        pos = tokenizer();
+        CHECK(std::wstring(pos, tokenizer.get_current_word_length()) == std::wstring{ L"branch" });
         }
     SECTION("Character Line Breaks")
         {

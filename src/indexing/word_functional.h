@@ -1165,7 +1165,10 @@ class is_correctly_spelled_word
             ((the_word.is_exclamatory() || the_word.is_acronym()) &&
              ((the_word.length() == 2 && the_word[1] == common_lang_constants::PERIOD) ||
               (the_word.length() >= 4 && the_word[1] == common_lang_constants::PERIOD &&
-               the_word[3] == common_lang_constants::PERIOD))))
+               the_word[3] == common_lang_constants::PERIOD))) ||
+            // placeholder pattern consisting of only 'x' characters and hyphens
+            // (e.g., "xxxxxxxx" or "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+            (the_word.find_first_not_of(L"xX-") == word_typeT::npos))
             {
             m_recent_hits.emplace(key);
             return true;

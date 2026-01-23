@@ -118,6 +118,21 @@ TEST_CASE("Spell checker", "[spellchecker]")
         CHECK(spellCheck(MYWORD(L"the\\ncat")));
         CHECK_FALSE(spellCheck(MYWORD(L"the\\ncatz")));
         }
+    SECTION("UUID Placeholder")
+        {
+        word_list knownWords;
+        word_list customKnownWords;
+        word_list programmerWords;
+        knownWords.load_words(L"the cat in cat is all about that", true, true);
+        is_correctly_spelled_word<MYWORD,word_list> spellCheck(&knownWords, &customKnownWords, &programmerWords, false, false, false, false, true, true, true);
+        CHECK(spellCheck(MYWORD(L"xxxxxxxx")));
+        // UUID-like placeholders should not be flagged as misspellings
+        CHECK(spellCheck(MYWORD(L"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")));
+        CHECK(spellCheck(MYWORD(L"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")));
+        // Actual UUID with hex characters
+        CHECK(spellCheck(MYWORD(L"550e8400-e29b-41d4-a716-446655440000")));
+        CHECK(spellCheck(MYWORD(L"550E8400-E29B-41D4-A716-446655440000")));
+        }
     }
 
 TEST_CASE("Social Media", "[social-media]")
