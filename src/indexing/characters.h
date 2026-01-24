@@ -177,7 +177,18 @@ namespace characters
                 // Pinyin caron: Ǎ Ǐ Ǒ Ǔ
                 (ch == 0x01CD || ch == 0x01CF || ch == 0x01D1 || ch == 0x01D3) ||
                 // Russian
-                (ch >= 0x0410 && ch <= 0x042F) || (ch == 0x0401));
+                (ch >= 0x0410 && ch <= 0x042F) || (ch == 0x0401) ||
+                // Ukrainian: Ґ Є І Ї
+                (ch == 0x0490 || ch == 0x0404 || ch == 0x0406 || ch == 0x0407) ||
+                // Serbian: Ђ Ј Љ Њ Ћ Џ
+                (ch == 0x0402 || ch == 0x0408 || ch == 0x0409 || ch == 0x040A || ch == 0x040B ||
+                 ch == 0x040F) ||
+                // Belarusian: Ў
+                (ch == 0x040E) ||
+                // Macedonian: Ѓ Ќ Ѕ
+                (ch == 0x0403 || ch == 0x040C || ch == 0x0405) ||
+                // Historical Russian: Ѣ Ѳ Ѵ
+                (ch == 0x0462 || ch == 0x0472 || ch == 0x0474));
             }
 
         /** @returns @c true if a character is a lowercased letter.
@@ -267,7 +278,18 @@ namespace characters
                 // Pinyin caron: ǎ ǐ ǒ ǔ
                 (ch == 0x01CE || ch == 0x01D0 || ch == 0x01D2 || ch == 0x01D4) ||
                 // Russian
-                (ch >= 0x0430 && ch <= 0x044F) || (ch == 0x0451));
+                (ch >= 0x0430 && ch <= 0x044F) || (ch == 0x0451) ||
+                // Ukrainian: ґ є і ї
+                (ch == 0x0491 || ch == 0x0454 || ch == 0x0456 || ch == 0x0457) ||
+                // Serbian: ђ ј љ њ ћ џ
+                (ch == 0x0452 || ch == 0x0458 || ch == 0x0459 || ch == 0x045A || ch == 0x045B ||
+                 ch == 0x045F) ||
+                // Belarusian: ў
+                (ch == 0x045E) ||
+                // Macedonian: ѓ ќ ѕ
+                (ch == 0x0453 || ch == 0x045C || ch == 0x0455) ||
+                // Historical Russian: ѣ ѳ ѵ
+                (ch == 0x0463 || ch == 0x0473 || ch == 0x0475));
             }
 
         /** @returns The lowercased version of a letter, or the letter itself
@@ -404,6 +426,28 @@ namespace characters
                 (ch == 0x01CF) ? 0x01D0 : // Ǐ -> ǐ
                 (ch == 0x01D1) ? 0x01D2 : // Ǒ -> ǒ
                 (ch == 0x01D3) ? 0x01D4 : // Ǔ -> ǔ
+                // Ukrainian
+                (ch == 0x0490) ? 0x0491 : // Ґ -> ґ
+                (ch == 0x0404) ? 0x0454 : // Є -> є
+                (ch == 0x0406) ? 0x0456 : // І -> і
+                (ch == 0x0407) ? 0x0457 : // Ї -> ї
+                // Serbian
+                (ch == 0x0402) ? 0x0452 : // Ђ -> ђ
+                (ch == 0x0408) ? 0x0458 : // Ј -> ј
+                (ch == 0x0409) ? 0x0459 : // Љ -> љ
+                (ch == 0x040A) ? 0x045A : // Њ -> њ
+                (ch == 0x040B) ? 0x045B : // Ћ -> ћ
+                (ch == 0x040F) ? 0x045F : // Џ -> џ
+                // Belarusian
+                (ch == 0x040E) ? 0x045E : // Ў -> ў
+                // Macedonian
+                (ch == 0x0403) ? 0x0453 : // Ѓ -> ѓ
+                (ch == 0x040C) ? 0x045C : // Ќ -> ќ
+                (ch == 0x0405) ? 0x0455 : // Ѕ -> ѕ
+                // Historical Russian
+                (ch == 0x0462) ? 0x0463 : // Ѣ -> ѣ
+                (ch == 0x0472) ? 0x0473 : // Ѳ -> ѳ
+                (ch == 0x0474) ? 0x0475 : // Ѵ -> ѵ
                     ch;
             }
 
@@ -509,7 +553,16 @@ namespace characters
                     is_either<wchar_t>(letter, 0x01CD, 0x01CE) ||
                     is_either<wchar_t>(letter, 0x01CF, 0x01D0) ||
                     is_either<wchar_t>(letter, 0x01D1, 0x01D2) ||
-                    is_either<wchar_t>(letter, 0x01D3, 0x01D4));
+                    is_either<wchar_t>(letter, 0x01D3, 0x01D4) ||
+                    // Ukrainian vowels: Є/є І/і Ї/ї
+                    is_either<wchar_t>(letter, 0x0404, 0x0454) ||
+                    is_either<wchar_t>(letter, 0x0406, 0x0456) ||
+                    is_either<wchar_t>(letter, 0x0407, 0x0457) ||
+                    // Belarusian: Ў/ў (short U, functions as vowel)
+                    is_either<wchar_t>(letter, 0x040E, 0x045E) ||
+                    // Historical Russian vowels: Ѣ/ѣ (Yat) Ѵ/ѵ (Izhitsa)
+                    is_either<wchar_t>(letter, 0x0462, 0x0463) ||
+                    is_either<wchar_t>(letter, 0x0474, 0x0475));
             }
 
         /** @returns @c true if a character is a consonant.
@@ -634,7 +687,22 @@ namespace characters
                 is_either<wchar_t>(letter, 0x011C, 0x011D) ||
                 is_either<wchar_t>(letter, 0x0124, 0x0125) ||
                 is_either<wchar_t>(letter, 0x0134, 0x0135) ||
-                is_either<wchar_t>(letter, 0x015C, 0x015D));
+                is_either<wchar_t>(letter, 0x015C, 0x015D) ||
+                // Ukrainian: Ґ/ґ
+                is_either<wchar_t>(letter, 0x0490, 0x0491) ||
+                // Serbian: Ђ/ђ Ј/ј Љ/љ Њ/њ Ћ/ћ Џ/џ
+                is_either<wchar_t>(letter, 0x0402, 0x0452) ||
+                is_either<wchar_t>(letter, 0x0408, 0x0458) ||
+                is_either<wchar_t>(letter, 0x0409, 0x0459) ||
+                is_either<wchar_t>(letter, 0x040A, 0x045A) ||
+                is_either<wchar_t>(letter, 0x040B, 0x045B) ||
+                is_either<wchar_t>(letter, 0x040F, 0x045F) ||
+                // Macedonian: Ѓ/ѓ Ќ/ќ Ѕ/ѕ
+                is_either<wchar_t>(letter, 0x0403, 0x0453) ||
+                is_either<wchar_t>(letter, 0x040C, 0x045C) ||
+                is_either<wchar_t>(letter, 0x0405, 0x0455) ||
+                // Historical Russian: Ѳ/ѳ (Fita)
+                is_either<wchar_t>(letter, 0x0472, 0x0473));
             }
 
         /** @returns @c true if a character is a lowercased consonant.

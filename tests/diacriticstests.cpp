@@ -261,6 +261,36 @@ TEST_CASE("Diacritics", "[diacritics]")
         CHECK(cld(L"b\u0307B\u0307d\u0307D\u0307f\u0307F\u0307m\u0307M\u0307p\u0307P\u0307s\u0307S\u0307t\u0307T\u0307"));
         CHECK(cld.get_conversion() == std::wstring{ L"ḃḂḋḊḟḞṁṀṗṖṡṠṫṪ" });
         }
+    SECTION("Russian diaeresis")
+        {
+        // Russian Е/е + diaeresis -> Ё/ё
+        CHECK(cld(L"е\u0308Е\u0308"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ёЁ" });
+        }
+    SECTION("Russian breve")
+        {
+        // Russian И/и + breve -> Й/й
+        CHECK(cld(L"и\u0306И\u0306"));
+        CHECK(cld.get_conversion() == std::wstring{ L"йЙ" });
+        }
+    SECTION("Ukrainian diaeresis")
+        {
+        // Ukrainian І/і + diaeresis -> Ї/ї
+        CHECK(cld(L"і\u0308І\u0308"));
+        CHECK(cld.get_conversion() == std::wstring{ L"їЇ" });
+        }
+    SECTION("Belarusian breve")
+        {
+        // Belarusian У/у + breve -> Ў/ў
+        CHECK(cld(L"у\u0306У\u0306"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ўЎ" });
+        }
+    SECTION("Macedonian acute")
+        {
+        // Macedonian Г/г + acute -> Ѓ/ѓ, К/к + acute -> Ќ/ќ
+        CHECK(cld(L"г\u0301Г\u0301к\u0301К\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ѓЃќЌ" });
+        }
     }
 
 TEST_CASE("Ligatures", "[diacritics]")

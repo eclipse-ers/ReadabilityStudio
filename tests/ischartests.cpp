@@ -1215,6 +1215,200 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK_FALSE(is_character::is_vowel(L'Ṫ'));
         CHECK(is_character::to_lower(L'Ṫ') == L'ṫ');
         }
+
+    // =========================================================================
+    // EXTENDED CYRILLIC SUPPORT
+    // The following tests are for Cyrillic letters used in Ukrainian, Serbian,
+    // Belarusian, Macedonian, and historical/archaic Russian orthography.
+    // =========================================================================
+
+    SECTION("Ukrainian G With Upturn")
+        {
+        // Ґ/ґ (U+0490/U+0491)
+        CHECK(is_character::is_lower(L'ґ'));
+        CHECK(is_character::is_upper(L'Ґ'));
+        CHECK(is_character::is_consonant(L'ґ'));
+        CHECK(is_character::is_consonant(L'Ґ'));
+        CHECK_FALSE(is_character::is_vowel(L'ґ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ґ'));
+        CHECK(is_character::to_lower(L'Ґ') == L'ґ');
+        }
+    SECTION("Ukrainian Ye")
+        {
+        // Є/є (U+0404/U+0454)
+        CHECK(is_character::is_lower(L'є'));
+        CHECK(is_character::is_upper(L'Є'));
+        CHECK(is_character::is_vowel(L'є'));
+        CHECK(is_character::is_vowel(L'Є'));
+        CHECK_FALSE(is_character::is_consonant(L'є'));
+        CHECK_FALSE(is_character::is_consonant(L'Є'));
+        CHECK(is_character::to_lower(L'Є') == L'є');
+        }
+    SECTION("Ukrainian Belarusian I")
+        {
+        // І/і (U+0406/U+0456) - also used in historical Russian
+        CHECK(is_character::is_lower(L'і'));
+        CHECK(is_character::is_upper(L'І'));
+        CHECK(is_character::is_vowel(L'і'));
+        CHECK(is_character::is_vowel(L'І'));
+        CHECK_FALSE(is_character::is_consonant(L'і'));
+        CHECK_FALSE(is_character::is_consonant(L'І'));
+        CHECK(is_character::to_lower(L'І') == L'і');
+        }
+    SECTION("Ukrainian Yi")
+        {
+        // Ї/ї (U+0407/U+0457)
+        CHECK(is_character::is_lower(L'ї'));
+        CHECK(is_character::is_upper(L'Ї'));
+        CHECK(is_character::is_vowel(L'ї'));
+        CHECK(is_character::is_vowel(L'Ї'));
+        CHECK_FALSE(is_character::is_consonant(L'ї'));
+        CHECK_FALSE(is_character::is_consonant(L'Ї'));
+        CHECK(is_character::to_lower(L'Ї') == L'ї');
+        }
+    SECTION("Serbian Dje")
+        {
+        // Ђ/ђ (U+0402/U+0452)
+        CHECK(is_character::is_lower(L'ђ'));
+        CHECK(is_character::is_upper(L'Ђ'));
+        CHECK(is_character::is_consonant(L'ђ'));
+        CHECK(is_character::is_consonant(L'Ђ'));
+        CHECK_FALSE(is_character::is_vowel(L'ђ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ђ'));
+        CHECK(is_character::to_lower(L'Ђ') == L'ђ');
+        }
+    SECTION("Serbian Je")
+        {
+        // Ј/ј (U+0408/U+0458)
+        CHECK(is_character::is_lower(L'ј'));
+        CHECK(is_character::is_upper(L'Ј'));
+        CHECK(is_character::is_consonant(L'ј'));
+        CHECK(is_character::is_consonant(L'Ј'));
+        CHECK_FALSE(is_character::is_vowel(L'ј'));
+        CHECK_FALSE(is_character::is_vowel(L'Ј'));
+        CHECK(is_character::to_lower(L'Ј') == L'ј');
+        }
+    SECTION("Serbian Lje")
+        {
+        // Љ/љ (U+0409/U+0459)
+        CHECK(is_character::is_lower(L'љ'));
+        CHECK(is_character::is_upper(L'Љ'));
+        CHECK(is_character::is_consonant(L'љ'));
+        CHECK(is_character::is_consonant(L'Љ'));
+        CHECK_FALSE(is_character::is_vowel(L'љ'));
+        CHECK_FALSE(is_character::is_vowel(L'Љ'));
+        CHECK(is_character::to_lower(L'Љ') == L'љ');
+        }
+    SECTION("Serbian Nje")
+        {
+        // Њ/њ (U+040A/U+045A)
+        CHECK(is_character::is_lower(L'њ'));
+        CHECK(is_character::is_upper(L'Њ'));
+        CHECK(is_character::is_consonant(L'њ'));
+        CHECK(is_character::is_consonant(L'Њ'));
+        CHECK_FALSE(is_character::is_vowel(L'њ'));
+        CHECK_FALSE(is_character::is_vowel(L'Њ'));
+        CHECK(is_character::to_lower(L'Њ') == L'њ');
+        }
+    SECTION("Serbian Tshe")
+        {
+        // Ћ/ћ (U+040B/U+045B)
+        CHECK(is_character::is_lower(L'ћ'));
+        CHECK(is_character::is_upper(L'Ћ'));
+        CHECK(is_character::is_consonant(L'ћ'));
+        CHECK(is_character::is_consonant(L'Ћ'));
+        CHECK_FALSE(is_character::is_vowel(L'ћ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ћ'));
+        CHECK(is_character::to_lower(L'Ћ') == L'ћ');
+        }
+    SECTION("Serbian Dzhe")
+        {
+        // Џ/џ (U+040F/U+045F)
+        CHECK(is_character::is_lower(L'џ'));
+        CHECK(is_character::is_upper(L'Џ'));
+        CHECK(is_character::is_consonant(L'џ'));
+        CHECK(is_character::is_consonant(L'Џ'));
+        CHECK_FALSE(is_character::is_vowel(L'џ'));
+        CHECK_FALSE(is_character::is_vowel(L'Џ'));
+        CHECK(is_character::to_lower(L'Џ') == L'џ');
+        }
+    SECTION("Belarusian Short U")
+        {
+        // Ў/ў (U+040E/U+045E)
+        CHECK(is_character::is_lower(L'ў'));
+        CHECK(is_character::is_upper(L'Ў'));
+        CHECK(is_character::is_vowel(L'ў'));
+        CHECK(is_character::is_vowel(L'Ў'));
+        CHECK_FALSE(is_character::is_consonant(L'ў'));
+        CHECK_FALSE(is_character::is_consonant(L'Ў'));
+        CHECK(is_character::to_lower(L'Ў') == L'ў');
+        }
+    SECTION("Macedonian Gje")
+        {
+        // Ѓ/ѓ (U+0403/U+0453)
+        CHECK(is_character::is_lower(L'ѓ'));
+        CHECK(is_character::is_upper(L'Ѓ'));
+        CHECK(is_character::is_consonant(L'ѓ'));
+        CHECK(is_character::is_consonant(L'Ѓ'));
+        CHECK_FALSE(is_character::is_vowel(L'ѓ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ѓ'));
+        CHECK(is_character::to_lower(L'Ѓ') == L'ѓ');
+        }
+    SECTION("Macedonian Kje")
+        {
+        // Ќ/ќ (U+040C/U+045C)
+        CHECK(is_character::is_lower(L'ќ'));
+        CHECK(is_character::is_upper(L'Ќ'));
+        CHECK(is_character::is_consonant(L'ќ'));
+        CHECK(is_character::is_consonant(L'Ќ'));
+        CHECK_FALSE(is_character::is_vowel(L'ќ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ќ'));
+        CHECK(is_character::to_lower(L'Ќ') == L'ќ');
+        }
+    SECTION("Macedonian Dze")
+        {
+        // Ѕ/ѕ (U+0405/U+0455)
+        CHECK(is_character::is_lower(L'ѕ'));
+        CHECK(is_character::is_upper(L'Ѕ'));
+        CHECK(is_character::is_consonant(L'ѕ'));
+        CHECK(is_character::is_consonant(L'Ѕ'));
+        CHECK_FALSE(is_character::is_vowel(L'ѕ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ѕ'));
+        CHECK(is_character::to_lower(L'Ѕ') == L'ѕ');
+        }
+    SECTION("Historical Russian Yat")
+        {
+        // Ѣ/ѣ (U+0462/U+0463) - used in pre-1918 Russian orthography
+        CHECK(is_character::is_lower(L'ѣ'));
+        CHECK(is_character::is_upper(L'Ѣ'));
+        CHECK(is_character::is_vowel(L'ѣ'));
+        CHECK(is_character::is_vowel(L'Ѣ'));
+        CHECK_FALSE(is_character::is_consonant(L'ѣ'));
+        CHECK_FALSE(is_character::is_consonant(L'Ѣ'));
+        CHECK(is_character::to_lower(L'Ѣ') == L'ѣ');
+        }
+    SECTION("Historical Russian Fita")
+        {
+        // Ѳ/ѳ (U+0472/U+0473) - used in pre-1918 Russian orthography
+        CHECK(is_character::is_lower(L'ѳ'));
+        CHECK(is_character::is_upper(L'Ѳ'));
+        CHECK(is_character::is_consonant(L'ѳ'));
+        CHECK(is_character::is_consonant(L'Ѳ'));
+        CHECK_FALSE(is_character::is_vowel(L'ѳ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ѳ'));
+        CHECK(is_character::to_lower(L'Ѳ') == L'ѳ');
+        }
+    SECTION("Historical Russian Izhitsa")
+        {
+        // Ѵ/ѵ (U+0474/U+0475) - used in pre-1918 Russian orthography
+        CHECK(is_character::is_lower(L'ѵ'));
+        CHECK(is_character::is_upper(L'Ѵ'));
+        CHECK(is_character::is_vowel(L'ѵ'));
+        CHECK(is_character::is_vowel(L'Ѵ'));
+        CHECK_FALSE(is_character::is_consonant(L'ѵ'));
+        CHECK_FALSE(is_character::is_consonant(L'Ѵ'));
+        CHECK(is_character::to_lower(L'Ѵ') == L'ѵ');
+        }
     }
 // NOLINTEND
 // clang-format on

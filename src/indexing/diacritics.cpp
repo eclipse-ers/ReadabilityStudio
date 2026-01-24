@@ -309,7 +309,22 @@ namespace grammar
             { { L'o', 0x031B }, L'ơ' },
             { { L'O', 0x031B }, L'Ơ' },
             { { L'u', 0x031B }, L'ư' },
-            { { L'U', 0x031B }, L'Ư' }
+            { { L'U', 0x031B }, L'Ư' },
+            // Cyrillic diaeresis (Russian Ё, Ukrainian Ї)
+            { { L'е', 0x0308 }, L'ё' }, // Russian е + diaeresis -> ё
+            { { L'Е', 0x0308 }, L'Ё' }, // Russian Е + diaeresis -> Ё
+            { { L'і', 0x0308 }, L'ї' }, // Ukrainian і + diaeresis -> ї
+            { { L'І', 0x0308 }, L'Ї' }, // Ukrainian І + diaeresis -> Ї
+            // Cyrillic breve (Russian Й, Belarusian Ў)
+            { { L'и', 0x0306 }, L'й' }, // Russian и + breve -> й
+            { { L'И', 0x0306 }, L'Й' }, // Russian И + breve -> Й
+            { { L'у', 0x0306 }, L'ў' }, // Belarusian у + breve -> ў
+            { { L'У', 0x0306 }, L'Ў' }, // Belarusian У + breve -> Ў
+            // Cyrillic acute (Macedonian Ѓ, Ќ)
+            { { L'г', 0x0301 }, L'ѓ' }, // Macedonian г + acute -> ѓ
+            { { L'Г', 0x0301 }, L'Ѓ' }, // Macedonian Г + acute -> Ѓ
+            { { L'к', 0x0301 }, L'ќ' }, // Macedonian к + acute -> ќ
+            { { L'К', 0x0301 }, L'Ќ' }  // Macedonian К + acute -> Ќ
         };
 
     //-------------------------------------------------------------
