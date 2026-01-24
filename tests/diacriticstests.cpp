@@ -132,6 +132,135 @@ TEST_CASE("Diacritics", "[diacritics]")
         CHECK(cld(L"o\u031BO\u031Bu\u031BU\u031B"));
         CHECK(cld.get_conversion() == std::wstring{ L"ơƠưƯ" });
         }
+    SECTION("Turkish breve")
+        {
+        // Turkish G with breve
+        CHECK(cld(L"g\u0306G\u0306"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ğĞ" });
+        }
+    SECTION("Turkish dot above")
+        {
+        // Turkish I with dot above (capital only - lowercase i already has dot)
+        CHECK(cld(L"I\u0307"));
+        CHECK(cld.get_conversion() == std::wstring{ L"İ" });
+        }
+    SECTION("Polish N acute")
+        {
+        CHECK(cld(L"n\u0301N\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ńŃ" });
+        }
+    SECTION("Slovak L caron")
+        {
+        CHECK(cld(L"l\u030CL\u030C"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ľĽ" });
+        }
+    SECTION("Slovak L acute")
+        {
+        CHECK(cld(L"l\u0301L\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ĺĹ" });
+        }
+    SECTION("Welsh circumflex")
+        {
+        // Welsh W and Y with circumflex
+        CHECK(cld(L"w\u0302W\u0302y\u0302Y\u0302"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ŵŴŷŶ" });
+        }
+    SECTION("Maltese dot above")
+        {
+        // Maltese C and G with dot above
+        CHECK(cld(L"c\u0307C\u0307g\u0307G\u0307"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ċĊġĠ" });
+        }
+    SECTION("Maltese H stroke")
+        {
+        // Maltese H with stroke
+        CHECK(cld(L"h\u0335H\u0335"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ħĦ" });
+        }
+    SECTION("Slovak R acute")
+        {
+        // Slovak R with acute
+        CHECK(cld(L"r\u0301R\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ŕŔ" });
+        }
+    SECTION("Croatian D stroke")
+        {
+        // Croatian D with stroke
+        CHECK(cld(L"d\u0335D\u0335"));
+        CHECK(cld.get_conversion() == std::wstring{ L"đĐ" });
+        }
+    SECTION("Welsh W grave")
+        {
+        // Welsh W with grave
+        CHECK(cld(L"w\u0300W\u0300"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ẁẀ" });
+        }
+    SECTION("Welsh W acute")
+        {
+        // Welsh W with acute
+        CHECK(cld(L"w\u0301W\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ẃẂ" });
+        }
+    SECTION("Welsh W diaeresis")
+        {
+        // Welsh W with diaeresis
+        CHECK(cld(L"w\u0308W\u0308"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ẅẄ" });
+        }
+    SECTION("Welsh Y grave")
+        {
+        // Welsh Y with grave
+        CHECK(cld(L"y\u0300Y\u0300"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ỳỲ" });
+        }
+    SECTION("Latvian cedilla")
+        {
+        // Latvian G, K, L, N with cedilla
+        CHECK(cld(L"g\u0327G\u0327k\u0327K\u0327l\u0327L\u0327n\u0327N\u0327"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ģĢķĶļĻņŅ" });
+        }
+    SECTION("Lithuanian E dot above")
+        {
+        // Lithuanian E with dot above
+        CHECK(cld(L"e\u0307E\u0307"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ėĖ" });
+        }
+    SECTION("Esperanto circumflex")
+        {
+        // Esperanto C, G, H, J, S with circumflex
+        CHECK(cld(L"c\u0302C\u0302g\u0302G\u0302h\u0302H\u0302j\u0302J\u0302s\u0302S\u0302"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ĉĈĝĜĥĤĵĴŝŜ" });
+        }
+    SECTION("Esperanto U breve")
+        {
+        // Esperanto U with breve
+        CHECK(cld(L"u\u0306U\u0306"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ŭŬ" });
+        }
+    SECTION("Pinyin caron vowels")
+        {
+        // Pinyin A, I, O, U with caron
+        CHECK(cld(L"a\u030CA\u030Ci\u030CI\u030Co\u030CO\u030Cu\u030CU\u030C"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ǎǍǐǏǒǑǔǓ" });
+        }
+    SECTION("French Y diaeresis")
+        {
+        // French Y with diaeresis
+        CHECK(cld(L"y\u0308Y\u0308"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ÿŸ" });
+        }
+    SECTION("Sami T stroke")
+        {
+        // Sami T with stroke
+        CHECK(cld(L"t\u0335T\u0335"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ŧŦ" });
+        }
+    SECTION("Old Irish dot above")
+        {
+        // Old Irish/Gaelic consonants with dot above (lenition marker)
+        CHECK(cld(L"b\u0307B\u0307d\u0307D\u0307f\u0307F\u0307m\u0307M\u0307p\u0307P\u0307s\u0307S\u0307t\u0307T\u0307"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ḃḂḋḊḟḞṁṀṗṖṡṠṫṪ" });
+        }
     }
 
 TEST_CASE("Ligatures", "[diacritics]")

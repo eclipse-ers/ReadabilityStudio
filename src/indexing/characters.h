@@ -126,15 +126,56 @@ namespace characters
                 (ch == 0x015E || ch == 0x0162) ||
                 // Romanian comma below: Ș Ț
                 (ch == 0x0218 || ch == 0x021A) ||
+                // Polish acute consonants: Ś Ź
+                (ch == 0x015A || ch == 0x0179) ||
+                // Polish dot above: Ż
+                (ch == 0x017B) ||
+                // Czech ring: Ů
+                (ch == 0x016E) ||
+                // Caron consonants: Ň Š Ž Ť Ď
+                (ch == 0x0147 || ch == 0x0160 || ch == 0x017D || ch == 0x0164 || ch == 0x010E) ||
+                // Caron vowel: Ě
+                (ch == 0x011A) ||
                 // Vietnamese O with dot below
                 (ch == 0x1ECC) ||
                 // Vietnamese dot below: Ạ Ẹ Ị Ụ
                 (ch == 0x1EA0 || ch == 0x1EB8 || ch == 0x1ECA || ch == 0x1EE4) ||
                 // Vietnamese hook above: Ả Ẻ Ỉ Ỏ Ủ Ỷ
-                (ch == 0x1EA2 || ch == 0x1EBA || ch == 0x1EC8 || ch == 0x1ECE ||
-                 ch == 0x1EE6 || ch == 0x1EF6) ||
+                (ch == 0x1EA2 || ch == 0x1EBA || ch == 0x1EC8 || ch == 0x1ECE || ch == 0x1EE6 ||
+                 ch == 0x1EF6) ||
                 // Vietnamese horn: Ơ Ư
                 (ch == 0x01A0 || ch == 0x01AF) ||
+                // Turkish: Ğ İ
+                (ch == 0x011E || ch == 0x0130) ||
+                // Polish: Ń
+                (ch == 0x0143) ||
+                // Slovak: Ľ Ĺ
+                (ch == 0x013D || ch == 0x0139) ||
+                // Welsh: Ŵ Ŷ
+                (ch == 0x0174 || ch == 0x0176) ||
+                // Maltese: Ċ Ġ Ħ
+                (ch == 0x010A || ch == 0x0120 || ch == 0x0126) ||
+                // Croatian: Đ
+                (ch == 0x0110) ||
+                // Sami: Ŧ Ŋ
+                (ch == 0x0166 || ch == 0x014A) ||
+                // German: ẞ (capital eszett)
+                (ch == 0x1E9E) ||
+                // Old Irish dot above: Ḃ Ḋ Ḟ Ṁ Ṗ Ṡ Ṫ
+                (ch == 0x1E02 || ch == 0x1E0A || ch == 0x1E1E || ch == 0x1E40 || ch == 0x1E56 ||
+                 ch == 0x1E60 || ch == 0x1E6A) ||
+                // Welsh: Ẁ Ẃ Ẅ Ỳ
+                (ch == 0x1E80 || ch == 0x1E82 || ch == 0x1E84 || ch == 0x1EF2) ||
+                // Latvian cedilla: Ģ Ķ Ļ Ņ
+                (ch == 0x0122 || ch == 0x0136 || ch == 0x013B || ch == 0x0145) ||
+                // Lithuanian: Ė
+                (ch == 0x0116) ||
+                // Esperanto circumflex: Ĉ Ĝ Ĥ Ĵ Ŝ
+                (ch == 0x0108 || ch == 0x011C || ch == 0x0124 || ch == 0x0134 || ch == 0x015C) ||
+                // Esperanto breve: Ŭ
+                (ch == 0x016C) ||
+                // Pinyin caron: Ǎ Ǐ Ǒ Ǔ
+                (ch == 0x01CD || ch == 0x01CF || ch == 0x01D1 || ch == 0x01D3) ||
                 // Russian
                 (ch >= 0x0410 && ch <= 0x042F) || (ch == 0x0401));
             }
@@ -175,15 +216,56 @@ namespace characters
                 (ch == 0x015F || ch == 0x0163) ||
                 // Romanian comma below: ș ț
                 (ch == 0x0219 || ch == 0x021B) ||
+                // Polish acute consonants: ś ź
+                (ch == 0x015B || ch == 0x017A) ||
+                // Polish dot above: ż
+                (ch == 0x017C) ||
+                // Czech ring: ů
+                (ch == 0x016F) ||
+                // Caron consonants: ň š ž ť ď
+                (ch == 0x0148 || ch == 0x0161 || ch == 0x017E || ch == 0x0165 || ch == 0x010F) ||
+                // Caron vowel: ě
+                (ch == 0x011B) ||
                 // Vietnamese o with dot below
                 (ch == 0x1ECD) ||
                 // Vietnamese dot below: ạ ẹ ị ụ
                 (ch == 0x1EA1 || ch == 0x1EB9 || ch == 0x1ECB || ch == 0x1EE5) ||
                 // Vietnamese hook above: ả ẻ ỉ ỏ ủ ỷ
-                (ch == 0x1EA3 || ch == 0x1EBB || ch == 0x1EC9 || ch == 0x1ECF ||
-                 ch == 0x1EE7 || ch == 0x1EF7) ||
+                (ch == 0x1EA3 || ch == 0x1EBB || ch == 0x1EC9 || ch == 0x1ECF || ch == 0x1EE7 ||
+                 ch == 0x1EF7) ||
                 // Vietnamese horn: ơ ư
                 (ch == 0x01A1 || ch == 0x01B0) ||
+                // Turkish: ğ ı
+                (ch == 0x011F || ch == 0x0131) ||
+                // Polish: ń
+                (ch == 0x0144) ||
+                // Slovak: ľ ĺ
+                (ch == 0x013E || ch == 0x013A) ||
+                // Welsh: ŵ ŷ
+                (ch == 0x0175 || ch == 0x0177) ||
+                // Maltese: ċ ġ ħ
+                (ch == 0x010B || ch == 0x0121 || ch == 0x0127) ||
+                // Croatian: đ
+                (ch == 0x0111) ||
+                // Sami: ŧ ŋ
+                (ch == 0x0167 || ch == 0x014B) ||
+                // Greenlandic: ĸ (Kra, no uppercase exists)
+                (ch == 0x0138) ||
+                // Old Irish dot above: ḃ ḋ ḟ ṁ ṗ ṡ ṫ
+                (ch == 0x1E03 || ch == 0x1E0B || ch == 0x1E1F || ch == 0x1E41 || ch == 0x1E57 ||
+                 ch == 0x1E61 || ch == 0x1E6B) ||
+                // Welsh: ẁ ẃ ẅ ỳ
+                (ch == 0x1E81 || ch == 0x1E83 || ch == 0x1E85 || ch == 0x1EF3) ||
+                // Latvian cedilla: ģ ķ ļ ņ
+                (ch == 0x0123 || ch == 0x0137 || ch == 0x013C || ch == 0x0146) ||
+                // Lithuanian: ė
+                (ch == 0x0117) ||
+                // Esperanto circumflex: ĉ ĝ ĥ ĵ ŝ
+                (ch == 0x0109 || ch == 0x011D || ch == 0x0125 || ch == 0x0135 || ch == 0x015D) ||
+                // Esperanto breve: ŭ
+                (ch == 0x016D) ||
+                // Pinyin caron: ǎ ǐ ǒ ǔ
+                (ch == 0x01CE || ch == 0x01D0 || ch == 0x01D2 || ch == 0x01D4) ||
                 // Russian
                 (ch >= 0x0430 && ch <= 0x044F) || (ch == 0x0451));
             }
@@ -246,6 +328,82 @@ namespace characters
                 // Vietnamese horn
                 (ch == 0x01A0) ? 0x01A1 : // Ơ -> ơ
                 (ch == 0x01AF) ? 0x01B0 : // Ư -> ư
+                // Polish acute consonants
+                (ch == 0x0106) ? 0x0107 : // Ć -> ć
+                (ch == 0x015A) ? 0x015B : // Ś -> ś
+                (ch == 0x0179) ? 0x017A : // Ź -> ź
+                // Polish dot above
+                (ch == 0x017B) ? 0x017C : // Ż -> ż
+                // Czech ring
+                (ch == 0x016E) ? 0x016F : // Ů -> ů
+                // Caron characters
+                (ch == 0x010C) ? 0x010D : // Č -> č
+                (ch == 0x0147) ? 0x0148 : // Ň -> ň
+                (ch == 0x0158) ? 0x0159 : // Ř -> ř
+                (ch == 0x0160) ? 0x0161 : // Š -> š
+                (ch == 0x017D) ? 0x017E : // Ž -> ž
+                (ch == 0x0164) ? 0x0165 : // Ť -> ť
+                (ch == 0x010E) ? 0x010F : // Ď -> ď
+                (ch == 0x011A) ? 0x011B : // Ě -> ě
+                // Polish stroke
+                (ch == 0x0141) ? 0x0142 : // Ł -> ł
+                // Turkish
+                (ch == 0x011E) ? 0x011F : // Ğ -> ğ
+                (ch == 0x0130) ? 0x0069 : // İ -> i (standard Unicode case folding)
+                // Polish
+                (ch == 0x0143) ? 0x0144 : // Ń -> ń
+                // Slovak
+                (ch == 0x013D) ? 0x013E : // Ľ -> ľ
+                (ch == 0x0139) ? 0x013A : // Ĺ -> ĺ
+                // Welsh
+                (ch == 0x0174) ? 0x0175 : // Ŵ -> ŵ
+                (ch == 0x0176) ? 0x0177 : // Ŷ -> ŷ
+                // Maltese
+                (ch == 0x010A) ? 0x010B : // Ċ -> ċ
+                (ch == 0x0120) ? 0x0121 : // Ġ -> ġ
+                (ch == 0x0126) ? 0x0127 : // Ħ -> ħ
+                // Slovak
+                (ch == 0x0154) ? 0x0155 : // Ŕ -> ŕ
+                // Croatian
+                (ch == 0x0110) ? 0x0111 : // Đ -> đ
+                // Sami
+                (ch == 0x0166) ? 0x0167 : // Ŧ -> ŧ
+                (ch == 0x014A) ? 0x014B : // Ŋ -> ŋ
+                // German
+                (ch == 0x1E9E) ? 0x00DF : // ẞ -> ß
+                // Old Irish dot above
+                (ch == 0x1E02) ? 0x1E03 : // Ḃ -> ḃ
+                (ch == 0x1E0A) ? 0x1E0B : // Ḋ -> ḋ
+                (ch == 0x1E1E) ? 0x1E1F : // Ḟ -> ḟ
+                (ch == 0x1E40) ? 0x1E41 : // Ṁ -> ṁ
+                (ch == 0x1E56) ? 0x1E57 : // Ṗ -> ṗ
+                (ch == 0x1E60) ? 0x1E61 : // Ṡ -> ṡ
+                (ch == 0x1E6A) ? 0x1E6B : // Ṫ -> ṫ
+                // Welsh
+                (ch == 0x1E80) ? 0x1E81 : // Ẁ -> ẁ
+                (ch == 0x1E82) ? 0x1E83 : // Ẃ -> ẃ
+                (ch == 0x1E84) ? 0x1E85 : // Ẅ -> ẅ
+                (ch == 0x1EF2) ? 0x1EF3 : // Ỳ -> ỳ
+                // Latvian cedilla
+                (ch == 0x0122) ? 0x0123 : // Ģ -> ģ
+                (ch == 0x0136) ? 0x0137 : // Ķ -> ķ
+                (ch == 0x013B) ? 0x013C : // Ļ -> ļ
+                (ch == 0x0145) ? 0x0146 : // Ņ -> ņ
+                // Lithuanian
+                (ch == 0x0116) ? 0x0117 : // Ė -> ė
+                // Esperanto circumflex
+                (ch == 0x0108) ? 0x0109 : // Ĉ -> ĉ
+                (ch == 0x011C) ? 0x011D : // Ĝ -> ĝ
+                (ch == 0x0124) ? 0x0125 : // Ĥ -> ĥ
+                (ch == 0x0134) ? 0x0135 : // Ĵ -> ĵ
+                (ch == 0x015C) ? 0x015D : // Ŝ -> ŝ
+                // Esperanto breve
+                (ch == 0x016C) ? 0x016D : // Ŭ -> ŭ
+                // Pinyin caron
+                (ch == 0x01CD) ? 0x01CE : // Ǎ -> ǎ
+                (ch == 0x01CF) ? 0x01D0 : // Ǐ -> ǐ
+                (ch == 0x01D1) ? 0x01D2 : // Ǒ -> ǒ
+                (ch == 0x01D3) ? 0x01D4 : // Ǔ -> ǔ
                     ch;
             }
 
@@ -298,6 +456,10 @@ namespace characters
                     // Hungarian double acute: ő Ő ű Ű
                     is_either<wchar_t>(letter, 0x0150, 0x0151) ||
                     is_either<wchar_t>(letter, 0x0170, 0x0171) ||
+                    // Czech ring: ů Ů
+                    is_either<wchar_t>(letter, 0x016E, 0x016F) ||
+                    // Czech caron vowel: ě Ě
+                    is_either<wchar_t>(letter, 0x011A, 0x011B) ||
                     // Portuguese tilde: ã Ã õ Õ
                     is_either<wchar_t>(letter, 0x00C3, 0x00E3) ||
                     is_either<wchar_t>(letter, 0x00D5, 0x00F5) ||
@@ -329,7 +491,25 @@ namespace characters
                     is_either<wchar_t>(letter, 0x042E, 0x044E) ||
                     is_either<wchar_t>(letter, 0x042F, 0x044F) ||
                     // Vietnamese O with dot below
-                    is_either<wchar_t>(letter, 0x1ECC, 0x1ECD));
+                    is_either<wchar_t>(letter, 0x1ECC, 0x1ECD) ||
+                    // Turkish: İ ı
+                    is_either<wchar_t>(letter, 0x0130, 0x0131) ||
+                    // Welsh: Ŷ ŷ Ỳ ỳ
+                    is_either<wchar_t>(letter, 0x0176, 0x0177) ||
+                    is_either<wchar_t>(letter, 0x1EF2, 0x1EF3) ||
+                    // Y with acute: Ý ý (Czech, Slovak, Icelandic, Vietnamese)
+                    is_either<wchar_t>(letter, 0x00DD, 0x00FD) ||
+                    // Y with diaeresis: Ÿ ÿ (French)
+                    is_either<wchar_t>(letter, 0x0178, 0x00FF) ||
+                    // Lithuanian: Ė ė
+                    is_either<wchar_t>(letter, 0x0116, 0x0117) ||
+                    // Esperanto breve: Ŭ ŭ
+                    is_either<wchar_t>(letter, 0x016C, 0x016D) ||
+                    // Pinyin caron: Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ
+                    is_either<wchar_t>(letter, 0x01CD, 0x01CE) ||
+                    is_either<wchar_t>(letter, 0x01CF, 0x01D0) ||
+                    is_either<wchar_t>(letter, 0x01D1, 0x01D2) ||
+                    is_either<wchar_t>(letter, 0x01D3, 0x01D4));
             }
 
         /** @returns @c true if a character is a consonant.
@@ -373,12 +553,11 @@ namespace characters
                 (letter == 0xC7) ||                   // upper C with cedilla
                 (letter == 0xD0) ||                   // upper Eth
                 (letter == 0xD1) ||                   // upper N with tilde
-                (letter >= 0xDD && letter <= 0xDF) || // upper Y with acute to Eszett
+                (letter >= 0xDE && letter <= 0xDF) || // upper Thorn and Eszett
                 (letter == 0xE7) ||                   // lower C with cedilla
                 (letter == 0xF0) ||                   // lower Eth
                 (letter == 0xF1) ||                   // lower N with tilde
-                (letter >= 0xFD && letter <= 0xFF) || // lower Y with acute to Y with umlauts
-                (letter == 0x0178) ||
+                (letter == 0xFE) ||                   // lower thorn
                 // basic Russian alphabet
                 (letter >= 0x0411 && letter <= 0x414) || (letter >= 0x0416 && letter <= 0x417) ||
                 (letter >= 0x041A && letter <= 0x041D) || (letter >= 0x041F && letter <= 0x0422) ||
@@ -392,7 +571,70 @@ namespace characters
                 is_either<wchar_t>(letter, 0x0162, 0x0163) ||
                 // Romanian comma below: ș Ș ț Ț
                 is_either<wchar_t>(letter, 0x0218, 0x0219) ||
-                is_either<wchar_t>(letter, 0x021A, 0x021B));
+                is_either<wchar_t>(letter, 0x021A, 0x021B) ||
+                // Polish acute consonants: Ć/ć Ś/ś Ź/ź
+                is_either<wchar_t>(letter, 0x0106, 0x0107) ||
+                is_either<wchar_t>(letter, 0x015A, 0x015B) ||
+                is_either<wchar_t>(letter, 0x0179, 0x017A) ||
+                // Polish dot above: Ż/ż
+                is_either<wchar_t>(letter, 0x017B, 0x017C) ||
+                // Caron consonants: Č/č Ň/ň Ř/ř Š/š Ž/ž Ť/ť Ď/ď
+                is_either<wchar_t>(letter, 0x010C, 0x010D) ||
+                is_either<wchar_t>(letter, 0x0147, 0x0148) ||
+                is_either<wchar_t>(letter, 0x0158, 0x0159) ||
+                is_either<wchar_t>(letter, 0x0160, 0x0161) ||
+                is_either<wchar_t>(letter, 0x017D, 0x017E) ||
+                is_either<wchar_t>(letter, 0x0164, 0x0165) ||
+                is_either<wchar_t>(letter, 0x010E, 0x010F) ||
+                // Polish stroke: Ł/ł
+                is_either<wchar_t>(letter, 0x0141, 0x0142) ||
+                // Turkish: Ğ/ğ
+                is_either<wchar_t>(letter, 0x011E, 0x011F) ||
+                // Polish: Ń/ń
+                is_either<wchar_t>(letter, 0x0143, 0x0144) ||
+                // Slovak: Ľ/ľ Ĺ/ĺ
+                is_either<wchar_t>(letter, 0x013D, 0x013E) ||
+                is_either<wchar_t>(letter, 0x0139, 0x013A) ||
+                // Welsh: Ŵ/ŵ
+                is_either<wchar_t>(letter, 0x0174, 0x0175) ||
+                // Maltese: Ċ/ċ Ġ/ġ Ħ/ħ
+                is_either<wchar_t>(letter, 0x010A, 0x010B) ||
+                is_either<wchar_t>(letter, 0x0120, 0x0121) ||
+                is_either<wchar_t>(letter, 0x0126, 0x0127) ||
+                // Slovak: Ŕ/ŕ
+                is_either<wchar_t>(letter, 0x0154, 0x0155) ||
+                // Croatian: Đ/đ
+                is_either<wchar_t>(letter, 0x0110, 0x0111) ||
+                // Sami: Ŧ/ŧ Ŋ/ŋ
+                is_either<wchar_t>(letter, 0x0166, 0x0167) ||
+                is_either<wchar_t>(letter, 0x014A, 0x014B) ||
+                // Greenlandic: ĸ (Kra, lowercase only)
+                (letter == 0x0138) ||
+                // Old Irish dot above: Ḃ/ḃ Ḋ/ḋ Ḟ/ḟ Ṁ/ṁ Ṗ/ṗ Ṡ/ṡ Ṫ/ṫ
+                is_either<wchar_t>(letter, 0x1E02, 0x1E03) ||
+                is_either<wchar_t>(letter, 0x1E0A, 0x1E0B) ||
+                is_either<wchar_t>(letter, 0x1E1E, 0x1E1F) ||
+                is_either<wchar_t>(letter, 0x1E40, 0x1E41) ||
+                is_either<wchar_t>(letter, 0x1E56, 0x1E57) ||
+                is_either<wchar_t>(letter, 0x1E60, 0x1E61) ||
+                is_either<wchar_t>(letter, 0x1E6A, 0x1E6B) ||
+                // German: ẞ (capital eszett, lowercase ß already covered by 0xDF above)
+                (letter == 0x1E9E) ||
+                // Welsh: Ẁ/ẁ Ẃ/ẃ Ẅ/ẅ
+                is_either<wchar_t>(letter, 0x1E80, 0x1E81) ||
+                is_either<wchar_t>(letter, 0x1E82, 0x1E83) ||
+                is_either<wchar_t>(letter, 0x1E84, 0x1E85) ||
+                // Latvian cedilla: Ģ/ģ Ķ/ķ Ļ/ļ Ņ/ņ
+                is_either<wchar_t>(letter, 0x0122, 0x0123) ||
+                is_either<wchar_t>(letter, 0x0136, 0x0137) ||
+                is_either<wchar_t>(letter, 0x013B, 0x013C) ||
+                is_either<wchar_t>(letter, 0x0145, 0x0146) ||
+                // Esperanto circumflex: Ĉ/ĉ Ĝ/ĝ Ĥ/ĥ Ĵ/ĵ Ŝ/ŝ
+                is_either<wchar_t>(letter, 0x0108, 0x0109) ||
+                is_either<wchar_t>(letter, 0x011C, 0x011D) ||
+                is_either<wchar_t>(letter, 0x0124, 0x0125) ||
+                is_either<wchar_t>(letter, 0x0134, 0x0135) ||
+                is_either<wchar_t>(letter, 0x015C, 0x015D));
             }
 
         /** @returns @c true if a character is a lowercased consonant.
@@ -428,8 +670,6 @@ namespace characters
                    // Doxygen tags (e.g., @note) or used as a whole word
                    // (e.g., "meet @ 5:00")
                    is_either<wchar_t>(ch, L'@', 0xFF20) ? true :
-                   (ch == 0x9F) ? // Y with diaeresis
-                    true :
                    is_either<wchar_t>(ch, 163, 0xFFE1) ? // Pound Sterling
                     true :
                    is_either<wchar_t>(ch, 0x80, 0x20AC) ? // Euro
@@ -457,8 +697,6 @@ namespace characters
                    is_numeric(ch)                       ? true :
                    is_upper(ch)                         ? true :
                    is_either<wchar_t>(ch, L'@', 0xFF20) ? true :
-                   (ch == 0x9F) ? // Y with diaeresis
-                    true :
                    is_either<wchar_t>(ch, 163, 0xFFE1) ? // Pound Sterling
                     true :
                    is_either<wchar_t>(ch, 0x80, 0x20AC) ? // Euro
@@ -494,8 +732,6 @@ namespace characters
                    is_either<wchar_t>(ch, L'@', 0xFF20) ?
                     true :
                    is_either<wchar_t>(ch, 92, 0xFF3C) ? /*\*/
-                    true :
-                   (ch == 0x9F) ? // Y with diaeresis
                     true :
                    is_either<wchar_t>(ch, 162, 0xFFE0) ? // cent
                     true :
@@ -547,8 +783,6 @@ namespace characters
                    (ch >= 0xFF3F && ch <= 0xFF40) ? // full-width _`
                     true :
                    (ch == 126) ? // tilde (usually appear inside a file path)
-                    true :
-                   (ch == 159) ? // Y with diaeresis
                     true :
                    is_either<wchar_t>(ch, 162, 0xFFE0) ? // cent
                     true :
