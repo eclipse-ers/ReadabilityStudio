@@ -79,6 +79,10 @@ set(RAM_RECOMMENDED "4 GB")
 
 # Edit these values when bumping the release version
 project(readstudio VERSION 2026.0.0.0 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
+enable_language(CXX)
+if(APPLE)
+    enable_language(OBJCXX)
+endif()
 set(PROGRAM_LONGNAME "Eclipse ${readstudio_DESCRIPTION}")
 set(PROGRAM_NUMBERED_VERSION 9.0)
 set(PUBLISHER "Eclipse Foundation AISBL")
@@ -535,8 +539,6 @@ include(cmake/modules/PrintCompilerFlags.cmake)
 print_compile_flags_summary(${PROJECT_NAME})
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     COMPILE_FLAGS_SUMMARY_STR="${COMPILE_FLAGS_SUMMARY_STR}")
-
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link required libraries to the executable
 if(WIN32 OR APPLE)
