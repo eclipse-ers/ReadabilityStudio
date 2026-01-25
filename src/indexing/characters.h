@@ -188,7 +188,14 @@ namespace characters
                 // Macedonian: Ѓ Ќ Ѕ
                 (ch == 0x0403 || ch == 0x040C || ch == 0x0405) ||
                 // Historical Russian: Ѣ Ѳ Ѵ
-                (ch == 0x0462 || ch == 0x0472 || ch == 0x0474));
+                (ch == 0x0462 || ch == 0x0472 || ch == 0x0474) ||
+                // Greek uppercase: Α-Ρ (U+0391-U+03A1), Σ-Ω (U+03A3-U+03A9)
+                (ch >= 0x0391 && ch <= 0x03A1) || (ch >= 0x03A3 && ch <= 0x03A9) ||
+                // Greek uppercase with tonos: Ά Έ Ή Ί Ό Ύ Ώ
+                (ch == 0x0386) || (ch >= 0x0388 && ch <= 0x038A) || (ch == 0x038C) ||
+                (ch == 0x038E) || (ch == 0x038F) ||
+                // Greek uppercase with dialytika: Ϊ Ϋ
+                (ch == 0x03AA || ch == 0x03AB));
             }
 
         /** @returns @c true if a character is a lowercased letter.
@@ -289,7 +296,16 @@ namespace characters
                 // Macedonian: ѓ ќ ѕ
                 (ch == 0x0453 || ch == 0x045C || ch == 0x0455) ||
                 // Historical Russian: ѣ ѳ ѵ
-                (ch == 0x0463 || ch == 0x0473 || ch == 0x0475));
+                (ch == 0x0463 || ch == 0x0473 || ch == 0x0475) ||
+                // Greek lowercase: α-ρ (U+03B1-U+03C1), ς (U+03C2), σ-ω (U+03C3-U+03C9)
+                (ch >= 0x03B1 && ch <= 0x03C1) || (ch >= 0x03C2 && ch <= 0x03C9) ||
+                // Greek lowercase with tonos: ά έ ή ί ό ύ ώ
+                (ch == 0x03AC) || (ch >= 0x03AD && ch <= 0x03AF) || (ch == 0x03CC) ||
+                (ch == 0x03CD) || (ch == 0x03CE) ||
+                // Greek lowercase with dialytika: ϊ ϋ
+                (ch == 0x03CA || ch == 0x03CB) ||
+                // Greek lowercase with dialytika and tonos: ΐ ΰ
+                (ch == 0x0390 || ch == 0x03B0));
             }
 
         /** @returns The lowercased version of a letter, or the letter itself
@@ -448,6 +464,20 @@ namespace characters
                 (ch == 0x0462) ? 0x0463 : // Ѣ -> ѣ
                 (ch == 0x0472) ? 0x0473 : // Ѳ -> ѳ
                 (ch == 0x0474) ? 0x0475 : // Ѵ -> ѵ
+                // Greek basic alphabet (offset of 32)
+                (ch >= 0x0391 && ch <= 0x03A1) ? (ch + 32) :
+                (ch >= 0x03A3 && ch <= 0x03A9) ? (ch + 32) :
+                // Greek uppercase with tonos
+                (ch == 0x0386) ? 0x03AC : // Ά -> ά
+                (ch == 0x0388) ? 0x03AD : // Έ -> έ
+                (ch == 0x0389) ? 0x03AE : // Ή -> ή
+                (ch == 0x038A) ? 0x03AF : // Ί -> ί
+                (ch == 0x038C) ? 0x03CC : // Ό -> ό
+                (ch == 0x038E) ? 0x03CD : // Ύ -> ύ
+                (ch == 0x038F) ? 0x03CE : // Ώ -> ώ
+                // Greek uppercase with dialytika
+                (ch == 0x03AA) ? 0x03CA : // Ϊ -> ϊ
+                (ch == 0x03AB) ? 0x03CB : // Ϋ -> ϋ
                     ch;
             }
 
@@ -562,7 +592,28 @@ namespace characters
                     is_either<wchar_t>(letter, 0x040E, 0x045E) ||
                     // Historical Russian vowels: Ѣ/ѣ (Yat) Ѵ/ѵ (Izhitsa)
                     is_either<wchar_t>(letter, 0x0462, 0x0463) ||
-                    is_either<wchar_t>(letter, 0x0474, 0x0475));
+                    is_either<wchar_t>(letter, 0x0474, 0x0475) ||
+                    // Greek vowels: Α/α Ε/ε Η/η Ι/ι Ο/ο Υ/υ Ω/ω
+                    is_either<wchar_t>(letter, 0x0391, 0x03B1) || // Α/α
+                    is_either<wchar_t>(letter, 0x0395, 0x03B5) || // Ε/ε
+                    is_either<wchar_t>(letter, 0x0397, 0x03B7) || // Η/η
+                    is_either<wchar_t>(letter, 0x0399, 0x03B9) || // Ι/ι
+                    is_either<wchar_t>(letter, 0x039F, 0x03BF) || // Ο/ο
+                    is_either<wchar_t>(letter, 0x03A5, 0x03C5) || // Υ/υ
+                    is_either<wchar_t>(letter, 0x03A9, 0x03C9) || // Ω/ω
+                    // Greek vowels with tonos: Ά/ά Έ/έ Ή/ή Ί/ί Ό/ό Ύ/ύ Ώ/ώ
+                    is_either<wchar_t>(letter, 0x0386, 0x03AC) || // Ά/ά
+                    is_either<wchar_t>(letter, 0x0388, 0x03AD) || // Έ/έ
+                    is_either<wchar_t>(letter, 0x0389, 0x03AE) || // Ή/ή
+                    is_either<wchar_t>(letter, 0x038A, 0x03AF) || // Ί/ί
+                    is_either<wchar_t>(letter, 0x038C, 0x03CC) || // Ό/ό
+                    is_either<wchar_t>(letter, 0x038E, 0x03CD) || // Ύ/ύ
+                    is_either<wchar_t>(letter, 0x038F, 0x03CE) || // Ώ/ώ
+                    // Greek vowels with dialytika: Ϊ/ϊ Ϋ/ϋ
+                    is_either<wchar_t>(letter, 0x03AA, 0x03CA) || // Ϊ/ϊ
+                    is_either<wchar_t>(letter, 0x03AB, 0x03CB) || // Ϋ/ϋ
+                    // Greek vowels with dialytika and tonos: ΐ ΰ (lowercase only)
+                    (letter == 0x0390) || (letter == 0x03B0));
             }
 
         /** @returns @c true if a character is a consonant.
@@ -702,7 +753,25 @@ namespace characters
                 is_either<wchar_t>(letter, 0x040C, 0x045C) ||
                 is_either<wchar_t>(letter, 0x0405, 0x0455) ||
                 // Historical Russian: Ѳ/ѳ (Fita)
-                is_either<wchar_t>(letter, 0x0472, 0x0473));
+                is_either<wchar_t>(letter, 0x0472, 0x0473) ||
+                // Greek consonants: Β Γ Δ Ζ Θ Κ Λ Μ Ν Ξ Π Ρ Σ Τ Φ Χ Ψ
+                is_either<wchar_t>(letter, 0x0392, 0x03B2) ||                     // Β/β
+                is_either<wchar_t>(letter, 0x0393, 0x03B3) ||                     // Γ/γ
+                is_either<wchar_t>(letter, 0x0394, 0x03B4) ||                     // Δ/δ
+                is_either<wchar_t>(letter, 0x0396, 0x03B6) ||                     // Ζ/ζ
+                is_either<wchar_t>(letter, 0x0398, 0x03B8) ||                     // Θ/θ
+                is_either<wchar_t>(letter, 0x039A, 0x03BA) ||                     // Κ/κ
+                is_either<wchar_t>(letter, 0x039B, 0x03BB) ||                     // Λ/λ
+                is_either<wchar_t>(letter, 0x039C, 0x03BC) ||                     // Μ/μ
+                is_either<wchar_t>(letter, 0x039D, 0x03BD) ||                     // Ν/ν
+                is_either<wchar_t>(letter, 0x039E, 0x03BE) ||                     // Ξ/ξ
+                is_either<wchar_t>(letter, 0x03A0, 0x03C0) ||                     // Π/π
+                is_either<wchar_t>(letter, 0x03A1, 0x03C1) ||                     // Ρ/ρ
+                (letter == 0x03A3) || (letter == 0x03C3) || (letter == 0x03C2) || // Σ/σ/ς
+                is_either<wchar_t>(letter, 0x03A4, 0x03C4) ||                     // Τ/τ
+                is_either<wchar_t>(letter, 0x03A6, 0x03C6) ||                     // Φ/φ
+                is_either<wchar_t>(letter, 0x03A7, 0x03C7) ||                     // Χ/χ
+                is_either<wchar_t>(letter, 0x03A8, 0x03C8));                      // Ψ/ψ
             }
 
         /** @returns @c true if a character is a lowercased consonant.

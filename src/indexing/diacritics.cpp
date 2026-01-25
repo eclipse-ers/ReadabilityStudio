@@ -324,7 +324,27 @@ namespace grammar
             { { L'г', 0x0301 }, L'ѓ' }, // Macedonian г + acute -> ѓ
             { { L'Г', 0x0301 }, L'Ѓ' }, // Macedonian Г + acute -> Ѓ
             { { L'к', 0x0301 }, L'ќ' }, // Macedonian к + acute -> ќ
-            { { L'К', 0x0301 }, L'Ќ' }  // Macedonian К + acute -> Ќ
+            { { L'К', 0x0301 }, L'Ќ' }, // Macedonian К + acute -> Ќ
+            // Greek tonos (acute accent)
+            { { L'α', 0x0301 }, L'ά' }, // α + tonos -> ά
+            { { L'ε', 0x0301 }, L'έ' }, // ε + tonos -> έ
+            { { L'η', 0x0301 }, L'ή' }, // η + tonos -> ή
+            { { L'ι', 0x0301 }, L'ί' }, // ι + tonos -> ί
+            { { L'ο', 0x0301 }, L'ό' }, // ο + tonos -> ό
+            { { L'υ', 0x0301 }, L'ύ' }, // υ + tonos -> ύ
+            { { L'ω', 0x0301 }, L'ώ' }, // ω + tonos -> ώ
+            { { L'Α', 0x0301 }, L'Ά' }, // Α + tonos -> Ά
+            { { L'Ε', 0x0301 }, L'Έ' }, // Ε + tonos -> Έ
+            { { L'Η', 0x0301 }, L'Ή' }, // Η + tonos -> Ή
+            { { L'Ι', 0x0301 }, L'Ί' }, // Ι + tonos -> Ί
+            { { L'Ο', 0x0301 }, L'Ό' }, // Ο + tonos -> Ό
+            { { L'Υ', 0x0301 }, L'Ύ' }, // Υ + tonos -> Ύ
+            { { L'Ω', 0x0301 }, L'Ώ' }, // Ω + tonos -> Ώ
+            // Greek dialytika (diaeresis)
+            { { L'ι', 0x0308 }, L'ϊ' }, // ι + dialytika -> ϊ
+            { { L'υ', 0x0308 }, L'ϋ' }, // υ + dialytika -> ϋ
+            { { L'Ι', 0x0308 }, L'Ϊ' }, // Ι + dialytika -> Ϊ
+            { { L'Υ', 0x0308 }, L'Ϋ' }  // Υ + dialytika -> Ϋ
         };
 
     //-------------------------------------------------------------

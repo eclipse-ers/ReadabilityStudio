@@ -291,6 +291,27 @@ TEST_CASE("Diacritics", "[diacritics]")
         CHECK(cld(L"г\u0301Г\u0301к\u0301К\u0301"));
         CHECK(cld.get_conversion() == std::wstring{ L"ѓЃќЌ" });
         }
+    SECTION("Greek tonos lowercase")
+        {
+        // Greek lowercase vowels + tonos (U+0301) -> accented vowels
+        // α→ά, ε→έ, η→ή, ι→ί, ο→ό, υ→ύ, ω→ώ
+        CHECK(cld(L"α\u0301ε\u0301η\u0301ι\u0301ο\u0301υ\u0301ω\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"άέήίόύώ" });
+        }
+    SECTION("Greek tonos uppercase")
+        {
+        // Greek uppercase vowels + tonos (U+0301) -> accented vowels
+        // Α→Ά, Ε→Έ, Η→Ή, Ι→Ί, Ο→Ό, Υ→Ύ, Ω→Ώ
+        CHECK(cld(L"Α\u0301Ε\u0301Η\u0301Ι\u0301Ο\u0301Υ\u0301Ω\u0301"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ΆΈΉΊΌΎΏ" });
+        }
+    SECTION("Greek dialytika")
+        {
+        // Greek vowels + dialytika (U+0308) -> vowels with diaeresis
+        // ι→ϊ, υ→ϋ, Ι→Ϊ, Υ→Ϋ
+        CHECK(cld(L"ι\u0308υ\u0308Ι\u0308Υ\u0308"));
+        CHECK(cld.get_conversion() == std::wstring{ L"ϊϋΪΫ" });
+        }
     }
 
 TEST_CASE("Ligatures", "[diacritics]")

@@ -1409,6 +1409,247 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK_FALSE(is_character::is_consonant(L'Ѵ'));
         CHECK(is_character::to_lower(L'Ѵ') == L'ѵ');
         }
+
+    // =========================================================================
+    // GREEK ALPHABET SUPPORT
+    // Basic Greek: Uppercase U+0391-U+03A9, Lowercase U+03B1-U+03C9
+    // Plus final sigma ς (U+03C2), accented vowels, and diaeresis forms.
+    // =========================================================================
+
+    SECTION("Greek Basic Alphabet")
+        {
+        // Uppercase: first (Α), middle (Μ), last (Ω)
+        CHECK(is_character::is_upper(L'Α'));
+        CHECK_FALSE(is_character::is_lower(L'Α'));
+        CHECK(is_character::is_alpha(L'Α'));
+        CHECK(is_character::is_upper(L'Μ'));
+        CHECK_FALSE(is_character::is_lower(L'Μ'));
+        CHECK(is_character::is_alpha(L'Μ'));
+        CHECK(is_character::is_upper(L'Ω'));
+        CHECK_FALSE(is_character::is_lower(L'Ω'));
+        CHECK(is_character::is_alpha(L'Ω'));
+
+        // Lowercase: first (α), middle (μ), last (ω)
+        CHECK(is_character::is_lower(L'α'));
+        CHECK_FALSE(is_character::is_upper(L'α'));
+        CHECK(is_character::is_alpha(L'α'));
+        CHECK(is_character::is_lower(L'μ'));
+        CHECK_FALSE(is_character::is_upper(L'μ'));
+        CHECK(is_character::is_alpha(L'μ'));
+        CHECK(is_character::is_lower(L'ω'));
+        CHECK_FALSE(is_character::is_upper(L'ω'));
+        CHECK(is_character::is_alpha(L'ω'));
+
+        // Final sigma (ς) - lowercase only
+        CHECK(is_character::is_lower(L'ς'));
+        CHECK_FALSE(is_character::is_upper(L'ς'));
+        CHECK(is_character::is_alpha(L'ς'));
+        CHECK(is_character::is_consonant(L'ς'));
+        }
+    SECTION("Greek Vowels")
+        {
+        // 7 vowels: Α/α, Ε/ε, Η/η, Ι/ι, Ο/ο, Υ/υ, Ω/ω
+        CHECK(is_character::is_vowel(L'Α'));
+        CHECK(is_character::is_vowel(L'α'));
+        CHECK_FALSE(is_character::is_consonant(L'Α'));
+        CHECK_FALSE(is_character::is_consonant(L'α'));
+
+        CHECK(is_character::is_vowel(L'Ε'));
+        CHECK(is_character::is_vowel(L'ε'));
+        CHECK_FALSE(is_character::is_consonant(L'Ε'));
+        CHECK_FALSE(is_character::is_consonant(L'ε'));
+
+        CHECK(is_character::is_vowel(L'Η'));
+        CHECK(is_character::is_vowel(L'η'));
+        CHECK_FALSE(is_character::is_consonant(L'Η'));
+        CHECK_FALSE(is_character::is_consonant(L'η'));
+
+        CHECK(is_character::is_vowel(L'Ι'));
+        CHECK(is_character::is_vowel(L'ι'));
+        CHECK_FALSE(is_character::is_consonant(L'Ι'));
+        CHECK_FALSE(is_character::is_consonant(L'ι'));
+
+        CHECK(is_character::is_vowel(L'Ο'));
+        CHECK(is_character::is_vowel(L'ο'));
+        CHECK_FALSE(is_character::is_consonant(L'Ο'));
+        CHECK_FALSE(is_character::is_consonant(L'ο'));
+
+        CHECK(is_character::is_vowel(L'Υ'));
+        CHECK(is_character::is_vowel(L'υ'));
+        CHECK_FALSE(is_character::is_consonant(L'Υ'));
+        CHECK_FALSE(is_character::is_consonant(L'υ'));
+
+        CHECK(is_character::is_vowel(L'Ω'));
+        CHECK(is_character::is_vowel(L'ω'));
+        CHECK_FALSE(is_character::is_consonant(L'Ω'));
+        CHECK_FALSE(is_character::is_consonant(L'ω'));
+        }
+    SECTION("Greek Consonants")
+        {
+        // All 17 Greek consonants: Β Γ Δ Ζ Θ Κ Λ Μ Ν Ξ Π Ρ Σ Τ Φ Χ Ψ
+        CHECK(is_character::is_consonant(L'Β'));
+        CHECK(is_character::is_consonant(L'β'));
+        CHECK_FALSE(is_character::is_vowel(L'Β'));
+        CHECK_FALSE(is_character::is_vowel(L'β'));
+
+        CHECK(is_character::is_consonant(L'Γ'));
+        CHECK(is_character::is_consonant(L'γ'));
+        CHECK_FALSE(is_character::is_vowel(L'Γ'));
+        CHECK_FALSE(is_character::is_vowel(L'γ'));
+
+        CHECK(is_character::is_consonant(L'Δ'));
+        CHECK(is_character::is_consonant(L'δ'));
+        CHECK_FALSE(is_character::is_vowel(L'Δ'));
+        CHECK_FALSE(is_character::is_vowel(L'δ'));
+
+        CHECK(is_character::is_consonant(L'Ζ'));
+        CHECK(is_character::is_consonant(L'ζ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ζ'));
+        CHECK_FALSE(is_character::is_vowel(L'ζ'));
+
+        CHECK(is_character::is_consonant(L'Θ'));
+        CHECK(is_character::is_consonant(L'θ'));
+        CHECK_FALSE(is_character::is_vowel(L'Θ'));
+        CHECK_FALSE(is_character::is_vowel(L'θ'));
+
+        CHECK(is_character::is_consonant(L'Κ'));
+        CHECK(is_character::is_consonant(L'κ'));
+        CHECK_FALSE(is_character::is_vowel(L'Κ'));
+        CHECK_FALSE(is_character::is_vowel(L'κ'));
+
+        CHECK(is_character::is_consonant(L'Λ'));
+        CHECK(is_character::is_consonant(L'λ'));
+        CHECK_FALSE(is_character::is_vowel(L'Λ'));
+        CHECK_FALSE(is_character::is_vowel(L'λ'));
+
+        CHECK(is_character::is_consonant(L'Μ'));
+        CHECK(is_character::is_consonant(L'μ'));
+        CHECK_FALSE(is_character::is_vowel(L'Μ'));
+        CHECK_FALSE(is_character::is_vowel(L'μ'));
+
+        CHECK(is_character::is_consonant(L'Ν'));
+        CHECK(is_character::is_consonant(L'ν'));
+        CHECK_FALSE(is_character::is_vowel(L'Ν'));
+        CHECK_FALSE(is_character::is_vowel(L'ν'));
+
+        CHECK(is_character::is_consonant(L'Ξ'));
+        CHECK(is_character::is_consonant(L'ξ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ξ'));
+        CHECK_FALSE(is_character::is_vowel(L'ξ'));
+
+        CHECK(is_character::is_consonant(L'Π'));
+        CHECK(is_character::is_consonant(L'π'));
+        CHECK_FALSE(is_character::is_vowel(L'Π'));
+        CHECK_FALSE(is_character::is_vowel(L'π'));
+
+        CHECK(is_character::is_consonant(L'Ρ'));
+        CHECK(is_character::is_consonant(L'ρ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ρ'));
+        CHECK_FALSE(is_character::is_vowel(L'ρ'));
+
+        CHECK(is_character::is_consonant(L'Σ'));
+        CHECK(is_character::is_consonant(L'σ'));
+        CHECK(is_character::is_consonant(L'ς')); // final sigma
+        CHECK_FALSE(is_character::is_vowel(L'Σ'));
+        CHECK_FALSE(is_character::is_vowel(L'σ'));
+        CHECK_FALSE(is_character::is_vowel(L'ς'));
+
+        CHECK(is_character::is_consonant(L'Τ'));
+        CHECK(is_character::is_consonant(L'τ'));
+        CHECK_FALSE(is_character::is_vowel(L'Τ'));
+        CHECK_FALSE(is_character::is_vowel(L'τ'));
+
+        CHECK(is_character::is_consonant(L'Φ'));
+        CHECK(is_character::is_consonant(L'φ'));
+        CHECK_FALSE(is_character::is_vowel(L'Φ'));
+        CHECK_FALSE(is_character::is_vowel(L'φ'));
+
+        CHECK(is_character::is_consonant(L'Χ'));
+        CHECK(is_character::is_consonant(L'χ'));
+        CHECK_FALSE(is_character::is_vowel(L'Χ'));
+        CHECK_FALSE(is_character::is_vowel(L'χ'));
+
+        CHECK(is_character::is_consonant(L'Ψ'));
+        CHECK(is_character::is_consonant(L'ψ'));
+        CHECK_FALSE(is_character::is_vowel(L'Ψ'));
+        CHECK_FALSE(is_character::is_vowel(L'ψ'));
+        }
+    SECTION("Greek To Lower")
+        {
+        CHECK(is_character::to_lower(L'Α') == L'α');
+        CHECK(is_character::to_lower(L'Β') == L'β');
+        CHECK(is_character::to_lower(L'Μ') == L'μ');
+        CHECK(is_character::to_lower(L'Σ') == L'σ');
+        CHECK(is_character::to_lower(L'Ω') == L'ω');
+        // Lowercase should stay lowercase
+        CHECK(is_character::to_lower(L'α') == L'α');
+        CHECK(is_character::to_lower(L'ω') == L'ω');
+        CHECK(is_character::to_lower(L'ς') == L'ς');
+        }
+    SECTION("Greek Accented Vowels Tonos")
+        {
+        // Lowercase with tonos: ά έ ή ί ό ύ ώ
+        CHECK(is_character::is_lower(L'ά'));
+        CHECK(is_character::is_vowel(L'ά'));
+        CHECK(is_character::is_lower(L'έ'));
+        CHECK(is_character::is_vowel(L'έ'));
+        CHECK(is_character::is_lower(L'ή'));
+        CHECK(is_character::is_vowel(L'ή'));
+        CHECK(is_character::is_lower(L'ί'));
+        CHECK(is_character::is_vowel(L'ί'));
+        CHECK(is_character::is_lower(L'ό'));
+        CHECK(is_character::is_vowel(L'ό'));
+        CHECK(is_character::is_lower(L'ύ'));
+        CHECK(is_character::is_vowel(L'ύ'));
+        CHECK(is_character::is_lower(L'ώ'));
+        CHECK(is_character::is_vowel(L'ώ'));
+
+        // Uppercase with tonos: Ά Έ Ή Ί Ό Ύ Ώ
+        CHECK(is_character::is_upper(L'Ά'));
+        CHECK(is_character::is_vowel(L'Ά'));
+        CHECK(is_character::is_upper(L'Έ'));
+        CHECK(is_character::is_vowel(L'Έ'));
+        CHECK(is_character::is_upper(L'Ή'));
+        CHECK(is_character::is_vowel(L'Ή'));
+        CHECK(is_character::is_upper(L'Ί'));
+        CHECK(is_character::is_vowel(L'Ί'));
+        CHECK(is_character::is_upper(L'Ό'));
+        CHECK(is_character::is_vowel(L'Ό'));
+        CHECK(is_character::is_upper(L'Ύ'));
+        CHECK(is_character::is_vowel(L'Ύ'));
+        CHECK(is_character::is_upper(L'Ώ'));
+        CHECK(is_character::is_vowel(L'Ώ'));
+
+        // Case conversion for accented
+        CHECK(is_character::to_lower(L'Ά') == L'ά');
+        CHECK(is_character::to_lower(L'Έ') == L'έ');
+        CHECK(is_character::to_lower(L'Ή') == L'ή');
+        CHECK(is_character::to_lower(L'Ί') == L'ί');
+        CHECK(is_character::to_lower(L'Ό') == L'ό');
+        CHECK(is_character::to_lower(L'Ύ') == L'ύ');
+        CHECK(is_character::to_lower(L'Ώ') == L'ώ');
+        }
+    SECTION("Greek Dialytika")
+        {
+        // Iota/upsilon with diaeresis: ϊ ϋ Ϊ Ϋ
+        CHECK(is_character::is_lower(L'ϊ'));
+        CHECK(is_character::is_vowel(L'ϊ'));
+        CHECK(is_character::is_lower(L'ϋ'));
+        CHECK(is_character::is_vowel(L'ϋ'));
+        CHECK(is_character::is_upper(L'Ϊ'));
+        CHECK(is_character::is_vowel(L'Ϊ'));
+        CHECK(is_character::is_upper(L'Ϋ'));
+        CHECK(is_character::is_vowel(L'Ϋ'));
+
+        CHECK(is_character::to_lower(L'Ϊ') == L'ϊ');
+        CHECK(is_character::to_lower(L'Ϋ') == L'ϋ');
+
+        // Combined dialytika + tonos: ΐ ΰ (lowercase only)
+        CHECK(is_character::is_lower(L'ΐ'));
+        CHECK(is_character::is_vowel(L'ΐ'));
+        CHECK(is_character::is_lower(L'ΰ'));
+        CHECK(is_character::is_vowel(L'ΰ'));
+        }
     }
 // NOLINTEND
 // clang-format on
