@@ -1650,6 +1650,141 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK(is_character::is_lower(L'ΰ'));
         CHECK(is_character::is_vowel(L'ΰ'));
         }
+    SECTION("Georgian Alphabet")
+        {
+        // Georgian Mkhedruli is unicameral (no case distinction)
+        // All letters should be treated as lowercase for is_alpha to work
+        // Range: U+10D0 to U+10F0
+
+        // Test that Georgian letters are recognized as alphabetic
+        CHECK(is_character::is_alpha(L'ა')); // U+10D0
+        CHECK(is_character::is_alpha(L'ბ')); // U+10D1
+        CHECK(is_character::is_alpha(L'გ')); // U+10D2
+        CHECK(is_character::is_alpha(L'ჰ')); // U+10F0 (last letter)
+
+        // Georgian is unicameral - treat as lowercase
+        CHECK(is_character::is_lower(L'ა'));
+        CHECK(is_character::is_lower(L'ბ'));
+        CHECK(is_character::is_lower(L'გ'));
+        CHECK(is_character::is_lower(L'ჰ'));
+
+        // No uppercase in Georgian
+        CHECK_FALSE(is_character::is_upper(L'ა'));
+        CHECK_FALSE(is_character::is_upper(L'ბ'));
+        CHECK_FALSE(is_character::is_upper(L'ჰ'));
+
+        // to_lower should return the same character
+        CHECK(is_character::to_lower(L'ა') == L'ა');
+        CHECK(is_character::to_lower(L'ბ') == L'ბ');
+        CHECK(is_character::to_lower(L'ჰ') == L'ჰ');
+        }
+    SECTION("Georgian Vowels")
+        {
+        // Georgian vowels: ა ე ი ო უ (5 vowels)
+        CHECK(is_character::is_vowel(L'ა')); // a - U+10D0
+        CHECK_FALSE(is_character::is_consonant(L'ა'));
+
+        CHECK(is_character::is_vowel(L'ე')); // e - U+10D4
+        CHECK_FALSE(is_character::is_consonant(L'ე'));
+
+        CHECK(is_character::is_vowel(L'ი')); // i - U+10D8
+        CHECK_FALSE(is_character::is_consonant(L'ი'));
+
+        CHECK(is_character::is_vowel(L'ო')); // o - U+10DD
+        CHECK_FALSE(is_character::is_consonant(L'ო'));
+
+        CHECK(is_character::is_vowel(L'უ')); // u - U+10E3
+        CHECK_FALSE(is_character::is_consonant(L'უ'));
+        }
+    SECTION("Georgian Consonants")
+        {
+        // Georgian consonants (28 total)
+        // ბ გ დ ვ ზ თ კ ლ მ ნ პ ჟ რ ს ტ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ
+
+        CHECK(is_character::is_consonant(L'ბ')); // b - U+10D1
+        CHECK_FALSE(is_character::is_vowel(L'ბ'));
+
+        CHECK(is_character::is_consonant(L'გ')); // g - U+10D2
+        CHECK_FALSE(is_character::is_vowel(L'გ'));
+
+        CHECK(is_character::is_consonant(L'დ')); // d - U+10D3
+        CHECK_FALSE(is_character::is_vowel(L'დ'));
+
+        CHECK(is_character::is_consonant(L'ვ')); // v - U+10D5
+        CHECK_FALSE(is_character::is_vowel(L'ვ'));
+
+        CHECK(is_character::is_consonant(L'ზ')); // z - U+10D6
+        CHECK_FALSE(is_character::is_vowel(L'ზ'));
+
+        CHECK(is_character::is_consonant(L'თ')); // t - U+10D7
+        CHECK_FALSE(is_character::is_vowel(L'თ'));
+
+        CHECK(is_character::is_consonant(L'კ')); // k - U+10D9
+        CHECK_FALSE(is_character::is_vowel(L'კ'));
+
+        CHECK(is_character::is_consonant(L'ლ')); // l - U+10DA
+        CHECK_FALSE(is_character::is_vowel(L'ლ'));
+
+        CHECK(is_character::is_consonant(L'მ')); // m - U+10DB
+        CHECK_FALSE(is_character::is_vowel(L'მ'));
+
+        CHECK(is_character::is_consonant(L'ნ')); // n - U+10DC
+        CHECK_FALSE(is_character::is_vowel(L'ნ'));
+
+        CHECK(is_character::is_consonant(L'პ')); // p - U+10DE
+        CHECK_FALSE(is_character::is_vowel(L'პ'));
+
+        CHECK(is_character::is_consonant(L'ჟ')); // zh - U+10DF
+        CHECK_FALSE(is_character::is_vowel(L'ჟ'));
+
+        CHECK(is_character::is_consonant(L'რ')); // r - U+10E0
+        CHECK_FALSE(is_character::is_vowel(L'რ'));
+
+        CHECK(is_character::is_consonant(L'ს')); // s - U+10E1
+        CHECK_FALSE(is_character::is_vowel(L'ს'));
+
+        CHECK(is_character::is_consonant(L'ტ')); // t' - U+10E2
+        CHECK_FALSE(is_character::is_vowel(L'ტ'));
+
+        CHECK(is_character::is_consonant(L'ფ')); // p' - U+10E4
+        CHECK_FALSE(is_character::is_vowel(L'ფ'));
+
+        CHECK(is_character::is_consonant(L'ქ')); // k' - U+10E5
+        CHECK_FALSE(is_character::is_vowel(L'ქ'));
+
+        CHECK(is_character::is_consonant(L'ღ')); // gh - U+10E6
+        CHECK_FALSE(is_character::is_vowel(L'ღ'));
+
+        CHECK(is_character::is_consonant(L'ყ')); // q - U+10E7
+        CHECK_FALSE(is_character::is_vowel(L'ყ'));
+
+        CHECK(is_character::is_consonant(L'შ')); // sh - U+10E8
+        CHECK_FALSE(is_character::is_vowel(L'შ'));
+
+        CHECK(is_character::is_consonant(L'ჩ')); // ch - U+10E9
+        CHECK_FALSE(is_character::is_vowel(L'ჩ'));
+
+        CHECK(is_character::is_consonant(L'ც')); // ts - U+10EA
+        CHECK_FALSE(is_character::is_vowel(L'ც'));
+
+        CHECK(is_character::is_consonant(L'ძ')); // dz - U+10EB
+        CHECK_FALSE(is_character::is_vowel(L'ძ'));
+
+        CHECK(is_character::is_consonant(L'წ')); // ts' - U+10EC
+        CHECK_FALSE(is_character::is_vowel(L'წ'));
+
+        CHECK(is_character::is_consonant(L'ჭ')); // ch' - U+10ED
+        CHECK_FALSE(is_character::is_vowel(L'ჭ'));
+
+        CHECK(is_character::is_consonant(L'ხ')); // kh - U+10EE
+        CHECK_FALSE(is_character::is_vowel(L'ხ'));
+
+        CHECK(is_character::is_consonant(L'ჯ')); // j - U+10EF
+        CHECK_FALSE(is_character::is_vowel(L'ჯ'));
+
+        CHECK(is_character::is_consonant(L'ჰ')); // h - U+10F0
+        CHECK_FALSE(is_character::is_vowel(L'ჰ'));
+        }
     }
 // NOLINTEND
 // clang-format on

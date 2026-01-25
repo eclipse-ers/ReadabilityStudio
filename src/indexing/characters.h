@@ -305,7 +305,9 @@ namespace characters
                 // Greek lowercase with dialytika: ϊ ϋ
                 (ch == 0x03CA || ch == 0x03CB) ||
                 // Greek lowercase with dialytika and tonos: ΐ ΰ
-                (ch == 0x0390 || ch == 0x03B0));
+                (ch == 0x0390 || ch == 0x03B0) ||
+                // Georgian Mkhedruli (unicameral, treat as lowercase): U+10D0-U+10F0
+                (ch >= 0x10D0 && ch <= 0x10F0));
             }
 
         /** @returns The lowercased version of a letter, or the letter itself
@@ -613,7 +615,13 @@ namespace characters
                     is_either<wchar_t>(letter, 0x03AA, 0x03CA) || // Ϊ/ϊ
                     is_either<wchar_t>(letter, 0x03AB, 0x03CB) || // Ϋ/ϋ
                     // Greek vowels with dialytika and tonos: ΐ ΰ (lowercase only)
-                    (letter == 0x0390) || (letter == 0x03B0));
+                    (letter == 0x0390) || (letter == 0x03B0) ||
+                    // Georgian vowels: ა ე ი ო უ
+                    (letter == 0x10D0) || // ა (a)
+                    (letter == 0x10D4) || // ე (e)
+                    (letter == 0x10D8) || // ი (i)
+                    (letter == 0x10DD) || // ო (o)
+                    (letter == 0x10E3));  // უ (u)
             }
 
         /** @returns @c true if a character is a consonant.
@@ -771,7 +779,37 @@ namespace characters
                 is_either<wchar_t>(letter, 0x03A4, 0x03C4) ||                     // Τ/τ
                 is_either<wchar_t>(letter, 0x03A6, 0x03C6) ||                     // Φ/φ
                 is_either<wchar_t>(letter, 0x03A7, 0x03C7) ||                     // Χ/χ
-                is_either<wchar_t>(letter, 0x03A8, 0x03C8));                      // Ψ/ψ
+                is_either<wchar_t>(letter, 0x03A8, 0x03C8) ||                     // Ψ/ψ
+                // Georgian consonants (28 total, all letters except 5 vowels)
+                // ბ გ დ ვ ზ თ კ ლ მ ნ პ ჟ რ ს ტ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ
+                (letter == 0x10D1) || // ბ (b)
+                (letter == 0x10D2) || // გ (g)
+                (letter == 0x10D3) || // დ (d)
+                (letter == 0x10D5) || // ვ (v)
+                (letter == 0x10D6) || // ზ (z)
+                (letter == 0x10D7) || // თ (t)
+                (letter == 0x10D9) || // კ (k)
+                (letter == 0x10DA) || // ლ (l)
+                (letter == 0x10DB) || // მ (m)
+                (letter == 0x10DC) || // ნ (n)
+                (letter == 0x10DE) || // პ (p)
+                (letter == 0x10DF) || // ჟ (zh)
+                (letter == 0x10E0) || // რ (r)
+                (letter == 0x10E1) || // ს (s)
+                (letter == 0x10E2) || // ტ (t')
+                (letter == 0x10E4) || // ფ (p')
+                (letter == 0x10E5) || // ქ (k')
+                (letter == 0x10E6) || // ღ (gh)
+                (letter == 0x10E7) || // ყ (q)
+                (letter == 0x10E8) || // შ (sh)
+                (letter == 0x10E9) || // ჩ (ch)
+                (letter == 0x10EA) || // ც (ts)
+                (letter == 0x10EB) || // ძ (dz)
+                (letter == 0x10EC) || // წ (ts')
+                (letter == 0x10ED) || // ჭ (ch')
+                (letter == 0x10EE) || // ხ (kh)
+                (letter == 0x10EF) || // ჯ (j)
+                (letter == 0x10F0));  // ჰ (h)
             }
 
         /** @returns @c true if a character is a lowercased consonant.
