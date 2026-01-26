@@ -2671,14 +2671,16 @@ namespace LuaScripting
             return 0;
             }
 
-        wxGetApp().GetAppOptions()->SetWatermark(wxString{ luaL_checkstring(L, 1), wxConvUTF8 });
+        auto watermark = wxGetApp().GetAppOptions()->GetWatermark();
+        watermark.m_label = wxString{ luaL_checkstring(L, 1), wxConvUTF8 };
+        wxGetApp().GetAppOptions()->SetWatermark(watermark);
         return 0;
         }
 
     //-------------------------------------------------------------
     int GetWatermark(lua_State* L)
         {
-        lua_pushstring(L, wxGetApp().GetAppOptions()->GetWatermark().utf8_str());
+        lua_pushstring(L, wxGetApp().GetAppOptions()->GetWatermark().m_label.utf8_str());
         return 1;
         }
 

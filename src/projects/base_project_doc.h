@@ -206,10 +206,10 @@ class BaseProjectDoc : public BaseProject, public wxDocument
         }
 
     /// watermark functions
-    void SetWatermark(const wxString& watermark) { m_watermark = watermark; }
+    void SetWatermark(const Wisteria::Canvas::Watermark& watermark) { m_watermark = watermark; }
 
     [[nodiscard]]
-    wxString GetWatermark() const
+    Wisteria::Canvas::Watermark GetWatermark() const
         {
         return m_watermark;
         }
@@ -1116,25 +1116,25 @@ class BaseProjectDoc : public BaseProject, public wxDocument
 
     void LoadSettingsFile(const wchar_t* settingsFileText);
 
-    void UpdateGraphOptions(Wisteria::Canvas* canvas);
-    static void UpdateListOptions(Wisteria::UI::ListCtrlEx* list);
+    void UpdateGraphOptions(Wisteria::Canvas* canvas) const;
+    void UpdateListOptions(Wisteria::UI::ListCtrlEx* list) const;
     void UpdateTextWindowOptions(Wisteria::UI::FormattedTextCtrl* textW) const;
-    static void UpdateExplanationListOptions(ExplanationListCtrl* eList);
-    /// @brief Updates printer headers and footers for a canvas.
+    void UpdateExplanationListOptions(ExplanationListCtrl* eList) const;
+    /// @brief Updates printer settings for a canvas.
     /// @param window The Canvas to update.
-    static void UpdatePrinterHeaderAndFooters(Wisteria::Canvas* window);
-    /// @brief Updates printer headers and footers for a list control.
+    void UpdatePrinterSettings(Wisteria::Canvas* window) const;
+    /// @brief Updates printer settings for a list control.
     /// @param window The list control to update.
-    static void UpdatePrinterHeaderAndFooters(Wisteria::UI::ListCtrlEx* window);
-    /// @brief Updates printer headers and footers for a text window.
+    void UpdatePrinterSettings(Wisteria::UI::ListCtrlEx* window) const;
+    /// @brief Updates printer settings for a text window.
     /// @param window The text window to update.
-    static void UpdatePrinterHeaderAndFooters(Wisteria::UI::FormattedTextCtrl* window);
-    /// @brief Updates printer headers and footers for an explanation list control.
+    void UpdatePrinterSettings(Wisteria::UI::FormattedTextCtrl* window) const;
+    /// @brief Updates printer settings for an explanation list control.
     /// @param window The explanation list control to update.
-    static void UpdatePrinterHeaderAndFooters(ExplanationListCtrl* window);
-    /// @brief Updates printer headers and footers for an HTML report.
+    void UpdatePrinterSettings(ExplanationListCtrl* window) const;
+    /// @brief Updates printer settings for an HTML report.
     /// @param window The HTML report to update.
-    static void UpdatePrinterHeaderAndFooters(Wisteria::UI::HtmlTableWindow* window);
+    void UpdatePrinterSettings(Wisteria::UI::HtmlTableWindow* window) const;
 
     virtual void RefreshGraphs() {}
 
@@ -1282,7 +1282,7 @@ class BaseProjectDoc : public BaseProject, public wxDocument
     wxColour m_plotBackGroundColor;
     uint8_t m_plotBackGroundImageOpacity{ wxALPHA_OPAQUE };
     uint8_t m_plotBackGroundColorOpacity{ wxALPHA_OPAQUE };
-    wxString m_watermark;
+    Wisteria::Canvas::Watermark m_watermark;
     wxString m_watermarkImagePath;
     wxBitmapBundle m_waterMarkImage;
     wxColour m_xAxisFontColor;

@@ -454,11 +454,11 @@ void BaseProjectDoc::UpdateTextWindowOptions(Wisteria::UI::FormattedTextCtrl* te
 
     textW->SetBackgroundColour(GetTextReportBackgroundColor());
 
-    UpdatePrinterHeaderAndFooters(textW);
+    UpdatePrinterSettings(textW);
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdateExplanationListOptions(ExplanationListCtrl* eList)
+void BaseProjectDoc::UpdateExplanationListOptions(ExplanationListCtrl* eList) const
     {
     if (eList == nullptr)
         {
@@ -468,11 +468,11 @@ void BaseProjectDoc::UpdateExplanationListOptions(ExplanationListCtrl* eList)
     eList->SetResources(wxGetApp().GetMainFrame()->GetHelpDirectory(),
                         L"online/customizing-results.html");
 
-    UpdatePrinterHeaderAndFooters(eList);
+    UpdatePrinterSettings(eList);
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::Canvas* window)
+void BaseProjectDoc::UpdatePrinterSettings(Wisteria::Canvas* window) const
     {
     if (window == nullptr)
         {
@@ -485,10 +485,11 @@ void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::Canvas* window)
     window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
     window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
     window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+    window->SetWatermark(GetWatermark());
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterHeaderAndFooters(ExplanationListCtrl* window)
+void BaseProjectDoc::UpdatePrinterSettings(ExplanationListCtrl* window) const
     {
     if (window == nullptr)
         {
@@ -501,10 +502,11 @@ void BaseProjectDoc::UpdatePrinterHeaderAndFooters(ExplanationListCtrl* window)
     window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
     window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
     window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+    window->SetWatermark(GetWatermark());
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::FormattedTextCtrl* window)
+void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::FormattedTextCtrl* window) const
     {
     if (window == nullptr)
         {
@@ -517,10 +519,11 @@ void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::FormattedTextCt
     window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
     window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
     window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+    window->SetWatermark(GetWatermark());
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::ListCtrlEx* window)
+void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::ListCtrlEx* window) const
     {
     if (window == nullptr)
         {
@@ -533,10 +536,11 @@ void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::ListCtrlEx* win
     window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
     window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
     window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+    window->SetWatermark(GetWatermark());
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::HtmlTableWindow* window)
+void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::HtmlTableWindow* window) const
     {
     if (window == nullptr)
         {
@@ -549,10 +553,11 @@ void BaseProjectDoc::UpdatePrinterHeaderAndFooters(Wisteria::UI::HtmlTableWindow
     window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
     window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
     window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+    window->SetWatermark(GetWatermark());
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdateListOptions(Wisteria::UI::ListCtrlEx* list)
+void BaseProjectDoc::UpdateListOptions(Wisteria::UI::ListCtrlEx* list) const
     {
     if (list == nullptr)
         {
@@ -564,11 +569,11 @@ void BaseProjectDoc::UpdateListOptions(Wisteria::UI::ListCtrlEx* list)
     list->SetSortHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(),
                            L"online/customizing-results.html");
 
-    UpdatePrinterHeaderAndFooters(list);
+    UpdatePrinterSettings(list);
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas)
+void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas) const
     {
     if (canvas == nullptr)
         {
@@ -577,9 +582,10 @@ void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas)
     canvas->SetExportResources(wxGetApp().GetMainFrame()->GetHelpDirectory(),
                                L"online/publishing.html");
 
-    UpdatePrinterHeaderAndFooters(canvas);
+    UpdatePrinterSettings(canvas);
 
     canvas->SetBackgroundColor(GetBackGroundColor(), GetGraphBackGroundLinearGradient());
+    canvas->SetWatermarkLogo(m_waterMarkImage, wxSize{ 100, 100 });
 
     auto graph = std::dynamic_pointer_cast<Wisteria::Graphs::Graph2D>(canvas->GetFixedObject(0, 0));
     assert(graph && L"No graph on the canvas!");
@@ -607,8 +613,6 @@ void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas)
 
     graph->SetStippleBrush(m_graphStippleImage);
     graph->SetImageScheme(m_graphImageScheme);
-    canvas->SetWatermarkLogo(m_waterMarkImage, wxSize(100, 100));
-    canvas->SetWatermark(GetWatermark());
     graph->GetBottomXAxis().GetFont() = GetXAxisFont();
     graph->GetBottomXAxis().SetFontColor(GetXAxisFontColor());
     graph->GetBottomXAxis().GetTitle().GetFont() = GetXAxisFont();
@@ -1637,8 +1641,12 @@ void BaseProjectDoc::LoadSettingsFile(const wchar_t* settingsFileText)
                                                ReadabilityAppOptions::XML_SHOWCASE_KEY_ITEMS.data(),
                                                wxGetApp().GetAppOptions()->IsShowcasingKeyItems()));
 
-        SetWatermark(XmlFormat::GetString(graphsSection, graphsSectionEnd,
-                                          ReadabilityAppOptions::XML_GRAPH_WATERMARK.data()));
+        // this option really applies to all windows, but is in the graph section for legacy reasons
+        auto currentWaterMark = GetWatermark();
+        currentWaterMark.m_label = XmlFormat::GetString(
+            graphsSection, graphsSectionEnd, ReadabilityAppOptions::XML_GRAPH_WATERMARK.data());
+        SetWatermark(currentWaterMark);
+
         SetWatermarkLogoPath(XmlFormat::GetString(
             graphsSection, graphsSectionEnd,
             ReadabilityAppOptions::XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data()));
@@ -2850,7 +2858,7 @@ wxString BaseProjectDoc::FormatProjectSettings() const
     fileText += sectionText;
     // watermarks
     XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_GRAPH_WATERMARK.data(),
-                             GetWatermark(), 2);
+                             GetWatermark().m_label, 2);
     fileText += sectionText;
     XmlFormat::FormatSection(sectionText,
                              ReadabilityAppOptions::XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data(),

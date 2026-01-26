@@ -477,12 +477,6 @@ class ToolsOptionsDlg final : public wxDialog
         }
 
     [[nodiscard]]
-    static wxString GetWatermarkLabel()
-        {
-        return _(L"Watermark");
-        }
-
-    [[nodiscard]]
     static wxString GetLogoImageLabel()
         {
         return _(L"Logo image");

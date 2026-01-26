@@ -138,6 +138,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnOpenDocument([[maybe_unused]] wxCommandEvent& event);
     void OnPaste([[maybe_unused]] wxCommandEvent& event);
     void OnPrinterHeaderFooter([[maybe_unused]] wxCommandEvent& event);
+    void OnPrintWatermark([[maybe_unused]] wxCommandEvent& event);
     void OnBlankGraph(const wxCommandEvent& event);
     void OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnViewLogReport([[maybe_unused]] wxRibbonButtonBarEvent& event);

@@ -1446,7 +1446,7 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(GetActiveProjectWindow());
         /* just in case this is a print or preview command, update the window's headers
            and footer to whatever the global options currently are*/
-        BaseProjectDoc::UpdateListOptions(list);
+        doc->UpdateListOptions(list);
         // in case we are exporting the window, set its label to include the name of the document,
         // and then reset it
         list->SetLabel(wxString::Format(L"%s [%s]", list->GetName(),
@@ -1569,7 +1569,7 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
              GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
         {
         auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(GetActiveProjectWindow());
-        BaseProjectDoc::UpdatePrinterHeaderAndFooters(html);
+        doc->UpdatePrinterSettings(html);
         html->SetLabel(wxString::Format(L"%s [%s]", html->GetName(),
                                         wxFileName::StripExtension(doc->GetTitle())));
         const ParentEventBlocker blocker(html);
@@ -1589,7 +1589,7 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
              GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ExplanationListCtrl)))
         {
         auto* elist = dynamic_cast<ExplanationListCtrl*>(GetActiveProjectWindow());
-        BaseProjectDoc::UpdateExplanationListOptions(elist);
+        doc->UpdateExplanationListOptions(elist);
         elist->SetLabel(wxString::Format(L"%s [%s]", elist->GetName(),
                                          wxFileName::StripExtension(doc->GetTitle())));
         const ParentEventBlocker blocker(elist);
@@ -3190,15 +3190,16 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                              htmlEncode({ canvas->GetName().wc_str() }, true).c_str()));
     };
 
-    const auto formatList = [&outputText, &htmlEncode, &sectionCounter, &tableCounter, pageBreak](
-                                Wisteria::UI::ListCtrlEx* list, const bool includeLeadingPageBreak)
+    const auto formatList =
+        [&doc, &outputText, &htmlEncode, &sectionCounter, &tableCounter,
+         pageBreak](Wisteria::UI::ListCtrlEx* list, const bool includeLeadingPageBreak)
     {
         if (list == nullptr)
             {
             return;
             }
 
-        BaseProjectDoc::UpdateListOptions(list);
+        doc->UpdateListOptions(list);
         wxString buffer;
         list->FormatToHtml(
             buffer, true, Wisteria::UI::ListCtrlEx::ExportRowSelection::ExportAll, 0, -1, 0, -1,

@@ -1812,10 +1812,10 @@ class ReadabilityAppOptions
         }
 
     /// water mark functions
-    void SetWatermark(const wxString& watermark) { m_watermark = watermark; }
+    void SetWatermark(const Wisteria::Canvas::Watermark& watermark) { m_watermark = watermark; }
 
     [[nodiscard]]
-    wxString GetWatermark() const
+    Wisteria::Canvas::Watermark GetWatermark() const
         {
         return m_watermark;
         }
@@ -2747,7 +2747,7 @@ class ReadabilityAppOptions
     bool m_showcaseKeyItems{ false };
     wxString m_graphColorSchemeName{ _DT(L"campfire") };
     wxString m_plotBackGroundImagePath;
-    wxString m_watermark;
+    Wisteria::Canvas::Watermark m_watermark;
     wxString m_watermarkImg;
     wxColour m_graphBackGroundColor{ wxColour{ 255, 255, 255 } };
     wxColour m_plotBackGroundColor{ wxColour{ 255, 255, 255 } };

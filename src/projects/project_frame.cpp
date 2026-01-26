@@ -170,8 +170,6 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          XRCID("ID_INCOMPLETE_THRESHOLD"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnDropShadow, this,
          XRCID("ID_DROP_SHADOW"));
-    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnGraphWatermark, this,
-         XRCID("ID_EDIT_WATERMARK"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnGraphLogo, this,
          XRCID("ID_EDIT_LOGO"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnEnglishLabels, this,
@@ -187,6 +185,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnInvalidRegionColor, this,
          XRCID("ID_INVALID_REGION_COLOR"));
     // menus
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnPrintWatermark, this, XRCID("ID_EDIT_WATERMARK"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnRaygorStyleSelected, this,
          XRCID("ID_EDIT_GRAPH_RAYGOR_ORIGINAL"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnRaygorStyleSelected, this,
@@ -1671,19 +1670,25 @@ void ProjectDocChildFrame::OnGraphLogo([[maybe_unused]] wxRibbonButtonBarEvent& 
     }
 
 //---------------------------------------------------
-void ProjectDocChildFrame::OnGraphWatermark([[maybe_unused]] wxRibbonButtonBarEvent& event)
+void ProjectDocChildFrame::OnPrintWatermark([[maybe_unused]] wxCommandEvent& event)
     {
-    wxTextEntryDialog textDlg(
-        this,
-        _(L"Enter watermark:\n\n(Note that the tags @DATETIME@, @DATE@, and @TIME@ can be used\n"
-          "to dynamically expand into the current date and time.)"),
-        _(L"Watermark"), dynamic_cast<BaseProjectDoc*>(GetDocument())->GetWatermark(),
-        wxTextEntryDialogStyle | wxTE_MULTILINE);
-    if (textDlg.ShowModal() == wxID_OK)
+    auto doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
+    if (doc != nullptr)
         {
-        dynamic_cast<BaseProjectDoc*>(GetDocument())->SetWatermark(textDlg.GetValue());
-        dynamic_cast<BaseProjectDoc*>(GetDocument())->RefreshRequired(ProjectRefresh::Minimal);
-        dynamic_cast<BaseProjectDoc*>(GetDocument())->RefreshGraphs();
+        wxTextEntryDialog textDlg(this,
+                                  _(L"Enter watermark:\n\n(Note that the tags @DATETIME@, @DATE@, "
+                                    "and @TIME@ can be used\n"
+                                    "to dynamically expand into the current date and time.)"),
+                                  _(L"Watermark"), doc->GetWatermark().m_label,
+                                  wxTextEntryDialogStyle | wxTE_MULTILINE);
+        if (textDlg.ShowModal() == wxID_OK)
+            {
+            auto watermark = doc->GetWatermark();
+            watermark.m_label = textDlg.GetValue();
+            doc->SetWatermark(watermark);
+            doc->RefreshRequired(ProjectRefresh::Minimal);
+            doc->RefreshGraphs();
+            }
         }
     }
 

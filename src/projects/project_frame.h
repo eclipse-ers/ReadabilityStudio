@@ -243,8 +243,6 @@ class ProjectDocChildFrame : public wxDocChildFrame
 
     void OnEditDictionaryButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
-    void OnGraphWatermark([[maybe_unused]] wxRibbonButtonBarEvent& event);
-
     void OnIgnoreCopyrights([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
     void OnIgnoreBlankLines([[maybe_unused]] wxRibbonButtonBarEvent& event);
@@ -274,6 +272,8 @@ class ProjectDocChildFrame : public wxDocChildFrame
     void OnBoxPlotShowAllPointsButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
     void OnBoxPlotShowLabelsButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
+
+    void OnPrintWatermark([[maybe_unused]] wxCommandEvent& event);
 
     void OnAddCustomTestBundle(wxCommandEvent& event);
 

@@ -191,7 +191,6 @@ void WordListDlg::AddSingleColumnPage(
                           std::numeric_limits<double>::quiet_NaN());
         }
     list->DistributeColumns();
-    BaseProjectDoc::UpdateListOptions(list);
 
     panelSizer->Add(list, wxSizerFlags{ 1 }.Expand());
     }
@@ -326,7 +325,6 @@ void WordListDlg::CreateControls()
             }
         list->SetVirtualDataSize(currentDolchItem);
         list->DistributeColumns();
-        BaseProjectDoc::UpdateListOptions(list);
 
         panelSizer->Add(list, wxSizerFlags{ 1 }.Expand());
         }

@@ -1423,8 +1423,6 @@ bool ToolsOptionsDlg::HaveGraphOptionsChanged() const
            // general
            (IsPropertyAvailable(m_generalGraphPropertyGrid, GetGraphColorSchemeLabel()) &&
             m_generalGraphPropertyGrid->IsPropertyModified(GetGraphColorSchemeLabel())) ||
-           (IsPropertyAvailable(m_generalGraphPropertyGrid, GetWatermarkLabel()) &&
-            m_generalGraphPropertyGrid->IsPropertyModified(GetWatermarkLabel())) ||
            (IsPropertyAvailable(m_generalGraphPropertyGrid, GetLogoImageLabel()) &&
             m_generalGraphPropertyGrid->IsPropertyModified(GetLogoImageLabel())) ||
            (IsPropertyAvailable(m_generalGraphPropertyGrid, GetBackgroundColorFadeLabel()) &&
@@ -2296,11 +2294,6 @@ void ToolsOptionsDlg::SaveGlobalOptions()
             wxGetApp().GetAppOptions()->SetPlotBackGroundImageOpacity(static_cast<uint8_t>(
                 m_generalGraphPropertyGrid->GetPropertyValueAsInt(GetImageOpacityLabel())));
             }
-        if (IsPropertyAvailable(m_generalGraphPropertyGrid, GetWatermarkLabel()))
-            {
-            wxGetApp().GetAppOptions()->SetWatermark(
-                m_generalGraphPropertyGrid->GetPropertyValueAsString(GetWatermarkLabel()));
-            }
         if (IsPropertyAvailable(m_generalGraphPropertyGrid, GetLogoImageLabel()))
             {
             wxGetApp().GetAppOptions()->SetWatermarkLogo(
@@ -3033,11 +3026,6 @@ void ToolsOptionsDlg::SaveProjectGraphOptions()
             {
             m_readabilityProjectDoc->SetPlotBackGroundImageOpacity(static_cast<uint8_t>(
                 m_generalGraphPropertyGrid->GetPropertyValueAsInt(GetImageOpacityLabel())));
-            }
-        if (IsPropertyAvailable(m_generalGraphPropertyGrid, GetWatermarkLabel()))
-            {
-            m_readabilityProjectDoc->SetWatermark(
-                m_generalGraphPropertyGrid->GetPropertyValueAsString(GetWatermarkLabel()));
             }
         if (IsPropertyAvailable(m_generalGraphPropertyGrid, GetLogoImageLabel()))
             {
@@ -5656,17 +5644,7 @@ void ToolsOptionsDlg::CreateGraphGeneralSection()
     m_generalGraphPropertyGrid->SetPropertyHelpString(
         GetWatermarksLogosLabel(), _(L"The options in this section customize the watermarks and "
                                      "logo images of the graphs."));
-    // watermark
-    m_generalGraphPropertyGrid->Append(new wxStringProperty(
-        GetWatermarkLabel(), wxPG_LABEL,
-        ((m_readabilityProjectDoc != nullptr) ? m_readabilityProjectDoc->GetWatermark() :
-                                                wxGetApp().GetAppOptions()->GetWatermark())));
-    m_generalGraphPropertyGrid->SetPropertyAttribute(GetWatermarkLabel(), wxPG_ATTR_HINT,
-                                                     _(L"Enter text"));
-    m_generalGraphPropertyGrid->SetPropertyHelpString(
-        GetWatermarkLabel(), _(L"Enter a label to be stamped across your graphs into this field. "
-                               "This label will be stamped diagonally, top left-hand corner to "
-                               "bottom right-hand corner."));
+
     // logo
     auto* graphLogo = new wxImageFileProperty(GetLogoImageLabel(), wxPG_LABEL,
                                               ((m_readabilityProjectDoc != nullptr) ?

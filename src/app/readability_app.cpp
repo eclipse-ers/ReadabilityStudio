@@ -1785,6 +1785,9 @@ void ReadabilityApp::FillPrintMenu(wxMenu& printMenu, const RibbonType rtype)
         new wxMenuItem(&printMenu, XRCID("ID_PRINTER_HEADER_FOOTER"), _(L"Headers && Footers..."));
     item->SetBitmap(GetResourceManager().GetSVG(L"ribbon/print-header-footer.svg"));
     printMenu.Append(item);
+    item = new wxMenuItem(&printMenu, XRCID("ID_EDIT_WATERMARK"), _(L"Watermark..."));
+    item->SetBitmap(GetResourceManager().GetSVG(L"ribbon/watermark.svg"));
+    printMenu.Append(item);
     }
 
 //-----------------------------------
@@ -1969,9 +1972,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2009,9 +2009,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2052,9 +2049,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2086,9 +2080,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2123,9 +2114,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2164,9 +2152,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
 
@@ -2199,9 +2184,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
 
@@ -2225,9 +2207,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_DROP_SHADOW"), _(L"Shadows"),
@@ -2257,9 +2236,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_USE_ENGLISH_LABELS"), _(L"English Labels"),
@@ -2285,9 +2261,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddButton(XRCID("ID_INVALID_REGION_COLOR"), _(L"Invalid Region"),
@@ -2322,9 +2295,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddButton(XRCID("ID_INVALID_REGION_COLOR"), _(L"Invalid Region"),
@@ -2350,9 +2320,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
         editButtonBar->AddToggleButton(XRCID("ID_FLESCH_DISPLAY_LINES"), _(L"Connect Points"),
@@ -2381,9 +2348,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
 
@@ -2410,9 +2374,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
 
@@ -2436,9 +2397,6 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_FONTS"), _(L"Font"),
                                          ReadSvgIcon(L"ribbon/font.svg"),
                                          _(L"Change the graph's fonts."));
-        editButtonBar->AddButton(XRCID("ID_EDIT_WATERMARK"), _(L"Watermark"),
-                                 ReadSvgIcon(L"ribbon/watermark.svg"),
-                                 _(L"Add a watermark to the graph."));
         editButtonBar->AddButton(XRCID("ID_EDIT_LOGO"), _(L"Logo"), ReadSvgIcon(L"ribbon/logo.svg"),
                                  _(L"Add a logo to the graph."));
 
@@ -3104,7 +3062,6 @@ void MainFrame::OnViewProfileReport([[maybe_unused]] wxRibbonButtonBarEvent& eve
     profileReportDialog.GetListCtrl()->InsertColumn(4, _DT(L"Lowest Call Time"));
     profileReportDialog.GetListCtrl()->InsertColumn(5, _DT(L"Highest Call Time"));
     profileReportDialog.GetListCtrl()->InsertColumn(6, _DT(L"Average Call Time"));
-    BaseProjectDoc::UpdateListOptions(profileReportDialog.GetListCtrl());
 
     wxString filePath = wxGetApp().GetProfileReportPath();
     wxString buffer;
@@ -3184,8 +3141,6 @@ void MainFrame::OnViewLogReport([[maybe_unused]] wxRibbonButtonBarEvent& event)
     // fit the columns
     m_logWindow->GetListCtrl()->DistributeColumns(-1);
 
-    BaseProjectDoc::UpdateListOptions(m_logWindow->GetListCtrl());
-
     m_logWindow->Show();
     m_logWindow->SetFocus();
     }
@@ -3220,7 +3175,6 @@ void MainFrame::OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event)
     testsOverviewDlg.GetListCtrl()->InsertColumn(7, _(L"Description"));
     testsOverviewDlg.GetListCtrl()->SetVirtualDataSize(
         BaseProject::GetDefaultReadabilityTestsTemplate().get_tests().size(), 8);
-    BaseProjectDoc::UpdateListOptions(testsOverviewDlg.GetListCtrl());
     size_t i = 0;
     for (auto testPos = BaseProject::GetDefaultReadabilityTestsTemplate().get_tests().begin();
          testPos != BaseProject::GetDefaultReadabilityTestsTemplate().get_tests().end();
@@ -3711,6 +3665,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
 
     // print and paste
     Bind(wxEVT_MENU, &MainFrame::OnPrinterHeaderFooter, this, XRCID("ID_PRINTER_HEADER_FOOTER"));
+    Bind(wxEVT_MENU, &MainFrame::OnPrintWatermark, this, XRCID("ID_EDIT_WATERMARK"));
     Bind(wxEVT_MENU, &MainFrame::OnPaste, this, wxID_PASTE);
 
     // blank graph menu
@@ -5065,6 +5020,23 @@ void MainFrame::OnPrinterHeaderFooter([[maybe_unused]] wxCommandEvent& event)
         wxGetApp().GetAppOptions()->SetLeftPrinterFooter(dlg.GetLeftPrinterFooter());
         wxGetApp().GetAppOptions()->SetCenterPrinterFooter(dlg.GetCenterPrinterFooter());
         wxGetApp().GetAppOptions()->SetRightPrinterFooter(dlg.GetRightPrinterFooter());
+        }
+    }
+
+//---------------------------------------------------
+void MainFrame::OnPrintWatermark([[maybe_unused]] wxCommandEvent& event)
+    {
+    wxTextEntryDialog textDlg(this,
+                              _(L"Enter watermark:\n\n(Note that the tags @DATETIME@, @DATE@, "
+                                L"and @TIME@ can be used\n"
+                                "to dynamically expand into the current date and time.)"),
+                              _(L"Watermark"), wxGetApp().GetAppOptions()->GetWatermark().m_label,
+                              wxTextEntryDialogStyle | wxTE_MULTILINE);
+    if (textDlg.ShowModal() == wxID_OK)
+        {
+        auto watermark = wxGetApp().GetAppOptions()->GetWatermark();
+        watermark.m_label = textDlg.GetValue();
+        wxGetApp().GetAppOptions()->SetWatermark(watermark);
         }
     }
 

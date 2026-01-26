@@ -2254,15 +2254,16 @@ bool BatchProjectView::ExportAllToHtml(
                     .c_str()));
     };
 
-    const auto formatList = [&outputText, &htmlEncode, &sectionCounter, &tableCounter, pageBreak](
-                                Wisteria::UI::ListCtrlEx* list, const bool includeLeadingPageBreak)
+    const auto formatList =
+        [&doc, &outputText, &htmlEncode, &sectionCounter, &tableCounter,
+         pageBreak](Wisteria::UI::ListCtrlEx* list, const bool includeLeadingPageBreak)
     {
         if (list == nullptr)
             {
             return;
             }
 
-        BaseProjectDoc::UpdateListOptions(list);
+        doc->UpdateListOptions(list);
         wxString buffer;
         list->FormatToHtml(
             buffer, true, Wisteria::UI::ListCtrlEx::ExportRowSelection::ExportAll, 0, -1, 0, -1,
@@ -3183,8 +3184,7 @@ void BatchProjectView::OnMenuCommand(wxCommandEvent& event)
         {
         /* just in case this is a print or preview command, update the window's headers
            and footer to whatever the global options currently are.*/
-        BaseProjectDoc::UpdateListOptions(
-            dynamic_cast<Wisteria::UI::ListCtrlEx*>(GetActiveProjectWindow()));
+        doc->UpdateListOptions(dynamic_cast<Wisteria::UI::ListCtrlEx*>(GetActiveProjectWindow()));
 
         // in case we are exporting the window, set its label to include
         // the name of the document, and then reset it

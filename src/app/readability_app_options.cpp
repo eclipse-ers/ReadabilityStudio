@@ -484,7 +484,6 @@ void ReadabilityAppOptions::ResetSettings()
     m_showcaseKeyItems = false;
     m_plotBackGroundImagePath.clear();
     m_graphColorSchemeName = _DT(L"campfire");
-    m_watermark.clear();
     m_watermarkImg.clear();
     m_graphBackGroundColor = wxColour(255, 255, 255);
     m_plotBackGroundColor = wxColour(255, 255, 255);
@@ -550,6 +549,8 @@ void ReadabilityAppOptions::ResetSettings()
     m_leftPrinterFooter.clear();
     m_centerPrinterFooter.clear();
     m_rightPrinterFooter.clear();
+
+    m_watermark = Wisteria::Canvas::Watermark{};
     // test inclusion options
     m_includeScoreSummaryReport = true;
     // test options
@@ -876,6 +877,10 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             {
             SetRightPrinterFooter(TiXmlNodeAttributeToString(printerNode, XML_VALUE.data()));
             }
+        auto currentWaterMark = GetWatermark();
+        currentWaterMark.m_label = std::move(TiXmlNodeAttributeToString(
+            printerSettingsNode->FirstChildElement(XML_GRAPH_WATERMARK.data()), XML_VALUE.data()));
+        SetWatermark(currentWaterMark);
         }
     // editor settings
     auto* editorSettingsNode = configRootNode->FirstChildElement(XML_EDITOR.data());
@@ -1952,10 +1957,17 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                 ShowcaseKeyItems(int_to_bool(showcaseComplexWordsNode->ToElement()->IntAttribute(
                     XML_VALUE.data(), bool_to_int(IsShowcasingKeyItems()))));
                 }
-            // watermarks
-            SetWatermark(TiXmlNodeAttributeToString(
-                graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK.data()),
-                XML_VALUE.data()));
+            // watermark used to be stored with the graphs info, so read that legacy value
+            // if upgrading a settings file
+            wxString legacyWatermark = TiXmlNodeAttributeToString(
+                graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK.data()), XML_VALUE.data());
+            if (!legacyWatermark.empty())
+                {
+                auto currentWaterMark = GetWatermark();
+                currentWaterMark.m_label = std::move(legacyWatermark);
+                SetWatermark(currentWaterMark);
+                }
+
             SetWatermarkLogo(TiXmlNodeAttributeToString(
                 graphDefaultsNode->FirstChildElement(XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data()),
                 XML_VALUE.data()));
@@ -3054,7 +3066,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
 
     auto* userAgent = doc.NewElement(XML_USER_AGENT.data());
     userAgent->SetAttribute(
-        XML_VALUE.data(), wxString(ENCODE({ GetUserAgent().wc_str() }, false).c_str()).utf8_str());
+        XML_VALUE.data(), wxString(ENCODE({ GetUserAgent().wc_str() }, false)).utf8_str());
     configSection->InsertEndChild(userAgent);
 
     auto* downloadReplaceExistingNode = doc.NewElement(XML_DOWNLOAD_REPLACE_EXISTING.data());
@@ -3093,24 +3105,24 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* projectPath = doc.NewElement(XML_FILE_OPEN_PROJECT_PATH.data());
     projectPath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetProjectPath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetProjectPath().wc_str() }, false)).utf8_str());
     filePaths->InsertEndChild(projectPath);
     // image path
     auto* imagePath = doc.NewElement(XML_FILE_OPEN_IMAGE_PATH.data());
     imagePath->SetAttribute(
-        XML_VALUE.data(), wxString(ENCODE({ GetImagePath().wc_str() }, false).c_str()).utf8_str());
+        XML_VALUE.data(), wxString(ENCODE({ GetImagePath().wc_str() }, false)).utf8_str());
     filePaths->InsertEndChild(imagePath);
     // downloads path
     auto* downloadsPath = doc.NewElement(XML_DOWNLOADS_PATH.data());
     downloadsPath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetDownloadsPath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetDownloadsPath().wc_str() }, false)).utf8_str());
     filePaths->InsertEndChild(downloadsPath);
     // word list path
     auto* wordlistPath = doc.NewElement(XML_FILE_OPEN_WORDLIST_PATH.data());
     wordlistPath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetWordListPath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetWordListPath().wc_str() }, false)).utf8_str());
     filePaths->InsertEndChild(wordlistPath);
 
     configSection->InsertEndChild(filePaths);
@@ -3203,34 +3215,39 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* printerLeftHeader = doc.NewElement(XML_PRINTER_LEFT_HEADER.data());
     printerLeftHeader->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetLeftPrinterHeader().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetLeftPrinterHeader().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerLeftHeader);
     auto* printerCenterHeader = doc.NewElement(XML_PRINTER_CENTER_HEADER.data());
     printerCenterHeader->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetCenterPrinterHeader().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetCenterPrinterHeader().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerCenterHeader);
     auto* printerRightHeader = doc.NewElement(XML_PRINTER_RIGHT_HEADER.data());
     printerRightHeader->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetRightPrinterHeader().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetRightPrinterHeader().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerRightHeader);
     // footers
     auto* printerLeftFooter = doc.NewElement(XML_PRINTER_LEFT_FOOTER.data());
     printerLeftFooter->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetLeftPrinterFooter().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetLeftPrinterFooter().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerLeftFooter);
     auto* printerCenterFooter = doc.NewElement(XML_PRINTER_CENTER_FOOTER.data());
     printerCenterFooter->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetCenterPrinterFooter().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetCenterPrinterFooter().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerCenterFooter);
     auto* printerRightFooter = doc.NewElement(XML_PRINTER_RIGHT_FOOTER.data());
     printerRightFooter->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetRightPrinterFooter().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetRightPrinterFooter().wc_str() }, false)).utf8_str());
     printerSection->InsertEndChild(printerRightFooter);
+    auto* printerWatermark = doc.NewElement(XML_GRAPH_WATERMARK.data());
+    printerWatermark->SetAttribute(
+        XML_VALUE.data(),
+        wxString(ENCODE({ GetWatermark().m_label.wc_str() }, false)).utf8_str());
+    printerSection->InsertEndChild(printerWatermark);
     configSection->InsertEndChild(printerSection);
 
         // editor section
@@ -3252,7 +3269,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
                            bool_to_int(m_editorFont.GetUnderlined()));
         font->SetAttribute(
             XmlFormat::FONT_FACE_NAME_TAG.data(),
-            wxString(ENCODE({ m_editorFont.GetFaceName().wc_str() }, false).c_str()).utf8_str());
+            wxString(ENCODE({ m_editorFont.GetFaceName().wc_str() }, false)).utf8_str());
         editorSection->InsertEndChild(font);
 
         auto* indent = doc.NewElement(XML_EDITOR_INDENT.data());
@@ -3281,7 +3298,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     // reviewer and status
     auto* docReviewer = doc.NewElement(XML_REVIEWER.data());
     docReviewer->SetAttribute(
-        XML_VALUE.data(), wxString(ENCODE({ GetReviewer().wc_str() }, false).c_str()).utf8_str());
+        XML_VALUE.data(), wxString(ENCODE({ GetReviewer().wc_str() }, false)).utf8_str());
     projectSettings->InsertEndChild(docReviewer);
 
     auto* realTimeRefresh = doc.NewElement(XML_REALTIME_UPDATE.data());
@@ -3292,7 +3309,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* appendedDocPath = doc.NewElement(XML_APPENDED_DOC_PATH.data());
     appendedDocPath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetAppendedDocumentFilePath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetAppendedDocumentFilePath().wc_str() }, false)).utf8_str());
     projectSettings->InsertEndChild(appendedDocPath);
 
     // document storage/linking
@@ -3436,7 +3453,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* excludedPhrasesFilePath = doc.NewElement(XML_EXCLUDED_PHRASES_PATH.data());
     excludedPhrasesFilePath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetExcludedPhrasesPath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetExcludedPhrasesPath().wc_str() }, false)).utf8_str());
     documentAnalysisSection->InsertEndChild(excludedPhrasesFilePath);
 
     // exclusion block tags
@@ -3762,13 +3779,13 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* graphColorScheme = doc.NewElement(XML_GRAPH_COLOR_SCHEME.data());
     graphColorScheme->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetGraphColorScheme().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetGraphColorScheme().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(graphColorScheme);
     // background image
     auto* graphBackgroundImage = doc.NewElement(XML_GRAPH_PLOT_BACKGROUND_IMAGE_PATH.data());
     graphBackgroundImage->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetPlotBackGroundImagePath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetPlotBackGroundImagePath().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(graphBackgroundImage);
 
     auto* backgroundImageEffect = doc.NewElement(XML_GRAPH_PLOT_BACKGROUND_IMAGE_EFFECT.data());
@@ -3818,19 +3835,19 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* stipplePath = doc.NewElement(XML_GRAPH_STIPPLE_PATH.data());
     stipplePath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetStippleImagePath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetStippleImagePath().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(stipplePath);
     // common image path
     auto* commonImagePath = doc.NewElement(XML_GRAPH_COMMON_IMAGE_PATH.data());
     commonImagePath->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetGraphCommonImagePath().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetGraphCommonImagePath().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(commonImagePath);
     // stipple shape
     auto* stippleShape = doc.NewElement(XML_GRAPH_STIPPLE_SHAPE.data());
     stippleShape->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetStippleShape().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetStippleShape().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(stippleShape);
 
     if (GetStippleShapeColor().IsOk())
@@ -3855,13 +3872,8 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* graphWatermarkLogo = doc.NewElement(XML_GRAPH_WATERMARK_LOGO_IMAGE_PATH.data());
     graphWatermarkLogo->SetAttribute(
         XML_VALUE.data(),
-        wxString(ENCODE({ GetWatermarkLogo().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetWatermarkLogo().wc_str() }, false)).utf8_str());
     graphDefaultsSection->InsertEndChild(graphWatermarkLogo);
-
-    auto* graphWatermark = doc.NewElement(XML_GRAPH_WATERMARK.data());
-    graphWatermark->SetAttribute(
-        XML_VALUE.data(), wxString(ENCODE({ GetWatermark().wc_str() }, false).c_str()).utf8_str());
-    graphDefaultsSection->InsertEndChild(graphWatermark);
 
     // histogram settings
     auto* histogramSettings = doc.NewElement(XML_HISTOGRAM_SETTINGS.data());
@@ -4013,7 +4025,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
                             bool_to_int(GetXAxisFont().GetUnderlined()));
     xAxisFont->SetAttribute(
         XmlFormat::FONT_FACE_NAME_TAG.data(),
-        wxString(ENCODE({ GetXAxisFont().GetFaceName().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetXAxisFont().GetFaceName().wc_str() }, false)).utf8_str());
     // put it all together
     xAxis->InsertEndChild(xAxisFontColor);
     xAxis->InsertEndChild(xAxisFont);
@@ -4037,7 +4049,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
                             bool_to_int(GetYAxisFont().GetUnderlined()));
     yAxisFont->SetAttribute(
         XmlFormat::FONT_FACE_NAME_TAG.data(),
-        wxString(ENCODE({ GetYAxisFont().GetFaceName().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ GetYAxisFont().GetFaceName().wc_str() }, false)).utf8_str());
     // put it all together
     yAxis->InsertEndChild(yAxisFontColor);
     yAxis->InsertEndChild(yAxisFont);
@@ -4301,7 +4313,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         auto* customTest = doc.NewElement(XML_CUSTOM_TEST.data());
         customTest->SetAttribute(
             XML_VALUE.data(),
-            wxString(ENCODE({ includedCustomTest.wc_str() }, false).c_str()).utf8_str());
+            wxString(ENCODE({ includedCustomTest.wc_str() }, false)).utf8_str());
         readabilityTestSection->InsertEndChild(customTest);
         }
     projectSettings->InsertEndChild(readabilityTestSection);
@@ -4430,7 +4442,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
                        bool_to_int(m_textViewFont.GetUnderlined()));
     font->SetAttribute(
         XmlFormat::FONT_FACE_NAME_TAG.data(),
-        wxString(ENCODE({ m_textViewFont.GetFaceName().wc_str() }, false).c_str()).utf8_str());
+        wxString(ENCODE({ m_textViewFont.GetFaceName().wc_str() }, false)).utf8_str());
     textViewsSection->InsertEndChild(font);
 
     projectSettings->InsertEndChild(textViewsSection);
@@ -4624,8 +4636,6 @@ void ReadabilityAppOptions::UpdateGraphOptions(Wisteria::Canvas* graphCanvas)
 
     plot->SetStippleBrush(m_graphStippleImage);
     plot->SetImageScheme(m_graphImageScheme);
-    graphCanvas->SetWatermarkLogo(m_waterMarkImage, wxSize(100, 100));
-    graphCanvas->SetWatermark(GetWatermark());
     plot->GetBottomXAxis().SetFont(GetXAxisFont());
     plot->GetBottomXAxis().SetFontColor(GetXAxisFontColor());
     plot->GetLeftYAxis().SetFont(GetYAxisFont());

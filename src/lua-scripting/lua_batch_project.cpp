@@ -1499,8 +1499,9 @@ namespace LuaScripting
             {
             return 0;
             }
-
-        m_project->SetWatermark(wxString{ luaL_checkstring(L, 2), wxConvUTF8 });
+        auto watermark = m_project->GetWatermark();
+        watermark.m_label = wxString{ luaL_checkstring(L, 2), wxConvUTF8 };
+        m_project->SetWatermark(watermark);
         ReloadIfNotDelayedSimple();
         return 0;
         }
@@ -1513,7 +1514,7 @@ namespace LuaScripting
             return 0;
             }
 
-        lua_pushstring(L, m_project->GetWatermark().utf8_str());
+        lua_pushstring(L, m_project->GetWatermark().m_label.utf8_str());
         return 1;
         }
 
