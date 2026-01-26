@@ -880,6 +880,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
         auto currentWaterMark = GetWatermark();
         currentWaterMark.m_label = std::move(TiXmlNodeAttributeToString(
             printerSettingsNode->FirstChildElement(XML_GRAPH_WATERMARK.data()), XML_VALUE.data()));
+        string_util::remove_blank_lines(currentWaterMark.m_label);
         SetWatermark(currentWaterMark);
         }
     // editor settings
