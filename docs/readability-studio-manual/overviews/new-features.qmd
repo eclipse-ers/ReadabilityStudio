@@ -20,8 +20,9 @@ source('../R/appdown.r')
 - Added document's last modified time to the summary statistics (standard projects).
 - **Web Harvester** improvements:
   - Previous download folder is now saved.
-- `@USER@` placeholder can now be entered in printer headers and footers.
+- `@USER@` placeholder can now be entered in printer headers, footers, and watermarks.
   (This will expand into the user name currently logged into the computer.)
+- `@DATETIME@` placeholder can now be entered in printer headers and footers.
 - All result windows now support printing watermarks, not just graphs.\
   Note that this option has been moved to the menu under the **Print** button on the ribbon.\
   Also, watermarks on graphs will now only appear when printing or saving graphs.
