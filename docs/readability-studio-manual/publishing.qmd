@@ -364,11 +364,11 @@ To print\index{printing} any window, go to the **Home** tab and click the `r key
 Clicking the arrow beneath the `r keys("Print")` button will open a menu containing additional printing options.
 For example, to change the paper size or orientation of your printouts, select **Page Setup** from this menu.
 
-To add headers or footers to your printouts, select **Headers & Footers** from this menu.
+To add headers or footers to your printouts, select **Headers & Footers...** from this menu.
 
-Headers and footers support placeholder tags for items such as page, date, and time information.
+Headers and footers support placeholders for items such as page, date, and time information.
 These tags are expanded dynamically when printing takes place.
-These tags are:
+These include:
 
 - `@TITLE@`: The title of the printed document.
 - `@DATE@`: The date when it was printed.
@@ -386,3 +386,14 @@ may expand to:
 > *1 (of 7 pages)*
 
 Custom values can also be entered here (e.g., the editor's name).
+
+Finally, a watermark can be stamped across each page when you print (e.g., *CONFIDENTIAL* or your company name).
+
+To do this, select **Watermark...** from the menu, enter a label, and click `r keys("OK")`.
+
+Note that watermarks support the following placeholders:
+
+- `@DATE@`: The date when it was printed.
+- `@TIME@`: The time when it was printed.
+- `@DATETIME@`: The date and time when it was printed.
+- `@USER@`: The user name currently logged into the computer.

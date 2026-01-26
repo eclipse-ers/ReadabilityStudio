@@ -91,7 +91,7 @@ Click the `r keys("Background")` button and select `r menu(c('Plot Image', 'Effe
 ## Adding Watermarks and Logos {#sec-graph-watermark-example}
 
 Next, let's put a [watermark](#sec-options-graphs) across our graph.
-Click the `r keys("Watermark")` button in the **Edit** section.
+On the **Home** tab, click `r menu(c('Print', 'Watermark...'))`
 Enter the following into the **Watermark** dialog and click `r keys("OK")`:
 
 > INTERNAL USE ONLY
@@ -104,7 +104,11 @@ Note how this label is now lightly written across the graph:
 
 ::: {.tipsection data-latex=""}
 Entering `@DATE@` in the watermark field will show the current date when the graph is rendered.
-Refer to @sec-options-graphs for other watermark options.
+Refer to @sec-printing for other watermark options.
+:::
+
+::: {.tipsection data-latex=""}
+The watermark will be embedded in your project; this will ensure that it is portable when sharing with others.
 :::
 
 Now let's put a company logo on our graph.

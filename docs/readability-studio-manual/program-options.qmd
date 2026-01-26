@@ -958,15 +958,7 @@ The following options can be used to fit the image to the plot background:
 **Shrink to fit**: Shrink the image to the plot area, maintaining its aspect ratio.
 ::::
 
-#### Watermarks & Logos {-}
-
-**Watermark**: Enter a label to be stamped across your graphs into this field.
-This label will be stamped diagonally across each graph, top left-hand corner to bottom right-hand corner.
-
-This option is useful for stamping labels such as *CONFIDENTIAL* or your company name onto your graphs.
-
-The tags `@DATETIME@`, `@DATE@`, and `@TIME@` can also be included in these labels.
-These tags expand to their literal values at the time of rendering the graph.
+#### Logos {-}
 
 **Logo image**: Enter the path to the image file used as your graphs' logo into this field.
 The logo will be displayed in the lower right-hand corner of each graph.
@@ -977,7 +969,7 @@ For example, PNG files support transparency and can be used to create logos with
 
 The logo will also be scaled down to a maximum width and height of 100x100 pixels.
 
-Note that watermarks and logos will also appear when you [print](#sec-printing) or [save](#sec-exporting) a graph.
+Note that logos will also appear when you [print](#sec-printing) or [save](#sec-exporting) a graph.
 
 #### Effects {-}
 

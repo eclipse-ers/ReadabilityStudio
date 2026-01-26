@@ -22,6 +22,9 @@ source('../R/appdown.r')
   - Previous download folder is now saved.
 - `@USER@` placeholder can now be entered in printer headers and footers.
   (This will expand into the user name currently logged into the computer.)
+- All result windows now support printing watermarks, not just graphs.\
+  Note that this option has been moved to the menu under the **Print** button on the ribbon.\
+  Also, watermarks on graphs will now only appear when printing or saving graphs.
 - [Command-line options](#sec-command-line-options) have changed.
 
 ### Graph Enhancements {-}
