@@ -1,8 +1,0 @@
-wx/include/wx/osx/core/private.h
-    copy the definition for Print().
-
-wx/include/wx/osx/cocoa/private/textimpl.h
-    copy the definition for Print(), and also NSTextViewWithHeadersAndFooters declaration up top.
-
-wx/src/osx/cocoa/textctrl.mm
-    copy the body for Print(), and also NSTextViewWithHeadersAndFooters implementation up top.

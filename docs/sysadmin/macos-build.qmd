@@ -61,9 +61,6 @@ git clone https://github.com/wxWidgets/wxWidgets.git --recurse-submodules
 
 This should be cloned into a folder next to *{{< var PROGRAM_NAME >}}*.
 
-Before including *wxWidgets* in the build, a patch needs to be applied to add text control features needed by the program.
-Follow the instructions in `r menu(c('wxpatch', 'macOS', 'Instructions.txt'))` to apply the patch.
-
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
 ```{.bash include="build-commands.txt" start-line=11 end-line=20}
@@ -74,7 +71,6 @@ To create a debug build, pass `-DCMAKE_BUILD_TYPE=Debug` during the configuratio
 You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support in debug builds.
 
 If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
-(This is currently necessary for macOS builds.)
 :::
 
 {{< pagebreak >}}
