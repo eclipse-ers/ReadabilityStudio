@@ -1785,6 +1785,133 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK(is_character::is_consonant(L'ჰ')); // h - U+10F0
         CHECK_FALSE(is_character::is_vowel(L'ჰ'));
         }
+
+    // =========================================================================
+    // GREEK LETTER DETECTION (is_greek_letter)
+    // Tests for detecting any Greek letter (uppercase or lowercase)
+    // Used to avoid flagging Greek letters as improper lowercase sentence starts
+    // =========================================================================
+
+    SECTION("Greek Letter Detection Basic Uppercase")
+        {
+        // All 24 Greek uppercase letters: Α-Ρ (U+0391-U+03A1), Σ-Ω (U+03A3-U+03A9)
+        CHECK(is_character::is_greek_letter(L'Α')); // Alpha
+        CHECK(is_character::is_greek_letter(L'Β')); // Beta
+        CHECK(is_character::is_greek_letter(L'Γ')); // Gamma
+        CHECK(is_character::is_greek_letter(L'Δ')); // Delta
+        CHECK(is_character::is_greek_letter(L'Ε')); // Epsilon
+        CHECK(is_character::is_greek_letter(L'Ζ')); // Zeta
+        CHECK(is_character::is_greek_letter(L'Η')); // Eta
+        CHECK(is_character::is_greek_letter(L'Θ')); // Theta
+        CHECK(is_character::is_greek_letter(L'Ι')); // Iota
+        CHECK(is_character::is_greek_letter(L'Κ')); // Kappa
+        CHECK(is_character::is_greek_letter(L'Λ')); // Lambda
+        CHECK(is_character::is_greek_letter(L'Μ')); // Mu
+        CHECK(is_character::is_greek_letter(L'Ν')); // Nu
+        CHECK(is_character::is_greek_letter(L'Ξ')); // Xi
+        CHECK(is_character::is_greek_letter(L'Ο')); // Omicron
+        CHECK(is_character::is_greek_letter(L'Π')); // Pi
+        CHECK(is_character::is_greek_letter(L'Ρ')); // Rho
+        CHECK(is_character::is_greek_letter(L'Σ')); // Sigma
+        CHECK(is_character::is_greek_letter(L'Τ')); // Tau
+        CHECK(is_character::is_greek_letter(L'Υ')); // Upsilon
+        CHECK(is_character::is_greek_letter(L'Φ')); // Phi
+        CHECK(is_character::is_greek_letter(L'Χ')); // Chi
+        CHECK(is_character::is_greek_letter(L'Ψ')); // Psi
+        CHECK(is_character::is_greek_letter(L'Ω')); // Omega
+        }
+    SECTION("Greek Letter Detection Basic Lowercase")
+        {
+        // All 24 Greek lowercase letters: α-ρ (U+03B1-U+03C1), ς, σ-ω (U+03C3-U+03C9)
+        CHECK(is_character::is_greek_letter(L'α')); // alpha
+        CHECK(is_character::is_greek_letter(L'β')); // beta
+        CHECK(is_character::is_greek_letter(L'γ')); // gamma
+        CHECK(is_character::is_greek_letter(L'δ')); // delta
+        CHECK(is_character::is_greek_letter(L'ε')); // epsilon
+        CHECK(is_character::is_greek_letter(L'ζ')); // zeta
+        CHECK(is_character::is_greek_letter(L'η')); // eta
+        CHECK(is_character::is_greek_letter(L'θ')); // theta
+        CHECK(is_character::is_greek_letter(L'ι')); // iota
+        CHECK(is_character::is_greek_letter(L'κ')); // kappa
+        CHECK(is_character::is_greek_letter(L'λ')); // lambda
+        CHECK(is_character::is_greek_letter(L'μ')); // mu
+        CHECK(is_character::is_greek_letter(L'ν')); // nu
+        CHECK(is_character::is_greek_letter(L'ξ')); // xi
+        CHECK(is_character::is_greek_letter(L'ο')); // omicron
+        CHECK(is_character::is_greek_letter(L'π')); // pi
+        CHECK(is_character::is_greek_letter(L'ρ')); // rho
+        CHECK(is_character::is_greek_letter(L'ς')); // final sigma
+        CHECK(is_character::is_greek_letter(L'σ')); // sigma
+        CHECK(is_character::is_greek_letter(L'τ')); // tau
+        CHECK(is_character::is_greek_letter(L'υ')); // upsilon
+        CHECK(is_character::is_greek_letter(L'φ')); // phi
+        CHECK(is_character::is_greek_letter(L'χ')); // chi
+        CHECK(is_character::is_greek_letter(L'ψ')); // psi
+        CHECK(is_character::is_greek_letter(L'ω')); // omega
+        }
+    SECTION("Greek Letter Detection With Tonos")
+        {
+        // Uppercase with tonos: Ά Έ Ή Ί Ό Ύ Ώ
+        CHECK(is_character::is_greek_letter(L'Ά')); // Alpha with tonos
+        CHECK(is_character::is_greek_letter(L'Έ')); // Epsilon with tonos
+        CHECK(is_character::is_greek_letter(L'Ή')); // Eta with tonos
+        CHECK(is_character::is_greek_letter(L'Ί')); // Iota with tonos
+        CHECK(is_character::is_greek_letter(L'Ό')); // Omicron with tonos
+        CHECK(is_character::is_greek_letter(L'Ύ')); // Upsilon with tonos
+        CHECK(is_character::is_greek_letter(L'Ώ')); // Omega with tonos
+
+        // Lowercase with tonos: ά έ ή ί ό ύ ώ
+        CHECK(is_character::is_greek_letter(L'ά')); // alpha with tonos
+        CHECK(is_character::is_greek_letter(L'έ')); // epsilon with tonos
+        CHECK(is_character::is_greek_letter(L'ή')); // eta with tonos
+        CHECK(is_character::is_greek_letter(L'ί')); // iota with tonos
+        CHECK(is_character::is_greek_letter(L'ό')); // omicron with tonos
+        CHECK(is_character::is_greek_letter(L'ύ')); // upsilon with tonos
+        CHECK(is_character::is_greek_letter(L'ώ')); // omega with tonos
+        }
+    SECTION("Greek Letter Detection With Dialytika")
+        {
+        // Uppercase with dialytika: Ϊ Ϋ
+        CHECK(is_character::is_greek_letter(L'Ϊ')); // Iota with dialytika
+        CHECK(is_character::is_greek_letter(L'Ϋ')); // Upsilon with dialytika
+
+        // Lowercase with dialytika: ϊ ϋ
+        CHECK(is_character::is_greek_letter(L'ϊ')); // iota with dialytika
+        CHECK(is_character::is_greek_letter(L'ϋ')); // upsilon with dialytika
+
+        // Lowercase with dialytika and tonos: ΐ ΰ
+        CHECK(is_character::is_greek_letter(L'ΐ')); // iota with dialytika and tonos
+        CHECK(is_character::is_greek_letter(L'ΰ')); // upsilon with dialytika and tonos
+        }
+    SECTION("Greek Letter Detection Non-Greek Characters")
+        {
+        // Latin letters should NOT be detected as Greek
+        CHECK_FALSE(is_character::is_greek_letter(L'A'));
+        CHECK_FALSE(is_character::is_greek_letter(L'a'));
+        CHECK_FALSE(is_character::is_greek_letter(L'Z'));
+        CHECK_FALSE(is_character::is_greek_letter(L'z'));
+
+        // Cyrillic letters should NOT be detected as Greek
+        // (some look similar to Greek but are different code points)
+        CHECK_FALSE(is_character::is_greek_letter(L'А')); // Cyrillic A (U+0410)
+        CHECK_FALSE(is_character::is_greek_letter(L'а')); // Cyrillic a (U+0430)
+        CHECK_FALSE(is_character::is_greek_letter(L'Я')); // Cyrillic Ya
+        CHECK_FALSE(is_character::is_greek_letter(L'я')); // Cyrillic ya
+
+        // Numbers should NOT be detected as Greek
+        CHECK_FALSE(is_character::is_greek_letter(L'0'));
+        CHECK_FALSE(is_character::is_greek_letter(L'9'));
+
+        // Punctuation should NOT be detected as Greek
+        CHECK_FALSE(is_character::is_greek_letter(L'.'));
+        CHECK_FALSE(is_character::is_greek_letter(L','));
+        CHECK_FALSE(is_character::is_greek_letter(L'!'));
+        CHECK_FALSE(is_character::is_greek_letter(L' '));
+
+        // Georgian letters should NOT be detected as Greek
+        CHECK_FALSE(is_character::is_greek_letter(L'ა')); // Georgian a
+        CHECK_FALSE(is_character::is_greek_letter(L'ბ')); // Georgian b
+        }
     }
 // NOLINTEND
 // clang-format on

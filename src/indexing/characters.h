@@ -310,6 +310,30 @@ namespace characters
                 (ch >= 0x10D0 && ch <= 0x10F0));
             }
 
+        /** @returns @c true if a character is a Greek letter (uppercase or lowercase).
+            @param ch The letter to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_greek_letter(const wchar_t ch) noexcept
+            {
+            return (
+                // Greek uppercase: Α-Ρ (U+0391-U+03A1), Σ-Ω (U+03A3-U+03A9)
+                (ch >= 0x0391 && ch <= 0x03A1) || (ch >= 0x03A3 && ch <= 0x03A9) ||
+                // Greek uppercase with tonos: Ά Έ Ή Ί Ό Ύ Ώ
+                (ch == 0x0386) || (ch >= 0x0388 && ch <= 0x038A) || (ch == 0x038C) ||
+                (ch == 0x038E) || (ch == 0x038F) ||
+                // Greek uppercase with dialytika: Ϊ Ϋ
+                (ch == 0x03AA || ch == 0x03AB) ||
+                // Greek lowercase: α-ρ (U+03B1-U+03C1), ς (U+03C2), σ-ω (U+03C3-U+03C9)
+                (ch >= 0x03B1 && ch <= 0x03C1) || (ch >= 0x03C2 && ch <= 0x03C9) ||
+                // Greek lowercase with tonos: ά έ ή ί ό ύ ώ
+                (ch == 0x03AC) || (ch >= 0x03AD && ch <= 0x03AF) || (ch == 0x03CC) ||
+                (ch == 0x03CD) || (ch == 0x03CE) ||
+                // Greek lowercase with dialytika: ϊ ϋ
+                (ch == 0x03CA || ch == 0x03CB) ||
+                // Greek lowercase with dialytika and tonos: ΐ ΰ
+                (ch == 0x0390 || ch == 0x03B0));
+            }
+
         /** @returns The lowercased version of a letter, or the letter itself
                      if it can't be lowercased.
             @param ch The letter to be lowered.*/

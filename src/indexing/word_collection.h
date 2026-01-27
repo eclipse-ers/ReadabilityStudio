@@ -807,10 +807,12 @@ class document
                         // Headers should be uppercased though.
                         // Also, something like "p-Level" or "t-Test" is OK to start a sentence,
                         // those are not meant to be capitalized.
+                        // Greek letters are also OK since they may reference equation variables.
                         if (firstWord.length() && !firstWord.is_numeric() &&
                             !characters::is_character::is_numeric(firstWord[0]) &&
                             !firstWord.is_capitalized() &&
                             !characters::is_character::is_punctuation(firstWord[0]) &&
+                            !characters::is_character::is_greek_letter(firstWord[0]) &&
                             (firstWord.length() == 1 ||
                              !characters::is_character::is_dash_or_hyphen(firstWord[1])) &&
                             // "a." type of bullet

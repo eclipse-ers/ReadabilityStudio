@@ -2620,6 +2620,18 @@ TEST_CASE("Document lowercased sentences", "[document]")
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(doc.get_lowercase_beginning_sentences().size() == 0);
         }
+    SECTION("Lowercased Sentences Greek Letter")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        // Lowercase Greek letters (α, β, etc.) are often used as equation variables
+        // and should not be flagged as improper lowercase sentence starts
+        const wchar_t text[] = L"α represents the significance level. Here is another sentence.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_lowercase_beginning_sentences().size() == 0);
+        }
     }
 
 TEST_CASE("Document wordy phrases", "[document]")
