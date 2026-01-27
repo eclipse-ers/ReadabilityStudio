@@ -3,7 +3,7 @@
 # Purpose:     Build script for Readability Studio
 # Author:      Blake Madden
 # Created:     2023-07-31
-# Copyright:   (c) 2025 Blake Madden
+# Copyright:   (c) 2026 Blake Madden
 # License:     Eclipse Public License 2.0
 #############################################################################
 
