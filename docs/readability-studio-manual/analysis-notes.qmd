@@ -454,8 +454,8 @@ Ligatures\index{ligatures} are glyphs that combine two (or more) letters.
 For example, *æ* is a combination of the letters *a* and *e*.
 Some ligatures represent unique characters that are part of languages (e.g., *œ* in French).
 Other times, they are stylistic substitutions used to improve typography.
-An example of this is *ﬁ*; in some fonts, the dot of the *i* may overlap the hood of the *f*.
-To prevent this, *ﬁ* is used to provide more control of how adjacent *f i* sequences are displayed.
+An example of this is *fi*; in some fonts, the dot of the *i* may overlap the hood of the *f*.
+To prevent this, a special ligature replaces any *fi* sequences for a more refined appearance.
 
 In the case of typographic ligatures, *{{< var PROGRAM_NAME >}}* will substitute them with their constituent characters.
 This allows for more accurate analyses and word searching.
