@@ -2,6 +2,7 @@
 3Dlabs
 3DNow
 3DStudio
+3GPP
 3M
 4chan
 7Zip
@@ -476,7 +477,6 @@ Astoria
 Astrakhan
 Astrix
 Astro
-Astro's
 Astrodome
 Astros
 Asturias
@@ -1794,7 +1794,6 @@ Dayi
 Dayton
 Daytona
 Daytonian
-Daytonian's
 Daytonians
 Dayville
 Dbghelp
@@ -2469,7 +2468,6 @@ Foxboro
 Foxconn
 FoxPro
 Fr
-Fr's
 Frackville
 Fragrantica
 France
@@ -3258,7 +3256,9 @@ Infosys
 Infotron
 InfoTrust
 Infragistics
+Ingersoll
 Ingleside
+Ingres
 Initech
 Initrode
 Inkscape
@@ -3269,6 +3269,7 @@ InnovateMass
 Innovu
 Innsbruck
 Inola
+Inonu
 InputAccel
 Insite
 Instacart
@@ -3361,6 +3362,7 @@ ITCorp
 Itel
 Ithaca
 Ithacan
+Ito
 iTunes
 Itza
 iWatch
@@ -3452,7 +3454,6 @@ JQuery
 JScript
 Juba
 Jubilarian
-Jubilarian's
 Jubilarians
 Judaic
 Judaical
@@ -3856,6 +3857,7 @@ Limon
 Limousin
 Limpopo
 Linaro
+Linc
 Lincolnshire
 Lincolnton
 Lindale
@@ -3995,6 +3997,7 @@ Mac
 Macao
 Macau
 MacBook
+Maccabeus
 Macchu
 Macclesfield
 Macedon
@@ -4039,6 +4042,7 @@ Mahagonny
 Mahala
 Mahalia
 Maharashtra
+Mahavira
 Mahayana
 Mahican
 Mahinapua
@@ -4085,6 +4089,8 @@ Maltese
 Malthusian
 Malvern
 Malwarebytes
+Mamore
+Mamoutzu
 Managua
 Manama
 Manassas
@@ -4094,6 +4100,7 @@ Manchu
 Manchuria
 Manchurian
 Mancunian
+Manda
 Mandalay
 Mandeville
 Mandiant
@@ -4122,6 +4129,7 @@ MapReduce
 Maputo
 Maquoketa
 Maracaibo
+Marathi
 Marburg
 March
 Marcomm
@@ -4174,10 +4182,12 @@ Maseru
 Mashhad
 Masonic
 Maspeth
+Massa
 Massachusetts
 Massena
 Massillon
 MasterCard
+Mata-Utu
 Matarangi
 Matchup
 Mathematica
@@ -4296,9 +4306,7 @@ Merthyr
 Mesabi
 Mesenburg
 Mesoamerica
-Mesoamerica's
 Mesoamerican
-Mesoamerican's
 Mesoamericans
 Mesopotamia
 Mesopotamian
@@ -4382,6 +4390,7 @@ Milwaukie
 Mimas
 Mimecast
 Minamata
+Minardi
 Mindanao
 Minden
 Mindoro
@@ -4407,6 +4416,7 @@ Mintaka
 MinuteClinic
 Miquelon
 Miracast
+Miro
 Mirzam
 Miskatonic
 Miskito
@@ -4421,7 +4431,6 @@ Missouria
 Missourian
 Mistassini
 Misérables
-Misérables's
 MIT
 Mithra
 Mithraic
@@ -4458,6 +4467,8 @@ Mojave
 Moldavia
 Moldavian
 Moldova
+Molina
+Moline
 Molson
 Moluccas
 Mombasa
@@ -4470,6 +4481,7 @@ Mondrian
 Monee
 Moneychimp
 Moneytree
+Monfort
 Mongodb
 Mongol
 Mongolia
@@ -4524,6 +4536,7 @@ Morelos
 Moresby
 Morganton
 Morgantown
+Morin
 Mormon
 Mormonism
 Morningstar
@@ -4550,6 +4563,7 @@ Moundsville
 Moundville
 Mountville
 Mourne
+Mouthe
 Moveworks
 Mozambican
 Mozambique
@@ -4890,6 +4904,7 @@ Norwalk
 Norway
 Norwegian
 Norwich
+Nostrand
 Notre
 Notting
 Nottingham
@@ -4920,6 +4935,7 @@ Nudestix
 Nuevo
 Nuface
 Nuku'alofa
+Nukualofa
 Nullarbor
 NullSoft
 NumPy
@@ -5010,6 +5026,8 @@ Oldfield
 Oldham
 Oldsmobile
 Olduvai
+Olin
+Oliva
 Olmec
 Olmsted
 Olympia
@@ -5083,6 +5101,7 @@ Oriya
 Orizaba
 Orkin
 Orkney
+Orland
 Orlando
 Orleans
 Orléans
@@ -5169,6 +5188,7 @@ Palikir
 Palisades
 Palmolive
 Palmyra
+Palo
 Palomar
 Palooza
 Paltz
@@ -5305,6 +5325,7 @@ Peshawar
 Peterbilt
 Peterborough
 Peterhead
+Peterhouse
 Petersburg
 Petersburgh
 Petoskey
@@ -5359,6 +5380,7 @@ Piedmont
 Pierre
 Piggly
 Piketon
+Pilcomayo
 Pillsbury
 Pilocarpine
 Piltdown
@@ -5386,7 +5408,6 @@ Pittston
 Pixabay
 Pixar
 Pkware
-Pkware's
 Placentia
 PlaceU
 Plaines
@@ -5399,6 +5420,7 @@ Plano
 Planview
 Platonism
 Platonist
+Platte
 Platteville
 Plattsburgh
 Plauen
@@ -5497,6 +5519,7 @@ PRC
 Preble
 Precambrian
 Prefast
+Prent
 Presario
 Presbyterian
 Presbyterianism
@@ -5585,6 +5608,7 @@ Purine
 Puritan
 Puritanism
 Pusan
+Pusey
 Pushtu
 Putney
 PwC
@@ -5809,6 +5833,7 @@ Ritalin
 Rittal
 Rittenberg
 Ritz
+Rivas
 Riverdale
 RiverMobile
 Riverton
@@ -5963,6 +5988,7 @@ Samaritan
 Samarkand
 Samoa
 Samoan
+Samoset
 Samoyed
 Samsonite
 Samsung
@@ -6084,7 +6110,6 @@ Scottsboro
 Scottsburg
 Scottsdale
 Scottville
-Scotty's
 Scotweb
 Scrabble
 Scranton
@@ -6154,6 +6179,7 @@ Sephora
 Sephoria
 September
 Sequim
+Sequoya
 Serb
 Serbia
 Serbian
@@ -6197,6 +6223,7 @@ Shasta
 Shavian
 Shavuot
 Shawnee
+Shebeli
 Sheboygan
 Shedir
 Sheepshead
@@ -6212,6 +6239,7 @@ Shenyang
 Shenzhen
 Shepherdstown
 Shepherdsville
+Shepstone
 Sherwood
 Shetland
 Shi'ite
@@ -6374,6 +6402,7 @@ Solarcentury
 Solaris
 Solawave
 Solihull
+Solis
 Solomon
 Solorigate
 Somali
@@ -6397,6 +6426,7 @@ Sophoclean
 Sophos
 Sorbonne
 Sorrentine
+Sotos
 Soulaines
 Soundcloud
 Soundwire
@@ -6559,6 +6589,7 @@ Sufism
 Sugarbear
 Sugarbush
 Sugarcreek
+Sui
 Suiss
 Suisse
 Sukari
@@ -6725,6 +6756,7 @@ Tangshan
 Tanologist
 Tanzania
 Tanzanian
+Tao
 Taoism
 Taoist
 Taoistic
@@ -6804,6 +6836,7 @@ Tempe
 Templar
 Tencent
 Tenderheart
+Tendo
 Teneguía
 Tenesmus
 Tenia
@@ -6848,6 +6881,7 @@ Thalia
 Thalomid
 Thames
 Thanksgiving
+Thar
 Thawte
 Theara
 Thebes
@@ -6918,6 +6952,7 @@ Tinseltown
 Tinton
 Tinyexpr
 Tinyxml2
+Tioga
 Tipp
 Tippecanoe
 Tipperary
@@ -6978,6 +7013,7 @@ Torquay
 Torquemada
 Tortola
 Tory
+Tosca
 Toshiba
 Tostitos
 Totemism
@@ -7287,6 +7323,7 @@ Vaseline
 Vaselined
 Vaselines
 Vaselining
+Vassar
 Vatican
 Vaud
 Vaudois
