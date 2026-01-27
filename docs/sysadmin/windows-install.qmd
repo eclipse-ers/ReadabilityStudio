@@ -62,12 +62,20 @@ For example, the following will run a silent install that will not restart the c
 
 Available command line options include:
 
-| Option | Purpose |
-| :--    | :--     |
-| `/SILENT` | Skips user prompts, keeping the default options. |
-| `/VERYSILENT` | Same as `/SILENT`, but also hides the installer's window. |
-| `/LOG` | Log the installer's progress to a temp file. |
-| `/LOG="filename"` | Same as `/LOG`, but writes to the provided filename. |
-| `/NORESTART` | Do not reboot after installation, even if necessary. |
-| `/CLOSEAPPLICATIONS` | (Updater only) Close *{{< var PROGRAM_NAME >}}* if open during the update. |
-| `/DIR="c:\foldername"` | (Installer and updater only) Where to install (or update) the program.<br>\linebreak (This will override the default installation path.) |
+```{r}
+#| echo: false
+#| message: false
+
+inno_options <- dplyr::as_tibble(
+  read.delim("data/innosetup-options.txt", sep = "\t", header = TRUE, check.names = FALSE))
+
+# Convert \n placeholder to actual newlines, then apply linebreak() for makecell support
+inno_options[[2]] <- inno_options[[2]] |>
+  stringr::str_replace_all(stringr::fixed("\\n"), "\n") |>
+  kableExtra::linebreak()
+
+kableExtra::kbl(inno_options, booktabs = TRUE, linesep = "", escape = FALSE) |>
+  kableExtra::kable_styling() |>
+  kableExtra::column_spec(1, monospace = TRUE) |>
+  kableExtra::row_spec(seq(2, nrow(inno_options), 2), background = "#F0F0F0")
+```

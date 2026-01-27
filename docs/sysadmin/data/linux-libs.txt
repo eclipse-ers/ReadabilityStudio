@@ -1,0 +1,14 @@
+Library	Debian / Ubuntu	RHEL / Fedora / openSUSE
+*GTK 3*	*libgtk-3-dev*	*gtk3-devel*
+*libcurl*	*libcurl4-openssl-dev*	*libcurl-devel*
+*GStreamer MM*	*libgstreamermm-1.0-dev*	*gstreamermm-devel*
+*libsecret*	*libsecret-1-dev*	*libsecret-devel*
+*WebKitGTK*	*libwebkit2gtk-4.1-dev*	*webkit2gtk3-devel*
+*SDL2*	*libsdl2-dev*	*SDL2-devel*
+*libnotify*	*libnotify-dev*	*libnotify-devel*
+*TBB*	*libtbb-dev*	*tbb-devel*
+*OpenSSL*	*libssl-dev*	*openssl-devel*
+*libxml2*	*libxml2-dev*	*libxml2-devel*
+*gspell*	*libgspell-1-dev*	*gspell-devel*
+*ImageMagick++* (optional)	*libmagick++-dev*	*ImageMagick-c++-devel*
+*Poppler* (optional)	*libpoppler-cpp-dev*	*poppler-cpp-devel*

@@ -405,16 +405,16 @@ markdown_to_kable_cell <- function(text)
   if (knitr::is_latex_output())
     {
                # convert markdown bold tags
-    text %<>% stringr::str_replace_all("\\*\\*([\\w (),-[.]]{1,})\\*\\*",
+    text %<>% stringr::str_replace_all("\\*\\*([\\w (),-[+][.]]{1,})\\*\\*",
                                         "\\\\textbf{\\1}") %>%
                # italics
-               stringr::str_replace_all("\\*([\\w (),-[.]]{1,})\\*",
+               stringr::str_replace_all("\\*([\\w (),-[+][.]]{1,})\\*",
                                         "\\\\textit{\\1}") %>%
                # superscript
-               stringr::str_replace_all("\\^([\\w (),-[.]]{1,})\\^",
+               stringr::str_replace_all("\\^([\\w (),-[+][.]]{1,})\\^",
                                         "\\\\textsuperscript{\\1}") %>%
                # inline code
-               stringr::str_replace_all("`([\\w (),-[.]]{1,})`",
+               stringr::str_replace_all("`([\\w (),-[+][.]]{1,})`",
                                         "\\\\texttt{\\1}")
     knitr::asis_output(text)
     }

@@ -1,0 +1,8 @@
+Option	Purpose
+/SILENT	Skips user prompts, keeping the default options.
+/VERYSILENT	Same as `/SILENT`, but also hides the installer's window.
+/LOG	Log the installer's progress to a temp file.
+/LOG="filename"	Same as `/LOG`, but writes to the provided filename.
+/NORESTART	Do not reboot after installation, even if necessary.
+/CLOSEAPPLICATIONS	(Updater only) Close the program if open during the update.
+/DIR="foldername"	(Installer and updater only) Where to install (or update) the program.\n(This will override the default installation path.)
