@@ -70,14 +70,13 @@
 wxDECLARE_APP(ReadabilityApp);
 
 //------------------------------------------------------
-AboutDialogEx::AboutDialogEx(wxWindow* parent, wxBitmap banner, wxString appVersion,
-                             wxString copyright, wxString eula, wxString mlaCitation,
-                             wxString apaCitation, wxString bibtexCitation, wxWindowID id,
-                             const wxPoint& pos, const wxSize& size, long style)
-    : m_banner(std::move(banner)), m_appVersion(std::move(appVersion)),
-      m_copyright(std::move(copyright)), m_eula(std::move(eula)),
-      m_mlaCitation(std::move(mlaCitation)), m_apaCitation(std::move(apaCitation)),
-      m_bibtexCitation(std::move(bibtexCitation))
+AboutDialogEx::AboutDialogEx(wxWindow* parent, wxString appVersion, wxString copyright,
+                             wxString eula, wxString mlaCitation, wxString apaCitation,
+                             wxString bibtexCitation, wxWindowID id, const wxPoint& pos,
+                             const wxSize& size, long style)
+    : m_appVersion(std::move(appVersion)), m_copyright(std::move(copyright)),
+      m_eula(std::move(eula)), m_mlaCitation(std::move(mlaCitation)),
+      m_apaCitation(std::move(apaCitation)), m_bibtexCitation(std::move(bibtexCitation))
     {
     Create(parent, id, pos, size, style);
     }
@@ -216,14 +215,6 @@ bool AboutDialogEx::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 void AboutDialogEx::CreateControls()
     {
     auto* mainSizer = new wxBoxSizer(wxVERTICAL);
-
-    if (m_banner.IsOk())
-        {
-        auto* bannerBox = new wxStaticBitmap(this, wxID_ANY, m_banner, wxDefaultPosition,
-                                             wxDefaultSize, wxSIMPLE_BORDER);
-        mainSizer->Add(bannerBox, 0, wxALIGN_CENTER_HORIZONTAL | wxALL,
-                       wxSizerFlags::GetDefaultBorder());
-        }
 
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());

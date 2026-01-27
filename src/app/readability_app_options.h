@@ -2598,6 +2598,15 @@ class ReadabilityAppOptions
 
   private:
     void LoadThemeNode(tinyxml2::XMLElement* appearanceNode);
+    void LoadInternetNode(tinyxml2::XMLElement* configRootNode);
+    void LoadWarningsNode(tinyxml2::XMLElement* configRootNode);
+    void LoadExportNode(tinyxml2::XMLElement* configRootNode);
+    void LoadTestBundlesNode(tinyxml2::XMLElement* projectSettings);
+    void LoadCustomTestsNode(tinyxml2::XMLElement* projectSettings);
+    void LoadGraphsNode(tinyxml2::XMLElement* projectSettings);
+    void LoadStatsNode(tinyxml2::XMLElement* projectSettings);
+    void LoadDocAnalysisNode(tinyxml2::XMLElement* projectSettings);
+    void LoadReadabilityTestsNode(tinyxml2::XMLElement* projectSettings);
     /// @returns The value from the specified attribute from @c node as a double, or NaN on failure.
     /// @note This assumes the double is written in US format (and no thousands separator).
     [[nodiscard]]

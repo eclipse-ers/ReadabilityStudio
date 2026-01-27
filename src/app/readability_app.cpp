@@ -700,21 +700,6 @@ bool ReadabilityApp::OnInit()
         GetAppOptions()->GetPaperOrientation());
     GetMainFrame()->GetDocumentManager()->GetPageSetupDialogData().EnableMargins(false);
 
-    // get a random image for the About box
-    std::uniform_int_distribution<size_t> randNum(0, GetSplashscreenPaths().GetCount() - 1);
-    const size_t imageIndex = randNum(GetRandomNumberEngine());
-    if (imageIndex < GetSplashscreenPaths().GetCount())
-        {
-        wxString imageName{ GetSplashscreenPaths()[imageIndex] };
-        auto scaledBmp =
-            GetScaledImage(GetSplashscreenPaths()[imageIndex],
-                           Wisteria::GraphItems::Image::GetImageFileTypeFromExtension(imageName),
-                           wxSize{ 800, 800 });
-        // crop the bottom
-        GetMainFrameEx()->SetAboutDialogImage(wxBitmap(wxImage{ scaledBmp.ConvertToImage() }.Resize(
-            GetMainFrame()->FromDIP(wxSize{ 800, 100 }), wxPoint{ 0, 0 })));
-        }
-
     // set the help
     GetMainFrame()->SetHelpDirectory(FindResourceDirectory(L"readability-studio-manual"));
     wxLogMessage(L"Documentation Location: %s", GetMainFrame()->GetHelpDirectory());
@@ -3005,17 +2990,14 @@ void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
         }
 
     AboutDialogEx aboutDlg(
-        wxGetApp().GetParentingWindow(), GetAboutDialogImage(), wxGetApp().GetAppVersion(),
-        // TRANSLATORS: with "\U000000A9%s%d %s", "\U000000A9" should not be edited
-        // (it's a copyright symbol), "%s%d" is a range of years and " %s" is the
-        // software publisher.
-        wxString::Format(_(L"Copyright \U000000A92006-2025 Oleander Software, Ltd.\n"
-                           "Copyright \U000000A9%s%d %s.\nAll rights reserved.\n\n"
-                           "%s\U000000AE is a Trademark of %s.\n"
+        wxGetApp().GetParentingWindow(), wxGetApp().GetAppVersion(),
+        // TRANSLATORS: "%s" is the software publisher.
+        wxString::Format(_(L"Copyright ©2006–2025 Oleander Software, Ltd.\n"
+                           "Copyright ©2025–%d %s.\nAll rights reserved.\n\n"
+                           "%s® is a Trademark of %s.\n"
                            "Jakarta and Jakarta EE are Trademarks of %s.\n"
-                           "Eclipse\U000000AE is a Trademark of %s.\n"
+                           "Eclipse® is a Trademark of %s.\n"
                            "Eclipse Foundation is a Trademark of %s."),
-                         (buildDate.GetYear() > 2025 ? wxString{ L"2025-" } : wxString{}),
                          buildDate.GetYear(), wxGetApp().GetVendorDisplayName(),
                          _READSTUDIO_APP_LONG_NAME, wxGetApp().GetVendorDisplayName(),
                          wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName(),

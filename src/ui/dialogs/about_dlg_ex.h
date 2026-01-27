@@ -68,7 +68,6 @@ class AboutDialogEx final : public Wisteria::UI::DialogWithHelp
   public:
     /** @brief Constructor.
         @param parent The dialog's parent.
-        @param banner A banner to show at the top of the dialog.
         @param appVersion The application's version.
         @param copyright The copyright string.
         @param eula The end-user license agreement content.
@@ -79,10 +78,10 @@ class AboutDialogEx final : public Wisteria::UI::DialogWithHelp
         @param pos The dialog's position.
         @param size The dialog's size.
         @param style The dialog's style.*/
-    AboutDialogEx(wxWindow* parent, wxBitmap banner, wxString appVersion, wxString copyright,
-                  wxString eula, wxString mlaCitation, wxString apaCitation,
-                  wxString bibtexCitation, wxWindowID id = wxID_ANY,
-                  const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+    AboutDialogEx(wxWindow* parent, wxString appVersion, wxString copyright, wxString eula,
+                  wxString mlaCitation, wxString apaCitation, wxString bibtexCitation,
+                  wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
                   long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     /// @private
     AboutDialogEx(const AboutDialogEx& that) = delete;
@@ -119,7 +118,6 @@ class AboutDialogEx final : public Wisteria::UI::DialogWithHelp
 
     Wisteria::UI::SideBarBook* m_sideBarBook{ nullptr };
 
-    wxBitmap m_banner;
     wxString m_appVersion;
     wxString m_copyright;
     wxString m_eula;

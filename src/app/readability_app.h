@@ -230,17 +230,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
         return m_startPage;
         }
 
-    /// @brief Sets the About dialog image.
-    /// @param bmp The image.
-    void SetAboutDialogImage(const wxBitmap& bmp) { m_aboutBmp = bmp; }
-
-    /// @returns The image used for a custom About dialog.
-    [[nodiscard]]
-    const wxBitmap& GetAboutDialogImage() const noexcept
-        {
-        return m_aboutBmp;
-        }
-
     // Note that some of these ribbon button bar IDs are used by
     // ribbons other than the project one. This is the communal collection
     // of all bar IDs for the program's ribbons.
@@ -315,8 +304,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     wxStartPage* m_startPage{ nullptr };
     LuaEditorDlg* m_luaEditor{ nullptr };
     Wisteria::UI::ListDlg* m_logWindow{ nullptr };
-
-    wxBitmap m_aboutBmp;
 
     wxDECLARE_CLASS(MainFrame);
     };

@@ -4726,7 +4726,7 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
                                           indexScore, clozeScore, setFocus);
 
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    assert(view && "Invalid view when adding test!");
+    wxASSERT_MSG(view, "Invalid view when adding test!");
     if (view == nullptr)
         {
         return;
@@ -7822,7 +7822,7 @@ void ProjectDoc::DisplaySightWords()
     {
     PROFILE();
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    assert(view && "Error getting view when displaying sight words!");
+    wxASSERT_MSG(view, "Error getting view when displaying sight words!");
     if (view == nullptr)
         {
         return;

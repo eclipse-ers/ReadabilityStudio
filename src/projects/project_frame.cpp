@@ -945,7 +945,7 @@ void ProjectDocChildFrame::OnEditGraphColor(wxCommandEvent& event)
     wxGetApp().GetAppOptions()->CopyCustomColorsToColorData(data);
     data.SetChooseFull(true);
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Invalid document when editing graph colors!");
+    wxASSERT_MSG(doc, L"Invalid document when editing graph colors!");
     if (event.GetId() == XRCID("ID_EDIT_GRAPH_BKCOLOR"))
         {
         data.SetColour(doc->GetBackGroundColor());
@@ -1607,7 +1607,7 @@ void ProjectDocChildFrame::OnBoxPlotShowLabelsButton([[maybe_unused]] wxRibbonBu
 void ProjectDocChildFrame::OnBarLabelsButton([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1633,7 +1633,7 @@ void ProjectDocChildFrame::OnFleschConnectLinesButton(
 void ProjectDocChildFrame::OnEnglishLabels([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1648,7 +1648,7 @@ void ProjectDocChildFrame::OnEnglishLabels([[maybe_unused]] wxRibbonButtonBarEve
 void ProjectDocChildFrame::OnGraphLogo([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1672,7 +1672,7 @@ void ProjectDocChildFrame::OnGraphLogo([[maybe_unused]] wxRibbonButtonBarEvent& 
 //---------------------------------------------------
 void ProjectDocChildFrame::OnPrintWatermark([[maybe_unused]] wxCommandEvent& event)
     {
-    auto doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
+    auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
     if (doc != nullptr)
         {
         wxTextEntryDialog textDlg(this,
@@ -1706,7 +1706,7 @@ void ProjectDocChildFrame::OnDropShadow([[maybe_unused]] wxRibbonButtonBarEvent&
 void ProjectDocChildFrame::OnShowcaseKeyItems([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1896,7 +1896,7 @@ void ProjectDocChildFrame::OnEditPlotBackgroundImageEffect(wxCommandEvent& event
 void ProjectDocChildFrame::OnMergePlotBackgroundImages([[maybe_unused]] wxCommandEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1932,7 +1932,7 @@ void ProjectDocChildFrame::OnMergePlotBackgroundImages([[maybe_unused]] wxComman
 void ProjectDocChildFrame::OnEditPlotBackgroundImage([[maybe_unused]] wxCommandEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
@@ -1971,7 +1971,7 @@ void ProjectDocChildFrame::OnEditGraphOpacity(wxCommandEvent& event)
     };
 
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc && L"Failed to get document!");
+    wxASSERT_MSG(doc, L"Failed to get document!");
     if (doc == nullptr)
         {
         return;
