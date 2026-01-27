@@ -8,6 +8,10 @@ metadata:
   pdf-cover-background-color: "250, 244, 230"
   theme-color: "240, 108, 2"
   page-side-decoration-color: "0, 0, 0"
+  photography-credits: >-
+    Cover and interior photographs by the author and from the
+    \textit{Images from the History of Medicine} (IHM) collection,
+    National Library of Medicine.
 book:
   subtitle: Programming Manual
   output-file: "readability-studio-api"
