@@ -218,15 +218,6 @@ StemmingType =
   Swedish = 11    -- Swedish
   }
 
--- The following releases of *Readability Studio* are available.
-ProductType =
-  {
-  ProductWindows32Bit = 0,      -- Windows 32-bit
-  ProductMac32BitPowerPC = 1,   -- OSX 32-bit PowerPC (discontinued after 2013)
-  ProductMac32BitIntel = 2,     -- OSX 32-bit Intel (discontinued after 2015)
-  ProductMac64BitIntel = 3      -- macOS 64-bit Intel
-  }
-
 -- The following bar chart and box plot effects are available.
 BoxEffect =
   {

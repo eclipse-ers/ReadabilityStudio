@@ -24,3 +24,7 @@ book:
     - part: "Support Types"
       chapters:
       - enums.qmd
+format:
+  pdf:
+    lot: false
+    lof: false
