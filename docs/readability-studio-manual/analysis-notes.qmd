@@ -472,11 +472,10 @@ These substitutions include:
 ## Combined Accents {#diacritics}
 
 Diacritical markers are accents combined with letters to produce a new letter.
-For example, *e* combined with *◌́ * will create an "e with acute" (*é*).
+For example, *e* combined with combining acute accent (U+0301) will create an "e with acute" (*é*).
 In some files, these accented characters may be stored as two-characters sequences, rather than a single character.
-For example, the file will contain a *e\ ◌́* sequence instead of a simple *é*.
-Although most text editors will display this sequence as a *é*, searching for *é* will not work.
-This is because the text is really an *e* followed by an *◌́ * and there are no *é* characters.
+For example, the file will contain the sequence *e* + U+0301 rather than the precomposed character *é*.
+While most text editors display them identically, searching for *é* will fail because the file contains two distinct code points.
 
 During import, *{{< var PROGRAM_NAME >}}* will substitute these sequences with their proper characters.
 This will ensure accurate results and text searching.

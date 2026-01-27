@@ -53,7 +53,6 @@ ligature\index{ligatures}
 :::
 ::: {.glsdef data-latex=''}
 A glyph that combines two (or more) letters.
-For example, *ﬀ* is a ligature combining two *f* letters.
 :::
 ::::
 
