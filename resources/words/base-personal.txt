@@ -5753,7 +5753,6 @@ Debussy
 Decalogue
 Decameron
 DeCarlo
-Decarlos
 DeCastro
 Deccan
 Dechant
@@ -13656,7 +13655,7 @@ Kyleigh
 Kylen
 Kylene
 Kyler
-kyles
+Kyle
 Kyley
 Kyli
 Kylie
@@ -18937,7 +18936,6 @@ Pontillo
 Ponting
 Pontolillo
 Ponzi
-Pooh
 Pooley
 Poorvu
 Popek

@@ -1912,6 +1912,87 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK_FALSE(is_character::is_greek_letter(L'ა')); // Georgian a
         CHECK_FALSE(is_character::is_greek_letter(L'ბ')); // Georgian b
         }
+
+    // =========================================================================
+    // WESTERN EUROPEAN LETTER DETECTION (is_western_european_letter)
+    // Tests for detecting Latin-based letters - used by spell checker to
+    // identify words outside the scope of English spell checking
+    // =========================================================================
+
+    SECTION("Western European Letter Detection Basic Latin")
+        {
+        // Basic Latin letters should be detected as Western European
+        CHECK(is_character::is_western_european_letter(L'a'));
+        CHECK(is_character::is_western_european_letter(L'z'));
+        CHECK(is_character::is_western_european_letter(L'A'));
+        CHECK(is_character::is_western_european_letter(L'Z'));
+        CHECK(is_character::is_western_european_letter(L'm'));
+        CHECK(is_character::is_western_european_letter(L'M'));
+        }
+    SECTION("Western European Letter Detection Extended Latin")
+        {
+        // French
+        CHECK(is_character::is_western_european_letter(L'é'));
+        CHECK(is_character::is_western_european_letter(L'è'));
+        CHECK(is_character::is_western_european_letter(L'ê'));
+        CHECK(is_character::is_western_european_letter(L'ë'));
+        CHECK(is_character::is_western_european_letter(L'à'));
+        CHECK(is_character::is_western_european_letter(L'ç'));
+        CHECK(is_character::is_western_european_letter(L'œ'));
+
+        // Spanish
+        CHECK(is_character::is_western_european_letter(L'ñ'));
+        CHECK(is_character::is_western_european_letter(L'Ñ'));
+
+        // German
+        CHECK(is_character::is_western_european_letter(L'ü'));
+        CHECK(is_character::is_western_european_letter(L'ö'));
+        CHECK(is_character::is_western_european_letter(L'ä'));
+        CHECK(is_character::is_western_european_letter(L'ß'));
+        CHECK(is_character::is_western_european_letter(L'ẞ')); // capital eszett
+
+        // Scandinavian
+        CHECK(is_character::is_western_european_letter(L'ø'));
+        CHECK(is_character::is_western_european_letter(L'å'));
+        CHECK(is_character::is_western_european_letter(L'æ'));
+        CHECK(is_character::is_western_european_letter(L'Ø'));
+        CHECK(is_character::is_western_european_letter(L'Å'));
+        CHECK(is_character::is_western_european_letter(L'Æ'));
+        }
+    SECTION("Western European Letter Detection Non-Western")
+        {
+        // Greek should NOT be detected as Western European
+        CHECK_FALSE(is_character::is_western_european_letter(L'α')); // alpha
+        CHECK_FALSE(is_character::is_western_european_letter(L'β')); // beta
+        CHECK_FALSE(is_character::is_western_european_letter(L'ω')); // omega
+        CHECK_FALSE(is_character::is_western_european_letter(L'Α')); // Alpha
+        CHECK_FALSE(is_character::is_western_european_letter(L'Ω')); // Omega
+        CHECK_FALSE(is_character::is_western_european_letter(L'ά')); // alpha with tonos
+
+        // Cyrillic should NOT be detected as Western European
+        CHECK_FALSE(is_character::is_western_european_letter(L'а')); // Cyrillic a
+        CHECK_FALSE(is_character::is_western_european_letter(L'я')); // Cyrillic ya
+        CHECK_FALSE(is_character::is_western_european_letter(L'А')); // Cyrillic A
+        CHECK_FALSE(is_character::is_western_european_letter(L'Я')); // Cyrillic Ya
+        CHECK_FALSE(is_character::is_western_european_letter(L'ї')); // Ukrainian yi
+        CHECK_FALSE(is_character::is_western_european_letter(L'ђ')); // Serbian dje
+
+        // Georgian should NOT be detected as Western European
+        CHECK_FALSE(is_character::is_western_european_letter(L'ა')); // Georgian a
+        CHECK_FALSE(is_character::is_western_european_letter(L'ბ')); // Georgian b
+        }
+    SECTION("Western European Letter Detection Non-Letters")
+        {
+        // Numbers should NOT be detected as Western European letters
+        CHECK_FALSE(is_character::is_western_european_letter(L'0'));
+        CHECK_FALSE(is_character::is_western_european_letter(L'9'));
+
+        // Punctuation should NOT be detected
+        CHECK_FALSE(is_character::is_western_european_letter(L'.'));
+        CHECK_FALSE(is_character::is_western_european_letter(L' '));
+        CHECK_FALSE(is_character::is_western_european_letter(L'-'));
+        CHECK_FALSE(is_character::is_western_european_letter(L'!'));
+        }
     }
 // NOLINTEND
 // clang-format on

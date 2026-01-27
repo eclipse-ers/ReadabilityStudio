@@ -334,6 +334,30 @@ namespace characters
                 (ch == 0x0390 || ch == 0x03B0));
             }
 
+        /** @returns @c true if a character is a Western European (Latin-based) letter.
+            This includes basic Latin a-z/A-Z and extended Latin with diacritics
+            used in Western European languages (French, German, Spanish,
+            Portuguese, Italian, Scandinavian, etc.).
+            @param ch The letter to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_western_european_letter(const wchar_t ch) noexcept
+            {
+            return (
+                // Basic Latin: A-Z, a-z
+                (ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A) ||
+                // Full-width Latin: Ａ-Ｚ, ａ-ｚ
+                (ch >= 0xFF21 && ch <= 0xFF3A) || (ch >= 0xFF41 && ch <= 0xFF5A) ||
+                // Extended ASCII (covers French, German, Spanish, Portuguese,
+                // Italian, Scandinavian): À-Ö, Ø-ß, à-ö, ø-ÿ
+                (ch >= 0xC0 && ch <= 0xD6) || (ch >= 0xD8 && ch <= 0xFF) ||
+                // OE ligature: Œ/œ
+                (ch == 0x0152 || ch == 0x0153) ||
+                // German capital eszett: ẞ
+                (ch == 0x1E9E) ||
+                // Y with umlaut uppercase: Ÿ
+                (ch == 0x0178));
+            }
+
         /** @returns The lowercased version of a letter, or the letter itself
                      if it can't be lowercased.
             @param ch The letter to be lowered.*/

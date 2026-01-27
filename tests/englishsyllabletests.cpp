@@ -1196,6 +1196,87 @@ TEST_CASE("English syllabizer", "[syllable]")
         add_syllable_size_ignore_numerals<word<std::char_traits<wchar_t>, stemming::no_op_stem<std::basic_string<wchar_t,std::char_traits<wchar_t> > > > > syllableAddNoNumbers;
         CHECK(syllableAddNoNumbers(0, money) == 0);
         }
+    SECTION("Non-Western European Languages (ENG)")
+        {
+        // the English syllabizer is not designed for non-Western European languages,
+        // but will count vowel blocks with the English logic at least and be close
+        english_syllabize syllabize;
+
+        // Greek
+        CHECK(syllabize(L"α", 1) == 1); // alpha
+        CHECK(syllabize(L"αβγ", 3) == 1); // alpha-beta-gamma
+        CHECK(syllabize(L"λόγος", 5) == 2); // logos
+        CHECK(syllabize(L"Ωμέγα", 5) == 3); // omega
+        CHECK(syllabize(L"φιλοσοφία", 9) == 4); // philosophia
+
+        // Russian (Cyrillic)
+        CHECK(syllabize(L"привет", 6) == 2); // privet (hello)
+        CHECK(syllabize(L"Москва", 6) == 2); // Moskva (Moscow)
+        CHECK(syllabize(L"Россия", 6) == 2); // Rossiya (Russia)
+        CHECK(syllabize(L"спасибо", 7) == 3); // spasibo (thank you)
+
+        // Ukrainian (Cyrillic)
+        CHECK(syllabize(L"Київ", 4) == 1); // Kyiv
+        CHECK(syllabize(L"Україна", 7) == 3); // Ukraina (Ukraine)
+
+        // Georgian
+        CHECK(syllabize(L"საქართველო", 10) == 4); // Sakartvelo (Georgia)
+        CHECK(syllabize(L"თბილისი", 7) == 3); // Tbilisi
+        }
+    SECTION("Non-Western European Languages (DE)")
+        {
+        // the German syllabizer is not designed for non-Western European languages,
+        // but will count vowel blocks with the English logic at least and be close
+        german_syllabize syllabize;
+
+        // Greek
+        CHECK(syllabize(L"α", 1) == 1); // alpha
+        CHECK(syllabize(L"αβγ", 3) == 1); // alpha-beta-gamma
+        CHECK(syllabize(L"λόγος", 5) == 2); // logos
+        CHECK(syllabize(L"Ωμέγα", 5) == 3); // omega
+        CHECK(syllabize(L"φιλοσοφία", 9) == 4); // philosophia
+
+        // Russian (Cyrillic)
+        CHECK(syllabize(L"привет", 6) == 2); // privet (hello)
+        CHECK(syllabize(L"Москва", 6) == 2); // Moskva (Moscow)
+        CHECK(syllabize(L"Россия", 6) == 2); // Rossiya (Russia)
+        CHECK(syllabize(L"спасибо", 7) == 3); // spasibo (thank you)
+
+        // Ukrainian (Cyrillic)
+        CHECK(syllabize(L"Київ", 4) == 1); // Kyiv
+        CHECK(syllabize(L"Україна", 7) == 3); // Ukraina (Ukraine)
+
+        // Georgian
+        CHECK(syllabize(L"საქართველო", 10) == 4); // Sakartvelo (Georgia)
+        CHECK(syllabize(L"თბილისი", 7) == 3); // Tbilisi
+        }
+    SECTION("Non-Western European Languages (ES)")
+        {
+        // the Spanish syllabizer is not designed for non-Western European languages,
+        // but will count vowel blocks with the English logic at least and be close
+        spanish_syllabize syllabize;
+
+        // Greek
+        CHECK(syllabize(L"α", 1) == 1); // alpha
+        CHECK(syllabize(L"αβγ", 3) == 1); // alpha-beta-gamma
+        CHECK(syllabize(L"λόγος", 5) == 2); // logos
+        CHECK(syllabize(L"Ωμέγα", 5) == 3); // omega
+        CHECK(syllabize(L"φιλοσοφία", 9) == 4); // philosophia
+
+        // Russian (Cyrillic)
+        CHECK(syllabize(L"привет", 6) == 2); // privet (hello)
+        CHECK(syllabize(L"Москва", 6) == 2); // Moskva (Moscow)
+        CHECK(syllabize(L"Россия", 6) == 2); // Rossiya (Russia)
+        CHECK(syllabize(L"спасибо", 7) == 3); // spasibo (thank you)
+
+        // Ukrainian (Cyrillic)
+        CHECK(syllabize(L"Київ", 4) == 1); // Kyiv
+        CHECK(syllabize(L"Україна", 7) == 3); // Ukraina (Ukraine)
+
+        // Georgian
+        CHECK(syllabize(L"საქართველო", 10) == 4); // Sakartvelo (Georgia)
+        CHECK(syllabize(L"თბილისი", 7) == 3); // Tbilisi
+        }
     }
 // NOLINTEND
 // clang-format on

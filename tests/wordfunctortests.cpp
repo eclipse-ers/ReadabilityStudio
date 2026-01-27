@@ -217,6 +217,60 @@ TEST_CASE("Spell checker", "[spellchecker]")
         CHECK_FALSE(spellCheck(MYWORD(L"1234.5..")));
         CHECK_FALSE(spellCheck(MYWORD(L"12345.6..")));
         }
+    SECTION("Non-Western European Words")
+        {
+        // Spell checker is designed for English/Western European languages.
+        // Words containing only non-Western European letters (Greek, Cyrillic, Georgian)
+        // should be ignored and considered "correctly spelled" since they are
+        // outside the scope of the English dictionary.
+        word_list knownWords;
+        word_list customKnownWords;
+        knownWords.load_words(L"the cat in cat is all about that", true, true);
+        is_correctly_spelled_word<MYWORD,word_list> spellCheck(&knownWords, &customKnownWords, nullptr, false, false, false, false, false, false, false);
+
+        // Greek words should be ignored (not flagged as misspelled)
+        CHECK(spellCheck(MYWORD(L"α"))); // single Greek letter (alpha)
+        CHECK(spellCheck(MYWORD(L"β"))); // beta
+        CHECK(spellCheck(MYWORD(L"αβγ"))); // multiple Greek letters
+        CHECK(spellCheck(MYWORD(L"λόγος"))); // Greek word with tonos
+        CHECK(spellCheck(MYWORD(L"ΑΒΓΔ"))); // uppercase Greek
+        CHECK(spellCheck(MYWORD(L"Ωμέγα"))); // mixed case Greek
+
+        // Cyrillic/Russian words should be ignored
+        CHECK(spellCheck(MYWORD(L"привет"))); // Russian "hello"
+        CHECK(spellCheck(MYWORD(L"МОСКВА"))); // Russian "Moscow" uppercase
+        CHECK(spellCheck(MYWORD(L"Россия"))); // Russian "Russia" mixed case
+
+        // Ukrainian Cyrillic should be ignored
+        CHECK(spellCheck(MYWORD(L"Київ"))); // Ukrainian "Kyiv"
+        CHECK(spellCheck(MYWORD(L"їжак"))); // Ukrainian word with ї
+
+        // Georgian words should be ignored
+        CHECK(spellCheck(MYWORD(L"საქართველო"))); // Georgian "Georgia"
+        CHECK(spellCheck(MYWORD(L"თბილისი"))); // Georgian "Tbilisi"
+
+        // Mixed scripts (Western + non-Western) should NOT be ignored
+        // These should be checked against the dictionary and fail if not found
+        CHECK_FALSE(spellCheck(MYWORD(L"Helloα"))); // Latin + Greek
+        CHECK_FALSE(spellCheck(MYWORD(L"catпривет"))); // Latin + Cyrillic
+        CHECK_FALSE(spellCheck(MYWORD(L"αHello"))); // Greek + Latin
+
+        // Pure Western European words should still be checked normally
+        CHECK_FALSE(spellCheck(MYWORD(L"misspeled"))); // English misspelling
+        CHECK(spellCheck(MYWORD(L"cat"))); // Known English word
+        }
+    SECTION("Standalone Punctuation Symbols")
+        {
+        // Standalone punctuation/symbols should not be flagged as misspellings
+        word_list knownWords;
+        word_list customKnownWords;
+        knownWords.load_words(L"the cat in cat is all about that", true, true);
+        is_correctly_spelled_word<MYWORD,word_list> spellCheck(&knownWords, &customKnownWords, nullptr, false, false, false, false, false, false, false);
+
+        CHECK(spellCheck(MYWORD(L"#"))); // hash/pound
+        CHECK(spellCheck(MYWORD(L"%"))); // percent
+        CHECK(spellCheck(MYWORD(L"&"))); // ampersand
+        }
     }
 
 TEST_CASE("Social Media", "[social-media]")

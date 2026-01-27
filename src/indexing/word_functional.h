@@ -1170,7 +1170,12 @@ class is_correctly_spelled_word
             // (e.g., "xxxxxxxx" or "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
             (the_word.find_first_not_of(L"xX-") == word_typeT::npos) ||
             // time with meridiem indicator (e.g., "4:00p.m.")
-            is_time_with_meridiem(the_word))
+            is_time_with_meridiem(the_word) ||
+            // words with only non-Western European letters (e.g., Greek, Cyrillic, Georgian)
+            // are outside the scope of the English spell checker
+            is_non_western_european_word(the_word) ||
+            // single non-letter character (e.g., "#", "%", "&")
+            (the_word.length() == 1 && !characters::is_character::is_alpha(the_word[0])))
             {
             m_recent_hits.emplace(key);
             return true;
@@ -1195,6 +1200,29 @@ class is_correctly_spelled_word
         }
 
   private:
+    /** @brief Checks if a word contains only non-Western European letters.
+        @param the_word The word to check.
+        @returns @c true if the word contains at least one letter and all letters
+                 are non-Western European (e.g., Greek, Cyrillic, Georgian).*/
+    [[nodiscard]]
+    static bool is_non_western_european_word(const word_typeT& the_word)
+        {
+        bool hasAnyLetter = false;
+        for (size_t i = 0; i < the_word.length(); ++i)
+            {
+            if (characters::is_character::is_western_european_letter(the_word[i]))
+                {
+                return false; // has Western European letter, not a non-Western word
+                }
+            if (characters::is_character::is_alpha(the_word[i]))
+                {
+                hasAnyLetter = true;
+                }
+            }
+        // Only return true if there was at least one letter (and no Western European ones)
+        return hasAnyLetter;
+        }
+
     [[nodiscard]]
     bool is_colloquialisms(const word_typeT& the_word) const
         {

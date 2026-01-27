@@ -2632,6 +2632,17 @@ TEST_CASE("Document lowercased sentences", "[document]")
         doc.load_document(text, wcslen(text), false, false, false, false);
         CHECK(doc.get_lowercase_beginning_sentences().size() == 0);
         }
+    SECTION("Lowercased Sentences Uppercase Greek Letter")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        // Uppercase Greek letters (Σ, Ω, etc.) should not be flagged as lowercase sentence starts
+        const wchar_t text[] = L"Σ (sigma) Placement accepts. Here is another sentence.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_lowercase_beginning_sentences().size() == 0);
+        }
     }
 
 TEST_CASE("Document wordy phrases", "[document]")
