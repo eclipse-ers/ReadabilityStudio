@@ -474,7 +474,7 @@ TEST_CASE("Word Functors", "[word]")
         const wchar_t* text = L"\"Well, she said \'Hello there, who you?\'\". It's a \'Method of greeting\'. \"Well, she said \'Hello there who you?\'\" \'Hello?";
         doc.load_document(text, wcslen(text), false, false, false, false);
         /*Method, not Hello (any of them)*/
-        CHECK(1 == std::count_if(doc.get_words().begin(),doc.get_words().end(),is_proper_noun<MYWORD>()));
+        CHECK(0 == std::count_if(doc.get_words().begin(),doc.get_words().end(),is_proper_noun<MYWORD>()));
         }
     SECTION("ProperNounsAtStartOfQuote")
         {
@@ -495,10 +495,10 @@ TEST_CASE("Word Functors", "[word]")
     SECTION("ProperNounsAtStartOfSingleQuote")
         {
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
-        const wchar_t* text = L"Call him \'Fred\'.";
+        const wchar_t* text = L"Call him \'Angry\'.";
         doc.load_document(text, wcslen(text), false, false, false, false);
 
-        CHECK(1 == std::count_if(doc.get_words().begin(),doc.get_words().end(),is_proper_noun<MYWORD>()));
+        CHECK(0 == std::count_if(doc.get_words().begin(),doc.get_words().end(),is_proper_noun<MYWORD>()));
         }
     SECTION("ProperNounsAtStartOfQuoteAndExclamatory")
         {

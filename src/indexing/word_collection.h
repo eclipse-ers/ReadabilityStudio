@@ -1683,7 +1683,7 @@ class document
                         m_quoteStartWords.push_back(currentWordIndex);
                         wordIsAtStartOfQuote = true;
                         }
-                     ++punctPos;
+                    ++punctPos;
                     }
                 // mark the word as proper if it meets our criteria now
                 if (!wordIsAtStartOfQuote)

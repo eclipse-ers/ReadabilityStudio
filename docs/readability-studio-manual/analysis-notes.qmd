@@ -498,7 +498,8 @@ All diacritical combinations for European letters are supported, including the f
 
 Words and phrases from other languages that are commonly used in another are referred to as loanwords (or borrowed words).
 For example, schadenfreude, doppelgänger, and armada are often heard in the English lexicon, despite their German and Spanish origins.
-In the context of readability, these words are counted and syllabized just as any other native word. For example:
+In the context of readability, these words are counted and syllabized just as any other native word.
+For example:
 
 ::: {.fancyquotes data-latex=''}
 That first sip of Mokka Java coffee while relaxing at Winans with a good Edward Tufte book...*la dolce vita*.
