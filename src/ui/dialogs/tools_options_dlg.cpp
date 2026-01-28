@@ -5297,7 +5297,7 @@ void ToolsOptionsDlg::CreateControls()
 
             optionsSizer->Add(
                 new wxCheckBox(generalSettingsPage, wxID_ANY,
-                               _(L"Allow Lua scripts to access files and system commands"),
+                               _(L"Allow Lua scripts to access system commands (requires restart)"),
                                wxDefaultPosition, wxDefaultSize, 0,
                                wxGenericValidator(&m_luaUnsafeMode.get_value())),
                 wxSizerFlags{}.Expand().Border(wxTOP));

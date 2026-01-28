@@ -145,12 +145,17 @@ The default behavior is to clear the log file every time the program starts.
 
 ### Scripting {-}
 
-**Allow Lua scripts to access files and system commands**: Select this option to enable the `io`, `os`, and `debug` libraries in the Lua scripting environment.
+**Allow Lua scripts to access system commands**: Select this option to enable the `io`, `os`, and `debug` libraries in the Lua scripting environment.
 By default, these libraries are disabled for security reasons.
 
 ::: {.warningsection data-latex=""}
-Enabling this option allows Lua scripts to read and write files, execute system commands, and access debugging features.
+Enabling this allows the use of Lua's built-in file I/O, system commands, and debugging features.
 Only enable this if you trust the scripts you are running.
+:::
+
+::: {.warningsection data-latex=""}
+This setting only affects Lua's own standard libraries.
+Lua scripts can still read or write files through functions provided by this application, regardless of this option.
 :::
 
 ::: {.notesection data-latex=""}
