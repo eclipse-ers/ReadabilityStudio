@@ -354,7 +354,7 @@ void AboutDialogEx::CreateControls()
             new wxStaticBitmap(mainPage, wxID_ANY,
                                Wisteria::UI::DialogWithHelp::FixStaticBitmapImage(
                                    wxGetApp().GetMainFrame()->GetLogo(), wxSize{ 128, 128 })));
-        appTitleSizer->Add(appLabelSizer, wxSizerFlags{}.CenterVertical());
+        appTitleSizer->Add(appLabelSizer, wxSizerFlags{}.CenterVertical().Left().Border(wxLEFT));
         mainPanelSizer->Add(appTitleSizer, wxSizerFlags{}.Left().Border(wxLEFT));
 
         auto* productArea = new wxBoxSizer(wxHORIZONTAL);

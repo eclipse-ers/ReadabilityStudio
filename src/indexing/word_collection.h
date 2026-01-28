@@ -1671,31 +1671,19 @@ class document
                 while (punctPos != m_punctuation.end() &&
                        punctPos->get_word_position() == currentWordIndex)
                     {
-                    /* If the word has a double quote *in front* of it then we will deal with it
-                       later. Treat it as if it were the first word of a sentence (basically, we see
-                       it as dialogue). */
+                    /* If the word has a quote *in front* of it then we will deal with it later.
+                       Treat it as if it were the first word of a sentence
+                       (basically, we see it as dialogue). */
                     if (!punctPos->is_connected_to_previous_word() &&
-                        characters::is_character::is_double_quote(punctPos->get_punctuation_mark()))
+                        (characters::is_character::is_double_quote(
+                             punctPos->get_punctuation_mark()) ||
+                         characters::is_character::is_single_quote(
+                             punctPos->get_punctuation_mark())))
                         {
                         m_quoteStartWords.push_back(currentWordIndex);
                         wordIsAtStartOfQuote = true;
                         }
-                    /* If the word has a single quote *in front* of it then we will maybe deal with
-                       it later. If the closing single quote is more than 3 words away or the next
-                       punctuation not a single quote, then we will treat it as if it were the first
-                       word of a sentence (basically, we see it as embedded dialogue). */
-                    else if (!punctPos->is_connected_to_previous_word() &&
-                             characters::is_character::is_single_quote(
-                                 punctPos->get_punctuation_mark()) &&
-                             punctPos + 1 != m_punctuation.end() &&
-                             ((punctPos + 1)->get_word_position() > currentWordIndex + 3 ||
-                              !characters::is_character::is_single_quote(
-                                  (punctPos + 1)->get_punctuation_mark())))
-                        {
-                        m_quoteStartWords.push_back(currentWordIndex);
-                        wordIsAtStartOfQuote = true;
-                        }
-                    ++punctPos;
+                     ++punctPos;
                     }
                 // mark the word as proper if it meets our criteria now
                 if (!wordIsAtStartOfQuote)
