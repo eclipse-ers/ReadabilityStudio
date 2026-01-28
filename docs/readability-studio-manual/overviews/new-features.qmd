@@ -17,15 +17,16 @@ source('../R/appdown.r')
 - Program's interface is now available in Spanish.
 - Added Lua scripting.
   This allows for programming your own scripts to automate various tasks.
-- Added document's last modified time to the summary statistics (standard projects).
-- **Web Harvester** improvements:
-  - Previous download folder is now saved.
-- `@USER@` placeholder can now be entered in printer headers, footers, and watermarks.
-  (This will expand into the user name currently logged into the computer.)
-- `@DATETIME@` placeholder can now be entered in printer headers and footers.
 - All result windows now support printing watermarks, not just graphs.\
   Note that this option has been moved to the menu under the **Print** button on the ribbon.\
   Also, watermarks on graphs will now only appear when printing or saving graphs.
+- `@USER@` placeholder can now be entered in printer headers, footers, and watermarks.
+  (This will expand into the user name currently logged into the computer.)
+- `@DATETIME@` placeholder can now be entered in printer headers and footers.
+- Added document's last modified time to the summary statistics (standard projects).
+- **Web Harvester** improvements:
+  - Previous download folder is now saved.
+
 - [Command-line options](#sec-command-line-options) have changed.
 
 ### Graph Enhancements {-}
@@ -41,10 +42,10 @@ source('../R/appdown.r')
 
 ### Analysis/Test Enhancements {-}
 
-- [Combined accents](#diacritics) (i.e., diacritics) are now supported.\
-  For example, "e ◌́" will be imported as a 'é'.
-- [Typographical ligatures](#typographical-ligatures) are now converted to the regular characters.\
-  For example, "ﬀ" will be imported as "f f."
+- [Combined accents](#diacritics) (i.e., diacritics) are now supported.
+- [Typographical ligatures](#typographical-ligatures) are now converted to the regular characters.
+- Most European letters are now recognized.\
+  This adds support for handling Greek, Czech, Russian, etc. words when mixed with other languages.
 - Custom test formulas:
     - New function `IFS`.
     - The functions `MIN`, `MAX`, `SUM`, `AVERAGE`, `OR`, and `AND` now support 24 arguments.
@@ -173,7 +174,7 @@ source('../R/appdown.r')
   - Include brackets to organize the grade levels into groups such as "Elementary School."
 - Box plots now use the Tukey hinges method for calculating quartiles.
   (This matches what *R* does.)
-- Removed box plot IQR coefficient option; blox plots now just use quartiles.
+- Removed box plot IQR coefficient option; box plots now just use quartiles.
 - Added grouping support to box plots in batch projects.
 - Graph background images are now drawn in the plot area, instead of the entire background.
   This makes reading the axes and titles easier.
@@ -190,7 +191,7 @@ source('../R/appdown.r')
   - sentences that contain only one word that end with a colon at the end of a line.
 - Lone *%* characters (unless preceded by a number) are now treated as whole words (rather than punctuation).
 - If *%*, *¢*, or *°* characters are preceded by a number, then they will now be connected to the previous word.
-- Trademark (™), registration (®), service mark (℠), official mark (Ⓜ), sound recording (℗), and copyright (©, Ⓒ) symbols after a sentence are now handled properly.
+- Trademark (™), registration (®), service mark (℠), official mark, sound recording (℗), and copyright (©) symbols after a sentence are now handled properly.
 - Custom-test formulas can now contain C/C^++^ style comments.
   This includes multi-line (text inside of `/*` and `*/`) and single-line (`//`) comments.
 - **Wording Errors** and **Misspellings** have been renamed to **Errors & Misspellings** and **Possible Misspellings**, respectively.
@@ -257,7 +258,7 @@ source('../R/appdown.r')
 
 - Added **Line ends mark the start of a new paragraph** layout option to the [project wizard](#sec-creating-standard-project).
 - Added test bundles option to the project wizard.
-- Added ability to include descriptions for any document included in a batch project.
+- Added ability to include descriptions for any document included in a batch project.\
   (The program will fill in these descriptions automatically, based on the document's title.)
 - Added ability to apply group labels to documents in a batch project.
 - Added option to include a document description in standard projects.
@@ -464,7 +465,7 @@ source('../R/appdown.r')
 - Improvements to proper noun detection.
 - Improvements to abbreviation detection for abbreviated month names.
 - Improved proper noun detection.
-  Words in headers and at the start of sentences are marked as proper if the number of mid-sentence occurrences of the same word are capitalized is more than the occurrences that aren't.
+  Words in headers and at the start of sentences are marked as proper if the number of mid-sentence occurrences of the same word are capitalized more than the occurrences that aren't.
 - Lines of text that appear to be equations will be marked as incomplete sentences.
 - The option **Aggressively deduce lists** is now **Aggressively exclude**.
   Enabling this will now make citation-section exclusion more aggressive.

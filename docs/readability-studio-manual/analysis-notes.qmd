@@ -494,6 +494,37 @@ All diacritical combinations for European letters are supported, including the f
 - retroflex hook below 
 - cedilla
 
+## Loanwords {#sec-loanwords}
+
+Words and phrases from other languages that are commonly used in another are referred to as loanwords (or borrowed words).
+For example, schadenfreude, doppelgänger, and armada are often heard in the English lexicon, despite their German and Spanish origins.
+In the context of readability, these words are counted and syllabized just as any other native word. For example:
+
+::: {.fancyquotes data-latex=''}
+That first sip of Mokka Java coffee while relaxing at Winans with a good Edward Tufte book...*la dolce vita*.
+:::
+
+In the above example, *la dolce vita* will be counted as part of the sentence and syllabized using the English syllabizer's rules.
+
+This also applies to dual-role characters, such as Greek letters, which are often used as mathematical symbols.
+In this context, analyses will treat individual Greek letters as monosyllabic words.
+On the other hand, contiguous Greek letters will be seen as a word and syllabized as such.
+
+*{{< var PROGRAM_NAME >}}* can process most European letters, meaning that it will count the letters of foreign words as expected.
+(This applies to all words, not just loanwords.)
+In terms of syllable counting, it will use the rules defined by the project.
+For example, a Spanish project will use the Spanish syllabizer for all words.
+
+As an example:
+
+::: {.fancyquotes data-latex=''}
+"привет," Ivan said to his trusty localization engineer.
+:::
+
+In an English project, *привет* will be counted as two syllables.
+Despite being a Russian word, *{{< var PROGRAM_NAME >}}* will recognize the vowels *и* and *е* in it.
+From there, the English syllable-counting algorithm will calculate this as being two syllables.
+
 ## Link Lists (HTML Importer)
 
 When importing HTML documents, three or more consecutive hyperlinks not separated by text will be treated as a link list.

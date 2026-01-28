@@ -1,6 +1,17 @@
+---
+name: doc review
+description: Review documentation in a file or folder, or the entire codebase if no file is provided
+parameters:
+  file?:
+    description: File or folder path to review (optional)
+---
+
 # Documentation Review
 
 Review Quarto (.qmd) and Markdown (.md) files for documentation issues.
+
+If a `file` parameter is provided:
+- Review only the documentation within `{{file}}` (may be a file or folder).
 
 ## Scope
 
@@ -16,6 +27,7 @@ Find and analyze all `.md` and `.qmd` files in the repository, excluding:
 - Doubled words (e.g., "the the", "is is")
 - Wrong word usage (e.g., "it's" vs "its", "than" vs "then")
 - Missing words that break grammar (e.g., "This performed after" missing "is")
+- Accidental curse words
 
 ### Grammar Issues
 - Subject-verb disagreement (e.g., "the files is" instead of "the files are")
