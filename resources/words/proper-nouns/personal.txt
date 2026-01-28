@@ -2135,8 +2135,6 @@ Allysons
 Allyssa
 Allyssa's
 Allyssas
-Alma
-Alma's
 Almach
 Almach's
 Almaches
@@ -2152,7 +2150,6 @@ Almandeels
 Almano
 Almano's
 Almanos
-Almas
 Almaties
 Almaty
 Almaty's
@@ -4145,9 +4142,6 @@ Arlynn
 Arlynn's
 Arlynns
 Arlyns
-Armada
-Armada's
-Armadas
 Arman
 Arman's
 Armand
@@ -15765,6 +15759,9 @@ d'Arcus's
 d'Arcuses
 D'Arcy
 D'Arcy's
+d'Arezzo
+d'Arezzo's
+d'Arezzos
 D'Artagnan
 D'Artagnan's
 D'Artagnans
@@ -15780,6 +15777,9 @@ d'Erricos
 d'Esposito
 d'Esposito's
 d'Espositos
+d'Estaing
+d'Estaing's
+d'Estaings
 d'Herelle
 d'Herelle's
 d'Herelles
@@ -17101,8 +17101,6 @@ Decamerons
 DeCarlo
 DeCarlo's
 DeCarlos
-Decarlos's
-Decarloses
 DeCastro
 DeCastro's
 DeCastros
@@ -21915,9 +21913,6 @@ Eppses
 Epstein
 Epstein's
 Epsteins
-Equatorial
-Equatorial's
-Equatorials
 Eran
 Eran's
 Erans
@@ -29610,9 +29605,6 @@ Heaton's
 Heatons
 Heaven
 Heaven's
-Heavenlies
-Heavenly
-Heavenly's
 Heavens
 Heaviside
 Heaviside's
@@ -33041,9 +33033,6 @@ Jaggers
 Jago
 Jago's
 Jagos
-Jaguar
-Jaguar's
-Jaguars
 Jaheim
 Jaheim's
 Jaheims
@@ -40633,8 +40622,6 @@ Kyler
 Kyler's
 Kylers
 Kyles
-kyles's
-kyleses
 Kyley
 Kyley's
 Kyleys
@@ -44990,7 +44977,7 @@ Mackenzi
 Mackenzi's
 MacKenzie
 MacKenzie's
-MacKenzies
+Mackenzies
 Mackenzis
 Mackenzy
 Mackenzy's
@@ -56344,9 +56331,6 @@ Pontolillos
 Ponzi
 Ponzi's
 Ponzis
-Pooh
-Pooh's
-Poohs
 Pooley
 Pooley's
 Pooleys
@@ -62512,6 +62496,9 @@ Searles
 Searra
 Searra's
 Searras
+Sears
+Sears's
+Searses
 Seaton
 Seaton's
 Seatons

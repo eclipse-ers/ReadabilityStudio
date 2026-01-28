@@ -71,6 +71,7 @@ specifiy = "specifiy"
 Curso = "Curso"
 Informacion = "Informacion"
 Perspectivas = "Perspectivas"
+philosophia = "philosophia"
 
 [type.svg]
 extend-glob = ["*.svg"]

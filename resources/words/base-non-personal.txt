@@ -14,6 +14,7 @@ Abbotsford
 Aberdeenshire
 Abingdon
 Aboriginal
+Aboriginally
 Aborigine
 Absecon
 Abuja
@@ -178,9 +179,6 @@ Alnilam
 Alnitak
 Aloysia
 Alpes
-Alpha
-Alphaproteobacteria
-Alphaproteobacterium
 Alphard
 Alpharetta
 Alphecca
@@ -333,7 +331,6 @@ Apostille
 Appaegis
 Appalachia
 Appalachian
-Appaloosa
 Appia
 Appian
 AppImage
@@ -513,7 +510,6 @@ Atria
 Atropa
 Attica
 Atzeret
-au
 Auckland
 Audi
 Audubon
@@ -608,7 +604,6 @@ Bacchanalian
 Baconit
 BactrimR
 Baden
-Badlands
 Baghdad
 Bagrodia
 Baha'i
@@ -777,9 +772,6 @@ Bensalem
 Bentlee
 Bentonville
 Bentwood
-Benzodiazepine
-Benzodiazepines
-benzoylecgonine
 Beograd
 Berber
 Berea
@@ -866,7 +858,6 @@ Blazor
 Blendercleanser
 Blendrops
 Blinq
-Blitzkrieg
 Bloemfontein
 BlogPulse
 Blogspot
@@ -903,10 +894,11 @@ Boeotian
 Boerne
 BofA
 Bogartian
-Bogotá
 Boheme
 Bohemia
 Bohemian
+Bohemianism
+Bohemianisms
 Boise
 Bokmaal
 Bokmål
@@ -1251,7 +1243,10 @@ Catalina
 Catalonia
 Catawba
 Catchpoint
+Catholic
 Catholicism
+Catholicity
+Catholicly
 Catonsville
 Catoosa
 Catskill
@@ -1274,7 +1269,6 @@ Cedarwood
 Celanese
 Celeron
 Celestron
-Celsius
 Celt
 Celtic
 Cengage
@@ -1308,7 +1302,6 @@ Chalazion
 Chaldea
 Chaldean
 Chambersburg
-Champagne
 Chandigarh
 Chandipura
 Changjie
@@ -1558,7 +1551,6 @@ Comté
 Conair
 Conakry
 Concentra
-Concord
 Conda
 Confucian
 Confucianism
@@ -1747,7 +1739,6 @@ Dall-E
 Dallas
 Dalles
 Dalmatia
-Dalmatian
 Daltonism
 Damascus
 Dandridge
@@ -1833,7 +1824,6 @@ Demavend
 Demerol
 Demisto
 Democrat
-Democratic
 Demopolis
 Denali
 Denbighshire
@@ -1890,7 +1880,6 @@ DirectTV
 DirectWrite
 DirectX
 Disneyland
-District
 Divina
 Diwali
 Dixie
@@ -2156,7 +2145,6 @@ Ephesian
 Ephesus
 EpiPen
 EPISCenter
-Epispadias
 Epsom
 Epson
 Equifax
@@ -2250,8 +2238,7 @@ Europeanizing
 Europeans
 Euroscepticism
 Eurostar
-eurozone
-Eurythmics
+Eurozone
 Eustace
 Eustachian
 Eustacia
@@ -2264,6 +2251,7 @@ Evenki
 Eventbee
 EventBrite
 Everest
+Everglade
 Everglades
 Evergrande
 Everhome
@@ -2277,7 +2265,6 @@ Exadata
 Exanthem
 Excalibur
 Excedrin
-Excel
 Exeter
 Exmoor
 Exmore
@@ -2306,7 +2293,6 @@ FactFinder
 Faeroe
 FAFSANet
 Fagatogo
-Fahrenheit
 Fairborn
 Fairfax
 Fairfield
@@ -2703,6 +2689,7 @@ Gloucester
 Gloucestershire
 glucagon
 Gmail
+Gnostic
 Gnosticism
 Goa
 Gobi
@@ -3377,6 +3364,7 @@ Jacobean
 Jacobian
 Jacobin
 Jacobite
+Jaguar
 Jainism
 Jaipur
 Jakarta
@@ -4349,8 +4337,8 @@ Michiganite
 Michoacan
 Michoacán
 Micmac
-MicroChannel
 Micronesia
+Micronesian
 Micronics
 MicroSD
 MicroVAX
@@ -4597,7 +4585,6 @@ Murrumbidgee
 Muscat
 Muscatine
 Muscogee
-Muscovite
 Muscovy
 Musicscape
 Muskegon
@@ -5361,6 +5348,7 @@ Philippians
 Philippine
 Philippines
 Philistine
+Philistinism
 Phillie
 Phillipsburg
 Philly
@@ -7220,7 +7208,6 @@ Unidrv
 Unigo
 Unilever
 Uniondale
-Unionist
 Uniontown
 Unionville
 UniPlus
@@ -7275,7 +7262,9 @@ USSR
 Utah
 Utahan
 Utica
+Utopia
 Utopian
+Utopianism
 Utrecht
 Uttlesford
 Uuidgen
@@ -7777,6 +7766,9 @@ Ximian
 Xingu
 Xmas
 XML
+XMLizer
+XMLizer's
+XMLizers
 Xochimilco
 Xochitl
 Xpress

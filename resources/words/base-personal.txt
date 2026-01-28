@@ -717,7 +717,6 @@ Allyse
 Allysen
 Allyson
 Allyssa
-Alma
 Almach
 Almaden
 Almaguer
@@ -1395,7 +1394,6 @@ Arly
 Arlyn
 Arlyne
 Arlynn
-Armada
 Arman
 Armand
 Armandina
@@ -5303,11 +5301,13 @@ D'Ann
 D'Anthony
 d'Arcus
 D'Arcy
+d'Arezzo
 D'Artagnan
 D'Elia
 D'Epagnier
 d'Errico
 d'Esposito
+d'Estaing
 d'Herelle
 D'Vorah
 Dabrowski
@@ -7369,7 +7369,6 @@ Epifania
 Eppie
 Epps
 Epstein
-Equatorial
 Eran
 Erasmus
 Erastus
@@ -9949,7 +9948,6 @@ Heather
 Heathman
 Heaton
 Heaven
-Heavenly
 Heaviside
 Heberden
 Hebert
@@ -11100,7 +11098,6 @@ Jaewon
 Jaffe
 Jagger
 Jago
-Jaguar
 Jaheim
 Jahmar
 Jahna
@@ -13655,7 +13652,6 @@ Kyleigh
 Kylen
 Kylene
 Kyler
-Kyle
 Kyley
 Kyli
 Kylie
@@ -21006,6 +21002,7 @@ Seanna
 Searlas
 Searle
 Searra
+Sears
 Seaton
 Seawell
 Seawright

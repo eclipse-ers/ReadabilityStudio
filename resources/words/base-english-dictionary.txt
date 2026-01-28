@@ -298,9 +298,6 @@ abomination
 abomination's
 abominations
 aboral
-aboriginal
-aboriginally
-aborigine
 aborning
 abort
 aborted
@@ -1079,9 +1076,6 @@ acknowledgment
 acknowledgment's
 acknowledgments
 ACM
-acme
-acme's
-acmes
 acne
 acne's
 acned
@@ -4648,8 +4642,6 @@ anklet's
 anklets
 ankling
 ankyloglossia
-ankylosaurus
-ankylosaurus's
 ankylose
 ankylosing
 ankylosis
@@ -6444,7 +6436,6 @@ argumentativeness's
 arguments
 argy
 argyle
-argyles
 arhinia
 aria
 aria's
@@ -8922,7 +8913,6 @@ babbling
 babblings
 babe
 babe's
-babel
 babes
 babesiosis
 babied
@@ -8963,7 +8953,6 @@ baccarat's
 baccarats
 bacchanal
 bacchanal's
-bacchanalian
 bacchanals
 bacchic
 bachelor
@@ -9890,8 +9879,6 @@ baptism's
 baptismal
 baptismally
 baptisms
-baptist
-baptist's
 baptisteries
 baptistery
 baptistery's
@@ -11451,7 +11438,6 @@ bendite's
 bends
 bendy
 beneath
-benedictine
 benediction
 benediction's
 benedictions
@@ -11529,11 +11515,13 @@ benzines
 benzo[a]pyrene
 benzoapyrene
 benzoate
+benzodiazepine
 benzodiazepines
 benzoic
 benzothiazepine
 benzoyl
 benzoyl's
+benzoylecgonine
 benzoyls
 benzphetamine
 benzphetamine's
@@ -14045,9 +14033,6 @@ bogus
 bogy's
 bogyman
 bogymen
-bohemian
-bohemianism
-bohemianisms
 bohrium
 bohrium's
 boil
@@ -19436,14 +19421,6 @@ cathode
 cathode's
 cathodes
 cathodic
-catholic
-catholic's
-catholicism
-catholicities
-catholicity
-catholicity's
-catholicly
-catholics
 cation
 cation's
 cationic
@@ -26317,7 +26294,6 @@ confronts
 confrère
 confrère's
 confrères
-confucian
 confusable
 confuse
 confused
@@ -31586,10 +31562,6 @@ czars
 czarship
 côte
 d
-d'Arezzo
-d'art
-d'Azur
-d'Estaing
 d'etat
 d'etre
 d'oeuvre
@@ -31636,10 +31608,6 @@ dad
 dad's
 dada
 dada's
-dadaism
-dadaisms
-dadaist
-dadaists
 daddies
 daddy
 daddy's
@@ -31746,6 +31714,7 @@ dallies
 dally
 dallying
 dalmatian
+dalmatian's
 dalmatians
 dam
 dam's
@@ -32129,8 +32098,6 @@ daunts
 dauphin
 dauphin's
 dauphins
-davenport
-davenports
 davit
 davit's
 davits
@@ -35759,7 +35726,6 @@ dewpoint's
 dewpoints
 dews
 dewy
-dexamethasone
 dexes
 dexterities
 dexterity
@@ -41053,7 +41019,6 @@ east's
 eastbound
 eastbourne
 eastbourne's
-easter
 easterlies
 easterly
 eastern
@@ -42651,10 +42616,6 @@ eminent
 eminently
 emir
 emir's
-emirate
-emirate's
-emirates
-emirates's
 emirs
 emissaries
 emissary
@@ -45494,9 +45455,6 @@ eventuates
 eventuating
 ever
 eveready
-everest
-everglade
-everglade's
 evergreen
 evergreens
 everlasting
@@ -50160,7 +50118,6 @@ flickeringly
 flickers
 flickery
 flicking
-flickr
 flicks
 flied
 flier
@@ -51696,7 +51653,6 @@ fortnight's
 fortnightlies
 fortnightly
 fortnights
-fortran
 fortress
 fortress's
 fortressed
@@ -55699,9 +55655,6 @@ gnomic
 gnomish
 gnomonic
 gnosis
-gnostic
-gnostic's
-gnosticism
 GNP
 gnu
 gnu's
@@ -57436,7 +57389,6 @@ gudgeon's
 guerilla
 guerilla's
 guerillas
-guernsey
 guerrilla
 guerrilla's
 guerrillas
@@ -58418,7 +58370,6 @@ ham
 ham's
 hamartoma
 hamate
-hamburg
 hamburger
 hamburger's
 hamburgers
@@ -59124,7 +59075,6 @@ hastily
 hastiness
 hastiness's
 hasting
-hastings
 hasty
 hat
 hat's
@@ -72188,8 +72138,6 @@ labouringly
 labourings
 labours
 labra
-labrador
-labrador's
 labradorean
 labradoreans
 labradors
@@ -77570,9 +77518,6 @@ manifolds
 manikin
 manikin's
 manikins
-manila
-manila's
-manilas
 manilla
 manilla's
 manillas
@@ -80478,10 +80423,6 @@ microneedle's
 microneedles
 microneedling
 microneeds
-micronesia
-micronesia's
-micronesian
-micronesians
 microniche
 microniche's
 microniches
@@ -80698,8 +80639,6 @@ midget
 midget's
 midgets
 midgut
-midi
-midis
 midland
 midland's
 midlander
@@ -84097,8 +84036,6 @@ mulleins
 mullet
 mullet's
 mullets
-mulligan
-mulligans
 mulligatawnies
 mulligatawny
 mulligatawny's
@@ -92559,9 +92496,6 @@ oxcarts
 oxen
 oxen's
 oxes
-oxford
-oxford's
-oxfords
 oxidant
 oxidant's
 oxidants
@@ -93006,9 +92940,6 @@ palate's
 palates
 palatial
 palatially
-palatinate
-palatinate's
-palatinates
 palatine
 palatines
 palatoglossal
@@ -94862,8 +94793,6 @@ paystubs
 paywall
 paywall's
 paywalls
-Paz
-Paz's
 Pb
 Pb's
 PbBr
@@ -95530,7 +95459,6 @@ pentathlon
 pentathlon's
 pentathlons
 pentatonic
-pentecostal
 pentene
 penthouse
 penthouse's
@@ -96796,10 +96724,6 @@ philharmonics
 philippic
 philippic's
 philippics
-philistine
-philistines
-philistinism
-philistinisms
 philodendron
 philodendron's
 philodendrons
@@ -104132,7 +104056,6 @@ psalming
 psalmist
 psalmist's
 psalmists
-psalms
 psalteries
 psaltery
 psaltery's
@@ -110519,7 +110442,6 @@ rennets
 rennin
 rennin's
 rennins
-reno
 renominate
 renominated
 renominates
@@ -116439,8 +116361,6 @@ scimitar
 scimitar's
 scimitars
 scintigraphy
-scintilla
-scintilla's
 scintillant
 scintillantly
 scintillas
@@ -116641,13 +116561,6 @@ scowler's
 scowling
 scowls
 scows
-scrabble
-scrabbled
-scrabbler
-scrabbler's
-scrabblers
-scrabbles
-scrabbling
 scrag
 scrag's
 scragged
@@ -117273,7 +117186,6 @@ searest
 searing
 searingly
 searings
-sears
 seas
 seascape
 seascape's
@@ -121181,8 +121093,6 @@ skittishly
 skittishness
 skittishness's
 skittishnesses
-skittle
-skittle's
 skivvied
 skivvies
 skivvy
@@ -123189,7 +123099,6 @@ solves
 solving
 soma
 soma's
-somalia
 somas
 somatic
 somatization
@@ -125165,7 +125074,6 @@ spurted
 spurting
 spurts
 sputa
-sputnik
 sputter
 sputtered
 sputterer
@@ -130743,7 +130651,6 @@ swishes
 swishier
 swishing
 swishy
-swiss
 switch
 switch's
 switchable
@@ -131326,7 +131233,6 @@ systoles
 systolic
 syzygies
 syzygy
-szechuan
 séance
 séance's
 séances
@@ -137039,7 +136945,6 @@ trawler's
 trawlers
 trawling
 trawls
-trax
 tray
 tray's
 trayless
@@ -137646,8 +137551,6 @@ tripod
 tripod's
 tripodal
 tripods
-tripoli
-tripoli's
 tripolyphosphate
 triporate
 tripos
@@ -143533,13 +143436,6 @@ utilizing
 utils
 utmost
 utmosts
-utopia
-utopia's
-utopian
-utopian's
-utopianism
-utopianism's
-utopias
 utricle
 utricle's
 utricles
@@ -149588,8 +149484,6 @@ xerophytes
 xeroradiography
 xerosis
 xerostomia
-xerox
-xeroxed
 xhtml
 xi
 xi's
@@ -149606,9 +149500,6 @@ xmit
 xmits
 xmitted
 xmitting
-XML
-xmlizer
-xmlizers
 XOR
 XP
 XS
@@ -149678,9 +149569,6 @@ yammerers
 yammering
 yammers
 yams
-yang
-yang's
-yangs
 yank
 yank's
 yanked
