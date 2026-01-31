@@ -591,6 +591,20 @@ namespace grammar
                     {
                     ++current_position;
                     }
+                // footnote asterisk(s) after a sentence terminator (e.g., "hours.*" or
+                // "hours.**")? Skip over them, but only treat as end of sentence if the
+                // following text can begin a new sentence (uppercase letter, etc.).
+                // This avoids false positives with wildcards like "data.* file".
+                else if (current_position + 1 < length && text[current_position + 1] == L'*')
+                    {
+                    auto nextNonAsterisk = current_position + 1;
+                    while (nextNonAsterisk < length && text[nextNonAsterisk] == L'*')
+                        {
+                        ++nextNonAsterisk;
+                        }
+                    // move forward to the last asterisk
+                    current_position = nextNonAsterisk - 1;
+                    }
 
                 // At the end of the text? Assume this is a sentence end.
                 if (current_position + 1 >= length)
@@ -864,6 +878,18 @@ namespace grammar
             {
             return (can_character_end_sentence_strict(character) ||
                     characters::is_character::is_dash(character));
+            }
+
+        /** @returns @c true if a character is a post-sentence marker that should appear
+                after the sentence terminator (e.g., footnote asterisks, superscript
+                citation numbers, trademark/registration symbols, or footnote return arrows).
+            @param character The character to review.*/
+        [[nodiscard]]
+        static bool is_post_sentence_marker(const wchar_t character) noexcept
+            {
+            return (character == L'*' || string_util::is_superscript_number(character) ||
+                    string_util::is_trademark_or_registration(character) ||
+                    character == 8617); // curved left arrow (footnote return)
             }
 
         /** @returns @c true if a character can be a valid beginning or ending to a

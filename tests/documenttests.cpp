@@ -2913,6 +2913,12 @@ TEST_CASE("Document long incomplete", "[document]")
         doc.set_allowable_incomplete_sentence_size(6);
         const wchar_t* text = L"f(x) = G[( n+ 1)/ 2] /G( n/2) *(n* p)- 1/2 *[1 +(x2/n)-( n+ 1)/ 2";
         doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(1 == doc.get_paragraph_count());
+        CHECK(0 == doc.get_valid_paragraph_count());
+        CHECK(1 == doc.get_sentence_count());
+        CHECK(0 == doc.get_complete_sentence_count());
+        REQUIRE(16 == doc.get_word_count());
+        CHECK(0 == doc.get_valid_word_count());
         CHECK(doc.get_words().at(0).is_valid() == false);
         CHECK(doc.get_words().at(1).is_valid() == false);
         CHECK(doc.get_words().at(2).is_valid() == false);
@@ -2929,13 +2935,6 @@ TEST_CASE("Document long incomplete", "[document]")
         CHECK(doc.get_words().at(13).is_valid() == false);
         CHECK(doc.get_words().at(14).is_valid() == false);
         CHECK(doc.get_words().at(15).is_valid() == false);
-
-        CHECK(1 == doc.get_paragraph_count());
-        CHECK(0 == doc.get_valid_paragraph_count());
-        CHECK(1 == doc.get_sentence_count());
-        CHECK(0 == doc.get_complete_sentence_count());
-        CHECK(16 == doc.get_word_count());
-        CHECK(0 == doc.get_valid_word_count());
         }
     SECTION("Long Incomplete Sentences Aggressive")
         {
@@ -2979,7 +2978,7 @@ TEST_CASE("Document long incomplete", "[document]")
 
         CHECK(doc.get_paragraph_count() == 3);
         CHECK(doc.get_valid_paragraph_count() == 1);
-        CHECK(doc.get_sentence_count() == 4);
+        REQUIRE(doc.get_sentence_count() == 4);
         CHECK(doc.get_complete_sentence_count() == 1);
         CHECK(doc.get_word_count() == 13);
         CHECK(doc.get_valid_word_count() == 7);
@@ -3000,7 +2999,7 @@ TEST_CASE("Document long incomplete", "[document]")
 
         CHECK(doc.get_paragraph_count() == 4);
         CHECK(doc.get_valid_paragraph_count() == 1);
-        CHECK(doc.get_sentence_count() == 5);
+        REQUIRE(doc.get_sentence_count() == 5);
         CHECK(doc.get_complete_sentence_count() == 1);
         CHECK(doc.get_word_count() == 15);
         CHECK(doc.get_valid_word_count() == 7);
@@ -3022,7 +3021,7 @@ TEST_CASE("Document long incomplete", "[document]")
 
         CHECK(doc.get_paragraph_count() == 5);
         CHECK(doc.get_valid_paragraph_count() == 1);
-        CHECK(doc.get_sentence_count() == 6);
+        REQUIRE(doc.get_sentence_count() == 6);
         CHECK(doc.get_complete_sentence_count() == 1);
         CHECK(doc.get_word_count() == 17);
         CHECK(doc.get_valid_word_count() == 7);
@@ -3045,7 +3044,7 @@ TEST_CASE("Document long incomplete", "[document]")
 
         CHECK(doc.get_paragraph_count() == 3);
         CHECK(doc.get_valid_paragraph_count() == 2);
-        CHECK(doc.get_sentence_count() == 5);
+        REQUIRE(doc.get_sentence_count() == 5);
         CHECK(doc.get_complete_sentence_count() == 3);
         CHECK(doc.get_word_count() == 17);
         CHECK(doc.get_valid_word_count() == 13);
@@ -3083,7 +3082,7 @@ TEST_CASE("Document sentence unit", "[document]")
             L"I—am Mr. Smithe my name is C. Blake Smithe.  I usually go by Blake: or the "
             L"Blakeman; Mr. blake is OK too. Seriously, call me Blake.";
         doc.load_document(text, wcslen(text), false, false, false, false);
-        CHECK(doc.get_sentence_count() == 3);
+        REQUIRE(doc.get_sentence_count() == 3);
         CHECK(doc.get_sentences()[0].get_unit_count() == 2);
         CHECK(doc.get_sentences()[1].get_unit_count() == 3);
         CHECK(doc.get_sentences()[2].get_unit_count() == 1);
@@ -3098,7 +3097,7 @@ TEST_CASE("Document sentence unit", "[document]")
             L"I am Mr. Smithe--my name is C. Blake Smithe.  I usually go by Blake:; or the "
             L"Blakeman; Mr. blake is OK too. Seriously, call me Blake.";
         doc.load_document(text, wcslen(text), false, false, false, false);
-        CHECK(doc.get_sentence_count() == 3);
+        REQUIRE(doc.get_sentence_count() == 3);
         CHECK(doc.get_sentences()[0].get_unit_count() == 2);
         CHECK(doc.get_sentences()[1].get_unit_count() == 3);
         CHECK(doc.get_sentences()[2].get_unit_count() == 1);
@@ -3113,7 +3112,7 @@ TEST_CASE("Document sentence unit", "[document]")
             L"I am Mr. Smithe my name is C. Blake Smithe.  I usually go by Blake or the Blakeman "
             L"Mr. blake is OK too. Seriously, call me Blake.";
         doc.load_document(text, wcslen(text), false, false, false, false);
-        CHECK(doc.get_sentence_count() == 3);
+        REQUIRE(doc.get_sentence_count() == 3);
         CHECK(doc.get_sentences()[0].get_unit_count() == 1);
         CHECK(doc.get_sentences()[1].get_unit_count() == 1);
         CHECK(doc.get_sentences()[2].get_unit_count() == 1);
@@ -3126,7 +3125,7 @@ TEST_CASE("Document sentence unit", "[document]")
                              &Programming_known_spellings, &Stop_list);
         const wchar_t text[] = L"I am a happy-go-lucky guy most of the time.";
         doc.load_document(text, wcslen(text), false, false, false, false);
-        CHECK(doc.get_sentence_count() == 1);
+        REQUIRE(doc.get_sentence_count() == 1);
         CHECK(doc.get_sentences()[0].get_unit_count() == 1);
         }
     SECTION("Sentence Unit Double Hyphens As Dash")
@@ -3137,8 +3136,34 @@ TEST_CASE("Document sentence unit", "[document]")
                              &Programming_known_spellings, &Stop_list);
         const wchar_t text[] = L"I am a happy--most of the time--guy.";
         doc.load_document(text, wcslen(text), false, false, false, false);
-        CHECK(doc.get_sentence_count() == 1);
+        REQUIRE(doc.get_sentence_count() == 1);
         CHECK(doc.get_sentences()[0].get_unit_count() == 3);
+        }
+    SECTION("Asterisk As Wildcard Not Ending Sentence")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t text[] =
+            L"Look for data.* files on the computer.";
+        doc.load_document(text, wcslen(text), false, false, false, true);
+        REQUIRE(doc.get_sentence_count() == 1);
+        CHECK(doc.get_sentences()[0].get_word_count() == 7);
+        }
+    SECTION("Sentence Ending With Footnote Asterisk")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t text[] =
+            L"It strengthens skin's barrier by 20% in two hours.* "
+            L"Oil-free gel strengthens skin's barrier by 18% in two hours.**";
+        doc.load_document(text, wcslen(text), false, false, false, true);
+        REQUIRE(doc.get_sentence_count() == 2);
+        CHECK(doc.get_sentences()[0].get_word_count() == 9);
+        CHECK(doc.get_sentences()[1].get_word_count() == 10);
         }
     SECTION("Sentence Unit No Sentences")
         {

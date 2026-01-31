@@ -194,9 +194,17 @@ static size_t FormatWordCollectionHighlightedWords(
                                 endingPunctuation);
                             punct = lily_of_the_valley::html_encode_text::simple_encode(punct);
                             }
-                        // flip the last punctuation and period around if the punctuation is
-                        // a quote (i.e., ". becomes .")
-                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()))
+                        // flip the last punctuation and sentence terminator if the
+                        // punctuation is a quote (i.e., ". becomes .") or the only
+                        // trailing post-sentence marker (e.g., a lone footnote asterisk)
+                        const bool isOnlyConnectedPunct =
+                            (punctPos == theDocument->get_punctuation().cbegin() ||
+                             std::prev(punctPos)->get_word_position() != i + 1 ||
+                             !std::prev(punctPos)->is_connected_to_previous_word());
+                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()) ||
+                            (grammar::is_end_of_sentence::is_post_sentence_marker(
+                                 punctPos->get_punctuation_mark()) &&
+                             isOnlyConnectedPunct))
                             {
                             text.append(endingPunctuation).append(punct);
                             }
@@ -489,9 +497,17 @@ static size_t FormatWordCollectionHighlightedGrammarIssues(
                                 endingPunctuation);
                             punct = lily_of_the_valley::html_encode_text::simple_encode(punct);
                             }
-                        // flip the last punctuation and period around if the punctuation
-                        // is a quote (i.e., ". becomes .")
-                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()))
+                        // flip the last punctuation and sentence terminator if the
+                        // punctuation is a quote (i.e., ". becomes .") or the only
+                        // trailing post-sentence marker (e.g., a lone footnote asterisk)
+                        const bool isOnlyConnectedPunct =
+                            (punctPos == theDocument->get_punctuation().cbegin() ||
+                             std::prev(punctPos)->get_word_position() != i + 1 ||
+                             !std::prev(punctPos)->is_connected_to_previous_word());
+                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()) ||
+                            (grammar::is_end_of_sentence::is_post_sentence_marker(
+                                 punctPos->get_punctuation_mark()) &&
+                             isOnlyConnectedPunct))
                             {
                             text.append(endingPunctuation).append(punct);
                             }
@@ -696,9 +712,17 @@ FormatFilteredWordCollection(const std::shared_ptr<documentT>& theDocument, std:
                         const std::wstring punct(1, punctPos->get_punctuation_mark());
                         const std::wstring endingPunctuation(
                             1, currentSentence.get_ending_punctuation());
-                        // flip the last punctuation and period around if the punctuation
-                        // is a quote (i.e., ". becomes .")
-                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()))
+                        // flip the last punctuation and sentence terminator if the
+                        // punctuation is a quote (i.e., ". becomes .") or the only
+                        // trailing post-sentence marker (e.g., a lone footnote asterisk)
+                        const bool isOnlyConnectedPunct =
+                            (punctPos == theDocument->get_punctuation().cbegin() ||
+                             std::prev(punctPos)->get_word_position() != i + 1 ||
+                             !std::prev(punctPos)->is_connected_to_previous_word());
+                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()) ||
+                            (grammar::is_end_of_sentence::is_post_sentence_marker(
+                                 punctPos->get_punctuation_mark()) &&
+                             isOnlyConnectedPunct))
                             {
                             text.append(endingPunctuation).append(punct);
                             }
