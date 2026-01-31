@@ -151,7 +151,6 @@ Download and upload SVG images with CC0 public domain license.
 *Playfair Display*, designed by Claus Eggers Sørensen.
 *Inter*, designed by Rasmus Andersson.
 *Inconsolata*, designed by Raph Levien.
-*Playfair Display*, designed by Claus Eggers Sørensen.
 *Noto Sans Japanese*, created by Google, inc.
 
 All fonts licensed under the SIL Open Font License Version 1.1.

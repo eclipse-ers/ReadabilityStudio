@@ -495,7 +495,7 @@ NanoSVG is a simple stupid single-header-file SVG parse. The output of the parse
 
 Library for stemming words down to their root words.
 
-> Copyright (c) 2020, Oleander Software, Ltd.
+> Copyright (c) 2026, Oleander Software, Ltd.
 >
 > All rights reserved.
 >
@@ -507,7 +507,7 @@ Library for stemming words down to their root words.
 >    copyright notice, this list of conditions and the
 >    following disclaimer.
 >
->  - Redistributions in binary form must reproduce th
+>  - Redistributions in binary form must reproduce the
 >    above copyright notice, this list of conditions
 >    and the following disclaimer in the documentation
 >    and/or other materials provided with the distribution.
@@ -611,7 +611,7 @@ Tiny recursive descent parser and evaluation engine in C.
 
 Tiny recursive descent parser and evaluation engine in C++ (based on TinyExpr).
 
-> Copyright (c) 2020-2025 Blake Madden
+> Copyright (c) 2020-2026 Blake Madden
 > 
 > This software is provided 'as-is', without any express or implied
 > warranty. In no event will the authors be held liable for any damages
@@ -1246,7 +1246,7 @@ A stable and powerful open source framework for developing native cross-platform
 
 Wisteria Dataviz is data visualization library based on wxWidgets.
 
-> Copyright (c) 2025, Blake Madden.
+> Copyright (c) 2026, Blake Madden.
 >
 > All rights reserved.
 >
@@ -1258,7 +1258,7 @@ Wisteria Dataviz is data visualization library based on wxWidgets.
 >    copyright notice, this list of conditions and the
 >    following disclaimer.
 >
->  - Redistributions in binary form must reproduce th
+>  - Redistributions in binary form must reproduce the
 >    above copyright notice, this list of conditions
 >    and the following disclaimer in the documentation
 >    and/or other materials provided with the distribution.

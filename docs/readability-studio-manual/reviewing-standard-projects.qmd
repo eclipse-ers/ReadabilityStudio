@@ -813,7 +813,7 @@ If part of a phrase ends one sentence and begins the next, then it will not be c
 Cliché-searching is applied to all sentences.
 [Incomplete sentences](#sec-how-text-is-excluded) will be reviewed for this, even if they are excluded from the analysis.
 
-To view any clichés in its original context, double-click on it.
+To view any cliché in its original context, double-click on it.
 This will take you to the **Highlighted Report** page with that cliché selected.
 
 Note that if there are no clichés in your document, then this window will not be included.

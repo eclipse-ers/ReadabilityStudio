@@ -17,7 +17,7 @@ This test consists of the following steps:
 
 Cloze procedures can also be used to gauge how easily a passage of text can be comprehended.
 In this context, a cloze procedure is given to a group of students, and the mean (average) of their scores is the level of comprehensibility for the passage.
-Sixty percent and higher are considered to be an acceptable levels of comprehensibility.
+Sixty percent and higher are considered to be acceptable levels of comprehensibility.
 Scores lower than 60% indicate that the passage may be too difficult to be comprehensible and should be rewritten.
 
 Cloze scores such as these are the criteria used to validate most readability formulas.

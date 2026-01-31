@@ -1,7 +1,7 @@
 ## Quadratwurzelverfahren\index{Quadratwurzelverfahren|(idxit} {#sec-qu-bamberger-vanecek}
 
 Quadratwurzelverfahren ("Square root method") is an alternative method for calculating [SMOG (Bamberger-Vanecek)](#sec-smog-bamberger-vanecek)\index{SMOG!derivatives!Quadratwurzelverfahren (German)} [-@{bamberger-vanecek}78].
-Where SMOG (Bamberger-Vanecek) uses a 30-sentence sample, Quadratwurzelverfahren uses a 100-word sample; otherwise, they produce the similar results.
+Where SMOG (Bamberger-Vanecek) uses a 30-sentence sample, Quadratwurzelverfahren uses a 100-word sample; otherwise, they produce similar results.
 
 ::: {.callout-note icon=false}
 ## Quadratwurzelverfahren formula
