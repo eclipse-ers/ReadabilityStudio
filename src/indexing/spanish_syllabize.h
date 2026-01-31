@@ -112,6 +112,12 @@ namespace grammar
                 }
 
             m_length = length;
+
+            if (syllabize_japanese({ start, m_length }))
+                {
+                return m_syllable_count;
+                }
+
             adjust_length_if_possessive(start);
 
             const std::pair<bool, size_t> mathResult = is_special_math_word(start, m_length);

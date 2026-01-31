@@ -81,7 +81,7 @@ namespace characters
         [[nodiscard]]
         constexpr static bool is_alpha(const wchar_t ch) noexcept
             {
-            return (is_upper(ch) || is_lower(ch));
+            return (is_upper(ch) || is_lower(ch) || is_japanese_script(ch));
             }
 
         /** @returns @c true if a character is a letter (English alphabet only,
@@ -356,6 +356,47 @@ namespace characters
                 (ch == 0x1E9E) ||
                 // Y with umlaut uppercase: Ÿ
                 (ch == 0x0178));
+            }
+
+        /** @returns @c true if a character is a Hiragana character (U+3040-U+309F).
+            @param ch The character to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_hiragana(const wchar_t ch) noexcept
+            {
+            return (ch >= 0x3040 && ch <= 0x309F);
+            }
+
+        /** @returns @c true if a character is a Katakana character
+                (U+30A0-U+30FF or halfwidth U+FF65-U+FF9F).
+            @param ch The character to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_katakana(const wchar_t ch) noexcept
+            {
+            return (ch >= 0x30A0 && ch <= 0x30FF) || // Katakana
+                   (ch >= 0x31F0 && ch <= 0x31FF) || // Katakana Phonetic Extensions (Ainu)
+                   (ch >= 0xFF65 && ch <= 0xFF9F);   // Halfwidth
+            }
+
+        /** @returns @c true if a character is a CJK Unified Ideograph
+                (U+4E00-U+9FFF or Extension A U+3400-U+4DBF).
+            @param ch The character to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_cjk_unified_ideograph(const wchar_t ch) noexcept
+            {
+            return (ch >= 0x4E00 && ch <= 0x9FFF) || (ch >= 0x3400 && ch <= 0x4DBF);
+            }
+
+        /** @returns @c true if a character is a Japanese ideograph
+                (Hiragana, Katakana, or CJK Unified Ideograph).
+            @param ch The character to be reviewed.
+            @note This implementation supports Standard Modern Japanese (Jōyō/Jinmeiyō Kanji)
+                as defined in the Unicode BMP.
+                It does not support rare name variants (Extensions B-I) or non-BMP characters
+                like Emojis.*/
+        [[nodiscard]]
+        constexpr static bool is_japanese_script(const wchar_t ch) noexcept
+            {
+            return is_hiragana(ch) || is_katakana(ch) || is_cjk_unified_ideograph(ch);
             }
 
         /** @returns The lowercased version of a letter, or the letter itself
@@ -1076,7 +1117,8 @@ namespace characters
         constexpr static bool is_period(const wchar_t ch) noexcept
             {
             return (ch == L'.' || ch == 0xFF0E /*full-width*/ ||
-                    ch == 0xFF61 /*half-width, more commonly used*/);
+                    ch == 0x3002 /*ideographic full stop*/ ||
+                    ch == 0xFF61 /*half-width ideographic period*/);
             }
 
         /** @returns @c true if a (non-numeric) character can appear in front of a number

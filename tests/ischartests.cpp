@@ -86,6 +86,39 @@ TEST_CASE("ischaracter", "[ischaracter]")
             }
         }
 
+    SECTION("Is Alpha Japanese")
+        {
+        // hiragana
+        CHECK(is_character::is_alpha(L'あ'));
+        CHECK(is_character::is_alpha(L'い'));
+        CHECK(is_character::is_alpha(L'う'));
+        CHECK(is_character::is_alpha(L'か'));
+        CHECK(is_character::is_alpha(L'ん'));
+        // katakana
+        CHECK(is_character::is_alpha(L'ア'));
+        CHECK(is_character::is_alpha(L'イ'));
+        CHECK(is_character::is_alpha(L'ウ'));
+        CHECK(is_character::is_alpha(L'カ'));
+        CHECK(is_character::is_alpha(L'ン'));
+        // halfwidth katakana
+        CHECK(is_character::is_alpha(L'ｱ'));
+        CHECK(is_character::is_alpha(L'ｶ'));
+        // kanji
+        CHECK(is_character::is_alpha(L'一'));
+        CHECK(is_character::is_alpha(L'人'));
+        CHECK(is_character::is_alpha(L'日'));
+        CHECK(is_character::is_alpha(L'本'));
+        CHECK(is_character::is_alpha(L'山'));
+        // not 8-bit
+        CHECK_FALSE(is_character::is_alpha_8bit(L'あ'));
+        CHECK_FALSE(is_character::is_alpha_8bit(L'ア'));
+        CHECK_FALSE(is_character::is_alpha_8bit(L'一'));
+        // Japanese punctuation should not be alpha
+        CHECK_FALSE(is_character::is_alpha(L'。'));
+        CHECK_FALSE(is_character::is_alpha(L'、'));
+        CHECK_FALSE(is_character::is_alpha(L'．'));
+        }
+
     SECTION("Is Vowel Russian")
         {
         for (size_t i = 0 ; i < vowelsRussian.length(); ++i)
@@ -1992,6 +2025,124 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK_FALSE(is_character::is_western_european_letter(L' '));
         CHECK_FALSE(is_character::is_western_european_letter(L'-'));
         CHECK_FALSE(is_character::is_western_european_letter(L'!'));
+        }
+    SECTION("Is Hiragana")
+        {
+        CHECK(is_character::is_hiragana(L'あ')); // a
+        CHECK(is_character::is_hiragana(L'い')); // i
+        CHECK(is_character::is_hiragana(L'う')); // u
+        CHECK(is_character::is_hiragana(L'え')); // e
+        CHECK(is_character::is_hiragana(L'お')); // o
+        CHECK(is_character::is_hiragana(L'か')); // ka
+        CHECK(is_character::is_hiragana(L'さ')); // sa
+        CHECK(is_character::is_hiragana(L'た')); // ta
+        CHECK(is_character::is_hiragana(L'な')); // na
+        CHECK(is_character::is_hiragana(L'は')); // ha
+        CHECK(is_character::is_hiragana(L'ん')); // n
+        // boundary checks (use hex for potentially unassigned codepoints)
+        CHECK(is_character::is_hiragana(L'\x3040'));
+        CHECK(is_character::is_hiragana(L'\x309F'));
+
+        CHECK_FALSE(is_character::is_hiragana(L'\x303F'));
+        CHECK_FALSE(is_character::is_hiragana(L'\x30A0'));
+        CHECK_FALSE(is_character::is_hiragana(L'A'));
+        CHECK_FALSE(is_character::is_hiragana(L'.'));
+        CHECK_FALSE(is_character::is_hiragana(L'ア')); // katakana
+        }
+    SECTION("Is Katakana")
+        {
+        CHECK(is_character::is_katakana(L'ア')); // a
+        CHECK(is_character::is_katakana(L'イ')); // i
+        CHECK(is_character::is_katakana(L'ウ')); // u
+        CHECK(is_character::is_katakana(L'エ')); // e
+        CHECK(is_character::is_katakana(L'オ')); // o
+        CHECK(is_character::is_katakana(L'カ')); // ka
+        CHECK(is_character::is_katakana(L'サ')); // sa
+        CHECK(is_character::is_katakana(L'タ')); // ta
+        CHECK(is_character::is_katakana(L'ナ')); // na
+        CHECK(is_character::is_katakana(L'ハ')); // ha
+        CHECK(is_character::is_katakana(L'ン')); // n
+        // boundary checks
+        CHECK(is_character::is_katakana(L'\x30A0'));
+        CHECK(is_character::is_katakana(L'\x30FF'));
+
+        // halfwidth katakana
+        CHECK(is_character::is_katakana(L'ｦ')); // U+FF66
+        CHECK(is_character::is_katakana(L'ｱ')); // U+FF71 halfwidth a
+        CHECK(is_character::is_katakana(L'ｶ')); // U+FF76 halfwidth ka
+        // halfwidth boundary checks
+        CHECK(is_character::is_katakana(L'\xFF65'));
+        CHECK(is_character::is_katakana(L'\xFF9F'));
+
+        // Katakana Phonetic Extensions (Ainu)
+        CHECK(is_character::is_katakana(L'ㇰ')); // U+31F0 small ku
+        CHECK(is_character::is_katakana(L'ㇱ')); // U+31F1 small si
+        CHECK(is_character::is_katakana(L'ㇲ')); // U+31F2 small su
+        CHECK(is_character::is_katakana(L'ㇵ')); // U+31F5 small nu
+        CHECK(is_character::is_katakana(L'ㇺ')); // U+31FA small mu
+        CHECK(is_character::is_katakana(L'ㇿ')); // U+31FF small ri
+        // Katakana Phonetic Extensions boundary checks
+        CHECK(is_character::is_katakana(L'\x31F0'));
+        CHECK(is_character::is_katakana(L'\x31FF'));
+        CHECK_FALSE(is_character::is_katakana(L'\x31EF'));
+        CHECK_FALSE(is_character::is_katakana(L'\x3200'));
+
+        CHECK_FALSE(is_character::is_katakana(L'\x309F'));
+        CHECK_FALSE(is_character::is_katakana(L'\x3100'));
+        CHECK_FALSE(is_character::is_katakana(L'\xFF64'));
+        CHECK_FALSE(is_character::is_katakana(L'\xFFA0'));
+        CHECK_FALSE(is_character::is_katakana(L'A'));
+        CHECK_FALSE(is_character::is_katakana(L'あ')); // hiragana
+        }
+    SECTION("Is CJK Unified Ideograph")
+        {
+        // common kanji
+        CHECK(is_character::is_cjk_unified_ideograph(L'一')); // one
+        CHECK(is_character::is_cjk_unified_ideograph(L'人')); // person
+        CHECK(is_character::is_cjk_unified_ideograph(L'日')); // day/sun
+        CHECK(is_character::is_cjk_unified_ideograph(L'本')); // book/origin
+        CHECK(is_character::is_cjk_unified_ideograph(L'山')); // mountain
+        CHECK(is_character::is_cjk_unified_ideograph(L'水')); // water
+        CHECK(is_character::is_cjk_unified_ideograph(L'火')); // fire
+        CHECK(is_character::is_cjk_unified_ideograph(L'木')); // tree
+        // CJK Unified Ideographs boundary checks
+        CHECK(is_character::is_cjk_unified_ideograph(L'\x4E00'));
+        CHECK(is_character::is_cjk_unified_ideograph(L'\x9FFF'));
+        // CJK Extension A boundary checks
+        CHECK(is_character::is_cjk_unified_ideograph(L'\x3400'));
+        CHECK(is_character::is_cjk_unified_ideograph(L'\x4DBF'));
+
+        CHECK_FALSE(is_character::is_cjk_unified_ideograph(L'\x33FF'));
+        CHECK_FALSE(is_character::is_cjk_unified_ideograph(L'\xA000'));
+        CHECK_FALSE(is_character::is_cjk_unified_ideograph(L'A'));
+        CHECK_FALSE(is_character::is_cjk_unified_ideograph(L'あ'));
+        CHECK_FALSE(is_character::is_cjk_unified_ideograph(L'ア'));
+        }
+    SECTION("Is Japanese Ideograph")
+        {
+        // hiragana
+        CHECK(is_character::is_japanese_script(L'あ'));
+        CHECK(is_character::is_japanese_script(L'ん'));
+
+        // katakana
+        CHECK(is_character::is_japanese_script(L'ア'));
+        CHECK(is_character::is_japanese_script(L'ン'));
+
+        // halfwidth katakana
+        CHECK(is_character::is_japanese_script(L'ｱ'));
+
+        // kanji
+        CHECK(is_character::is_japanese_script(L'一'));
+        CHECK(is_character::is_japanese_script(L'日'));
+        CHECK(is_character::is_japanese_script(L'本'));
+
+        // non-Japanese
+        CHECK_FALSE(is_character::is_japanese_script(L'A'));
+        CHECK_FALSE(is_character::is_japanese_script(L'0'));
+        CHECK_FALSE(is_character::is_japanese_script(L'.'));
+        CHECK_FALSE(is_character::is_japanese_script(L'。')); // ideographic period
+        CHECK_FALSE(is_character::is_japanese_script(L'．')); // fullwidth period
+        CHECK_FALSE(is_character::is_japanese_script(L' '));
         }
     }
 // NOLINTEND

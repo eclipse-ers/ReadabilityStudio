@@ -1277,6 +1277,46 @@ TEST_CASE("English syllabizer", "[syllable]")
         CHECK(syllabize(L"საქართველო", 10) == 4); // Sakartvelo (Georgia)
         CHECK(syllabize(L"თბილისი", 7) == 3); // Tbilisi
         }
+
+    SECTION("Japanese")
+        {
+        english_syllabize syllabize;
+
+        // pure hiragana (each character = 1 syllable)
+        CHECK(syllabize(L"あ", 1) == 1);
+        CHECK(syllabize(L"あい", 2) == 2);
+        CHECK(syllabize(L"さくら", 3) == 3); // sakura
+        CHECK(syllabize(L"ひらがな", 4) == 4); // hiragana
+        CHECK(syllabize(L"おはよう", 4) == 4); // ohayou
+
+        // pure katakana
+        CHECK(syllabize(L"アイ", 2) == 2);
+        CHECK(syllabize(L"カタカナ", 4) == 4); // katakana
+        CHECK(syllabize(L"トウキョウ", 5) == 5); // toukyou
+
+        // halfwidth katakana
+        CHECK(syllabize(L"ｱｲ", 2) == 2);
+
+        // pure kanji
+        CHECK(syllabize(L"日", 1) == 1);
+        CHECK(syllabize(L"日本", 2) == 2); // nihon
+        CHECK(syllabize(L"東京", 2) == 2); // toukyou
+        CHECK(syllabize(L"山水火木", 4) == 4);
+
+        // mixed hiragana and katakana
+        CHECK(syllabize(L"あアい", 3) == 3);
+
+        // mixed kanji and hiragana
+        CHECK(syllabize(L"食べる", 3) == 3); // taberu
+
+        // mixed: Japanese first, then English letters
+        CHECK(syllabize(L"東京test", 6) == 3); // 2 kanji + "test" (1 syllable)
+
+        // mixed: English letters first, then Japanese
+        CHECK(syllabize(L"test東京", 6) == 3); // "test" (1) + 2 kanji
+
+        CHECK(syllabize(L"東te京st", 6) == 3); // weird mix, just do what we can
+        }
     }
 // NOLINTEND
 // clang-format on

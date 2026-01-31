@@ -511,7 +511,7 @@ This also applies to dual-role characters, such as Greek letters, which are ofte
 In this context, analyses will treat individual Greek letters as monosyllabic words.
 On the other hand, contiguous Greek letters will be seen as a word and syllabized as such.
 
-*{{< var PROGRAM_NAME >}}* can process most European letters, meaning that it will count the letters of foreign words as expected.
+*{{< var PROGRAM_NAME >}}* can process most European letters (and Japanese, see below), meaning that it will count the letters of foreign words as expected.
 (This applies to all words, not just loanwords.)
 In terms of syllable counting, it will use the rules defined by the project.
 For example, a Spanish project will use the Spanish syllabizer for all words.
@@ -525,6 +525,28 @@ As an example:
 In an English project, *привет* will be counted as two syllables.
 Despite being a Russian word, *{{< var PROGRAM_NAME >}}* will recognize the vowels *и* and *е* in it.
 From there, the English syllable-counting algorithm will calculate this as being two syllables.
+
+In regards to Japanese script, *{{< var PROGRAM_NAME >}}* supports modern Japanese orthography (as defined in the Unicode Basic Multilingual Plane [BMP]).
+This includes:
+
+- Hiragana
+- Katakana (including the half-width and phonetic extensions for Ainu)
+- Jōyō/Jinmeiyō Kanji
+
+When a Japanese word is encountered, each character will be counted as one syllable (this applies to all project languages).
+For example:
+
+::: {.fancyquotes data-latex=''}
+Check the option "ドキュメンテーション" to install the documentation.
+:::
+
+Here, *ドキュメンテーション* will be counted as a ten-syllable word.
+
+::: {.notesection data-latex=""}
+Note on word separation: this feature is intended for individual Japanese words appearing within other languages.
+Because Japanese does not use spaces between words, larger blocks of Japanese text will be treated as a single "word" with an extremely high syllable count.
+If your documents contain sections of Japanese, it is recommended to exclude them using the [**Exclude text between**](#sec-options-overview) feature.
+:::
 
 ## Link Lists (HTML Importer)
 

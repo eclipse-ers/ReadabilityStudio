@@ -78,6 +78,41 @@ namespace grammar
             m_syllable_count = m_length = m_previous_vowel = m_previous_block_vowel = 0;
             }
 
+        /** @brief Counts Japanese ideographs in a word, treating each as one syllable.
+            @details If the word is entirely Japanese ideographs, the syllable count
+                is set to the word length and @c true is returned.
+                If the word is a mix of Japanese and non-Japanese characters,
+                the Japanese characters are counted and added to the syllable count,
+                and @c false is returned so the caller can handle the rest.
+            @param word The word to analyze.
+            @returns @c true if the entire word was Japanese and fully syllabized.*/
+        bool syllabize_japanese(const std::wstring_view word)
+            {
+            if (word.empty())
+                {
+                return false;
+                }
+
+            const auto japaneseCount = std::count_if(word.cbegin(), word.cend(),
+                                                     characters::is_character::is_japanese_script);
+
+            if (japaneseCount == 0)
+                {
+                return false;
+                }
+
+            if (std::cmp_equal(japaneseCount, word.length()))
+                {
+                m_syllable_count = word.length();
+                return true;
+                }
+
+            // mixed: count Japanese characters as syllables,
+            // let the caller handle the rest
+            m_syllable_count += japaneseCount;
+            return false;
+            }
+
         /** @brief Special case mathematical terms that need to be counted differently.
             @param start The word to analyze.
             @param length The length of the word.

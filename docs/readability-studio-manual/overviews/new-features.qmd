@@ -46,6 +46,8 @@ source('../R/appdown.r')
 - [Typographical ligatures](#typographical-ligatures) are now converted to the regular characters.
 - Most European letters are now recognized.\
   This adds support for handling Greek, Czech, Russian, etc. words when mixed with other languages.
+- Japanese characters are now recognized as text.\
+  Each character will be counted as one syllable and Japanese words will be included in the word counts.
 - Custom test formulas:
     - New function `IFS`.
     - The functions `MIN`, `MAX`, `SUM`, `AVERAGE`, `OR`, and `AND` now support 24 arguments.
