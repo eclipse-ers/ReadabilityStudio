@@ -136,9 +136,9 @@ namespace Wisteria::Graphs
         std::array<wxPoint, 11> m_grade7to8Polygon;
         std::array<wxPoint, 12> m_gradeOver8Polygon;
 
-        const Wisteria::Data::Column<double>* m_numberOfWordsColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOfSyllablesColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOfSentencesColumn{ nullptr };
+        wxString m_numberOfWordsColumn;
+        wxString m_numberOfSyllablesColumn;
+        wxString m_numberOfSentencesColumn;
         std::vector<Wisteria::ScorePoint> m_results;
 
         // used for consistent polygon calculations

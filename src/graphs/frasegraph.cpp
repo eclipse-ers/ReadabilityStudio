@@ -113,7 +113,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
         SetDataset(data);
         ResetGrouping();
         m_results.clear();
-        m_numberOfWordsColumn = m_numberOfSyllablesColumn = m_numberOfSentencesColumn = nullptr;
         GetSelectedIds().clear();
 
         if (GetDataset() == nullptr)
@@ -122,16 +121,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
             }
 
         SetGroupColumn(groupColumnName);
+        m_numberOfWordsColumn = numberOfWordsColumnName;
+        m_numberOfSyllablesColumn = numberOfSyllablesColumnName;
+        m_numberOfSentencesColumn = numberOfSentencesColumnName;
 
         // if grouping, build the list of group IDs, sorted by their respective labels
         if (IsUsingGrouping())
             {
             BuildGroupIdMap();
             }
-
-        m_numberOfWordsColumn = GetContinuousColumnRequired(numberOfWordsColumnName);
-        m_numberOfSyllablesColumn = GetContinuousColumnRequired(numberOfSyllablesColumnName);
-        m_numberOfSentencesColumn = GetContinuousColumnRequired(numberOfSentencesColumnName);
 
         BuildBackscreen();
         }
@@ -313,6 +311,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
             {
             return;
             }
+        const auto numberOfWordsColumn = GetContinuousColumn(m_numberOfWordsColumn);
+        const auto numberOfSyllablesColumn = GetContinuousColumn(m_numberOfSyllablesColumn);
+        const auto numberOfSentencesColumn = GetContinuousColumn(m_numberOfSentencesColumn);
 
         assert(m_backscreen && L"Backscreen not set!");
         assert(m_backscreen->GetBoundingBox(dc).GetWidth() == Canvas::GetDefaultCanvasWidthDIPs() &&
@@ -329,20 +330,20 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
         m_results.resize(GetDataset()->GetRowCount());
         for (size_t i = 0; i < GetDataset()->GetRowCount(); ++i)
             {
-            if (std::isnan(m_numberOfWordsColumn->GetValue(i)))
+            if (std::isnan(numberOfWordsColumn->GetValue(i)))
                 {
                 m_results[i].SetScoreInvalid(true);
                 continue;
                 }
 
             const auto normalizationFactor =
-                safe_divide<double>(100, m_numberOfWordsColumn->GetValue(i));
+                safe_divide<double>(100, numberOfWordsColumn->GetValue(i));
 
             // add the score to the grouped data
             m_results[i] = Wisteria::ScorePoint(
-                std::clamp<double>(normalizationFactor * m_numberOfSyllablesColumn->GetValue(i),
-                                   182, 234),
-                std::clamp<double>(normalizationFactor * m_numberOfSentencesColumn->GetValue(i), 0,
+                std::clamp<double>(normalizationFactor * numberOfSyllablesColumn->GetValue(i), 182,
+                                   234),
+                std::clamp<double>(normalizationFactor * numberOfSentencesColumn->GetValue(i), 0,
                                    15));
 
             m_results[i].ResetStatus();

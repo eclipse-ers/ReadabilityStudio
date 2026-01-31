@@ -223,8 +223,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
         SetDataset(data);
         ResetGrouping();
         m_results.clear();
-        m_numberOfWordsColumn = m_numberOf6PlusCharWordsColumn = m_numberOfSentencesColumn =
-            nullptr;
         GetSelectedIds().clear();
 
         if (GetDataset() == nullptr)
@@ -233,17 +231,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
             }
 
         SetGroupColumn(groupColumnName);
+        m_numberOfWordsColumn = numberOfWordsColumnName;
+        m_numberOf6PlusCharWordsColumn = numberOf6PlusCharWordsColumnName;
+        m_numberOfSentencesColumn = numberOfSentencesColumnName;
 
         // if grouping, build the list of group IDs, sorted by their respective labels
         if (IsUsingGrouping())
             {
             BuildGroupIdMap();
             }
-
-        m_numberOfWordsColumn = GetContinuousColumnRequired(numberOfWordsColumnName);
-        m_numberOf6PlusCharWordsColumn =
-            GetContinuousColumnRequired(numberOf6PlusCharWordsColumnName);
-        m_numberOfSentencesColumn = GetContinuousColumnRequired(numberOfSentencesColumnName);
 
         BuildBackscreen();
         }
@@ -648,12 +644,18 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
             {
             return;
             }
-        assert(m_backscreen && L"Backscreen not set!");
-        assert(m_backscreen->GetBoundingBox(dc).GetWidth() == Canvas::GetDefaultCanvasWidthDIPs() &&
-               L"Invalid backscreen size!");
-        assert(m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                   Canvas::GetDefaultCanvasHeightDIPs() &&
-               L"Invalid backscreen size!");
+        const auto numberOfWordsColumn = GetContinuousColumn(m_numberOfWordsColumn);
+        const auto numberOf6PlusCharWordsColumn =
+            GetContinuousColumn(m_numberOf6PlusCharWordsColumn);
+        const auto numberOfSentencesColumn = GetContinuousColumn(m_numberOfSentencesColumn);
+
+        wxASSERT_MSG(m_backscreen, L"Backscreen not set!");
+        wxASSERT_MSG(m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                         Canvas::GetDefaultCanvasWidthDIPs(),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG(m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                         Canvas::GetDefaultCanvasHeightDIPs(),
+                     L"Invalid backscreen size!");
 
         auto points = std::make_unique<GraphItems::Points2D>(wxNullPen);
         points->SetScaling(GetScaling());
@@ -663,21 +665,21 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
         m_results.resize(GetDataset()->GetRowCount());
         for (size_t i = 0; i < GetDataset()->GetRowCount(); ++i)
             {
-            if (std::isnan(m_numberOfWordsColumn->GetValue(i)))
+            if (std::isnan(numberOfWordsColumn->GetValue(i)))
                 {
                 m_results[i].SetScoreInvalid(true);
                 continue;
                 }
 
             const auto normalizationFactor =
-                safe_divide<double>(100, m_numberOfWordsColumn->GetValue(i));
+                safe_divide<double>(100, numberOfWordsColumn->GetValue(i));
 
             // add the score to the grouped data
             m_results[i] = Wisteria::ScorePoint(
-                std::clamp<double>(
-                    normalizationFactor * m_numberOf6PlusCharWordsColumn->GetValue(i), 6, 44),
-                std::clamp<double>(normalizationFactor * m_numberOfSentencesColumn->GetValue(i),
-                                   3.2, 28));
+                std::clamp<double>(normalizationFactor * numberOf6PlusCharWordsColumn->GetValue(i),
+                                   6, 44),
+                std::clamp<double>(normalizationFactor * numberOfSentencesColumn->GetValue(i), 3.2,
+                                   28));
 
             m_results[i].ResetStatus();
 

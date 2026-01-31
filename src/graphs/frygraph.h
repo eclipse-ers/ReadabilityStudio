@@ -159,9 +159,9 @@ namespace Wisteria::Graphs
         std::array<wxPoint, 9> m_longWordPoints;
         std::array<wxPoint, 12> m_dividerLinePoints;
 
-        const Wisteria::Data::Column<double>* m_numberOfWordsColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOfSyllablesColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOfSentencesColumn{ nullptr };
+        wxString m_numberOfWordsColumn;
+        wxString m_numberOfSyllablesColumn;
+        wxString m_numberOfSentencesColumn;
         std::vector<Wisteria::ScorePoint> m_results;
 
         // used for consistent polygon calculations

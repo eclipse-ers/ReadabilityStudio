@@ -139,9 +139,9 @@ namespace Wisteria::Graphs
         std::array<wxPoint, 10> m_longWordPoints;
         std::array<wxPoint, 10> m_dividerLinePoints;
 
-        const Wisteria::Data::Column<double>* m_numberOfWordsColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOf6PlusCharWordsColumn{ nullptr };
-        const Wisteria::Data::Column<double>* m_numberOfSentencesColumn{ nullptr };
+        wxString m_numberOfWordsColumn;
+        wxString m_numberOf6PlusCharWordsColumn;
+        wxString m_numberOfSentencesColumn;
         std::vector<Wisteria::ScorePoint> m_results;
 
         RaygorStyle m_raygorStyle{ RaygorStyle::BaldwinKaufman };
