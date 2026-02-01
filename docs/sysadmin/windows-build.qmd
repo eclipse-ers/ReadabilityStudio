@@ -9,7 +9,7 @@ source('R/appdown.r')
 
 | Install the following tools to build *{{< var PROGRAM_NAME >}}* |
 | :-- |
-| *{{< var MIN_MSVC_REQUIRED >}}* or higher |
+| *Visual Studio {{< var MIN_MSVC_REQUIRED >}}* or higher |
 | *Inno Setup* |
 | *R* from CRAN (optional) |
 | *Quarto* (optional) |
@@ -27,12 +27,12 @@ source('R/appdown.r')
 - From *Visual Studio*, select **Clone a Repository** again
   - Enter ["{{< var GIT_REPO >}}.git"]({{< var GIT_REPO >}}.git) and clone it to the same level as the "wxWidgets" folder
 - Once the "ReadabilityStudio" folder is cloned, open it in *Visual Studio*
-- Select the "{{< var MIN_MSVC_REQUIRED >}} Release" configuration and build it
+- Select the "Visual Studio {{< var MIN_MSVC_REQUIRED >}} Release" configuration and build it
 - Optionally, the "manuals" target can also be ran to rebuild the documentation
 
 ::: {.tipsection data-latex=""}
-To create a debug build, select the "{{< var MIN_MSVC_REQUIRED >}} Debug" configuration.
-Additionally, selecting "{{< var MIN_MSVC_REQUIRED >}} Debug w/ ASAN" will enable AddressSanitizer.
+To create a debug build, select the "Visual Studio {{< var MIN_MSVC_REQUIRED >}} Debug" configuration.
+Additionally, selecting "Visual Studio {{< var MIN_MSVC_REQUIRED >}} Debug w/ ASAN" will enable AddressSanitizer.
 
 To allow building with uncommitted changes in Git submodules, open your "CMakePresets.json" file and add the following to your chosen profile:
 

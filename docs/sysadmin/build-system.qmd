@@ -1,0 +1,164 @@
+```{r}
+#| include: false
+#| eval: true
+
+source('R/appdown.r')
+```
+
+# Build System Overview
+
+*{{< var PROGRAM_NAME >}}* uses a single *CMake* build script (`r file_path("CMakeLists.txt")`) to build the application across all supported platforms.
+This chapter provides a general overview of the build process, detailing the requirements, options, and platform-specific behavior of this script.
+
+## Requirements {-}
+
+The build system requires the following minimum versions:
+
+| Requirement | Version |
+| :-- | :-- |
+| *CMake* | {{< var CMAKE_MINIMUM_REQUIRED_VERSION >}} |
+| C++ standard | C++{{< var CMAKE_CXX_STANDARD >}} |
+| *GCC* (`r os_logo('linux')`) | {{< var MIN_GCC_REQUIRED >}} |
+| *AppleClang* (`r os_logo('apple')`) | {{< var MIN_APPLECLANG_REQUIRED >}} |
+| Microsoft *Visual Studio* (`r os_logo('Windows')`) | {{< var MIN_MSVC_REQUIRED >}} (toolset {{< var MIN_MSVC_TOOLSET_REQUIRED >}}) |
+| *wxWidgets* | {{< var MIN_WXWIDGETS_REQUIRED >}} |
+
+## Build Configurations {-}
+
+If no build type is specified, the script defaults to **Debug**.
+Two build types are supported: **Debug** and **Release**.
+
+The following options are available:
+
+- `ENABLE_SANITIZERS`: enables *AddressSanitizer* and *UndefinedBehaviorSanitizer* (ignored in release builds)
+- `ALLOW_DIRTY_SUBMODULES`: allows building even if Git submodules have local changes.
+  This is always `ON` for debug builds and defaults to `OFF` for release builds.
+
+In debug builds, `wxDEBUG_LEVEL` is set to 1; in release builds, it is set to 0.
+The script verifies that `wxBUILD_DEBUG_LEVEL` and `wxDEBUG_LEVEL` are consistent, and will halt with an error if they are mismatched.
+
+## wxWidgets Integration {-}
+
+*wxWidgets* is discovered by searching parent directories above the project folder.
+It is built as a static library (`wxBUILD_SHARED OFF`).
+
+The following *wxWidgets* libraries are linked:
+
+- core, base, xrc, propgrid, xml, aui, ribbon, qa, stc, net, richtext
+
+## Submodules {-}
+
+The project depends on the following Git submodules:
+
+- *Catch2*: testing framework
+- *Lua*: scripting language
+- *OleanderStemmingLibrary*: text stemming
+- *TinyExpr++*: formula parsing engine
+- *TinyXML2*: XML parser
+- *Wisteria-Dataviz*: graphics library (includes *CRCpp*, *easyexif*, *utfcpp*, *wxSimpleJSON*, and *wxStartPage*)
+
+During configuration, the build script queries each submodule for its commit hash, remote origin, and version tag.
+These are written into a generated SBOM header (`r file_path(c("src", "app", "sbom.h"))`) for traceability.
+
+## Versioning and Configured Files {-}
+
+The project version is defined via `project(readstudio VERSION ...)` and is broken into major, minor, patch, and tweak components.
+A display version string is built that omits trailing zero components (e.g., "2026.1" instead of "2026.1.0.0").
+
+The current Git commit hash is embedded as the build version.
+
+During configuration, `configure_file()` generates the following from their `.in` templates:
+
+- `r file_path(c("src", "app", "version.h"))` — compiled version information
+- `r file_path(c("current-version.txt"))` — plain-text version for remote update checks
+- `r file_path(c("citations.bib"))`, `r file_path(c("citations.mla"))`, `r file_path(c("citations.apa"))` — citation files
+- `r file_path(c("resource.h"))` — Windows resource header
+- `r file_path(c("docs", "_variables.yml"))` — *Quarto* documentation variables
+- `r file_path(c("docs", "sysadmin", "build-commands.txt"))` — build command reference
+- `r file_path(c("docs", "sysadmin", "windows-silent.txt"))` — silent install parameters
+- `r file_path(c("docs", "readability-studio-manual", "_quarto.yml"))` — manual *Quarto* configuration
+
+On Linux (`r os_logo('linux')`), a ".desktop" file is also generated.
+On Windows (`r os_logo('Windows')`), *Inno Setup* installer scripts are generated.
+
+## Platform-Specific Compilation {-}
+
+### Windows (MSVC) `r os_logo('Windows')` {-}
+
+- Definitions: `__WXMSW__`, `CRCPP_USE_CPP11`, `_CRT_SECURE_NO_WARNINGS`, `_UNICODE`
+- Debug adds: `__WXDEBUG__`, `ENABLE_PROFILING`, sanitizer definitions
+- Key flags: `/Zc:__cplusplus`, `/MP`, `/W3`, `/WX`, `/openmp`, `/permissive-`, `/sdl`, `/utf-8`
+- Release optimization: `/O2`
+
+### Windows (MinGW/MSYS) `r os_logo('Windows')` {-}
+
+- Same definitions as *MSVC*
+- *GCC*-style flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`
+- Security hardening: `-fstack-protector-strong`, `-D_FORTIFY_SOURCE=2`
+- Release optimization: `-O2`
+
+### macOS `r os_logo('apple')` {-}
+
+- Definitions: `__WXOSX__`, `CRCPP_USE_CPP11`
+- Universal binary: `arm64` and `x86_64` architectures
+- Deployment target: {{< var MACOS_REQUIRED >}}
+- Hardened runtime enabled
+- *GCC* flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`
+
+### Linux `r os_logo('linux')` {-}
+
+- Definitions: `__WXGTK__`, `CRCPP_USE_CPP11`
+- Requires *GTK 3*
+- *OpenMP* enabled for multithreading; *Intel TBB* linked if available
+- Dead code stripped in release builds (`-s`)
+- Symbol visibility set to hidden
+- *clang* flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`
+- Linker hardening: `-Wl,-z,relro,-z,now`
+
+## Unit Testing {-}
+
+When `BUILD_TESTING` is enabled, the build script runs all unit test suites during the configure step.
+Test results are written in *JUnit* XML format to the `r file_path(c("test-results"))` directory.
+
+The following test suites are executed:
+
+| Test Suite | Runner |
+| :-- | :-- |
+| *OleanderStemmingLibrary* | *OleanderStemTestRunner* |
+| *TinyExpr++* | *TETestRunner* |
+| *Wisteria-Dataviz* | *WisteriaTestRunner* |
+| *Wisteria-Dataviz* (GUI) | *WisteriaGuiTestRunner* |
+| *{{< var PROGRAM_NAME >}}* | *RSTestRunner* |
+| *{{< var PROGRAM_NAME >}}* (GUI) | *RSGuiTestRunner* |
+
+## Resource Bundling and Staging {-}
+
+After building, the following resources are bundled and copied to the build output and installer staging directories:
+
+- `r file_path(c("res.wad"))`: images and menu resources (zipped)
+- `r file_path(c("words.wad"))`: word lists (zipped)
+- Documentation folders (user manual, cheat sheets, test reference, release notes, sysadmin manual, API docs, Lua reference)
+- Translation files (e.g., Spanish)
+- License and citation files
+
+## Help and Documentation Targets {-}
+
+The build script provides additional targets beyond the main application:
+
+- **manuals**: builds the documentation using *R* and *Quarto* (requires *R* to be installed)
+- **doxygen-docs**: generates API documentation with *Doxygen* (included with `ALL` if *Doxygen* is found)
+- **g11n-dashboard**: globalization dashboard showing translation statuses
+- **docs-dashboard**: documentation coverage and completion dashboard
+- **tests-dashboard**: tests and quality dashboard
+
+## Installer Packaging {-}
+
+In release builds, the binary and resources are automatically staged for installer creation:
+
+- Windows (`r os_logo('Windows')`): the executable is copied to `r file_path(c('installers', 'windows', 'release'))`.\
+  An *Inno Setup* script is configured for building the installer.
+- Linux (`r os_logo('linux')`): the executable is copied to the AppImage staging directory at\
+  `r file_path(c('installers', 'unix', 'AppDir', 'usr', 'bin'))`.\
+  A `.desktop` file and application icon are also staged.
+- macOS (`r os_logo('apple')`): the application bundle is copied to `r file_path(c('installers', 'macos', 'release'))`.\
+  The `r file_path("Info.plist")` is configured from its template.

@@ -28,7 +28,7 @@ jobs:
           pip install codespell
       - name: Run codespell
         run: |
-          codespell src/ *.md *.rmd --skip="syllable.cpp,negating_word.cpp" -L forcast,ges,ded,sie,ure,nd,claus,compres,ue,oder,pard,als,atleast
+          codespell src/ *.md *.rmd --skip="syllable.cpp,negating_word.cpp" -L forcast,ges,ded,sie,ure,nd,claus,compres,ue,oder,pard,als,atleast,oint
           rc=$?
           if [ $rc != 0 ]; then
           cat <<EOF

@@ -4,7 +4,7 @@
 
 The following guidelines relate to all code:
 
-- Write in modern C++20, but only use features compatible with the latest *Visual Studio*, *GCC*, and *Apple Clang* releases
+- Write in modern C++{{< var CMAKE_CXX_STANDARD >}}, but only use features compatible with the latest *Visual Studio*, *GCC*, and *Apple Clang* releases
 - Class member variables should be prefixed with an `m_`
 - Macros should be in all caps (although macros should be avoided as much as possible)
 - Global and class member constants should be in all caps

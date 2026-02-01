@@ -72,6 +72,7 @@ Curso = "Curso"
 Informacion = "Informacion"
 Perspectivas = "Perspectivas"
 philosophia = "philosophia"
+thm = "thm"
 
 [type.svg]
 extend-glob = ["*.svg"]

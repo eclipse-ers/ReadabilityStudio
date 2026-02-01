@@ -23,6 +23,7 @@ book:
       - reporting-issues.qmd
     - part: "Building from Source"
       chapters:
+      - build-system.qmd
       - windows-build.qmd
       - macos-build.qmd
       - linux-build.qmd
