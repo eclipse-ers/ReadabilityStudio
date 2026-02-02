@@ -46,6 +46,7 @@ achieved	did
 achieves	does
 achieving	doing
 acquaintance	friend
+acquaintance's	friend's
 acquaintances	friends
 acquiesce	agree
 acquiesced	agreed
@@ -256,12 +257,14 @@ avenues	roads
 aversion	fear
 aversions	dislikes
 axiom	truth
+axiom's	rule's
 axioms	truths
 bargain	deal
 bargains	deals
 bashful	shy
 beatitude	blessing
 behemoth	giant
+behemoth's	giant's
 behemoths	giants
 benediction	blessing
 beneficence	kindness
@@ -345,7 +348,7 @@ commerce	trade
 commiseration	pity
 communicate	tell
 companion	friend
-companion's	mate's
+companion's	friend's
 companions	friends
 compassion	pity
 compensate	pay
@@ -442,6 +445,7 @@ contributed	gave
 contributes	gives
 contributing	giving
 contribution	gift
+contribution's	gift's
 contributions	gifts
 contributor	giver
 convene	meet
@@ -480,6 +484,7 @@ cultivating	growing
 currently	now
 customary	accepted
 damsel	girl
+damsel's	girl's
 damsels	girls
 debilitate	weaken
 debilitated	weakened
@@ -953,6 +958,7 @@ insipid	weak
 institution	office
 intelligent	smart
 intention	plan
+intention's	plan's
 intentions	plans
 interminable	endless
 internal	inside
@@ -993,6 +999,7 @@ located	found
 locates	finds
 locating	finding
 location	place
+location's	place's
 locations	places
 lucent	bright
 lucid	clear
@@ -1029,6 +1036,7 @@ mendicants	beggars
 mentality	mind
 methodologies	designs
 methodology	design
+methodology's	design's
 militate	fight
 militated	fought
 militates	fights
@@ -1120,6 +1128,7 @@ opportunities	chances
 opportunity	chance
 optimum	best
 option	choice
+option's	choice's
 options	choices
 opulent	rich
 ordinance	rule
@@ -1176,6 +1185,7 @@ portion	part
 portion's	part's
 portions	parts
 position	place
+position's	place's
 positions	places
 possess	have
 possessed	had
@@ -1210,6 +1220,7 @@ prior	earlier
 probabilities	chances
 probability	chance
 procedure	rule
+procedure's	rule's
 procedures	rules
 proceed	do
 proceeding	doing
@@ -1362,6 +1373,7 @@ speculating	reflecting
 state-of-the-art	latest
 strategies	plans
 strategy	plan
+strategy's	plan's
 stringent	tight
 submit	give
 submits	sends

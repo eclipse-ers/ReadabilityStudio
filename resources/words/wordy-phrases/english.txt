@@ -817,6 +817,7 @@ all hands on deck	everyone needs to help	2
 all in a day's work	that's part of the job	2		
 all in due time	be patient	2		
 all in the same boat	all in the same situation	2		
+all intensive purposes	all intents and purposes	3		
 all most	almost	3		
 all of	all (unless proceeding a pronoun), (consider removing this)	0		them
 all of a sudden	suddenly	0		
@@ -1124,6 +1125,9 @@ an one	and one	3
 an other	another	3		
 an ran	and ran	3		
 an the	(strike one of these)	3		
+anal meeting	annual meeting	3		
+anal report	annual report	3		
+anal review	annual review	3		
 analagous	analogous	3		
 analitic	analytic	3		
 analogeous	analogous	3		
@@ -2249,6 +2253,7 @@ backrounds	backgrounds	3
 bad blood	unsettled dispute, a grudge, ill feelings	2		
 bahavior	behavior	3		
 baited breath	bated breath	3		
+baited time	bated time	3		
 bakc	back	3		
 balacing	balancing	3		
 Balasubramian	Balasubramanian	3		
@@ -2271,6 +2276,11 @@ barbarous	coarse, brutal	0
 bare naked	bare, naked	1		
 bare the mark	bear the mark	3		
 bare the signature	bear the signature	3		
+bare with her	bear with her	3		
+bare with him	bear with him	3		
+bare with me	bear with me	3		
+bare with them	bear with them	3		
+bare with us	bear with us	3		
 bargain	deal	0		
 bargains	deals	0		
 bark up the wrong tree	look in the wrong place for the answer, misdirect your efforts	2		
@@ -2290,6 +2300,7 @@ basic principle	principle	1
 basic principles	principles	1		
 basicaly	basically	3		
 basicly	basically	3		
+bated breath	baited breath	3		
 batery	battery	3		
 bathroom facilities	bathroom, facilities	0		
 bats in the belfry	crazy	2		
@@ -2469,6 +2480,7 @@ bespeaking	ordering, reserving	0
 bespeaks	orders, reserves	0		
 bespoke	ordered, reserved	0		
 best ever	best	1		
+best retards	best regards	3		
 best thing since sliced bread	very innovative	2		
 bestow	give	0		
 bestowed	gave	0		
@@ -3320,6 +3332,10 @@ chlakboards	chalkboards	3
 chlids	children	3		
 chnage	change	3		
 chnages	changes	3		
+chock it up	chalk it up	3		
+chocked it up	chalked it up	3		
+chocking it up	chalking it up	3		
+chocks it up	chalks it up	3		
 Chocolately	Chocolatey	3		
 Chocolately's	Chocolatey's	3		
 choicing	choosing	3		
@@ -3417,6 +3433,9 @@ clincal's	clinical's	3
 clincals	clinicals	3		
 clincial	clinical	3		
 clinicaly	clinically	3		
+clitical error	critical error	3		
+clitical mass	critical mass	3		
+clitical thinking	critical thinking	3		
 cloak-and-dagger	top secret, related to spying	2		
 clonesd	clones, cloned	3		
 close call	narrow escape	2		
@@ -4659,6 +4678,8 @@ cultivated	grew, tilled, raised, farmed	0
 cultivates	grows, tills, raises, farms	0		
 cultivating	growing, tilling, raising, farming	0		
 cultur	culture	3		
+cumming soon	coming soon	3		
+cumming year	coming year	3		
 cummulative	cumulative	3		
 cumulatative	cumulative	3		
 curch	church	3		
@@ -4783,6 +4804,7 @@ deamon	daemon	3
 deamon's	daemon's	3		
 deamons	daemons	3		
 deapth	depth	3		
+dear dairy	dear diary	3		
 deascription	description	3		
 deascription's	description's	3		
 deascriptions	descriptions	3		
@@ -5752,6 +5774,7 @@ doesn't not	doesn't	3
 doesnt	doesn't	3		
 doesnt't	doesn't	3		
 dog eat dog	ruthless competition	2		
+doggy dog world	dog-eat-dog world	3		
 doign	doing	3		
 doing away with	removing, canceling, ending	0		
 doman	domain	3		
@@ -7065,6 +7088,7 @@ far cry	long distance	2
 Farenheit	Fahrenheit	3		
 farm manger	farm manager	3		
 farm mangers	farm managers	3		
+fart and away	far and away	3		
 fasciation	fascination	3		
 fasciation's	fascination's	3		
 fasciations	fascinations	3		
@@ -7301,7 +7325,6 @@ foor	floor, for	3
 foor's	floor's	3		
 foors	floors	3		
 for a period of	for	0		
-for all intensive purposes	for all intents and purposes	3		
 for all intents and purposes	in effect, in essence, practically	0		
 for all practical purposes	in effect, in essence, practically	0		
 for along time	for a long time	3		
@@ -8237,6 +8260,7 @@ hit and miss	random	2
 hit below the belt	act unfairly	2		
 hit or miss	random	2		
 hit pay dirt	succeed	2		
+hit the breaks	hit the brakes	3		
 hit the nail on the head	said it just right	2		
 hitherto	until now	0		
 hits below the belt	acts unfairly	2		
@@ -8286,6 +8310,7 @@ homogeneous	similar	0
 homogeneously	similarly	0		
 Hondurus	Honduras	3		
 Hondurus's	Honduras's	3		
+hone in	home in	3		
 honest as the day is long	consistently reliable	2		
 honest injun	truthfully, I'm being truthful (this phrase is highly offensive and should be avoided)	2		
 honest to goodness	truthfully, I'm being truthful	2		
@@ -8643,6 +8668,7 @@ in a pickle	in trouble	2
 in a pig's eye	never	2		
 in a position to	able to	0		
 in a precise manner	precisely	0		
+in a rears	in arrears	3		
 in a rut	stuck in a routine	2		
 in a similar fashion	like	0		
 in a situation in which	when	0		
@@ -9883,7 +9909,7 @@ juristictions	jurisdictions	3
 jury is still out	not decided yet	2		
 jury-rigged	a makeshift repair, a hack	2		
 just about	about	0		
-just desserts	just deserts	3		
+just deserts	just desserts	3		
 just exactly	exactly, just	0		
 just fell off the turnip truck	naive, gullible, not very smart	2		
 just out of curiosity	(consider removing this)	0		
@@ -9953,6 +9979,7 @@ kill two birds with one stone	achieve two objectives with one effort	2
 killed two birds with one stone	achieved two objectives with one effort	2		
 killing two birds with one stone	achieving two objectives with one effort	2		
 kills two birds with one stone	achieves two objectives with one effort	2		
+kind retards	kind regards	3		
 Kindergarden	Kindergarten	3		
 Kindergarden's	Kindergarten's	3		
 kindergartner	kingergartener	3		
@@ -10763,6 +10790,7 @@ mimicks	mimics	3
 mimimal	minimal	3		
 mimimum	minimum	3		
 minature	miniature	3		
+mind as well	might as well	3		
 mindfuness	mindfullness	3		
 mindriver	minidriver	3		
 mindriver's	minidriver's	3		
@@ -11578,6 +11606,7 @@ old relic	relic	1
 old relics	relics	1		
 old saying	saying	1		
 old sayings	sayings	1		
+old timers disease	Alzheimer's disease	3		
 oline	online	3		
 omelette	omelet	3		
 omision	omission	3		
@@ -11619,6 +11648,7 @@ on pins and needles	nervous, on edge	2
 on previous occasions	earlier	0		
 on principal	on principle	3		actor;actors;investigator;investigators;role;roles
 on prior occasions	earlier	0		
+on route	en route	3		
 on that particular occasion	then	0		
 on the ball	doing well, skilled, sharp, competent	2		
 on the basis of	because of	0		
@@ -11667,6 +11697,7 @@ one foot in the grave	at the brink of death, seriously ill	2
 one form or another	some form	0		
 one foul swoop	one fell swoop	3		
 one fowl swoop	one fell swoop	3		
+one in the same	one and the same	3		
 one more time	again	0		
 one single	one, a single	1		
 one way or another	anyway, somehow, in any way	0		
@@ -11809,6 +11840,7 @@ organiztion	organization	3
 organzation	organization	3		
 organzation's	organization's	3		
 organzations	organizations	3		
+orgasmic growth	organic growth	3		
 orgin	origin	3		
 orginal	original	3		
 orginally	originally	3		
@@ -12155,6 +12187,7 @@ pdated	updated	3
 peace and quiet	peace, quiet	1		
 peageant	pageant	3		
 peak curiosity	pique curiosity	3		
+peak her interest	pique her interest	3		
 peak his curiosity	pique his curiosity	3		
 peak his interest	pique his interest	3		
 peak interest	pique interest	3		
@@ -12167,6 +12200,7 @@ peak their interest	pique their interest	3
 peak your curiosity	pique your curiosity	3		
 peak your interest	pique your interest	3		
 peaked curiosity	piqued curiosity	3		
+peaked her interest	piqued her interest	3		
 peaked his curiosity	piqued his curiosity	3		
 peaked his interest	piqued his interest	3		
 peaked interest	piqued interest	3		
@@ -12191,6 +12225,7 @@ peaking their interest	piquing their interest	3
 peaking your curiosity	piquing your curiosity	3		
 peaking your interest	piquing your interest	3		
 peaks curiosity	piques curiosity	3		
+peaks her interest	piques her interest	3		
 peaks his curiosity	piques his curiosity	3		
 peaks his interest	piques his interest	3		
 peaks interest	piques interest	3		
@@ -13338,12 +13373,26 @@ psueudo	pseudo	3
 psychadelic	psychedelic	3		
 psycology	psychology	3		
 psyhic	psychic	3		
+pubic figure	public figure	3		
+pubic figure's	public figure's	3		
+pubic figures	public figures	3		
+pubic libraries	public libraries	3		
+pubic library	public library	3		
+pubic library's	public library's	3		
+pubic record	public record	3		
+pubic record's	public record's	3		
+pubic records	public records	3		
+pubic restroom	public restroom	3		
+pubic restroom's	public restroom's	3		
+pubic restrooms	public restrooms	3		
 pubic sector	public sector	3		
 pubic sector's	public sector's	3		
 pubic sectors	public sectors	3		
 pubic servant	public servant	3		
 pubic servant's	public servant's	3		
 pubic servants	public servants	3		
+pubic service	public service	3		
+pubic speaking	public speaking	3		
 pubilsher	publisher	3		
 pubisher	publisher	3		
 publiaher	publisher	3		
@@ -13586,18 +13635,20 @@ quizes	quizzes	3
 qverage	average	3		
 rabinnical	rabbinical	3		
 racaus	raucous	3		
-rack my brain	strain to remember	2		
-rack your brain	strain to remember	2		
-racked her brain	strained to remember	2		
-racked his brain	strained to remember	2		
-racked my brain	strained to remember	2		
-racked your brain	strained to remember	2		
-racking her brain	straining to remember	2		
-racking his brain	straining to remember	2		
-racking my brain	straining to remember	2		
-racking your brain	straining to remember	2		
-racks her brain	strains to remember	2		
-racks his brain	strains to remember	2		
+rack her brain	wrack her brain	3		
+rack his brain	wrack his brain	3		
+rack my brain	wrack my brain	3		
+rack their brains	wrack their brains	3		
+rack your brain	wrack your brain	3		
+racked her brain	wracked her brain	3		
+racked his brain	wracked his brain	3		
+racked my brain	wracked my brain	3		
+racked their brains	wracked their brains	3		
+racked your brain	wracked your brain	3		
+racking her brain	wracking her brain	3		
+racking his brain	wracking his brain	3		
+racking their brains	wracking their brains	3		
+racking your brain	wracking your brain	3		
 radiactive	radioactive	3		
 radiant	bright	0		
 radiantly	brightly	0		
@@ -14985,6 +15036,7 @@ shineing	shining	3
 ship has come in	success has been achieved	2		
 shiped	shipped	3		
 shiping	shipping	3		
+shoe-in	shoo-in	3		
 shoot from the hip	speak directly	2		
 shooting from the hip	speaking directly	2		
 shoots from the hip	speaks directly	2		
@@ -15496,6 +15548,7 @@ stracture's	structure's	3
 stractures	structures	3		
 stradegies	strategies	3		
 stradegy	strategy	3		
+straight laced	straitlaced	3		
 straightfoward	straightforward	3		
 straigt	straight	3		
 straigth	straight	3		
@@ -15993,6 +16046,7 @@ take for granite	take for granted	3
 take into account	consider	0		
 take into consideration	consider	0		
 take into custody	arrest, capture	0		
+take it for granite	take it for granted	3		
 take it with a grain of salt	be skeptical	2		
 take one for the team	take responsibility so others can succeed	2		
 take pity on	pity	0		

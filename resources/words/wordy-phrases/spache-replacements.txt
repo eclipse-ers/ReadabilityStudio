@@ -109,6 +109,7 @@ approximate	about
 approximately	about
 arduous	hard
 aroma	smell
+aroma's	smell's
 aromas	smells
 ascend	climb
 ascended	climbed
@@ -129,6 +130,7 @@ assay	try
 assayed	tried
 assaying	trying
 assays	tries
+assemblies	meetings
 assembly	meeting
 assist	help
 assistance	help
@@ -159,6 +161,7 @@ avenue	road
 avenue's	road's
 avenues	roads
 axiom	rule
+axiom's	rule's
 axioms	rules
 behemoth	giant
 behemoth's	giant's
@@ -243,6 +246,8 @@ conclusion	close
 conclusive	final
 confront	meet
 confrontation	meeting
+confrontation's	meeting's
+confrontations	meetings
 confronted	face
 confronting	meeting
 confronts	faces
@@ -380,6 +385,7 @@ disseminate	give
 dissimilar	different
 dissipate	waste
 dissipated	wasted
+dissipates	wastes
 dissipating	wasting
 divulge	tell
 divulged	told
@@ -439,6 +445,7 @@ enumerating	counting
 enumeration	count
 enumerations	counts
 epistle	letter
+epistles	letters
 equable	even
 equine	horse
 equine's	horse's
@@ -461,6 +468,7 @@ execution	killing
 exhibit	show
 exhibiting	showing
 exhibition	show
+exhibition's	show's
 exhibitions	shows
 exhibits	shows
 exigency	need
@@ -594,6 +602,7 @@ inaugurates	begins
 inception	start
 inceptions	starts
 incision	cut
+incision's	cut's
 incisions	cuts
 incisive	cutting
 inconvenience	bother
@@ -606,6 +615,7 @@ indicate	show
 indicates	shows
 indicating	showing
 indication	sign
+indication's	sign's
 indications	signs
 indigent	poor
 individual	person
@@ -613,6 +623,7 @@ individuals	people
 indolent	lazy
 indubitable	certain
 inferno	fire
+inferno's	fire's
 infernos	fires
 inform	tell
 ingenuous	open
@@ -641,6 +652,7 @@ inquiring	asking
 institution	company
 intelligent	smart
 intention	plan
+intention's	plan's
 intentions	plans
 internal	inside
 jocular	funny
@@ -681,6 +693,7 @@ maximum	most
 mentality	mind
 methodologies	plans
 methodology	plan
+methodology's	plan's
 militate	fight
 militates	fights
 minimum	least
@@ -728,6 +741,7 @@ observed	saw
 observes	sees
 observing	seeing
 obstacle	problem
+obstacle's	problem's
 obstacles	problems
 obstruct	block
 obstructed	blocked
@@ -761,7 +775,7 @@ organisations	companies
 organization's	company's
 organizations	companies
 orifice	opening
-orifices	holes
+orifices	openings
 ostentation	show
 ostentations	shows
 palatable	pleasing
@@ -807,6 +821,7 @@ precept	rule
 precepts	rules
 precipitation	rain
 predicament	problem
+predicament's	problem's
 predicaments	problems
 predilection	liking
 preeminent	top
@@ -817,7 +832,9 @@ previously	before
 primary	first
 probabilities	chances
 probability	chance
+probability's	chance's
 procedure	rule
+procedure's	rule's
 procedures	rules
 proceed	do
 proceeds	does
@@ -843,6 +860,7 @@ pursuit	chase
 pusillanimous	frightened
 quandaries	problems
 quandary	problem
+quandary's	problem's
 quiescent	still
 quiescently	quietly
 radiant	bright
@@ -855,6 +873,7 @@ reduced	cut
 reduces	cuts
 reducing	cutting
 reduction	cut
+reduction's	cut's
 reductions	cuts
 reflect	say
 regarding	about
@@ -870,6 +889,7 @@ relocation	move
 relocations	moves
 remain	stay
 remainder	rest
+remainder's	rest's
 remained	stayed
 remaining	staying
 remains	stays
@@ -929,6 +949,7 @@ speculates	guesses
 speculating	guessing
 strategies	plans
 strategy	plan
+strategy's	plan's
 stringent	tight
 stringently	tightly
 submit	give
