@@ -533,14 +533,15 @@ This includes:
 - Katakana (including the half-width and phonetic extensions for Ainu)
 - Jōyō/Jinmeiyō Kanji
 
-When a Japanese word is encountered, each character will be counted as one syllable (this applies to all project languages).
+When a Japanese word is encountered, each character is counted as one syllable, except for small kana (e.g., *ュ*, *ョ*, *ッ*).
+(Small kana modifies the preceding character and are not counted as separate syllables.)
 For example:
 
 ::: {.fancyquotes data-latex=''}
 Check the option "ドキュメンテーション" to install the documentation.
 :::
 
-Here, *ドキュメンテーション* will be counted as a ten-syllable word.
+Here, *ドキュメンテーション* will be counted as an eight-syllable word (the *ュ* and *ョ* will not count as syllables).
 
 ::: {.notesection data-latex=""}
 Note on word separation: this feature is intended for individual Japanese words appearing within other languages.

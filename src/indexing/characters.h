@@ -51,13 +51,15 @@
 #define INDEXING_CHARACTERS_H
 
 #include "../Wisteria-Dataviz/src/util/string_util.h"
+#include "../Wisteria-Dataviz/src/math/mathematics.h"
 #include <cassert>
 
 /// @brief Namespace for punctuation classes.
 /// @details Recognizes the following character sets:
 ///     - Western European languages
 ///     - Russian
-///     - Eastern European WORK IN PROGRESS
+///     - Eastern European
+///     - Japanese
 namespace characters
     {
     /// @brief This is the central interface for word character deductions and comparisons.
@@ -375,6 +377,35 @@ namespace characters
             return (ch >= 0x30A0 && ch <= 0x30FF) || // Katakana
                    (ch >= 0x31F0 && ch <= 0x31FF) || // Katakana Phonetic Extensions (Ainu)
                    (ch >= 0xFF65 && ch <= 0xFF9F);   // Halfwidth
+            }
+
+        /** @returns @c true if the character is a "small kana" (modifier character)
+                that should not be counted as an independent syllable. */
+        [[nodiscard]]
+        constexpr static bool is_small_kana(const wchar_t ch) noexcept
+            {
+            return
+                // small Hiragana: ぁ ぃ ぅ ぇ ぉ っ ゃ ゅ ょ ゎ ゕ ゖ
+                (ch >= 0x3041 && ch <= 0x3049 && !is_even(ch)) || // ぁ through ぉ
+                (ch == 0x3063) ||                                 // っ
+                (ch >= 0x3083 && ch <= 0x3087 && !is_even(ch)) || // ゃ ゅ ょ
+                (ch == 0x308E) ||                                 // ゎ
+                (ch == 0x3095 || ch == 0x3096) ||                 // ゕ ゖ
+
+                // small Katakana: ァ ィ ゥ ェ ォ ッ ャ ュ ョ ヮ ヵ ヶ
+                (ch >= 0x30A1 && ch <= 0x30A9 && !is_even(ch)) || // ァ through ォ
+                (ch == 0x30C3) ||                                 // ッ
+                (ch >= 0x30E3 && ch <= 0x30E7 && !is_even(ch)) || // ャ ュ ョ
+                (ch == 0x30EE) ||                                 // ヮ
+                (ch == 0x30F5 || ch == 0x30F6) ||                 // ヵ ヶ
+
+                // Katakana Phonetic Extensions (Ainu): ㇰ ㇱ ㇲ ㇳ ㇴ ㇵ ㇶ ㇷ ㇸ ㇹ ㇺ ㇻ ㇼ ㇽ ㇾ
+                // ㇿ
+                (ch >= 0x31F0 && ch <= 0x31FF) ||
+
+                // small Half-width Katakana: ｧ ｨ ｩ ｪ ｫ ｬ ｭ ｮ ｯ
+                (ch >= 0xFF67 && ch <= 0xFF6B) || // ｧ ｨ ｩ ｪ ｫ
+                (ch >= 0xFF6C && ch <= 0xFF6F);   // ｬ ｭ ｮ ｯ
             }
 
         /** @returns @c true if a character is a CJK Unified Ideograph

@@ -86,32 +86,7 @@ namespace grammar
                 and @c false is returned so the caller can handle the rest.
             @param word The word to analyze.
             @returns @c true if the entire word was Japanese and fully syllabized.*/
-        bool syllabize_japanese(const std::wstring_view word)
-            {
-            if (word.empty())
-                {
-                return false;
-                }
-
-            const auto japaneseCount = std::count_if(word.cbegin(), word.cend(),
-                                                     characters::is_character::is_japanese_script);
-
-            if (japaneseCount == 0)
-                {
-                return false;
-                }
-
-            if (std::cmp_equal(japaneseCount, word.length()))
-                {
-                m_syllable_count = word.length();
-                return true;
-                }
-
-            // mixed: count Japanese characters as syllables,
-            // let the caller handle the rest
-            m_syllable_count += japaneseCount;
-            return false;
-            }
+        bool syllabize_japanese(const std::wstring_view word);
 
         /** @brief Special case mathematical terms that need to be counted differently.
             @param start The word to analyze.

@@ -65,6 +65,45 @@ namespace grammar
                                                           L"yard", L"book", L"hill" };
 
     //----------------------------------------------
+    bool base_syllabize::syllabize_japanese(const std::wstring_view word)
+        {
+        if (word.empty())
+            {
+            return false;
+            }
+
+        size_t japaneseCount{ 0 };
+        size_t syllableCount{ 0 };
+        for (const auto ch : word)
+            {
+            if (characters::is_character::is_japanese_script(ch))
+                {
+                ++japaneseCount;
+                if (!characters::is_character::is_small_kana(ch))
+                    {
+                    ++syllableCount;
+                    }
+                }
+            }
+
+        if (japaneseCount == 0)
+            {
+            return false;
+            }
+
+        if (std::cmp_equal(japaneseCount, word.length()))
+            {
+            m_syllable_count = (syllableCount > 0) ? syllableCount : 1;
+            return true;
+            }
+
+        // mixed: count Japanese characters as syllables,
+        // let the caller handle the rest
+        m_syllable_count += syllableCount;
+        return false;
+        }
+
+    //----------------------------------------------
     std::pair<bool, size_t> base_syllabize::is_special_math_word(const wchar_t* start,
                                                                  const size_t length) noexcept
         {

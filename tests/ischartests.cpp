@@ -2144,6 +2144,98 @@ TEST_CASE("ischaracter", "[ischaracter]")
         CHECK_FALSE(is_character::is_japanese_script(L'．')); // fullwidth period
         CHECK_FALSE(is_character::is_japanese_script(L' '));
         }
+
+    SECTION("Small Kana")
+        {
+        // small Hiragana vowels: ぁ ぃ ぅ ぇ ぉ
+        CHECK(is_character::is_small_kana(L'ぁ'));
+        CHECK(is_character::is_small_kana(L'ぃ'));
+        CHECK(is_character::is_small_kana(L'ぅ'));
+        CHECK(is_character::is_small_kana(L'ぇ'));
+        CHECK(is_character::is_small_kana(L'ぉ'));
+        // small Hiragana tsu
+        CHECK(is_character::is_small_kana(L'っ'));
+        // small Hiragana ya, yu, yo
+        CHECK(is_character::is_small_kana(L'ゃ'));
+        CHECK(is_character::is_small_kana(L'ゅ'));
+        CHECK(is_character::is_small_kana(L'ょ'));
+        // small Hiragana wa
+        CHECK(is_character::is_small_kana(L'ゎ'));
+        // small Hiragana ka, ke
+        CHECK(is_character::is_small_kana(L'ゕ'));
+        CHECK(is_character::is_small_kana(L'ゖ'));
+
+        // small Katakana vowels: ァ ィ ゥ ェ ォ
+        CHECK(is_character::is_small_kana(L'ァ'));
+        CHECK(is_character::is_small_kana(L'ィ'));
+        CHECK(is_character::is_small_kana(L'ゥ'));
+        CHECK(is_character::is_small_kana(L'ェ'));
+        CHECK(is_character::is_small_kana(L'ォ'));
+        // small Katakana tsu
+        CHECK(is_character::is_small_kana(L'ッ'));
+        // small Katakana ya, yu, yo
+        CHECK(is_character::is_small_kana(L'ャ'));
+        CHECK(is_character::is_small_kana(L'ュ'));
+        CHECK(is_character::is_small_kana(L'ョ'));
+        // small Katakana wa
+        CHECK(is_character::is_small_kana(L'ヮ'));
+        // small Katakana ka, ke
+        CHECK(is_character::is_small_kana(L'ヵ'));
+        CHECK(is_character::is_small_kana(L'ヶ'));
+
+        // Katakana Phonetic Extensions (Ainu)
+        CHECK(is_character::is_small_kana(L'ㇰ'));
+        CHECK(is_character::is_small_kana(L'ㇱ'));
+        CHECK(is_character::is_small_kana(L'ㇲ'));
+        CHECK(is_character::is_small_kana(L'ㇳ'));
+        CHECK(is_character::is_small_kana(L'ㇴ'));
+        CHECK(is_character::is_small_kana(L'ㇵ'));
+        CHECK(is_character::is_small_kana(L'ㇶ'));
+        CHECK(is_character::is_small_kana(L'ㇷ'));
+        CHECK(is_character::is_small_kana(L'ㇸ'));
+        CHECK(is_character::is_small_kana(L'ㇹ'));
+        CHECK(is_character::is_small_kana(L'ㇺ'));
+        CHECK(is_character::is_small_kana(L'ㇻ'));
+        CHECK(is_character::is_small_kana(L'ㇼ'));
+        CHECK(is_character::is_small_kana(L'ㇽ'));
+        CHECK(is_character::is_small_kana(L'ㇾ'));
+        CHECK(is_character::is_small_kana(L'ㇿ'));
+
+        // small Half-width Katakana
+        CHECK(is_character::is_small_kana(L'ｧ'));
+        CHECK(is_character::is_small_kana(L'ｨ'));
+        CHECK(is_character::is_small_kana(L'ｩ'));
+        CHECK(is_character::is_small_kana(L'ｪ'));
+        CHECK(is_character::is_small_kana(L'ｫ'));
+        CHECK(is_character::is_small_kana(L'ｬ'));
+        CHECK(is_character::is_small_kana(L'ｭ'));
+        CHECK(is_character::is_small_kana(L'ｮ'));
+        CHECK(is_character::is_small_kana(L'ｯ'));
+
+        // full-size kana should not be small
+        CHECK_FALSE(is_character::is_small_kana(L'あ'));
+        CHECK_FALSE(is_character::is_small_kana(L'い'));
+        CHECK_FALSE(is_character::is_small_kana(L'う'));
+        CHECK_FALSE(is_character::is_small_kana(L'つ'));
+        CHECK_FALSE(is_character::is_small_kana(L'や'));
+        CHECK_FALSE(is_character::is_small_kana(L'ア'));
+        CHECK_FALSE(is_character::is_small_kana(L'イ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ウ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ツ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ヤ'));
+        // non-kana
+        CHECK_FALSE(is_character::is_small_kana(L'A'));
+        CHECK_FALSE(is_character::is_small_kana(L'1'));
+        CHECK_FALSE(is_character::is_small_kana(L'.'));
+        CHECK_FALSE(is_character::is_small_kana(L'一'));
+        // regular half-width katakana should not be small
+        CHECK_FALSE(is_character::is_small_kana(L'ｦ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ｱ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ｲ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ｳ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ｶ'));
+        CHECK_FALSE(is_character::is_small_kana(L'ﾝ'));
+        }
     }
 // NOLINTEND
 // clang-format on
