@@ -3170,7 +3170,6 @@ fleas
 flesh
 flew
 flies
-flies'
 flight
 flight's
 flights
@@ -4471,7 +4470,6 @@ ladder
 ladder's
 ladders
 ladies
-ladies'
 lads
 lady
 lady's
@@ -5691,7 +5689,6 @@ panda's
 pandas
 pans
 pants
-pants'
 papa
 papa's
 papas
@@ -9244,7 +9241,6 @@ woke
 wolf
 wolf's
 wolves
-wolves'
 woman
 woman's
 women
