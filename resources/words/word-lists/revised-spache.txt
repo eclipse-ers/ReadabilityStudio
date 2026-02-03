@@ -1,4 +1,5 @@
 a
+a's
 able
 about
 above
@@ -94,6 +95,7 @@ awakes
 awaking
 away
 b
+b's
 babies
 baby
 baby's
@@ -338,6 +340,7 @@ buying
 buys
 by
 c
+c's
 cabin
 cabin's
 cabins
@@ -564,6 +567,7 @@ cut's
 cuts
 cutting
 d
+d's
 dad
 dad's
 dads
@@ -676,6 +680,7 @@ during
 dust
 dusts
 e
+e's
 each
 eager
 ear
@@ -744,6 +749,7 @@ eye
 eye's
 eyes
 f
+f's
 fable
 fable's
 fables
@@ -910,6 +916,7 @@ fur
 fur's
 furs
 g
+g's
 game
 game's
 games
@@ -997,6 +1004,7 @@ gun
 gun's
 guns
 h
+h's
 had
 hair
 hair's
@@ -1142,6 +1150,7 @@ husbands
 i
 I'll
 I'm
+i's
 ice
 ice's
 idea
@@ -1170,6 +1179,7 @@ it
 it's
 its
 j
+j's
 jacket
 jacket's
 jackets
@@ -1200,6 +1210,7 @@ jumping
 jumps
 just
 k
+k's
 keep
 keeping
 keeps
@@ -1237,6 +1248,7 @@ knocks
 know
 knows
 l
+l's
 ladder
 ladder's
 ladders
@@ -1356,6 +1368,7 @@ lunch
 lunch's
 lunches
 m
+m's
 machine
 machine's
 machines
@@ -1489,6 +1502,7 @@ musics
 must
 my
 n
+n's
 name
 name's
 named
@@ -1570,6 +1584,7 @@ number
 number's
 numbers
 o
+o's
 ocean
 ocean's
 oceans
@@ -1616,6 +1631,7 @@ owned
 owning
 owns
 p
+p's
 pack
 packed
 packing
@@ -1866,6 +1882,7 @@ put
 puts
 putting
 q
+q's
 queen
 queen's
 queens
@@ -1886,6 +1903,7 @@ quietly
 quiets
 quite
 r
+r's
 rabbit
 rabbit's
 rabbits
@@ -2021,6 +2039,7 @@ rushed
 rushes
 rushing
 s
+s's
 sad
 sadder
 saddest
@@ -2401,6 +2420,7 @@ swing
 swing's
 swings
 t
+t's
 table
 table's
 tables
@@ -2603,6 +2623,7 @@ two
 two's
 twos
 u
+u's
 ugly
 uncle
 uncle's
@@ -2623,6 +2644,7 @@ uses
 using
 usual
 v
+v's
 valley
 valley's
 valleys
@@ -2640,6 +2662,7 @@ voice
 voice's
 voices
 w
+w's
 wag
 wagged
 wagging
@@ -2812,7 +2835,9 @@ wrong
 wronger
 wrongly
 x
+x's
 y
+y's
 yard
 yard's
 yards
@@ -2836,6 +2861,7 @@ youngest
 your
 yours
 z
+z's
 zoo
 zoo's
 zoos

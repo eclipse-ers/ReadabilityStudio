@@ -1,4 +1,5 @@
 a
+a's
 able
 abler
 ablest
@@ -123,6 +124,7 @@ awaked
 away
 aways
 b
+b's
 babies
 baby
 baby's
@@ -533,6 +535,7 @@ buying
 buys
 by
 c
+c's
 cage
 caged
 cages
@@ -921,6 +924,7 @@ cut
 cuts
 cutting
 d
+d's
 dad
 dad's
 daddies
@@ -1122,6 +1126,7 @@ dusting
 dusts
 dusty
 e
+e's
 each
 ear
 ear's
@@ -1227,6 +1232,7 @@ eyed
 eyes
 eying
 f
+f's
 face
 face's
 faced
@@ -1515,6 +1521,7 @@ furs
 fuzz
 fuzzy
 g
+g's
 gallop
 galloped
 galloping
@@ -1646,6 +1653,7 @@ guessed
 guesses
 guessing
 h
+h's
 ha
 had
 hadn't
@@ -1852,6 +1860,7 @@ i
 i'd
 i'll
 i'm
+i's
 i've
 ice
 iced
@@ -1888,6 +1897,7 @@ it's
 its
 itself
 j
+j's
 jam
 jam's
 jammed
@@ -1929,6 +1939,7 @@ junk
 just
 justly
 k
+k's
 keep
 keeping
 keeps
@@ -1992,6 +2003,7 @@ knowing
 known
 knows
 l
+l's
 ladder
 ladder's
 ladders
@@ -2192,6 +2204,7 @@ lunchtime's
 lunchtimes
 lying
 m
+m's
 ma
 ma's
 machine
@@ -2417,6 +2430,7 @@ musty
 my
 myself
 n
+n's
 nail
 nail's
 nailed
@@ -2534,6 +2548,7 @@ nuts
 nutting
 o
 o'clock
+o's
 ocean
 ocean's
 oceans
@@ -2606,6 +2621,7 @@ owned
 owning
 owns
 p
+p's
 pack
 pack's
 packed
@@ -2993,6 +3009,7 @@ puzzled
 puzzles
 puzzling
 q
+q's
 quack
 quacked
 quacking
@@ -3023,6 +3040,7 @@ quilting
 quilts
 quite
 r
+r's
 rabbit
 rabbit's
 rabbits
@@ -3209,6 +3227,7 @@ rustled
 rustles
 rustling
 s
+s's
 sack
 sacking
 sacks
@@ -3894,6 +3913,7 @@ swinging
 swings
 swung
 t
+t's
 t.v.
 t.v.'s
 table
@@ -4230,6 +4250,7 @@ two
 two's
 twos
 u
+u's
 uglier
 ugliest
 ugly
@@ -4271,6 +4292,7 @@ used
 uses
 using
 v
+v's
 valley
 valley's
 valleys
@@ -4297,6 +4319,7 @@ voiced
 voices
 voicing
 w
+w's
 wag
 wagged
 wagging
@@ -4574,7 +4597,9 @@ wrongly
 wrongs
 wrote
 x
+x's
 y
+y's
 yard
 yard's
 yards
@@ -4610,6 +4635,7 @@ youth
 youth's
 youths
 z
+z's
 zoo
 zoo's
 zoos

@@ -1,5 +1,6 @@
 &
 a
+a's
 a.m.
 able
 aboard
@@ -349,6 +350,7 @@ axed
 axes
 axing
 b
+b's
 baa
 baaed
 baaing
@@ -1230,6 +1232,7 @@ by
 bye
 byes
 c
+c's
 cab
 cab's
 cabbage
@@ -2139,6 +2142,7 @@ cutest
 cuts
 cutting
 d
+d's
 d.c.
 dab
 dad
@@ -2606,6 +2610,7 @@ dust
 dusty
 dying
 e
+e's
 each
 eager
 eagle
@@ -2852,6 +2857,7 @@ eyelids
 eyes
 eyesight
 f
+f's
 fable
 fable's
 fabled
@@ -3368,6 +3374,7 @@ fuzzier
 fuzziest
 fuzzy
 g
+g's
 gain
 gained
 gaining
@@ -3720,6 +3727,7 @@ gym
 gym's
 gyms
 h
+h's
 habit
 habit's
 habits
@@ -4164,6 +4172,7 @@ i
 i'd
 i'll
 i'm
+i's
 i've
 ice
 ice's
@@ -4254,6 +4263,7 @@ ivory's
 ivy
 ivy's
 j
+j's
 jack
 jack-o-lantern
 jack-o-lantern's
@@ -4363,6 +4373,7 @@ jungles
 junk
 just
 k
+k's
 kangaroo
 kangaroo's
 kangaroos
@@ -4463,6 +4474,7 @@ know
 known
 knows
 l
+l's
 lace
 lad
 lad's
@@ -4797,6 +4809,7 @@ luxury
 luxury's
 lying
 m
+m's
 ma
 macaroni
 macaroni's
@@ -5283,6 +5296,7 @@ mysteries
 mystery
 mystery's
 n
+n's
 nail
 nail's
 nailed
@@ -5479,6 +5493,7 @@ nut's
 nuts
 o
 o'clock
+o's
 o.k.
 oak
 oar
@@ -5633,6 +5648,7 @@ owners
 owning
 owns
 p
+p's
 p.m.
 pa
 pa's
@@ -6335,6 +6351,7 @@ puzzled
 puzzles
 puzzling
 q
+q's
 quack
 quacked
 quacking
@@ -6381,6 +6398,7 @@ quits
 quitter
 quitting
 r
+r's
 rabbit
 rabbit's
 rabbits
@@ -6806,6 +6824,7 @@ rustiest
 rusts
 rusty
 s
+s's
 sack
 sack's
 sacks
@@ -8144,6 +8163,7 @@ syllable
 syllable's
 syllables
 t
+t's
 t.v.
 t.v.'s
 t.v.s
@@ -8757,6 +8777,7 @@ typewriter's
 typewriters
 typing
 u
+u's
 u.s.
 u.s.a.
 uglier
@@ -8839,6 +8860,7 @@ ushering
 ushers
 using
 v
+v's
 vacant
 vacation
 vacation's
@@ -8925,6 +8947,7 @@ voter
 votes
 voting
 w
+w's
 waffle
 waffle's
 waffles
@@ -9333,6 +9356,7 @@ wrong
 wrote
 wrung
 x
+x's
 x-ray
 x-ray's
 x-rays
@@ -9340,6 +9364,7 @@ xmas
 xmas's
 xmases
 y
+y's
 yard
 yard's
 yards
@@ -9384,6 +9409,7 @@ yourself
 yourselves
 youth
 z
+z's
 zebra
 zebra's
 zebras
