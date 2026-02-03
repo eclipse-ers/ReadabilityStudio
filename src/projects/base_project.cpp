@@ -151,7 +151,8 @@ bool BaseProject::LoadAppendedDocument()
 void BaseProject::UpdateDocumentSettings()
     {
     // cppcheck-suppress assertWithSideEffect
-    assert(GetWords() != nullptr && L"Invalid word collection when updating document settings!");
+    wxASSERT_MSG(GetWords() != nullptr,
+                 L"Invalid word collection when updating document settings!");
     GetWords()->set_allowable_incomplete_sentence_size(
         GetIncludeIncompleteSentencesIfLongerThanValue());
     GetWords()->set_aggressive_exclusion(IsExcludingAggressively());
@@ -2147,8 +2148,11 @@ void BaseProject::LoadHardWords()
         isDCWord(IsIncludingStockerCatholicSupplement() ?
                      &m_dale_chall_plus_stocker_catholic_word_list :
                      &m_dale_chall_word_list,
-                 // because we are reviewing a frequency set, turn off proper noun support
-                 // and handle it ourselves
+                 // Because we are reviewing a frequency set that contains a word that can be
+                 // flagged as proper but has instances where it is both proper and non-proper,
+                 // using this functor to classify it based on the proper flag will be wrong. Turn
+                 // off proper noun support in this functor and handle the proper noun counts for
+                 // the word based on the actual proper noun settings at the call site.
                  readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar, true);
     m_totalHardWordsDaleChall = 0;
     m_uniqueDCHardWords = 0;
@@ -2351,13 +2355,13 @@ void BaseProject::LoadHardWords()
     auto stemmer = CreateStemmer();
 
     size_t uniqueProperNouns{ 0 }, uniqueContractions{ 0 };
-    size_t i = 0;
+    size_t i{ 0 };
     for (auto wordPos = GetWordsWithFrequencies()->get_data().begin();
          wordPos != GetWordsWithFrequencies()->get_data().end(); ++wordPos, ++i)
         {
         // the values are frequency count (first) and the number
         // of those that are proper (second)
-        assert(wordPos->second.first >= wordPos->second.second);
+        wxASSERT(wordPos->second.first >= wordPos->second.second);
         /* subtract number of times word is proper from total count of word
            to see if at least on instance is NOT proper. If they are equal, then
            all instances are proper and therefore cannot be an unfamiliar word.*/
@@ -3038,9 +3042,9 @@ void BaseProject::LoadHardWords()
         m_keyWordsDataset->Clear();
         m_keyWordsDataset->AddCategoricalColumn(GetWordsColumnName());
         m_keyWordsDataset->AddContinuousColumn(GetWordsCountsColumnName());
-        assert(m_keyWordsDataset->GetCategoricalColumns().size() == 1 &&
-               L"Hard word dataset invalid!");
-        assert(m_keyWordsDataset->GetRowCount() == 0 && L"Hard word dataset should be empty!");
+        wxASSERT_MSG(m_keyWordsDataset->GetCategoricalColumns().size() == 1,
+                     L"Hard word dataset invalid!");
+        wxASSERT_MSG(m_keyWordsDataset->GetRowCount() == 0, L"Hard word dataset should be empty!");
         m_keyWordsDataset->Resize(keyWordsStemmedWithCounts.get_data().size());
         auto keyWordsColumn = m_keyWordsDataset->GetCategoricalColumn(GetWordsColumnName());
         auto keydWordsFreqColumn =
