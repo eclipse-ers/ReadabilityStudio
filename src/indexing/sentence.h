@@ -853,6 +853,7 @@ namespace grammar
                     character == 0xFF01 /*full-width exclamation mark*/ ||
                     traits::case_insensitive_ex::eq(character, L'?') ||
                     character == 0xFF1F /*full-width question mark*/ ||
+                    character == 0x061F /*Arabic question mark*/ ||
                     character == 0x85 || /*horizontal ellipse on Windows*/
                     character == common_lang_constants::INTERROBANG || // interrobang
                     // special case when a colon is at the end of a line
@@ -872,6 +873,7 @@ namespace grammar
                     character == 0xFF01 /*full-width exclamation mark*/ ||
                     traits::case_insensitive_ex::eq(character, L'?') ||
                     character == 0xFF1F /*full-width question mark*/ ||
+                    character == 0x061F /*Arabic question mark*/ ||
                     character == 0x85 || /*horizontal ellipse on Windows*/
                     character == common_lang_constants::ELLIPSE /*Unicode horizontal ellipse*/ ||
                     character == common_lang_constants::INTERROBANG || // interrobang

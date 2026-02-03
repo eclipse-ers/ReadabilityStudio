@@ -474,12 +474,12 @@ class document
                         // It can still be seen as a list item or header, just mark it as valid.
                         // The semicolon will also be moved from the punctuation data onto the
                         // sentence.
-                        if (traits::case_insensitive_ex::eq(
-                                punctPosNonConst->get_punctuation_mark(),
-                                common_lang_constants::SEMICOLON))
+                        if (characters::is_character::is_semicolon(
+                                punctPosNonConst->get_punctuation_mark()))
                             {
                             theSentence.set_valid(true);
-                            theSentence.set_ending_punctuation(common_lang_constants::SEMICOLON);
+                            theSentence.set_ending_punctuation(
+                                punctPosNonConst->get_punctuation_mark());
                             punctPosNonConst = m_punctuation.erase(punctPosNonConst);
                             break;
                             }
@@ -2370,8 +2370,7 @@ class document
                 }
             if (traits::case_insensitive_ex::eq(punctIter.get_punctuation_mark(),
                                                 common_lang_constants::COLON) ||
-                traits::case_insensitive_ex::eq(punctIter.get_punctuation_mark(),
-                                                common_lang_constants::SEMICOLON) ||
+                characters::is_character::is_semicolon(punctIter.get_punctuation_mark()) ||
                 characters::is_character::is_dash_or_hyphen(punctIter.get_punctuation_mark()))
                 {
                 // avoid consecutive unit delimiters (i.e., ones that are attached to the same word)

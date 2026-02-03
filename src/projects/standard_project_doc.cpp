@@ -1562,7 +1562,7 @@ bool ProjectDoc::OnNewDocument()
         {
         // note our special case for list item lines ending with semicolons will be ignored here
         if (sent.is_valid() && !sent.ends_with_valid_punctuation() &&
-            sent.get_ending_punctuation() != common_lang_constants::SEMICOLON &&
+            !characters::is_character::is_semicolon(sent.get_ending_punctuation()) &&
             sent.get_word_count() > GetIncludeIncompleteSentencesIfLongerThanValue())
             {
             ++sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength;

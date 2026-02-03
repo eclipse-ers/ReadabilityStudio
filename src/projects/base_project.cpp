@@ -5087,7 +5087,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
     for (const auto& sentPos : GetWords()->get_sentences())
         {
         if (sentPos.is_valid() && !sentPos.ends_with_valid_punctuation() &&
-            sentPos.get_ending_punctuation() != common_lang_constants::SEMICOLON &&
+            !characters::is_character::is_semicolon(sentPos.get_ending_punctuation()) &&
             sentPos.get_word_count() > GetIncludeIncompleteSentencesIfLongerThanValue())
             {
             ++sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength;

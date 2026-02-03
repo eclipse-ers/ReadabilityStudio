@@ -1149,7 +1149,16 @@ namespace characters
             {
             return (ch == L'.' || ch == 0xFF0E /*full-width*/ ||
                     ch == 0x3002 /*ideographic full stop*/ ||
-                    ch == 0xFF61 /*half-width ideographic period*/);
+                    ch == 0xFF61 /*half-width ideographic period*/ ||
+                    ch == 0x06D4 /*Urdu/South Asian Arabic-script full stop*/);
+            }
+
+        /** @returns @c true if a character is a semicolon.
+            @param ch The letter to be reviewed.*/
+        [[nodiscard]]
+        constexpr static bool is_semicolon(const wchar_t ch) noexcept
+            {
+            return (ch == L';' || ch == 0xFF1B /*full-width*/ || ch == 0x061B /*Arabic semicolon*/);
             }
 
         /** @returns @c true if a (non-numeric) character can appear in front of a number
