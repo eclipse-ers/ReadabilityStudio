@@ -36,6 +36,7 @@ source('../R/appdown.r')
   Lix Gauge\
   German Lix Gauge
 - Added new icon shapes for stipple brushes.
+- Added new styles for bar charts and box plots.
 - Stipple shapes now support transparency.\
   This includes using icon shapes for histograms that use showcasing.
 - Added WebP image support.

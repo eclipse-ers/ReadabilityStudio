@@ -314,6 +314,10 @@ ProjectDocChildFrame* BaseProjectView::CreateChildFrame(wxDocument* doc, wxView*
     item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/brush.svg"));
     subframe->m_barStyleMenu.Append(item);
 
+    item = new wxMenuItem(&subframe->m_barStyleMenu, XRCID("ID_BAR_STYLE_MARKER"), _(L"Marker"));
+    item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/highlighter.svg"));
+    subframe->m_barStyleMenu.Append(item);
+
     item = new wxMenuItem(&subframe->m_barStyleMenu, XRCID("ID_BAR_STYLE_COMMON_IMAGE"),
                           _(L"Common Image"));
     item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/image.svg"));
@@ -389,6 +393,11 @@ ProjectDocChildFrame* BaseProjectView::CreateChildFrame(wxDocument* doc, wxView*
     item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/brush.svg"));
     subframe->m_histoBarStyleMenu.Append(item);
 
+    item = new wxMenuItem(&subframe->m_histoBarStyleMenu, XRCID("ID_HISTOGRAM_BAR_STYLE_MARKER"),
+                          _(L"Marker"));
+    item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/highlighter.svg"));
+    subframe->m_histoBarStyleMenu.Append(item);
+
     item = new wxMenuItem(&subframe->m_histoBarStyleMenu,
                           XRCID("ID_HISTOGRAM_BAR_STYLE_COMMON_IMAGE"), _(L"Common Image"));
     item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/image.svg"));
@@ -458,6 +467,10 @@ ProjectDocChildFrame* BaseProjectView::CreateChildFrame(wxDocument* doc, wxView*
     item = new wxMenuItem(&subframe->m_boxStyleMenu, XRCID("ID_BOX_STYLE_THICK_WATERCOLOR"),
                           _(L"Thick Watercolor"));
     item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/brush.svg"));
+    subframe->m_boxStyleMenu.Append(item);
+
+    item = new wxMenuItem(&subframe->m_boxStyleMenu, XRCID("ID_BOX_STYLE_MARKER"), _(L"Marker"));
+    item->SetBitmap(wxGetApp().GetResourceManager().GetSVG(L"ribbon/highlighter.svg"));
     subframe->m_boxStyleMenu.Append(item);
 
     item = new wxMenuItem(&subframe->m_boxStyleMenu, XRCID("ID_BOX_STYLE_COMMON_IMAGE"),

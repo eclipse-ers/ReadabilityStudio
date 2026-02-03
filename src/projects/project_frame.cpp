@@ -325,6 +325,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          XRCID("ID_BAR_STYLE_WATERCOLOR"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBarStyleSelected, this,
          XRCID("ID_BAR_STYLE_THICK_WATERCOLOR"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBarStyleSelected, this, XRCID("ID_BAR_STYLE_MARKER"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBarStyleSelected, this,
          XRCID("ID_BAR_STYLE_COMMON_IMAGE"));
 
@@ -345,6 +346,8 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnHistoBarStyleSelected, this,
          XRCID("ID_HISTOGRAM_BAR_STYLE_THICK_WATERCOLOR"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnHistoBarStyleSelected, this,
+         XRCID("ID_HISTOGRAM_BAR_STYLE_MARKER"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnHistoBarStyleSelected, this,
          XRCID("ID_HISTOGRAM_BAR_STYLE_COMMON_IMAGE"));
 
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBoxStyleSelected, this, XRCID("ID_BOX_STYLE_SOLID"));
@@ -359,6 +362,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          XRCID("ID_BOX_STYLE_WATERCOLOR"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBoxStyleSelected, this,
          XRCID("ID_BOX_STYLE_THICK_WATERCOLOR"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBoxStyleSelected, this, XRCID("ID_BOX_STYLE_MARKER"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnBoxStyleSelected, this,
          XRCID("ID_BOX_STYLE_COMMON_IMAGE"));
 
@@ -1143,6 +1147,10 @@ void ProjectDocChildFrame::OnBarStyleSelected(wxCommandEvent& event)
         {
         baseDoc->SetGraphBarEffect(Wisteria::BoxEffect::ThickWaterColor);
         }
+    else if (event.GetId() == XRCID("ID_BAR_STYLE_MARKER"))
+        {
+        baseDoc->SetGraphBarEffect(Wisteria::BoxEffect::Marker);
+        }
     else if (event.GetId() == XRCID("ID_BAR_STYLE_COMMON_IMAGE"))
         {
         if (!wxFile::Exists(baseDoc->GetGraphCommonImagePath()))
@@ -1168,7 +1176,7 @@ void ProjectDocChildFrame::OnBarStyleSelected(wxCommandEvent& event)
 void ProjectDocChildFrame::OnHistoBarStyleSelected(wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1209,18 +1217,19 @@ void ProjectDocChildFrame::OnHistoBarStyleSelected(wxCommandEvent& event)
         }
     else if (event.GetId() == XRCID("ID_HISTOGRAM_BAR_STYLE_STIPPLE_SHAPE"))
         {
-        dynamic_cast<BaseProjectDoc*>(GetDocument())
-            ->SetHistogramBarEffect(Wisteria::BoxEffect::StippleShape);
+        baseDoc->SetHistogramBarEffect(Wisteria::BoxEffect::StippleShape);
         }
     else if (event.GetId() == XRCID("ID_HISTOGRAM_BAR_STYLE_WATERCOLOR"))
         {
-        dynamic_cast<BaseProjectDoc*>(GetDocument())
-            ->SetHistogramBarEffect(Wisteria::BoxEffect::WaterColor);
+        baseDoc->SetHistogramBarEffect(Wisteria::BoxEffect::WaterColor);
         }
     else if (event.GetId() == XRCID("ID_HISTOGRAM_BAR_STYLE_THICK_WATERCOLOR"))
         {
-        dynamic_cast<BaseProjectDoc*>(GetDocument())
-            ->SetHistogramBarEffect(Wisteria::BoxEffect::ThickWaterColor);
+        baseDoc->SetHistogramBarEffect(Wisteria::BoxEffect::ThickWaterColor);
+        }
+    else if (event.GetId() == XRCID("ID_HISTOGRAM_BAR_STYLE_MARKER"))
+        {
+        baseDoc->SetHistogramBarEffect(Wisteria::BoxEffect::Marker);
         }
     else if (event.GetId() == XRCID("ID_HISTOGRAM_BAR_STYLE_COMMON_IMAGE"))
         {
@@ -1237,8 +1246,7 @@ void ProjectDocChildFrame::OnHistoBarStyleSelected(wxCommandEvent& event)
             wxGetApp().GetAppOptions()->SetImagePath(wxFileName(fd.GetPath()).GetPath());
             baseDoc->SetGraphCommonImagePath(fd.GetPath());
             }
-        dynamic_cast<BaseProjectDoc*>(GetDocument())
-            ->SetHistogramBarEffect(Wisteria::BoxEffect::CommonImage);
+        baseDoc->SetHistogramBarEffect(Wisteria::BoxEffect::CommonImage);
         }
     baseDoc->RefreshRequired(ProjectRefresh::Minimal);
     baseDoc->RefreshGraphs();
@@ -1560,6 +1568,10 @@ void ProjectDocChildFrame::OnBoxStyleSelected(wxCommandEvent& event)
     else if (event.GetId() == XRCID("ID_BOX_STYLE_THICK_WATERCOLOR"))
         {
         baseDoc->SetGraphBoxEffect(Wisteria::BoxEffect::ThickWaterColor);
+        }
+    else if (event.GetId() == XRCID("ID_BOX_STYLE_MARKER"))
+        {
+        baseDoc->SetGraphBoxEffect(Wisteria::BoxEffect::Marker);
         }
     else if (event.GetId() == XRCID("ID_BOX_STYLE_COMMON_IMAGE"))
         {

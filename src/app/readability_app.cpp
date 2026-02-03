@@ -459,7 +459,10 @@ bool ReadabilityApp::OnInit()
                    std::make_pair(_(L"Hundred dollar bill"), DONTTRANSLATE(L"hundred-dollar-bill")),
                    std::make_pair(_(L"Pumpkin"), DONTTRANSLATE(L"pumpkin")),
                    std::make_pair(_(L"Jack-o'-lantern"), DONTTRANSLATE(L"jack-o-lantern")),
-                   std::make_pair(_(L"Monitor"), DONTTRANSLATE(L"monitor")) };
+                   std::make_pair(_(L"Monitor"), DONTTRANSLATE(L"monitor")),
+                   std::make_pair(_(L"Cheese pizza"), DONTTRANSLATE(L"cheese-pizza")),
+                   std::make_pair(_(L"Pepperoni pizza"), DONTTRANSLATE(L"pepperoni-pizza")),
+                   std::make_pair(_(L"Hawaiian pizza"), DONTTRANSLATE(L"hawaiian-pizza")) };
 
     // do the same for the color schemes (for the graphs)
     m_colorSchemeMap = { std::make_pair(_(L"Dusk"), DONTTRANSLATE(L"dusk")),

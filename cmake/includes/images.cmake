@@ -80,6 +80,7 @@ ribbon/heatmap.svg
 ribbon/help-button.svg
 ribbon/help.svg
 ribbon/highlightedwords.svg
+ribbon/highlighter.svg
 ribbon/highlighting.svg
 ribbon/histogram.svg
 ribbon/home-dark-mode.svg
