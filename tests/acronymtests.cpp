@@ -41,7 +41,18 @@ TEST_CASE("Acronyms", "[acronyms]")
     word_list Known_spellings;
     word_list Secondary_known_spellings;
     word_list Programming_known_spellings;
-
+    SECTION("Possessive")
+        {
+        grammar::is_possessive isPossessive;
+        CHECK(isPossessive(L"Carl's"));
+        CHECK(isPossessive(L"Carl's"));
+        CHECK(isPossessive(L"Carl＇s"));
+        CHECK(isPossessive(L"Carl'S"));
+        CHECK_FALSE(isPossessive(L"Carl"));
+        CHECK_FALSE(isPossessive(L"s"));
+        CHECK_FALSE(isPossessive(L""));
+        CHECK_FALSE(isPossessive(L"'"));
+        }
     SECTION("Acronym")
         {
         const wchar_t text[] = L"I live U.S. of A. right now.";

@@ -4651,11 +4651,22 @@ TEST_CASE("Document", "[document]")
         CHECK(std::wcscmp(doc.get_word(5).c_str(), L"Frank's") == 0);
         CHECK(doc.get_word(5).is_contraction());
         CHECK(std::wcscmp(doc.get_word(9).c_str(), L"Frank's") == 0);
-        CHECK(doc.get_word(9).is_contraction() == false);
+        CHECK_FALSE(doc.get_word(9).is_contraction());
         CHECK(std::wcscmp(doc.get_word(16).c_str(), L"Frank's") == 0);
-        CHECK(doc.get_word(16).is_contraction() == false);
+        CHECK_FALSE(doc.get_word(16).is_contraction());
         CHECK(std::wcscmp(doc.get_word(23).c_str(), L"Frank's") == 0);
-        CHECK(doc.get_word(23).is_contraction() == false);
+        CHECK_FALSE(doc.get_word(23).is_contraction());
+
+        // but are possessive
+        CHECK(doc.get_word(0).is_possessive());
+        CHECK_FALSE(doc.get_word(1).is_possessive());
+        CHECK_FALSE(doc.get_word(2).is_possessive());
+        CHECK_FALSE(doc.get_word(3).is_possessive());
+        CHECK_FALSE(doc.get_word(4).is_possessive());
+        CHECK(doc.get_word(5).is_possessive());
+        CHECK(doc.get_word(9).is_possessive());
+        CHECK(doc.get_word(16).is_possessive());
+        CHECK(doc.get_word(23).is_possessive());
         }
 
     SECTION("Contractions leading apos")

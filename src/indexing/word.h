@@ -77,6 +77,7 @@ enum class word_flags
     custom_tagged_flag,    /*!< User-defined tag applies to this word.*/
     social_media_tag_flag, /*!< A hashtagged word.*/
     abbreviation_flag,     /*!< Abbreviation.*/
+    possessive_flag,       /*!< A possessive word.*/
     WORD_FLAG_COUNT        /*!< The number of word flags available.*/
     };
 
@@ -352,15 +353,26 @@ class word : public std::basic_string<wchar_t, Tchar_traits>
         return flags[static_cast<size_t>(word_flags::social_media_tag_flag)];
         }
 
-    void set_abbreviation_tag(const bool enable)
+    void set_abbreviation(const bool enable)
         {
         flags.set(static_cast<size_t>(word_flags::abbreviation_flag), enable);
         }
 
     [[nodiscard]]
-    bool is_abbreviation_tag() const
+    bool is_abbreviation() const
         {
         return flags[static_cast<size_t>(word_flags::abbreviation_flag)];
+        }
+
+    void set_possessive(const bool enable)
+        {
+        flags.set(static_cast<size_t>(word_flags::possessive_flag), enable);
+        }
+
+    [[nodiscard]]
+    bool is_possessive() const
+        {
+        return flags[static_cast<size_t>(word_flags::possessive_flag)];
         }
 
   private:
@@ -595,15 +607,26 @@ class word<Tchar_traits, stemming::no_op_stem<std::basic_string<wchar_t, Tchar_t
         return flags[static_cast<size_t>(word_flags::social_media_tag_flag)];
         }
 
-    void set_abbreviation_tag(const bool enable)
+    void set_abbreviation(const bool enable)
         {
         flags.set(static_cast<size_t>(word_flags::abbreviation_flag), enable);
         }
 
     [[nodiscard]]
-    bool is_abbreviation_tag() const
+    bool is_abbreviation() const
         {
         return flags[static_cast<size_t>(word_flags::abbreviation_flag)];
+        }
+
+    void set_possessive(const bool enable)
+        {
+        flags.set(static_cast<size_t>(word_flags::possessive_flag), enable);
+        }
+
+    [[nodiscard]]
+    bool is_possessive() const
+        {
+        return flags[static_cast<size_t>(word_flags::possessive_flag)];
         }
 
   private:

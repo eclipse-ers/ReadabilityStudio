@@ -51,6 +51,7 @@
 #define ABBREVIATION_H
 
 #include "word_list.h"
+#include "characters.h"
 
 /// @brief Namespace for grammar analysis.
 namespace grammar
@@ -125,6 +126,21 @@ namespace grammar
       private:
         mutable size_t m_dot_count{ 0 };
         mutable bool m_ends_with_lower_s{ false };
+        };
+
+    // @brief Predicate for determining if a word is a possessive.
+    class is_possessive
+        {
+      public:
+        /** @returns @c true if text block is possessive (i.e., ends with "'s").
+            @param text The text block to analyze.*/
+        [[nodiscard]]
+        bool operator()(const std::wstring_view text) const
+            {
+            return (text.length() >= 2 &&
+                    characters::is_character::is_either(text.back(), L's', L'S') &&
+                    characters::is_character::is_apostrophe(text[text.length() - 2]));
+            }
         };
     } // namespace grammar
 

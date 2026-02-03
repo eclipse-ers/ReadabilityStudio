@@ -308,11 +308,16 @@ class document
         is_social_media_tag<Tword_type> isSmTag;
         for_each(m_words.begin(), m_words.end(), [&isSmTag = std::as_const(isSmTag)](auto& word)
                  { word.set_social_media_tag(isSmTag(word)); });
+        // possessive
+        grammar::is_possessive isPossessive;
+        for_each(m_words.begin(), m_words.end(),
+                 [&isPossessive = std::as_const(isPossessive)](auto& word)
+                 { word.set_possessive(isPossessive({ word.c_str(), word.length() })); });
         // abbreviation
         grammar::is_abbreviation isAbbreviation;
         for_each(m_words.begin(), m_words.end(),
                  [&isAbbreviation = std::as_const(isAbbreviation)](auto& word)
-                 { word.set_abbreviation_tag(isAbbreviation({ word.c_str(), word.length() })); });
+                 { word.set_abbreviation(isAbbreviation({ word.c_str(), word.length() })); });
             // contractions
             {
             auto punctPos =
