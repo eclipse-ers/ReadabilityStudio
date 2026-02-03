@@ -97,6 +97,10 @@ By default, lowercase words can be considered the start of a new sentence (with 
 Although it is poor grammar to not capitalize the first word of a sentence, this writing style is often found in some literature.
 This behavior can be toggled using the option [**Sentences must begin with capitalized words**](#sec-document-analysis).
 
+Finally, East Asian sentence-ending punctuation is always treated as the end of a sentence.
+This includes the ideographic full stop (*。*), its half-width variant (*｡*), the full-width question mark (*？*), and exclamation mark (*！*).
+Unlike Western periods, these characters do not require special handling for abbreviations or spacing because East Asian languages do not use them in those contexts.
+
 ## Line (Sentence) Chaining\index{sentences!chaining} {#sec-line-chaining}
 
 Line chaining (or sentence chaining) is a sentence deduction method where lines of text are joined until a *.*, *?*, or *!* is found.

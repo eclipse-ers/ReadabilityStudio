@@ -29,6 +29,9 @@ using namespace lily_of_the_valley;
 using MYWORD = word<traits::case_insensitive_ex,
     stemming::english_stem<std::basic_string<wchar_t, traits::case_insensitive_ex> > >;
 
+using MYWORD_NOSTEM = word<traits::case_insensitive_ex,
+    stemming::no_op_stem<std::basic_string<wchar_t, traits::case_insensitive_ex> > >;
+
 TEST_CASE("Custom familiar words tests", "[custom][readability-tests]")
     {
     SECTION("ProperNounOnlyFirst")

@@ -11,12 +11,12 @@
  *   Blake Madden - initial implementation
  ********************************************************************************/
 
+#include "../src/indexing/article.h"
+#include "../src/indexing/word.h"
+#include "../src/indexing/word_collection.h"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "../src/indexing/article.h"
-#include "../src/indexing/word_collection.h"
-#include "../src/indexing/word.h"
 
 // clang-format off
 // NOLINTBEGIN
@@ -1241,5 +1241,158 @@ TEST_CASE("Sentences Incomplete", "[sentence]")
         CHECK(doc.get_valid_paragraph_count() == 2);
         }
     }
+TEST_CASE("Japanese sentence parsing", "[sentence]")
+    {
+    grammar::english_syllabize ENsyllabizer;
+    stemming::english_stem<std::wstring> ENStemmer;
+    grammar::is_english_coordinating_conjunction is_conjunction;
+    grammar::phrase_collection pmap;
+    grammar::phrase_collection copyrightPMap;
+    grammar::phrase_collection citationPMap;
+    word_list Known_proper_nouns;
+    word_list Known_personal_nouns;
+    word_list Known_spellings;
+    word_list Secondary_known_spellings;
+    word_list Programming_known_spellings;
+
+    document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                         &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                         &Known_spellings, &Secondary_known_spellings,
+                         &Programming_known_spellings, &Stop_list);
+    const wchar_t* text =
+        L"文字符號寫成四方形，每個符號（含標點）保有相同的空間大小。\n\n"
+        L"傳統日文和古典漢文一樣使用纵书（(縦書き），從上而下書寫，縱行之間由右至左書寫。"
+        L"此種書寫方式反映在現今的文學體裁和漫畫上面。"
+        L"现代日文使用横书（横書き），从左至右横排书写，写完一行向下换行。"
+        L"现代日语中，横书和纵书都会使用，但使用纵书的场合较多！"
+        L"由于纵书是传统书写的方法，书法、国语教科书、小说诗歌等文艺作品、报刊的部分版面等，"
+        L"多会沿用纵书，但是使用纵书也不限于传统用途，如漫画、日式个人名片（日语的一面多会纵书、"
+        L"另一面英文的则横书）？"
+        L"横书则用于外语、数学、科学、音乐等类别的书刊，较正式的文本如商业书信、演示稿书、"
+        L"论文等通常几乎都是横书的，这样不仅便于插入西方文字，电脑排版也比较方便｡"
+        L"竖排书刊也可能会有些栏目或页面使用横书，以迁就版面设。";
+    // Japanese/CJK text doesn't require uppercase sentence starts
+    doc.load_document(text, wcslen(text), false, false, false, false);
+
+    // Should parse into 8 sentences
+    REQUIRE(doc.get_sentence_count() == 8);
+
+    // Verify sentence content by checking words in each sentence.
+    // Word parsing is crude - it stops on punctuation like ， and （
+
+    // Sentence 1: 文字符號寫成四方形，每個符號（含標點）保有相同的空間大小。
+    // Words split by ，（）: 文字符號寫成四方形, 每個符號, 含標點, 保有相同的空間大小
+        {
+        const auto& sent = doc.get_sentences()[0];
+        REQUIRE(sent.get_word_count() == 4);
+        CHECK(sent.get_ending_punctuation() == L'\x3002'); // 。
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"文字符號寫成四方形");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"每個符號");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"含標點");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"保有相同的空間大小");
+        }
+
+    // Sentence 2: 傳統日文和古典漢文一樣使用纵书（(縦書き），從上而下書寫，縱行之間由右至左書寫。
+    // Words split by ，（）: 傳統日文和古典漢文一樣使用纵书, (縦書き, 從上而下書寫, 縱行之間由右至左書寫
+        {
+        const auto& sent = doc.get_sentences()[1];
+        REQUIRE(sent.get_word_count() == 4);
+        CHECK(sent.get_ending_punctuation() == L'\x3002'); // 。
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"傳統日文和古典漢文一樣使用纵书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"縦書き");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"從上而下書寫");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"縱行之間由右至左書寫");
+        }
+
+    // Sentence 3: 此種書寫方式反映在現今的文學體裁和漫畫上面。
+    // No internal punctuation, single word
+        {
+        const auto& sent = doc.get_sentences()[2];
+        REQUIRE(sent.get_word_count() == 1);
+        CHECK(sent.get_ending_punctuation() == L'\x3002'); // 。
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"此種書寫方式反映在現今的文學體裁和漫畫上面");
+        }
+
+    // Sentence 4: 现代日文使用横书（横書き），从左至右横排书写，写完一行向下换行。
+    // Words split by ，（）: 现代日文使用横书, 横書き, 从左至右横排书写, 写完一行向下换行
+        {
+        const auto& sent = doc.get_sentences()[3];
+        REQUIRE(sent.get_word_count() == 4);
+        CHECK(sent.get_ending_punctuation() == L'\x3002'); // 。
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"现代日文使用横书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"横書き");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"从左至右横排书写");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"写完一行向下换行");
+        }
+
+    // Sentence 5: 现代日语中，横书和纵书都会使用，但使用纵书的场合较多！
+    // Words split by ，: 现代日语中, 横书和纵书都会使用, 但使用纵书的场合较多
+        {
+        const auto& sent = doc.get_sentences()[4];
+        REQUIRE(sent.get_word_count() == 3);
+        CHECK(sent.get_ending_punctuation() == L'\xFF01'); // ！
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"现代日语中");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"横书和纵书都会使用");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"但使用纵书的场合较多");
+        }
+
+    // Sentence 6: 由于纵书是传统书写的方法，书法、国语教科书、小说诗歌等文艺作品、报刊的部分版面等，
+    //             多会沿用纵书，但是使用纵书也不限于传统用途，如漫画、日式个人名片（日语的一面多会纵书、
+    //             另一面英文的则横书）？
+    // Words split by ，（）、
+        {
+        const auto& sent = doc.get_sentences()[5];
+        REQUIRE(sent.get_word_count() == 11);
+        CHECK(sent.get_ending_punctuation() == L'\xFF1F'); // ？
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"由于纵书是传统书写的方法");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"书法");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"国语教科书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"小说诗歌等文艺作品");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"报刊的部分版面等");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"多会沿用纵书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"但是使用纵书也不限于传统用途");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"如漫画");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"日式个人名片");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"日语的一面多会纵书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"另一面英文的则横书");
+        }
+
+    // Sentence 7: 横书则用于外语、数学、科学、音乐等类别的书刊，较正式的文本如商业书信、演示稿书、
+    //             论文等通常几乎都是横书的，这样不仅便于插入西方文字，电脑排版也比较方便｡
+    // Words split by ，、
+        {
+        const auto& sent = doc.get_sentences()[6];
+        REQUIRE(sent.get_word_count() == 9);
+        CHECK(sent.get_ending_punctuation() == L'\xFF61'); // ｡ (half-width)
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"横书则用于外语");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"数学");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"科学");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"音乐等类别的书刊");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"较正式的文本如商业书信");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"演示稿书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"论文等通常几乎都是横书的");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"这样不仅便于插入西方文字");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"电脑排版也比较方便");
+        }
+
+    // Sentence 8: 竖排书刊也可能会有些栏目或页面使用横书，以迁就版面设。
+    // Words split by ，
+        {
+        const auto& sent = doc.get_sentences()[7];
+        REQUIRE(sent.get_word_count() == 2);
+        CHECK(sent.get_ending_punctuation() == L'\x3002'); // 。
+        size_t idx = sent.get_first_word_index();
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"竖排书刊也可能会有些栏目或页面使用横书");
+        CHECK(std::wstring(doc.get_word(idx++).c_str()) == L"以迁就版面设");
+        }
+    }
+
 // NOLINTEND
 // clang-format on

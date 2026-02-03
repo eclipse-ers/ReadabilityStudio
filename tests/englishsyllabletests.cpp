@@ -1281,6 +1281,9 @@ TEST_CASE("English syllabizer", "[syllable]")
     SECTION("Japanese")
         {
         english_syllabize syllabize;
+        
+        // example from docs
+        CHECK(syllabize(L"ドキュメンテーション", 10) == 8);
 
         // pure hiragana (each character = 1 syllable)
         CHECK(syllabize(L"あ", 1) == 1);
@@ -1292,7 +1295,7 @@ TEST_CASE("English syllabizer", "[syllable]")
         // pure katakana
         CHECK(syllabize(L"アイ", 2) == 2);
         CHECK(syllabize(L"カタカナ", 4) == 4); // katakana
-        CHECK(syllabize(L"トウキョウ", 5) == 5); // toukyou
+        CHECK(syllabize(L"トウキョウ", 5) == 4); // toukyou
 
         // halfwidth katakana
         CHECK(syllabize(L"ｱｲ", 2) == 2);

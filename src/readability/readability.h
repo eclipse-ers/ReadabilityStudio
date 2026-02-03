@@ -53,6 +53,7 @@
 #include "../OleanderStemmingLibrary/src/stemming.h"
 #include "../Wisteria-Dataviz/src/math/mathematics.h"
 #include "../Wisteria-Dataviz/src/util/string_util.h"
+#include "../indexing/characters.h"
 #include "grade_scales.h"
 #include "readability_enums.h"
 #include <algorithm>

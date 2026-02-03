@@ -419,6 +419,16 @@ namespace grammar
                     {
                     return true;
                     }
+                // Japanese full-width sentence terminators always end a sentence.
+                // Japanese doesn't use spaces after these and they don't serve dual roles
+                // like periods do in English abbreviations.
+                if (text[current_position] == 0x3002 || // ideographic full stop (。)
+                    text[current_position] == 0xFF61 || // half-width ideographic full stop (｡)
+                    text[current_position] == 0xFF01 || // full-width exclamation mark (！)
+                    text[current_position] == 0xFF1F)   // full-width question mark (？)
+                    {
+                    return true;
+                    }
                 // watch out for ill-formatted quotes in the middle of a sentence
                 // (e.g., "'hi there',! and 'goodbye',! he said.").
                 if (current_position > 0 &&
