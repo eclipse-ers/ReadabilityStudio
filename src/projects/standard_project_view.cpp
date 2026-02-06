@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1063,7 +1063,7 @@ void ProjectView::UpdateSideBarIcons()
     const auto checkGraphType = [](wxWindow* window, const wxClassInfo* className)
     {
         const auto* canvas = dynamic_cast<Wisteria::Canvas*>(window);
-        assert(canvas && "Window is not a canvas!");
+        wxASSERT_MSG(canvas, L"Window is not a canvas!");
         return (canvas != nullptr) ? canvas->GetFixedObject(0, 0)->IsKindOf(className) : false;
     };
 
@@ -1633,7 +1633,7 @@ void ProjectView::UpdateRibbonState()
         projectButtonBarWindow->IsKindOf(wxCLASSINFO(wxRibbonButtonBar)))
         {
         auto* projBar = dynamic_cast<wxRibbonButtonBar*>(projectButtonBarWindow);
-        assert(projBar);
+        wxASSERT(projBar);
         if (projBar != nullptr)
             {
             projBar->ToggleButton(XRCID("ID_REALTIME_UPDATE"), projDoc->IsRealTimeUpdating());
@@ -2231,12 +2231,12 @@ void ProjectView::OnTestDelete([[maybe_unused]] wxRibbonButtonBarEvent& event)
 //-------------------------------------------------------
 void ProjectView::OnItemSelected(wxCommandEvent& event)
     {
-    assert(GetRibbon() != nullptr);
+    wxASSERT(GetRibbon() != nullptr);
     const auto hideEditPanel = [this](const wxWindowID windowId)
     {
         wxWindow* editButtonBarWindow = GetRibbon()->FindWindow(windowId);
-        assert(editButtonBarWindow != nullptr);
-        assert(editButtonBarWindow->IsKindOf(wxCLASSINFO(wxRibbonPanel)));
+        wxASSERT(editButtonBarWindow != nullptr);
+        wxASSERT(editButtonBarWindow->IsKindOf(wxCLASSINFO(wxRibbonPanel)));
         editButtonBarWindow->Show(false);
         return dynamic_cast<wxRibbonPanel*>(editButtonBarWindow);
     };
@@ -2244,7 +2244,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
     const auto getEditButtonBar = [](wxRibbonPanel* panel)
     {
         auto* buttonBar = panel->FindWindow(MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
-        assert(buttonBar != nullptr && buttonBar->IsKindOf(wxCLASSINFO(wxRibbonButtonBar)));
+        wxASSERT(buttonBar != nullptr && buttonBar->IsKindOf(wxCLASSINFO(wxRibbonButtonBar)));
         return dynamic_cast<wxRibbonButtonBar*>(buttonBar);
     };
 
@@ -2253,7 +2253,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         if (GetActiveProjectWindow() != nullptr &&
             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
             {
-            assert(dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow()));
+            wxASSERT(dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow()));
             dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow())->ResetResizeDelay();
             }
     };
@@ -2311,7 +2311,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetReadabilityResultsView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2350,7 +2350,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetReadabilityResultsView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2423,7 +2423,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetSentencesBreakdownView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2482,7 +2482,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetSummaryView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2515,7 +2515,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
             m_activeWindow = GetWordsBreakdownView().FindWindowById(event.GetInt());
             }
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2606,7 +2606,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetGrammarView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2645,7 +2645,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetDolchSightWordsView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -2697,7 +2697,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         }
 
     // add the label for the window type to the export menu item
-    assert(GetActiveProjectWindow());
+    wxASSERT(GetActiveProjectWindow());
     if (auto* exportMenuItem{ GetDocFrame()->m_exportMenu.FindChildItem(XRCID("ID_SAVE_ITEM")) };
         exportMenuItem != nullptr && GetActiveProjectWindow() != nullptr)
         {

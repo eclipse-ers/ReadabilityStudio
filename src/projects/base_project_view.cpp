@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1132,7 +1132,7 @@ void BaseProjectView::ShowSideBar(const bool show /*= true*/)
         projectButtonBarWindow->IsKindOf(wxCLASSINFO(wxRibbonButtonBar)))
         {
         auto* const projectButtonBar = dynamic_cast<wxRibbonButtonBar*>(projectButtonBarWindow);
-        assert(projectButtonBar && L"Error casting project ribbon bar!");
+        wxASSERT_MSG(projectButtonBar, L"Error casting project ribbon bar!");
         if (projectButtonBar != nullptr)
             {
             projectButtonBar->ToggleButton(XRCID("ID_SHOW_SIDEBAR"), m_sidebarShown);

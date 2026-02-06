@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,8 +50,8 @@
 #ifndef ABBREVIATION_H
 #define ABBREVIATION_H
 
-#include "word_list.h"
 #include "characters.h"
+#include "word_list.h"
 
 /// @brief Namespace for grammar analysis.
 namespace grammar

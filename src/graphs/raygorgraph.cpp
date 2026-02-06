@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -275,12 +275,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
         {
         Graph2D::RecalcSizes(dc);
 
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
-                                     Canvas::GetDefaultCanvasWidthDIPs()) &&
-               L"Invalid backscreen size!");
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                                     Canvas::GetDefaultCanvasHeightDIPs()) &&
-               L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                                           Canvas::GetDefaultCanvasWidthDIPs()),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                                           Canvas::GetDefaultCanvasHeightDIPs()),
+                     L"Invalid backscreen size!");
 
         const wxColour labelFontColor{ GetLeftYAxis().GetFontColor() };
 
@@ -372,7 +372,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
         GetPhysicalCoordinates(44, 3.2, m_gradeLinePoints[25]);
         GetPhysicalCoordinates(44, 6.3, m_gradeLinePoints[26]);
 
-        assert(GetMessageCatalog() && L"Label manager not set in Raygor Graph!");
+        wxASSERT_MSG(GetMessageCatalog(), L"Label manager not set in Raygor Graph!");
 
         // draw the labels in the "danger areas"
         wxPoint topCorner;

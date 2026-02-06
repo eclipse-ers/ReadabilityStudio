@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -4459,8 +4459,8 @@ void BatchProjectDoc::DisplayCrawfordGraph()
 
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label for Crawford graph!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label for Crawford graph!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName().wc_str())
@@ -4560,8 +4560,8 @@ void BatchProjectDoc::DisplayDB2Plot()
 
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label for DB Plot!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label for DB Plot!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName().wc_str())
@@ -4681,8 +4681,8 @@ void BatchProjectDoc::DisplayFleschChart()
 
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label for Flesch Chart!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label for Flesch Chart!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName().wc_str())
@@ -4781,8 +4781,8 @@ void BatchProjectDoc::DisplayGermanLixGauge()
 
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label for German Lix gauge!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label for German Lix gauge!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName().wc_str())
@@ -4884,8 +4884,8 @@ void BatchProjectDoc::DisplayLixGauge()
                                  doc->GetTotalHardLixRixWords(), doc->GetTotalSentences());
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label for Lix Gauge!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label for Lix Gauge!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName().wc_str())
@@ -5009,8 +5009,8 @@ void BatchProjectDoc::DisplayReadabilityGraphs()
             {
             auto foundGroupId =
                 GetDocumentLabels().find(doc->GetOriginalDocumentDescription().wc_str());
-            assert((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()) &&
-                   L"Could not find group label!");
+            wxASSERT_MSG((!IsShowingGroupLegends() || foundGroupId != GetDocumentLabels().cend()),
+                         L"Could not find group label!");
             scoreDataset->AddRow(
                 Wisteria::Data::RowInfo()
                     .Id(wxFileName(doc->GetOriginalDocumentFilePath()).GetFullName())
@@ -5422,7 +5422,7 @@ void BatchProjectDoc::DisplayBoxPlots()
 
                 auto boxPlot = std::dynamic_pointer_cast<Wisteria::Graphs::BoxPlot>(
                     boxPlotCanvas->GetFixedObject(0, 0));
-                assert(boxPlot && "Invalid dynamic cast to box plot!");
+                wxASSERT_MSG(boxPlot, L"Invalid dynamic cast to box plot!");
                 boxPlot->SetBrushScheme(std::make_shared<Wisteria::Brushes::Schemes::BrushScheme>(
                     Wisteria::Colors::Schemes::ColorScheme({ GetGraphBoxColor() })));
                 boxPlot->SetData(sTest.get_grade_point_collection(), GetScoreColumnName(),
@@ -5517,7 +5517,7 @@ void BatchProjectDoc::DisplayBoxPlots()
 
                 auto boxPlot = std::dynamic_pointer_cast<Wisteria::Graphs::BoxPlot>(
                     boxPlotCanvas->GetFixedObject(0, 0));
-                assert(boxPlot && "Invalid dynamic cast to box plot!");
+                wxASSERT_MSG(boxPlot, L"Invalid dynamic cast to box plot!");
                 boxPlot->SetBrushScheme(std::make_shared<Wisteria::Brushes::Schemes::BrushScheme>(
                     Wisteria::Colors::Schemes::ColorScheme({ GetGraphBoxColor() })));
                 boxPlot->SetData(sTest.get_index_point_collection(), GetScoreColumnName(),
@@ -5623,7 +5623,7 @@ void BatchProjectDoc::DisplayBoxPlots()
 
                 auto boxPlot = std::dynamic_pointer_cast<Wisteria::Graphs::BoxPlot>(
                     boxPlotCanvas->GetFixedObject(0, 0));
-                assert(boxPlot && "Invalid dynamic cast to box plot!");
+                wxASSERT_MSG(boxPlot, L"Invalid dynamic cast to box plot!");
                 boxPlot->SetBrushScheme(std::make_shared<Wisteria::Brushes::Schemes::BrushScheme>(
                     Wisteria::Colors::Schemes::ColorScheme({ GetGraphBoxColor() })));
                 boxPlot->SetData(sTest.get_cloze_point_collection(), GetScoreColumnName(),
@@ -5706,7 +5706,7 @@ void BatchProjectDoc::DisplayBoxPlots()
 
                 auto boxPlot = std::dynamic_pointer_cast<Wisteria::Graphs::BoxPlot>(
                     boxPlotCanvas->GetFixedObject(0, 0));
-                assert(boxPlot && "Invalid dynamic cast to box plot!");
+                wxASSERT_MSG(boxPlot, L"Invalid dynamic cast to box plot!");
                 boxPlot->SetBrushScheme(std::make_shared<Wisteria::Brushes::Schemes::BrushScheme>(
                     Wisteria::Colors::Schemes::ColorScheme({ GetGraphBoxColor() })));
                 boxPlot->SetData(scoreDataset, GetScoreColumnName(),
@@ -5792,7 +5792,7 @@ void BatchProjectDoc::DisplayBoxPlots()
 
                 auto boxPlot = std::dynamic_pointer_cast<Wisteria::Graphs::BoxPlot>(
                     boxPlotCanvas->GetFixedObject(0, 0));
-                assert(boxPlot && "Invalid dynamic cast to box plot!");
+                wxASSERT_MSG(boxPlot, L"Invalid dynamic cast to box plot!");
                 boxPlot->SetData(scoreDataset, GetScoreColumnName(),
                                  // if more documents than groups, then use grouping
                                  (GetDocumentLabels().size() > 1 &&
@@ -5999,7 +5999,7 @@ void BatchProjectDoc::DisplayHistogram(const wxString& name, const wxWindowID Id
 
         auto histogram =
             std::dynamic_pointer_cast<Wisteria::Graphs::Histogram>(canvas->GetFixedObject(0, 0));
-        assert(histogram && "Invalid histogram cast!");
+        wxASSERT_MSG(histogram, L"Invalid histogram cast!");
 
         if (!IsShowingGroupLegends())
             {

@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -2196,6 +2196,10 @@ void BaseProject::LoadHardWords()
                                         stemming::no_op_stem<word_case_insensitive_no_stem>>
         isHarrisJacobsonWord(
             &m_harris_jacobson_word_list,
+            /* All proper words are familiar for this test, but because the set containing our
+               word frequencies need to mix words that can have proper and non-proper forms,
+               we need to trigger them as unfamiliar initially. From there, we count the
+               instances of the proper occurrences.*/
             readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar, true);
     m_uniqueHarrisJacobsonHardWords = m_totalHardWordsHarrisJacobson = 0;
     if (HasUI())
@@ -3063,7 +3067,7 @@ void BaseProject::LoadHardWords()
                     allValuesStr.append(subWord.first.c_str()).append(L"; ");
                     }
                 allValuesStr.Trim().RemoveLast();
-                assert(!allValuesStr.empty() && L"Empty word list from stemmed word?!");
+                wxASSERT_MSG(!allValuesStr.empty(), L"Empty word list from stemmed word?!");
 
                 GetKeyWordsBaseData()->SetItemText(
                     uniqueImportWordsCount, 0, allValuesStr,
@@ -3080,8 +3084,8 @@ void BaseProject::LoadHardWords()
                 auto mostFrequentWordVariation = std::ranges::max_element(
                     keyWordFreqInfo.first.get_data(), [](const auto& lhv, const auto& rhv) noexcept
                     { return lhv.second < rhv.second; });
-                assert(mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend() &&
-                       L"Empty word list for stemmed word?!");
+                wxASSERT_MSG(mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend(),
+                             L"Empty word list for stemmed word?!");
                 // add the next word to the dataset's string table
                 const auto nextKey = keyWordsColumn->GetNextKey();
                 if (mostFrequentWordVariation != keyWordFreqInfo.first.get_data().cend())
@@ -3177,7 +3181,7 @@ void BaseProject::LoadHardWords()
     for (auto wordPos = completeSentAndHeaderWordFrequencyMap.get_data().cbegin();
          wordPos != completeSentAndHeaderWordFrequencyMap.get_data().cend(); ++wordPos)
         {
-        assert(wordPos->second.first >= wordPos->second.second);
+        wxASSERT(wordPos->second.first >= wordPos->second.second);
         /* subtract number of times word is proper from total count of word
            to see if at least on instance is NOT proper. If they are equal, then
            all instances are proper and therefore cannot be an unfamiliar word.*/
@@ -8726,7 +8730,7 @@ bool BaseProject::VerifyTestBeforeAdding(
     const std::pair<std::vector<ProjectTestType>::const_iterator, bool>& theTest)
     {
     // see if the test was found in the list of known tests (this shouldn't be an issue)
-    assert(theTest.second);
+    wxASSERT(theTest.second);
     if (!theTest.second)
         {
         throw std::exception();
@@ -8756,15 +8760,15 @@ void BaseProject::HandleFailedTestCalculation(const wxString& testName)
 //------------------------------------------------
 bool BaseProject::ReviewTestGoal(const wxString& testName, const double score)
     {
-    assert((!std::isnan(score) ||
-            // doesn't have an actual score
-            testName == ReadabilityMessages::GetDolchLabel() ||
-            // these tests can fail
-            testName == ReadabilityMessages::FRASE() || testName == ReadabilityMessages::FRY() ||
-            testName == ReadabilityMessages::GPM_FRY() ||
-            testName == ReadabilityMessages::RAYGOR() ||
-            testName == ReadabilityMessages::SCHWARTZ()) &&
-           L"Score should not be NaN!");
+    wxASSERT((!std::isnan(score) ||
+              // doesn't have an actual score
+              testName == ReadabilityMessages::GetDolchLabel() ||
+              // these tests can fail
+              testName == ReadabilityMessages::FRASE() || testName == ReadabilityMessages::FRY() ||
+              testName == ReadabilityMessages::GPM_FRY() ||
+              testName == ReadabilityMessages::RAYGOR() ||
+              testName == ReadabilityMessages::SCHWARTZ()) &&
+             L"Score should not be NaN!");
     if (GetTestGoals().empty())
         {
         return false;
@@ -8810,7 +8814,7 @@ void BaseProject::ReviewStatGoals()
 //------------------------------------------------
 bool BaseProject::ReviewStatGoal(const wxString& statName, const double value)
     {
-    assert(!std::isnan(value) && L"Stat value should not be NaN!");
+    wxASSERT_MSG(!std::isnan(value), L"Stat value should not be NaN!");
     if (GetStatGoals().empty())
         {
         return false;

@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -3998,7 +3998,7 @@ wxString ProjectReportFormat::FormatSentence(
     std::vector<punctuation::punctuation_mark>::const_iterator& punctStart,
     const std::vector<punctuation::punctuation_mark>::const_iterator& punctEnd)
     {
-    assert(project);
+    wxASSERT(project);
     if (project == nullptr)
         {
         return {};

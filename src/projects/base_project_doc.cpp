@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -588,7 +588,7 @@ void BaseProjectDoc::UpdateGraphOptions(Wisteria::Canvas* canvas) const
     canvas->SetWatermarkLogo(m_waterMarkImage, wxSize{ 100, 100 });
 
     auto graph = std::dynamic_pointer_cast<Wisteria::Graphs::Graph2D>(canvas->GetFixedObject(0, 0));
-    assert(graph && L"No graph on the canvas!");
+    wxASSERT_MSG(graph, L"No graph on the canvas!");
 
     if (m_graphBrushScheme != nullptr)
         {
@@ -924,7 +924,7 @@ bool BaseProjectDoc::AddGlobalCustomReadabilityTest(CustomReadabilityTest& custo
     m_custom_word_tests.push_back(customTest);
 
     auto* mainFrame = dynamic_cast<MainFrame*>(wxGetApp().GetMainFrame());
-    assert(mainFrame);
+    wxASSERT(mainFrame);
     if (mainFrame != nullptr)
         {
         mainFrame->AddCustomTestToMenus(customTest.get_name().c_str());

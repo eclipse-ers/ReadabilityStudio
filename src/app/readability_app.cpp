@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1312,7 +1312,7 @@ void ReadabilityApp::LoadInterface()
     // create the menubar (macOS only)
 #ifdef __WXOSX__
     wxMenuBar* menuBar = wxXmlResource::Get()->LoadMenuBar(_DT(L"ID_MENUBAR"));
-    assert(menuBar);
+    wxASSERT(menuBar);
     if (menuBar != nullptr)
         {
         GetMainFrame()->SetMenuBar(menuBar);
@@ -1672,7 +1672,7 @@ void ReadabilityApp::FillGradeScalesMenu(wxMenu& menu)
 //-----------------------------------
 void ReadabilityApp::FillSaveMenu(wxMenu& saveMenu, const RibbonType rtype)
     {
-    assert(rtype != RibbonType::MainFrameRibbon && L"Mainframe should not have a save menu!");
+    wxASSERT_MSG(rtype != RibbonType::MainFrameRibbon, L"Mainframe should not have a save menu!");
 
     const auto filterIcon = GetResourceManager().GetSVG(L"ribbon/filter.svg");
     const auto saveIcon = GetResourceManager().GetSVG(L"ribbon/file-save.svg");
@@ -4322,7 +4322,7 @@ void MainFrame::FillReadabilityMenu(wxMenu* primaryMenu, wxMenu* secondaryMenu, 
         if (project->GetProjectLanguage() == readability::test_language::english_test)
             {
             const auto bp = wxGetApp().GetResourceManager().GetSVG(L"tests/dolch.svg");
-            assert(bp.IsOk());
+            wxASSERT(bp.IsOk());
 
                 {
                 auto* dolchItem = new wxMenuItem(primaryMenu, XRCID("ID_DOLCH"),

@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -755,7 +755,7 @@ namespace LuaScripting
             {
             return 0;
             }
-        assert(wxGetApp().GetSplashscreenPaths().GetCount());
+        wxASSERT(wxGetApp().GetSplashscreenPaths().GetCount());
         const auto index = std::clamp<size_t>(luaL_checkinteger(L, 1) - 1 /*make it zero-indexed*/,
                                               0, wxGetApp().GetSplashscreenPaths().GetCount() - 1);
         wxBitmap bitmap = wxGetApp().GetScaledImage(wxGetApp().GetSplashscreenPaths()[index],

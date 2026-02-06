@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -677,7 +677,7 @@ void BatchProjectView::UpdateSideBarIcons()
     const auto checkGraphType = [](wxWindow* window, const wxClassInfo* className)
     {
         const auto* canvas = dynamic_cast<Wisteria::Canvas*>(window);
-        assert(canvas && "Window is not a canvas!");
+        wxASSERT_MSG(canvas, L"Window is not a canvas!");
         return (canvas != nullptr) ? canvas->GetFixedObject(0, 0)->IsKindOf(className) : false;
     };
 
@@ -1037,12 +1037,12 @@ void BatchProjectView::OnDocumentDelete([[maybe_unused]] wxRibbonButtonBarEvent&
 //-------------------------------------------------------
 void BatchProjectView::OnItemSelected(wxCommandEvent& event)
     {
-    assert(GetRibbon() != nullptr);
+    wxASSERT(GetRibbon() != nullptr);
     const auto hideEditPanel = [this](const wxWindowID windowId)
     {
         wxWindow* editButtonBarWindow = GetRibbon()->FindWindow(windowId);
-        assert(editButtonBarWindow != nullptr);
-        assert(editButtonBarWindow->IsKindOf(CLASSINFO(wxRibbonPanel)));
+        wxASSERT(editButtonBarWindow != nullptr);
+        wxASSERT(editButtonBarWindow->IsKindOf(CLASSINFO(wxRibbonPanel)));
         editButtonBarWindow->Show(false);
         return dynamic_cast<wxRibbonPanel*>(editButtonBarWindow);
     };
@@ -1050,7 +1050,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
     const auto getEditButtonBar = [](const wxRibbonPanel* panel)
     {
         auto* buttonBar = panel->FindWindow(MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
-        assert(buttonBar != nullptr && buttonBar->IsKindOf(CLASSINFO(wxRibbonButtonBar)));
+        wxASSERT(buttonBar != nullptr && buttonBar->IsKindOf(CLASSINFO(wxRibbonButtonBar)));
         return dynamic_cast<wxRibbonButtonBar*>(buttonBar);
     };
 
@@ -1059,7 +1059,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         if (GetActiveProjectWindow() != nullptr &&
             GetActiveProjectWindow()->IsKindOf(CLASSINFO(Wisteria::Canvas)))
             {
-            assert(dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow()));
+            wxASSERT(dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow()));
             dynamic_cast<Wisteria::Canvas*>(GetActiveProjectWindow())->ResetResizeDelay();
             }
     };
@@ -1107,7 +1107,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetScoresView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1208,7 +1208,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
             m_activeWindow =
                 GetBoxPlotView().FindWindowByIdAndLabel(event.GetInt(), event.GetString());
             resetActiveCanvasResizeDelay();
-            assert(m_activeWindow != nullptr);
+            wxASSERT(m_activeWindow != nullptr);
 
             if (GetActiveProjectWindow() != nullptr)
                 {
@@ -1223,7 +1223,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
             m_activeWindow =
                 GetHistogramsView().FindWindowByIdAndLabel(event.GetInt(), event.GetString());
             resetActiveCanvasResizeDelay();
-            assert(m_activeWindow != nullptr);
+            wxASSERT(m_activeWindow != nullptr);
 
             if (GetActiveProjectWindow() != nullptr)
                 {
@@ -1279,7 +1279,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
                               GetWordsBreakdownView().FindWindowById(event.GetInt()) :
                               GetSummaryStatsView().FindWindowById(event.GetInt()));
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1324,7 +1324,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetSentencesBreakdownView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1342,7 +1342,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetGrammarView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1360,7 +1360,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetDolchSightWordsView().FindWindowById(event.GetInt());
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1378,7 +1378,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         {
         m_activeWindow = GetWarningsView();
         resetActiveCanvasResizeDelay();
-        assert(m_activeWindow != nullptr);
+        wxASSERT(m_activeWindow != nullptr);
 
         if (GetActiveProjectWindow() != nullptr)
             {
@@ -1394,7 +1394,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         }
 
     // add the label for the window type to the export menu item
-    assert(GetActiveProjectWindow());
+    wxASSERT(GetActiveProjectWindow());
     if (auto* exportMenuItem{ GetDocFrame()->m_exportMenu.FindChildItem(XRCID("ID_SAVE_ITEM")) };
         exportMenuItem != nullptr && GetActiveProjectWindow() != nullptr)
         {
@@ -1464,7 +1464,7 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
         }
     auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
         GetScoresView().FindWindowById(ID_SCORE_LIST_PAGE_ID));
-    assert(list != nullptr);
+    wxASSERT(list != nullptr);
     // shouldn't happen
     if (list == nullptr)
         {
@@ -2566,7 +2566,7 @@ void BatchProjectView::OnExportScoresAndStatistics([[maybe_unused]] wxCommandEve
 
     const Wisteria::UI::ListCtrlEx* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(
         GetScoresView().FindWindowById(ID_SCORE_LIST_PAGE_ID));
-    assert(list);
+    wxASSERT(list);
     // shouldn't happen
     if (list == nullptr)
         {

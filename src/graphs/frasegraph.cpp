@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -165,12 +165,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
         {
         Graph2D::RecalcSizes(dc);
 
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
-                                     Wisteria::Canvas::GetDefaultCanvasWidthDIPs()) &&
-               L"Invalid backscreen size!");
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                                     Wisteria::Canvas::GetDefaultCanvasHeightDIPs()) &&
-               L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                                           Wisteria::Canvas::GetDefaultCanvasWidthDIPs()),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                                           Wisteria::Canvas::GetDefaultCanvasHeightDIPs()),
+                     L"Invalid backscreen size!");
 
         const wxColour labelFontColor{ GetLeftYAxis().GetFontColor() };
 
@@ -315,12 +315,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
         const auto numberOfSyllablesColumn = GetContinuousColumn(m_numberOfSyllablesColumn);
         const auto numberOfSentencesColumn = GetContinuousColumn(m_numberOfSentencesColumn);
 
-        assert(m_backscreen && L"Backscreen not set!");
-        assert(m_backscreen->GetBoundingBox(dc).GetWidth() == Canvas::GetDefaultCanvasWidthDIPs() &&
-               L"Invalid backscreen size!");
-        assert(m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                   Canvas::GetDefaultCanvasHeightDIPs() &&
-               L"Invalid backscreen size!");
+        wxASSERT_MSG(m_backscreen, L"Backscreen not set!");
+        wxASSERT_MSG(m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                         Canvas::GetDefaultCanvasWidthDIPs(),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG(m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                         Canvas::GetDefaultCanvasHeightDIPs(),
+                     L"Invalid backscreen size!");
 
         auto points = std::make_unique<GraphItems::Points2D>(wxNullPen);
         points->SetScaling(GetScaling());

@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -245,12 +245,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FryGraph, Wisteria::Graphs::PolygonR
         {
         Graph2D::RecalcSizes(dc);
 
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
-                                     Canvas::GetDefaultCanvasWidthDIPs()) &&
-               L"Invalid backscreen size!");
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                                     Canvas::GetDefaultCanvasHeightDIPs()) &&
-               L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                                           Canvas::GetDefaultCanvasWidthDIPs()),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                                           Canvas::GetDefaultCanvasHeightDIPs()),
+                     L"Invalid backscreen size!");
 
         const wxColour labelFontColor{ GetLeftYAxis().GetFontColor() };
 
@@ -370,7 +370,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FryGraph, Wisteria::Graphs::PolygonR
         levelsSpline->SetShape(GraphItems::Polygon::PolygonShape::Spline);
         AddObject(std::move(levelsSpline));
 
-        assert(GetMessageCatalog() && L"Label manager not set in Fry Graph!");
+        wxASSERT_MSG(GetMessageCatalog(), L"Label manager not set in Fry Graph!");
 
         // draw the grade areas (for selecting)
         AddObject(std::make_unique<GraphItems::Polygon>(

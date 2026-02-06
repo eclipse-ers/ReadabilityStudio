@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -182,12 +182,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::SchwartzGraph,
 
         const wxColour labelFontColor{ GetLeftYAxis().GetFontColor() };
 
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
-                                     Canvas::GetDefaultCanvasWidthDIPs()) &&
-               L"Invalid backscreen size!");
-        assert((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
-                                     Canvas::GetDefaultCanvasHeightDIPs()) &&
-               L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetWidth() ==
+                                           Canvas::GetDefaultCanvasWidthDIPs()),
+                     L"Invalid backscreen size!");
+        wxASSERT_MSG((!m_backscreen || m_backscreen->GetBoundingBox(dc).GetHeight() ==
+                                           Canvas::GetDefaultCanvasHeightDIPs()),
+                     L"Invalid backscreen size!");
 
         // long sentence region
         GetPhysicalCoordinates(125, 10.8, m_longSentencesPoints[0]);
@@ -303,7 +303,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::SchwartzGraph,
         GetPhysicalCoordinates(189, 10.24, m_gradeLinePoints[13]);
         GetPhysicalCoordinates(189, 2.4, m_gradeLinePoints[14]);
 
-        assert(GetMessageCatalog() && L"Label manager not set in Schwartz Graph!");
+        wxASSERT_MSG(GetMessageCatalog(), L"Label manager not set in Schwartz Graph!");
 
         // 1st grade polygon
         GetPhysicalCoordinates(125, 20.0, m_grade1Polygon[0]);

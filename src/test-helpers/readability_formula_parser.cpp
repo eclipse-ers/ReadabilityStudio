@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -641,8 +641,8 @@ ReadabilityFormulaParser::ReadabilityFormulaParser(const BaseProject* project,
                                                    const wchar_t listSeparator)
     : m_formulaProject(project)
     {
-    assert(decimalSeparator <= 255);
-    assert(listSeparator <= 255);
+    wxASSERT(decimalSeparator <= 255);
+    wxASSERT(listSeparator <= 255);
     if (decimalSeparator <= 255 && listSeparator <= 255)
         {
         set_decimal_separator(static_cast<char>(decimalSeparator));

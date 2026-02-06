@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2005-2025 Blake Madden
+ * Copyright (c) 2005-2026 Blake Madden
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -513,7 +513,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
         [this]([[maybe_unused]] wxCommandEvent&)
         {
             auto* projView = dynamic_cast<BaseProjectView*>(GetView());
-            assert(projView);
+            wxASSERT(projView);
             if (projView != nullptr)
                 {
                 projView->ShowSideBar(!projView->IsSideBarShown());
@@ -526,7 +526,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
         [this]([[maybe_unused]] wxCommandEvent&)
         {
             auto* projView = dynamic_cast<BaseProjectView*>(GetView());
-            assert(projView);
+            wxASSERT(projView);
             if (projView != nullptr)
                 {
                 projView->ShowSideBar(!projView->IsSideBarShown());
@@ -539,7 +539,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
         [this]([[maybe_unused]] wxCommandEvent&)
         {
             auto* projView = dynamic_cast<BaseProjectView*>(GetView());
-            assert(projView);
+            wxASSERT(projView);
             if (projView != nullptr && projView->GetRibbon() != nullptr)
                 {
                 projView->GetRibbon()->ShowPanels(projView->GetRibbon()->GetDisplayMode() ==
@@ -562,7 +562,7 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
 void ProjectDocChildFrame::OnMenuCapture(wxCommandEvent& event)
     {
     auto* activeView = dynamic_cast<BaseProjectView*>(GetView());
-    assert(activeView);
+    wxASSERT(activeView);
     if (activeView == nullptr)
         {
         return;
@@ -570,12 +570,12 @@ void ProjectDocChildFrame::OnMenuCapture(wxCommandEvent& event)
 
     if (activeView->IsKindOf(wxCLASSINFO(ProjectView)))
         {
-        assert(dynamic_cast<ProjectView*>(activeView));
+        wxASSERT(dynamic_cast<ProjectView*>(activeView));
         dynamic_cast<ProjectView*>(activeView)->ProcessEvent(event);
         }
     else if (activeView->IsKindOf(wxCLASSINFO(BatchProjectView)))
         {
-        assert(dynamic_cast<BatchProjectView*>(activeView));
+        wxASSERT(dynamic_cast<BatchProjectView*>(activeView));
         dynamic_cast<BatchProjectView*>(activeView)->ProcessEvent(event);
         }
     }
@@ -1024,7 +1024,7 @@ void ProjectDocChildFrame::OnEditGraphColor(wxCommandEvent& event)
 void ProjectDocChildFrame::OnEditGraphColorScheme([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1100,7 +1100,7 @@ void ProjectDocChildFrame::OnBarOrientationSelected(wxCommandEvent& event)
 void ProjectDocChildFrame::OnBarStyleSelected(wxCommandEvent& event)
     {
     auto* baseDoc{ dynamic_cast<BaseProjectDoc*>(GetDocument()) };
-    assert(baseDoc && "Invalid document!");
+    wxASSERT_MSG(baseDoc, L"Invalid document!");
 
     if (event.GetId() == XRCID("ID_BAR_STYLE_SOLID"))
         {
@@ -1256,7 +1256,7 @@ void ProjectDocChildFrame::OnHistoBarStyleSelected(wxCommandEvent& event)
 void ProjectDocChildFrame::OnHistoBarSelectStippleBrush([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1282,7 +1282,7 @@ void ProjectDocChildFrame::OnHistoBarSelectStippleBrush([[maybe_unused]] wxComma
 void ProjectDocChildFrame::OnHistoBarSelectStippleShape([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1319,7 +1319,7 @@ void ProjectDocChildFrame::OnHistoBarSelectStippleShape([[maybe_unused]] wxComma
 void ProjectDocChildFrame::OnBarSelectStippleShape([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1356,7 +1356,7 @@ void ProjectDocChildFrame::OnBarSelectStippleShape([[maybe_unused]] wxCommandEve
 void ProjectDocChildFrame::OnBoxSelectStippleShape([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1393,7 +1393,7 @@ void ProjectDocChildFrame::OnBoxSelectStippleShape([[maybe_unused]] wxCommandEve
 void ProjectDocChildFrame::OnHistoBarSelectCommonImage([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1419,7 +1419,7 @@ void ProjectDocChildFrame::OnHistoBarSelectCommonImage([[maybe_unused]] wxComman
 void ProjectDocChildFrame::OnBoxSelectCommonImage([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1445,7 +1445,7 @@ void ProjectDocChildFrame::OnBoxSelectCommonImage([[maybe_unused]] wxCommandEven
 void ProjectDocChildFrame::OnBoxSelectStippleBrush([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1471,7 +1471,7 @@ void ProjectDocChildFrame::OnBoxSelectStippleBrush([[maybe_unused]] wxCommandEve
 void ProjectDocChildFrame::OnBarSelectStippleBrush([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1497,7 +1497,7 @@ void ProjectDocChildFrame::OnBarSelectStippleBrush([[maybe_unused]] wxCommandEve
 void ProjectDocChildFrame::OnBarSelectCommonImage([[maybe_unused]] wxCommandEvent& event)
     {
     auto* baseDoc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(baseDoc && L"Failed to get document!");
+    wxASSERT_MSG(baseDoc, L"Failed to get document!");
     if (baseDoc == nullptr)
         {
         return;
@@ -1523,7 +1523,7 @@ void ProjectDocChildFrame::OnBarSelectCommonImage([[maybe_unused]] wxCommandEven
 void ProjectDocChildFrame::OnBoxStyleSelected(wxCommandEvent& event)
     {
     auto* baseDoc{ dynamic_cast<BaseProjectDoc*>(GetDocument()) };
-    assert(baseDoc && "Invalid document!");
+    wxASSERT_MSG(baseDoc, L"Invalid document!");
     if (event.GetId() == XRCID("ID_BOX_STYLE_SOLID"))
         {
         baseDoc->SetGraphBoxEffect(Wisteria::BoxEffect::Solid);
@@ -2432,7 +2432,7 @@ void ProjectDocChildFrame::OnIgnoreNumerals([[maybe_unused]] wxRibbonButtonBarEv
     auto* theProject = dynamic_cast<BaseProjectDoc*>(GetDocument());
     theProject->ExcludeNumerals(!theProject->IsExcludingNumerals());
     auto* view = dynamic_cast<BaseProjectView*>(GetView());
-    assert(view);
+    wxASSERT(view);
     if (view != nullptr && view->GetRibbon() != nullptr)
         {
         wxWindow* numeralButtonBar =
@@ -2516,7 +2516,7 @@ void ProjectDocChildFrame::OnCustomTestBundle(wxCommandEvent& event)
     if (GetDocument() != nullptr)
         {
         auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-        assert(doc);
+        wxASSERT(doc);
         if ((doc != nullptr) && doc->IsSafeToUpdate())
             {
             const bool hadDolchSightWords = doc->IsIncludingDolchSightWords();
@@ -2687,7 +2687,7 @@ void ProjectDocChildFrame::OnAddCustomTestBundle(wxCommandEvent& event)
 void ProjectDocChildFrame::OnProjectSettings([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     auto* doc = dynamic_cast<BaseProjectDoc*>(GetDocument());
-    assert(doc);
+    wxASSERT(doc);
     if ((doc == nullptr) || !doc->IsSafeToUpdate())
         {
         return;
@@ -2697,7 +2697,7 @@ void ProjectDocChildFrame::OnProjectSettings([[maybe_unused]] wxRibbonButtonBarE
         {
         doc->RefreshProject();
         auto* view = dynamic_cast<BaseProjectView*>(GetView());
-        assert(view);
+        wxASSERT(view);
         if (view != nullptr)
             {
             view->UpdateRibbonState();
