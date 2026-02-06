@@ -65,16 +65,16 @@ namespace grammar
                                                           L"yard", L"book", L"hill" };
 
     //----------------------------------------------
-    bool base_syllabize::syllabize_japanese(const std::wstring_view word)
+    bool base_syllabize::syllabize_japanese(const std::wstring_view theWord)
         {
-        if (word.empty())
+        if (theWord.empty())
             {
             return false;
             }
 
         size_t japaneseCount{ 0 };
         size_t syllableCount{ 0 };
-        for (const auto ch : word)
+        for (const auto ch : theWord)
             {
             if (characters::is_character::is_japanese_script(ch))
                 {
@@ -91,7 +91,7 @@ namespace grammar
             return false;
             }
 
-        if (std::cmp_equal(japaneseCount, word.length()))
+        if (std::cmp_equal(japaneseCount, theWord.length()))
             {
             m_syllable_count = (syllableCount > 0) ? syllableCount : 1;
             return true;
@@ -104,12 +104,11 @@ namespace grammar
         }
 
     //----------------------------------------------
-    std::pair<bool, size_t> base_syllabize::is_special_math_word(const wchar_t* start,
-                                                                 const size_t length) noexcept
+    std::pair<bool, size_t>
+    base_syllabize::is_special_math_word(const std::wstring_view theWord) noexcept
         {
-        assert(start);
-        if (length == 2 && characters::is_character::is_numeric_simple(start[0]) &&
-            traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_D))
+        if (theWord.length() == 2 && characters::is_character::is_numeric_simple(theWord[0]) &&
+            traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_D))
             {
             return std::make_pair(true, 2);
             }
@@ -278,7 +277,7 @@ namespace grammar
              characters::is_character::is_apostrophe(start[m_length - 2]) &&
              traits::case_insensitive_ex::eq(start[m_length - 1], common_lang_constants::LOWER_T));
 
-        const std::pair<bool, size_t> mathResult = is_special_math_word(start, m_length);
+        const std::pair<bool, size_t> mathResult = is_special_math_word({ start, m_length });
         if (mathResult.first)
             {
             return m_syllable_count = mathResult.second;

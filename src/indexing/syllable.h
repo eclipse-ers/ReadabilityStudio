@@ -84,18 +84,16 @@ namespace grammar
                 If the word is a mix of Japanese and non-Japanese characters,
                 the Japanese characters are counted and added to the syllable count,
                 and @c false is returned so the caller can handle the rest.
-            @param word The word to analyze.
+            @param theWord The word to analyze.
             @returns @c true if the entire word was Japanese and fully syllabized.*/
-        bool syllabize_japanese(const std::wstring_view word);
+        bool syllabize_japanese(std::wstring_view theWord);
 
         /** @brief Special case mathematical terms that need to be counted differently.
-            @param start The word to analyze.
-            @param length The length of the word.
+            @param theWord The word to analyze.
             @returns A pair indicating whether this is a special case,
                 and if so the syllable count.*/
         [[nodiscard]]
-        static std::pair<bool, size_t> is_special_math_word(const wchar_t* start,
-                                                            const size_t length) noexcept;
+        static std::pair<bool, size_t> is_special_math_word(std::wstring_view theWord) noexcept;
 
         /** @brief Determines the number of syllables for a numeric string.
             @param numeral_string The string to analyze.

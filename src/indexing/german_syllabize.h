@@ -103,7 +103,7 @@ namespace grammar
             adjust_length_if_possessive(start);
             const wchar_t* end = start + m_length;
 
-            const std::pair<bool, size_t> mathResult = is_special_math_word(start, m_length);
+            const std::pair<bool, size_t> mathResult = is_special_math_word({ start, m_length });
             if (mathResult.first)
                 {
                 return m_syllable_count = mathResult.second;
@@ -119,7 +119,7 @@ namespace grammar
                 return m_syllable_count;
                 }
 
-            const std::pair<size_t, size_t> prefixResult = get_prefix_length(start, m_length);
+            const std::pair<size_t, size_t> prefixResult = get_prefix_length({ start, m_length });
             if (prefixResult.second > 0)
                 {
                 start += prefixResult.second;
@@ -127,7 +127,7 @@ namespace grammar
                 m_syllable_count += prefixResult.first;
                 }
             // if past tense form of verb, skip "ge" prefix
-            if (has_past_tense_prefix(start, m_length))
+            if (has_past_tense_prefix({ start, m_length }))
                 {
                 start += 2;
                 ++m_syllable_count;
@@ -205,337 +205,332 @@ namespace grammar
             }
 
       protected:
-        /** @brief Sees if a word begins with a "ge" prefix which should always end as a syllable
-           division.
-            @param start The start of the text to parse.
-            @param length The length of the text.
+        /** @brief Sees if a word begins with a "ge" prefix which should always end as
+                a syllable division.
+            @param theWord The word to parse.
             @returns @c true if the word begins with a valid past tense ("ge") prefix.*/
         [[nodiscard]]
-        static bool has_past_tense_prefix(const wchar_t* start, const size_t length) noexcept
+        static bool has_past_tense_prefix(const std::wstring_view theWord) noexcept
             {
-            assert(start);
-            assert(std::wcslen(start) >= length);
-            if (length >= 2 &&
-                traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E))
+            if (theWord.length() >= 2 &&
+                traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_G) &&
+                traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E))
                 {
                 // watch out for "geis" or "geiß"
-                return length < 4 ||
-                       !traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_I) ||
-                       (!traits::case_insensitive_ex::eq(start[3],
+                return theWord.length() < 4 ||
+                       !traits::case_insensitive_ex::eq(theWord[2],
+                                                        common_lang_constants::LOWER_I) ||
+                       (!traits::case_insensitive_ex::eq(theWord[3],
                                                          common_lang_constants::LOWER_S) &&
-                        start[3] != common_lang_constants::ESZETT);
+                        theWord[3] != common_lang_constants::ESZETT);
                 }
 
             return false;
             }
 
-        /** @brief Sees if a word begins with a special prefix which should always end as a syllable
-           division.
-            @param start The start of the text to parse.
-            @param length The length of the text.
+        /** @brief Sees if a word begins with a special prefix which should always
+                end as a syllable division.
+            @param theWord The word to parse.
             @returns A pair with the syllable count and length of the prefix.*/
         [[nodiscard]]
-        static std::pair<size_t, size_t> get_prefix_length(const wchar_t* start,
-                                                           const size_t length) noexcept
+        static std::pair<size_t, size_t> get_prefix_length(const std::wstring_view theWord) noexcept
             {
-            assert(start);
-            assert(std::wcslen(start) >= length);
-            if (length >= 9 &&
-                traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_G) &&
-                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_B) &&
-                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
-                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_N) &&
-                traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_U_UMLAUTS) &&
-                traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_B) &&
-                traits::case_insensitive_ex::eq(start[7], common_lang_constants::LOWER_E) &&
-                traits::case_insensitive_ex::eq(start[8], common_lang_constants::LOWER_R))
+            if (theWord.length() >= 9 &&
+                traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_G) &&
+                traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_B) &&
+                traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(theWord[5],
+                                                common_lang_constants::LOWER_U_UMLAUTS) &&
+                traits::case_insensitive_ex::eq(theWord[6], common_lang_constants::LOWER_B) &&
+                traits::case_insensitive_ex::eq(theWord[7], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(theWord[8], common_lang_constants::LOWER_R))
                 {
                 return std::make_pair(4, 9);
                 }
-            if (length >= 8)
+            if (theWord.length() >= 8)
                 {
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_G) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[7], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_N) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_T) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_G) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_B) &&
+                    traits::case_insensitive_ex::eq(theWord[6], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[7], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(3, 8);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_Z) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_W) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[7], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_Z) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_W) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[6], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[7], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(2, 8);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_Z) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[7], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_Z) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_U) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_M) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_M) &&
+                    traits::case_insensitive_ex::eq(theWord[6], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[7], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(3, 8);
                     }
                 }
-            if (length >= 7 &&
-                traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_E) &&
-                traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N) &&
-                traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T) &&
-                traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_L) &&
-                traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_A) &&
-                traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_N) &&
-                traits::case_insensitive_ex::eq(start[6], common_lang_constants::LOWER_G))
+            if (theWord.length() >= 7 &&
+                traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_E) &&
+                traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_T) &&
+                traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_L) &&
+                traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_A) &&
+                traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_N) &&
+                traits::case_insensitive_ex::eq(theWord[6], common_lang_constants::LOWER_G))
                 {
                 return std::make_pair(2, 7);
                 }
-            if (length >= 6)
+            if (theWord.length() >= 6)
                 {
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_Z) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(start[3],
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_Z) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_U) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(theWord[3],
                                                     common_lang_constants::LOWER_U_UMLAUTS) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_K))
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_K))
                     {
                     return std::make_pair(2, 6);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_G) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_L) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_H))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_G) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_L) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_H))
                     {
                     return std::make_pair(1, 6);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_U) &&
-                    (traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_F) ||
-                     traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_S)))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_U) &&
+                    (traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_F) ||
+                     traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_S)))
                     {
                     return std::make_pair(2, 6);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_W) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[5], common_lang_constants::LOWER_G))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_N) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_W) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[5], common_lang_constants::LOWER_G))
                     {
                     return std::make_pair(2, 6);
                     }
                 }
-            if (length >= 5)
+            if (theWord.length() >= 5)
                 {
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_R) &&
-                    (traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_D) ||
-                     traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_B)))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_B) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_R) &&
+                    (traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_D) ||
+                     traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_B)))
                     {
                     return std::make_pair(2, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_D) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_I))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_D) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_B) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_I))
                     {
                     return std::make_pair(2, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_D) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_D) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(2, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_D) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_H))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_D) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_U) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_H))
                     {
                     return std::make_pair(1, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_P) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_R))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_M) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_P) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_R))
                     {
                     return std::make_pair(2, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_Z) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_U))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_N) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_Z) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_U))
                     {
                     return std::make_pair(2, 5);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_T) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_T) &&
-                    traits::case_insensitive_ex::eq(start[4], common_lang_constants::LOWER_T))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_T) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_T) &&
+                    traits::case_insensitive_ex::eq(theWord[4], common_lang_constants::LOWER_T))
                     {
                     return std::make_pair(1, 5);
                     }
                 }
-            if (length >= 4)
+            if (theWord.length() >= 4)
                 {
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_E) &&
-                    (traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_N) ||
-                     traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_H)))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_B) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_E) &&
+                    (traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_N) ||
+                     traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_H)))
                     {
                     return std::make_pair(2, 4);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_F) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_L))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_F) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_L))
                     {
                     return std::make_pair(1, 4);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_F) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_S) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_T))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_F) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_S) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_T))
                     {
                     return std::make_pair(1, 4);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_F) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_T))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_F) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_T))
                     {
                     return std::make_pair(1, 4);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_N) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_C) &&
-                    traits::case_insensitive_ex::eq(start[3], common_lang_constants::LOWER_H))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_N) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_C) &&
+                    traits::case_insensitive_ex::eq(theWord[3], common_lang_constants::LOWER_H))
                     {
                     return std::make_pair(1, 4);
                     }
                 }
-            if (length >= 3)
+            if (theWord.length() >= 3)
                 {
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U) &&
-                    (traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_F) ||
-                     traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_S)))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_U) &&
+                    (traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_F) ||
+                     traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_S)))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_B) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_I))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_B) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_I))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_H) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_H) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_L) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_S))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_L) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_S))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_I) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_T))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_M) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_I) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_T))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_V) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_O) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_R))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_V) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_O) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_R))
                     {
                     return std::make_pair(1, 3);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_W) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_G))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_W) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_G))
                     {
                     return std::make_pair(1, 3);
                     }
                 }
-            if (length >= 2)
+            if (theWord.length() >= 2)
                 {
                 // Irish names with preceding "Mc" is a separate syllable
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_M) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_C))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_M) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_C))
                     {
                     return std::make_pair(1, 2);
                     }
                 // separable prefixes, which need to be stripped in case the word is past tense and
                 // has a GE in it
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_N))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_N))
                     {
                     return std::make_pair(1, 2);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_A) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_B))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_A) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_B))
                     {
                     return std::make_pair(1, 2);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_D) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_A))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_D) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_A))
                     {
-                    if (length >= 3 &&
-                        traits::case_insensitive_ex::eq(start[2], common_lang_constants::LOWER_U))
+                    if (theWord.length() >= 3 &&
+                        traits::case_insensitive_ex::eq(theWord[2], common_lang_constants::LOWER_U))
                         {
                         return std::make_pair(0, 0);
                         }
                     return std::make_pair(1, 2);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_E) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_R))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_E) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_R))
                     {
                     return std::make_pair(1, 2);
                     }
-                if (traits::case_insensitive_ex::eq(start[0], common_lang_constants::LOWER_Z) &&
-                    traits::case_insensitive_ex::eq(start[1], common_lang_constants::LOWER_U))
+                if (traits::case_insensitive_ex::eq(theWord[0], common_lang_constants::LOWER_Z) &&
+                    traits::case_insensitive_ex::eq(theWord[1], common_lang_constants::LOWER_U))
                     {
                     return std::make_pair(1, 2);
                     }
