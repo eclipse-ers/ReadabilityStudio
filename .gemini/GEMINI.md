@@ -1,8 +1,8 @@
-# CLAUDE.md
+# GEMINI.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI systems when working with code in this repository.
 
-## Claude Code Rules
+## Gemini Rules
 
 - Never perform any git operations
 - Never run builds or test runners - the user will do that
@@ -10,51 +10,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Eclipse Readability Studio is a C++20 cross-platform desktop application for analyzing text readability. It uses wxWidgets 3.3.1+ for the GUI framework and CMake for building.
-
-## Build Commands
-
-**Prerequisites:** wxWidgets must be built separately and placed at the parent directory level (see README.md for platform-specific wxWidgets setup).
-
-### Windows (Visual Studio 2022)
-```bash
-cmake . -DCMAKE_BUILD_TYPE=Release
-cmake --build . --target readstudio -j4 --config Release
-```
-
-### Linux
-```bash
-cmake . -DCMAKE_BUILD_TYPE=Debug
-cmake --build . --target all -j $(nproc) --config Debug
-```
-
-### macOS (XCode)
-```bash
-cmake . -DCMAKE_BUILD_TYPE=Release -G Xcode
-cmake --build . --target readstudio --config Release
-cmake --build . --target manuals
-```
+*Eclipse Readability Studio* is a C++20 cross-platform desktop application for analyzing text readability.
+It uses *wxWidgets* 3.3.1+ for the GUI framework and *CMake* for building.
 
 ### Build Targets
 - `readstudio` - Main application
 - `manuals` - User documentation (requires R and Quarto)
 - `doxygen-docs` - API documentation
 
-## Running Tests
+## Creating Tests
 
-Tests use the Catch2 framework and are built separately:
-
-```bash
-cd tests
-cmake ./
-cmake --build . -j4
-cd bin
-./RSTestRunner                                    # Run all tests
-./RSTestRunner --reporter junit --out=results.xml # JUnit output
-./RSTestRunner "[tagname]"                        # Run specific test by tag
-```
-
-GUI tests are in `tests/gui-tests/` with runner `RSGuiTestRunner`.
+Tests use the Catch2 (v3) framework and are located in @tests (core tests) and @tests/gui-tests (GUI tests).
+Test-driven development is practiced; failing tests should be created before implementing new (non-GUI) code.
 
 ## Code Style
 
@@ -66,6 +33,8 @@ The project uses clang-format (v20) and clang-tidy. Key style rules:
   - Syllabification (`syllable.cpp`, `german_syllabize.h`, `russian_syllabize.h`, `spanish_syllabize.h`)
   - Word/phrase analysis (`word.h`, `phrase.h`, `word_functional.cpp`)
   - Various linguistic helpers (abbreviations, contractions, conjunctions, pronouns, etc.)
+- Use `std::wstring_view`, `std::prev`, `std::next`, `std::advance` instead of pointer arithmetic
+- Make variables and lambdas `const` if possible
 
 - **Indentation:** 4 spaces, no tabs
 - **Line length:** 100 characters max
@@ -92,10 +61,10 @@ src/
 ├── readability/      # Readability test algorithms (core domain logic)
 ├── indexing/         # Text parsing and linguistic analysis
 ├── projects/         # Document management (Standard/Batch projects)
-├── graphs/           # Readability visualization (Fry, Raygor, etc.)
+├── graphs/           # Readability visualization (Fry, Raygor, etc.) not in Wisteria-Dataviz
 ├── ui/               # Dialogs and custom controls
 ├── lua-scripting/    # Lua automation bindings
-└── Wisteria-Dataviz/ # Data visualization framework (submodule)
+└── Wisteria-Dataviz/ # Data visualization and controls framework (submodule)
 ```
 
 ### Key Architectural Patterns
@@ -117,7 +86,7 @@ src/
 - `src/app/readability_app.h` - Main application class extending `Wisteria::UI::BaseApp`
 
 ### Submodules
-- `Wisteria-Dataviz` - Data visualization framework
+- `Wisteria-Dataviz` - Data visualization and controls framework framework
 - `OleanderStemmingLibrary` - Word stemming
 - `Catch2` - Testing framework
 - `lua` - Scripting engine
