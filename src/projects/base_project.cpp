@@ -2143,16 +2143,16 @@ void BaseProject::LoadHardWords()
         GetDaleChallHardWordData()->SetSize(m_word_frequency_map->get_data().size(), 3);
         }
 
+    // Dale-Chall has a customizable proper noun counting method, but because we are reviewing
+    // a frequency set where a word can have both proper and non-proper instances mixed together,
+    // we can't use the functor to classify it based on the proper flag. Instead, we set the
+    // functor to treat all proper nouns as unfamiliar (so it only checks if the word is on
+    // the list), and then manually apply the user's proper noun setting at the call site below.
     const readability::is_familiar_word<word_case_insensitive_no_stem, const word_list,
                                         stemming::no_op_stem<word_case_insensitive_no_stem>>
         isDCWord(IsIncludingStockerCatholicSupplement() ?
                      &m_dale_chall_plus_stocker_catholic_word_list :
                      &m_dale_chall_word_list,
-                 // Because we are reviewing a frequency set that contains a word that can be
-                 // flagged as proper but has instances where it is both proper and non-proper,
-                 // using this functor to classify it based on the proper flag will be wrong. Turn
-                 // off proper noun support in this functor and handle the proper noun counts for
-                 // the word based on the actual proper noun settings at the call site.
                  readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar, true);
     m_totalHardWordsDaleChall = 0;
     m_uniqueDCHardWords = 0;
@@ -2174,6 +2174,9 @@ void BaseProject::LoadHardWords()
         GetSpacheHardWordData()->SetSize(m_word_frequency_map->get_data().size(), 3);
         }
 
+    // Spache always treats proper nouns as familiar (not customizable). We set the functor to
+    // treat all proper nouns as unfamiliar so it only checks if the word is on the list, and
+    // then we manually exclude words where all instances are proper at the call site below.
     const readability::is_familiar_word<word_case_insensitive_no_stem, const word_list,
                                         stemming::no_op_stem<word_case_insensitive_no_stem>>
         isSpacheWord(&m_spache_word_list,
@@ -2191,15 +2194,11 @@ void BaseProject::LoadHardWords()
     // Monosyllabic words
     m_uniqueMonoSyllabicWords = 0;
 
-    // hard words (Harris-Jacobson)
+    // Harris-Jacobson always treats proper nouns as familiar (same approach as Spache above)
     const readability::is_familiar_word<word_case_insensitive_no_stem, const word_list,
                                         stemming::no_op_stem<word_case_insensitive_no_stem>>
         isHarrisJacobsonWord(
             &m_harris_jacobson_word_list,
-            /* All proper words are familiar for this test, but because the set containing our
-               word frequencies need to mix words that can have proper and non-proper forms,
-               we need to trigger them as unfamiliar initially. From there, we count the
-               instances of the proper occurrences.*/
             readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar, true);
     m_uniqueHarrisJacobsonHardWords = m_totalHardWordsHarrisJacobson = 0;
     if (HasUI())
@@ -2895,7 +2894,7 @@ void BaseProject::LoadHardWords()
             ++m_uniqueSpacheHardWords;
             m_totalHardWordsSpache += nonProperCount;
             }
-        // go through the custom tests
+        // custom tests have customizable proper noun handling (same approach as Dale-Chall above)
         for (auto& customTest : m_customTestsInUse)
             {
             /* if not using familiar word then skip. Also need to skip if using CustomHJ or
