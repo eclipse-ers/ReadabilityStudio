@@ -83,6 +83,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
     src/Wisteria-Dataviz/src/graphs/boxplot.cpp
+    src/Wisteria-Dataviz/src/graphs/bubbleplot.cpp
     src/Wisteria-Dataviz/src/graphs/categoricalbarchart.cpp
     src/Wisteria-Dataviz/src/graphs/crawfordgraph.cpp
     src/Wisteria-Dataviz/src/graphs/danielsonbryan2plot.cpp
@@ -97,6 +98,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/graphs/lixgaugegerman.cpp
     src/Wisteria-Dataviz/src/graphs/piechart.cpp
     src/Wisteria-Dataviz/src/graphs/scalechart.cpp
+    src/Wisteria-Dataviz/src/graphs/scatterplot.cpp
     src/Wisteria-Dataviz/src/graphs/wordcloud.cpp
     src/Wisteria-Dataviz/src/import/cpp_extract_text.cpp
     src/Wisteria-Dataviz/src/import/doc_extract_text.cpp

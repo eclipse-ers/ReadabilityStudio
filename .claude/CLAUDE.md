@@ -35,7 +35,6 @@ The project uses clang-format (v20) and clang-tidy. Key style rules:
   - Various linguistic helpers (abbreviations, contractions, conjunctions, pronouns, etc.)
 - Use `std::wstring_view`, `std::prev`, `std::next`, `std::advance` instead of pointer arithmetic
 - Make variables and lambdas `const` if possible
-
 - **Indentation:** 4 spaces, no tabs
 - **Line length:** 100 characters max
 - **Brace style:** Whitesmiths
