@@ -27,10 +27,13 @@ aller
 alles
 allo
 allt
+almost
+already
 als
 also
 alt
 altijd
+always
 am
 an
 anche
@@ -159,6 +162,7 @@ come
 con
 contra
 contro
+could
 cual
 cuando
 cui
@@ -691,6 +695,7 @@ isso
 ist
 isto
 it
+it's
 its
 itself
 ja
@@ -798,6 +803,7 @@ mon
 more
 most
 mot
+much
 mucho
 muchos
 muito
@@ -878,6 +884,7 @@ och
 oder
 of
 off
+often
 også
 ohne
 old
@@ -898,6 +905,7 @@ otra
 otras
 otro
 otros
+ought
 our
 ours
 ourselves
@@ -1012,7 +1020,9 @@ ses
 seu
 seus
 seáis
+shall
 she
+should
 sia
 siamo
 siano
@@ -1365,11 +1375,13 @@ wollen
 wollte
 worden
 wordt
+would
 während
 würde
 würden
 y
 ya
+yet
 yo
 you
 your
