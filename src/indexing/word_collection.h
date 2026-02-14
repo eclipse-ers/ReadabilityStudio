@@ -1768,16 +1768,30 @@ class document
                 if (currentWord.is_capitalized() && currentWord.length() > 1 &&
                     !currentWord.is_numeric())
                     {
-                    if (is_known_proper_nouns->contains(currentWord.c_str()))
+                    // if possessive, strip the "'s" for lookups
+                    const bool isPossessive =
+                        currentWord.is_possessive() && currentWord.length() > 2;
+                    const Tword_type wordWithoutPossessive =
+                        isPossessive ? Tword_type(currentWord.c_str(), currentWord.length() - 2) :
+                                       Tword_type{};
+                    const Tword_type& lookupWord =
+                        isPossessive ? wordWithoutPossessive : currentWord;
+
+                    if (is_known_proper_nouns->contains(lookupWord.c_str()))
                         {
                         currentWord.set_proper_noun(true);
                         continue;
                         }
                     // it's in the proper nouns that we detected...
-                    const auto propPos = properWords.get_data().find(currentWord);
+                    const auto propPos = properWords.get_data().find(lookupWord);
                     if (propPos != properWords.get_data().cend())
                         {
-                        const auto nonPropPos = nonProperWords.get_data().find(currentWord);
+                        // Compare frequencies to handle ambiguous words like "Bill" vs "bill".
+                        // If mid-sentence the text has "Bill" (capitalized) 5 times and
+                        // "bill" (lowercase) 2 times, then "Bill" at the start of a sentence
+                        // is probably the name, not the common noun. The word that appears
+                        // proper more frequently wins.
+                        const auto nonPropPos = nonProperWords.get_data().find(lookupWord);
                         if (nonPropPos == nonProperWords.get_data().cend() ||
                             propPos->second > nonPropPos->second)
                             {
@@ -1845,12 +1859,21 @@ class document
                 continue;
                 }
             if (currentWord.is_capitalized() && currentWord.length() > 1 &&
-                !currentWord.is_numeric() &&
-                (properWords.get_data().find(currentWord) != properWords.get_data().cend() ||
-                 is_known_proper_nouns->contains({ currentWord.c_str(), currentWord.length() })))
+                !currentWord.is_numeric())
                 {
-                currentWord.set_proper_noun(true);
-                continue;
+                // if possessive, strip the "'s" for lookups
+                const bool isPossessive = currentWord.is_possessive() && currentWord.length() > 2;
+                const Tword_type wordWithoutPossessive =
+                    isPossessive ? Tword_type(currentWord.c_str(), currentWord.length() - 2) :
+                                   Tword_type{};
+                const Tword_type& lookupWord = isPossessive ? wordWithoutPossessive : currentWord;
+
+                if (properWords.get_data().find(lookupWord) != properWords.get_data().cend() ||
+                    is_known_proper_nouns->contains({ lookupWord.c_str(), lookupWord.length() }))
+                    {
+                    currentWord.set_proper_noun(true);
+                    continue;
+                    }
                 }
             // Any acronym leftovers should be made proper. This can happen if any acronym begins a
             // sentence, but isn't displayed anywhere else in the text.

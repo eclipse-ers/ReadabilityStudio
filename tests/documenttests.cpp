@@ -183,6 +183,34 @@ TEST_CASE("Document phrases", "[document]")
         CHECK(2 == doc.get_proper_phrase_indices()[0].first);
         CHECK(2 == doc.get_proper_phrase_indices()[0].second);
         }
+    SECTION("Possessive Proper Noun At Sentence Start")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t* text = L"Teddw's car is nice, Teddw has a nice car.";
+        // "Teddw" appears mid-sentence, confirming it's proper.
+        // "Teddw's" at the start should also be recognized as proper.
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_word(0) == L"Teddw's");
+        CHECK(doc.get_word(0).is_proper_noun()); // "Teddw's" should be proper
+        CHECK(doc.get_word(4).is_proper_noun()); // "Teddw" mid-sentence is proper
+        }
+    SECTION("Possessive Proper Noun At Quote Start")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t* text = L"He said \"Teddw's car is nice,\" and Teddw smiled.";
+        // "Teddw" appears mid-sentence, confirming it's proper.
+        // "Teddw's" at the start of the quote should also be recognized as proper.
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_word(2) == L"Teddw's");
+        CHECK(doc.get_word(2).is_proper_noun()); // "Teddw's" at quote start should be proper
+        CHECK(doc.get_word(7).is_proper_noun()); // "Teddw" mid-sentence is proper
+        }
     }
 
 TEST_CASE("Document punctuation", "[document]")
