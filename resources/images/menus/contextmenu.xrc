@@ -6,11 +6,16 @@
         <object class="wxMenuItem" name="ID_COPY_ALL">
             <label>Copy All</label>
         </object>
-        <object class="separator">
-        </object>
-        <object class="wxMenuItem" name="ID_REMOVE_TEST">
-            <label>Remove Test</label>
-        </object>
+      <object class="separator">
+      </object>
+      <object class="wxMenuItem" name="ID_SAVE_LIST">
+        <label>Save List</label>
+      </object>
+      <object class="separator">
+      </object>
+      <object class="wxMenuItem" name="ID_REMOVE_TEST">
+          <label>Remove Test</label>
+      </object>
     </object>
     <object class="wxMenu" name="IDM_SINGLE_SEL_LIST_MENU_NO_SAVE">
         <object class="wxMenuItem" name="wxID_COPY">

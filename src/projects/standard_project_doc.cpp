@@ -1159,6 +1159,7 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                     BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID);
                 scoresReport->Hide();
                 scoresReport->SetName(_(L"Summary Report"));
+                scoresReport->SetLabel(_(L"Summary Report"));
                 scoresReport->SetPrinterSettings(wxGetApp().GetPrintData());
                 scoresReport->SetLeftPrinterHeader(
                     wxGetApp().GetAppOptions()->GetLeftPrinterHeader());

@@ -75,6 +75,8 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
     m_explanation_view = new Wisteria::UI::HtmlTableWindow(this);
     // NOLINTEND(cppcoreguidelines-prefer-member-initializer)
     wxSplitterWindow::SplitHorizontally(GetResultsListCtrl(), GetExplanationView());
+    GetResultsListCtrl()->SetLabel(_(L"Scores"));
+    GetExplanationView()->SetLabel(_(L"Score Summary"));
     SetMinimumPaneSize(100 * wxWindow::GetDPIScaleFactor());
 
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnPreview, this, wxID_PREVIEW);
@@ -83,6 +85,7 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnPrint, this, wxID_PRINT);
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnMenuCommand, this, XRCID("ID_VIEW_ITEM"));
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnMenuCommand, this, XRCID("ID_LIST_SORT"));
+    Bind(wxEVT_MENU, &ExplanationListCtrl::OnMenuCommand, this, XRCID("ID_SAVE_LIST"));
 
     Bind(wxEVT_FIND, &ExplanationListCtrl::OnFind, this);
     Bind(wxEVT_FIND_NEXT, &ExplanationListCtrl::OnFind, this);
@@ -96,6 +99,10 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
 void ExplanationListCtrl::OnMenuCommand(wxCommandEvent& event)
     {
     const ParentEventBlocker blocker(GetResultsListCtrl());
+    if (event.GetId() == XRCID("ID_SAVE_LIST"))
+        {
+        event.SetId(wxID_SAVE);
+        }
     GetResultsListCtrl()->ProcessWindowEvent(event);
     }
 
