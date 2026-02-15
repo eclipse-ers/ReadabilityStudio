@@ -164,7 +164,8 @@ namespace readability
                 }
             // ...or if it's proper, then add it to the proper nouns already encountered.
             // If already encountered, then it is familiar.
-            auto pos = m_usedProperNouns.insert(the_word);
+            // Normalize by stripping possessive suffix so "John" and "John's" are treated the same.
+            auto pos = m_usedProperNouns.insert(strip_possessive_suffix(the_word));
             // this being false means that it was already in the set
             return !pos.second;
             }
@@ -233,6 +234,18 @@ namespace readability
                 return validTokenFound;
                 }
             return false;
+            }
+
+        [[nodiscard]]
+        word_typeT strip_possessive_suffix(word_typeT the_word) const
+            {
+            if (the_word.length() >= 2 &&
+                characters::is_character::is_apostrophe(the_word[the_word.length() - 2]) &&
+                characters::is_character::is_either(the_word.back(), L's', L'S'))
+                {
+                the_word.erase(the_word.length() - 2);
+                }
+            return the_word;
             }
 
         const wordlistT* m_wordlist{ nullptr };

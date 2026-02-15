@@ -2103,6 +2103,38 @@ void BaseProject::AddCustomReadabilityTests()
 void BaseProject::LoadHardWords()
     {
     PROFILE();
+
+    // helper to strip possessive suffix from a word (e.g., "John's" -> "John")
+    const auto strip_possessive_suffix = [](auto the_word)
+    {
+        if (the_word.length() >= 2 &&
+            characters::is_character::is_apostrophe(the_word[the_word.length() - 2]) &&
+            characters::is_character::is_either(the_word.back(), L's', L'S'))
+            {
+            the_word.erase(the_word.length() - 2);
+            }
+        return the_word;
+    };
+
+    // helper to check if possessive proper noun should be skipped because base form will handle it
+    // (used for only_count_first_instance_of_proper_noun_as_unfamiliar method)
+    const auto shouldSkipPossessiveProperNoun =
+        [this, &strip_possessive_suffix](const word_case_insensitive_no_stem& theWord,
+                                         size_t properCount)
+    {
+        if (theWord.is_possessive() && properCount > 0)
+            {
+            const auto baseWord = strip_possessive_suffix(theWord);
+            if (baseWord != theWord)
+                {
+                const auto baseIter = m_word_frequency_map->get_data().find(baseWord);
+                return (baseIter != m_word_frequency_map->get_data().end() &&
+                        baseIter->second.second > 0);
+                }
+            }
+        return false;
+    };
+
     // complex words (3+ syllable)
     if (HasUI())
         {
@@ -2715,6 +2747,7 @@ void BaseProject::LoadHardWords()
             ++m_uniqueHarrisJacobsonHardWords;
             m_totalHardWordsHarrisJacobson += nonProperCount;
             }
+
         if ((GetDaleChallTextExclusionMode() == SpecializedTestTextExclusion::UseSystemDefault) &&
             !isDCWord(wordPos->first))
             {
@@ -2799,57 +2832,65 @@ void BaseProject::LoadHardWords()
                      readability::proper_noun_counting_method::
                          only_count_first_instance_of_proper_noun_as_unfamiliar)
                 {
-                // only load the data for standard projects
-                if (HasUI())
+                // if this is a possessive proper noun and the base form exists with proper
+                // occurrences, skip since the base form will handle it
+                if (!shouldSkipPossessiveProperNoun(wordPos->first, wordPos->second.second))
                     {
-                    GetDaleChallHardWordData()->SetItemText(
-                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
-                        Wisteria::NumberFormatInfo{
-                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                        std::numeric_limits<double>::quiet_NaN());
-                    if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
-                        {
-                        GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
-                                                                 wordPos->second.first);
-                        }
-                    else if (nonProperCount == 0)
+                    // only load the data for standard projects
+                    if (HasUI())
                         {
                         GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 1,
-                            wxString::Format(
-                                _(L"1 (%zu total occurrences, only first occurrence unfamiliar)"),
-                                wordPos->second.first),
-                            Wisteria::NumberFormatInfo{
-                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                            1);
-                        }
-                    else
-                        {
-                        GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 1,
-                            wxString::Format(
-                                // TRANSLATORS: %zu are word total placeholders
-                                _(L"%zu (%zu total occurrences. First proper occurrence "
-                                  "unfamiliar, %zu non-proper and unfamiliar)"),
-                                nonProperCount + 1, wordPos->second.first, nonProperCount),
-                            Wisteria::NumberFormatInfo{
-                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                            nonProperCount + 1);
-                        }
-                    auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
-                    if (replacement.first)
-                        {
-                        GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
                             Wisteria::NumberFormatInfo{
                                 Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             std::numeric_limits<double>::quiet_NaN());
+                        if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
+                            {
+                            GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
+                                                                     wordPos->second.first);
+                            }
+                        else if (nonProperCount == 0)
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 1,
+                                wxString::Format(_(L"1 (%zu total occurrences, only first "
+                                                   "occurrence unfamiliar)"),
+                                                 wordPos->second.first),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                1);
+                            }
+                        else
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 1,
+                                wxString::Format(
+                                    // TRANSLATORS: %zu are word total placeholders
+                                    _(L"%zu (%zu total occurrences. First proper occurrence "
+                                      "unfamiliar, %zu non-proper and unfamiliar)"),
+                                    nonProperCount + 1, wordPos->second.first, nonProperCount),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                nonProperCount + 1);
+                            }
+                        auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
+                        if (replacement.first)
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                std::numeric_limits<double>::quiet_NaN());
+                            }
                         }
+                    ++m_uniqueDCHardWords;
+                    m_totalHardWordsDaleChall += (wordPos->second.first == nonProperCount) ?
+                                                     wordPos->second.first :
+                                                     nonProperCount + 1;
                     }
-                ++m_uniqueDCHardWords;
-                m_totalHardWordsDaleChall += (wordPos->second.first == nonProperCount) ?
-                                                 wordPos->second.first :
-                                                 nonProperCount + 1;
                 }
             }
         if (!allInstancesAreProper && !isSpacheWord(wordPos->first))
@@ -2953,6 +2994,9 @@ void BaseProject::LoadHardWords()
                             }
                         }
                     customTest.IncrementUnfamiliarWordCount(nonProperCount);
+                    // count as one unique unfamiliar word because it has unfamiliar (non-proper)
+                    // occurrences; proper instances were already skipped via continue above
+                    customTest.IncrementUniqueUnfamiliarWordCount();
                     }
                 else if (customTest.GetIterator()->get_proper_noun_method() ==
                          readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar)
@@ -2969,58 +3013,67 @@ void BaseProject::LoadHardWords()
                             customTest.GetUniqueUnfamiliarWordCount(), 1, wordPos->second.first);
                         }
                     customTest.IncrementUnfamiliarWordCount(wordPos->second.first);
+                    customTest.IncrementUniqueUnfamiliarWordCount();
                     }
                 else if (customTest.GetIterator()->get_proper_noun_method() ==
                          readability::proper_noun_counting_method::
                              only_count_first_instance_of_proper_noun_as_unfamiliar)
                     {
-                    // only load the data if user asked for this view
-                    if (HasUI())
+                    // if this is a possessive proper noun and the base form exists with proper
+                    // occurrences, skip since the base form will handle it
+                    if (!shouldSkipPossessiveProperNoun(wordPos->first, wordPos->second.second))
                         {
-                        customTest.GetListViewData()->SetItemText(
-                            customTest.GetUniqueUnfamiliarWordCount(), 0, wordPos->first.c_str(),
-                            Wisteria::NumberFormatInfo{
-                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                            std::numeric_limits<double>::quiet_NaN());
-                        if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
-                            {
-                            customTest.GetListViewData()->SetItemValue(
-                                customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                wordPos->second.first);
-                            }
-                        else if (nonProperCount == 0)
+                        // only load the data if user asked for this view
+                        if (HasUI())
                             {
                             customTest.GetListViewData()->SetItemText(
-                                customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                wxString::Format(_(L"1 (%zu total occurrences, only first "
-                                                   "occurrence unfamiliar)"),
-                                                 wordPos->second.first),
+                                customTest.GetUniqueUnfamiliarWordCount(), 0,
+                                wordPos->first.c_str(),
                                 Wisteria::NumberFormatInfo{
                                     Wisteria::NumberFormatInfo::NumberFormatType::
                                         StandardFormatting },
-                                1);
+                                std::numeric_limits<double>::quiet_NaN());
+                            if (wordPos->second.first == nonProperCount ||
+                                wordPos->second.first == 1)
+                                {
+                                customTest.GetListViewData()->SetItemValue(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                    wordPos->second.first);
+                                }
+                            else if (nonProperCount == 0)
+                                {
+                                customTest.GetListViewData()->SetItemText(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                    wxString::Format(_(L"1 (%zu total occurrences, only first "
+                                                       "occurrence unfamiliar)"),
+                                                     wordPos->second.first),
+                                    Wisteria::NumberFormatInfo{
+                                        Wisteria::NumberFormatInfo::NumberFormatType::
+                                            StandardFormatting },
+                                    1);
+                                }
+                            else
+                                {
+                                customTest.GetListViewData()->SetItemText(
+                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                    wxString::Format(
+                                        // TRANSLATORS: %zu are word total placeholders
+                                        _(L"%zu (%zu total occurrences. "
+                                          "First proper occurrence unfamiliar, %zu "
+                                          "non-proper and unfamiliar)"),
+                                        nonProperCount + 1, wordPos->second.first, nonProperCount),
+                                    Wisteria::NumberFormatInfo{
+                                        Wisteria::NumberFormatInfo::NumberFormatType::
+                                            StandardFormatting },
+                                    nonProperCount + 1);
+                                }
                             }
-                        else
-                            {
-                            customTest.GetListViewData()->SetItemText(
-                                customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                wxString::Format(
-                                    // TRANSLATORS: %zu are word total placeholders
-                                    _(L"%zu (%zu total occurrences. "
-                                      "First proper occurrence unfamiliar, %zu "
-                                      "non-proper and unfamiliar)"),
-                                    nonProperCount + 1, wordPos->second.first, nonProperCount),
-                                Wisteria::NumberFormatInfo{
-                                    Wisteria::NumberFormatInfo::NumberFormatType::
-                                        StandardFormatting },
-                                nonProperCount + 1);
-                            }
+                        customTest.IncrementUnfamiliarWordCount(
+                            (wordPos->second.first == nonProperCount) ? wordPos->second.first :
+                                                                        nonProperCount + 1);
+                        customTest.IncrementUniqueUnfamiliarWordCount();
                         }
-                    customTest.IncrementUnfamiliarWordCount(
-                        (wordPos->second.first == nonProperCount) ? wordPos->second.first :
-                                                                    nonProperCount + 1);
                     }
-                customTest.IncrementUniqueUnfamiliarWordCount();
                 }
             }
         }
@@ -3321,59 +3374,68 @@ void BaseProject::LoadHardWords()
                      readability::proper_noun_counting_method::
                          only_count_first_instance_of_proper_noun_as_unfamiliar)
                 {
-                // only load the data for standard projects
-                if (HasUI())
+                // if this is a possessive proper noun and the base form exists with proper
+                // occurrences, skip since the base form will handle it
+                if (!shouldSkipPossessiveProperNoun(wordPos->first, wordPos->second.second))
                     {
-                    GetDaleChallHardWordData()->SetItemText(
-                        GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
-                        Wisteria::NumberFormatInfo{
-                            Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                        std::numeric_limits<double>::quiet_NaN());
-                    if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
-                        {
-                        GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
-                                                                 wordPos->second.first);
-                        }
-                    else if (nonProperCount == 0)
+                    // only load the data for standard projects
+                    if (HasUI())
                         {
                         GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 1,
-                            wxString::Format(
-                                // TRANSLATORS: %zu are word total placeholders
-                                _(L"1 (%zu total occurrences, only first occurrence unfamiliar)"),
-                                wordPos->second.first),
-                            Wisteria::NumberFormatInfo{
-                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                            1);
-                        }
-                    else
-                        {
-                        GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 1,
-                            wxString::Format(
-                                // TRANSLATORS: %zu are word total placeholders
-                                _(L"%zu (%zu total occurrences. "
-                                  "First proper occurrence unfamiliar, %zu "
-                                  "non-proper and unfamiliar)"),
-                                nonProperCount + 1, wordPos->second.first, nonProperCount),
-                            Wisteria::NumberFormatInfo{
-                                Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
-                            nonProperCount + 1);
-                        }
-                    auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
-                    if (replacement.first)
-                        {
-                        GetDaleChallHardWordData()->SetItemText(
-                            GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                            GetTotalUniqueDCHardWords(), 0, wordPos->first.c_str(),
                             Wisteria::NumberFormatInfo{
                                 Wisteria::NumberFormatInfo::NumberFormatType::StandardFormatting },
                             std::numeric_limits<double>::quiet_NaN());
+                        if (wordPos->second.first == nonProperCount || wordPos->second.first == 1)
+                            {
+                            GetDaleChallHardWordData()->SetItemValue(GetTotalUniqueDCHardWords(), 1,
+                                                                     wordPos->second.first);
+                            }
+                        else if (nonProperCount == 0)
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 1,
+                                wxString::Format(
+                                    // TRANSLATORS: %zu are word total placeholders
+                                    _(L"1 (%zu total occurrences, "
+                                      "only first occurrence unfamiliar)"),
+                                    wordPos->second.first),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                1);
+                            }
+                        else
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 1,
+                                wxString::Format(
+                                    // TRANSLATORS: %zu are word total placeholders
+                                    _(L"%zu (%zu total occurrences. "
+                                      "First proper occurrence unfamiliar, %zu "
+                                      "non-proper and unfamiliar)"),
+                                    nonProperCount + 1, wordPos->second.first, nonProperCount),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                nonProperCount + 1);
+                            }
+                        auto replacement = dale_chall_replacement_list.find(wordPos->first.c_str());
+                        if (replacement.first)
+                            {
+                            GetDaleChallHardWordData()->SetItemText(
+                                GetTotalUniqueDCHardWords(), 2, replacement.second.c_str(),
+                                Wisteria::NumberFormatInfo{
+                                    Wisteria::NumberFormatInfo::NumberFormatType::
+                                        StandardFormatting },
+                                std::numeric_limits<double>::quiet_NaN());
+                            }
                         }
+                    ++m_uniqueDCHardWords;
+                    m_totalHardWordsDaleChall += (wordPos->second.first == nonProperCount) ?
+                                                     wordPos->second.first :
+                                                     nonProperCount + 1;
                     }
-                ++m_uniqueDCHardWords;
-                m_totalHardWordsDaleChall += (wordPos->second.first == nonProperCount) ?
-                                                 wordPos->second.first :
-                                                 nonProperCount + 1;
                 }
             }
         // go through the custom tests
@@ -3440,6 +3502,7 @@ void BaseProject::LoadHardWords()
                                 }
                             }
                         customTest.IncrementUnfamiliarWordCount(nonProperCount);
+                        customTest.IncrementUniqueUnfamiliarWordCount();
                         }
                     else if (customTest.GetIterator()->get_proper_noun_method() ==
                              readability::proper_noun_counting_method::
@@ -3460,63 +3523,71 @@ void BaseProject::LoadHardWords()
                                 wordPos->second.first);
                             }
                         customTest.IncrementUnfamiliarWordCount(wordPos->second.first);
+                        customTest.IncrementUniqueUnfamiliarWordCount();
                         }
                     else if (customTest.GetIterator()->get_proper_noun_method() ==
                              readability::proper_noun_counting_method::
                                  only_count_first_instance_of_proper_noun_as_unfamiliar)
                         {
-                        // only load the data if user asked for this view
-                        if (HasUI())
+                        // same as Dale-Chall: if this is a possessive proper noun and the
+                        // base form exists with proper occurrences, skip since the base
+                        // form will handle it
+                        if (!shouldSkipPossessiveProperNoun(wordPos->first, wordPos->second.second))
                             {
-                            customTest.GetListViewData()->SetItemText(
-                                customTest.GetUniqueUnfamiliarWordCount(), 0,
-                                wordPos->first.c_str(),
-                                Wisteria::NumberFormatInfo{
-                                    Wisteria::NumberFormatInfo::NumberFormatType::
-                                        StandardFormatting },
-                                std::numeric_limits<double>::quiet_NaN());
-                            if (wordPos->second.first == nonProperCount ||
-                                wordPos->second.first == 1)
-                                {
-                                customTest.GetListViewData()->SetItemValue(
-                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                    wordPos->second.first);
-                                }
-                            else if (nonProperCount == 0)
+                            // only load the data if user asked for this view
+                            if (HasUI())
                                 {
                                 customTest.GetListViewData()->SetItemText(
-                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                    wxString::Format(
-                                        // TRANSLATORS: %zu are word total placeholders
-                                        _(L"1 (%zu total occurrences, only first "
-                                          "occurrence unfamiliar)"),
-                                        wordPos->second.first),
+                                    customTest.GetUniqueUnfamiliarWordCount(), 0,
+                                    wordPos->first.c_str(),
                                     Wisteria::NumberFormatInfo{
                                         Wisteria::NumberFormatInfo::NumberFormatType::
                                             StandardFormatting },
-                                    1);
+                                    std::numeric_limits<double>::quiet_NaN());
+                                if (wordPos->second.first == nonProperCount ||
+                                    wordPos->second.first == 1)
+                                    {
+                                    customTest.GetListViewData()->SetItemValue(
+                                        customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                        wordPos->second.first);
+                                    }
+                                else if (nonProperCount == 0)
+                                    {
+                                    customTest.GetListViewData()->SetItemText(
+                                        customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                        wxString::Format(
+                                            // TRANSLATORS: %zu are word total placeholders
+                                            _(L"1 (%zu total occurrences, only first "
+                                              "occurrence unfamiliar)"),
+                                            wordPos->second.first),
+                                        Wisteria::NumberFormatInfo{
+                                            Wisteria::NumberFormatInfo::NumberFormatType::
+                                                StandardFormatting },
+                                        1);
+                                    }
+                                else
+                                    {
+                                    customTest.GetListViewData()->SetItemText(
+                                        customTest.GetUniqueUnfamiliarWordCount(), 1,
+                                        wxString::Format(
+                                            // TRANSLATORS: %zu are word total placeholders
+                                            _(L"%zu (%zu total occurrences. "
+                                              "First proper occurrence unfamiliar, "
+                                              "%zu non-proper and unfamiliar)"),
+                                            nonProperCount + 1, wordPos->second.first,
+                                            nonProperCount),
+                                        Wisteria::NumberFormatInfo{
+                                            Wisteria::NumberFormatInfo::NumberFormatType::
+                                                StandardFormatting },
+                                        nonProperCount + 1);
+                                    }
                                 }
-                            else
-                                {
-                                customTest.GetListViewData()->SetItemText(
-                                    customTest.GetUniqueUnfamiliarWordCount(), 1,
-                                    wxString::Format(
-                                        // TRANSLATORS: %zu are word total placeholders
-                                        _(L"%zu (%zu total occurrences. "
-                                          "First proper occurrence unfamiliar, "
-                                          "%zu non-proper and unfamiliar)"),
-                                        nonProperCount + 1, wordPos->second.first, nonProperCount),
-                                    Wisteria::NumberFormatInfo{
-                                        Wisteria::NumberFormatInfo::NumberFormatType::
-                                            StandardFormatting },
-                                    nonProperCount + 1);
-                                }
+                            customTest.IncrementUnfamiliarWordCount(
+                                (wordPos->second.first == nonProperCount) ? wordPos->second.first :
+                                                                            nonProperCount + 1);
+                            customTest.IncrementUniqueUnfamiliarWordCount();
                             }
-                        customTest.IncrementUnfamiliarWordCount(
-                            (wordPos->second.first == nonProperCount) ? wordPos->second.first :
-                                                                        nonProperCount + 1);
                         }
-                    customTest.IncrementUniqueUnfamiliarWordCount();
                     }
                 }
             }

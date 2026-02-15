@@ -663,6 +663,44 @@ TEST_CASE("Familiar words", "[word-list]")
         is_fam.set_proper_noun_method(readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
         CHECK(is_fam(numberWord));
         }
+    SECTION("Proper Noun Possessive")
+        {
+        // test that possessive form of proper noun is recognized as already seen
+        word_list dcLite;
+        dcLite.load_words(L"chocolate cake sugar", true, false);
+        readability::is_familiar_word<MYWORD_NOSTEM, word_list,
+            stemming::no_op_stem<std::basic_string<wchar_t, traits::case_insensitive_ex>>>
+            is_fam(&dcLite,
+                   readability::proper_noun_counting_method::only_count_first_instance_of_proper_noun_as_unfamiliar,
+                   false);
+
+        // test possessive: "Mac" then "Mac's"
+        MYWORD_NOSTEM mac(L"Mac", 3, UNUSED_WORD_ARGS);
+        mac.set_proper_noun(true);
+        CHECK_FALSE(is_fam(mac)); // first instance is unfamiliar
+
+        MYWORD_NOSTEM macPossessive(L"Mac's", 5, UNUSED_WORD_ARGS);
+        macPossessive.set_proper_noun(true);
+        macPossessive.set_possessive(true);
+        CHECK(is_fam(macPossessive)); // possessive form should be familiar (same base word)
+
+        // reset and test reverse order: "Mac's" then "Mac"
+        is_fam.clear_encountered_proper_nouns();
+        CHECK_FALSE(is_fam(macPossessive)); // first instance (possessive) is unfamiliar
+        CHECK(is_fam(mac)); // base form should be familiar now
+
+        // verify all_proper_nouns_are_familiar is not affected
+        is_fam.clear_encountered_proper_nouns();
+        is_fam.set_proper_noun_method(readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
+        CHECK(is_fam(mac));
+        CHECK(is_fam(macPossessive));
+
+        // verify all_proper_nouns_are_unfamiliar is not affected
+        is_fam.clear_encountered_proper_nouns();
+        is_fam.set_proper_noun_method(readability::proper_noun_counting_method::all_proper_nouns_are_unfamiliar);
+        CHECK_FALSE(is_fam(mac));
+        CHECK_FALSE(is_fam(macPossessive));
+        }
     SECTION("Hyphen Word")
         {
         word_list dcLite;
