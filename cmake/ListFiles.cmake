@@ -7,7 +7,7 @@ utfcpp/samples|utfcpp/extern|cxxopts|xmltest.cpp|html5-printer.cpp|\
 textclassifier.cpp|candlestickplot.cpp|ganttchart.cpp|lrroadmap.cpp|proconroadmap.cpp|\
 roadmap.cpp|sankeydiagram.cpp|table.cpp|wcurveplot.cpp|variableselectdlg.cpp|reportbuilder.cpp|\
 win_loss_sparkline.cpp|multi_series_lineplot.cpp|likertchart.cpp|waffle_chart.cpp|\
-pivot.cpp|subset.cpp|join.cpp|clone.cpp)")
+pivot.cpp|subset.cpp|join.cpp|clone.cpp|xrc_menu_strings.cpp)")
 
 # these files get compiled into larger ones that are included with the distribution
 set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-english-dictionary.txt|base-non-personal.txt|base-personal.txt|base-english.txt|\
@@ -96,4 +96,45 @@ block()
 
     set(FILE_MANIFEST_PATH "${FILE_SRC_PATH}/cmake/includes/words.cmake")
     update_file_if_needed("${FILE_MANIFEST_PATH}" "${FILE_CONTENT}")
+endblock()
+
+# Extract translatable strings from XRC files for gettext
+block()
+    set(TRANSLATABLE_TAGS label help title tooltip longhelp)
+
+    set(OUTPUT_CONTENT "// Auto-generated from XRC files for gettext extraction\n")
+    string(APPEND OUTPUT_CONTENT "// DO NOT EDIT - regenerate by running CMake\n\n")
+    string(APPEND OUTPUT_CONTENT "#include <wx/intl.h>\n\n")
+    string(APPEND OUTPUT_CONTENT "void _xrc_menu_strings()\n")
+    string(APPEND OUTPUT_CONTENT "    {\n")
+
+    file(GLOB XRC_FILES "${FILE_SRC_PATH}/resources/images/menus/*.xrc")
+    foreach(XRC_FILE ${XRC_FILES})
+        file(READ "${XRC_FILE}" XRC_CONTENT)
+        # escape semicolons to prevent CMake from treating them as list separators
+        string(REPLACE ";" "<<SEMICOLON>>" XRC_CONTENT "${XRC_CONTENT}")
+        get_filename_component(XRC_FILENAME "${XRC_FILE}" NAME)
+        string(APPEND OUTPUT_CONTENT "    // ${XRC_FILENAME}\n")
+
+        foreach(TAG ${TRANSLATABLE_TAGS})
+            string(REGEX MATCHALL "<${TAG}>[^<]+</${TAG}>" MATCHES "${XRC_CONTENT}")
+            foreach(MATCH ${MATCHES})
+                string(REGEX REPLACE "<${TAG}>([^<]+)</${TAG}>" "\\1" TEXT "${MATCH}")
+                # restore semicolons
+                string(REPLACE "<<SEMICOLON>>" ";" TEXT "${TEXT}")
+                string(STRIP "${TEXT}" TEXT)
+                if(TEXT)
+                    string(REPLACE "\\" "\\\\" TEXT "${TEXT}")
+                    string(REPLACE "\"" "\\\"" TEXT "${TEXT}")
+                    string(REPLACE "\n" "\\n" TEXT "${TEXT}")
+                    string(APPEND OUTPUT_CONTENT "    _(\"${TEXT}\");\n")
+                endif()
+            endforeach()
+        endforeach()
+    endforeach()
+
+    string(APPEND OUTPUT_CONTENT "    }\n")
+
+    set(FILE_MANIFEST_PATH "${FILE_SRC_PATH}/src/xrc_menu_strings.cpp")
+    update_file_if_needed("${FILE_MANIFEST_PATH}" "${OUTPUT_CONTENT}")
 endblock()

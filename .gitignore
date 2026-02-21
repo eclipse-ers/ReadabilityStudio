@@ -19,6 +19,7 @@
 /CMakeFiles
 /resource.h
 /src/app/version.h
+/src/xrc_menu_strings.cpp
 /src/app/citations.bib
 /installers/windows/setup.isl
 /installers/windows/icons.isl

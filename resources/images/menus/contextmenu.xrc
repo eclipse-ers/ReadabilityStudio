@@ -9,7 +9,7 @@
       <object class="separator">
       </object>
       <object class="wxMenuItem" name="ID_SAVE_LIST">
-        <label>Save List</label>
+        <label>Save List...</label>
       </object>
       <object class="separator">
       </object>
