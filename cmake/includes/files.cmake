@@ -85,6 +85,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/graphs/boxplot.cpp
     src/Wisteria-Dataviz/src/graphs/bubbleplot.cpp
     src/Wisteria-Dataviz/src/graphs/categoricalbarchart.cpp
+    src/Wisteria-Dataviz/src/graphs/chernoffplot.cpp
     src/Wisteria-Dataviz/src/graphs/crawfordgraph.cpp
     src/Wisteria-Dataviz/src/graphs/danielsonbryan2plot.cpp
     src/Wisteria-Dataviz/src/graphs/fleschchart.cpp
@@ -116,6 +117,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp
     src/Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.cpp
     src/Wisteria-Dataviz/src/ui/controls/listctrlex.cpp
+    src/Wisteria-Dataviz/src/ui/controls/listctrlexcelexporter.cpp
     src/Wisteria-Dataviz/src/ui/controls/listctrlexdataprovider.cpp
     src/Wisteria-Dataviz/src/ui/controls/searchpanel.cpp
     src/Wisteria-Dataviz/src/ui/controls/sidebar.cpp
