@@ -6,6 +6,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  ACTIONS_STEP_DEBUG: true
+
 jobs:
   build:
     name: windows-build
@@ -17,9 +20,18 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Log Environment Info
+        run: |
+          Write-Host "::group::Environment Information"
+          Write-Host "Runner OS: $env:RUNNER_OS"
+          Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+          Write-Host "PowerShell Version: $($PSVersionTable.PSVersion)"
+          Write-Host "Current Directory: $(Get-Location)"
+          Write-Host "::endgroup::"
+
       - name: Download wxWidgets
         run: |
-             git clone https://github.com/wxWidgets/wxWidgets.git --recurse-submodules
+          git clone https://github.com/wxWidgets/wxWidgets.git --recurse-submodules
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
@@ -27,11 +39,187 @@ jobs:
       - name: Build
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
-             cmake . -DCMAKE_BUILD_TYPE=Release
-             cmake --build . --target=readstudio -j4 --config Release
+          cmake . -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --target=readstudio -j4 --config Release
 
-      - name: Archive Windows Build
+      - name: Verify Build Output
+        run: |
+          Write-Host "::group::Build Output Verification"
+          $exePath = "${{ github.workspace }}/installers/windows/release/readstudio.exe"
+          if (Test-Path $exePath) {
+            Write-Host "EXE found: $exePath"
+            $file = Get-Item $exePath
+            Write-Host "Size: $($file.Length) bytes"
+            Write-Host "SHA256: $((Get-FileHash $exePath -Algorithm SHA256).Hash)"
+          } else {
+            Write-Host "::error::EXE not found at $exePath"
+            Write-Host "Listing installers/windows/release/:"
+            Get-ChildItem "${{ github.workspace }}/installers/windows/release/" -Recurse -ErrorAction SilentlyContinue | Format-Table
+            Write-Host "Listing installers/windows/:"
+            Get-ChildItem "${{ github.workspace }}/installers/windows/" -Recurse -ErrorAction SilentlyContinue | Format-Table
+            exit 1
+          }
+          Write-Host "::endgroup::"
+
+      - name: Upload Unsigned EXE
+        id: upload-unsigned-exe
         uses: actions/upload-artifact@v4
         with:
-          name: Windows Windows Build
-          path: ${{ github.workspace }}/installers/windows/*
+          name: Unsigned EXE
+          path: ${{ github.workspace }}/installers/windows/release/readstudio.exe
+
+      - name: Log Unsigned EXE Artifact ID
+        run: |
+          Write-Host "Unsigned EXE Artifact ID: ${{ steps.upload-unsigned-exe.outputs.artifact-id }}"
+
+      - name: Sign EXE
+        id: sign-exe
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
+          project-slug: 'technology.ers'
+          signing-policy-slug: 'eclipse-ers-msi'
+          github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: '${{ github.workspace }}/installers/windows/release'
+
+      - name: Verify Signed EXE
+        run: |
+          Write-Host "::group::Signed EXE Verification"
+          $exePath = "${{ github.workspace }}/installers/windows/release/readstudio.exe"
+          if (Test-Path $exePath) {
+            Write-Host "Signed EXE found: $exePath"
+            $file = Get-Item $exePath
+            Write-Host "Size: $($file.Length) bytes"
+            Write-Host "SHA256: $((Get-FileHash $exePath -Algorithm SHA256).Hash)"
+            Write-Host "Signature Info:"
+            Get-AuthenticodeSignature $exePath | Format-List
+          } else {
+            Write-Host "::error::Signed EXE not found at $exePath"
+            exit 1
+          }
+          Write-Host "::endgroup::"
+
+      - name: Install Inno Setup
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
+        with:
+          path: installers/windows/readstudio.iss
+          options: /V0
+
+      - name: List Installer Input Files
+        run: |
+          Write-Host "::group::Installer Input Files"
+          Write-Host "Contents of installers/windows/:"
+          Get-ChildItem "${{ github.workspace }}/installers/windows/" | Format-Table
+          Write-Host "Contents of installers/windows/release/:"
+          Get-ChildItem "${{ github.workspace }}/installers/windows/release/" -ErrorAction SilentlyContinue | Format-Table
+          Write-Host "Contents of installers/windows/resources/:"
+          Get-ChildItem "${{ github.workspace }}/installers/windows/resources/" -ErrorAction SilentlyContinue | Format-Table
+          Write-Host "::endgroup::"
+
+      - name: Build Installer
+        working-directory: ${{ github.workspace }}/installers/windows
+        run: iscc /V9 readstudio.iss *> installer-build.log
+
+      - name: Upload Installer Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Installer Build Log
+          path: ${{ github.workspace }}/installers/windows/installer-build.log
+
+      - name: Verify Installer Output
+        run: |
+          Write-Host "::group::Installer Output Verification"
+          $outputDir = "${{ github.workspace }}/installers/windows/Output"
+          if (Test-Path $outputDir) {
+            Write-Host "Contents of Output/:"
+            Get-ChildItem $outputDir | ForEach-Object {
+              Write-Host "File: $($_.Name)"
+              Write-Host "Size: $($_.Length) bytes"
+              Write-Host "SHA256: $((Get-FileHash $_.FullName -Algorithm SHA256).Hash)"
+            }
+          } else {
+            Write-Host "::error::Output directory not found"
+            exit 1
+          }
+          Write-Host "::endgroup::"
+
+      - name: List Installer Contents
+        run: |
+          Write-Host "::group::Installing innoextract"
+          choco install innoextract -y
+          Write-Host "::endgroup::"
+          Write-Host "::group::Installer Contents"
+          $installer = (Get-ChildItem "${{ github.workspace }}/installers/windows/Output/*.exe")[0]
+          Write-Host "Listing contents of: $($installer.Name)"
+          innoextract --list --list-sizes "$($installer.FullName)"
+          Write-Host "::endgroup::"
+
+      - name: Upload Unsigned Installer
+        id: upload-unsigned-installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unsigned Installer
+          path: ${{ github.workspace }}/installers/windows/Output/*.exe
+
+      - name: Log Unsigned Installer Artifact ID
+        run: |
+          Write-Host "Unsigned Installer Artifact ID: ${{ steps.upload-unsigned-installer.outputs.artifact-id }}"
+
+      - name: Sign Installer
+        id: sign-installer
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
+          project-slug: 'technology.ers'
+          signing-policy-slug: 'eclipse-ers-msi'
+          github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: '${{ github.workspace }}/signed'
+
+      - name: Verify Signed Installer
+        run: |
+          Write-Host "::group::Signed Installer Verification"
+          $signedDir = "${{ github.workspace }}/signed"
+          if (Test-Path $signedDir) {
+            Write-Host "Contents of signed/:"
+            Get-ChildItem $signedDir -Filter *.exe | ForEach-Object {
+              Write-Host "File: $($_.Name)"
+              Write-Host "Size: $($_.Length) bytes"
+              Write-Host "SHA256: $((Get-FileHash $_.FullName -Algorithm SHA256).Hash)"
+              Write-Host "Signature Info:"
+              Get-AuthenticodeSignature $_.FullName | Format-List
+            }
+          } else {
+            Write-Host "::error::Signed directory not found"
+            exit 1
+          }
+          Write-Host "::endgroup::"
+
+      - name: Archive Signed Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Signed Windows Installer
+          path: ${{ github.workspace }}/signed/*.exe
+
+      - name: Generate Build Summary
+        if: always()
+        run: |
+          $summary = @"
+          ## Windows Build Summary
+
+          | Step | Status |
+          |------|--------|
+          | Build EXE | ${{ steps.upload-unsigned-exe.outcome }} |
+          | Sign EXE | ${{ steps.sign-exe.outcome }} |
+          | Build Installer | ${{ steps.upload-unsigned-installer.outcome }} |
+          | Sign Installer | ${{ steps.sign-installer.outcome }} |
+
+          ### Artifact IDs
+          - Unsigned EXE: ``${{ steps.upload-unsigned-exe.outputs.artifact-id }}``
+          - Unsigned Installer: ``${{ steps.upload-unsigned-installer.outputs.artifact-id }}``
+          "@
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
