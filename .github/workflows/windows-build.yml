@@ -79,7 +79,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
           project-slug: 'technology.ers'
-          eclipse-ers-test-signing: 'eclipse-ers-exe'
+          signing-policy-slug: eclipse-ers-test-signing
           artifact-configuration-slug: eclipse-ers-exe
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
@@ -176,7 +176,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
           project-slug: 'technology.ers'
-          eclipse-ers-test-signing: 'eclipse-ers-exe'
+          signing-policy-slug: eclipse-ers-test-signing
           artifact-configuration-slug: eclipse-ers-exe
           github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true
