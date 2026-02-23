@@ -79,7 +79,8 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
           project-slug: 'technology.ers'
-          signing-policy-slug: 'eclipse-ers-msi'
+          eclipse-ers-test-signing: 'eclipse-ers-exe'
+          artifact-configuration-slug: eclipse-ers-exe
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '${{ github.workspace }}/installers/windows/release'
@@ -175,7 +176,8 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
           project-slug: 'technology.ers'
-          signing-policy-slug: 'eclipse-ers-msi'
+          eclipse-ers-test-signing: 'eclipse-ers-exe'
+          artifact-configuration-slug: eclipse-ers-exe
           github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '${{ github.workspace }}/signed'
