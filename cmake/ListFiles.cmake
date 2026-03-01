@@ -14,7 +14,7 @@ set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-english-dictionary.txt|
 base-german.txt|base-spanish.txt|common-errors.txt|sql.txt|visual-basic.txt|programming/r.txt|python.txt|java.txt|\
 html.txt|csharp.txt|cpp.txt|assembly.txt)")
 
-set(FILE_SRC_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+get_filename_component(FILE_SRC_PATH "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 
 message(STATUS "Generating file lists for build system.")
 
