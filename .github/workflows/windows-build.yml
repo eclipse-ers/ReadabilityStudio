@@ -63,10 +63,11 @@ jobs:
 
       - name: Upload Unsigned EXE
         id: upload-unsigned-exe
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Unsigned EXE
           path: ${{ github.workspace }}/installers/windows/release/readstudio.exe
+          archive: false
 
       - name: Log Unsigned EXE Artifact ID
         run: |
@@ -125,7 +126,7 @@ jobs:
 
       - name: Upload Installer Build Log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Installer Build Log
           path: ${{ github.workspace }}/installers/windows/installer-build.log
@@ -160,10 +161,11 @@ jobs:
 
       - name: Upload Unsigned Installer
         id: upload-unsigned-installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Unsigned Installer
           path: ${{ github.workspace }}/installers/windows/Output/*.exe
+          archive: false
 
       - name: Log Unsigned Installer Artifact ID
         run: |
@@ -202,10 +204,11 @@ jobs:
           Write-Host "::endgroup::"
 
       - name: Archive Signed Installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Signed Windows Installer
           path: ${{ github.workspace }}/signed/*.exe
+          archive: false
 
       - name: Generate Build Summary
         if: always()
