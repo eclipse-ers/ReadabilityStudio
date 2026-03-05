@@ -67,7 +67,7 @@ jobs:
         with:
           name: Unsigned EXE
           path: ${{ github.workspace }}/installers/windows/release/readstudio.exe
-          archive: false
+          archive: true
 
       - name: Log Unsigned EXE Artifact ID
         run: |
