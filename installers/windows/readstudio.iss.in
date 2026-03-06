@@ -34,7 +34,7 @@ Source: resources\readability-studio-manual\*; DestDir: {app}\readability-studio
 ; examples
 Source: resources\examples\*; DestDir: {app}\examples; Components: Examples; Excludes: "thumbs.db,README.md,\.git"; Flags: replacesameversion restartreplace recursesubdirs
 ; translations
-Source: resources\es\*.mo; DestDir: {app}; Components: Translations; Flags: replacesameversion restartreplace recursesubdirs
+;Source: resources\es\*.mo; DestDir: {app}; Components: Translations; Flags: replacesameversion restartreplace recursesubdirs
 
 [Languages]
 #include "lang.isl"
