@@ -148,17 +148,6 @@ jobs:
           }
           Write-Host "::endgroup::"
 
-      - name: List Installer Contents
-        run: |
-          Write-Host "::group::Installing innoextract"
-          choco install innoextract -y
-          Write-Host "::endgroup::"
-          Write-Host "::group::Installer Contents"
-          $installer = (Get-ChildItem "${{ github.workspace }}/installers/windows/Output/*.exe")[0]
-          Write-Host "Listing contents of: $($installer.Name)"
-          innoextract --list --list-sizes "$($installer.FullName)"
-          Write-Host "::endgroup::"
-
       - name: Upload Unsigned Installer
         id: upload-unsigned-installer
         uses: actions/upload-artifact@v7
