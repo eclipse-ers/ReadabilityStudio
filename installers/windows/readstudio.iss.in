@@ -22,22 +22,15 @@ Source: release\${CMAKE_PROJECT_NAME}.exe; DestDir: {app}; Components: ProgramFi
 ; resource files (required part of programs)
 Source: resources\res.wad; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\words.wad; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\scripting\*.api; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\scripting\*.lua; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
+Source: resources\*.api; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
+Source: resources\*.lua; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\report-themes\*; DestDir: {app}\report-themes; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\LICENSE; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 Source: resources\citations.bib; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 Source: resources\citations.mla; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 Source: resources\citations.apa; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 ; help files
-Source: resources\readability-studio-manual\docs-manual\*; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Excludes: "thumbs.db,*.tex,*.log,README.md,\.git"; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\readability-studio-manual\docs-online\*; DestDir: {app}\readability-studio-manual\online; Components: HelpFiles; Excludes: "thumbs.db,*.tex,*.log,README.md,\.git"; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\readability-test-reference\docs\readability-test-reference.pdf; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\shortcuts-cheatsheet\docs\shortcuts-cheatsheet.pdf; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\sysadmin\docs\sysadmin-manual.pdf; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\release-notes\docs\release-notes.pdf; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\readability-studio-api\docs\readability-studio-api.pdf; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Flags: replacesameversion restartreplace recursesubdirs
-Source: resources\lua-5.4\doc\*; DestDir: {app}\readability-studio-manual\lua-5.4\doc; Components: HelpFiles; Excludes: "thumbs.db"; Flags: replacesameversion restartreplace recursesubdirs
+Source: resources\readability-studio-manual\*; DestDir: {app}\readability-studio-manual; Components: HelpFiles; Excludes: "thumbs.db,*.tex,*.log,README.md,\.git"; Flags: replacesameversion restartreplace recursesubdirs
 ; examples
 Source: resources\examples\*; DestDir: {app}\examples; Components: Examples; Excludes: "thumbs.db,README.md,\.git"; Flags: replacesameversion restartreplace recursesubdirs
 ; translations

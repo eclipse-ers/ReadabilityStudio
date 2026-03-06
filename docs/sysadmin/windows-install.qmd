@@ -19,13 +19,13 @@ To install, download and run the latest [Microsoft Visual C++ Redistributable](h
 
 ## Installing Locally {-}
 
-Run the installer ("rssetup{{< var FULL_VERSION >}}.exe") as an administrator.
+Run the installer ("ers-setup.exe") as an administrator.
 You will be prompted for a user name, where to install the program, and which components to install.
 After answering these prompts, continue the installer to completion.
 
 ## Installing Remotely {-}
 
-Run the installer ("rssetup{{< var FULL_VERSION >}}.exe") via a remote tool, such as *Windows^®^ SCCM* (*System Center Configuration Manager*).
+Run the installer ("ers-setup.exe") via a remote tool, such as *Windows^®^ SCCM* (*System Center Configuration Manager*).
 Refer to the end of this chapter for available command line options.
 
 ## Uninstalling {-}
@@ -41,7 +41,7 @@ System Admins can run this program remotely to uninstall the program from workst
 
 ## Updating {-}
 
-To upgrade an installation, run the installer ("rssetup{{< var FULL_VERSION >}}.exe") as an administrator and follow the prompts.
+To upgrade an installation, run the installer ("ers-setup.exe") as an administrator and follow the prompts.
 If there is a previous installation of *{{< var PROGRAM_NAME >}}*, then the installer will update it.
 
 ::: {.notesection data-latex=""}

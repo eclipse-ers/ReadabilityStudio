@@ -165,7 +165,7 @@ jobs:
         with:
           name: Unsigned Installer
           path: ${{ github.workspace }}/installers/windows/Output/*.exe
-          archive: false
+          archive: true
 
       - name: Log Unsigned Installer Artifact ID
         run: |
@@ -179,7 +179,7 @@ jobs:
           organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
           project-slug: 'technology.ers'
           signing-policy-slug: eclipse-ers-test-signing
-          artifact-configuration-slug: eclipse-ers-exe
+          artifact-configuration-slug: ers-setup.exe
           github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '${{ github.workspace }}/signed'
@@ -208,7 +208,7 @@ jobs:
         with:
           name: Signed Windows Installer
           path: ${{ github.workspace }}/signed/*.exe
-          archive: false
+          archive: true
 
       - name: Generate Build Summary
         if: always()
