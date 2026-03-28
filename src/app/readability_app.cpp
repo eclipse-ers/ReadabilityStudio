@@ -1687,7 +1687,7 @@ void ReadabilityApp::FillSaveMenu(wxMenu& saveMenu, const RibbonType rtype)
         {
         // Don't use stock wxID_SAVE and wxID_SAVEAS because of event handling issues
         // under GTK+ and also because we use can't use wxID_SAVE on a hybrid ribbon
-        // button; otherwise, it because disabled with the document isn't dirty, and
+        // button; otherwise, it becomes disabled when the document isn't dirty, and
         // then you can't access the other export options from the menu.
         auto* item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT"), _(L"Save") + L"\tCtrl+S");
         item->SetBitmap(saveIcon);
@@ -2879,7 +2879,7 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     LoadRibbonToolsPage(ribbon, rtype);
     LoadRibbonHelpPage(ribbon);
 
-    ribbon->SetArtProvider(new wxRibbonMSWArtProvider);
+    ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
     UpdateRibbonTheme(ribbon);
 
     ribbon->Realize();
