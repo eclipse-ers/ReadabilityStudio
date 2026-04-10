@@ -291,8 +291,34 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     /// @returns The lua editor dialog.
     LuaEditorDlg* GetLuaEditor() noexcept { return m_luaEditor; }
 
+    /// @brief Resets the Lua editor window.
+    /// @note This should be called from document view's close event
+    ///     to ensure that this window gets cleaned up and re-parented.
+    void DestroyLuaEditor()
+        {
+        if (m_luaEditor != nullptr)
+            {
+            m_luaEditor->Hide();
+            m_luaEditor->Destroy();
+            m_luaEditor = nullptr;
+            }
+        }
+
     /// @returns The log report dialog.
     Wisteria::UI::ListDlg* GetLogWindow() noexcept { return m_logWindow; }
+
+    /// @brief Resets the log window.
+    /// @note This should be called from document view's close event
+    ///     to ensure that this window gets cleaned up and re-parented.
+    void DestroyLogWindow()
+        {
+        if (m_logWindow != nullptr)
+            {
+            m_logWindow->Hide();
+            m_logWindow->Destroy();
+            m_logWindow = nullptr;
+            }
+        }
 
   private:
     static std::map<int, wxString> m_testBundleMenuIds;
