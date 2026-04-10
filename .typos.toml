@@ -73,6 +73,7 @@ Informacion = "Informacion"
 Perspectivas = "Perspectivas"
 philosophia = "philosophia"
 thm = "thm"
+optin = "optin"
 
 [type.svg]
 extend-glob = ["*.svg"]

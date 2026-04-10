@@ -78,10 +78,10 @@ jobs:
         uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
+          organization-id: '46624a66-6595-48fd-85c3-64bdee7fecc9'
           project-slug: 'technology.ers'
-          signing-policy-slug: eclipse-ers-test-signing
-          artifact-configuration-slug: readstudio.exe-in-zip
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: exe-in-zip
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '${{ github.workspace }}/installers/windows/release'
@@ -165,10 +165,10 @@ jobs:
         uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '1e3884d6-5f7d-4d16-8035-e6af1f812bd7'
+          organization-id: '46624a66-6595-48fd-85c3-64bdee7fecc9'
           project-slug: 'technology.ers'
-          signing-policy-slug: eclipse-ers-test-signing
-          artifact-configuration-slug: ers-setup.exe
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: exe-in-zip
           github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '${{ github.workspace }}/signed'

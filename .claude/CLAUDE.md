@@ -11,12 +11,7 @@ This file provides guidance to AI systems when working with code in this reposit
 ## Project Overview
 
 *Eclipse Readability Studio* is a C++20 cross-platform desktop application for analyzing text readability.
-It uses *wxWidgets* 3.3.1+ for the GUI framework and *CMake* for building.
-
-### Build Targets
-- `readstudio` - Main application
-- `manuals` - User documentation (requires R and Quarto)
-- `doxygen-docs` - API documentation
+It uses *wxWidgets* 3.3.3+ for the GUI framework and *CMake* for building.
 
 ## Creating Tests
 
@@ -35,6 +30,8 @@ The project uses clang-format (v20) and clang-tidy. Key style rules:
   - Various linguistic helpers (abbreviations, contractions, conjunctions, pronouns, etc.)
 - Use `std::wstring_view`, `std::prev`, `std::next`, `std::advance` instead of pointer arithmetic
 - Make variables and lambdas `const` if possible
+- Use `{}` CTOR initializer syntax when possible
+- Variable names have minimum of three letters (except loop counter)
 - **Indentation:** 4 spaces, no tabs
 - **Line length:** 100 characters max
 - **Brace style:** Whitesmiths
@@ -45,6 +42,8 @@ The project uses clang-format (v20) and clang-tidy. Key style rules:
 - **Pointers/references:** Left-aligned (`int* ptr`, not `int *ptr`)
 - **Comments:** First word lowercase, unless the comment contains multiple sentences
 - **Line endings:** LF (Unix-style)
+- Uses wxWidgets 3.3.3 API
+- Use validators when connecting values to wxWidgets UI objects
 
 Run formatting check:
 ```bash
@@ -98,12 +97,3 @@ After editing word lists in `resources/words/`:
 2. Open Readability Studio
 3. Run `resources/finalize-word-lists.lua` in the Lua editor
 4. Rebuild the program to repackage
-
-## CI/CD
-
-GitHub Actions workflows enforce:
-- clang-format formatting (v20)
-- clang-tidy static analysis
-- cppcheck analysis
-- Unit tests on Linux, Windows, and macOS
-- Spell checking (typos)
