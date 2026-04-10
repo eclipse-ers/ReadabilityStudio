@@ -148,6 +148,27 @@ jobs:
           }
           Write-Host "::endgroup::"
 
+      - name: List Installer Contents
+        shell: pwsh
+        run: |
+          Write-Host "::group::Installer Contents"
+    
+          # Locate the installer
+          $installer = (Get-ChildItem "${{ github.workspace }}/installers/windows/Output/*.exe")[0]
+    
+          if ($null -eq $installer) {
+              Write-Error "No installer found in the output directory!"
+              exit 1
+          }
+
+          Write-Host "Listing contents of: $($installer.Name)"
+    
+          # 7z l: Lists contents
+          # -ba: Bare mode (optional, suppresses headers for cleaner logs)
+          7z l "$($installer.FullName)"
+    
+          Write-Host "::endgroup::"
+
       - name: Upload Unsigned Installer
         id: upload-unsigned-installer
         uses: actions/upload-artifact@v7
