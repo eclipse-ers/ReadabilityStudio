@@ -103,17 +103,6 @@ jobs:
           }
           Write-Host "::endgroup::"
 
-      - name: Install Inno Setup
-        shell: pwsh
-        run: |
-          $installed = winget list --id JRSoftware.InnoSetup -e
-
-          if ($installed -match "Inno Setup") {
-            Write-Host "Inno Setup already installed"
-          } else {
-            winget install --id JRSoftware.InnoSetup -e --source winget --accept-package-agreements --accept-source-agreements
-          }
-
       - name: List Installer Input Files
         run: |
           Write-Host "::group::Installer Input Files"
