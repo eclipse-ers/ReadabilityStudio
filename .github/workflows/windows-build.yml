@@ -104,10 +104,7 @@ jobs:
           Write-Host "::endgroup::"
 
       - name: Install Inno Setup
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
-        with:
-          path: installers/windows/readstudio.iss
-          options: /V0
+        run: winget install --id JRSoftware.InnoSetup -e --source winget --accept-package-agreements --accept-source-agreements
 
       - name: List Installer Input Files
         run: |
@@ -146,27 +143,6 @@ jobs:
             Write-Host "::error::Output directory not found"
             exit 1
           }
-          Write-Host "::endgroup::"
-
-      - name: List Installer Contents
-        shell: pwsh
-        run: |
-          Write-Host "::group::Installer Contents"
-    
-          # Locate the installer
-          $installer = (Get-ChildItem "${{ github.workspace }}/installers/windows/Output/*.exe")[0]
-    
-          if ($null -eq $installer) {
-              Write-Error "No installer found in the output directory!"
-              exit 1
-          }
-
-          Write-Host "Listing contents of: $($installer.Name)"
-    
-          # 7z l: Lists contents
-          # -ba: Bare mode (optional, suppresses headers for cleaner logs)
-          7z l "$($installer.FullName)"
-    
           Write-Host "::endgroup::"
 
       - name: Upload Unsigned Installer
