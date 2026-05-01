@@ -186,6 +186,40 @@ jobs:
           }
           Write-Host "::endgroup::"
 
+      - name: Run Installer
+        shell: pwsh
+        run: |
+            $installDir = "$env:RUNNER_TEMP\readstudio"
+            $signedInstaller = Get-ChildItem -Path "${{ github.workspace }}/signed" -Filter "*.exe" | Select-Object -First 1
+
+            # Ensure clean directory
+            if (Test-Path $installDir) {
+                Remove-Item -Recurse -Force $installDir
+            }
+            New-Item -ItemType Directory -Path $installDir | Out-Null
+
+            # Run installer
+            Start-Process -FilePath $signedInstaller.FullName `
+                -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /DIR=$installDir" `
+                -Wait
+
+            echo "INSTALL_DIR=$installDir" >> $env:GITHUB_ENV
+
+      - name: Generate Installed File Manifest
+        shell: pwsh
+        run: |
+            $installDir = "$env:INSTALL_DIR"
+            $manifestPath = "$installDir\manifest.txt"
+
+            Get-ChildItem -Path $installDir -Recurse -File |
+                ForEach-Object {
+                    $_.FullName.Replace("$installDir\", "")
+                } |
+                Sort-Object |
+                Out-File $manifestPath -Encoding utf8
+
+            Write-Host "Manifest created at $manifestPath"
+
       - name: Archive Signed Installer
         uses: actions/upload-artifact@v7
         with:

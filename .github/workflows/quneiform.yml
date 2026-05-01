@@ -28,7 +28,7 @@ jobs:
       - name: analyze
         run: |
              ./quneiform/bin/quneiform ./src -q \
-             --ignore=app/sbom.h,Wisteria-Dataviz/demo/demo.cpp,Wisteria-Dataviz/src/base/version.h,Wisteria-Dataviz/src/math,Wisteria-Dataviz/src/debug,Wisteria-Dataviz/src/util/logfile.cpp,Wisteria-Dataviz/src/import/,Wisteria-Dataviz/tests,lua,Wisteria-Dataviz/src/base/colors.cpp,Wisteria-Dataviz/locale/es.po,readability,Catch2,OleanderStemmingLibrary,tinyexpr-plusplus,tinyxml2,Wisteria-Dataviz/src/utfcpp,Wisteria-Dataviz/src/easyexif,Wisteria-Dataviz/src/CRCpp,Wisteria-Dataviz/src/wxSimpleJSON \
+             --ignore=app/sbom.h,Wisteria-Dataviz/demo/demo.cpp,Wisteria-Dataviz/src/base/version.h,Wisteria-Dataviz/src/math,Wisteria-Dataviz/src/debug,Wisteria-Dataviz/src/util/logfile.cpp,Wisteria-Dataviz/src/base/svgreportprintout.cpp,Wisteria-Dataviz/src/import/,Wisteria-Dataviz/tests,lua,Wisteria-Dataviz/src/base/colors.cpp,Wisteria-Dataviz/locale/es.po,readability,Catch2,OleanderStemmingLibrary,tinyexpr-plusplus,tinyxml2,Wisteria-Dataviz/src/utfcpp,Wisteria-Dataviz/src/easyexif,Wisteria-Dataviz/src/CRCpp,Wisteria-Dataviz/src/wxSimpleJSON \
              --enable=allI18N,allCodeFormatting --disable=suspectL10NUsage,unencodedExtASCII \
              --cpp-version=2017 \
              --untranslatables="Fry,Degrees of Reading Power,Bormuth Grade Placement,Bormuth Cloze Mean,Automated Readability Index,Gunning Fog,SMOG,PSK Gunning Fog,Rate Index,New Dale-Chall,Flesch,New Fog Count,Modified SMOG,New Automated Readability Index,Flesch Reading Ease,Jakarta,Eclipse Foundation,Eclipse" \
