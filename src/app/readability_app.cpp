@@ -3865,6 +3865,11 @@ void MainFrame::OnStartPageClick(const wxCommandEvent& event)
         {
         OpenFile(event.GetString());
         }
+    else if (wxStartPage::IsBrowseId(event.GetId()))
+        {
+        wxCommandEvent openEvent(wxEVT_MENU, wxID_OPEN);
+        ProcessWindowEvent(openEvent);
+        }
     else if (wxStartPage::IsFileListClearId(event.GetId()))
         {
         wxGetApp().ClearFileHistoryMenu();
