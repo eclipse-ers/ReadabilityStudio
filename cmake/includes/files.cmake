@@ -63,22 +63,42 @@ SET(APP_SRC_FILES
     src/webharvester/filepathresolver.cpp
     src/webharvester/webharvester.cpp
     src/Wisteria-Dataviz/src/base/axis.cpp
+    src/Wisteria-Dataviz/src/base/brushes.cpp
     src/Wisteria-Dataviz/src/base/canvas.cpp
     src/Wisteria-Dataviz/src/base/colorbrewer.cpp
+    src/Wisteria-Dataviz/src/base/colorlookup.cpp
     src/Wisteria-Dataviz/src/base/colors.cpp
     src/Wisteria-Dataviz/src/base/commonaxisbuilder.cpp
     src/Wisteria-Dataviz/src/base/fillableshape.cpp
     src/Wisteria-Dataviz/src/base/graphitems.cpp
+    src/Wisteria-Dataviz/src/base/icons.cpp
     src/Wisteria-Dataviz/src/base/image.cpp
     src/Wisteria-Dataviz/src/base/label.cpp
     src/Wisteria-Dataviz/src/base/lines.cpp
+    src/Wisteria-Dataviz/src/base/pdfreportprintout.cpp
     src/Wisteria-Dataviz/src/base/points.cpp
     src/Wisteria-Dataviz/src/base/polygon.cpp
     src/Wisteria-Dataviz/src/base/reportbuildercolors.cpp
     src/Wisteria-Dataviz/src/base/reportprintout.cpp
     src/Wisteria-Dataviz/src/base/shapes.cpp
+    src/Wisteria-Dataviz/src/base/shapes_art.cpp
+    src/Wisteria-Dataviz/src/base/shapes_buildings.cpp
+    src/Wisteria-Dataviz/src/base/shapes_business.cpp
+    src/Wisteria-Dataviz/src/base/shapes_education.cpp
+    src/Wisteria-Dataviz/src/base/shapes_food.cpp
+    src/Wisteria-Dataviz/src/base/shapes_geometric.cpp
+    src/Wisteria-Dataviz/src/base/shapes_medical.cpp
+    src/Wisteria-Dataviz/src/base/shapes_nature.cpp
+    src/Wisteria-Dataviz/src/base/shapes_people.cpp
+    src/Wisteria-Dataviz/src/base/shapes_religion.cpp
+    src/Wisteria-Dataviz/src/base/shapes_stats.cpp
+    src/Wisteria-Dataviz/src/base/shapes_vehicles.cpp
+    src/Wisteria-Dataviz/src/base/svgreportprintout.cpp
     src/Wisteria-Dataviz/src/data/dataset.cpp
     src/Wisteria-Dataviz/src/data/excelreader.cpp
+    src/Wisteria-Dataviz/src/data/join_inner.cpp
+    src/Wisteria-Dataviz/src/data/join_left.cpp
+    src/Wisteria-Dataviz/src/data/odsreader.cpp
     src/Wisteria-Dataviz/src/debug/debug_profile.cpp
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
@@ -100,15 +120,18 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/graphs/piechart.cpp
     src/Wisteria-Dataviz/src/graphs/scalechart.cpp
     src/Wisteria-Dataviz/src/graphs/scatterplot.cpp
+    src/Wisteria-Dataviz/src/graphs/stemandleafplot.cpp
     src/Wisteria-Dataviz/src/graphs/wordcloud.cpp
     src/Wisteria-Dataviz/src/import/cpp_extract_text.cpp
     src/Wisteria-Dataviz/src/import/doc_extract_text.cpp
     src/Wisteria-Dataviz/src/import/docx_extract_text.cpp
     src/Wisteria-Dataviz/src/import/html_extract_text.cpp
     src/Wisteria-Dataviz/src/import/markdown_extract_text.cpp
+    src/Wisteria-Dataviz/src/import/ods_extract_text.cpp
     src/Wisteria-Dataviz/src/import/odt_odp_extract_text.cpp
     src/Wisteria-Dataviz/src/import/postscript_extract_text.cpp
     src/Wisteria-Dataviz/src/import/rtf_extract_text.cpp
+    src/Wisteria-Dataviz/src/import/spreadsheet_extract_text.cpp
     src/Wisteria-Dataviz/src/import/xlsx_extract_text.cpp
     src/Wisteria-Dataviz/src/ui/app.cpp
     src/Wisteria-Dataviz/src/ui/controls/codeeditor.cpp
@@ -135,9 +158,12 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/ui/dialogs/listctrlitemviewdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/listctrlsortdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/odspreviewdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/opacitydlg.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/pdfexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/printerheaderfooterdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/warningmessagesdlg.cpp
     src/Wisteria-Dataviz/src/ui/mainframe.cpp
     src/Wisteria-Dataviz/src/util/downloadfile.cpp

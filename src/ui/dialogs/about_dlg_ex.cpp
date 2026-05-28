@@ -54,6 +54,7 @@
 #include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/dialogwithhelp.h"
 #include "../../Wisteria-Dataviz/src/util/hardwareinfo.h"
+#include "../../Wisteria-Dataviz/src/wxpdfdoc/include/wx/pdfdoc_version.h"
 #include "../../app/readability_app.h"
 #include "../../app/sbom.h"
 #include "../../lua/lua.h"
@@ -470,8 +471,11 @@ void AboutDialogEx::CreateControls()
             formatLibInfo(wxStyledTextCtrl::GetLibraryVersionInfo(), SCINTILLA_HASH,
                           SCINTILLA_ORIGIN),
             formatLibInfo(wxGetZlibVersionInfo(), ZLIB_HASH, ZLIB_ORIGIN),
-            /// @todo uncomment if WebView is ever included
-            // formatLibInfo(wxWebView::GetBackendVersionInfo()),
+            formatLibInfo(wxVersionInfo{ L"wxPDFDocument", PDFDOC_MAJOR_VERSION,
+                                         PDFDOC_MINOR_VERSION, PDFDOC_RELEASE_NUMBER,
+                                         PDFDOC_SUBRELEASE_NUMBER, wxString{}, wxString{} },
+                          WXPDFDOC_HASH, WXPDFDOC_ORIGIN),
+            formatLibInfo(wxWebView::GetBackendVersionInfo()),
             // submodules without version information
             formatLibInfo(wxVersionInfo{ L"NanoSVG", -1 }, NANOSVG_HASH, NANOSVG_ORIGIN),
             formatLibInfo(wxVersionInfo{ L"CRC++", CRCPP_MAJOR_VERSION, CRCPP_MINOR_VERSION,

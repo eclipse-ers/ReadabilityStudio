@@ -290,10 +290,13 @@ if(UNIX AND NOT APPLE)
     # WebKitGTK dependency (required for wxWebView)
     pkg_check_modules(WEBKIT2 REQUIRED webkit2gtk-4.1)
 
+    # Fontconfig dependency (required by wxPDFDocument's font manager on GTK)
+    pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
+
     # Setup CMake to use GTK+ and WebKitGTK, tell the compiler where to look for headers
     # and to the linker where to look for libraries
-    include_directories(${GTK3_INCLUDE_DIRS} ${WEBKIT2_INCLUDE_DIRS})
-    link_directories(${GTK3_LIBRARY_DIRS} ${WEBKIT2_LIBRARY_DIRS})
+    include_directories(${GTK3_INCLUDE_DIRS} ${WEBKIT2_INCLUDE_DIRS} ${FONTCONFIG_INCLUDE_DIRS})
+    link_directories(${GTK3_LIBRARY_DIRS} ${WEBKIT2_LIBRARY_DIRS} ${FONTCONFIG_LIBRARY_DIRS})
 endif()
 
 # List of submodules (relative paths)
@@ -307,6 +310,7 @@ set(SUBMODULES
     src/Wisteria-Dataviz/src/CRCpp
     src/Wisteria-Dataviz/src/easyexif
     src/Wisteria-Dataviz/src/utfcpp
+    src/Wisteria-Dataviz/src/wxpdfdoc
     src/Wisteria-Dataviz/src/wxSimpleJSON
     src/Wisteria-Dataviz/src/wxStartPage
     ${wxWidgets_BASEDIR}
@@ -314,7 +318,6 @@ set(SUBMODULES
     ${wxWidgets_BASEDIR}/src/jpeg
     ${wxWidgets_BASEDIR}/src/png
     ${wxWidgets_BASEDIR}/src/tiff
-    ${wxWidgets_BASEDIR}/src/zlib
     ${wxWidgets_BASEDIR}/src/zlib
     ${wxWidgets_BASEDIR}/src/stc/lexilla
     ${wxWidgets_BASEDIR}/src/stc/scintilla
@@ -450,6 +453,37 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 ##############################################################
 # (re-configure project to update this)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/includes/files.cmake)
+
+# Add wxPDFDocument submodule (lives under the Wisteria-Dataviz submodule).
+# Reuse Wisteria's canonical source list, but re-root the paths to the submodule
+# location. wxpdfdoc is excluded from the source glob in ListFiles.cmake so that
+# these files are added once, here, with their warning suppressions.
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/cmake/includes/wxpdf.cmake)
+# Barcode support is unused and would drag in the bundled zint C library, so drop
+# the two barcode sources (pdfbarcode.cpp is the only consumer of pdfbarcodezint.cpp,
+# which is the only consumer of zint).
+list(REMOVE_ITEM WXPDF_SRC
+    src/wxpdfdoc/src/pdfbarcode.cpp
+    src/wxpdfdoc/src/pdfbarcodezint.cpp)
+list(TRANSFORM WXPDF_SRC PREPEND "src/Wisteria-Dataviz/")
+list(APPEND APP_SRC_FILES ${WXPDF_SRC})
+# Suppress warnings from wxPDFDocument
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # -Wno-maybe-uninitialized is GCC-only (Clang has no equivalent flag)
+    set_source_files_properties(${WXPDF_SRC} PROPERTIES
+        COMPILE_OPTIONS "-Wno-unused-but-set-variable;-Wno-unused-variable;-Wno-unused-parameter;-Wno-shadow;-Wno-ignored-qualifiers;-Wno-maybe-uninitialized")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+    set_source_files_properties(${WXPDF_SRC} PROPERTIES
+        COMPILE_OPTIONS "-Wno-unused-but-set-variable;-Wno-unused-variable;-Wno-unused-parameter;-Wno-shadow;-Wno-ignored-qualifiers")
+elseif(MSVC)
+    # /wd4189 — local variable initialized but not referenced
+    # /wd4100 — unreferenced formal parameter
+    # /wd4101 — unreferenced local variable
+    # /wd4267 — conversion from 'size_t' to 'uint32_t', possible loss of data
+    set_source_files_properties(${WXPDF_SRC} PROPERTIES
+        COMPILE_OPTIONS "/wd4189;/wd4100;/wd4101;/wd4267")
+endif()
+
 if(WIN32)
     # Include an RC file and HiDPI manifest for Windows (provided by wxWidgets)
     set(wxUSE_DPI_AWARE_MANIFEST 1)
@@ -460,6 +494,12 @@ elseif(APPLE)
     list(APPEND APP_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/app-logo.icns)
 endif()
 add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${APP_SRC_FILES})
+
+# wxPDFDocument include paths (zint/barcode support is disabled, see above)
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/brotli/include)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:Debug>:
@@ -570,6 +610,8 @@ elseif(UNIX)
     else()
         target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
     endif()
+    # Fontconfig is required by wxPDFDocument's font manager on GTK
+    target_link_libraries(${PROJECT_NAME} ${FONTCONFIG_LIBRARIES})
 endif()
 
 # Copy help, scripts, and resources into build folder
