@@ -466,7 +466,10 @@ bool ReadabilityApp::OnInit()
                    std::make_pair(_(L"Chocolate chip cookie"),
                                   DONTTRANSLATE(L"chocolate-chip-cookie")),
                    std::make_pair(_(L"Coffee shop cup"), DONTTRANSLATE(L"coffee-shop-cup")),
-                   std::make_pair(_(L"Pill"), DONTTRANSLATE(L"pill")) };
+                   std::make_pair(_(L"Pill"), DONTTRANSLATE(L"pill")),
+                   std::make_pair(_(L"Tractor"), DONTTRANSLATE(L"tractor")),
+                   std::make_pair(_(L"Butterfly"), DONTTRANSLATE(L"butterfly")),
+                   std::make_pair(_(L"Star"), DONTTRANSLATE(L"star")) };
 
     // do the same for the color schemes (for the graphs)
     m_colorSchemeMap = { std::make_pair(_(L"Dusk"), DONTTRANSLATE(L"dusk")),
