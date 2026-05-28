@@ -16,5 +16,11 @@
   "general": {
     "autoApprove": false,
     "respectGitIgnore": true
+  },
+  "context": {
+    "fileName": [
+      "AGENTS.md",
+      "GEMINI.md"
+    ]
   }
 }
