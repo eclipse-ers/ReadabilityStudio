@@ -8,6 +8,8 @@ concurrency:
 
 env:
   ACTIONS_STEP_DEBUG: true
+  # SignPath policy: 'release-signing' for production, 'test-signing' for the self-signed certificate
+  SIGNING_POLICY: release-signing
 
 jobs:
   build:
@@ -80,7 +82,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '46624a66-6595-48fd-85c3-64bdee7fecc9'
           project-slug: 'technology.ers'
-          signing-policy-slug: release-signing
+          signing-policy-slug: ${{ env.SIGNING_POLICY }}
           artifact-configuration-slug: exe-in-zip
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
@@ -161,7 +163,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '46624a66-6595-48fd-85c3-64bdee7fecc9'
           project-slug: 'technology.ers'
-          signing-policy-slug: release-signing
+          signing-policy-slug: ${{ env.SIGNING_POLICY }}
           artifact-configuration-slug: exe-in-zip
           github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true

@@ -40,7 +40,7 @@ jobs:
           profanity.load_censor_words()
 
           # Ignore list (all lowercase)
-          ignore_words = {w.lower() for w in ["facial", "c(", "c", "POT", "whisker", "outlier", "stripchart", "stupid", "XXX", "wad", "Pigs", "len", "Guido", "Coon", "Header", "he/she", "sexual", "Test", "Kill"]}
+          ignore_words = {w.lower() for w in ["van-dyke", "facial", "c(", "c", "POT", "whisker", "outlier", "stripchart", "stupid", "XXX", "wad", "Pigs", "len", "Guido", "Coon", "Header", "he/she", "sexual", "Test", "Kill"]}
 
           # File extensions to scan
           extensions = ['.md', '.qmd']
