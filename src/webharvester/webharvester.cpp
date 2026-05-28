@@ -1084,8 +1084,8 @@ wxString WebHarvester::GetCharsetFromContentType(const wxString& contentType)
 //----------------------------------
 wxString WebHarvester::GetCharsetFromPageContent(std::string_view pageContent)
     {
-    wxString charSet = lily_of_the_valley::html_extract_text::parse_charset(pageContent.data(),
-                                                                            pageContent.length());
+    wxString charSet = lily_of_the_valley::html_extract_text::parse_charset(
+        { pageContent.data(), pageContent.length() });
     if (charSet.empty())
         {
         // If system encoding is UTF (8, 16, etc.), then we don't want to convert from that.

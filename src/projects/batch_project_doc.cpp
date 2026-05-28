@@ -1899,7 +1899,7 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                             }
 
                         const wxString cellText =
-                            lily_of_the_valley::xlsx_extract_text::get_cell_text(
+                            lily_of_the_valley::spreadsheet_extract_text::get_cell_text(
                                 cellName.wc_str(), internalSheetPos->second);
 
                         fileResolver.ResolvePath(cellText, false);
