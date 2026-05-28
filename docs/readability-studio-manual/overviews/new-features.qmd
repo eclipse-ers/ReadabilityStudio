@@ -39,6 +39,7 @@ source('../R/appdown.r')
 - Added new styles for bar charts and box plots.
 - Stipple shapes now support transparency.\
   This includes using icon shapes for histograms that use showcasing.
+- Added PDF export support.
 - Added WebP image support.
 
 ### Analysis/Test Enhancements {-}
