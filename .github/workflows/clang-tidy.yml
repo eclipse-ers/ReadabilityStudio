@@ -31,10 +31,14 @@ jobs:
         src/tinyxml2
         src/tinyexpr-plusplus
         src/OleanderStemmingLibrary
+        src/Wisteria-Dataviz/src/app
+        src/Wisteria-Dataviz/src/ui/dialogs/editors
         src/Wisteria-Dataviz/src/CRCpp
         src/Wisteria-Dataviz/src/easyexif
         src/Wisteria-Dataviz/src/utfcpp
         src/Wisteria-Dataviz/src/wxSimpleJSON
+        src/Wisteria-Dataviz/src/wxStartPage/demo/
+        src/Wisteria-Dataviz/src/wxpdfdoc
         src/Wisteria-Dataviz/src/easyexif
         src/Wisteria-Dataviz/tests
         src/Wisteria-Dataviz/demo
