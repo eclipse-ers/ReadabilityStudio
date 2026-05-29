@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Readability Studio\n"
-"POT-Creation-Date: 2026-05-28 11:59-0400\n"
-"PO-Revision-Date: 2026-05-28 12:30-0400\n"
+"POT-Creation-Date: 2026-05-29 13:39-0400\n"
+"PO-Revision-Date: 2026-05-29 15:26-0400\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -139,24 +139,21 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/axis.cpp:4145
 #, c-format
-#| msgid "'%s': label column not found for line plot."
 msgid "'%s': label column not found for axis brackets."
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/axis.cpp:4599
 #, c-format
 msgid "Ranging from %s to %s"
-msgstr ""
+msgstr "Que van desde %s hasta %s"
 
 #: Wisteria-Dataviz/src/base/axis.cpp:4604
 #, c-format
-#| msgid "Headers"
 msgid ", header: %s"
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/axis.cpp:4609
 #, c-format
-#| msgid "Footers"
 msgid ", footer: %s"
 msgstr ""
 
@@ -279,6 +276,8 @@ msgstr ""
 msgid ""
 "A vector-based document format that preserves text and graphics at any scale."
 msgstr ""
+"Un formato de documento basado en vectores que conserva texto y gráficos a "
+"cualquier escala."
 
 #: Wisteria-Dataviz/src/base/canvas.cpp:234
 msgid "Select Image Format"
@@ -398,9 +397,8 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/pdfreportprintout.cpp:42
 #, c-format
-#| msgid "Failed to save document (%s)."
 msgid "Failed to create PDF document \"%s\"."
-msgstr ""
+msgstr "No se han conseguido crear los \"%s\" del documento PDF."
 
 #: Wisteria-Dataviz/src/base/pdfreportprintout.cpp:43
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:533
@@ -413,13 +411,11 @@ msgstr "Error al Exportar"
 
 #: Wisteria-Dataviz/src/base/reporttableloader.cpp:419
 #, c-format
-#| msgid "%s: image not found."
 msgid "%s: label side image not found."
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/reporttableloader.cpp:1274
 #, c-format
-#| msgid "%s: unknown test could not be added."
 msgid "%s: unknown table position origin value."
 msgstr ""
 
@@ -487,20 +483,17 @@ msgstr "asterisco"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:454
 msgid "hexagon"
-msgstr ""
+msgstr "hexágono"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:456
-#| msgid "Warning road sign"
 msgid "warning road sign"
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:458
-#| msgid "Warning road sign"
 msgid "go road sign"
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:460
-#| msgid "Location marker"
 msgid "location marker"
 msgstr ""
 
@@ -533,7 +526,6 @@ msgid "female"
 msgstr "mujer"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:476
-#| msgid "Business woman"
 msgid "businesswoman"
 msgstr ""
 
@@ -555,15 +547,13 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:486
 msgid "banner"
-msgstr ""
+msgstr "banner"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:488
-#| msgid "Watercolor"
 msgid "watercolor rectangle"
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:490
-#| msgid "Thick watercolor"
 msgid "thick watercolor rectangle"
 msgstr ""
 
@@ -581,7 +571,7 @@ msgstr "gorro de graduación"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:498
 msgid "book"
-msgstr ""
+msgstr "libro"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:500
 msgid "tire"
@@ -694,7 +684,7 @@ msgstr "linterna de calabaza"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:554
 msgid "butterfly"
-msgstr ""
+msgstr "mariposa"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:556
 msgid "flame"
@@ -706,7 +696,7 @@ msgstr "espada"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:560
 msgid "pill"
-msgstr ""
+msgstr "cápsula"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:562
 msgid "cold thermometer"
@@ -726,11 +716,11 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:570
 msgid "pepperoni pizza"
-msgstr ""
+msgstr "pizza de pepperoni"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:572 app/readability_app.cpp:465
 msgid "Hawaiian pizza"
-msgstr ""
+msgstr "Pizza hawaiana"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:574
 msgid "chocolate chip cookie"
@@ -741,7 +731,6 @@ msgid "coffee cup"
 msgstr "taza de café"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:578
-#| msgid "Curving road"
 msgid "curving road"
 msgstr ""
 
@@ -750,7 +739,6 @@ msgid "crossed-out symbol"
 msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:584
-#| msgid "Recent"
 msgid "crescent"
 msgstr ""
 
@@ -761,7 +749,6 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:594
 #, c-format
-#| msgid "Non-outlier range: %s-%s"
 msgid "number range %s to %s"
 msgstr ""
 
@@ -788,13 +775,13 @@ msgstr "DAYTON TIMES"
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:482
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:218
 msgid "Stacked"
-msgstr ""
+msgstr "Apilados"
 
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:377
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:482
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:219
 msgid "Duplex"
-msgstr ""
+msgstr "Dúplex"
 
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:480
 msgid "Toggle between stacked and duplex page layout"
@@ -814,9 +801,8 @@ msgstr "Ir a la página siguiente"
 
 #: Wisteria-Dataviz/src/base/svgreportprintout.cpp:532
 #, c-format
-#| msgid "Failed to save document (%s)."
 msgid "Failed to save SVG report to \"%s\"."
-msgstr ""
+msgstr "No se pudo guardar el informe SVG en \"%s\"."
 
 #. TRANSLATORS: Bar axis label (%s), percent value (%s)
 #. and percentage symbol (%%). '%%' can be changed and/or
@@ -937,11 +923,6 @@ msgstr ""
 #. The five %s placeholders are: lower whisker, Q1, median, Q3, upper whisker.
 #: Wisteria-Dataviz/src/graphs/boxplot.cpp:1070
 #, c-format
-#| msgid ""
-#| "75th Percentile: %s\n"
-#| "Median: %s\n"
-#| "25th Percentile: %s\n"
-#| "Non-outlier Range: %s-%s"
 msgid ""
 "lower whisker %s, 25th percentile %s, median %s, 75th percentile %s, upper "
 "whisker %s"
@@ -958,9 +939,8 @@ msgstr "'%s': columna continua no encontrada para el diagrama de caja."
 msgid "'%s': group column not found for box plot."
 msgstr "'%s': columna de grupo no encontrada para el diagrama de caja."
 
-#: Wisteria-Dataviz/src/graphs/bubbleplot.cpp:313
+#: Wisteria-Dataviz/src/graphs/bubbleplot.cpp:169
 #, c-format
-#| msgid "Line #%s: %s"
 msgid "Size (%s): %s–%s"
 msgstr ""
 
@@ -995,9 +975,8 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/candlestickplot.cpp:177
 #, c-format
-#| msgid "Non-outlier range: %s-%s"
 msgid ". Date range: %s–%s"
-msgstr ""
+msgstr ". Rango de fechas: %s–%s"
 
 #: Wisteria-Dataviz/src/graphs/candlestickplot.cpp:189
 #, c-format
@@ -1064,17 +1043,17 @@ msgstr "Frecuencia"
 
 #: Wisteria-Dataviz/src/graphs/categoricalbarchart.cpp:238
 msgid "A categorical bar chart"
-msgstr ""
+msgstr "Gráfico de barras categórico"
 
 #. TRANSLATORS: bar label and its total length in a categorical bar chart.
 #. 1st %s is the bar's category label, 2nd %s is the total length.
 #. TRANSLATORS: bin label and its total count in a histogram.
 #. 1st %s is the bin's range label, 2nd %s is the total count.
 #: Wisteria-Dataviz/src/graphs/categoricalbarchart.cpp:263
-#: Wisteria-Dataviz/src/graphs/histogram.cpp:777
+#: Wisteria-Dataviz/src/graphs/histogram.cpp:781
 #, c-format
 msgid "%s: %s total"
-msgstr ""
+msgstr "%s: %s total"
 
 #. TRANSLATORS: a labeled bar group and its aggregate total in a categorical bar
 #. chart. 1st %s is the group label, 2nd %s is the total, 3rd %s is the first
@@ -1107,19 +1086,17 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:90
 msgid "Face width"
-msgstr ""
+msgstr "Anchura de la cara"
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:92
 msgid "Face height"
-msgstr ""
+msgstr "Altura de la cara"
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:94
-#| msgid "Text size"
 msgid "Eye size"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:96
-#| msgid "Preposition"
 msgid "Eye position"
 msgstr ""
 
@@ -1128,12 +1105,10 @@ msgid "Eyebrow slant"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:100
-#| msgid "Produce Section"
 msgid "Pupil direction"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:102
-#| msgid "Text size"
 msgid "Nose size"
 msgstr ""
 
@@ -1146,27 +1121,23 @@ msgid "Smile/frown"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:108
-#| msgid "Font color"
 msgid "Face color"
-msgstr ""
+msgstr "Color de piel"
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:110
 msgid "Ear size"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:112
-#| msgid "Bar Style"
 msgid "Hair style"
-msgstr ""
+msgstr "Peinado"
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:114
-#| msgid "Addition."
 msgid "Hair addition"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:1189
 #, c-format
-#| msgid "'%s': label column not found for line plot."
 msgid "'%s': face width column not found for Chernoff faces plot."
 msgstr ""
 
@@ -1202,14 +1173,13 @@ msgstr ""
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:1601
 #, c-format
 msgid "%zu faces"
-msgstr ""
+msgstr "%zu caras"
 
 #. TRANSLATORS: Chernoff faces accessibility: comma-separated list of face IDs.
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:1620
 #, c-format
-#| msgid "Labels"
 msgid "Labels: %s"
-msgstr ""
+msgstr "Etiquetas: %s"
 
 #. TRANSLATORS: Chernoff faces accessibility: list of facial feature to
 #. variable mappings (e.g., "Face width: age; Eye size: income").
@@ -1219,9 +1189,8 @@ msgid "Feature mappings: %s"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/chernoffplot.cpp:3547
-#| msgid "Literature"
 msgid "Features:\n"
-msgstr ""
+msgstr "Características:\n"
 
 #: Wisteria-Dataviz/src/graphs/crawfordgraph.cpp:30
 #: Wisteria-Dataviz/src/graphs/crawfordgraph.cpp:31
@@ -1249,6 +1218,32 @@ msgid ""
 msgstr ""
 "Número de Oraciones\n"
 "por 100 palabras"
+
+#: Wisteria-Dataviz/src/graphs/crawfordgraph.cpp:333
+msgid "A Crawford graph"
+msgstr "Gráfico de Crawford"
+
+#. TRANSLATORS: Crawford graph accessibility: a single score.
+#. %s is the score value.
+#. TRANSLATORS: scale chart accessibility: a single score with no ID.
+#. %s is the score value.
+#: Wisteria-Dataviz/src/graphs/crawfordgraph.cpp:367
+#: Wisteria-Dataviz/src/graphs/scalechart.cpp:373
+#, c-format
+msgid "Score: %s"
+msgstr "Puntuación: %s"
+
+#. TRANSLATORS: Crawford graph accessibility: multiple scores summary.
+#. %zu is the score count, 1st %s is the lowest value, 2nd %s is the
+#. highest value.
+#. TRANSLATORS: scale chart accessibility: multiple scores summary.
+#. %zu is the score count, 1st %s is the lowest value, 2nd %s is the
+#. highest value.
+#: Wisteria-Dataviz/src/graphs/crawfordgraph.cpp:379
+#: Wisteria-Dataviz/src/graphs/scalechart.cpp:386
+#, c-format
+msgid "%zu scores ranging from %s to %s"
+msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/danielsonbryan2plot.cpp:29
 #: Wisteria-Dataviz/src/graphs/danielsonbryan2plot.cpp:30
@@ -1444,9 +1439,6 @@ msgstr ""
 #. 1st %s is the start date, 2nd %s is the end date, 3rd %d is day count.
 #: Wisteria-Dataviz/src/graphs/ganttchart.cpp:448
 #, c-format
-#| msgid ""
-#| "%s\n"
-#| "%d days"
 msgid ", %s–%s (%d days)"
 msgstr ""
 
@@ -1465,7 +1457,6 @@ msgid ", %s through open end"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/ganttchart.cpp:468
-#| msgid "%d%% complete"
 msgid ", complete"
 msgstr ""
 
@@ -1473,12 +1464,10 @@ msgstr ""
 #. %d is the percentage (1-99).
 #: Wisteria-Dataviz/src/graphs/ganttchart.cpp:475
 #, c-format
-#| msgid "%d%% complete"
 msgid ", %d%% complete"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1420
-#| msgid "Printing"
 msgid "pointing at"
 msgstr ""
 
@@ -1487,7 +1476,7 @@ msgstr ""
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1435
 #, c-format
 msgid "Annotations: %s"
-msgstr ""
+msgstr "Anotaciones: %s"
 
 #. TRANSLATORS: DAY at TIME OF DAY
 #. TRANSLATORS: placeholders are date and time
@@ -1524,41 +1513,34 @@ msgid "Brackets along %s: %s"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1531
-#| msgid "Y axis"
 msgid "left Y axis"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1532
-#| msgid "Y axis"
 msgid "right Y axis"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1533
-#| msgid "Bottom titles"
 msgid "bottom X axis"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1534
-#| msgid "Y axis"
 msgid "top X axis"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1538
-#| msgid "Custom %s"
 msgid "custom axis"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1560
 #, c-format
-#| msgid "Y axis"
 msgid "X axis: %s"
-msgstr ""
+msgstr "Eje x: %s"
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1564
 #, c-format
-#| msgid "Y axis"
 msgid "Y axis: %s"
-msgstr ""
+msgstr "Eje y: %s"
 
 #: Wisteria-Dataviz/src/graphs/graph2d.cpp:1568
 #, c-format
@@ -1577,19 +1559,16 @@ msgstr "'%s': columna continua no encontrada."
 
 #: Wisteria-Dataviz/src/graphs/graph2d.h:921
 #, c-format
-#| msgid "'%s': continuous column not found for histogram."
 msgid "'%s': continuous column not found for graph."
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.h:941
 #, c-format
-#| msgid "'%s': categorical column not found for Likert chart."
 msgid "'%s': categorical column not found for graph."
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/graph2d.h:961
 #, c-format
-#| msgid "'%s': group column not found for graph."
 msgid "'%s': date column not found for graph."
 msgstr ""
 
@@ -1612,19 +1591,19 @@ msgid "'%s': group column not found for graph."
 msgstr "'%s': columna de grupo no encontrada para el gráfico."
 
 #: Wisteria-Dataviz/src/graphs/heatmap.cpp:59
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:472
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:474
 #, c-format
 msgid "'%s': continuous column not found for heatmap."
 msgstr "'%s': columna continua no encontrada para el mapa de calor."
 
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:519
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:525
 msgid "A heatmap"
-msgstr ""
+msgstr "Mapa de calor"
 
 #. TRANSLATORS: heatmap accessibility: %s is the variable name.
 #. TRANSLATORS: legend line showing the plotted variable name.
 #. TRANSLATORS: stem-and-leaf accessibility: %s is the variable name.
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:527
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:533
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:569
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:625
 #, c-format
@@ -1633,24 +1612,23 @@ msgstr "Variable: %s"
 
 #. TRANSLATORS: heatmap accessibility: value range.
 #. 1st %s is the minimum, 2nd %s is the maximum.
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:532
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:538
 #, c-format
 msgid "Values range from %s to %s"
-msgstr ""
+msgstr "Los valores varían desde %s hasta %s"
 
 #. TRANSLATORS: heatmap accessibility: grouped row count. %zu is number of groups.
 #.
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:561
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:567
 #, c-format
-#| msgid "Groups"
 msgid "%zu groups"
-msgstr ""
+msgstr "%zu Grupos"
 
 #. TRANSLATORS: heatmap accessibility: total observation count. %zu is the count.
-#: Wisteria-Dataviz/src/graphs/heatmap.cpp:608
+#: Wisteria-Dataviz/src/graphs/heatmap.cpp:614
 #, c-format
 msgid "%zu values"
-msgstr ""
+msgstr "%zu valores"
 
 #: Wisteria-Dataviz/src/graphs/heatmap.h:249
 msgid "Groups"
@@ -1671,10 +1649,9 @@ msgstr "..."
 msgid "%s and <= %s"
 msgstr "%s y <= %s"
 
-#: Wisteria-Dataviz/src/graphs/histogram.cpp:753
-#| msgid "Histograms"
+#: Wisteria-Dataviz/src/graphs/histogram.cpp:757
 msgid "A histogram"
-msgstr ""
+msgstr "Histograma"
 
 #: Wisteria-Dataviz/src/graphs/likertchart.cpp:91
 #: Wisteria-Dataviz/src/graphs/likertchart.cpp:173
@@ -1770,21 +1747,20 @@ msgstr "Sin Respuesta"
 
 #: Wisteria-Dataviz/src/graphs/lineplot.cpp:136
 msgid "A line plot"
-msgstr ""
+msgstr "Gráfico de línea"
 
 #: Wisteria-Dataviz/src/graphs/lineplot.cpp:195
 #: Wisteria-Dataviz/src/graphs/multi_series_lineplot.cpp:338
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:215
 #, c-format
 msgid "%s (%zu points): "
-msgstr ""
+msgstr "%s (%zu puntos): "
 
 #: Wisteria-Dataviz/src/graphs/lineplot.cpp:199
 #: Wisteria-Dataviz/src/graphs/wcurveplot.cpp:219
 #, c-format
-#| msgid "Cutpoints"
 msgid "%zu points: "
-msgstr ""
+msgstr "%zu puntos: "
 
 #: Wisteria-Dataviz/src/graphs/lineplot.cpp:447
 #, c-format
@@ -1884,7 +1860,6 @@ msgid "Negatively associated with %s"
 msgstr "Asociado negativamente con %s"
 
 #: Wisteria-Dataviz/src/graphs/multi_series_lineplot.cpp:284
-#| msgid "'%s': y column not found for multi-series line plot."
 msgid "A multi-series line plot"
 msgstr ""
 
@@ -2015,9 +1990,8 @@ msgstr ""
 #. 3rd %s is the percentage (the literal %% is the percent sign).
 #: Wisteria-Dataviz/src/graphs/piechart.cpp:4603
 #, c-format
-#| msgid "%s (%s%%)"
 msgid "%s: %s (%s%%)"
-msgstr ""
+msgstr "%s: %s (%s%%)"
 
 #: Wisteria-Dataviz/src/graphs/piechart.cpp:4611
 #, c-format
@@ -2148,25 +2122,8 @@ msgstr ""
 #. ID label. 1st %s is the ID label, 2nd %s is the score value.
 #: Wisteria-Dataviz/src/graphs/scalechart.cpp:366
 #, c-format
-#| msgid "Shortcut for %s."
 msgid "Score for %s: %s"
-msgstr ""
-
-#. TRANSLATORS: scale chart accessibility: a single score with no ID.
-#. %s is the score value.
-#: Wisteria-Dataviz/src/graphs/scalechart.cpp:373
-#, c-format
-#| msgid "Score: "
-msgid "Score: %s"
-msgstr ""
-
-#. TRANSLATORS: scale chart accessibility: multiple scores summary.
-#. %zu is the score count, 1st %s is the lowest value, 2nd %s is the
-#. highest value.
-#: Wisteria-Dataviz/src/graphs/scalechart.cpp:386
-#, c-format
-msgid "%zu scores ranging from %s to %s"
-msgstr ""
+msgstr "Puntuación para %s: %s"
 
 #. TRANSLATORS: scale chart accessibility: which block of the
 #. current scale the single score lands in. %s is the block's
@@ -2174,7 +2131,7 @@ msgstr ""
 #: Wisteria-Dataviz/src/graphs/scalechart.cpp:464
 #, c-format
 msgid "score falls in %s"
-msgstr ""
+msgstr "la puntuación cae en %s"
 
 #. TRANSLATORS: scale chart accessibility: where the highest and
 #. lowest scores fall in the current scale. 1st %s is the highest
@@ -2184,61 +2141,61 @@ msgstr ""
 msgid "highest score in %s, lowest in %s"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:192
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:189
 msgid "A scatter plot"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:494
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:498
 msgid "Regression Line"
 msgstr ""
 
 #. TRANSLATORS: 'n' is number of observations.
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:504
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:508
 #, c-format
 msgid "n: %s\n"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:519
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:523
 msgid "R²: Undefined (insufficient variance in outcome)\n"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:532
+#. TRANSLATORS: 'r' is statistic in a regression.
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:538
 msgid "r: Undefined (constant variable detected)\n"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:542
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:548
 #, c-format
 msgid "p-value: < %.1e\n"
-msgstr ""
+msgstr "p-valor: < %.1e\n"
 
 #. TRANSLATORS: don't translate 'p' ('value' is OK) or '%.2e'
 #. (scientific notation)
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:550
-#, c-format
-msgid "p-value: %.2e\n"
-msgstr ""
-
-#. TRANSLATORS: don't translate 'p'.
 #: Wisteria-Dataviz/src/graphs/scatterplot.cpp:556
 #, c-format
-msgid "p-value: %s\n"
-msgstr ""
+msgid "p-value: %.2e\n"
+msgstr "p-valor: %.2e\n"
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:563
+#. TRANSLATORS: don't translate 'p'.
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:562
+#, c-format
+msgid "p-value: %s\n"
+msgstr "p-valor: %s\n"
+
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:569
 msgid "p-value: Undefined (insufficient degrees of freedom)\n"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:579
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:585
 msgid "Slope: Undefined (zero variance in predictor)\n"
 msgstr ""
 
-#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:583
+#: Wisteria-Dataviz/src/graphs/scatterplot.cpp:589
 msgid "Intercept: Undefined (model not estimable)\n"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:50
 #, c-format
-#| msgid "'%s': continuous column not found for box plot."
 msgid "'%s': continuous column not found for stem-and-leaf plot."
 msgstr ""
 
@@ -2278,7 +2235,7 @@ msgstr "Hoja"
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:409
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:418
 msgid "Stem"
-msgstr ""
+msgstr "Tallo"
 
 #. TRANSLATORS: Stem-and-leaf legend key line.
 #. %1 = stem digit, %2 = "(stem)", %3 = leaf digit,
@@ -2291,25 +2248,25 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:544
 msgid "(stem)"
-msgstr ""
+msgstr "(tallo)"
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:545
 msgid "(leaf)"
 msgstr "(hoja)"
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:564
-#| msgid "Key\n"
 msgid ""
 "Key\n"
 " \n"
 msgstr ""
+"Clave\n"
+" \n"
 
 #. TRANSLATORS: legend line showing the grouping variable name.
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:575
 #, c-format
-#| msgid "Groups"
 msgid "Grouped by: %s"
-msgstr ""
+msgstr "Agrupados por: %s"
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:617
 msgid "A back-to-back stem-and-leaf plot"
@@ -2336,9 +2293,8 @@ msgid "%zu observations across %zu stems"
 msgstr ""
 
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:680
-#| msgid "Rows: from"
 msgid ". Rows: "
-msgstr ""
+msgstr ". Filas: "
 
 #. TRANSLATORS: back-to-back stem-and-leaf row description.
 #. 1st %s is the left group label, 2nd %s is its leaf digits,
@@ -2347,15 +2303,14 @@ msgstr ""
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:690
 #, c-format
 msgid "%s: %s | stem %s | %s: %s"
-msgstr ""
+msgstr "%s: %s | tallo %s | %s: %s"
 
 #. TRANSLATORS: single-series stem-and-leaf row description.
 #. 1st %s is the stem value, 2nd %s is the leaf digits.
 #: Wisteria-Dataviz/src/graphs/stemandleafplot.cpp:699
 #, c-format
-#| msgid "Line #%s: %s"
 msgid "stem %s: %s"
-msgstr ""
+msgstr "tallo %s: %s"
 
 #: Wisteria-Dataviz/src/graphs/table.cpp:153
 #: Wisteria-Dataviz/src/graphs/table.cpp:223
@@ -2534,7 +2489,7 @@ msgstr "Nube de Palabras Importante"
 #: Wisteria-Dataviz/src/graphs/wordcloud.cpp:431
 #, c-format
 msgid "Top %zu words: "
-msgstr ""
+msgstr "Palabras principales de %zu: "
 
 #: Wisteria-Dataviz/src/ui/app.cpp:311
 msgid "All rights reserved."
@@ -3023,7 +2978,7 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:153
 msgid "Worksheet:"
-msgstr ""
+msgstr "Hoja de trabajo:"
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:175
 msgid "Skip rows:"
@@ -3038,7 +2993,6 @@ msgid "Leading zeros as text"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:199
-#| msgid "Very easy text"
 msgid "Years as text"
 msgstr ""
 
@@ -3061,7 +3015,6 @@ msgid "(None)"
 msgstr "(Ninguno)"
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:253
-#| msgid "Column Name"
 msgid "Column data type:"
 msgstr ""
 
@@ -3096,13 +3049,12 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:335
 #, c-format
-#| msgid ""
-#| "Unable to load theme file:\n"
-#| "%s"
 msgid ""
 "Unable to re-read the file:\n"
 "%s"
 msgstr ""
+"No se pudo releer el archivo: \n"
+"%s"
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:337
 msgid "Refresh Failed"
@@ -3120,7 +3072,6 @@ msgid "Worksheet Missing"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:398
-#| msgid "The following are being filtered:"
 msgid "The following columns are no longer in the file:\n"
 msgstr ""
 
@@ -3130,7 +3081,6 @@ msgid "The previously-selected ID column \"%s\" is no longer available."
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.cpp:414
-#| msgid "Column Name"
 msgid "Columns Removed"
 msgstr ""
 
@@ -3156,7 +3106,7 @@ msgstr "Error de Importación"
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.h:49
 msgid "Import Dataset"
-msgstr ""
+msgstr "Importar conjunto de datos"
 
 #: Wisteria-Dataviz/src/ui/dialogs/datasetimportdlg.h:69
 msgid "Edit Import Settings"
@@ -3645,9 +3595,8 @@ msgstr "Subproyecto:"
 
 #: Wisteria-Dataviz/src/ui/dialogs/pdfexportdlg.cpp:112
 #: Wisteria-Dataviz/src/ui/dialogs/projectsettingsdlg.cpp:71
-#| msgid "Key Words"
 msgid "Keywords:"
-msgstr ""
+msgstr "Palabras clave:"
 
 #: Wisteria-Dataviz/src/ui/dialogs/pdfexportdlg.cpp:122
 msgid "Compress content"
@@ -3741,11 +3690,11 @@ msgstr "Tamaño de página"
 
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:75
 msgid "Use page setup"
-msgstr ""
+msgstr "Utilizar la configuración de página"
 
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:210
 msgid "Interactive Features"
-msgstr ""
+msgstr "Características interactivas"
 
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:213
 msgid "Layout options"
@@ -3772,7 +3721,6 @@ msgid "Page shadow"
 msgstr ""
 
 #: Wisteria-Dataviz/src/ui/dialogs/svgexportdlg.cpp:262
-#| msgid "Highlighting"
 msgid "Hover highlighting"
 msgstr ""
 
@@ -4148,7 +4096,7 @@ msgstr ""
 
 #: app/readability_app.cpp:464
 msgid "Pepperoni pizza"
-msgstr ""
+msgstr "Pizza de pepperoni"
 
 #: app/readability_app.cpp:466
 msgid "Chocolate chip cookie"
@@ -4160,7 +4108,7 @@ msgstr "Taza de café"
 
 #: app/readability_app.cpp:469
 msgid "Pill"
-msgstr ""
+msgstr "Cápsula"
 
 #: app/readability_app.cpp:470
 msgid "Tractor"
@@ -8109,7 +8057,7 @@ msgstr "Acuarela Espesa"
 #: projects/base_project_view.cpp:317 projects/base_project_view.cpp:397
 #: projects/base_project_view.cpp:472
 msgid "Marker"
-msgstr ""
+msgstr "Marcador"
 
 #: projects/base_project_view.cpp:322 projects/base_project_view.cpp:402
 #: projects/base_project_view.cpp:477
@@ -16586,51 +16534,44 @@ msgid "Opens a project"
 msgstr "Abrir un proyecto"
 
 #: xrc_menu_strings.cpp:24 xrc_menu_strings.cpp:41 xrc_menu_strings.cpp:63
-#| msgid "Tests meant for primary-age materials."
 msgid "Sets the headers and footers for printed materials"
-msgstr ""
+msgstr "Establece los encabezados y pies de página para materiales impresos"
 
 #: xrc_menu_strings.cpp:25 xrc_menu_strings.cpp:42 xrc_menu_strings.cpp:64
-#| msgid "List Export Options"
 msgid "Set printer options"
-msgstr ""
+msgstr "Opciones de impresora"
 
 #: xrc_menu_strings.cpp:26 xrc_menu_strings.cpp:45 xrc_menu_strings.cpp:67
 msgid "Exits the application"
 msgstr "Sale de la aplicación"
 
 #: xrc_menu_strings.cpp:27 xrc_menu_strings.cpp:49 xrc_menu_strings.cpp:73
-#| msgid "Unfamiliar New Dale-Chall words"
 msgid "Show or hide the New Dale-Chall word list"
-msgstr ""
+msgstr "Mostrar o ocultar la lista de palabras de New Dale-Chall"
 
 #: xrc_menu_strings.cpp:28 xrc_menu_strings.cpp:50 xrc_menu_strings.cpp:74
-#| msgid "Shows or hides the bars' labels."
 msgid "Show or hide the Harris-Jacobson word list"
-msgstr ""
+msgstr "Mostrar o ocultar la lista de palabras de Harris-Jacobson"
 
 #: xrc_menu_strings.cpp:29 xrc_menu_strings.cpp:51 xrc_menu_strings.cpp:75
-#| msgid "Unfamiliar Spache Revised words"
 msgid "Show or hide the Spache Revised word list"
-msgstr ""
+msgstr "Mostrar o ocultar la lista de palabras de Spache Revised"
 
 #: xrc_menu_strings.cpp:30 xrc_menu_strings.cpp:52 xrc_menu_strings.cpp:76
-#| msgid "Shows or hides the sidebar."
 msgid "Show or hide the Dolch sight word list"
-msgstr ""
+msgstr "Muestra o esconde la lista de palabras de Dolch a la vista"
 
 #: xrc_menu_strings.cpp:31 xrc_menu_strings.cpp:53 xrc_menu_strings.cpp:77
 msgid "Opens the help"
-msgstr ""
+msgstr "Abre la ayuda"
 
 #: xrc_menu_strings.cpp:35 xrc_menu_strings.cpp:58
 msgid "Saves the project"
 msgstr "Guardar el proyecto"
 
 #: xrc_menu_strings.cpp:36 xrc_menu_strings.cpp:59
-#| msgid "Please specify a different name:"
 msgid "Saves the project as a different file"
-msgstr ""
+msgstr "Guarda el proyecto como un archivo diferente"
 
 #: xrc_menu_strings.cpp:37 xrc_menu_strings.cpp:60
 msgid "Exports the selected window"
@@ -16638,7 +16579,7 @@ msgstr "Exporta la ventana seleccionada"
 
 #: xrc_menu_strings.cpp:38 xrc_menu_strings.cpp:61
 msgid "Exports all the windows to a folder"
-msgstr ""
+msgstr "Exporta todas las ventanas a una carpeta"
 
 #: xrc_menu_strings.cpp:39 xrc_menu_strings.cpp:62
 msgid "Configures settings for the project"
@@ -16646,7 +16587,7 @@ msgstr "Cambie la configuración de este proyecto"
 
 #: xrc_menu_strings.cpp:40
 msgid "Opens the file you are analyzing in its native application"
-msgstr ""
+msgstr "Abre el archivo que estás analizando en su aplicación nativa"
 
 #: xrc_menu_strings.cpp:43 xrc_menu_strings.cpp:65
 msgid "Prints the active window"
@@ -16666,7 +16607,7 @@ msgstr "Selecciona todo el texto"
 
 #: xrc_menu_strings.cpp:48 xrc_menu_strings.cpp:70
 msgid "Reloads and recalculates the source document"
-msgstr ""
+msgstr "Recarga y recalcula el documento fuente"
 
 #: xrc_menu_strings.cpp:56
 msgid "Create a standard project from the selected document"
