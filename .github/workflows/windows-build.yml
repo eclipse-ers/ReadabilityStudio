@@ -213,14 +213,22 @@ jobs:
             $installDir = "$env:INSTALL_DIR"
             $manifestPath = "$installDir\manifest.txt"
 
-            Get-ChildItem -Path $installDir -Recurse -File |
+            $manifest = Get-ChildItem -Path $installDir -Recurse -File |
                 ForEach-Object {
                     $_.FullName.Replace("$installDir\", "")
                 } |
-                Sort-Object |
-                Out-File $manifestPath -Encoding utf8
+                Sort-Object
+
+            $manifest | Out-File $manifestPath -Encoding utf8
 
             Write-Host "Manifest created at $manifestPath"
+
+            Write-Host "::group::Installed Files ($($manifest.Count) files)"
+            $manifest | ForEach-Object { Write-Host $_ }
+            Write-Host "::endgroup::"
+
+            $summary = "## Installed File Manifest`n`n``````n" + ($manifest -join "`n") + "`n``````n"
+            $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
       - name: Archive Signed Installer
         uses: actions/upload-artifact@v7
