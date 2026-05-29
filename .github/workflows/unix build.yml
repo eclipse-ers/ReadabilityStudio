@@ -24,21 +24,59 @@ jobs:
              sudo apt-get update && sudo apt-get install xvfb cmake libtbb-dev libgtk-3-0 libgtk-3-dev libwebkit2gtk-4.1-0 libwebkit2gtk-4.1-dev libcurl4-openssl-dev
              git clone https://github.com/wxWidgets/wxWidgets.git --recurse-submodules
 
-      - name: Install LinuxDeploy
-        id: install-linuxdeploy
-        uses: miurahr/install-linuxdeploy-action@v1.8.0
+      - name: Install linuxdeploy
+        run: |
+             mkdir -p "$HOME/tools"
+             curl -fsSL -o "$HOME/tools/linuxdeploy" \
+               https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+             curl -fsSL -o "$HOME/tools/linuxdeploy-plugin-appimage" \
+               https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+             chmod +x "$HOME/tools/linuxdeploy" "$HOME/tools/linuxdeploy-plugin-appimage"
+             echo "$HOME/tools" >> "$GITHUB_PATH"
+
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+             mkdir -p ~/.gnupg
+             chmod 700 ~/.gnupg
+             echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+             gpgconf --kill gpg-agent
+             echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+             printf '%s' "$GPG_PASSPHRASE" > ~/.gnupg/passphrase
+             chmod 600 ~/.gnupg/passphrase
 
       - name: Build
+        env:
+          SIGN: 1
+          SIGN_KEY: ${{ secrets.GPG_KEY_ID }}
+          SIGN_OPTS: --pinentry-mode loopback --passphrase-file /home/runner/.gnupg/passphrase --batch --yes
+          APPIMAGE_EXTRACT_AND_RUN: 1
         run: |
              cmake . -DCMAKE_BUILD_TYPE=Release
              cmake --build . --target=readstudio -j4 --config Release
-             ${{ steps.install-linuxdeploy.outputs.linuxdeploy }} \
+             linuxdeploy \
                --appdir installers/unix/AppDir \
                --executable installers/unix/AppDir/usr/bin/readstudio \
                -d installers/unix/AppDir/readstudio.desktop \
                -i installers/unix/AppDir/app-logo.svg \
                --output appimage
-               mv Readability_Studio*.AppImage ./installers/unix
+             mv Readability_Studio*.AppImage ./installers/unix
+
+      - name: Verify AppImage signature
+        run: |
+             APPIMAGE=$(ls ./installers/unix/Readability_Studio*.AppImage | head -n1)
+             chmod +x "$APPIMAGE"
+             SIG=$("$APPIMAGE" --appimage-signature)
+             if [ -z "$SIG" ]; then
+               echo "ERROR: AppImage is not signed"
+               exit 1
+             fi
+             echo "Embedded signature:"
+             echo "$SIG"
+             echo "Signing key fingerprint:"
+             "$APPIMAGE" --appimage-signing-key
 
       - name: Archive AppImage
         uses: actions/upload-artifact@v4
