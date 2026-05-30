@@ -71,7 +71,6 @@
 #include "../readability/readability_project_test.h"
 #include "../test-helpers/tests_functional.h"
 #include "../ui/dialogs/about_dlg_ex.h"
-#include "../ui/dialogs/lua_editor_dlg.h"
 #include "../ui/dialogs/web_harvester_dlg.h"
 #include "../ui/dialogs/word_list_dlg.h"
 #include "../webharvester/webharvester.h"
@@ -92,6 +91,7 @@
 #include <wx/wx.h>
 
 class BaseProject;
+class ScriptWorkbenchPanel;
 
 /// @brief Extended icon provider, which is connected to application's
 ///     custom icons.
@@ -127,10 +127,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
             {
             m_logWindow->Destroy();
             }
-        if (m_luaEditor != nullptr)
-            {
-            m_luaEditor->Destroy();
-            }
         }
 
     void OnAbout([[maybe_unused]] wxCommandEvent& event);
@@ -157,7 +153,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnOpenExample(const wxCommandEvent& event);
     // pane events
     void OnWordListByPage(const wxCommandEvent& event);
-    void OnScriptEditor([[maybe_unused]] wxCommandEvent& event);
     // custom test events
     void OnAddCustomTest(const wxCommandEvent& event);
     void OnEditCustomTest([[maybe_unused]] wxCommandEvent& event);
@@ -288,21 +283,24 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     wxMenu m_testsBundleMenu;
     wxMenu* m_testsBundleRegularMenu{ nullptr };
 
-    /// @returns The lua editor dialog.
-    LuaEditorDlg* GetLuaEditor() noexcept { return m_luaEditor; }
-
-    /// @brief Resets the Lua editor window.
-    /// @note This should be called from document view's close event
-    ///     to ensure that this window gets cleaned up and re-parented.
-    void DestroyLuaEditor()
+    /// @returns The script workbench (hosted in the Developer ribbon tab).
+    [[nodiscard]]
+    ScriptWorkbenchPanel* GetScriptWorkbench() noexcept
         {
-        if (m_luaEditor != nullptr)
-            {
-            m_luaEditor->Hide();
-            m_luaEditor->Destroy();
-            m_luaEditor = nullptr;
-            }
+        return m_scriptWorkbench;
         }
+
+    /// @returns The Developer ribbon tab page.
+    [[nodiscard]]
+    wxRibbonPage* GetDeveloperRibbonPage() noexcept
+        {
+        return m_developerRibbonPage;
+        }
+
+    /// @brief Show MainFrame, switch the ribbon to the Developer tab,
+    ///     and focus the script workbench. Used by both the project frames'
+    ///     "Script" button and the Lua Application.ShowScriptEditor() API.
+    void ActivateScriptWorkbench();
 
     /// @returns The log report dialog.
     Wisteria::UI::ListDlg* GetLogWindow() noexcept { return m_logWindow; }
@@ -328,7 +326,8 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     std::vector<wxBitmapBundle> m_projectSideBarImageList;
 
     wxStartPage* m_startPage{ nullptr };
-    LuaEditorDlg* m_luaEditor{ nullptr };
+    ScriptWorkbenchPanel* m_scriptWorkbench{ nullptr };
+    wxRibbonPage* m_developerRibbonPage{ nullptr };
     Wisteria::UI::ListDlg* m_logWindow{ nullptr };
 
     wxDECLARE_CLASS(MainFrame);
@@ -437,6 +436,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void LoadRibbonDocumentPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype);
+    void LoadRibbonDeveloperPage(wxRibbonBar* ribbon);
     void LoadRibbonHelpPage(wxRibbonBar* ribbon);
 
     // menu creation

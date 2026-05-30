@@ -1392,14 +1392,6 @@ class ReadabilityAppOptions
         return m_uiLanguage;
         }
 
-    [[nodiscard]]
-    wxString GetScriptEditorLayout() const
-        {
-        return m_scriptEditorLayout;
-        }
-
-    void SetScriptEditorLayout(const wxString& layout) { m_scriptEditorLayout = layout; }
-
     // ribbon theming
     [[nodiscard]]
     wxColour GetRibbonActiveTabColor() const
@@ -2717,7 +2709,6 @@ class ReadabilityAppOptions
     int m_appWindowWidth{ 800 };
     int m_appWindowHeight{ 700 };
     UiLanguage m_uiLanguage{ UiLanguage::Default };
-    wxString m_scriptEditorLayout;
     // ribbon
     wxColour m_ribbonActiveTabColor{ wxColour{ 245, 246, 247 } };
     wxColour m_ribbonInactiveTabColor{ wxColour{ 254, 254, 254 } };
@@ -3169,8 +3160,6 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_WINDOW_WIDTH{ _DT("app-window-width") };
     inline constexpr static std::string_view XML_WINDOW_HEIGHT{ _DT("app-window-height") };
     inline constexpr static std::string_view XML_UI_LANGUAGE{ _DT("ui-language") };
-    inline constexpr static std::string_view XML_SCRIPT_EDITOR_LAYOUT{ _DT(
-        "script-editor-layout") };
     // web harvester options
     inline constexpr static std::string_view XML_USER_AGENT{ _DT("user-agent") };
     inline constexpr static std::string_view XML_DISABLE_PEER_VERIFY{ _DT("disable-peer-verify") };

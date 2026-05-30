@@ -98,10 +98,14 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int ShowScriptEditor(lua_State* L)
         {
-        if (wxGetApp().GetMainFrameEx()->GetLuaEditor() != nullptr)
+        const bool show = lua_gettop(L) > 0 ? int_to_bool(lua_toboolean(L, 1)) : true;
+        if (show)
             {
-            wxGetApp().GetMainFrameEx()->GetLuaEditor()->Show(
-                lua_gettop(L) > 0 ? int_to_bool(lua_toboolean(L, 1)) : true);
+            wxGetApp().GetMainFrameEx()->ActivateScriptWorkbench();
+            }
+        else
+            {
+            wxGetApp().GetMainFrameEx()->Hide();
             }
         return 1;
         }

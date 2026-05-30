@@ -69,6 +69,7 @@
 #include "../ui/dialogs/project_wizard_dlg.h"
 #include "../ui/dialogs/test_bundle_dlg.h"
 #include "../ui/dialogs/tools_options_dlg.h"
+#include "../ui/controls/script_workbench_panel.h"
 #include <algorithm>
 #include <utility>
 #include <wx/dir.h>
@@ -2867,6 +2868,57 @@ void ReadabilityApp::LoadRibbonHelpPage(wxRibbonBar* ribbon)
     }
 
 //-----------------------------------
+void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
+    {
+    const bool darkMode = wxSystemSettings::GetAppearance().IsDark();
+    GetMainFrameEx()->m_developerRibbonPage = new wxRibbonPage(ribbon, wxID_ANY, _(L"Developer"));
+
+    auto* scriptBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Script"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    scriptBar->AddButton(XRCID("ID_SCRIPT_NEW"), _(L"New"), ReadSvgIcon(L"ribbon/document.svg"),
+                         _(L"Create a new script."));
+    scriptBar->AddButton(XRCID("ID_SCRIPT_OPEN"), _(L"Open"), ReadSvgIcon(L"ribbon/file-open.svg"),
+                         _(L"Open a script."));
+    scriptBar->AddButton(XRCID("ID_SCRIPT_SAVE"), _(L"Save"), ReadSvgIcon(L"ribbon/file-save.svg"),
+                         _(L"Save the script."));
+
+    auto* runBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Run"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    runBar->AddButton(XRCID("ID_SCRIPT_RUN"), _(L"Run"), ReadSvgIcon(L"ribbon/run.svg"),
+                      _(L"Execute the script (or selection)."));
+    runBar->AddButton(XRCID("ID_SCRIPT_STOP"), _(L"Stop"), ReadSvgIcon(L"ribbon/stop.svg"),
+                      _(L"Stop the currently running script."));
+
+    auto* editBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Edit"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    editBar->AddButton(XRCID("ID_SCRIPT_FIND"), _(L"Find"), ReadSvgIcon(L"ribbon/find.svg"),
+                       _(L"Find text."));
+    editBar->AddButton(XRCID("ID_SCRIPT_REPLACE"), _(L"Replace"),
+                       ReadSvgIcon(L"ribbon/find-replace.svg"), _(L"Replace text."));
+
+    auto* debugBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Debug"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    debugBar->AddButton(XRCID("ID_SCRIPT_CLEAR_DEBUG"), _(L"Clear"),
+                        ReadSvgIcon(L"ribbon/clear.svg"), _(L"Clear the log window."));
+
+    auto* refBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Reference"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    refBar->AddButton(XRCID("ID_SCRIPT_FUNCTION_BROWSER"), _(L"Function Browser"),
+                      ReadSvgIcon(darkMode ? L"ribbon/function-dark.svg" : L"ribbon/function.svg"),
+                      _(L"View the function browser."));
+    refBar->AddButton(XRCID("ID_SCRIPT_API_PDF"), _(L"API"),
+                      ReadSvgIcon(L"ribbon/electronic-help.svg"), _(L"View the documentation."));
+    refBar->AddButton(XRCID("ID_SCRIPT_LUA_REFERENCE"), _(L"Lua Reference"),
+                      ReadSvgIcon(darkMode ? L"ribbon/lua-dark-mode.svg" : L"ribbon/lua.svg"),
+                      _(L"View the Lua Reference Manual."));
+    }
+
+//-----------------------------------
 wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc)
     {
     const RibbonType rtype = (doc == nullptr) ? RibbonType::MainFrameRibbon :
@@ -2880,6 +2932,10 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     LoadRibbonDocumentPage(ribbon, rtype);
     LoadRibbonReadabilityPage(ribbon, rtype);
     LoadRibbonToolsPage(ribbon, rtype);
+    if (rtype == RibbonType::MainFrameRibbon)
+        {
+        LoadRibbonDeveloperPage(ribbon);
+        }
     LoadRibbonHelpPage(ribbon);
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
@@ -3647,7 +3703,103 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     // list editing
     Bind(wxEVT_MENU, &MainFrame::OnEditWordList, this, XRCID("ID_EDIT_WORD_LIST"));
     Bind(wxEVT_MENU, &MainFrame::OnEditPhraseList, this, XRCID("ID_EDIT_PHRASE_LIST"));
-    Bind(wxEVT_MENU, &MainFrame::OnScriptEditor, this, XRCID("ID_SCRIPT_WINDOW"));
+
+    // "Lua Script" buttons on MainFrame Home tab and project frames' Tools tab
+    Bind(
+        wxEVT_MENU, [this](wxCommandEvent&) { ActivateScriptWorkbench(); },
+        XRCID("ID_SCRIPT_WINDOW"));
+
+    // Developer ribbon — swap start page <-> script workbench when the tab changes
+    Bind(wxEVT_RIBBONBAR_PAGE_CHANGED,
+         [this](wxRibbonBarEvent& evt)
+         {
+             const bool showWorkbench = (evt.GetPage() == m_developerRibbonPage);
+             if (GetScriptWorkbench() != nullptr)
+                 {
+                 GetScriptWorkbench()->Show(showWorkbench);
+                 }
+             if (m_startPage != nullptr)
+                 {
+                 m_startPage->Show(!showWorkbench);
+                 }
+             Layout();
+             if (showWorkbench && GetScriptWorkbench() != nullptr)
+                 {
+                 GetScriptWorkbench()->SetFocus();
+                 }
+             evt.Skip();
+         });
+
+    // Developer ribbon button handlers — forward to the workbench
+    const auto withWorkbench = [this](auto fn)
+    {
+        return [this, fn](wxCommandEvent&)
+        {
+            if (GetScriptWorkbench() != nullptr)
+                {
+                fn(GetScriptWorkbench());
+                }
+        };
+    };
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->NewScript(); }),
+         XRCID("ID_SCRIPT_NEW"));
+    Bind(
+        wxEVT_MENU,
+        [this](wxCommandEvent&)
+        {
+            if (GetScriptWorkbench() == nullptr)
+                {
+                return;
+                }
+            wxFileDialog dlg(this, _(L"Select Script to Open"), wxEmptyString, wxEmptyString,
+                             _(L"Lua Scripts (*.lua)|*.lua"),
+                             wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
+            if (dlg.ShowModal() == wxID_OK)
+                {
+                GetScriptWorkbench()->OpenScriptFromFile(dlg.GetPath());
+                }
+        },
+        XRCID("ID_SCRIPT_OPEN"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->SaveCurrentScript(); }),
+         XRCID("ID_SCRIPT_SAVE"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->RunCurrentScript(); }),
+         XRCID("ID_SCRIPT_RUN"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->StopScript(); }),
+         XRCID("ID_SCRIPT_STOP"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
+         XRCID("ID_SCRIPT_FIND"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),
+         XRCID("ID_SCRIPT_REPLACE"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->DebugClear(); }),
+         XRCID("ID_SCRIPT_CLEAR_DEBUG"));
+    Bind(wxEVT_MENU,
+         withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ToggleFunctionBrowser(); }),
+         XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
+    Bind(
+        wxEVT_MENU,
+        [](wxCommandEvent&)
+        {
+            const wxString manualPath = wxGetApp().GetMainFrameEx()->GetHelpDirectory() +
+                                        wxFileName::GetPathSeparator() +
+                                        _DT(L"readability-studio-api.pdf");
+            if (wxFile::Exists(manualPath))
+                {
+                wxLaunchDefaultApplication(manualPath);
+                }
+        },
+        XRCID("ID_SCRIPT_API_PDF"));
+    Bind(
+        wxEVT_MENU,
+        [](wxCommandEvent&)
+        {
+            const wxString helpPath = wxGetApp().GetMainFrameEx()->GetHelpDirectory() +
+                                      _DT(L"/lua-5.4/doc/contents.html");
+            if (wxFile::Exists(helpPath))
+                {
+                wxLaunchDefaultBrowser(wxFileName::FileNameToURL(helpPath));
+                }
+        },
+        XRCID("ID_SCRIPT_LUA_REFERENCE"));
 
     // dictionary menu
     Bind(wxEVT_MENU, &MainFrame::OnEditEnglishDictionary, this,
@@ -3695,9 +3847,9 @@ void ReadabilityApp::UpdateStartPageTheme()
 //---------------------------------------------------
 void ReadabilityApp::UpdateScriptEditorTheme()
     {
-    if (GetMainFrameEx()->GetLuaEditor() != nullptr)
+    if (GetMainFrameEx()->GetScriptWorkbench() != nullptr)
         {
-        GetMainFrameEx()->GetLuaEditor()->SetThemeColor(
+        GetMainFrameEx()->GetScriptWorkbench()->SetThemeColor(
             wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
         }
     }
@@ -3785,6 +3937,13 @@ void ReadabilityApp::InitStartPage()
     UpdateStartPageTheme();
 
     GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->GetStartPage(), wxSizerFlags{ 1 }.Expand());
+
+    // The script workbench shares the same sizer slot as the start page;
+    // the Developer ribbon tab swaps which one is visible.
+    GetMainFrameEx()->m_scriptWorkbench = new ScriptWorkbenchPanel(GetMainFrameEx());
+    GetMainFrameEx()->GetScriptWorkbench()->Hide();
+    GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->GetScriptWorkbench(),
+                                      wxSizerFlags{ 1 }.Expand());
     }
 
 //---------------------------------------------------
@@ -4074,30 +4233,26 @@ void MainFrame::OnWordListByPage(const wxCommandEvent& event)
     }
 
 //-------------------------------------------------------
-void MainFrame::OnScriptEditor([[maybe_unused]] wxCommandEvent& event)
+void MainFrame::ActivateScriptWorkbench()
     {
-    if (GetLuaEditor() != nullptr && GetLuaEditor()->IsShown())
+    if (GetScriptWorkbench() == nullptr || m_developerRibbonPage == nullptr)
         {
-        GetLuaEditor()->HideAllWindows();
         return;
         }
-
-    if (GetLuaEditor() == nullptr)
+    if (!IsShown())
         {
-        const wxSize screenSize{ wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X),
-                                 wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) };
-        m_luaEditor = new LuaEditorDlg(
-            nullptr, wxID_ANY, _(L"Lua Script"), wxDefaultPosition,
-            wxSize{ static_cast<int>(screenSize.GetWidth() * math_constants::third),
-                    static_cast<int>(screenSize.GetHeight() * math_constants::three_quarters) });
-        if (!wxGetApp().GetAppOptions()->GetScriptEditorLayout().empty())
-            {
-            GetLuaEditor()->LoadLayout(wxGetApp().GetAppOptions()->GetScriptEditorLayout());
-            }
+        Show();
         }
-    GetLuaEditor()->SetThemeColor(wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
-    GetLuaEditor()->ShowAllWindows();
-    GetLuaEditor()->SetFocus();
+    Raise();
+    GetRibbon()->SetActivePage(m_developerRibbonPage);
+    // manually fire the layout swap; SetActivePage() doesn't always emit a change event
+    GetScriptWorkbench()->Show(true);
+    if (m_startPage != nullptr)
+        {
+        m_startPage->Hide();
+        }
+    Layout();
+    GetScriptWorkbench()->SetFocus();
     }
 
 //-------------------------------------------------------
@@ -5049,15 +5204,18 @@ void MainFrame::OnClose(wxCloseEvent& event)
             wxMessageBox(_(L"Project still processing. Please wait before closing."),
                          wxFileName::StripExtension(doc->GetTitle()), wxOK | wxICON_EXCLAMATION);
             event.Veto();
+            return;
             }
+        }
+    if (GetScriptWorkbench() != nullptr && !GetScriptWorkbench()->PromptToSaveUnsavedScripts())
+        {
+        ActivateScriptWorkbench();
+        event.Veto();
+        return;
         }
     wxGetApp().GetAppOptions()->SetAppWindowMaximized(IsMaximized());
     wxGetApp().GetAppOptions()->SetAppWindowWidth(GetSize().GetWidth());
     wxGetApp().GetAppOptions()->SetAppWindowHeight(GetSize().GetHeight());
-    if (GetLuaEditor() != nullptr)
-        {
-        wxGetApp().GetAppOptions()->SetScriptEditorLayout(GetLuaEditor()->GetLayout());
-        }
     wxGetApp().GetAppOptions()->SetPaperId(wxGetApp().GetPrintData()->GetPaperId());
     wxGetApp().GetAppOptions()->SetPaperOrientation(wxGetApp().GetPrintData()->GetOrientation());
     event.Skip();

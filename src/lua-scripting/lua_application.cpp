@@ -59,6 +59,7 @@
 #include "../projects/base_project.h"
 #include "../projects/batch_project_doc.h"
 #include "../projects/standard_project_doc.h"
+#include "../ui/controls/script_workbench_panel.h"
 #include <wx/dir.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -866,14 +867,18 @@ namespace LuaScripting
                 }
             }
 
+        auto* workbench = wxGetApp().GetMainFrameEx()->GetScriptWorkbench();
         // write out the warnings of bad links
         for (const auto& badLink : badLinks)
             {
-            wxGetApp().GetMainFrameEx()->GetLuaEditor()->DebugOutput(
-                wxString::Format(_DT(L"Broken link in '<span style='font-weight:bold;'>%s</span>': "
-                                     "<span style='color:#FF7386; font-weight:bold;'>%s</span>",
-                                     DTExplanation::DebugMessage),
-                                 badLink.first, badLink.second));
+            if (workbench != nullptr)
+                {
+                workbench->DebugOutput(wxString::Format(
+                    _DT(L"Broken link in '<span style='font-weight:bold;'>%s</span>': "
+                        "<span style='color:#FF7386; font-weight:bold;'>%s</span>",
+                        DTExplanation::DebugMessage),
+                    badLink.first, badLink.second));
+                }
             wxLogError(L"Broken link in '%s': %s", badLink.first, badLink.second);
             }
         if (badLinks.empty())
@@ -884,10 +889,13 @@ namespace LuaScripting
         // match their size specified in a topic
         for (const auto& badImage : badImageSizes)
             {
-            wxGetApp().GetMainFrameEx()->GetLuaEditor()->DebugOutput(wxString::Format(
-                _DT(L"Bad image size in '<span style='font-weight:bold;'>%s</span>%s</span>': "
-                    "<span style='color:#FF7386; font-weight:bold;'>%s</span>"),
-                badImage.first, badImage.second));
+            if (workbench != nullptr)
+                {
+                workbench->DebugOutput(wxString::Format(
+                    _DT(L"Bad image size in '<span style='font-weight:bold;'>%s</span>%s</span>': "
+                        "<span style='color:#FF7386; font-weight:bold;'>%s</span>"),
+                    badImage.first, badImage.second));
+                }
             wxLogError(L"Bad image size in '%s': %s", badImage.first, badImage.second);
             }
         if (badImageSizes.empty())

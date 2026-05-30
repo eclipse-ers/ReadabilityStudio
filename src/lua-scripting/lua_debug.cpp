@@ -50,6 +50,7 @@
 #include "lua_debug.h"
 #include "../Wisteria-Dataviz/src/base/reportbuilder.h"
 #include "../app/readability_app.h"
+#include "../ui/controls/script_workbench_panel.h"
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)
@@ -138,7 +139,11 @@ namespace LuaScripting
     //-------------------------------------------------------------
     void DebugPrint(const wxString& str)
         {
-        wxGetApp().GetMainFrameEx()->GetLuaEditor()->DebugOutput(str);
+        auto* workbench = wxGetApp().GetMainFrameEx()->GetScriptWorkbench();
+        if (workbench != nullptr)
+            {
+            workbench->DebugOutput(str);
+            }
         wxGetApp().Yield();
         }
 
@@ -174,7 +179,11 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int Clear([[maybe_unused]] lua_State* L)
         {
-        wxGetApp().GetMainFrameEx()->GetLuaEditor()->DebugClear();
+        auto* workbench = wxGetApp().GetMainFrameEx()->GetScriptWorkbench();
+        if (workbench != nullptr)
+            {
+            workbench->DebugClear();
+            }
         wxGetApp().Yield();
         return 0;
         }

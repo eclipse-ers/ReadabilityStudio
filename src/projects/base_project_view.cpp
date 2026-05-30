@@ -575,7 +575,6 @@ bool BaseProjectView::OnClose(bool deleteWindow)
         }
 
     wxGetApp().GetMainFrameEx()->DestroyLogWindow();
-    wxGetApp().GetMainFrameEx()->DestroyLuaEditor();
 
     if (deleteWindow)
         {

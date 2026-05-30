@@ -44,6 +44,7 @@ SET(APP_SRC_FILES
     src/tinyexpr-plusplus/tinyexpr.cpp
     src/tinyxml2/tinyxml2.cpp
     src/ui/controls/explanation_listctrl.cpp
+    src/ui/controls/script_workbench_panel.cpp
     src/ui/controls/word_list_property.cpp
     src/ui/dialogs/about_dlg_ex.cpp
     src/ui/dialogs/custom_test_dlg.cpp
@@ -53,7 +54,6 @@ SET(APP_SRC_FILES
     src/ui/dialogs/export_all_dlg.cpp
     src/ui/dialogs/filtered_text_export_options_dlg.cpp
     src/ui/dialogs/filtered_text_preview_dlg.cpp
-    src/ui/dialogs/lua_editor_dlg.cpp
     src/ui/dialogs/new_custom_test_simple_dlg.cpp
     src/ui/dialogs/project_wizard_dlg.cpp
     src/ui/dialogs/test_bundle_dlg.cpp
