@@ -19,10 +19,10 @@
 #include "../../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
 #include <vector>
 #include <wx/fdrepdlg.h>
-#include <wx/html/htmlwin.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
 #include <wx/splitter.h>
+#include <wx/webview.h>
 
 /// @brief Script workbench: script sidebar, single-editor area, debug output,
 ///     and an optional function-browser column.
@@ -109,7 +109,8 @@ class ScriptWorkbenchPanel final : public wxPanel
 
     Wisteria::UI::SideBar* m_scriptSidebar{ nullptr };
     wxSimplebook* m_editorBook{ nullptr };
-    wxHtmlWindow* m_debugMessageWindow{ nullptr };
+    wxWebView* m_debugMessageWindow{ nullptr };
+    wxString m_debugContent;
     Wisteria::UI::FunctionBrowserCtrl* m_functionBrowser{ nullptr };
 
     wxWindowID m_scriptsFolderId{ wxNewId() };

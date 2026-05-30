@@ -162,7 +162,7 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
         }
     const wxDateTime endTime(wxDateTime::Now());
     LuaScripting::DebugPrint(
-        wxString::Format(_(L"Script ran for %s"), endTime.Subtract(startTime).Format()));
+        wxString::Format(_(L"⏱️Script ran for %s"), endTime.Subtract(startTime).Format()));
 
     m_quitRequested = false;
     m_isRunning = false;
@@ -217,13 +217,13 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
             LuaScripting::DebugPrint(
                 wxString::Format( // TRANSLATORS: %s around "Error" are highlight
                                   // tags. The last one is a line number.
-                    _(L"%sError%s: Chunk line #%s"),
+                    _(L"❌%sError%s: Chunk line #%s"),
                     L"<span style='color:#FF7386; font-weight:bold;'>", L"</span>", errorMessage));
             }
         }
     const wxDateTime endTime(wxDateTime::Now());
     LuaScripting::DebugPrint(
-        wxString::Format(_(L"Script ran for %s"), endTime.Subtract(startTime).Format()));
+        wxString::Format(_(L"⏱️Script ran for %s"), endTime.Subtract(startTime).Format()));
 
     m_quitRequested = false;
     m_isRunning = false;

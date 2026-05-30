@@ -13,7 +13,6 @@
 
 #include "script_workbench_panel.h"
 #include "../../Wisteria-Dataviz/src/base/colorbrewer.h"
-#include "../../Wisteria-Dataviz/src/import/html_extract_text.h"
 #include "../../app/readability_app.h"
 #include "../../lua-scripting/lua_interface.h"
 #include <array>
@@ -154,7 +153,7 @@ void ScriptWorkbenchPanel::CreateControls()
     m_sidebarSplitter->SplitVertically(m_scriptSidebar, m_funcBrowserSplitter, FromDIP(200));
 
     // debug output (bottom half)
-    m_debugMessageWindow = new wxHtmlWindow(m_outerSplitter);
+    m_debugMessageWindow = wxWebView::New(m_outerSplitter, wxID_ANY);
 
     m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugMessageWindow, -FromDIP(150));
 
@@ -616,15 +615,16 @@ void ScriptWorkbenchPanel::SetThemeColor(const wxColour& color)
     // re-render the debug window with a body bg matching the theme
     if (m_debugMessageWindow != nullptr)
         {
-        const wxString htmlText = *(m_debugMessageWindow->GetParser()->GetSource());
         const auto debugReportBody =
             wxString::Format(
-                L"<html>\n<body bgcolor=%s text=%s>", color.GetAsString(wxC2S_HTML_SYNTAX),
+                L"<html>\n<body "
+                L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:11pt;"
+                L"margin:10px;\">",
+                color.GetAsString(wxC2S_HTML_SYNTAX),
                 Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
                     wxC2S_HTML_SYNTAX)) +
-            wxString{ lily_of_the_valley::html_extract_text::get_body(htmlText.wc_str()) } +
-            L"\n</body>\n</html>";
-        m_debugMessageWindow->SetPage(debugReportBody);
+            m_debugContent + L"\n</body>\n</html>";
+        m_debugMessageWindow->SetPage(debugReportBody, L"");
         }
 
     if (m_scriptSidebar != nullptr)
@@ -646,17 +646,18 @@ void ScriptWorkbenchPanel::DebugOutput(const wxString& str)
         {
         return;
         }
-    const wxColour bkColor = m_debugMessageWindow->GetBackgroundColour();
-    const wxString htmlText = wxString{ lily_of_the_valley::html_extract_text::get_body(
-                                  m_debugMessageWindow->GetParser()->GetSource()->wc_str()) } +
-                              L"\n<br />" + str;
+    m_debugContent += L"\n<br />" + str;
+
+    const wxColour bkColor = GetBackgroundColour();
     const auto debugReportBody =
-        wxString::Format(L"<html>\n<body bgcolor=%s text=%s>",
+        wxString::Format(L"<html>\n<body "
+                         L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
+                         L"11pt;margin:10px;\">",
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),
                          Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
                              wxC2S_HTML_SYNTAX)) +
-        htmlText + L"\n</body>\n</html>";
-    m_debugMessageWindow->SetPage(debugReportBody);
+        m_debugContent + L"\n</body>\n</html>";
+    m_debugMessageWindow->SetPage(debugReportBody, wxString{});
     }
 
 //-------------------------------------------------------
@@ -666,13 +667,17 @@ void ScriptWorkbenchPanel::DebugClear()
         {
         return;
         }
-    const wxColour bkColor = m_debugMessageWindow->GetBackgroundColour();
+    m_debugContent.clear();
+
+    const wxColour bkColor = GetBackgroundColour();
     const auto debugReportBody =
-        wxString::Format(L"<html>\n<body bgcolor=%s text=%s>\n</body>\n</html>",
+        wxString::Format(L"<html>\n<body "
+                         L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
+                         L"11pt;margin:10px;\">\n</body>\n</html>",
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),
                          Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
                              wxC2S_HTML_SYNTAX));
-    m_debugMessageWindow->SetPage(debugReportBody);
+    m_debugMessageWindow->SetPage(debugReportBody, L"");
     }
 
 //-------------------------------------------------------
