@@ -2120,7 +2120,7 @@ void BaseProject::LoadHardWords()
     // (used for only_count_first_instance_of_proper_noun_as_unfamiliar method)
     const auto shouldSkipPossessiveProperNoun =
         [this, &stripPossessiveSuffix](const word_case_insensitive_no_stem& theWord,
-                                         size_t properCount)
+                                       size_t properCount)
     {
         if (theWord.is_possessive() && properCount > 0)
             {

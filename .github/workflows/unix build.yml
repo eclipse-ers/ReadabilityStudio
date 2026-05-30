@@ -52,8 +52,13 @@ jobs:
                echo "default-cache-ttl 7200"
                echo "max-cache-ttl 7200"
              } > ~/.gnupg/gpg-agent.conf
+             # restart/reload the agent so the new options (allow-preset-passphrase) take
+             # effect. avoid `gpg-agent --daemon`: it warns and exits non-zero (aborting
+             # under `set -e`) when the runner already has an agent running. gpgconf is
+             # idempotent, and --reload re-reads the conf even if the agent survived the kill.
              gpgconf --kill gpg-agent
-             gpg-agent --daemon
+             gpgconf --launch gpg-agent
+             gpgconf --reload gpg-agent
              echo "$GPG_PRIVATE_KEY" | gpg --batch --import
              # preset the passphrase into the agent for every secret keygrip
              GPG_PRESET="$(gpgconf --list-dirs libexecdir)/gpg-preset-passphrase"

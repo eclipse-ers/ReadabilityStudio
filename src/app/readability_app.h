@@ -296,7 +296,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
         {
         return m_developerRibbonPage;
         }
-    
+
     /// @returns The Home ribbon tab page.
     [[nodiscard]]
     wxRibbonPage* GetHomeRibbonPage() noexcept

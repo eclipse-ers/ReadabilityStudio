@@ -2906,7 +2906,8 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     refBar->AddButton(XRCID("ID_SCRIPT_FUNCTION_BROWSER"), _(L"Function Browser"),
                       ReadSvgIcon(darkMode ? L"ribbon/function-dark.svg" : L"ribbon/function.svg"),
                       _(L"View the function browser."));
-    refBar->AddButton(XRCID("ID_SCRIPT_API_PDF"), _(L"API"),
+    refBar->AddButton(XRCID("ID_SCRIPT_API_PDF"),
+                      /* TRANSLATORS: Application Programming Interface */ _(L"API"),
                       ReadSvgIcon(L"ribbon/electronic-help.svg"), _(L"View the documentation."));
     refBar->AddButton(XRCID("ID_SCRIPT_LUA_REFERENCE"), _(L"Lua Reference"),
                       ReadSvgIcon(darkMode ? L"ribbon/lua-dark-mode.svg" : L"ribbon/lua.svg"),
