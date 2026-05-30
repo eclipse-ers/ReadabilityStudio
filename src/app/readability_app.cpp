@@ -2489,14 +2489,14 @@ void ReadabilityApp::LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage)
 void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rtype,
                                         const wxDocument* doc)
     {
-    auto* homePage = new wxRibbonPage(ribbon, wxID_ANY, _(L"Home"),
-                                      ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ?
-                                                      L"ribbon/home-dark-mode.svg" :
-                                                      L"ribbon/home.svg",
-                                                  wxSize{ 16, 16 }));
+    GetMainFrameEx()->m_homeRibbonPage = new wxRibbonPage(
+        ribbon, wxID_ANY, _(L"Home"),
+        ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ? L"ribbon/home-dark-mode.svg" :
+                                                                 L"ribbon/home.svg",
+                    wxSize{ 16, 16 }));
     auto* projectPanel =
-        new wxRibbonPanel(homePage, wxID_ANY, _(L"Project"), wxNullBitmap, wxDefaultPosition,
-                          wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY, _(L"Project"), wxNullBitmap,
+                          wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
     auto* projectButtonBar =
         new wxRibbonButtonBar(projectPanel, MainFrame::ID_PROJECT_RIBBON_BUTTON_BAR);
     projectButtonBar->AddHybridButton(wxID_NEW, _(L"New"), ReadSvgIcon(L"ribbon/document.svg"),
@@ -2505,9 +2505,9 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
                                       _(L"Open an existing project."));
     if (rtype == RibbonType::BatchProjectRibbon)
         {
-        auto* documentsPanel =
-            new wxRibbonPanel(homePage, wxID_ANY, _(L"Documents"), wxNullBitmap, wxDefaultPosition,
-                              wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* documentsPanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
+                                                 _(L"Documents"), wxNullBitmap, wxDefaultPosition,
+                                                 wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         auto* documentsButtonBar = new wxRibbonButtonBar(documentsPanel);
         documentsButtonBar->AddButton(XRCID("ID_SEND_TO_STANDARD_PROJECT"), _(L"Subproject"),
                                       ReadSvgIcon(L"ribbon/send-to-subproject.svg"),
@@ -2546,19 +2546,19 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
 
         // edit sections
         //--------------
-        LoadRibbonHomePageListSection(homePage);
-        LoadRibbonHomePageHtmlReportSection(homePage);
-        LoadRibbonHomePageExplanationListSection(homePage);
-        LoadRibbonHomePageTextWindowSection(homePage);
-        LoadRibbonHomePageStatisticsReportSection(homePage);
-        LoadRibbonHomePageGraphSection(homePage, doc);
+        LoadRibbonHomePageListSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePageHtmlReportSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePageExplanationListSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePageTextWindowSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePageStatisticsReportSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePageGraphSection(GetMainFrameEx()->m_homeRibbonPage, doc);
         }
     else // rtype == RibbonType::MainFrameRibbon
         {
         // settings section
-        auto* settingsPanel =
-            new wxRibbonPanel(homePage, wxID_ANY, _(L"Settings"), wxNullBitmap, wxDefaultPosition,
-                              wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* settingsPanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
+                                                _(L"Settings"), wxNullBitmap, wxDefaultPosition,
+                                                wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         auto* settingsButtonBar = new wxRibbonButtonBar(settingsPanel);
         settingsButtonBar->AddDropdownButton(XRCID("ID_PRINT_OPTIONS"), _(L"Printing"),
                                              ReadSvgIcon(L"ribbon/print.svg"),
@@ -2570,9 +2570,9 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
                                      ReadSvgIcon(L"ribbon/configure.svg"),
                                      _(L"Change the program's general options."));
         // test section
-        auto* readabilityTestsPanel =
-            new wxRibbonPanel(homePage, wxID_ANY, _(L"Readability Tests"), wxNullBitmap,
-                              wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* readabilityTestsPanel = new wxRibbonPanel(
+            GetMainFrameEx()->m_homeRibbonPage, wxID_ANY, _(L"Readability Tests"), wxNullBitmap,
+            wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         auto* readabilityTestsBar = new wxRibbonButtonBar(readabilityTestsPanel);
         readabilityTestsBar->AddDropdownButton(XRCID("ID_CUSTOM_TESTS"), _(L"Custom"),
                                                ReadSvgIcon(L"ribbon/formula.svg"),
@@ -2590,9 +2590,9 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
             XRCID("ID_BLANK_GRAPHS"), _(L"Blank Graphs"), ReadSvgIcon(L"ribbon/blank-graphs.svg"),
             _(L"Print or save blank readability graph templates."));
         // tools section
-        auto* toolsPanel =
-            new wxRibbonPanel(homePage, wxID_ANY, _(L"Tools"), wxNullBitmap, wxDefaultPosition,
-                              wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* toolsPanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
+                                             _(L"Tools"), wxNullBitmap, wxDefaultPosition,
+                                             wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         auto* toolButtonBar = new wxRibbonButtonBar(toolsPanel);
         toolButtonBar->AddButton(XRCID("ID_WEB_HARVEST"), _(L"Web Harvester"),
                                  ReadSvgIcon(L"ribbon/web-export.svg"),
@@ -2608,11 +2608,6 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         toolButtonBar->AddButton(XRCID("ID_VIEW_LOG_REPORT"), _(L"Log Report"),
                                  ReadSvgIcon(L"ribbon/log-book.svg"),
                                  _(L"View diagnostic information being logged by the program."));
-        toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Lua Script"),
-                                 ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ?
-                                                 L"ribbon/lua-dark-mode.svg" :
-                                                 L"ribbon/lua.svg"),
-                                 _(L"Edit and run scripts to automate tasks."));
 #ifndef NDEBUG
     #ifdef ENABLE_PROFILING
         toolButtonBar->AddButton(XRCID("ID_VIEW_PROFILE_REPORT"), _(L"Profile Report"),
@@ -4253,6 +4248,26 @@ void MainFrame::ActivateScriptWorkbench()
         }
     Layout();
     GetScriptWorkbench()->SetFocus();
+    }
+
+//-------------------------------------------------------
+void MainFrame::ActivateHomePage()
+    {
+    if (GetHomeRibbonPage() == nullptr)
+        {
+        return;
+        }
+    if (!IsShown())
+        {
+        Show();
+        }
+    Raise();
+    GetRibbon()->SetActivePage(GetHomeRibbonPage());
+    if (m_startPage != nullptr)
+        {
+        m_startPage->Show();
+        }
+    Layout();
     }
 
 //-------------------------------------------------------

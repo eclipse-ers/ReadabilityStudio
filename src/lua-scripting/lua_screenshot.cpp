@@ -105,7 +105,7 @@ namespace LuaScripting
             }
         else
             {
-            wxGetApp().GetMainFrameEx()->Hide();
+            wxGetApp().GetMainFrameEx()->ActivateHomePage();
             }
         return 1;
         }

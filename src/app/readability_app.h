@@ -296,11 +296,20 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
         {
         return m_developerRibbonPage;
         }
+    
+    /// @returns The Home ribbon tab page.
+    [[nodiscard]]
+    wxRibbonPage* GetHomeRibbonPage() noexcept
+        {
+        return m_homeRibbonPage;
+        }
 
     /// @brief Show MainFrame, switch the ribbon to the Developer tab,
-    ///     and focus the script workbench. Used by both the project frames'
-    ///     "Script" button and the Lua Application.ShowScriptEditor() API.
+    ///     and focus the script workbench.
     void ActivateScriptWorkbench();
+
+    /// @brief Show MainFrame and switch the ribbon to the Home tab.
+    void ActivateHomePage();
 
     /// @returns The log report dialog.
     Wisteria::UI::ListDlg* GetLogWindow() noexcept { return m_logWindow; }
@@ -327,6 +336,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 
     wxStartPage* m_startPage{ nullptr };
     ScriptWorkbenchPanel* m_scriptWorkbench{ nullptr };
+    wxRibbonPage* m_homeRibbonPage{ nullptr };
     wxRibbonPage* m_developerRibbonPage{ nullptr };
     Wisteria::UI::ListDlg* m_logWindow{ nullptr };
 
