@@ -2105,7 +2105,7 @@ void BaseProject::LoadHardWords()
     PROFILE();
 
     // helper to strip possessive suffix from a word (e.g., "John's" -> "John")
-    const auto strip_possessive_suffix = [](auto the_word)
+    const auto stripPossessiveSuffix = [](auto the_word)
     {
         if (the_word.length() >= 2 &&
             characters::is_character::is_apostrophe(the_word[the_word.length() - 2]) &&
@@ -2119,12 +2119,12 @@ void BaseProject::LoadHardWords()
     // helper to check if possessive proper noun should be skipped because base form will handle it
     // (used for only_count_first_instance_of_proper_noun_as_unfamiliar method)
     const auto shouldSkipPossessiveProperNoun =
-        [this, &strip_possessive_suffix](const word_case_insensitive_no_stem& theWord,
+        [this, &stripPossessiveSuffix](const word_case_insensitive_no_stem& theWord,
                                          size_t properCount)
     {
         if (theWord.is_possessive() && properCount > 0)
             {
-            const auto baseWord = strip_possessive_suffix(theWord);
+            const auto baseWord = stripPossessiveSuffix(theWord);
             if (baseWord != theWord)
                 {
                 const auto baseIter = m_word_frequency_map->get_data().find(baseWord);

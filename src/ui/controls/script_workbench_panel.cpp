@@ -624,7 +624,7 @@ void ScriptWorkbenchPanel::SetThemeColor(const wxColour& color)
                 Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
                     wxC2S_HTML_SYNTAX)) +
             m_debugContent + L"\n</body>\n</html>";
-        m_debugMessageWindow->SetPage(debugReportBody, L"");
+        m_debugMessageWindow->SetPage(debugReportBody, wxString{});
         }
 
     if (m_scriptSidebar != nullptr)
@@ -677,7 +677,7 @@ void ScriptWorkbenchPanel::DebugClear()
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),
                          Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
                              wxC2S_HTML_SYNTAX));
-    m_debugMessageWindow->SetPage(debugReportBody, L"");
+    m_debugMessageWindow->SetPage(debugReportBody, wxString{});
     }
 
 //-------------------------------------------------------
