@@ -3723,14 +3723,15 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(wxEVT_RIBBONBAR_PAGE_CHANGED,
          [this](wxRibbonBarEvent& evt)
          {
+             wxWindowUpdateLocker locker{ this };
              const bool showWorkbench = (evt.GetPage() == m_developerRibbonPage);
              if (GetScriptWorkbench() != nullptr)
                  {
                  GetScriptWorkbench()->Show(showWorkbench);
                  }
-             if (m_startPage != nullptr)
+             if (GetStartPage() != nullptr)
                  {
-                 m_startPage->Show(!showWorkbench);
+                 GetStartPage()->Show(!showWorkbench);
                  }
              Layout();
              if (showWorkbench && GetScriptWorkbench() != nullptr)
