@@ -124,7 +124,7 @@ Copy selection                          `r keys(c('Ctrl','C'))` (`r os_logo('win
 &nbsp;                                  &nbsp;
 
 Copy first column of selection          `r keys(c('Ctrl','Shift','C'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
-                                        `r keys(c('\\cmd','Shift','C'))` (`r os_logo('apple')`)
+                                        `r keys(c('\\cmd','\\shift','C'))` (`r os_logo('apple')`)
 
 &nbsp;                                  &nbsp;
 
@@ -190,23 +190,28 @@ Table: Script Editor
 ------------------------------------------------------------------------------------------------
 To do this                              Press                                               
 --------------------------------------- --------------------------------------------------------
-Create a new script                     `r keys(c('Ctrl','N'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
-                                        `r keys(c('\\cmd','N'))` (`r os_logo('apple')`)
+Create a new script                     `r keys(c('Ctrl','Shift','N'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\cmd','\\shift','N'))` (`r os_logo('apple')`)
 
 &nbsp;                                  &nbsp;
 
-Open a script                           `r keys(c('Ctrl','O'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
-                                        `r keys(c('\\cmd','O'))` (`r os_logo('apple')`)
+Open a script                           `r keys(c('Ctrl','Shift','O'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\cmd','\\shift','O'))` (`r os_logo('apple')`)
 
 &nbsp;                                  &nbsp;
 
-Save the script                         `r keys(c('Ctrl','S'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
-                                        `r keys(c('\\cmd','S'))` (`r os_logo('apple')`)
+Save the script                         `r keys(c('Ctrl','Shift','S'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\cmd','\\shift','S'))` (`r os_logo('apple')`)
 
 &nbsp;                                  &nbsp;
 
 Run selection<br>\linebreak             `r keys('F5')`
 (or full script if no selection)
+
+&nbsp;                                  &nbsp;
+
+Stop running                            `r keys(c('Shift','F5'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\shift','F5'))` (`r os_logo('apple')`)
 
 &nbsp;                                  &nbsp;
 

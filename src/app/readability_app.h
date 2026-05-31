@@ -292,14 +292,23 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 
     /// @returns The Developer ribbon tab page.
     [[nodiscard]]
-    wxRibbonPage* GetDeveloperRibbonPage() noexcept
+    wxRibbonPage* GetDeveloperRibbonPage() const noexcept
         {
         return m_developerRibbonPage;
         }
 
+    /// @returns @c true if the Developer ribbon tab is currently the active page.
+    [[nodiscard]]
+    bool IsDeveloperTabActive() const noexcept
+        {
+        return (GetRibbon() != nullptr && GetDeveloperRibbonPage() != nullptr &&
+                GetRibbon()->GetActivePage() ==
+                    GetRibbon()->GetPageNumber(GetDeveloperRibbonPage()));
+        }
+
     /// @returns The Home ribbon tab page.
     [[nodiscard]]
-    wxRibbonPage* GetHomeRibbonPage() noexcept
+    wxRibbonPage* GetHomeRibbonPage() const noexcept
         {
         return m_homeRibbonPage;
         }

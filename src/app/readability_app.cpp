@@ -3474,11 +3474,18 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     {
     Bind(wxEVT_MENU, &MainFrame::OnOpenExample, this, EXAMPLE_RANGE.GetFirstId(),
          EXAMPLE_RANGE.GetLastId());
-    const auto accelEntries =
-        std::to_array<wxAcceleratorEntry>({ { wxACCEL_NORMAL, WXK_F1, wxID_HELP },
-                                            { wxACCEL_CMD, static_cast<int>(L'N'), wxID_NEW },
-                                            { wxACCEL_CMD, static_cast<int>(L'O'), wxID_OPEN },
-                                            { wxACCEL_CMD, static_cast<int>(L'V'), wxID_PASTE } });
+    const auto accelEntries = std::to_array<wxAcceleratorEntry>(
+        { { wxACCEL_NORMAL, WXK_F1, wxID_HELP },
+          { wxACCEL_CMD, static_cast<int>(L'N'), wxID_NEW },
+          { wxACCEL_CMD, static_cast<int>(L'O'), wxID_OPEN },
+          { wxACCEL_CMD, static_cast<int>(L'V'), wxID_PASTE },
+          { wxACCEL_CMD, static_cast<int>(L'F'), XRCID("ID_SCRIPT_FIND") },
+          { wxACCEL_CMD, static_cast<int>(L'H'), XRCID("ID_SCRIPT_REPLACE") },
+          { wxACCEL_CMD | wxACCEL_SHIFT, static_cast<int>(L'N'), XRCID("ID_SCRIPT_NEW") },
+          { wxACCEL_CMD | wxACCEL_SHIFT, static_cast<int>(L'O'), XRCID("ID_SCRIPT_OPEN") },
+          { wxACCEL_CMD | wxACCEL_SHIFT, static_cast<int>(L'S'), XRCID("ID_SCRIPT_SAVE") },
+          { wxACCEL_NORMAL, WXK_F5, XRCID("ID_SCRIPT_RUN") },
+          { wxACCEL_SHIFT, WXK_F5, XRCID("ID_SCRIPT_STOP") } });
 
     wxWindowBase::SetAcceleratorTable(
         wxAcceleratorTable{ accelEntries.size(), accelEntries.data() });
@@ -3734,7 +3741,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     {
         return [this, fn](wxCommandEvent&)
         {
-            if (GetScriptWorkbench() != nullptr)
+            if (GetScriptWorkbench() != nullptr && IsDeveloperTabActive())
                 {
                 fn(GetScriptWorkbench());
                 }
@@ -3742,23 +3749,19 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     };
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->NewScript(); }),
          XRCID("ID_SCRIPT_NEW"));
-    Bind(
-        wxEVT_MENU,
-        [this](wxCommandEvent&)
-        {
-            if (GetScriptWorkbench() == nullptr)
-                {
-                return;
-                }
-            wxFileDialog dlg(this, _(L"Select Script to Open"), wxEmptyString, wxEmptyString,
-                             _(L"Lua Scripts (*.lua)|*.lua"),
-                             wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
-            if (dlg.ShowModal() == wxID_OK)
-                {
-                GetScriptWorkbench()->OpenScriptFromFile(dlg.GetPath());
-                }
-        },
-        XRCID("ID_SCRIPT_OPEN"));
+    Bind(wxEVT_MENU,
+         withWorkbench(
+             [this](ScriptWorkbenchPanel* panel)
+             {
+                 wxFileDialog dlg(this, _(L"Select Script to Open"), wxEmptyString, wxEmptyString,
+                                  _(L"Lua Scripts (*.lua)|*.lua"),
+                                  wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
+                 if (dlg.ShowModal() == wxID_OK)
+                     {
+                     panel->OpenScriptFromFile(dlg.GetPath());
+                     }
+             }),
+         XRCID("ID_SCRIPT_OPEN"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->SaveCurrentScript(); }),
          XRCID("ID_SCRIPT_SAVE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->RunCurrentScript(); }),
