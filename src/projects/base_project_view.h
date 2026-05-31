@@ -754,7 +754,7 @@ class BaseProjectView : public wxView
 
     void OnDClickRibbonBar([[maybe_unused]] wxRibbonBarEvent& event);
 
-    void OnClickRibbonBar([[maybe_unused]] wxRibbonBarEvent& event);
+    void OnClickRibbonBar(wxRibbonBarEvent& event);
 
     void OnCloseInfoBar([[maybe_unused]] wxCommandEvent& event);
 

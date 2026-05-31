@@ -3724,7 +3724,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          [this](wxRibbonBarEvent& evt)
          {
              wxWindowUpdateLocker locker{ this };
-             const bool showWorkbench = (evt.GetPage() == m_developerRibbonPage);
+             const bool showWorkbench = (evt.GetPage() == GetDeveloperRibbonPage());
              if (GetScriptWorkbench() != nullptr)
                  {
                  GetScriptWorkbench()->Show(showWorkbench);

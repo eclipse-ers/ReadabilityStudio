@@ -1149,9 +1149,10 @@ void BaseProjectView::OnDClickRibbonBar([[maybe_unused]] wxRibbonBarEvent& event
     }
 
 //---------------------------------------------------
-void BaseProjectView::OnClickRibbonBar([[maybe_unused]] wxRibbonBarEvent& event)
+void BaseProjectView::OnClickRibbonBar(wxRibbonBarEvent& event)
     {
     GetRibbon()->ShowPanels();
+    event.Skip();
     }
 
 //-------------------------------------------------------
@@ -1163,7 +1164,7 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
     m_frame = CreateChildFrame(doc, this);
     SetFrame(m_frame);
 
-    m_maxColumnWidth = GetDocFrame()->FromDIP(wxSize(200, 200)).GetWidth();
+    m_maxColumnWidth = GetDocFrame()->FromDIP(wxSize{ 200, 200 }).GetWidth();
 
     m_splitter = new wxSplitterWindow(m_frame, SPLITTER_ID, wxDefaultPosition,
                                       m_frame->GetClientSize(), wxSP_LIVE_UPDATE | wxSP_NOBORDER);
