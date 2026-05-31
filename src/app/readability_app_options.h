@@ -701,6 +701,16 @@ class ReadabilityAppOptions
     /// @warning Enabling this allows scripts to execute system commands and access files.
     void EnableLuaUnsafeMode(const bool enable) noexcept { m_luaUnsafeMode = enable; }
 
+    /// @returns @c true if the Developer ribbon tab is shown.
+    [[nodiscard]]
+    bool IsShowingDeveloperTab() const noexcept
+        {
+        return m_showDeveloperTab;
+        }
+
+    /// @brief Shows or hides the Developer ribbon tab.
+    void ShowDeveloperTab(const bool show) noexcept { m_showDeveloperTab = show; }
+
     void SetTextHighlightMethod(const TextHighlight highlight) noexcept
         {
         m_textHighlight = highlight;
@@ -2621,6 +2631,7 @@ class ReadabilityAppOptions
 
     // Lua scripting - enables os, io, debug libraries (security risk)
     bool m_luaUnsafeMode{ false };
+    bool m_showDeveloperTab{ true };
 
     wxColour m_dolchConjunctionsColor{ wxColour{ 255, 255, 0 } };
     wxColour m_dolchPrepositionsColor{ wxColour{ 0, 245, 255 } };
@@ -2923,6 +2934,7 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_IGNORE_NUMERALS{ _DT("ignore-numerals") };
     inline constexpr static std::string_view XML_IGNORE_PROPER_NOUNS{ _DT("ignore-proper-nouns") };
     inline constexpr static std::string_view XML_LUA_UNSAFE_MODE{ _DT("lua-unsafe-mode") };
+    inline constexpr static std::string_view XML_SHOW_DEVELOPER_TAB{ _DT("show-developer-tab") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_PATH{ _DT(
         "excluded-phrases-filepath") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE{ _DT(

@@ -143,7 +143,11 @@ The following are informational messages shown interactively in the program:
 **Append daily log**: Select this option to append to the previous log report (when running the program on the same day).
 The default behavior is to clear the log file every time the program starts.
 
-### Scripting {-}
+### Developer {-}
+
+**Show Developer tab**: Select this option to show the **Developer** tab on the ribbon.
+The **Developer** tab provides access to the Lua script editor, which can be used to automate tasks and run custom analyses.
+Uncheck this to hide the tab if you do not use these features.
 
 **Allow Lua scripts to access system commands**: Select this option to enable the `io`, `os`, and `debug` libraries in the Lua scripting environment.
 By default, these libraries are disabled for security reasons.

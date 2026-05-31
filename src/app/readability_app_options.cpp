@@ -403,6 +403,7 @@ void ReadabilityAppOptions::ResetSettings()
         }
     m_logAppendDailyLog = false;
     m_luaUnsafeMode = false;
+    m_showDeveloperTab = true;
 
     m_textHighlight = TextHighlight::HighlightBackground;
     m_dolchConjunctionsColor = wxColour(255, 255, 0);
@@ -2457,6 +2458,13 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             EnableLuaUnsafeMode(
                 int_to_bool(luaUnsafeModeNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
             }
+        auto* showDeveloperTabNode =
+            logSettingsNode->FirstChildElement(XML_SHOW_DEVELOPER_TAB.data());
+        if (showDeveloperTabNode != nullptr)
+            {
+            ShowDeveloperTab(
+                int_to_bool(showDeveloperTabNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
         }
     // printer settings
     auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
@@ -3201,6 +3209,10 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* luaUnsafeMode = doc.NewElement(XML_LUA_UNSAFE_MODE.data());
     luaUnsafeMode->SetAttribute(XML_VALUE.data(), bool_to_int(IsLuaUnsafeModeEnabled()));
     logSection->InsertEndChild(luaUnsafeMode);
+
+    auto* showDeveloperTab = doc.NewElement(XML_SHOW_DEVELOPER_TAB.data());
+    showDeveloperTab->SetAttribute(XML_VALUE.data(), bool_to_int(IsShowingDeveloperTab()));
+    logSection->InsertEndChild(showDeveloperTab);
 
     configSection->InsertEndChild(logSection);
 

@@ -788,6 +788,7 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
       m_logAppendDailyLog(wxGetApp().GetAppOptions()->IsAppendingDailyLog()),
       // scripting options
+      m_showDeveloperTab(wxGetApp().GetAppOptions()->IsShowingDeveloperTab()),
       m_luaUnsafeMode(wxGetApp().GetAppOptions()->IsLuaUnsafeModeEnabled()),
       // project settings
       m_projectLanguage(static_cast<int>((project != nullptr) ?
@@ -1797,6 +1798,23 @@ void ToolsOptionsDlg::SaveOptions()
     if (m_logAppendDailyLog.has_changed())
         {
         wxGetApp().GetAppOptions()->AppendDailyLog(m_logAppendDailyLog.get_value());
+        }
+    if (m_showDeveloperTab.has_changed())
+        {
+        wxGetApp().GetAppOptions()->ShowDeveloperTab(m_showDeveloperTab.get_value());
+        auto* mainFrame = wxGetApp().GetMainFrameEx();
+        if (mainFrame != nullptr && mainFrame->GetRibbon() != nullptr &&
+            mainFrame->GetDeveloperRibbonPage() != nullptr)
+            {
+            if (!m_showDeveloperTab.get_value() && mainFrame->IsDeveloperTabActive())
+                {
+                mainFrame->GetRibbon()->SetActivePage(mainFrame->GetHomeRibbonPage());
+                }
+            mainFrame->GetRibbon()->ShowPage(
+                mainFrame->GetRibbon()->GetPageNumber(mainFrame->GetDeveloperRibbonPage()),
+                m_showDeveloperTab.get_value());
+            mainFrame->GetRibbon()->Realize();
+            }
         }
     if (m_luaUnsafeMode.has_changed())
         {
@@ -5288,12 +5306,18 @@ void ToolsOptionsDlg::CreateControls()
                               wxSizerFlags{}.Expand().Border(wxTOP | wxBOTTOM));
 
             CreateLabelHeader(generalSettingsPage, docPanelSizer,
-                              // TRANSLATORS: Automation scripting.
-                              _(L"Scripting:"), true);
+                              // TRANSLATORS: Developer tools and automation scripting.
+                              _(L"Developer:"), true);
 
             optionsSizer = new wxBoxSizer(wxVERTICAL);
             docPanelSizer->Add(optionsSizer,
                                wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY,
+                                             _(L"Show Developer tab"), wxDefaultPosition,
+                                             wxDefaultSize, 0,
+                                             wxGenericValidator(&m_showDeveloperTab.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
 
             optionsSizer->Add(
                 new wxCheckBox(generalSettingsPage, wxID_ANY,

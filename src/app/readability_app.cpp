@@ -2935,6 +2935,10 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     if (rtype == RibbonType::MainFrameRibbon)
         {
         LoadRibbonDeveloperPage(ribbon);
+        if (!GetAppOptions()->IsShowingDeveloperTab())
+            {
+            ribbon->HidePage(ribbon->GetPageNumber(GetMainFrameEx()->GetDeveloperRibbonPage()));
+            }
         }
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);

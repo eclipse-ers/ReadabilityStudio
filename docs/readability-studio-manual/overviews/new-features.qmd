@@ -15,7 +15,7 @@ source('../R/appdown.r')
 - *{{< var PROGRAM_NAME >}}* is now open source (available under the Eclipse Public v2.0 License).
 - *{{< var PROGRAM_NAME >}}* now available for Linux (`r os_logo('linux')`).
 - Program's interface is now available in Spanish.
-- Added Lua scripting.
+- Added Lua scripting (**Developer** tab on the ribbon).
   This allows for programming your own scripts to automate various tasks.
 - All result windows now support printing watermarks, not just graphs.\
   Note that this option has been moved to the menu under the **Print** button on the ribbon.\
