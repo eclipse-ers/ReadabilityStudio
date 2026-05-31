@@ -49,6 +49,7 @@
 
 #include "base_project_view.h"
 #include "../app/readability_app.h"
+#include "../ui/controls/script_workbench_panel.h"
 #include "../ui/dialogs/test_bundle_dlg.h"
 #include "batch_project_doc.h"
 #include "standard_project_doc.h"
@@ -1158,8 +1159,13 @@ void BaseProjectView::OnClickRibbonBar(wxRibbonBarEvent& event)
 //-------------------------------------------------------
 bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
     {
-    // hide the empty mainframe when a document window is opened
-    wxGetApp().GetMainFrame()->Hide();
+    // hide the empty mainframe when a document window is opened, unless the
+    // script workbench has unsaved or loaded scripts that the user may need
+    const auto* wb = wxGetApp().GetMainFrameEx()->GetScriptWorkbench();
+    if (wb == nullptr || !wb->HasUnsavedOrLoadedScripts())
+        {
+        wxGetApp().GetMainFrame()->Hide();
+        }
 
     m_frame = CreateChildFrame(doc, this);
     SetFrame(m_frame);
