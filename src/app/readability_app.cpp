@@ -2931,11 +2931,11 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     LoadRibbonDocumentPage(ribbon, rtype);
     LoadRibbonReadabilityPage(ribbon, rtype);
     LoadRibbonToolsPage(ribbon, rtype);
+    LoadRibbonHelpPage(ribbon);
     if (rtype == RibbonType::MainFrameRibbon)
         {
         LoadRibbonDeveloperPage(ribbon);
         }
-    LoadRibbonHelpPage(ribbon);
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
     UpdateRibbonTheme(ribbon);
