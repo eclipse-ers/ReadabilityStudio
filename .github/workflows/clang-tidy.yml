@@ -37,7 +37,7 @@ jobs:
         src/Wisteria-Dataviz/src/easyexif
         src/Wisteria-Dataviz/src/utfcpp
         src/Wisteria-Dataviz/src/wxSimpleJSON
-        src/Wisteria-Dataviz/src/wxStartPage/demo/
+        src/Wisteria-Dataviz/src/wxStartPage/demo
         src/Wisteria-Dataviz/src/wxpdfdoc
         src/Wisteria-Dataviz/src/easyexif
         src/Wisteria-Dataviz/tests
