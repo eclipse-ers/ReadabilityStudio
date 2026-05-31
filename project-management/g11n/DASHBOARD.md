@@ -1,6 +1,6 @@
 # 🌐 Globalization Dashboard
 
-> **Project:** Readability Studio · **Last updated:** 2026-01-17
+> **Project:** Readability Studio · **Last updated:** 2026-05-31
 
 ## Legend
 
@@ -52,7 +52,7 @@ _Shipping the product in multiple languages. This section tracks per-language tr
 |:--:|:--:|:--:|
 | German | `░░░░░░░░░░` **0%** | 🔴 |
 | English | `██████████` **100%** | 🟢 |
-| Spanish | `██████████` **100%** | 🟢 |
+| Spanish | `█████████░` **94%** | 🟡 |
 | French | `░░░░░░░░░░` **0%** | 🔴 |
 | Japanese | `░░░░░░░░░░` **0%** | 🔴 |
 | Portuguese | `░░░░░░░░░░` **0%** | 🔴 |

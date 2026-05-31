@@ -17,6 +17,10 @@ The *Microsoft Visual C++ runtime* is also required.
 This is normally managed via *Windows Update*, but can also be installed manually.
 To install, download and run the latest [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) installer.
 
+The *Microsoft Edge WebView2 Runtime* is also required.
+This is pre-installed on Windows 11 and is normally managed via *Windows Update*, but can also be installed manually.
+To install, download and run the latest [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) installer.
+
 ## Installing Locally {-}
 
 Run the installer ("ers-setup.exe") as an administrator.
