@@ -2789,7 +2789,7 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         auto* toolsPanel =
             new wxRibbonPanel(toolsPage, wxID_ANY, _(L"Tools & Settings"), wxNullBitmap,
                               wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        auto* toolButtonBar = new wxRibbonButtonBar(toolsPanel);
+        auto* toolButtonBar = new wxRibbonButtonBar(toolsPanel, BaseProjectView::TOOLS_BUTTON_BAR_ID);
         toolButtonBar->AddButton(XRCID("ID_WEB_HARVEST"), _(L"Web Harvester"),
                                  ReadSvgIcon(L"ribbon/web-export.svg"),
                                  _(L"Download and analyze multiple webpages."));
@@ -2806,10 +2806,13 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
                                  _(L"Change the program's general options."));
         toolButtonBar->AddButton(XRCID("ID_VIEW_LOG_REPORT"), _(L"Log Report"),
                                  ReadSvgIcon(L"ribbon/log-book.svg"));
-        toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Lua Script"),
-                                 ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ?
-                                                 L"ribbon/lua-dark-mode.svg" :
-                                                 L"ribbon/lua.svg"));
+        if (GetAppOptions()->IsShowingDeveloperTab())
+            {
+            toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Developer Tools"),
+                                     ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ?
+                                                     L"ribbon/lua-dark-mode.svg" :
+                                                     L"ribbon/lua.svg"));
+            }
 #ifndef NDEBUG
     #ifdef ENABLE_PROFILING
         toolButtonBar->AddButton(XRCID("ID_VIEW_PROFILE_REPORT"), _(L"Profile Report"),

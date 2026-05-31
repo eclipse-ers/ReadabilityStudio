@@ -729,6 +729,9 @@ class BaseProjectView : public wxView
     constexpr static int SIDEBAR_HISTOGRAMS_SECTION_ID = wxID_HIGHEST + 96;
     constexpr static int SIDEBAR_STATS_SUMMARY_SECTION_ID = wxID_HIGHEST + 97;
     constexpr static int SIDEBAR_SENTENCES_BREAKDOWN_SECTION_ID = wxID_HIGHEST + 98;
+    // ribbon
+    //----------
+    constexpr static int RIBBON_TOOLS_BUTTON_BAR_ID = wxID_HIGHEST + 99;
     // Sidebar IDs for custom test windows.
     // Don't add any IDs between here and 1,000 above it; we will lock this whole range for that.
     constexpr static int SIDEBAR_CUSTOM_TESTS_START_ID = wxID_HIGHEST + 100;
@@ -744,7 +747,7 @@ class BaseProjectView : public wxView
 
     constexpr static int LEFT_PANE = wxID_HIGHEST + 78;
     constexpr static int SPLITTER_ID = wxID_HIGHEST + 79;
-
+    
   private:
     void OnActivateView(bool activate, wxView* oldView, wxView* newView) override;
 

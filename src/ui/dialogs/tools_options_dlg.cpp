@@ -56,6 +56,7 @@
 #include "../../app/readability_app.h"
 #include "../../app/readability_app_options.h"
 #include "../../graphs/schwartzgraph.h"
+#include "../../projects/base_project_view.h"
 #include "../../projects/batch_project_doc.h"
 #include "../../projects/standard_project_doc.h"
 #include "../controls/word_list_property.h"
@@ -1814,6 +1815,27 @@ void ToolsOptionsDlg::SaveOptions()
                 mainFrame->GetRibbon()->GetPageNumber(mainFrame->GetDeveloperRibbonPage()),
                 m_showDeveloperTab.get_value());
             mainFrame->GetRibbon()->Realize();
+            }
+        // enable/disable the Lua Script button on every open project's Tools ribbon
+        const auto& docs = wxGetApp().GetDocManager()->GetDocuments();
+        for (size_t i = 0; i < docs.GetCount(); ++i)
+            {
+            const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+            if (doc != nullptr)
+                {
+                auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
+                if (view != nullptr && view->GetRibbon() != nullptr)
+                    {
+                    auto* bar = dynamic_cast<wxRibbonButtonBar*>(
+                        view->GetRibbon()->FindWindow(BaseProjectView::RIBBON_TOOLS_BUTTON_BAR_ID));
+                    if (bar != nullptr)
+                        {
+                        bar->EnableButton(XRCID("ID_SCRIPT_WINDOW"),
+                                          m_showDeveloperTab.get_value());
+                        bar->Realize();
+                        }
+                    }
+                }
             }
         }
     if (m_luaUnsafeMode.has_changed())
