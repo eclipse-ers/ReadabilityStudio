@@ -5145,6 +5145,22 @@ void MainFrame::OnEditCustomTest([[maybe_unused]] wxCommandEvent& event)
 //-------------------------------------------------------
 void MainFrame::Paste()
     {
+    // If we're in the script workbench, then let the focused window handle it.
+    // This allows the editor to handle paste correctly instead of it falling
+    // through to here and creating a new project.
+    if (GetScriptWorkbench() != nullptr && GetScriptWorkbench()->IsShown())
+        {
+        wxWindow* focusWin = wxWindow::FindFocus();
+        if (focusWin != nullptr && focusWin->IsKindOf(wxCLASSINFO(wxStyledTextCtrl)))
+            {
+            if (auto* stc = dynamic_cast<wxStyledTextCtrl*>(focusWin))
+                {
+                stc->Paste();
+                return;
+                }
+            }
+        }
+
     if (wxTheClipboard->Open())
         {
         if (wxTheClipboard->IsSupported(wxDF_TEXT))
