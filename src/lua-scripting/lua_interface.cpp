@@ -144,21 +144,47 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
     const wxDateTime startTime(wxDateTime::Now());
     if (luaL_dofile(m_L, filePath.utf8_str()) != 0)
         {
-        // Error message from Lua has cryptic section in front of it showing the first line of the
-        // script and just shows the line number without saying "line" in front of it,
-        // so reformat this message to make it more readable.
+        constexpr std::wstring_view BREAK_LINE{ _DT(
+            L"BREAK_LINE:", DTExplanation::InternalKeyword,
+            L"String is from Lua itself and always in English") };
         wxString errorMessage(luaL_checkstring(m_L, -1), wxConvUTF8);
-        const auto endOfErrorHeader = errorMessage.find(L"]:");
-        if (endOfErrorHeader != wxString::npos)
+
+        // user stopped the script
+        if (errorMessage.find(BREAK_LINE.data()) != wxString::npos)
             {
-            errorMessage.erase(0, endOfErrorHeader + 2);
+            const auto endOfErrorHeader = errorMessage.find(L"]:");
+            if (endOfErrorHeader != wxString::npos)
+                {
+                errorMessage.erase(0, endOfErrorHeader + 2);
+                }
+            if (errorMessage.starts_with(BREAK_LINE.data()))
+                {
+                errorMessage.erase(0, BREAK_LINE.length());
+                }
+            long lineNumber{ 0 };
+            errorMessage.ToLong(&lineNumber);
+            LuaScripting::DebugPrint(
+                wxString::Format(_(L"Script stopped by user at line #%ld"), lineNumber));
             }
-        wxMessageBox(_(L"Line #") + errorMessage, _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
-        LuaScripting::DebugPrint(wxString::Format(
-            // TRANSLATORS: %s around "Error" are highlight tags.
-            // The last one is a line number.
-            _(L"%sError%s: Line #%s"), L"<span style='color:#FF7386; font-weight:bold;'>",
-            L"</span>", errorMessage));
+        // an actual error
+        else
+            {
+            // Error message from Lua has cryptic section in front of it showing the first line of
+            // the script and just shows the line number without saying "line" in front of it, so
+            // reformat this message to make it more readable.
+            const auto endOfErrorHeader = errorMessage.find(L"]:");
+            if (endOfErrorHeader != wxString::npos)
+                {
+                errorMessage.erase(0, endOfErrorHeader + 2);
+                }
+            wxMessageBox(_(L"Line #") + errorMessage, _(L"Script Error"),
+                         wxOK | wxICON_EXCLAMATION);
+            LuaScripting::DebugPrint(wxString::Format(
+                // TRANSLATORS: %s around "Error" are highlight tags.
+                // The last one is a line number.
+                _(L"%sError%s: Line #%s"), L"<span style='color:#FF7386; font-weight:bold;'>",
+                L"</span>", errorMessage));
+            }
         }
     const wxDateTime endTime(wxDateTime::Now());
     LuaScripting::DebugPrint(
@@ -194,9 +220,17 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
         errorMessage = wxString{ luaL_checkstring(m_L, -1), wxConvUTF8 };
 
         // user stopped the script
-        if (errorMessage.starts_with(BREAK_LINE.data()))
+        if (errorMessage.find(BREAK_LINE.data()) != wxString::npos)
             {
-            errorMessage.erase(0, BREAK_LINE.length());
+            const auto endOfErrorHeader = errorMessage.find(L"]:");
+            if (endOfErrorHeader != wxString::npos)
+                {
+                errorMessage.erase(0, endOfErrorHeader + 2);
+                }
+            if (errorMessage.starts_with(BREAK_LINE.data()))
+                {
+                errorMessage.erase(0, BREAK_LINE.length());
+                }
             long lineNumber{ 0 };
             errorMessage.ToLong(&lineNumber);
             LuaScripting::DebugPrint(
