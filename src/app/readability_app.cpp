@@ -4276,7 +4276,7 @@ void MainFrame::OnWordListByPage(const wxCommandEvent& event)
 //-------------------------------------------------------
 void MainFrame::ActivateScriptWorkbench()
     {
-    if (GetScriptWorkbench() == nullptr || m_developerRibbonPage == nullptr)
+    if (GetScriptWorkbench() == nullptr || GetDeveloperRibbonPage() == nullptr)
         {
         return;
         }
@@ -4285,12 +4285,12 @@ void MainFrame::ActivateScriptWorkbench()
         Show();
         }
     Raise();
-    GetRibbon()->SetActivePage(m_developerRibbonPage);
+    GetRibbon()->SetActivePage(GetDeveloperRibbonPage());
     // manually fire the layout swap; SetActivePage() doesn't always emit a change event
     GetScriptWorkbench()->Show(true);
-    if (m_startPage != nullptr)
+    if (GetStartPage() != nullptr)
         {
-        m_startPage->Hide();
+        GetStartPage()->Hide();
         }
     Layout();
     GetScriptWorkbench()->SetFocus();
@@ -4309,9 +4309,14 @@ void MainFrame::ActivateHomePage()
         }
     Raise();
     GetRibbon()->SetActivePage(GetHomeRibbonPage());
-    if (m_startPage != nullptr)
+    // manually fire the layout swap; SetActivePage() doesn't always emit a change event
+    if (GetStartPage() != nullptr)
         {
-        m_startPage->Show();
+        GetStartPage()->Show();
+        }
+    if (GetScriptWorkbench() != nullptr)
+        {
+        GetScriptWorkbench()->Hide();
         }
     Layout();
     }
