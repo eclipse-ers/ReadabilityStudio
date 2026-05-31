@@ -2789,7 +2789,8 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         auto* toolsPanel =
             new wxRibbonPanel(toolsPage, wxID_ANY, _(L"Tools & Settings"), wxNullBitmap,
                               wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        auto* toolButtonBar = new wxRibbonButtonBar(toolsPanel, BaseProjectView::TOOLS_BUTTON_BAR_ID);
+        auto* toolButtonBar =
+            new wxRibbonButtonBar(toolsPanel, BaseProjectView::RIBBON_TOOLS_BUTTON_BAR_ID);
         toolButtonBar->AddButton(XRCID("ID_WEB_HARVEST"), _(L"Web Harvester"),
                                  ReadSvgIcon(L"ribbon/web-export.svg"),
                                  _(L"Download and analyze multiple webpages."));
