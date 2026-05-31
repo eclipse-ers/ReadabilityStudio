@@ -15,6 +15,7 @@
 #include "../../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../../app/readability_app.h"
 #include "../../lua-scripting/lua_interface.h"
+#include "../../lua/lua.h"
 #include <array>
 #include <utility>
 #include <wx/filedlg.h>
@@ -163,6 +164,8 @@ void ScriptWorkbenchPanel::CreateControls()
 
     // seed the default untitled script (with the import header, marked clean)
     AddScriptEntry(_(L"(unnamed)"));
+
+    DebugClear();
     }
 
 //-------------------------------------------------------
@@ -448,6 +451,26 @@ bool ScriptWorkbenchPanel::IsFunctionBrowserVisible() const noexcept
     }
 
 //-------------------------------------------------------
+bool ScriptWorkbenchPanel::IsDebugWindowVisible() const noexcept
+    {
+    return (m_outerSplitter != nullptr && m_outerSplitter->IsSplit());
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::ToggleDebugWindow()
+    {
+    if (m_outerSplitter->IsSplit())
+        {
+        m_outerSplitter->Unsplit(m_debugMessageWindow);
+        }
+    else
+        {
+        m_debugMessageWindow->Show();
+        m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugMessageWindow, -FromDIP(150));
+        }
+    }
+
+//-------------------------------------------------------
 void ScriptWorkbenchPanel::ToggleFunctionBrowser()
     {
     if (m_funcBrowserSplitter->IsSplit())
@@ -673,16 +696,18 @@ void ScriptWorkbenchPanel::DebugClear()
         {
         return;
         }
-    m_debugContent.clear();
+    m_debugContent = wxString::Format(_(L"Lua version %d.%d.%d, ready..."), LUA_VERSION_MAJOR_N,
+                                      LUA_VERSION_MINOR_N, LUA_VERSION_RELEASE_N);
 
     const wxColour bkColor = GetBackgroundColour();
     const auto debugReportBody =
         wxString::Format(L"<html>\n<body "
                          L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
-                         L"11pt;margin:10px;\">\n</body>\n</html>",
+                         L"11pt;margin:10px;\">",
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),
                          Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
-                             wxC2S_HTML_SYNTAX));
+                             wxC2S_HTML_SYNTAX)) +
+        m_debugContent + L"\n</body>\n</html>";
     m_debugMessageWindow->SetPage(debugReportBody, wxString{});
     }
 

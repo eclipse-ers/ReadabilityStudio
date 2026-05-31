@@ -93,6 +93,7 @@ ribbon/internet.svg
 ribbon/invalid-region.svg
 ribbon/justified.svg
 ribbon/keyboard-shortcuts.svg
+ribbon/ladybug.svg
 ribbon/left-titles.svg
 ribbon/line-spacing.svg
 ribbon/link.svg

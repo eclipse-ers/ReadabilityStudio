@@ -2897,6 +2897,9 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     auto* debugBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Debug"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    debugBar->AddButton(XRCID("ID_SCRIPT_TOGGLE_DEBUG"), _(L"Output"),
+                        ReadSvgIcon(L"ribbon/ladybug.svg"), _(L"Toggle the debug output window."),
+                        wxRIBBON_BUTTON_TOGGLE);
     debugBar->AddButton(XRCID("ID_SCRIPT_CLEAR_DEBUG"), _(L"Clear"),
                         ReadSvgIcon(L"ribbon/clear.svg"), _(L"Clear the log window."));
 
@@ -3762,33 +3765,42 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_RUN"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->StopScript(); }),
          XRCID("ID_SCRIPT_STOP"));
-    Bind(
-        wxEVT_UPDATE_UI,
-        [this](wxUpdateUIEvent& evt)
-        {
-            const bool isRunning = LuaInterpreter::IsRunning();
-            if (evt.GetId() == XRCID("ID_SCRIPT_RUN"))
-                {
-                evt.Enable(GetScriptWorkbench() != nullptr && !isRunning);
-                }
-            else if (evt.GetId() == XRCID("ID_SCRIPT_STOP"))
-                {
-                evt.Enable(GetScriptWorkbench() != nullptr && isRunning);
-                }
-            else if (evt.GetId() == XRCID("ID_SCRIPT_FUNCTION_BROWSER"))
-                {
-                evt.Enable(GetScriptWorkbench() != nullptr);
-                evt.Check(GetScriptWorkbench() != nullptr &&
-                          GetScriptWorkbench()->IsFunctionBrowserVisible());
-                }
-        },
-        XRCID("ID_SCRIPT_RUN"), XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
+    auto updateUIHandler = [this](wxUpdateUIEvent& evt)
+    {
+        const bool isRunning = LuaInterpreter::IsRunning();
+        if (evt.GetId() == XRCID("ID_SCRIPT_RUN"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr && !isRunning);
+            }
+        else if (evt.GetId() == XRCID("ID_SCRIPT_STOP"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr && isRunning);
+            }
+        else if (evt.GetId() == XRCID("ID_SCRIPT_FUNCTION_BROWSER"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr);
+            evt.Check(GetScriptWorkbench() != nullptr &&
+                      GetScriptWorkbench()->IsFunctionBrowserVisible());
+            }
+        else if (evt.GetId() == XRCID("ID_SCRIPT_TOGGLE_DEBUG"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr);
+            evt.Check(GetScriptWorkbench() != nullptr &&
+                      GetScriptWorkbench()->IsDebugWindowVisible());
+            }
+    };
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_RUN"));
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_STOP"));
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_TOGGLE_DEBUG"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),
          XRCID("ID_SCRIPT_REPLACE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->DebugClear(); }),
          XRCID("ID_SCRIPT_CLEAR_DEBUG"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ToggleDebugWindow(); }),
+         XRCID("ID_SCRIPT_TOGGLE_DEBUG"));
     Bind(wxEVT_MENU,
          withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ToggleFunctionBrowser(); }),
          XRCID("ID_SCRIPT_FUNCTION_BROWSER"));

@@ -76,6 +76,13 @@ class ScriptWorkbenchPanel final : public wxPanel
     [[nodiscard]]
     bool IsFunctionBrowserVisible() const noexcept;
 
+    /// @returns @c true if the debug window is currently shown.
+    [[nodiscard]]
+    bool IsDebugWindowVisible() const noexcept;
+
+    /// @brief Toggles the debug window visibility.
+    void ToggleDebugWindow();
+
   private:
     struct ScriptEntry
         {
