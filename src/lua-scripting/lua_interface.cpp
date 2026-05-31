@@ -172,13 +172,27 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
         long lineNumber{ 0 };
         if (ParseLuaError(errorMessage, lineNumber))
             {
-            wxMessageBox(_(L"Line #") + errorMessage, _(L"Script Error"),
-                         wxOK | wxICON_EXCLAMATION);
+            const bool isUnsafeLibError = errorMessage.Contains(L"(global 'os')") ||
+                                          errorMessage.Contains(L"(global 'io')") ||
+                                          errorMessage.Contains(L"(global 'debug')");
+            wxMessageBox(
+                _(L"Line #") + errorMessage +
+                    (isUnsafeLibError ?
+                         _(L"\n\nTo fix this, enable \"Allow Lua scripts to access system "
+                           L"commands\" under Tools » Options » General Settings and restart.") :
+                         wxString{}),
+                _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
             LuaScripting::DebugPrint(wxString::Format(
                 // TRANSLATORS: %s around "Error" are highlight tags.
                 // The last one is a line number.
                 _(L"%sError%s: Line #%s"), L"<span style='color:#FF7386; font-weight:bold;'>",
                 L"</span>", errorMessage));
+            if (isUnsafeLibError)
+                {
+                LuaScripting::DebugPrint(
+                    _(L"To fix this, enable \"Allow Lua scripts to access system commands\" "
+                      "under Tools » Options » General Settings and restart."));
+                }
             }
         else
             {
@@ -218,11 +232,20 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
         long lineNumber{ 0 };
         if (ParseLuaError(errorMessage, lineNumber))
             {
+            const bool isUnsafeLibError = errorMessage.Contains(L"(global 'os')") ||
+                                          errorMessage.Contains(L"(global 'io')") ||
+                                          errorMessage.Contains(L"(global 'debug')");
             LuaScripting::DebugPrint(
                 wxString::Format( // TRANSLATORS: %s around "Error" are highlight
                                   // tags. The last one is a line number.
                     _(L"❌%sError%s: Chunk line #%s"),
                     L"<span style='color:#FF7386; font-weight:bold;'>", L"</span>", errorMessage));
+            if (isUnsafeLibError)
+                {
+                LuaScripting::DebugPrint(
+                    _(L"To fix this, enable \"Allow Lua scripts to access system commands\" "
+                      "under Tools » Options » General Settings and restart."));
+                }
             }
         else
             {

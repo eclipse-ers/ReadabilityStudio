@@ -950,11 +950,20 @@ namespace LuaScripting
             }
         else
             {
+            lua_Debug ar{};
+            wxString lineInfo;
+            if (lua_getstack(L, 1, &ar) != 0 && lua_getinfo(L, "l", &ar) != 0 && ar.currentline > 0)
+                {
+                // quneiform-suppress-begin
+                lineInfo = wxString::Format(_(L" (chunk line #%d)"), ar.currentline);
+                // quneiform-suppress-end
+                }
             DebugPrint(wxString::Format( // TRANSLATORS: %s are formatting tags and
                                          // should stay wrapped around "Warning"
-                _(L"%sWarning%s: unable to make %s path absolute."),
+                _(L"⚠️%sWarning%s: unable to make %s path absolute.") + lineInfo,
                 L"<span style='color:#00A2E8; font-weight:bold;'>", L"</span>",
                 wxString{ luaL_checkstring(L, 2), wxConvUTF8 }));
+            DebugPrint(wxString{});
             lua_pushstring(L, wxString{ luaL_checkstring(L, 2), wxConvUTF8 });
             }
 

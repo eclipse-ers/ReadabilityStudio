@@ -2935,7 +2935,6 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     LoadRibbonDocumentPage(ribbon, rtype);
     LoadRibbonReadabilityPage(ribbon, rtype);
     LoadRibbonToolsPage(ribbon, rtype);
-    LoadRibbonHelpPage(ribbon);
     if (rtype == RibbonType::MainFrameRibbon)
         {
         LoadRibbonDeveloperPage(ribbon);
@@ -2944,6 +2943,7 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
             ribbon->HidePage(ribbon->GetPageNumber(GetMainFrameEx()->GetDeveloperRibbonPage()));
             }
         }
+    LoadRibbonHelpPage(ribbon);
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
     UpdateRibbonTheme(ribbon);
