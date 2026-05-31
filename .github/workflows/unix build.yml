@@ -96,8 +96,10 @@ jobs:
              fi
              echo "Embedded signature:"
              echo "$SIG"
+             # --appimage-signing-key isn't implemented in every type2-runtime build,
+             # so treat it as informational and don't fail the step if it's unsupported
              echo "Signing key fingerprint:"
-             "$APPIMAGE" --appimage-signing-key
+             "$APPIMAGE" --appimage-signing-key || echo "(signing-key lookup not supported by this runtime)"
 
       - name: Archive AppImage
         uses: actions/upload-artifact@v4
