@@ -111,6 +111,13 @@ class LuaInterpreter
 
   private:
     static void LineHookCallback(lua_State* L, lua_Debug* ar);
+    /** @brief Strips the Lua error header from @c errorMessage in place.
+        @param[in,out] errorMessage The raw error string from the Lua interpreter.
+        @param[out] lineNumber The script line where the stop was requested.
+            Only meaningful when the function returns @c true.
+        @returns @c true if it was an actual script error;
+            @c false if the error was a user-requested stop (via @c Quit()).*/
+    static bool ParseLuaError(wxString& errorMessage, long& lineNumber);
 
     lua_State* m_L{ nullptr };
     static bool m_isRunning;
