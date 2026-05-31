@@ -236,6 +236,13 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
 //------------------------------------------------------
 void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
     {
+    static uint64_t callCount{ 0 };
+    // Periodically yield to the UI thread to keep the application responsive
+    // (e.g., allowing the Stop button to be clicked) without degrading script performance.
+    if (++callCount % 10 == 0)
+        {
+        wxSafeYield(wxGetApp().GetMainFrameEx(), true);
+        }
     if (m_quitRequested)
         {
         // NOLINTBEGIN(cppcoreguidelines-pro-type-vararg,hicpp-vararg)

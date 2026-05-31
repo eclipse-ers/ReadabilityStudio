@@ -451,7 +451,7 @@ void ScriptWorkbenchPanel::ToggleFunctionBrowser()
     else
         {
         m_functionBrowser->Show();
-        m_funcBrowserSplitter->SplitVertically(m_editorBook, m_functionBrowser, -FromDIP(450));
+        m_funcBrowserSplitter->SplitVertically(m_editorBook, m_functionBrowser, -FromDIP(500));
         }
     }
 

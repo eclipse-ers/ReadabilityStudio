@@ -3762,6 +3762,21 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_RUN"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->StopScript(); }),
          XRCID("ID_SCRIPT_STOP"));
+    Bind(
+        wxEVT_UPDATE_UI,
+        [this](wxUpdateUIEvent& evt)
+        {
+            const bool isRunning = LuaInterpreter::IsRunning();
+            if (evt.GetId() == XRCID("ID_SCRIPT_RUN"))
+                {
+                evt.Enable(GetScriptWorkbench() != nullptr && !isRunning);
+                }
+            else if (evt.GetId() == XRCID("ID_SCRIPT_STOP"))
+                {
+                evt.Enable(GetScriptWorkbench() != nullptr && isRunning);
+                }
+        },
+        XRCID("ID_SCRIPT_RUN"), XRCID("ID_SCRIPT_STOP"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),
