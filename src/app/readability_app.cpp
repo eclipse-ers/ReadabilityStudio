@@ -2905,7 +2905,7 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
     refBar->AddButton(XRCID("ID_SCRIPT_FUNCTION_BROWSER"), _(L"Function Browser"),
                       ReadSvgIcon(darkMode ? L"ribbon/function-dark.svg" : L"ribbon/function.svg"),
-                      _(L"View the function browser."));
+                      _(L"View the function browser."), wxRIBBON_BUTTON_TOGGLE);
     refBar->AddButton(XRCID("ID_SCRIPT_API_PDF"),
                       /* TRANSLATORS: Application Programming Interface */ _(L"API"),
                       ReadSvgIcon(L"ribbon/electronic-help.svg"), _(L"View the documentation."));
@@ -3775,8 +3775,14 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
                 {
                 evt.Enable(GetScriptWorkbench() != nullptr && isRunning);
                 }
+            else if (evt.GetId() == XRCID("ID_SCRIPT_FUNCTION_BROWSER"))
+                {
+                evt.Enable(GetScriptWorkbench() != nullptr);
+                evt.Check(GetScriptWorkbench() != nullptr &&
+                          GetScriptWorkbench()->IsFunctionBrowserVisible());
+                }
         },
-        XRCID("ID_SCRIPT_RUN"), XRCID("ID_SCRIPT_STOP"));
+        XRCID("ID_SCRIPT_RUN"), XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),

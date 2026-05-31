@@ -72,6 +72,10 @@ class ScriptWorkbenchPanel final : public wxPanel
         return m_isScriptRunning;
         }
 
+    /// @returns @c true if the function browser is currently shown.
+    [[nodiscard]]
+    bool IsFunctionBrowserVisible() const noexcept;
+
   private:
     struct ScriptEntry
         {

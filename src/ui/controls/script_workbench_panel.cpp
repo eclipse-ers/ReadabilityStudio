@@ -442,6 +442,12 @@ void ScriptWorkbenchPanel::StopScript()
     }
 
 //-------------------------------------------------------
+bool ScriptWorkbenchPanel::IsFunctionBrowserVisible() const noexcept
+    {
+    return (m_funcBrowserSplitter != nullptr && m_funcBrowserSplitter->IsSplit());
+    }
+
+//-------------------------------------------------------
 void ScriptWorkbenchPanel::ToggleFunctionBrowser()
     {
     if (m_funcBrowserSplitter->IsSplit())
