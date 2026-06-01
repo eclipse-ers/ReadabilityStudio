@@ -232,9 +232,9 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
         long lineNumber{ 0 };
         if (ParseLuaError(errorMessage, lineNumber))
             {
-            const bool isUnsafeLibError = errorMessage.Contains(L"(global 'os')") ||
-                                          errorMessage.Contains(L"(global 'io')") ||
-                                          errorMessage.Contains(L"(global 'debug')");
+            const bool isUnsafeLibError = errorMessage.Contains(_DT(L"(global 'os')")) ||
+                                          errorMessage.Contains(_DT(L"(global 'io')")) ||
+                                          errorMessage.Contains(_DT(L"(global 'debug')"));
             LuaScripting::DebugPrint(
                 wxString::Format( // TRANSLATORS: %s around "Error" are highlight
                                   // tags. The last one is a line number.
