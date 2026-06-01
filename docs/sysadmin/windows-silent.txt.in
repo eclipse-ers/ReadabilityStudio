@@ -1,1 +1,1 @@
-rssetup${FULL_VERSION}.exe /SILENT /NORESTART /LOG
+ers-setup.exe /SILENT /NORESTART /LOG

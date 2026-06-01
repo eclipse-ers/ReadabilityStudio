@@ -72,23 +72,15 @@
 /docs/shortcuts-cheatsheet/.quarto
 /docs/shortcuts-cheatsheet/index.tex
 /docs/shortcuts-cheatsheet/R
-/docs/shortcuts-cheatsheet/docs
 /docs/release-notes/.quarto
 /docs/release-notes/index.tex
 /docs/sysadmin/sysadmin-manual.tex
 /docs/_variables.yml
 /docs/readability-studio-api/_variables.yml
-/docs/sysadmin/docs
 /docs/sysadmin/build-commands.txt
 /docs/sysadmin/sysadmin-manual.tex
 /docs/sysadmin/windows-silent.txt
 /docs/doxygen/html
-/docs/readability-studio-api/docs
-/docs/readability-test-reference/docs
-/docs/shortcuts-cheatsheet/docs
-/docs/release-notes/docs
-/docs/readability-studio-manual/docs-manual
-/docs/readability-studio-manual/docs-online
 /docs/es/
 /wxWidgets_lib
 

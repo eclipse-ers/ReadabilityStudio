@@ -55,7 +55,7 @@ The project depends on the following Git submodules:
 - *OleanderStemmingLibrary*: text stemming
 - *TinyExpr++*: formula parsing engine
 - *TinyXML2*: XML parser
-- *Wisteria-Dataviz*: graphics library (includes *CRCpp*, *easyexif*, *utfcpp*, *wxSimpleJSON*, and *wxStartPage*)
+- *Wisteria-Dataviz*: graphics library (includes *CRCpp*, *easyexif*, *utfcpp*, *wxPdfDocument*, *wxSimpleJSON*, and *wxStartPage*)
 
 During configuration, the build script queries each submodule for its commit hash, remote origin, and version tag.
 These are written into a generated SBOM header (`r file_path(c("src", "app", "sbom.h"))`) for traceability.

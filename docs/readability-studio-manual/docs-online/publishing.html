@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Readability analysis software">
+
+<title>8&nbsp; Publishing the Results – Readability Studio 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./program-options.html" rel="next">
+<link href="./customizing-results.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6c49c5477b92c77c9eb341f9299c235f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fa1f459854a8ab2e5f5e8b32f437b5d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    window.setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      window.setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    window.hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(darkModeDefault) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !window.hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (window.hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./creating-a-new-project.html">Projects</a></li><li class="breadcrumb-item"><a href="./publishing.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Readability Studio 2026</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Overviews</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Technical Overviews</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Program Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/new-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">New Features and Enhancements</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./creating-a-new-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating a New Project</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-standard-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-batch-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reviewing Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./customizing-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Customizing the Results</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Options &amp; Features</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./program-options.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Additional Features</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Readability Tests</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-english.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">English Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-spanish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Spanish Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-german.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">German Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./custom-tests-and-bundles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-editing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Editing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Customizing Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-batch-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-creating-custom-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Creating Custom Tests</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analysis-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Analysis Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scoring-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Scoring Notes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Libraries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Tools &amp; Content</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/shortcuts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Keyboard Shortcuts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-exporting" id="toc-sec-exporting" class="nav-link active" data-scroll-target="#sec-exporting"><span class="header-section-number">8.1</span> Exporting</a></li>
+  <li><a href="#sec-scores-export" id="toc-sec-scores-export" class="nav-link" data-scroll-target="#sec-scores-export"><span class="header-section-number">8.2</span> Scores Export Options</a></li>
+  <li><a href="#sec-text-window-export" id="toc-sec-text-window-export" class="nav-link" data-scroll-target="#sec-text-window-export"><span class="header-section-number">8.3</span> Text Window Export Options</a></li>
+  <li><a href="#sec-image-export" id="toc-sec-image-export" class="nav-link" data-scroll-target="#sec-image-export"><span class="header-section-number">8.4</span> Image Export Options</a></li>
+  <li><a href="#sec-export-list" id="toc-sec-export-list" class="nav-link" data-scroll-target="#sec-export-list"><span class="header-section-number">8.5</span> List Export Options</a></li>
+  <li><a href="#sec-export-all-options" id="toc-sec-export-all-options" class="nav-link" data-scroll-target="#sec-export-all-options"><span class="header-section-number">8.6</span> Export All Options</a></li>
+  <li><a href="#sec-filtering-export" id="toc-sec-filtering-export" class="nav-link" data-scroll-target="#sec-filtering-export"><span class="header-section-number">8.7</span> Exporting Filtered Documents</a></li>
+  <li><a href="#sec-printing" id="toc-sec-printing" class="nav-link" data-scroll-target="#sec-printing"><span class="header-section-number">8.8</span> Printing</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./creating-a-new-project.html">Projects</a></li><li class="breadcrumb-item"><a href="./publishing.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>All graphs, lists, statistical summaries, and highlighted text reports can be exported and printed from <em>Readability Studio</em>. This is useful for reviewing the results outside the program, as well as publishing and sharing them with colleagues.</p>
+<div style="page-break-after: always;"></div>
+<section id="sec-exporting" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-exporting"><span class="header-section-number">8.1</span> Exporting</h2>
+<p>To export any window, go to the <strong>Home</strong> tab and click the <span class="keys">Save</span> button, or right-click on the window and select <strong>Save</strong>.</p>
+<p>Numerous formats are available for each type of window:</p>
+<ul>
+<li><a href="#sec-text-window-export">Highlighted text</a>: HTML, RTF, and Pango (Pango is only available on Linux.)</li>
+<li>Statistical summaries: HTML</li>
+<li><a href="#sec-scores-export">Test results</a>: HTML</li>
+<li>Word, phrase, and sentence <a href="#sec-export-list">lists</a>: HTML, Text, and <span class="math inline">\LaTeX</span></li>
+<li><a href="#sec-image-export">Graphs</a>: PNG, BMP, TIFF, JPEG, GIF, TARGA, and SVG</li>
+</ul>
+<p>All windows can also be exported at once by clicking the arrow beneath <span class="keys">Save</span> and selecting <a href="#sec-export-all-options"><strong>Export All…</strong></a>.</p>
+</section>
+<section id="sec-scores-export" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="sec-scores-export"><span class="header-section-number">8.2</span> Scores Export Options</h2>
+<p>When <a href="#sec-exporting">exporting</a> readability scores from a standard project, the following export options are available:</p>
+<section id="select-which-section-to-save" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="select-which-section-to-save">Select which section to save</h3>
+<div class="optionssection">
+<p><strong>Grid</strong>: Saves the grid of readability scores.</p>
+<p><strong>Explanations</strong>: Saves a report of the explanations associated with the scores.</p>
+<p><strong>Both</strong>: Saves the scores grid and explanations.</p>
+</div>
+</section>
+</section>
+<section id="sec-text-window-export" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="sec-text-window-export"><span class="header-section-number">8.3</span> Text Window Export Options</h2>
+<p>When exporting a text report, the following export formats are available:</p>
+<div class="optionssection">
+<p><strong>HTML</strong>: A format that can be displayed in Internet browsers and most word-processing programs.</p>
+<p><strong>RTF</strong>: A format that can be displayed in most word-processing programs.</p>
+<p><strong>Pango</strong>: A format that can be rendered within libraries such as Cairo or FreeType. (This option is only available on Linux.)</p>
+</div>
+<div class="tipsection">
+<p>If you plan to edit this output, then <strong>RTF</strong> is recommended. (Most word processors support editing this format.)</p>
+</div>
+</section>
+<section id="sec-image-export" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-image-export"><span class="header-section-number">8.4</span> Image Export Options</h2>
+<p>When <a href="#sec-exporting">exporting</a> a graph, you will first be prompted for an image format to export as. The following formats are available to choose from:</p>
+<div class="optionssection">
+<p><strong>PNG</strong>: A lossless-compressed image format. The image can be compressed to a smaller size without any loss of quality.</p>
+<p><strong>JPG</strong>: A lossy-compressed image format. Some image quality may be lost, compared to other formats such as PNG.</p>
+<p><strong>BMP</strong>: An uncompressed raster (i.e., pixel-based) image format.</p>
+<p><strong>TIFF</strong>: This format can either be compressed or uncompressed and offers both lossy and lossless compression. This format is generally preferred for desktop publishing.</p>
+<p><strong>TARGA</strong>: A raster (i.e., pixel-based) image format.</p>
+<p><strong>GIF</strong>: A raster (i.e., pixel-based) image format. Note that this image format is limited to 256 colors.</p>
+<p><strong>SVG</strong>: A format that uses vector (rather than raster) drawing. Vector-based images can be scaled to much larger sizes, without the loss of quality that raster images would experience.</p>
+</div>
+<p>After selecting the image format, these additional options will be provided:</p>
+<section id="image-size" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="image-size">Image Size</h3>
+<p><strong>Width</strong>: Enter the width of the exported image into this field.</p>
+<p><strong>Height</strong>: Enter the height of the exported image into this field.</p>
+<div class="notesection">
+<p>When you change the width or height, the other measurement will be adjusted automatically to maintain the aspect ratio.</p>
+</div>
+</section>
+<section id="color-mode" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="color-mode">Color Mode</h3>
+<div class="optionssection">
+<p><strong>RGB (Color)</strong>: Select this option to save the image in color.</p>
+<p><strong>Grayscale</strong>: Select this option to save the image in shades of gray.</p>
+</div>
+</section>
+<section id="tiff-options" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="tiff-options">TIFF options</h3>
+<p>This option is available only when exporting as a TIFF file.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Compression</p>
+</div>
+<p>This option specifies the compression level of the TIFF file and includes the following options:</p>
+<p><strong>None</strong>: do not compress the image</p>
+<p><strong>Lempel-Ziv &amp; Welch</strong>: lossless compression, but may generate larger images than other compression methods.</p>
+<p><strong>JPEG</strong>: lossy compression method. Suitable for high-color images, but some quality may be lost.</p>
+<p><strong>Deflate</strong>: lossless, high-compression method.</p>
+</div>
+</section>
+</section>
+<section id="sec-export-list" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="sec-export-list"><span class="header-section-number">8.5</span> List Export Options</h2>
+<p>When <a href="#sec-exporting">exporting</a> a list, you will be provided with the following formats to export as:</p>
+<div class="optionssection">
+<p><strong>HTML</strong>: A format that includes formatting and can be opened in browsers and spreadsheet programs.</p>
+<p><strong>TXT</strong>: A tab-delimited file with no formatting (i.e., colors will be lost).</p>
+<p><strong>LaTeX</strong>: A <span class="math inline">\LaTeX</span> file with the list formatted into a <code>longtable{}</code> environment that can be included in a larger <span class="math inline">\LaTeX</span> document.</p>
+</div>
+<p>After selecting the file format, these additional options will be provided.</p>
+<p><strong>Include column headers</strong>: Check this option to include the column headers in the output.</p>
+<p><strong>Export all rows</strong>: Select this option to export all rows and columns from the list.</p>
+<p><strong>Export selected rows</strong>: Select this option to only export the selected rows in the list.</p>
+<p><strong>Export a range of rows</strong>: Select this option to specify the rows (and columns) to export.</p>
+<p><strong>Paginate using printer settings</strong>: Check this option to split the list into smaller tables with page breaks between them. These tables will be sized to fit your current <a href="#sec-printing">printer</a> paper size and orientation. Additionally, a page break will be inserted between each table, which will appear when you print this output from a browser. To change either your paper size or orientation, select <strong>Page Setup</strong> from the <span class="keys">Print</span> button’s menu.</p>
+<p>This option only applies to HTML exporting and when exporting either all rows or a range.</p>
+<section id="range" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="range">Range</h3>
+<p>The options here specify the range of columns and rows to export.</p>
+<p><strong>Rows: from</strong>: Enter the starting row to export into this field.</p>
+<p><strong>Columns: from</strong>: Enter the starting column to export into this field.</p>
+<p><strong>Rows: to</strong>: Enter the ending row to export into this field.</p>
+<p><strong>Columns: to</strong>: Enter the ending column to export into this field.</p>
+</section>
+</section>
+<section id="sec-export-all-options" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="sec-export-all-options"><span class="header-section-number">8.6</span> Export All Options</h2>
+<p>Select <strong>Export All</strong> from the <span class="keys">Save</span> button’s menu to display the <strong>Export All Options</strong> dialog.</p>
+<p>This dialog provides options for <a href="#sec-exporting">exporting</a> an entire project into a single report or folder of separate files.</p>
+<p><strong>Folder to export to</strong>: Enter the folder path where you want to export the project to into this field. (Only applies if you are exporting as separate files.)</p>
+<section id="sections-to-export" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="sections-to-export">Sections to export</h3>
+<p><strong>Test scores</strong>: Select this option to export all the windows from the <a href="reviewing-standard-projects.html#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> section.</p>
+<p><strong>Summary statistics</strong>: Select this option to export all the windows from the <a href="reviewing-standard-projects.html#sec-reviewing-statistics"><strong>Summary Statistics</strong></a> section.</p>
+<p><strong>Histograms/box plots</strong>: Select this option to export all <a href="reviewing-batch-project.html#sec-reviewing-batch-histograms">histograms</a> and <a href="reviewing-batch-project.html#sec-reviewing-batch-box-plots">box plots</a>. This option only applies to batch projects.</p>
+<p><strong>Words breakdown</strong>: Select this option to export all the windows from the <a href="reviewing-standard-projects.html#sec-reviewing-word-breakdowns"><strong>Words Breakdown</strong></a> section.</p>
+<p><strong>Sentences breakdown</strong>: Select this option to export all the windows from the <a href="reviewing-standard-projects.html#sec-reviewing-sentences-breakdown"><strong>Sentences Breakdown</strong></a> section.</p>
+<p><strong>Grammar section</strong>: Select this option to export all the windows from the <strong>Grammar</strong> section.</p>
+<p><strong>Dolch sight words section</strong>: Select this option to export all the windows from the <a href="reviewing-standard-projects.html#sec-reviewing-dolch"><strong>Dolch Sight Words</strong></a> section. This option only applies if <strong>Dolch Sight Words</strong> is included in the project.</p>
+<p><strong>Warnings section</strong>: Select this option to export all the project’s <a href="reviewing-batch-project.html#sec-reviewing-batch-warnings">warnings</a>. This option only applies to batch projects.</p>
+</section>
+<section id="export-file-types" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="export-file-types">Export file types</h3>
+<p><strong>Export lists as</strong>: Select the file type that you want to save list windows as from this list. This option only applies when exporting as separate files.</p>
+<p><strong>Export text reports as</strong>: Select the file type that you want to save text reports as from this list. This option only applies to standard projects, and when exporting as separate files.</p>
+<p><strong>Export graphs as</strong>: Select the image type that you want to save graphs as from this list.</p>
+<p><strong>Image Options</strong>: Click this button to further customize how to save the graphs as images. This includes options such as color mode and image size. Note that the options available on this dialog will depend on which image type is selected.</p>
+<p><strong>Include lists</strong>: Select this option to include lists in the output. It is recommended to unselect this option for larger documents. This option only applies to standard projects.</p>
+<p><strong>Include text reports</strong>: Select this option to include highlighted text reports in the output. It is recommended to unselect this option for larger documents. This option only applies to standard projects.</p>
+</section>
+</section>
+<section id="sec-filtering-export" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="sec-filtering-export"><span class="header-section-number">8.7</span> Exporting Filtered Documents</h2>
+<p>Document filtering (or “cleaning”) is the removal or conversion of items from a document to assist a textual analysis. This includes items that are not meant to be analyzed, such as:</p>
+<ul>
+<li>Headers</li>
+<li>Footers</li>
+<li>Captions</li>
+<li>Copyright notices</li>
+<li>Citations</li>
+<li>(Short) list items</li>
+</ul>
+<p>Also, the romanization of items that may cause issues with legacy programs:</p>
+<ul>
+<li>Non-English letters (e.g., <em>é</em>)</li>
+<li>Advanced punctuation (e.g., <em>—</em>)</li>
+<li>Non-sentence-ending periods (e.g., ellipses and abbreviations)</li>
+</ul>
+<p>The first set of items are normally excluded from analysis because they a.) are not part of the narrative text and b.) skew the average sentence length.</p>
+<p>By default, <em>Readability Studio</em> will automatically ignore these items, rather than requiring you to manually remove them from your document. This is helpful by saving time and by not having to maintain two copies of your document: the original and the “cleansed” version used for analysis.</p>
+<p>The second set of items do not cause issue with <em>Readability Studio</em>. It can recognize extended characters (e.g., <em>é</em>, <em>—</em>, etc.) and can properly deduce sentence endings. For these reasons, document cleaning is generally not necessary within <em>Readability Studio</em>.</p>
+<p>Refer to <a href="analysis-notes.html#sec-how-text-is-excluded" class="quarto-xref"><span>Section 21.1</span></a> to learn how <em>Readability Studio</em> automatically filters documents.</p>
+<section id="exporting-filtered-documents" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="exporting-filtered-documents">Exporting Filtered Documents</h3>
+<p>There may be times when you would need a filtered copy of your document. For example, you might need to process your document through another program which does not have auto-filtering. In this situation, you can export a copy of your document with these aforementioned items removed. Then you can analyze your document with other software without needing to manually filter it.</p>
+<p>To do this, click on the <strong>Home</strong> tab of the ribbon, click on the arrow below the <span class="keys">Save</span> button, and select <strong>Export Filtered Document</strong>.</p>
+<div class="menu">
+<div class="keys">
+<p>Home</p>
+</div>
+<div class="arrow right">
+
+</div>
+<div class="keys">
+<p>Save</p>
+</div>
+<div class="arrow right">
+
+</div>
+<div class="keys">
+Export Filtered Document
+</div>
+</div>
+<p>After excluding incomplete sentences from your document, you will be presented with additional options (see below). Once you have specified your filtering options, the <strong>Preview Filtered Document</strong> dialog (shown on the right) will be displayed. This dialog will show a preview of the filtered document, along with listing the filtering options being used.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/filter-text-preview.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+<p>Finally, click <span class="keys">OK</span> to save the file.</p>
+<div class="tipsection">
+<p>Which incomplete-sentence removal method used is controlled by your project’s <a href="program-options.html#sec-options-text-exclusion">text exclusion options</a>.</p>
+</div>
+</section>
+<section id="sec-additional-filtering-options" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="sec-additional-filtering-options"><span class="header-section-number">8.7.1</span> Additional Filtering Options</h3>
+<p>When exporting a filtered version of your document, the program will first remove incomplete sentences (if applicable). This removal will be based on your project’s <a href="program-options.html#sec-options-text-exclusion">text exclusion</a> settings. After this text exclusion is applied, additional conversion options will be available from the <strong>Additional Filtering Options</strong> dialog. From this dialog, you can apply the following filters to the exported copy of your document.</p>
+<p><strong>Romanize text (replace accented and special characters)</strong>: Check this option to simplify text for compatibility with other text analysis tools. This will convert accented characters, smart punctuation, bullets, and similar formatting to simpler equivalents. The following Romanization replacements are used:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="lightable-classic caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">Extended ASCII Character</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Replacement</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Extended ASCII Character</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">ö</td>
+<td style="text-align: right; border-right: 1px solid;">oe</td>
+<td style="text-align: right;">ý</td>
+<td style="text-align: right;">y</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ü</td>
+<td style="text-align: right; border-right: 1px solid;">ue</td>
+<td style="text-align: right;">ÿ</td>
+<td style="text-align: right;">y</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ä</td>
+<td style="text-align: right; border-right: 1px solid;">ae</td>
+<td style="text-align: right;">`` • ``</td>
+<td style="text-align: right;">`` · ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ß</td>
+<td style="text-align: right; border-right: 1px solid;">ss</td>
+<td style="text-align: right;">‚</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ñ</td>
+<td style="text-align: right; border-right: 1px solid;">nn</td>
+<td style="text-align: right;">‹</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">å</td>
+<td style="text-align: right; border-right: 1px solid;">aa</td>
+<td style="text-align: right;">›</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">æ</td>
+<td style="text-align: right; border-right: 1px solid;">ae</td>
+<td style="text-align: right;">‘</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">œ</td>
+<td style="text-align: right; border-right: 1px solid;">oe</td>
+<td style="text-align: right;">’</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">à</td>
+<td style="text-align: right; border-right: 1px solid;">a</td>
+<td style="text-align: right;">`</td>
+<td style="text-align: right;">`` ' ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">á</td>
+<td style="text-align: right; border-right: 1px solid;">a</td>
+<td style="text-align: right;">„</td>
+<td style="text-align: right;">`` " ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">â</td>
+<td style="text-align: right; border-right: 1px solid;">a</td>
+<td style="text-align: right;">“</td>
+<td style="text-align: right;">`` " ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ã</td>
+<td style="text-align: right; border-right: 1px solid;">a</td>
+<td style="text-align: right;">”</td>
+<td style="text-align: right;">`` " ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">å</td>
+<td style="text-align: right; border-right: 1px solid;">a</td>
+<td style="text-align: right;">«</td>
+<td style="text-align: right;">`` " ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ç</td>
+<td style="text-align: right; border-right: 1px solid;">c</td>
+<td style="text-align: right;">»</td>
+<td style="text-align: right;">`` " ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">è</td>
+<td style="text-align: right; border-right: 1px solid;">e</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">`` ... ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">é</td>
+<td style="text-align: right; border-right: 1px solid;">e</td>
+<td style="text-align: right;">`` ‒ ``</td>
+<td style="text-align: right;">`` -- ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ê</td>
+<td style="text-align: right; border-right: 1px solid;">e</td>
+<td style="text-align: right;">`` – ``</td>
+<td style="text-align: right;">`` -- ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ë</td>
+<td style="text-align: right; border-right: 1px solid;">e</td>
+<td style="text-align: right;">`` — ``</td>
+<td style="text-align: right;">`` -- ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ì</td>
+<td style="text-align: right; border-right: 1px solid;">i</td>
+<td style="text-align: right;">`` ― ``</td>
+<td style="text-align: right;">`` -- ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">í</td>
+<td style="text-align: right; border-right: 1px solid;">i</td>
+<td style="text-align: right;">©</td>
+<td style="text-align: right;">`` (c) ``</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">î</td>
+<td style="text-align: right; border-right: 1px solid;">i</td>
+<td style="text-align: right;">®</td>
+<td style="text-align: right;">`` (r) ``</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ï</td>
+<td style="text-align: right; border-right: 1px solid;">i</td>
+<td style="text-align: right;"><sup><span class="small">TM</span></sup></td>
+<td style="text-align: right;">(tm)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ò</td>
+<td style="text-align: right; border-right: 1px solid;">o</td>
+<td style="text-align: right;">¼</td>
+<td style="text-align: right;">1/4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ó</td>
+<td style="text-align: right; border-right: 1px solid;">o</td>
+<td style="text-align: right;">½</td>
+<td style="text-align: right;">1/2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ô</td>
+<td style="text-align: right; border-right: 1px solid;">o</td>
+<td style="text-align: right;">¾</td>
+<td style="text-align: right;">3/4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">õ</td>
+<td style="text-align: right; border-right: 1px solid;">o</td>
+<td style="text-align: right;">±</td>
+<td style="text-align: right;">+-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ø</td>
+<td style="text-align: right; border-right: 1px solid;">o</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ù</td>
+<td style="text-align: right; border-right: 1px solid;">u</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">ú</td>
+<td style="text-align: right; border-right: 1px solid;">u</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">û</td>
+<td style="text-align: right; border-right: 1px solid;">u</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Any extended ASCII character not listed above will be removed from the document.</p>
+<p><strong>Remove ellipses</strong>: Check this option to remove ellipses (if in the middle of a sentence) or replace with a <em>.</em> (if at the end of a sentence).</p>
+<p><strong>Remove bullets and list-item numbering</strong>: Check this option to remove bullet symbols and numbers that appear in front of list items.</p>
+<p><strong>Remove Internet and file addresses</strong>: Check this option to remove Internet URLs and file paths.</p>
+<p><strong>Remove trailing periods from abbreviations and acronyms</strong>: Check this option to remove the last period from abbreviations and acronyms. For example:</p>
+<div class="fancyquotes">
+<p>Dr.&nbsp;Jones has requested a copy of the S.W.O.T. report.</p>
+</div>
+<p>will be exported as:</p>
+<div class="fancyquotes">
+<p>Dr Jones has requested a copy of the S.W.O.T report.</p>
+</div>
+<p>This option is recommended for other programs that may have difficulty with deducing sentences properly because of these periods.</p>
+<p><strong>Narrow full-width characters</strong>: Check this option to convert full-width characters to their narrow counterparts. For example:</p>
+<blockquote class="blockquote">
+<p><em>Ｈｅｌｌｏ</em></p>
+</blockquote>
+<p>will be exported as:</p>
+<blockquote class="blockquote">
+<p><em>Hello</em></p>
+</blockquote>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-printing" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="sec-printing"><span class="header-section-number">8.8</span> Printing</h2>
+<p>To print any window, go to the <strong>Home</strong> tab and click the <span class="keys">Print</span> button, or right-click on the window and select <strong>Print</strong>.</p>
+<div class="wrapfigure" style="width: 48%;">
+<p><img src="images/printerheadersfooters.png" class="img-fluid" style="width:48.0%"></p>
+</div>
+<p>Clicking the arrow beneath the <span class="keys">Print</span> button will open a menu containing additional printing options. For example, to change the paper size or orientation of your printouts, select <strong>Page Setup</strong> from this menu.</p>
+<p>To add headers or footers to your printouts, select <strong>Headers &amp; Footers…</strong> from this menu.</p>
+<p>Headers and footers support placeholders for items such as page, date, and time information. These tags are expanded dynamically when printing takes place. These include:</p>
+<ul>
+<li><code>@TITLE@</code>: The title of the printed document.</li>
+<li><code>@DATE@</code>: The date when it was printed.</li>
+<li><code>@TIME@</code>: The time when it was printed.</li>
+<li><code>@DATETIME@</code>: The date and time when it was printed.</li>
+<li><code>@PAGENUM@</code>: The current page number.</li>
+<li><code>@PAGESCNT@</code>: The number of printed pages.</li>
+<li><code>@USER@</code>: The user name currently logged into the computer.</li>
+</ul>
+<p>For example, printing:</p>
+<blockquote class="blockquote">
+<p><em>@PAGENUM@ (of @PAGESCNT@ pages)</em></p>
+</blockquote>
+<p>may expand to:</p>
+<blockquote class="blockquote">
+<p><em>1 (of 7 pages)</em></p>
+</blockquote>
+<p>Custom values can also be entered here (e.g., the editor’s name).</p>
+<p>Finally, a watermark can be stamped across each page when you print (e.g., <em>CONFIDENTIAL</em> or your company name).</p>
+<p>To do this, select <strong>Watermark…</strong> from the menu, enter a label, and click <span class="keys">OK</span>.</p>
+<p>Note that watermarks support the following placeholders:</p>
+<ul>
+<li><code>@DATE@</code>: The date when it was printed.</li>
+<li><code>@TIME@</code>: The time when it was printed.</li>
+<li><code>@DATETIME@</code>: The date and time when it was printed.</li>
+<li><code>@USER@</code>: The user name currently logged into the computer.</li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-amstad" class="csl-entry" role="listitem">
+Amstad, Toni. <em>Wie Verstandlich Sind Unsere Zeitungen?</em> Universitat Zurich, 1978.
+</div>
+<div id="ref-anderson:1981" class="csl-entry" role="listitem">
+Anderson, Jonathan. <em>Analysing the Readability of English and Non-English Texts in the Classroom with Lix</em>. Aug. 1981.
+</div>
+<div id="ref-anderson:1983" class="csl-entry" role="listitem">
+---. <span>“Lix and Rix: Variations of a Little-Known Readability Index.”</span> <em>Journal of Reading</em>, vol. 26, no. 6, 1983, pp. 490–96.
+</div>
+<div id="ref-aquino" class="csl-entry" role="listitem">
+Aquino, Milagros R. <span>“The Validity of the Miller-Coleman Readability Scale.”</span> <em>Reading Research Quarterly</em>, vol. 4, no. 3, Spring, 1969, pp. 342–57.
+</div>
+<div id="ref-baldwin-kaufman" class="csl-entry" role="listitem">
+Baldwin, R. Scott, and Rhonda K. Kaufman. <span>“A Concurrent Validity Study of the Raygor Readability Estimate.”</span> <em>Journal of Reading</em>, vol. 23, no. 2, 1979, pp. 148–53.
+</div>
+<div id="ref-bamberger-vanecek" class="csl-entry" role="listitem">
+Bamberger, Richard, and Erich Vanecek. <em>Lesen-Verstehen-Lernen-Schreiben: Die Schwierigkeitsstufen von Texten in Deutscher Sprache</em>. Jugend und Volk/Diesterweg/Sauerl<span>ä</span>nder, 1984.
+</div>
+<div id="ref-barrio-cantalejo-simon-lorda-melguizo-escalona-marijuan-hernando" class="csl-entry" role="listitem">
+Barrio-Cantalejo, Inés Marı́a, et al. <span>“Validaci<span>ó</span>n de la Escala INFLESZ para evaluar la legibilidad de los textos dirigidos a pacientes.”</span> <em>Anales del Sistema Sanitario de Navarra</em>, vol. 31, no. 2, 2008, pp. 135–52.
+</div>
+<div id="ref-bjornsson:1983" class="csl-entry" role="listitem">
+Björnsson, C. H. <span>“Readability of Newspapers in 11 Languages.”</span> <em>Reading Research Quarterly</em>, vol. 18, no. 4, 1983, pp. 480–97.
+</div>
+<div id="ref-bjornsson:1979" class="csl-entry" role="listitem">
+Björnsson, C. H., and Birgit Hård af Segerstad. <em>Lix p<span>å</span> Franska Och Tio Andra Spr<span>å</span>k</em>. Pedagogiskt centrum Stockholms skolf<span>ö</span>rvaltning, 1979.
+</div>
+<div id="ref-bormuth:1969" class="csl-entry" role="listitem">
+Bormuth, John R. <em>Development of Readability Analyses</em>. United States Department of Health, Education, <span>&amp;</span> Welfare, 1969.
+</div>
+<div id="ref-bormuth:1966" class="csl-entry" role="listitem">
+---. <span>“Readability: A New Approach.”</span> <em>Reading Research Quarterly</em>, vol. 1, no. 3, Spring, 1966, pp. 79–132.
+</div>
+<div id="ref-carver:1985" class="csl-entry" role="listitem">
+Carver, Ronald P. <span>“Measuring Readability Using DPR Units.”</span> <em>Journal of Reading</em>, vol. 27, no. 4, 1985, pp. 303–16.
+</div>
+<div id="ref-caylor-sticht-fox-ford" class="csl-entry" role="listitem">
+Caylor, John S., et al. <em>Methodologies for Determining Reading Requirements of Military Occupational Specialties</em>. United States Office of the Chief of Research; Development, 1973.
+</div>
+<div id="ref-chall-dale:manual:1995" class="csl-entry" role="listitem">
+Chall, Jeanne S., and Edgar Dale. <em>Manual for the New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-chall-dale:revisited:1995" class="csl-entry" role="listitem">
+---. <em>Readability Revisited: The New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-coleman-liau" class="csl-entry" role="listitem">
+Coleman, Meri, and T. L. Liau. <span>“A Computer Readability Formula Designed for Machine Scoring.”</span> <em>Journal of Applied Psychology</em>, vol. 60, no. 2, 1975, pp. 283–84.
+</div>
+<div id="ref-contreras" class="csl-entry" role="listitem">
+Contreras, Alfonso, et al. <span>“The SOL Formulas for Converting SMOG Readability Scores Between Health Education Materials Written in Spanish, English, and French.”</span> <em>Journal of Health Communications</em>, vol. 4, 1999, pp. 21–29.
+</div>
+<div id="ref-crawford" class="csl-entry" role="listitem">
+Crawford, Alan. <span>“A Spanish Language Fry-Type Readability Procedure: Elementary Level.”</span> <em>Bilingual Education Paper Series</em>, vol. 7, no. 8, 1984, pp. 1–17.
+</div>
+<div id="ref-cuayahuitl" class="csl-entry" role="listitem">
+Cuayáhuitl, Heriberto. <span>“A Syllabification Algorithm for Spanish.”</span> <em>Lecture Notes in Computer Science</em>, vol. 2945, 2004, pp. 412–15.
+</div>
+<div id="ref-dale-chall:1948" class="csl-entry" role="listitem">
+Dale, Edgar, and Jeanne S. Chall. <span>“A Formula for Predicting Readability.”</span> <em>Educational Research Bulletin</em>, vol. 27, no. 1, 1948, pp. 11–20, 28.
+</div>
+<div id="ref-danielson-bryan" class="csl-entry" role="listitem">
+Danielson, Wayne A., and Sam Dunn Bryan. <span>“Computer Automation of Two Readability Formulas.”</span> <em>Journalism Quarterly</em>, vol. 40, 1963, pp. 201–06.
+</div>
+<div id="ref-decicco" class="csl-entry" role="listitem">
+DeCicco, Laura. <em>Exploring Ggplot2 Boxplots - Defining Limits and Adjusting Style</em>. Water Data For The Nation Blog; https://www.waterdata.usgs.gov/blog/boxplots/, 10 Aug. 2018.
+</div>
+<div id="ref-dolch" class="csl-entry" role="listitem">
+Dolch, E. W. <span>“A Basic Sight Vocabulary.”</span> <em>Elementary School Journal</em>, vol. 36, no. 6, 1936, pp. 456–60.
+</div>
+<div id="ref-fang" class="csl-entry" role="listitem">
+Fang, Irving. <span>“The <span>‘</span>Easy Listening Formula’<span></span>.”</span> <em>Journal of Broadcasting</em>, vol. 10, no. 1, 1966, pp. 63–68.
+</div>
+<div id="ref-farr-jenkins-paterson" class="csl-entry" role="listitem">
+Farr, James N., et al. <span>“Simplification of the Flesch Reading Ease Formula.”</span> <em>Journal of Applied Psychology</em>, vol. 35, no. 5, 1951, pp. 333–37.
+</div>
+<div id="ref-flesch:1979" class="csl-entry" role="listitem">
+Flesch, Rudolf Franz. <em>How to Write Plain English: A Book for Lawyers and Consumers</em>. Harper <span>&amp;</span> Row, 1979.
+</div>
+<div id="ref-flesch:1949" class="csl-entry" role="listitem">
+---. <em>The Art of Readable Writing</em>. Harper <span>&amp;</span> Row, 1949.
+</div>
+<div id="ref-fry:1968" class="csl-entry" role="listitem">
+Fry, Edward. <span>“A Readability Formula That Saves Time.”</span> <em>Journal of Reading</em>, vol. 11, no. 7, 1968, pp. 513–16, 575–78.
+</div>
+<div id="ref-fry:elementary:1977" class="csl-entry" role="listitem">
+---. <em>Elementary Reading Instruction</em>. McGraw-Hill, 1977.
+</div>
+<div id="ref-fry:extensions:1977" class="csl-entry" role="listitem">
+---. <span>“Fry’s Readability Graph: Clarifications, Validity, and Extension to Level 17.”</span> <em>Journal of Reading</em>, vol. 21, no. 3, 1977, pp. 242–52.
+</div>
+<div id="ref-gilliam-pena-mountain" class="csl-entry" role="listitem">
+Gilliam, Bettye, et al. <span>“The Fry Graph Applied to Spanish Readability.”</span> <em>Reading Teacher</em>, vol. 33, 1980, pp. 426–30.
+</div>
+<div id="ref-grundner" class="csl-entry" role="listitem">
+Grundner, T. M. <span>“How to Make Consent Forms More Readable.”</span> <em>IRB: Ethics <span>&amp;</span> Human Research</em>, vol. 3, no. 7, 1981, pp. 9–10.
+</div>
+<div id="ref-gunning" class="csl-entry" role="listitem">
+Gunning, Robert. <em>The Technique of Clear Writing</em>. Rev. ed., McGraw-Hill, 1968.
+</div>
+<div id="ref-harris-jacobson" class="csl-entry" role="listitem">
+Harris, A. J., and M. D. Jacobson. <em>Basic Reading Vocabularies</em>. Macmillan, 1982.
+</div>
+<div id="ref-hooke-deleo-slaughter" class="csl-entry" role="listitem">
+Hooke, Lydia R., et al. <em>Readability of Air Force Publications: A Criterion Referenced Evaluation. Final Report</em>. United States Air Force Human Resources Lab, 1979.
+</div>
+<div id="ref-kibby" class="csl-entry" role="listitem">
+Kibby, Michael W. <span>“Test Review: The Degrees of Reading Power.”</span> <em>Journal of Reading</em>, vol. 24, no. 5, 1981, pp. 416–27.
+</div>
+<div id="ref-kincaid-fishburne-rogers-chissom:1975" class="csl-entry" role="listitem">
+Kincaid, J. Peter, Jr. Lt. Robert P. Fishburne, et al. <em>Derivation of New Readability Formulas (Automated Readability Index, Fog Count and Flesch Reading Ease Formula) for Navy Enlisted Personnel</em>. United States Naval Technical Training Command, 1975.
+</div>
+<div id="ref-kincaid-aagard-ohara:1980" class="csl-entry" role="listitem">
+Kincaid, J. Peter, James A. Aagard, et al. <em>Development and Test of a Computer Readability Editing System (CRES). Final Report, June 1978 Through December 1979</em>. United States Naval Training Analysis; Evaluation Group, 1980.
+</div>
+<div id="ref-kincaid:1972" class="csl-entry" role="listitem">
+Kincaid, J. Peter, John Van Deusen, et al. <em>Use of the Automated Readability Index for Evaluating Peer-Prepared Material for Use in Adult Reading Education</em>. United States Department of Health, Education, <span>&amp;</span> Welfare; Office of Education, 1972.
+</div>
+<div id="ref-mcalpine" class="csl-entry" role="listitem">
+McAlpine, Rachel. <em>From Plain English to Global English</em>. Quality Web Content; https://www.webpagecontent.com/arc_archive/139/5/, 2006.
+</div>
+<div id="ref-mccall-crabbs:1926" class="csl-entry" role="listitem">
+McCall, W. A., and L. M. Crabbs. <em>Standard Test Lessons in Reading</em>. Columbia University Teachers College, 1926.
+</div>
+<div id="ref-mccall-crabbs:1950" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1950.
+</div>
+<div id="ref-mccall-crabbs:1961" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1961.
+</div>
+<div id="ref-mclaughlin" class="csl-entry" role="listitem">
+McLaughlin, Harry. <span>“SMOG Grading - a New Readability Formula.”</span> <em>Journal of Reading</em>, vol. 12, no. 8, 1969, pp. 639–46.
+</div>
+<div id="ref-miller-coleman" class="csl-entry" role="listitem">
+Miller, G. R., and E. B. Coleman. <span>“A Set of Thirty-Six Prose Passages Calibrated for Complexity.”</span> <em>Journal of Verbal Learning and Verbal Behavior</em>, vol. 6, 1967, pp. 851–54.
+</div>
+<div id="ref-powers-sumner-kearl" class="csl-entry" role="listitem">
+Powers, R. D., et al. <span>“A Recalculation of Four Adult Readability Formulas.”</span> <em>Journal of Educational Psychology</em>, vol. 49, no. 2, 1958, pp. 99–105.
+</div>
+<div id="ref-raygor" class="csl-entry" role="listitem">
+Raygor, Alton L. <em>The Raygor Readability Estimate: A Quick and Easy Way to Determine Difficulty</em>. Dec. 1977, pp. 259–63.
+</div>
+<div id="ref-renstrom" class="csl-entry" role="listitem">
+Renström, Jan. <span>“Texte Und Textbehandlung Im Deutschunterricht.”</span> <em>Die Unterrichtspraxis / Teaching German</em>, vol. 13, no. 2, Autumn, 1980, pp. 150–55.
+</div>
+<div id="ref-schulz" class="csl-entry" role="listitem">
+Schulz, Renate A. <span>“Literature and Readability: Bridging the Gap in Foreign Language Reading.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 1, Spring, 1981, pp. 43–53.
+</div>
+<div id="ref-schwartz" class="csl-entry" role="listitem">
+Schwartz, Roswitha E. W. <em>An Exploratory Effort to Design a Readability Graph for German Material</em>. State University of New York at Albany, Reading Department, 1975.
+</div>
+<div id="ref-esmith" class="csl-entry" role="listitem">
+Smith, E. A., and R. J. Senter. <em>Automated Readability Index</em>. United States Aerospace Medical Research Laboratorties, 1967.
+</div>
+<div id="ref-lsmith" class="csl-entry" role="listitem">
+Smith, Lawrence L. <span>“Using a Modified SMOG in Primary and Intermediate Grades.”</span> <em>Reading Horizons</em>, vol. 24, no. 2, 1984, pp. 129–32.
+</div>
+<div id="ref-spache:1953" class="csl-entry" role="listitem">
+Spache, George. <span>“A New Readability Formula for Primary-Grade Reading Materials.”</span> <em>The Elementary School Journal</em>, vol. 53, no. 7, 1953, pp. 410–13.
+</div>
+<div id="ref-spache:1974" class="csl-entry" role="listitem">
+---. <em>Good Reading for Poor Readers</em>. Garrard Publishing Company, 1974.
+</div>
+<div id="ref-stocker" class="csl-entry" role="listitem">
+Stocker, Leonard P. <span>“Increasing the Precision of the Dale-Chall Readability Formula.”</span> <em>Reading Improvement</em>, vol. 8, no. 3, Winter, 1971, pp. 87–89.
+</div>
+<div id="ref-tufte:eyes" class="csl-entry" role="listitem">
+Tufte, Edward. <em>Seeing with Fresh Eyes</em>. Graphics <span>Press</span> LLC, 2020.
+</div>
+<div id="ref-vari-cartier" class="csl-entry" role="listitem">
+Vari-Cartier, Patricia. <span>“Development and Validation of a New Instrument to Assess the Readability of Spanish Prose.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 2, 1981, pp. 141–48.
+</div>
+<div id="ref-wheeler-smith" class="csl-entry" role="listitem">
+Wheeler, Lester R., and Edwin H. Smith. <span>“A Practical Readability Formula for the Classroom Teacher in Elementary Grades.”</span> <em>Elementary English</em>, vol. 31, 1954, pp. 397–99.
+</div>
+<div id="ref-wolinski" class="csl-entry" role="listitem">
+Wolinski, John T., and Maurice W. Bozman. <span>“Using the Raygor Readability Estimate for Social Studies.”</span> <em>The Social Studies</em>, vol. 74, no. 5, 1983, pp. 215–19.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    window.setColorSchemeToggle(window.hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./customizing-results.html" class="pagination-link" aria-label="Customizing the Results">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Customizing the Results</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./program-options.html" class="pagination-link" aria-label="Program &amp; Project Options">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

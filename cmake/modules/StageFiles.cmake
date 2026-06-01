@@ -201,7 +201,7 @@ function(copy_dir_to_staging SRC DEST_REL)
     set(_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${SRC}")
 
     if(NOT EXISTS "${_SRC}")
-        message(WARNING "Source folder '${_SRC}' not found and will not be copied to staging areas.")
+        message(FATAL_ERROR "Source folder '${_SRC}' not found and will not be copied to staging areas.")
         return()
     endif()
 

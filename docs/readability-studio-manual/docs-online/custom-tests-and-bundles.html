@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Readability analysis software">
+
+<title>14&nbsp; Custom Tests &amp; Bundles – Readability Studio 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./examples-getting-started.html" rel="next">
+<link href="./readability-tests-german.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6c49c5477b92c77c9eb341f9299c235f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fa1f459854a8ab2e5f5e8b32f437b5d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    window.setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      window.setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    window.hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(darkModeDefault) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !window.hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (window.hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./readability-tests-english.html">Readability Tests</a></li><li class="breadcrumb-item"><a href="./custom-tests-and-bundles.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Readability Studio 2026</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Overviews</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Technical Overviews</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Program Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/new-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">New Features and Enhancements</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./creating-a-new-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating a New Project</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-standard-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-batch-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reviewing Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./customizing-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Customizing the Results</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Options &amp; Features</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./program-options.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Additional Features</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Readability Tests</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-english.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">English Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-spanish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Spanish Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-german.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">German Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./custom-tests-and-bundles.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-editing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Editing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Customizing Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-batch-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-creating-custom-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Creating Custom Tests</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analysis-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Analysis Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scoring-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Scoring Notes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Libraries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Tools &amp; Content</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/shortcuts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Keyboard Shortcuts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-creating-custom-test" id="toc-sec-creating-custom-test" class="nav-link active" data-scroll-target="#sec-creating-custom-test"><span class="header-section-number">14.1</span> Creating a Custom Test</a></li>
+  <li><a href="#sec-custom-test-functions" id="toc-sec-custom-test-functions" class="nav-link" data-scroll-target="#sec-custom-test-functions"><span class="header-section-number">14.2</span> Custom Test Functions</a></li>
+  <li><a href="#sec-custom-test-dialog" id="toc-sec-custom-test-dialog" class="nav-link" data-scroll-target="#sec-custom-test-dialog"><span class="header-section-number">14.3</span> Custom Test Dialog</a></li>
+  <li><a href="#sec-add-custom-word-test" id="toc-sec-add-custom-word-test" class="nav-link" data-scroll-target="#sec-add-custom-word-test"><span class="header-section-number">14.4</span> Adding a Custom-word Test</a></li>
+  <li><a href="#sec-test-bundles" id="toc-sec-test-bundles" class="nav-link" data-scroll-target="#sec-test-bundles"><span class="header-section-number">14.5</span> Test Bundles</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./readability-tests-english.html">Readability Tests</a></li><li class="breadcrumb-item"><a href="./custom-tests-and-bundles.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="sec-creating-custom-test" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="sec-creating-custom-test"><span class="header-section-number">14.1</span> Creating a Custom Test</h2>
+<p>Along with offering standard tests, such as <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> and <a href="readability-tests-english.html#sec-spache-test">Spache Revised</a>, <em>Readability Studio</em> also includes the ability to create your own tests. Many customizable features are offered for new tests, such as being able to select your own familiar-word list and which formula to use.</p>
+<p>To create a custom test, go to the <strong>Readability</strong> tab, click the arrow beneath the <span class="keys">Custom Tests</span> button and select <strong>Add Test…</strong> from the menu. At this point, the <strong>Add Custom Test</strong> dialog will be displayed:</p>
+<p><img src="images/add-custom-test.png" class="img-fluid"></p>
+<p>In the <strong>General Settings</strong> section, enter a name for this test (e.g., “NDC Computer”) in the <strong>Test name</strong> field. This will be the name of the test as it appears in your results and on the menu.</p>
+<p>Next, enter the test’s formula in the <strong>Formula</strong> field. Essentially, there are two types of formulas: predefined familiar-word formulas and custom-built formulas. A predefined familiar-word formula will use a standard test’s formula along with your own familiar-word criteria. This is useful for expanding a standard test (such as New Dale-Chall) by including your own word list. The available predefined formulas are:</p>
+<ul>
+<li><code>CustomNewDaleChall()</code>: this will use the New Dale-Chall formula.</li>
+<li><code>CustomSpache()</code>: this will use the Spache Revised formula.</li>
+<li><code>CustomHarrisJacobson()</code>: this will use the Harris Jacobson formula.</li>
+</ul>
+<p>The second type of formula is a custom-built formula. For example, the formula for Lix is:</p>
+<p><code>SevenCharacterPlusWordCount() / SentenceCount()</code></p>
+<p>To create a new formula based on Lix that treats 6+ character words as difficult, enter this:</p>
+<p><code>SixCharacterPlusWordCount() / SentenceCount()</code></p>
+<p>To view all available functions, click the <span class="keys">ƒx</span> button. This will display a function browser on the right side of the dialog:</p>
+<p><img src="images/function-browser.png" class="img-fluid"></p>
+<p>The left side of this browser shows the function categories, while the right side shows the functions from the selected category. Beneath, a description of the selected function will be shown. Note that double-clicking a function on the right side will insert it into the formula.</p>
+<p>Refer to <a href="#sec-custom-test-functions" class="quarto-xref"><span>Section 14.2</span></a> for a list of available functions.</p>
+<div class="minipage">
+<p>After entering your formula, you will need to specify what type of test this will be from the <strong>Test result type</strong> combobox. This will determine which column the test’s score will appear in the <a href="reviewing-standard-projects.html#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> window. The following types of tests are available:</p>
+<ul>
+<li>Grade level</li>
+<li>Index value</li>
+<li><a href="scoring-notes.html#sec-cloze">Predicted cloze score</a></li>
+</ul>
+</div>
+<p>If your test is using any of the predefined familiar-word formulas (<code>CustomNewDaleChall()</code>, <code>CustomSpache()</code>, <code>CustomHarrisJacobson()</code>) or using the functions <code>UnfamiliarWordCount()</code> or <code>UniqueUnfamiliarWordCount()</code>, then you will need to define how familiar words are detected. Expand <strong>Familiar Words</strong> to view two sections: <a href="#sec-custom-word-list"><strong>Word Lists</strong></a> and <a href="#sec-custom-proper-numerals"><strong>Proper Nouns &amp; Numerals</strong></a>.</p>
+<p>If you want to include a list of your own familiar words, then check the option <strong>Include custom familiar word list</strong>. Next, enter the path to the familiar-word file in the <strong>File containing familiar words</strong> field. This file must be a text file and each word must be separated by a space, tab, comma, semicolon, or new line. An example file would look like this:</p>
+<blockquote class="blockquote">
+<p><code>apple orange pear</code></p>
+</blockquote>
+<p>or like this:</p>
+<blockquote class="blockquote">
+<p><code>apple</code><br>
+<code>orange</code><br>
+<code>pear</code></p>
+</blockquote>
+<p>After entering the file path, the words from the file will be shown in the familiar words grid.</p>
+<p>Next, you can specify which type of stemming (if any) to use. Stemming compares words based on their roots and is useful for finding words that appear in different forms. This comparison is performed when words from a document are being matched against your familiar-word list. For example, let us say that you have the word <em>open</em> in your list and have English stemming selected. When you analyze a document, words such as <em>opened</em> and <em>opening</em> will be considered familiar, even if they are not explicitly in your word list.</p>
+<div class="notesection">
+<p>The application implements 3.0.1 of the <em>Snowball</em> standard for its stemming algorithm.</p>
+</div>
+<p>If you are not using stemming, then it is recommended that you enter each inflected form of your words (e.g., possessive, plural) in your familiar-word list. For example, you would need <em>open</em>, <em>opens</em>, <em>opening</em>, etc. explicitly in your list to cover each form of <em>open</em>.</p>
+<p>Along with your own word list, you can also use the New Dale-Chall, Spache, and Harris-Jacobson word lists. This enables you to make your word list an appendage to any of these standard tests, therefore creating your own extended version of these tests. This behavior can be toggled with the options shown below:</p>
+<p><img src="images/custom-test-include-lists.png" class="img-fluid"></p>
+<p>Standard familiar-word tests normally consider numbers and proper nouns as familiar. This is the default behavior for a custom test as well, but these can be toggled on the <strong>Proper Nouns</strong> and <strong>Numbers</strong> sections (shown below):</p>
+<p><img src="images/custom-test-treat.png" class="img-fluid"></p>
+<p>Finally, you can specify how this test interacts with the <a href="creating-a-new-project.html#sec-creating-standard-project"><strong>New Project</strong></a> wizard by associating it with document types and industries. Click the <strong>Classification</strong> icon to display these options. Then select all the documents and industries that this test should relate to.</p>
+<p>For example, select the <strong>Children’s literature</strong> and <strong>Children’s healthcare</strong> check boxes (as shown below) and click <span class="keys">OK</span>.</p>
+<p><img src="images/custom-test-wizard-settings.png" class="img-fluid"></p>
+<p>Now create a new project and select <strong>Children’s healthcare</strong> as the industry type. Once the program loads the document, your custom test will be automatically included in the results.</p>
+</section>
+<section id="sec-custom-test-functions" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="sec-custom-test-functions"><span class="header-section-number">14.2</span> Custom Test Functions</h2>
+<p>The following functions and operators are available for use in <a href="#sec-creating-custom-test">custom test</a> formulas.</p>
+<div class="minipage">
+<div id="tbl-formula-operators" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-operators-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.1: Operators
+</figcaption>
+<div aria-describedby="tbl-formula-operators-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">*</td>
+<td style="text-align: left;">Multiplication.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">Division.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">%</td>
+<td style="text-align: left;">Modulus: Divides two values and returns the remainder.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">Addition.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Subtraction.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">^</td>
+<td style="text-align: left;">Exponentiation; the number in front of ^ is the base, the number after it is the power to raise it to.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">**</td>
+<td style="text-align: left;">Exponentiation (this is an alias for ^)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">=</td>
+<td style="text-align: left;">Equals.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&lt;</td>
+<td style="text-align: left;">Less than.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&gt;</td>
+<td style="text-align: left;">Greater than.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&lt;&gt;</td>
+<td style="text-align: left;">Not equal to.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">!=</td>
+<td style="text-align: left;">Not equal to (this is an alias for &lt;&gt;)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&gt;=</td>
+<td style="text-align: left;">Greater than or equal to.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&lt;=</td>
+<td style="text-align: left;">Less than or equal to.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&amp;</td>
+<td style="text-align: left;">Logical conjunction (AND).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">Logical alternative (OR).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">( )</td>
+<td style="text-align: left;">Groups sub-expressions, overriding the order of operations.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="minipage">
+<p>For operators, the order of precedence is:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">( )</td>
+<td style="text-align: left;">Instructions in parentheses are executed first.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">^</td>
+<td style="text-align: left;">Exponentiation.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">*, /, and %</td>
+<td style="text-align: left;">Multiplication, division, and modulus.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">+ and -</td>
+<td style="text-align: left;">Addition and subtraction.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, the following:</p>
+<p><span class="math display">
+5+5+5/2
+</span></p>
+<p>Will yield <code>12.5</code>. <code>5/2</code> is executed first, then added to the other fives. However, by using parentheses:</p>
+<p><span class="math display">
+(5+5+5)/2
+</span></p>
+<p>You can override it so that the additions happen first (resulting in <code>15</code>), followed by the division (finally yielding <code>7.5</code>). Likewise, <code>(2+5)^2</code> will yield <code>49</code> (<code>7</code> squared), while <code>2+5^2</code> will yield <code>27</code> (<code>5</code> squared, plus <code>2</code>).</p>
+<div class="minipage">
+<div id="tbl-formula-logic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-logic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.2: Logic Functions
+</figcaption>
+<div aria-describedby="tbl-formula-logic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AND(Value1, Value2, …)</td>
+<td style="text-align: left;">Returns true if all conditions are true.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IFS(Condition1, Value1, Condition2, Value2, …)</td>
+<td style="text-align: left;">Checks up to twelve conditions, returning the value corresponding to the first met condition.<br>This is shorthand for multiple nested <code>IF</code> commands, providing better readability.<br>Will accept 1–12 condition/value pairs.<br>NaN will be returned if all conditions are false.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IF(Condition, ValueIfTrue, ValueIfFalse)</td>
+<td style="text-align: left;">If <em>Condition</em> is true (non-zero), then <em>ValueIfTrue</em> is returned; otherwise, <em>ValueIfFalse</em> is returned.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NOT(Value)</td>
+<td style="text-align: left;">Returns the logical negation of <em>Value.</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OR(Value1, Value2, …)</td>
+<td style="text-align: left;">Returns true if any condition is true.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="minipage">
+<div id="tbl-formula-math" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-math-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.3: Math Functions
+</figcaption>
+<div aria-describedby="tbl-formula-math-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ABS(Number)</td>
+<td style="text-align: left;">Absolute value of <em>Number</em>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CEIL(Number)</td>
+<td style="text-align: left;">Smallest integer not less than <em>Number</em>.<br><code>CEIL(-3.2)</code> = -3<br><code>CEIL(3.2)</code> = 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CLAMP(Number, Start, End)</td>
+<td style="text-align: left;">Constrains <em>Number</em> within the range of <em>Start</em> and <em>End</em>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EXP(Number)</td>
+<td style="text-align: left;">Euler to the power of <em>Number</em>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FAC(Number)</td>
+<td style="text-align: left;">Returns the factorial of <em>Number</em>. The factorial of <em>Number</em> is equal to 1*2*3*…* <em>Number</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FACT(Number)</td>
+<td style="text-align: left;">Alias for <code>FAC()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FLOOR(Number)</td>
+<td style="text-align: left;">Returns the largest integer not greater than <em>Number</em>.<br><code>FLOOR(-3.2)</code> = -4<br><code>FLOOR(3.2)</code> = 3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LN(Number)</td>
+<td style="text-align: left;">Natural logarithm of <em>Number</em> (base Euler).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LOG10(Number)</td>
+<td style="text-align: left;">Common logarithm of <em>Number</em> (base 10).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIN(Value1, Value2, …)</td>
+<td style="text-align: left;">Returns the lowest value from a specified range of values.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MAX(Value1, Value2, …)</td>
+<td style="text-align: left;">Returns the highest value from a specified range of values.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOD(Number, Divisor)</td>
+<td style="text-align: left;">Returns the remainder after <em>Number</em> is divided by <em>Divisor</em>.<br>The result has the same sign as divisor.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">POW(Base, Exponent)</td>
+<td style="text-align: left;">Raises <em>Base</em> to any power.<br>For fractional exponents, <em>Base</em> must be greater than 0.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">POWER(Base, Exponent)</td>
+<td style="text-align: left;">Alias for <code>POW()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RAND()</td>
+<td style="text-align: left;">Generates a random floating point number within the range of 0 and 1.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ROUND(Number, NumDigits)</td>
+<td style="text-align: left;"><em>Number</em> rounded to <em>NumDigits</em> decimal places.<br>If <em>NumDigits</em> is negative, then <em>Number</em> is rounded to the left of the decimal point.<br>(<em>NumDigits</em> is optional and defaults to zero.)<br><code>ROUND(-11.6, 0)</code> = 12<br><code>ROUND(-11.6)</code> = 12<br><code>ROUND(1.5, 0)</code> = 2<br><code>ROUND(1.55, 1)</code> = 1.6<br><code>ROUND(3.1415, 3)</code> = 3.142<br><code>ROUND(-50.55, -2)</code> = -100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SIGN(Number)</td>
+<td style="text-align: left;">Returns the sign of <em>Number</em>. Returns <code>1</code> if <em>Number</em> is positive, zero (<code>0</code>) if <em>Number</em> is <code>0</code>, and <code>-1</code> if <em>Number</em> is negative.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SQRT(Number)</td>
+<td style="text-align: left;">Square root of <em>Number</em>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TRUNC(Number)</td>
+<td style="text-align: left;">Discards the fractional part of <em>Number</em>.<br><code>TRUNC(-3.2)</code> = -3<br><code>TRUNC(3.2)</code> = 3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="minipage">
+<div id="tbl-formula-stats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.4: Statistical Functions
+</figcaption>
+<div aria-describedby="tbl-formula-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AVERAGE(value1,value2,…)</td>
+<td style="text-align: left;">Returns the average of a specified range of values.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SUM(value1,value2,…)</td>
+<td style="text-align: left;">Returns the sum of a specified range of values.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="minipage">
+<div id="tbl-formula-fam-words" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-fam-words-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.5: Custom Familiar Word Test Functions
+</figcaption>
+<div aria-describedby="tbl-formula-fam-words-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CustomHarrisJacobson()</td>
+<td style="text-align: left;">Performs a Harris-Jacobson test with a custom familiar word list.<br>Note that this test will use the same text exclusion rules as Harris-Jacobson (overriding your system defaults).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CustomNewDaleChall()</td>
+<td style="text-align: left;">Performs a New Dale-Chall test with a custom familiar word list.<br>Note that this test will use the same text exclusion rules as New Dale-Chall (overriding your system defaults).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CustomSpache()</td>
+<td style="text-align: left;">Performs a Spache Revised test with a custom familiar word list.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="minipage">
+<!--
+Using the proper footnote method causes the footnotes to be numbers instead of letters,
+and does not work in LaTeX because of the minipage.
+(The minipage is to keep the footnotes under the table, and not the end of the page.)
+So, to create MLA footnotes, we have to create pseudo footnotes below the table.
+Also, can't use kable here because we have index tags embedded in the text.
+-->
+<div id="tbl-formula-doc-stats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-doc-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.6: Document Statistics Functions
+</figcaption>
+<div aria-describedby="tbl-formula-doc-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CharacterCount()</td>
+<td style="text-align: left;">Returns the number of characters (i.e., letters and numbers).<br>This function takes an argument specifying which text exclusion method to use: <code>Default</code>, <code>DaleChall</code><sup>a</sup>, or <code>HarrisJacobson</code><sup>b</sup>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CharacterPlusPunctuationCount()</td>
+<td style="text-align: left;">Returns the number of characters (i.e., letters and numbers) and punctuation.<br>Note that sentence-ending punctuation is not included in this count.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IndependentClauseCount()</td>
+<td style="text-align: left;">Returns the number of units/independent clauses.<br>A unit is a section of text ending with a period, exclamation, question mark, interrobang, colon, semicolon, or dash.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SentenceCount()</td>
+<td style="text-align: left;">Returns the number of sentences.<br>This function takes an argument specifying which text exclusion or sentence-counting method to use: <code>Default</code>, <code>DaleChall</code>, <code>HarrisJacobson</code>, or <code>GunningFog</code><sup>c</sup>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SyllableCount()</td>
+<td style="text-align: left;">Returns the number of syllables.<br>This function takes an argument specifying which numeral syllabizing method to use: <code>Default</code>, <code>NumeralsFullySyllabized</code>, or <code>NumeralsAreOneSyllable</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><sup>a</sup> Uses the <a href="program-options.html#sec-readability-test-options">Dale-Chall text-exclusion</a> method.<br>
+<sup>b</sup> Uses the <a href="program-options.html#sec-readability-test-options">Harris-Jacobson text-exclusion method</a>.<br>
+<sup>c</sup> Uses the <a href="program-options.html#sec-readability-test-options">Gunning Fog</a> sentence-counting method.<br>
+This will be either traditional sentence counting or unit counting.</p>
+</div>
+<div id="tbl-formula-word-stats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-word-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.7: Word Statistics Functions
+</figcaption>
+<div aria-describedby="tbl-formula-word-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">FamiliarDaleChallWordCount()</td>
+<td style="text-align: left;">Returns the number of familiar New Dale-Chall words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FamiliarHarrisJacobsonWordCount()</td>
+<td style="text-align: left;">Returns the number of familiar Harris-Jacobson words.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FamiliarSpacheWordCount()</td>
+<td style="text-align: left;">Returns the number of familiar Spache words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FamiliarWordCount()</td>
+<td style="text-align: left;">Returns the number of familiar words (based on a custom list) from the document.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HardFogWordCount()</td>
+<td style="text-align: left;">Returns the number of difficult Gunning Fog words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MiniWordCount()</td>
+<td style="text-align: left;">Returns the number of miniwords (refer to <a href="readability-tests-english.html#sec-eflaw-test" class="quarto-xref"><span>Section 11.10</span></a>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NumeralCount()</td>
+<td style="text-align: left;">Returns the number of numerals.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OneSyllableWordCount()</td>
+<td style="text-align: left;">Returns the number of monosyllabic words.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ProperNounCount()</td>
+<td style="text-align: left;">Returns the number of proper nouns.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SevenCharacterPlusWordCount()</td>
+<td style="text-align: left;">Returns the number of words consisting of seven or more characters.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SixCharacterPlusWordCount()</td>
+<td style="text-align: left;">Returns the number of words consisting of six or more characters.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ThreeSyllablePlusWordCount()</td>
+<td style="text-align: left;">Returns the number of words consisting of three or more syllables.<br>This function takes an argument specifying which numeral syllabizing method to use: <code>Default</code> or <code>NumeralsFullySyllabized</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UnfamiliarDaleChallWordCount()</td>
+<td style="text-align: left;">Returns the number of unfamiliar New Dale-Chall words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UnfamiliarHarrisJacobsonWordCount()</td>
+<td style="text-align: left;">Returns the number of unfamiliar Harris-Jacobson words.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UnfamiliarSpacheWordCount()</td>
+<td style="text-align: left;">Returns the number of unfamiliar Spache words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UnfamiliarWordCount()</td>
+<td style="text-align: left;">Returns the number of unfamiliar words (based on a custom list) from the document.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UniqueOneSyllableWordCount()</td>
+<td style="text-align: left;">Returns the number of unique monosyllabic words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UniqueSixCharacterPlusWordCount()</td>
+<td style="text-align: left;">Returns the number of unique words consisting of six or more characters.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UniqueUnfamiliarDaleChallWordCount()</td>
+<td style="text-align: left;">Returns the number of unique unfamiliar New Dale-Chall words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UniqueUnfamiliarHarrisJacobsonWordCount()</td>
+<td style="text-align: left;">Returns the number of unique unfamiliar Harris-Jacobson words.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UniqueUnfamiliarSpacheWordCount()</td>
+<td style="text-align: left;">Returns the number of unique unfamiliar Spache words.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UniqueUnfamiliarWordCount()</td>
+<td style="text-align: left;">Returns the number of unique unfamiliar words (from a custom list).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UniqueThreeSyllablePlusWordCount()</td>
+<td style="text-align: left;">Returns the number of unique words consisting of three or more syllables.<br>This function takes an argument specifying which numeral syllabizing method to use: <code>Default</code> or <code>NumeralsFullySyllabized</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UniqueWordCount()</td>
+<td style="text-align: left;">Returns the number of unique words.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WordCount()</td>
+<td style="text-align: left;">Returns the number of words.<br>This function takes an argument specifying which text exclusion method to use: <code>Default</code>, <code>DaleChall</code>, or <code>HarrisJacobson</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div class="notesection">
+<p>New Dale-Chall and Harris-Jacobson familiar word functions will take their respective test’s text exclusion options into account.</p>
+</div>
+<div class="minipage">
+<div id="tbl-formula-shortcuts" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-formula-shortcuts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.8: Shortcuts
+</figcaption>
+<div aria-describedby="tbl-formula-shortcuts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Shortcut</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Shortcut for <code>SyllableCount(Default)</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">Shortcut for <code>ThreeSyllablePlusWordCount(Default)</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">Shortcut for <code>FamiliarDaleChallWordCount()</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">Shortcut for <code>HardFogWordCount()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">Shortcut for <code>SixCharacterPlusWordCount()</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">Shortcut for <code>OneSyllableWordCount()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">Shortcut for <code>CharacterCount(Default)</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RP</td>
+<td style="text-align: left;">Shortcut for <code>CharacterPlusPunctuationCount()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">S</td>
+<td style="text-align: left;">Shortcut for <code>SentenceCount(Default)</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">T</td>
+<td style="text-align: left;">Shortcut for <code>MiniWordCount()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">U</td>
+<td style="text-align: left;">Shortcut for <code>IndependentClauseCount()</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UDC</td>
+<td style="text-align: left;">Shortcut for <code>UnfamiliarDaleChallWordCount()</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UUS</td>
+<td style="text-align: left;">Shortcut for <code>UniqueUnfamiliarSpacheWordCount()</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">W</td>
+<td style="text-align: left;">Shortcut for <code>WordCount(Default)</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">Shortcut for <code>SevenCharacterPlusWordCount()</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<section id="comments" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="comments">Comments</h3>
+<p>Comments can be embedded within an expression to clarify its intent. C/C<sup>++</sup> style comments are supported, which provide:</p>
+<ul>
+<li>multi-line comments (text within a pair of <code>/*</code> and <code>*/</code>).</li>
+<li>single-line comments (everything after a <code>//</code> until the end of the current line).</li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* Returns a value between 1-3, representing the usage</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-2" class="code-annotation-target"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="co">   of buzz words in the document.*/</span></span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a>IF<span class="op">(</span><span class="co">// Review the % of buzz words in the document.</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>   <span class="co">// Over 15% is unacceptable</span></span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>FamiliarWordCount<span class="op">()/</span>WordCount<span class="op">())*</span><span class="dv">100</span> <span class="op">&gt;</span> <span class="dv">15</span><span class="op">,</span> <span class="dv">3</span> <span class="co">/* Unacceptable */</span><span class="op">,</span></span>
+<span id="annotated-cell-1-6"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a>   <span class="co">// Over 5% should be reviewed</span></span>
+<span id="annotated-cell-1-7"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>   IF<span class="op">((</span>FamiliarWordCount<span class="op">()/</span>WordCount<span class="op">())*</span><span class="dv">100</span> <span class="op">&gt;</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="annotated-cell-1-8"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>   <span class="co">// 5% or less is acceptable</span></span>
+<span id="annotated-cell-1-9"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span> <span class="co">/* Acceptable */</span><span class="op">)</span> <span class="op">)</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="2" data-code-annotation="1">Multi-line comment</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="4" data-code-annotation="2">Single-line comment</span>
+</dd>
+</dl>
+</section>
+</section>
+<section id="sec-custom-test-dialog" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="sec-custom-test-dialog"><span class="header-section-number">14.3</span> Custom Test Dialog</h2>
+<section id="sec-custom-test-general-settings" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="sec-custom-test-general-settings"><span class="header-section-number">14.3.1</span> General Settings</h3>
+<p>From the <strong>Readability</strong> tab, click the <span class="keys">Custom Test</span> button and then select <strong>Add Test…</strong> to display the <strong>Add Custom Test</strong> dialog. This dialog is used to edit or create a <a href="#sec-creating-custom-test">custom test</a>.</p>
+<p><strong>Test name</strong>: If creating a new test, enter its name into this field.</p>
+<div class="minipage">
+<p><strong>Test type</strong>: Select from this list the type of result this test returns. This will determine which column the test’s score will appear in the <a href="reviewing-standard-projects.html#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> window. The following types of tests are available:</p>
+<ul>
+<li>Grade level</li>
+<li>Index value</li>
+<li><a href="scoring-notes.html#sec-cloze">Predicted cloze score</a></li>
+</ul>
+</div>
+</section>
+<section id="formula" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="formula">Formula</h3>
+<p><span class="keys">ƒx</span> Click this button to display the <strong>Function Browser</strong> dialog. In this dialog, you can browse the available functions and insert them into your formula. Refer to <a href="#sec-custom-test-functions" class="quarto-xref"><span>Section 14.2</span></a> for a list of available functions.</p>
+<p><span class="keys">✓</span> Click this button to validate the formula. You will be alerted if your formula contains any syntax errors.</p>
+<p><strong>Formula</strong>: Enter the test’s formula into this field. As you type, a list of available functions will appear beneath the cursor. To select a function from this list, first use the arrow keys on your keyboard to navigate through the list. Once you have selected the desired function, hit the <span class="keys">Spacebar</span> on your keyboard to insert it into your formula. You can also insert functions from the <strong>Function Browser</strong>.</p>
+</section>
+<section id="word-lists" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="word-lists">Word Lists</h3>
+<section id="sec-custom-word-list" class="level4" data-number="14.3.1.1">
+<h4 data-number="14.3.1.1" class="anchored" data-anchor-id="sec-custom-word-list"><span class="header-section-number">14.3.1.1</span> Custom familiar word list</h4>
+<p><strong>Include custom familiar word list</strong>: Check this option to use your own word list to determine if a word is familiar.</p>
+<p><strong>File containing familiar words</strong>: Enter the path to the familiar-word list into this field. This list must be a text file where each word is separated by a space, tab, comma, semicolon, or new line. An example file would look like this:</p>
+<blockquote class="blockquote">
+<p><code>computer install program videogame</code></p>
+</blockquote>
+<p>or like this:</p>
+<blockquote class="blockquote">
+<p><code>computer,install,program,videogame</code></p>
+</blockquote>
+<p>or like this:</p>
+<blockquote class="blockquote">
+<p><code>computer</code><br>
+<code>install</code><br>
+<code>program</code><br>
+<code>videogame</code></p>
+</blockquote>
+<p><strong>Use stemming to search for similar words</strong>: Select from this list the stemming method (if any) to use when comparing your familiar words with the words in a document.</p>
+<p>Stemming compares words based on their root. This is useful for finding words that appear in different forms from how they are entered in your word list. For example, let us say that you enter the word <em>installation</em> in your familiar word file. If you select English as your stemming type, then occurrences of the words <em>installation</em>, <em>install</em>, <em>installed</em>, <em>installs</em>, etc. found in your document will be considered familiar. This is because each of these words shares the same root, <em>install</em>. The benefit of this is that you do not need to enter every form of every word into your familiar word file.</p>
+<p>If you are not stemming, then it is recommended to enter each inflected form of your words (e.g., possessive, plural) in your word list.</p>
+</section>
+<section id="standard-familiar-word-lists" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="standard-familiar-word-lists">Standard familiar word lists</h4>
+<p><strong>Include New Dale-Chall familiar word list</strong>: Check this option to use the <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> word list (along with any other selected word lists) to determine if a word is familiar.</p>
+<p><strong>Include Spache Revised familiar word list</strong>: Check this option to use the <a href="readability-tests-english.html#sec-spache-test">Spache Revised</a> word list (along with any other selected word lists) to determine if a word is familiar.</p>
+<p><strong>Include Harris-Jacobson familiar word list</strong>: Check this option to use the <a href="readability-tests-english.html#sec-harris-jacobson">Harris-Jacobson</a> word list (along with any other selected word lists) to determine if a word is familiar.</p>
+<p><strong>Include Stocker’s Catholic supplement</strong>: Check this option to include <a href="readability-tests-english.html#sec-stocker-catholic-supplement">Stocker’s supplementary word list</a> for Catholic students (along with any other selected word lists) to determine if a word is familiar.</p>
+</section>
+<section id="other" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="other">Other</h4>
+<p><strong>Only use words common to all lists</strong>: Check this option to consider words familiar only if they appear on your custom list <em>and</em> other selected lists.</p>
+<div class="notesection">
+<p>This option is only available if you are including two or more word lists.</p>
+</div>
+<div class="warningsection">
+<p>This option is only recommended for when you want to find words that appear within a union of your word list and a standard list(s) (e.g., Spache).</p>
+</div>
+</section>
+</section>
+<section id="sec-custom-proper-numerals" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="sec-custom-proper-numerals"><span class="header-section-number">14.3.2</span> Proper Nouns &amp; Numerals</h3>
+<section id="proper-nouns" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="proper-nouns">Proper Nouns</h4>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Familiarity</p>
+</div>
+<p><strong>Count as unfamiliar</strong>: Select this option to consider all proper nouns (that do not appear on any familiar-word list) as unfamiliar.</p>
+<p><strong>Count as familiar</strong>: Select this option to consider all proper nouns as familiar.</p>
+<p><strong>Count only first occurrence of each as unfamiliar</strong>: Select this option to consider only the first occurrence of each proper noun (that does not appear on any familiar-word list) as unfamiliar.</p>
+</div>
+</section>
+<section id="numerals" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="numerals">Numerals</h4>
+<p><strong>Treat numerals as familiar</strong>: Check this to also consider numeric words as familiar.</p>
+</section>
+</section>
+<section id="classification" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="classification">Classification</h3>
+<p><strong>Associate with document type</strong>: Select the document types that you want this test to be associated with when creating a <a href="creating-a-new-project.html#sec-creating-standard-project">new project</a>. This will only take effect if the project wizard selects tests for you based on document type.</p>
+<p><strong>Associate with industry</strong>: Select the industries that you want this test to be associated with when creating a new project. This will only take effect if the project wizard selects tests for you based on industry or field.</p>
+</section>
+</section>
+<section id="sec-add-custom-word-test" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="sec-add-custom-word-test"><span class="header-section-number">14.4</span> Adding a Custom-word Test</h2>
+<p>From the <strong>Readability</strong> tab, click the <span class="keys">Custom Test</span> button and then select <strong>Add Custom [Test]…</strong> to display the <strong>Add Custom [Test]</strong> dialog. The following tests available are: New Dale-Chall, Spache Revised, and Harris-Jacobson. This dialog is used to create a <a href="#sec-creating-custom-test">custom word test</a> and is a simplified version of the standard <a href="#sec-creating-custom-test"><strong>Custom Test</strong></a> dialog.</p>
+<p><strong>Test name</strong>: Enter the name of the new test (e.g., “Harris-Jacobson (Social Studies)”) into this field.</p>
+<p><strong>File containing familiar words</strong>: Enter the path to the familiar-word list into this field. This list must be a text file where each word is separated by a space, tab, comma, semicolon, or new line. An example file would look like this:</p>
+<blockquote class="blockquote">
+<p><code>computer install program videogame</code></p>
+</blockquote>
+<p>or like this:</p>
+<blockquote class="blockquote">
+<p><code>computer,install,program,videogame</code></p>
+</blockquote>
+<p>or like this:</p>
+<blockquote class="blockquote">
+<p><code>computer</code><br>
+<code>install</code><br>
+<code>program</code><br>
+<code>videogame</code></p>
+</blockquote>
+</section>
+<section id="sec-test-bundles" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="sec-test-bundles"><span class="header-section-number">14.5</span> Test Bundles</h2>
+<p>Test bundles enable you to organize tests into collections that you can quickly add to a project. Rather than selecting numerous tests from the menus one-by-one, you can simply select a test bundle from the menu. From there, all tests within the bundle will be added to the project.</p>
+<p>To access the test bundles, select the <strong>Readability</strong> tab and click the <span class="keys">Bundles</span> button. A menu will appear which contains all the available bundles, as well as options to add, edit, and remove them.</p>
+<div class="minipage">
+<p>By default, the industry and document-type bundles used in the <a href="creating-a-new-project.html#sec-creating-standard-project"><strong>New Project</strong></a> wizard will be available. This includes:</p>
+<ul>
+<li>General document</li>
+<li>Technical document</li>
+<li>Structured form</li>
+<li>Literature</li>
+<li>Children’s literature</li>
+<li>Children’s publishing</li>
+<li>Young adult and adult publishing</li>
+<li>Children’s healthcare</li>
+<li>Adult healthcare</li>
+<li>Military and government</li>
+<li>Second language education</li>
+<li>Broadcasting</li>
+</ul>
+</div>
+<p>More specific bundles based on research articles are also included, such as <em>Patient Consent Forms</em> <span class="citation" data-cites="grundner">(<a href="references.html#ref-grundner" role="doc-biblioref">Grundner 9–10</a>)</span> and <em>Kincaid’s Tests for Navy-Personnel Materials</em>. (Some of these bundles may include goals, if recommended in the original article.)</p>
+<p>Select any of these bundles from the menu and all the tests within it will be added to the active project. Note that when you add a bundle to a project, all other tests currently in the project will be removed. This ensures that only the tests relevant to the bundle will be in the project after it is applied.</p>
+<p>You can also create your own bundles. To do this, select <strong>Add…</strong> from the <strong>Bundles</strong> menu to open the <strong>Add Test Bundle</strong> dialog:</p>
+<p><img src="images/test-bundle.png" class="img-fluid"></p>
+<p>On the <strong>General</strong> page of this dialog, you will first enter a name for the bundle. (This name is how it will appear in the <strong>Bundles</strong> menu.) Next, you will select all the tests that you wish to include in this bundle. (Tests are available on the <strong>Standard Tests</strong>, <strong>Custom Tests</strong>, and <strong>Vocabulary Tools</strong> pages.)</p>
+<p>Along with selecting tests, you can also specify the range of values that a document should score within for any given test. First, on the <strong>Goals</strong> page, click the add button to include a new goal. Next, double-click in the <strong>Test</strong> column to select the test. Finally, click in either the <strong>Recommended minimum score</strong> or <strong>Recommended maximum score</strong> column and enter the acceptable score range. Now, when this bundle is applied to a project, the document’s pass/fail status will be displayed in the <a href="reviewing-standard-projects.html#sec-reviewing-goals"><strong>Goals</strong></a> section.</p>
+<p>Beneath the test goals grid is another grid for creating statistics goals as well. For example, you can add a goal such as specifying the maximum average sentence length for the document.</p>
+<p>Once you are done, click the <span class="keys">OK</span> button to add the bundle to the menu.</p>
+<p>After this bundle is added, select it from the menu and all the tests in the bundle will be added to the active project.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-amstad" class="csl-entry" role="listitem">
+Amstad, Toni. <em>Wie Verstandlich Sind Unsere Zeitungen?</em> Universitat Zurich, 1978.
+</div>
+<div id="ref-anderson:1981" class="csl-entry" role="listitem">
+Anderson, Jonathan. <em>Analysing the Readability of English and Non-English Texts in the Classroom with Lix</em>. Aug. 1981.
+</div>
+<div id="ref-anderson:1983" class="csl-entry" role="listitem">
+---. <span>“Lix and Rix: Variations of a Little-Known Readability Index.”</span> <em>Journal of Reading</em>, vol. 26, no. 6, 1983, pp. 490–96.
+</div>
+<div id="ref-aquino" class="csl-entry" role="listitem">
+Aquino, Milagros R. <span>“The Validity of the Miller-Coleman Readability Scale.”</span> <em>Reading Research Quarterly</em>, vol. 4, no. 3, Spring, 1969, pp. 342–57.
+</div>
+<div id="ref-baldwin-kaufman" class="csl-entry" role="listitem">
+Baldwin, R. Scott, and Rhonda K. Kaufman. <span>“A Concurrent Validity Study of the Raygor Readability Estimate.”</span> <em>Journal of Reading</em>, vol. 23, no. 2, 1979, pp. 148–53.
+</div>
+<div id="ref-bamberger-vanecek" class="csl-entry" role="listitem">
+Bamberger, Richard, and Erich Vanecek. <em>Lesen-Verstehen-Lernen-Schreiben: Die Schwierigkeitsstufen von Texten in Deutscher Sprache</em>. Jugend und Volk/Diesterweg/Sauerl<span>ä</span>nder, 1984.
+</div>
+<div id="ref-barrio-cantalejo-simon-lorda-melguizo-escalona-marijuan-hernando" class="csl-entry" role="listitem">
+Barrio-Cantalejo, Inés Marı́a, et al. <span>“Validaci<span>ó</span>n de la Escala INFLESZ para evaluar la legibilidad de los textos dirigidos a pacientes.”</span> <em>Anales del Sistema Sanitario de Navarra</em>, vol. 31, no. 2, 2008, pp. 135–52.
+</div>
+<div id="ref-bjornsson:1983" class="csl-entry" role="listitem">
+Björnsson, C. H. <span>“Readability of Newspapers in 11 Languages.”</span> <em>Reading Research Quarterly</em>, vol. 18, no. 4, 1983, pp. 480–97.
+</div>
+<div id="ref-bjornsson:1979" class="csl-entry" role="listitem">
+Björnsson, C. H., and Birgit Hård af Segerstad. <em>Lix p<span>å</span> Franska Och Tio Andra Spr<span>å</span>k</em>. Pedagogiskt centrum Stockholms skolf<span>ö</span>rvaltning, 1979.
+</div>
+<div id="ref-bormuth:1969" class="csl-entry" role="listitem">
+Bormuth, John R. <em>Development of Readability Analyses</em>. United States Department of Health, Education, <span>&amp;</span> Welfare, 1969.
+</div>
+<div id="ref-bormuth:1966" class="csl-entry" role="listitem">
+---. <span>“Readability: A New Approach.”</span> <em>Reading Research Quarterly</em>, vol. 1, no. 3, Spring, 1966, pp. 79–132.
+</div>
+<div id="ref-carver:1985" class="csl-entry" role="listitem">
+Carver, Ronald P. <span>“Measuring Readability Using DPR Units.”</span> <em>Journal of Reading</em>, vol. 27, no. 4, 1985, pp. 303–16.
+</div>
+<div id="ref-caylor-sticht-fox-ford" class="csl-entry" role="listitem">
+Caylor, John S., et al. <em>Methodologies for Determining Reading Requirements of Military Occupational Specialties</em>. United States Office of the Chief of Research; Development, 1973.
+</div>
+<div id="ref-chall-dale:manual:1995" class="csl-entry" role="listitem">
+Chall, Jeanne S., and Edgar Dale. <em>Manual for the New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-chall-dale:revisited:1995" class="csl-entry" role="listitem">
+---. <em>Readability Revisited: The New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-coleman-liau" class="csl-entry" role="listitem">
+Coleman, Meri, and T. L. Liau. <span>“A Computer Readability Formula Designed for Machine Scoring.”</span> <em>Journal of Applied Psychology</em>, vol. 60, no. 2, 1975, pp. 283–84.
+</div>
+<div id="ref-contreras" class="csl-entry" role="listitem">
+Contreras, Alfonso, et al. <span>“The SOL Formulas for Converting SMOG Readability Scores Between Health Education Materials Written in Spanish, English, and French.”</span> <em>Journal of Health Communications</em>, vol. 4, 1999, pp. 21–29.
+</div>
+<div id="ref-crawford" class="csl-entry" role="listitem">
+Crawford, Alan. <span>“A Spanish Language Fry-Type Readability Procedure: Elementary Level.”</span> <em>Bilingual Education Paper Series</em>, vol. 7, no. 8, 1984, pp. 1–17.
+</div>
+<div id="ref-cuayahuitl" class="csl-entry" role="listitem">
+Cuayáhuitl, Heriberto. <span>“A Syllabification Algorithm for Spanish.”</span> <em>Lecture Notes in Computer Science</em>, vol. 2945, 2004, pp. 412–15.
+</div>
+<div id="ref-dale-chall:1948" class="csl-entry" role="listitem">
+Dale, Edgar, and Jeanne S. Chall. <span>“A Formula for Predicting Readability.”</span> <em>Educational Research Bulletin</em>, vol. 27, no. 1, 1948, pp. 11–20, 28.
+</div>
+<div id="ref-danielson-bryan" class="csl-entry" role="listitem">
+Danielson, Wayne A., and Sam Dunn Bryan. <span>“Computer Automation of Two Readability Formulas.”</span> <em>Journalism Quarterly</em>, vol. 40, 1963, pp. 201–06.
+</div>
+<div id="ref-decicco" class="csl-entry" role="listitem">
+DeCicco, Laura. <em>Exploring Ggplot2 Boxplots - Defining Limits and Adjusting Style</em>. Water Data For The Nation Blog; https://www.waterdata.usgs.gov/blog/boxplots/, 10 Aug. 2018.
+</div>
+<div id="ref-dolch" class="csl-entry" role="listitem">
+Dolch, E. W. <span>“A Basic Sight Vocabulary.”</span> <em>Elementary School Journal</em>, vol. 36, no. 6, 1936, pp. 456–60.
+</div>
+<div id="ref-fang" class="csl-entry" role="listitem">
+Fang, Irving. <span>“The <span>‘</span>Easy Listening Formula’<span></span>.”</span> <em>Journal of Broadcasting</em>, vol. 10, no. 1, 1966, pp. 63–68.
+</div>
+<div id="ref-farr-jenkins-paterson" class="csl-entry" role="listitem">
+Farr, James N., et al. <span>“Simplification of the Flesch Reading Ease Formula.”</span> <em>Journal of Applied Psychology</em>, vol. 35, no. 5, 1951, pp. 333–37.
+</div>
+<div id="ref-flesch:1979" class="csl-entry" role="listitem">
+Flesch, Rudolf Franz. <em>How to Write Plain English: A Book for Lawyers and Consumers</em>. Harper <span>&amp;</span> Row, 1979.
+</div>
+<div id="ref-flesch:1949" class="csl-entry" role="listitem">
+---. <em>The Art of Readable Writing</em>. Harper <span>&amp;</span> Row, 1949.
+</div>
+<div id="ref-fry:1968" class="csl-entry" role="listitem">
+Fry, Edward. <span>“A Readability Formula That Saves Time.”</span> <em>Journal of Reading</em>, vol. 11, no. 7, 1968, pp. 513–16, 575–78.
+</div>
+<div id="ref-fry:elementary:1977" class="csl-entry" role="listitem">
+---. <em>Elementary Reading Instruction</em>. McGraw-Hill, 1977.
+</div>
+<div id="ref-fry:extensions:1977" class="csl-entry" role="listitem">
+---. <span>“Fry’s Readability Graph: Clarifications, Validity, and Extension to Level 17.”</span> <em>Journal of Reading</em>, vol. 21, no. 3, 1977, pp. 242–52.
+</div>
+<div id="ref-gilliam-pena-mountain" class="csl-entry" role="listitem">
+Gilliam, Bettye, et al. <span>“The Fry Graph Applied to Spanish Readability.”</span> <em>Reading Teacher</em>, vol. 33, 1980, pp. 426–30.
+</div>
+<div id="ref-grundner" class="csl-entry" role="listitem">
+Grundner, T. M. <span>“How to Make Consent Forms More Readable.”</span> <em>IRB: Ethics <span>&amp;</span> Human Research</em>, vol. 3, no. 7, 1981, pp. 9–10.
+</div>
+<div id="ref-gunning" class="csl-entry" role="listitem">
+Gunning, Robert. <em>The Technique of Clear Writing</em>. Rev. ed., McGraw-Hill, 1968.
+</div>
+<div id="ref-harris-jacobson" class="csl-entry" role="listitem">
+Harris, A. J., and M. D. Jacobson. <em>Basic Reading Vocabularies</em>. Macmillan, 1982.
+</div>
+<div id="ref-hooke-deleo-slaughter" class="csl-entry" role="listitem">
+Hooke, Lydia R., et al. <em>Readability of Air Force Publications: A Criterion Referenced Evaluation. Final Report</em>. United States Air Force Human Resources Lab, 1979.
+</div>
+<div id="ref-kibby" class="csl-entry" role="listitem">
+Kibby, Michael W. <span>“Test Review: The Degrees of Reading Power.”</span> <em>Journal of Reading</em>, vol. 24, no. 5, 1981, pp. 416–27.
+</div>
+<div id="ref-kincaid-fishburne-rogers-chissom:1975" class="csl-entry" role="listitem">
+Kincaid, J. Peter, Jr. Lt. Robert P. Fishburne, et al. <em>Derivation of New Readability Formulas (Automated Readability Index, Fog Count and Flesch Reading Ease Formula) for Navy Enlisted Personnel</em>. United States Naval Technical Training Command, 1975.
+</div>
+<div id="ref-kincaid-aagard-ohara:1980" class="csl-entry" role="listitem">
+Kincaid, J. Peter, James A. Aagard, et al. <em>Development and Test of a Computer Readability Editing System (CRES). Final Report, June 1978 Through December 1979</em>. United States Naval Training Analysis; Evaluation Group, 1980.
+</div>
+<div id="ref-kincaid:1972" class="csl-entry" role="listitem">
+Kincaid, J. Peter, John Van Deusen, et al. <em>Use of the Automated Readability Index for Evaluating Peer-Prepared Material for Use in Adult Reading Education</em>. United States Department of Health, Education, <span>&amp;</span> Welfare; Office of Education, 1972.
+</div>
+<div id="ref-mcalpine" class="csl-entry" role="listitem">
+McAlpine, Rachel. <em>From Plain English to Global English</em>. Quality Web Content; https://www.webpagecontent.com/arc_archive/139/5/, 2006.
+</div>
+<div id="ref-mccall-crabbs:1926" class="csl-entry" role="listitem">
+McCall, W. A., and L. M. Crabbs. <em>Standard Test Lessons in Reading</em>. Columbia University Teachers College, 1926.
+</div>
+<div id="ref-mccall-crabbs:1950" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1950.
+</div>
+<div id="ref-mccall-crabbs:1961" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1961.
+</div>
+<div id="ref-mclaughlin" class="csl-entry" role="listitem">
+McLaughlin, Harry. <span>“SMOG Grading - a New Readability Formula.”</span> <em>Journal of Reading</em>, vol. 12, no. 8, 1969, pp. 639–46.
+</div>
+<div id="ref-miller-coleman" class="csl-entry" role="listitem">
+Miller, G. R., and E. B. Coleman. <span>“A Set of Thirty-Six Prose Passages Calibrated for Complexity.”</span> <em>Journal of Verbal Learning and Verbal Behavior</em>, vol. 6, 1967, pp. 851–54.
+</div>
+<div id="ref-powers-sumner-kearl" class="csl-entry" role="listitem">
+Powers, R. D., et al. <span>“A Recalculation of Four Adult Readability Formulas.”</span> <em>Journal of Educational Psychology</em>, vol. 49, no. 2, 1958, pp. 99–105.
+</div>
+<div id="ref-raygor" class="csl-entry" role="listitem">
+Raygor, Alton L. <em>The Raygor Readability Estimate: A Quick and Easy Way to Determine Difficulty</em>. Dec. 1977, pp. 259–63.
+</div>
+<div id="ref-renstrom" class="csl-entry" role="listitem">
+Renström, Jan. <span>“Texte Und Textbehandlung Im Deutschunterricht.”</span> <em>Die Unterrichtspraxis / Teaching German</em>, vol. 13, no. 2, Autumn, 1980, pp. 150–55.
+</div>
+<div id="ref-schulz" class="csl-entry" role="listitem">
+Schulz, Renate A. <span>“Literature and Readability: Bridging the Gap in Foreign Language Reading.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 1, Spring, 1981, pp. 43–53.
+</div>
+<div id="ref-schwartz" class="csl-entry" role="listitem">
+Schwartz, Roswitha E. W. <em>An Exploratory Effort to Design a Readability Graph for German Material</em>. State University of New York at Albany, Reading Department, 1975.
+</div>
+<div id="ref-esmith" class="csl-entry" role="listitem">
+Smith, E. A., and R. J. Senter. <em>Automated Readability Index</em>. United States Aerospace Medical Research Laboratorties, 1967.
+</div>
+<div id="ref-lsmith" class="csl-entry" role="listitem">
+Smith, Lawrence L. <span>“Using a Modified SMOG in Primary and Intermediate Grades.”</span> <em>Reading Horizons</em>, vol. 24, no. 2, 1984, pp. 129–32.
+</div>
+<div id="ref-spache:1953" class="csl-entry" role="listitem">
+Spache, George. <span>“A New Readability Formula for Primary-Grade Reading Materials.”</span> <em>The Elementary School Journal</em>, vol. 53, no. 7, 1953, pp. 410–13.
+</div>
+<div id="ref-spache:1974" class="csl-entry" role="listitem">
+---. <em>Good Reading for Poor Readers</em>. Garrard Publishing Company, 1974.
+</div>
+<div id="ref-stocker" class="csl-entry" role="listitem">
+Stocker, Leonard P. <span>“Increasing the Precision of the Dale-Chall Readability Formula.”</span> <em>Reading Improvement</em>, vol. 8, no. 3, Winter, 1971, pp. 87–89.
+</div>
+<div id="ref-tufte:eyes" class="csl-entry" role="listitem">
+Tufte, Edward. <em>Seeing with Fresh Eyes</em>. Graphics <span>Press</span> LLC, 2020.
+</div>
+<div id="ref-vari-cartier" class="csl-entry" role="listitem">
+Vari-Cartier, Patricia. <span>“Development and Validation of a New Instrument to Assess the Readability of Spanish Prose.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 2, 1981, pp. 141–48.
+</div>
+<div id="ref-wheeler-smith" class="csl-entry" role="listitem">
+Wheeler, Lester R., and Edwin H. Smith. <span>“A Practical Readability Formula for the Classroom Teacher in Elementary Grades.”</span> <em>Elementary English</em>, vol. 31, 1954, pp. 397–99.
+</div>
+<div id="ref-wolinski" class="csl-entry" role="listitem">
+Wolinski, John T., and Maurice W. Bozman. <span>“Using the Raygor Readability Estimate for Social Studies.”</span> <em>The Social Studies</em>, vol. 74, no. 5, 1983, pp. 215–19.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    window.setColorSchemeToggle(window.hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./readability-tests-german.html" class="pagination-link" aria-label="German Readability Tests">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">German Readability Tests</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./examples-getting-started.html" class="pagination-link" aria-label="Getting Started">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Getting Started</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

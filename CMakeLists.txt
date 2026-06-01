@@ -29,7 +29,7 @@ set(MIN_GCC_REQUIRED "12.2.1")
 set(MIN_APPLECLANG_REQUIRED "15.3")
 set(MIN_MSVC_TOOLSET_REQUIRED "19.30") # VS 2022 (1930 is the build number, which is what _MSC_VER will be set to)
 set(MIN_MSVC_REQUIRED "2022") # Just used in the help
-Set(MIN_WXWIDGETS_REQUIRED "3.3.1")
+Set(MIN_WXWIDGETS_REQUIRED "3.3.3")
 
 # https://blog.kitware.com/cmake-and-the-default-build-type/
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)

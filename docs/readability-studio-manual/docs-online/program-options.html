@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Readability analysis software">
+
+<title>9&nbsp; Program &amp; Project Options – Readability Studio 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./additional-features.html" rel="next">
+<link href="./publishing.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6c49c5477b92c77c9eb341f9299c235f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fa1f459854a8ab2e5f5e8b32f437b5d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    window.setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      window.setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    window.hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(darkModeDefault) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !window.hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (window.hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./program-options.html">Options &amp; Features</a></li><li class="breadcrumb-item"><a href="./program-options.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Readability Studio 2026</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Overviews</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Technical Overviews</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Program Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/new-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">New Features and Enhancements</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./creating-a-new-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating a New Project</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-standard-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-batch-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reviewing Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./customizing-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Customizing the Results</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Options &amp; Features</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./program-options.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Additional Features</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Readability Tests</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-english.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">English Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-spanish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Spanish Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-german.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">German Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./custom-tests-and-bundles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-editing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Editing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Customizing Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-batch-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-creating-custom-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Creating Custom Tests</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analysis-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Analysis Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scoring-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Scoring Notes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Libraries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Tools &amp; Content</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/shortcuts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Keyboard Shortcuts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-options-general-settings" id="toc-sec-options-general-settings" class="nav-link active" data-scroll-target="#sec-options-general-settings"><span class="header-section-number">9.1</span> General Settings</a></li>
+  <li><a href="#sec-project-settings" id="toc-sec-project-settings" class="nav-link" data-scroll-target="#sec-project-settings"><span class="header-section-number">9.2</span> Project</a></li>
+  <li><a href="#sec-document-analysis" id="toc-sec-document-analysis" class="nav-link" data-scroll-target="#sec-document-analysis"><span class="header-section-number">9.3</span> Document Indexing</a></li>
+  <li><a href="#sec-readability-test-options" id="toc-sec-readability-test-options" class="nav-link" data-scroll-target="#sec-readability-test-options"><span class="header-section-number">9.4</span> Readability Scores</a></li>
+  <li><a href="#sec-options-statistics" id="toc-sec-options-statistics" class="nav-link" data-scroll-target="#sec-options-statistics"><span class="header-section-number">9.5</span> Statistics</a></li>
+  <li><a href="#sec-options-words-breakdown" id="toc-sec-options-words-breakdown" class="nav-link" data-scroll-target="#sec-options-words-breakdown"><span class="header-section-number">9.6</span> Words Breakdown</a></li>
+  <li><a href="#sec-options-sentences-breakdown" id="toc-sec-options-sentences-breakdown" class="nav-link" data-scroll-target="#sec-options-sentences-breakdown"><span class="header-section-number">9.7</span> Sentences Breakdown</a></li>
+  <li><a href="#sec-options-grammar" id="toc-sec-options-grammar" class="nav-link" data-scroll-target="#sec-options-grammar"><span class="header-section-number">9.8</span> Grammar</a></li>
+  <li><a href="#sec-options-highlighted-reports" id="toc-sec-options-highlighted-reports" class="nav-link" data-scroll-target="#sec-options-highlighted-reports"><span class="header-section-number">9.9</span> Highlighted Reports</a></li>
+  <li><a href="#sec-options-graphs" id="toc-sec-options-graphs" class="nav-link" data-scroll-target="#sec-options-graphs"><span class="header-section-number">9.10</span> Graphs</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./program-options.html">Options &amp; Features</a></li><li class="breadcrumb-item"><a href="./program-options.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-options-overview" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><em>Readability Studio</em> offers many customizable features, including:</p>
+<ul>
+<li>How documents are parsed and analyzed.</li>
+<li>How results (e.g., statistics and graphs) are displayed.</li>
+<li>How projects connect to the documents they are analyzing.</li>
+</ul>
+<p>These options can be configured both globally and for individual projects. Note that changing options globally will affect all future projects, but will not affect currently existing projects.</p>
+<p>To set these options globally, click the <span class="keys">Options</span> button on the <strong>Tools</strong> tab to open the <strong>Options</strong> dialog:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/options-dlg.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>If you wish to change options for an individual project, then click the <span class="keys">Properties</span> button on the <strong>Home</strong> tab to open the <strong>Project Properties</strong> dialog:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/projectproperties.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<section id="sec-options-general-settings" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="sec-options-general-settings"><span class="header-section-number">9.1</span> General Settings</h2>
+<p>The options on this page manage the program’s general settings.</p>
+<section id="settings" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="settings">Settings</h3>
+<p><strong>Import</strong>: Click this button to import program settings and defaults from a file.</p>
+<p><strong>Export</strong>: Click this button to export the current program settings to a file. This includes all your settings on the <a href="#sec-options-overview"><strong>Options</strong></a> dialog, your defaults for the <a href="creating-a-new-project.html#sec-creating-standard-project"><strong>New Project</strong></a> wizard, and your printer headers &amp; footers.</p>
+<p><strong>Reset</strong>: Click this button to reset the program settings to the defaults.</p>
+</section>
+<section id="internet" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="internet">Internet</h3>
+<p><strong>User agent</strong>: Enter into this field your user agent. The user agent is the name of the client program that is sent to websites when you try to read and download pages from them.</p>
+<p><strong>Disable SSL certificate verification</strong>: Check this option to disable SSL certificate verification when reading and downloading webpages. This can be used to connect to self-signed servers or other invalid SSL connections.</p>
+<div class="warningsection">
+<p>Disabling SSL verification makes the communication insecure.</p>
+</div>
+<p><strong>Use JavaScript cookies</strong>: Check this option to scan for any cookies meant to be sent via JavaScript when reading or downloading a page. If any cookies are found, then the page will be re-read with the cookies being sent. This is useful when connecting to pages that won’t load as expected unless certain cookies are sent back to the server.</p>
+<div class="warningsection">
+<p>This will result in an additional call to read each webpage and is only recommended if JavaScript is being used to block non-browser connections.</p>
+</div>
+<p><strong>Persist cookies during each harvest</strong>: If using JavaScript cookies, check this option to save and resend cookies from each site. As each site is harvested, any cookies from that site and previous ones will be sent. This is useful if harvesting pages from the different portions of a website that may expect the same cookies.</p>
+<p>Note that cookies will only persist for the pages being harvested from one instance of the <strong>Web Harvester</strong> dialog. All cookies will be cleared once the dialog’s session is complete.</p>
+</section>
+<section id="warnings-prompts" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="warnings-prompts">Warnings &amp; Prompts</h3>
+<p><strong>Customize</strong>: Click this button to display the <strong>Warnings &amp; Prompts Display</strong> dialog. This dialog enables you to display or suppress various warnings and prompts, including:</p>
+<ul>
+<li><strong>Warn about projects being opened as read-only.</strong> This warning is shown when a project will be opened as read-only. If a project is read-only, then you cannot save any changes to it.</li>
+<li><strong>Prompt when removing a test from a project.</strong> When removing a readability test from a project, a prompt will be shown to confirm this action.</li>
+<li><strong>Warn about documents that do not contain any words.</strong> If you attempt to analyze a document containing no valid words, then you will be warned that no calculations will be performed.</li>
+<li><strong>Warn about documents containing less than 20 words.</strong> If you attempt to analyze a document containing less than 20 valid words, then you will be prompted whether you wish to continue. If a document contains such a low amount of text, then most tests will produce questionable results.</li>
+<li><strong>Warn about documents containing less than 100 words.</strong> This warning is shown when a document being analyzed contains less than 100 valid words. If a document contains a low amount of text, then some factors (e.g., word and syllable counts) will be standardized for some tests.</li>
+<li><strong>Warn about documents that contain sentences split by paragraph breaks.</strong> This warning is shown when a document being analyzed contains what appears to be sentences with paragraph breaks in them. In this situation, the sentences will not be indexed properly, and it is recommended to fix the document.</li>
+<li><strong>Warn about documents that contain long incomplete sentences that will be included in the analysis.</strong> This warning is shown when a document being analyzed contains sentences that, although missing terminating punctuation, will be included in the analysis because of their length. To change this behavior, adjust the option <a href="#sec-options-text-exclusion"><strong>Include incomplete sentences containing more than [15] words</strong></a>.</li>
+<li><strong>Prompt if a document should switch to include sentences in the analysis.</strong> If a document is excluding a high volume of incomplete sentences, then you will be prompted about switching to include those sentences in the analysis.</li>
+<li><strong>Prompt if a custom NDC test’s proper noun settings differ from the standard NDC test.</strong> By default, <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> requires that the first instance of each proper noun be seen as unfamiliar. If you are creating a custom New Dale-Chall test which uses different proper-noun logic, then you will be prompted whether this is your intent.</li>
+<li><strong>Prompt about New Dale-Chall using a different text exclusion method from the system default.</strong> By default, New Dale-Chall uses its own method for excluding text, which may differ from the system default’s method. This message will be shown to warn about this.</li>
+<li><strong>Prompt about Harris-Jacobson using a different text exclusion method from the system default.</strong> By default, Harris-Jacobson uses its own method for excluding text, which may differ from the system default’s method. This message will be shown to warn about this.</li>
+<li><strong>Warn when a custom test’s numeral settings will be adjusted.</strong> Some tests (e.g., <a href="readability-tests-english.html#sec-harris-jacobson">Harris-Jacobson</a>) require numerals to be excluded from the analysis. This warning will be shown if a custom test needs its numeral settings adjusted to take such rules into account.</li>
+<li><strong>Warn about German stemming not supporting proper noun detection.</strong> This warning is shown when creating a custom test that uses German stemming and treats proper nouns as familiar.</li>
+<li><strong>Warn about unique-value histograms requiring midpoint axis labels.</strong> If you specify unique values as your histogram <a href="#sec-options-graphs">bin sorting</a> method, then midpoint interval display will need to be used. Because each bin (i.e., bar) will represent only one value, the histograms will not have ranges of values for its intervals. Therefore, cutpoints will not be applicable and midpoint axis labels will be used instead. If you have cutpoints as the interval type and choose unique-value bin sorting, then this warning will be shown before adjusting the interval display.</li>
+<li><strong>Prompt about auto-searching for missing files.</strong> By default, projects link to the documents that they analyze. When you open a project, the document will be reanalyzed to include any recent changes. If the document cannot be found, then the program will ask if it should search for a document by the same name. This search will be relative to the project file’s location. Unchecking this option will suppress this prompt and the program will automatically search for and load the document.</li>
+<li><strong>Prompt about re-linking to a document that has been embedded.</strong> By default, a project will link to the document it is analyzing. When you click the <span class="keys">Edit Document</span> button (on the <strong>Home</strong> tab), the document will be opened in its default editor. However, if you have chosen to embed the document into the project, then this prompt will appear. It will ask you whether you want to change this setting to link to the document and then edit it, or continue embedding the document and then edit the embedded text. Note that if you continue to embed the document and edit the embedded text, then your changes will only be reflected in your project—your changes will not appear in the original document.</li>
+<li><strong>Prompt about failing to load a project that is missing its embedded text.</strong> When opening a project which embeds the document’s text, then an error message will be shown if the embedded text is not found within the project.</li>
+<li><strong>Check if ClearType is turned on.</strong> If ClearType is turned off, then the program will ask you about enabling it. ClearType makes fonts smoother and easier to read. This applies to the Windows<sup>®</sup> edition of <em>Readability Studio</em> only.</li>
+<li><strong>Prompt about whether to set the application’s word exclusion list from a project.</strong> When adding a word exclusion list from the ribbon for the first time, you will be prompted about setting this list to be included in all future projects.</li>
+</ul>
+<p>The following are informational messages shown interactively in the program:</p>
+<ul>
+<li>Prompt about how windows can be exported from the <span class="keys">Save</span> button.</li>
+<li>Prompt about how double-clicking a test can show its help.</li>
+<li>Prompt about how background images will not be upscaled beyond their original size when zooming into a graph.</li>
+<li>Prompt about how settings are embedded in projects and how to edit them.</li>
+</ul>
+</section>
+<section id="log" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="log">Log</h3>
+<p><strong>Verbose logging</strong>: Select this option to include extended information in the log report.</p>
+<p><strong>Append daily log</strong>: Select this option to append to the previous log report (when running the program on the same day). The default behavior is to clear the log file every time the program starts.</p>
+</section>
+<section id="developer" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="developer">Developer</h3>
+<p><strong>Show Developer tab</strong>: Select this option to show the <strong>Developer</strong> tab on the ribbon. The <strong>Developer</strong> tab provides access to the Lua script editor, which can be used to automate tasks and run custom analyses. Uncheck this to hide the tab if you do not use these features.</p>
+<p><strong>Allow Lua scripts to access system commands</strong>: Select this option to enable the <code>io</code>, <code>os</code>, and <code>debug</code> libraries in the Lua scripting environment. By default, these libraries are disabled for security reasons.</p>
+<div class="warningsection">
+<p>Enabling this allows the use of Lua’s built-in file I/O, system commands, and debugging features. Only enable this if you trust the scripts you are running.</p>
+</div>
+<div class="warningsection">
+<p>This setting only affects Lua’s own standard libraries. Lua scripts can still read or write files through functions provided by this application, regardless of this option.</p>
+</div>
+<div class="notesection">
+<p>Changing this will take effect the next time the program is started.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-project-settings" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="sec-project-settings"><span class="header-section-number">9.2</span> Project</h2>
+<p>The options on this page customize your general project settings.</p>
+<section id="project" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project">Project</h3>
+<p><strong>Reviewer</strong>: Enter your name in this field as it should appear in exported reports.</p>
+<p><strong>Status</strong>: Enter in this field the status of the document(s) that this project is reviewing (e.g., <em>DRAFT</em>). This information will appear in reports when you <a href="publishing.html#sec-export-all-options">export all</a>.</p>
+<p><strong>Batch options</strong></p>
+<p><strong>Minimum document word count</strong>: Enter in this field the minimum number of words a document must have to be included in a batch. Any document which does not meet this threshold will be removed from a batch during the analysis.</p>
+<p><strong>File path display</strong>:</p>
+<p><strong>Partially truncate the file path</strong>: Select this option to display the longer file paths with their folder names replaced by ellipses in all of the lists.</p>
+<p><strong>Show only the file name</strong>: Select this option to just display the file names in all of the lists.</p>
+<p><strong>Show the full file path</strong>: Select this option to display the full paths of the files in all of the lists.</p>
+</section>
+<section id="document" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="document">Document</h3>
+<p><strong>Language</strong>: Select from here the language of the document(s) that you will be analyzing. The language selected here will affect how syllables are counted and control which tests, word lists, and grammar features will be made available. For example, if Spanish is selected, then only Spanish tests will be available and the document will be analyzed using the Spanish syllable counter.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Linking and embedding</p>
+</div>
+<p><strong>Embed the document’s text into the project</strong>: Select this option to save the source document’s text directly into the project. When you open this project, it will not reanalyze your document. If your document has been edited, then those changes will not be reflected in this project.</p>
+<p>This is useful for analyzing a snapshot of your work. For example, you could analyze an early draft of your work and have it embedded in the project. As you edit your work, opening this project will still show the results from the original draft. From here, you can create a new project for your revised work and compare its results against your early draft.</p>
+<p><strong>Reload the document when opening project</strong>: Select this option to reload and reanalyze the source document the next time you open the project. Note that the source document’s content will not be stored in the project. If the document cannot be found, then only the results from the previous analysis will be shown.</p>
+</div>
+<p><strong>Real-time update</strong>: Select this option to automatically reload the project as the source document is edited externally. This allows for editing the document in another program (e.g., <em>Word</em>) and having the results update in <em>Readability Studio</em> in real time. (This is only relevant for standard projects and for when the project is linked to a local document.)</p>
+<div class="notesection">
+<p>The changes will take effect in <em>Readability Studio</em> only after you save the document from the other program. Real-time update works by checking the modified time on the document every five seconds; if the document’s timestamp has changed, then it will be reloaded.</p>
+</div>
+<p><strong>Document description</strong>: Enter into this field a description of the document. Note that for some file formats, the program will pre-fill this field with the document’s subject or title information.</p>
+</section>
+<section id="append-additional-document-e.g.-policies-license-agreements-addendums" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="append-additional-document-e.g.-policies-license-agreements-addendums">Append Additional Document (e.g., policies, license agreements, addendums)</h3>
+<p>Enter into this field an additional document to append to the regular document. This document will be appended to the original document’s text (or embedded text) during the project’s analysis. This is useful if your project is analyzing a document, but also needs to include a generic template (e.g., license agreement). For example, you could specify a generic insurance policy in this field, and a customized entitlement as the main document. When the project analyzes the entitlement, the policy will be appended to the entitlement (in memory) and both will be analyzed as one document.</p>
+<p>Note that for batch projects, this document will be appended to each document in the batch.</p>
+<p>Also note that your original document is not affected by this process. The original and additional documents are only combined within <em>Readability Studio</em> while it analyzes them.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-document-analysis" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="sec-document-analysis"><span class="header-section-number">9.3</span> Document Indexing</h2>
+<p>The options here specify how your documents should be parsed and analyzed.</p>
+<section id="consider-sentences-overly-long-if" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="consider-sentences-overly-long-if">Consider Sentences Overly Long If</h3>
+<p><strong>Longer than [22] words</strong>: Select this option to consider sentences overly long if they exceed the word count specified in this field. The default word count is 22, but can be changed as needed.</p>
+<p>Considering sentences with more than 22 words to be overly long is based on research from Kincaid <span class="citation" data-cites="kincaid-aagard-ohara:1980">(<a href="references.html#ref-kincaid-aagard-ohara:1980" role="doc-biblioref">19</a>)</span>.</p>
+<p><strong>Outside sentence outlier range</strong>: Select this option to consider sentences overly long if they are comparatively longer than other sentences in the document. This option is only recommended for situations where most of the sentences have an acceptable length, but a few (very) long sentences skew the average. This option is useful for finding these extreme sentences.</p>
+<p>These sentences can be viewed in the <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar"><strong>Grammar</strong></a> and <a href="reviewing-standard-projects.html#sec-reviewing-sentences-breakdown"><strong>Long Sentences</strong></a> windows in the <strong>Grammar</strong> section.</p>
+</section>
+<section id="sentenceparagraph-deduction" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="sentenceparagraph-deduction">Sentence/Paragraph Deduction</h3>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Line ends</p>
+</div>
+<p>The following options control how line ends affect how paragraphs are counted.</p>
+<p><strong>only begin a new paragraph if following a valid sentence</strong>: Select this option to only consider a line feed as the end of the current sentence and paragraph if it follows a valid sentence. This option is recommended for text that is formatted to a specific width (e.g., scanned documents).</p>
+<p>Two exceptions are made here. The first exception is for consecutive line feeds–these will be considered the start of a new paragraph. Consecutive line feeds normally indicate a title or chapter header that should be separated from the following paragraph.</p>
+<p>The second exception is if the line following a line feed is tabbed or bulleted–this will also indicate the start of a new paragraph. In narrative text, the first sentence of a paragraph is usually tabbed or spaced over. Also, items in a list are usually tabbed or bulleted. In both cases, the program will recognize these as new paragraphs.</p>
+<p>Both of these exceptions can be overridden by the options <a href="#sec-document-analysis"><strong>Ignore blank lines</strong></a> and <strong>Ignore indenting</strong>.</p>
+<p><strong>always begin a new paragraph</strong>: Select this option to always consider line feeds in the text as the end of the current sentence and paragraph. This should only be used for special cases where a document does not have paragraph indenting and contains numerous lists or headers that are not followed by blank lines.</p>
+<p>Refer to <a href="analysis-notes.html#sec-line-chaining" class="quarto-xref"><span>Section 21.3</span></a> for more information about these options.</p>
+</div>
+<p><strong>Ignore blank lines</strong>: Select this option to not consider <a href="analysis-notes.html#sec-how-text-is-excluded">incomplete sentences</a> followed by blank lines as the end of the current sentence and paragraph. If an incomplete sentence is encountered, any blank lines after it will be skipped and the sentence will be merged with the following sentence.</p>
+<p>This option is not recommended for documents that contain headers or lists that rely on blank lines to separate them from the narrative text. Refer to <a href="analysis-notes.html#sec-line-chaining" class="quarto-xref"><span>Section 21.3</span></a> for more information.</p>
+<p><strong>Ignore indenting</strong>: Select this option to not consider indented lines following incomplete sentences as the start of a new paragraph. This option is recommended for documents that center or left align their text.</p>
+<div class="notesection">
+<p>The options <strong>Ignore blank lines</strong> and <strong>Ignore indenting</strong> are disabled if <strong>Line ends always begin a new paragraph</strong> is selected. In this case, line feeds will always indicate the end of a paragraph, whether or not it is followed by blank or indented lines.</p>
+</div>
+<p><strong>Sentences must begin with capitalized words</strong>: Select this option to have sentence deduction assume that all sentences begin with capitalized words. By default, <em>Readability Studio</em> takes into consideration writing that does not capitalize the first word of every sentence. To change this behavior, select this option and the program will be more grammatically strict when deducing sentences.</p>
+</section>
+<section id="sec-options-text-exclusion" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="sec-options-text-exclusion"><span class="header-section-number">9.3.1</span> Text Exclusion</h3>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Exclusion</p>
+</div>
+<p>These options control how text is excluded from your documents.</p>
+<p><strong>Do not exclude any text</strong>: Select this option to treat all incomplete sentences as regular sentences when calculating statistics. This is only recommended for forms that may contain numerous titles and list items and little narrative text. Refer to <a href="analysis-notes.html#sec-fragmented-text" class="quarto-xref"><span>Section 21.8</span></a> for more information.</p>
+<p><strong>Exclude all incomplete sentences</strong>: Select this option to ignore all incomplete sentences when calculating statistics. This option is recommended by most tests.</p>
+<p><strong>Exclude all incomplete sentences, except headings</strong>: Select this option to ignore all tables and list items, but include headers and subheaders as full sentences.</p>
+</div>
+<p><strong>Include incomplete sentences containing more than [15] words</strong>: If a sentence is missing terminating punctuation (e.g., <em>.</em> or <em>?</em>) then it will be considered <a href="analysis-notes.html#sec-how-text-is-excluded">incomplete</a>. Lines of text missing this punctuation are generally headers or list items that should be excluded from the analysis. However, there are times when a legitimate sentence is simply missing this punctuation (due to writer or formatting error) and should be included in the analysis. To override this, enter into this field the maximum words that an incomplete sentence can have. Any sentence containing more than this number of words will be considered complete, even if its terminating punctuation is absent.</p>
+<div class="notesection">
+<p>Lines of text that resemble equations will continue to be marked as incomplete. Also, if <strong>Aggressively exclude</strong> is enabled, then list items with more words than this threshold will also continue to be excluded.</p>
+</div>
+<p>Note that if you are not excluding any text, this option will still take effect for tests which explicitly exclude headers (e.g., Harris-Jacobson).</p>
+<p><strong>Aggressively exclude</strong>: Select this option to mark any valid sentence as incomplete if a). it is between at least two incomplete sentences and b). is less than 10 words. For example:</p>
+<div class="fancyquotes">
+<ul>
+<li>Products by Industry</li>
+<li>Which Product is Right for You?</li>
+<li>Products Reviews</li>
+</ul>
+</div>
+<p>By default, the question mark would cause the second sentence to be included in an analysis. Checking this checkbox will instruct the program to consider this sentence as part of the surrounding list items and exclude it.</p>
+<p>Finally, checking this will also affect sentences that end with colons or semicolons at the end of a line. Ones that end with semicolons will be excluded. Ones that end with colons that only contain one word will be excluded.</p>
+<p>If <strong>Also exclude trailing citations</strong> is enabled, then checking this option will also cause citation deduction to be more aggressive. By default, only citation blocks in the lower half of the document are excluded. Enabling this option will tell the program to search for citations in the lower three-fourths of the document.</p>
+<p>If <strong>Also exclude copyright notices</strong> is enabled, then checking this option will also cause that feature to include larger paragraphs in its analysis.</p>
+<p><strong>Also exclude copyright notices</strong>: Select this option to ignore copyright and trademark notices when calculating statistics. Throughout the document, any paragraph consisting of one or two sentences which has a <em>©</em> symbol near the beginning is considered a copyright notice. (Three-sentence paragraphs will also be examined if <strong>Aggressively exclude</strong> is enabled.)</p>
+<p>Near the end of the document, the final paragraphs will be more aggressively reviewed. If the last two paragraphs contain one or two sentences and contain phrases such as <em>All rights reserved</em> or <em>copyright</em> or symbols such as <em>©</em> or <em>®</em>, then they will be considered copyright notices.</p>
+<p><strong>Also exclude trailing citations</strong>: Select this option to ignore a citation section at the end of the document when calculating statistics. If this option is selected, then the program will search for a citation header near the end of the document and exclude any paragraphs after it. A citation header will be any header which contains 5 (or less) words and any of the following labels:</p>
+<ul>
+<li><em>Anmerkungen</em></li>
+<li><em>Bibliographie</em></li>
+<li>Bibliography</li>
+<li><em>Bibliografía</em></li>
+<li>Citations</li>
+<li><em>Einzelnachweise</em></li>
+<li>For More Information</li>
+<li><em>Literatur</em></li>
+<li><em>Literaturverzeichnis</em></li>
+<li><em>Para Mas Informacion</em></li>
+<li>Reference</li>
+<li><em>References</em></li>
+<li><em>Referencias</em></li>
+<li>Related Publications</li>
+<li><em>Relación de los Trabajos Publicados</em></li>
+<li>Sources</li>
+<li>Textbooks and Curricula</li>
+<li>Works Cited</li>
+</ul>
+<div class="notesection">
+<p>The program will stop excluding text after a <em>References</em> header if it detects a paragraph that does not appear to be a citation. This is useful for when a references section is in the middle of a document, followed by other content.</p>
+</div>
+<p><strong>Also exclude Internet and file addresses</strong>: Select this option to ignore URLs (i.e., Internet addresses) and filepaths. Note that this applies to words inside of complete sentences, not just incomplete. For example:</p>
+<div class="fancyquotes">
+<p>Readability Studio is available from <em>www.readabilitystudio.com</em>.</p>
+</div>
+<p>If this option is selected, then <em>www.readabilitystudio.com</em> will be excluded from every analysis. This includes sentence-length, word-length, and syllable-count calculations.</p>
+<p><strong>Also exclude numerals</strong>: Select this option to ignore all numbers. For example:</p>
+<div class="fancyquotes">
+<p>Upon arrival at <em>5:30PM</em>, please be ready to cover the <em>$75</em> boarding fee.</p>
+</div>
+<p>would be analyzed as this:</p>
+<div class="fancyquotes">
+<p>Upon arrival at _____, please be ready to cover the _____ boarding fee.</p>
+</div>
+<p>This option may be recommended for mathematical works which contain equations and numbers that may skew the results.</p>
+<p><strong>Also exclude proper nouns</strong>: Select this option to ignore all proper names of people, places, and things. A useful example would be medical documents that contain drug names that the readers will be familiar with. Rather than penalizing the document for containing these complex product names (that cannot be substituted with simpler words), this option will entirely remove them from the analysis.</p>
+<p><strong>Words &amp; phrases to exclude</strong>: Enter the path to a text file containing words and phrases to ignore into this field. Any words or phrases from this file will be excluded from all calculations. The format for this text file is a single column, where each line is a separate word or phrase. For example:</p>
+<blockquote class="blockquote">
+<p><code>ex nihilo</code><br>
+<code>quantum fluctuations</code><br>
+<code>particles</code></p>
+</blockquote>
+<p>With the above exclusion list, this text:</p>
+<div class="fancyquotes">
+<p><em>Quantum Fluctuations</em> are fluctuations of <em>particles</em> within the quantum foam that appear <em>ex nihilo</em> and annihilate each other.</p>
+</div>
+<p>would be analyzed as this:</p>
+<div class="fancyquotes">
+<p>_____ are fluctuations of _____ within the quantum foam that appear _____ and annihilate each other.</p>
+</div>
+<p>This would be seen as a 13-word sentence, with all the phrases from the exclusion list removed. Note that the first instance of <em>fluctuations</em> is removed from the analysis because it is part of the phrase <em>Quantum Fluctuations</em> (which is on the exclusion list). However, the second instance of <em>fluctuations</em> will be included because it is not part of the phrase that we requested to ignore. To exclude all instances of <em>fluctuations</em>, include it in the list on a separate line.</p>
+<p>This phrase list can be edited by clicking the button next to this field, which will open the <a href="#sec-edit-word-list-dialog"><strong>Edit Word/Phrase List</strong></a> dialog.</p>
+<p><strong>Include first occurrence</strong>: Select this option to not exclude the first occurrence of any word or phrase from your exclusion list. All remaining occurrences of these words in the document will be excluded. This is useful if you wish to only analyze the first instance of certain difficult words.</p>
+<!-- *[* and *]* fails with markdown parser, so it has to be written out more verbosely -->
+<p><strong>Exclude text between</strong>: Selects whether to exclude all text in between a certain pair of tags. For example, select <strong>[ and ]</strong> and any text inside a pair of left and right square brackets will be ignored in the analysis. Along with excluding the bracketed words, any full paragraphs and sentences wrapped inside of these tags will also be excluded (which will be reflected in the statistics). Refer to <a href="examples-advanced.html#sec-excluding-placeholders" class="quarto-xref"><span>Section 16.4</span></a> for an example.</p>
+<div class="warningsection">
+<p>These options are not available if <strong>Do not exclude any text</strong> is selected.</p>
+</div>
+</section>
+<section id="sec-numsyllable" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="sec-numsyllable"><span class="header-section-number">9.3.2</span> Numerals</h3>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Syllabication</p>
+</div>
+<p>The following options control how numeric words are syllabized.</p>
+<p><strong>Numerals are one syllable</strong>: Select this option to have the program consider numeric words (e.g., numbers, dates, phone numbers) as monosyllabic.</p>
+<p><strong>Sound out each digit</strong>: Select this option to have the program sound out each digit when counting the syllables of numeric words. For example, the word <em>555-4778</em> will be considered nine syllables–read as <em>five-five-five-four-sev-en-sev-en-eight</em>. As another example, <em>$52</em> will be considered four syllables (read as <em>five-two-doll-ars</em>).</p>
+</div>
+<div class="notesection">
+<p>These options are not applicable if <strong>Also exclude numerals</strong> is checked.</p>
+</div>
+</section>
+<section id="sec-edit-word-list-dialog" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="sec-edit-word-list-dialog"><span class="header-section-number">9.3.3</span> Edit Word/Phrase List</h3>
+<p>This dialog can edit either a word or phrase list.</p>
+<p><strong>File containing list</strong>: Enter the path to the list into this field.</p>
+<div class="minipage">
+<p>After selecting your list file, its words/phrases will be displayed in the grid below the file-path field. In this grid, you can edit your list with the following keyboard commands:</p>
+<ul>
+<li><span class="keys">Del</span> (<svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"></path></svg>, <svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"></path></svg>) or <span class="keys">⌫</span> (<svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>)—removes the selected item(s) from the list.</li>
+<li><span class="keys">Ins</span>—edits the selected item in the list. Double-clicking an item with the mouse will also edit it.</li>
+<li><span class="keys">Ctrl</span>+<span class="keys">Ins</span> (<svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"></path></svg>, <svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"></path></svg>) or <span class="keys">⌘</span>+<span class="keys">Ins</span> (<svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>)—adds a new item to the list.</li>
+</ul>
+<p>Buttons to add, edit, and remove items are also available above the grid.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-readability-test-options" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="sec-readability-test-options"><span class="header-section-number">9.4</span> Readability Scores</h2>
+<section id="test-options" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="test-options">Test Options</h3>
+<p>The options on this page customize the behavior of certain tests.</p>
+<section id="gunning-fog" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="gunning-fog">Gunning Fog</h4>
+<p><strong>Count independent clauses</strong>: Check this option to count independent clauses as separate sentences when calculating a <a href="readability-tests-english.html#sec-gunning-fog-test">Gunning Fog</a> score. Independent clauses are detected by dashes, colons, and semicolons within a sentence.</p>
+<p>Although this behavior is recommended in <em>The Technique of Clear Writing</em>, it will produce lower scores than counting sentences with the <a href="analysis-notes.html#sec-how-sentences-are-counted">traditional method</a>. This is especially true if your document contains run-on sentences. For example, if this option is checked, then an 80-word sentence with four clauses will be counted as four smaller sentences and will not adversely affect the score. If this option is unchecked, then this same sentence will be counted as a single 80-word sentence and will adversely affect the score. If you prefer to penalize run-on sentences, then leave this option unchecked.</p>
+<p>This option affects the Gunning Fog, (PSK) Gunning Fog, and New Fog Count tests.</p>
+</section>
+<section id="flesch" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="flesch">Flesch</h4>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Numeral syllabication</p>
+</div>
+<p>Select one of the following options to control how numerals are syllabized for Flesch related tests.</p>
+<p><strong>Count numerals as one syllable</strong>: Select this option to consider all numerals as monosyllabic.</p>
+<p><strong>System default</strong>: Select this option to use the system default <a href="#sec-numsyllable">numeral syllabication</a> method.</p>
+<p>This option affects the Flesch, PSK Flesch, and Amstad tests.</p>
+<p>Note that these options are not applicable if <a href="#sec-options-text-exclusion"><strong>Also exclude numerals</strong></a> is checked.</p>
+</div>
+</section>
+<section id="flesch-kincaid" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="flesch-kincaid">Flesch-Kincaid</h4>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Numeral syllabication</p>
+</div>
+<p>Select from the following options to control how numerals are syllabized for Flesch-Kincaid.</p>
+<p><strong>Sound out each digit</strong>: Select this option to have the program sound out each digit when counting the syllables of numeric words. For example, the word <em>555-4778</em> will be considered nine syllables–read as <em>five-five-five-four-seven-seven-eight</em>.</p>
+<p><strong>System default</strong>: Select this option to use the system default <a href="#sec-numsyllable">numeral syllabication</a> method.</p>
+<p>Note that these options are not applicable if <a href="#sec-options-text-exclusion"><strong>Also exclude numerals</strong></a> is checked.</p>
+</div>
+</section>
+<section id="dale-chall" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="dale-chall">Dale-Chall</h4>
+<p><strong>Include Catholic Supplement</strong>: Check this option to include <a href="readability-tests-english.html#sec-stocker-catholic-supplement">Stocker’s supplementary word list</a> for Catholic students.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Proper nouns</p>
+</div>
+<p>Select one of the following options to control how proper nouns are treated by Dale-Chall related tests:</p>
+<p><strong>Count as unfamiliar</strong>: Select this option to consider all proper nouns (that do not appear on the familiar-word list) as unfamiliar.</p>
+<p><strong>Count as familiar</strong>: Select this option to consider all proper nouns as familiar.</p>
+<p><strong>First occurrence of each is unfamiliar</strong>: Select this option to consider only the first occurrence of each proper noun (that does not appear on the familiar-word list) as unfamiliar.</p>
+</div>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Text exclusion</p>
+</div>
+<p>Select one of the following options to control how text is excluded in Dale-Chall related tests:</p>
+<p><strong>Exclude incomplete sentences, except headings</strong>: Select this option to have New Dale-Chall include headers and subheaders in its analysis, but exclude lists and tables.</p>
+<p><strong>Use system default</strong>: Select this option to have New Dale-Chall use the <a href="#sec-options-text-exclusion">default text exclusion</a> method used by other tests.</p>
+</div>
+<div class="notesection">
+<p>These options affect both the New Dale-Chall and PSK Dale-Chall tests. The <strong>Text exclusion</strong> option will also affect any custom test using the following functions:</p>
+<ul>
+<li><code>CustomNewDaleChall()</code></li>
+<li><code>UnfamiliarDaleChallWordCount()</code></li>
+<li><code>UniqueUnfamiliarDaleChallWordCount()</code></li>
+<li><code>FamiliarDaleChallWordCount()</code></li>
+</ul>
+</div>
+</section>
+<section id="harris-jacobson" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="harris-jacobson">Harris-Jacobson</h4>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Text exclusion</p>
+</div>
+<p>Select one of the following options to control how text is excluded in Harris-Jacobson:</p>
+<p><strong>Exclude incomplete sentences, except headings</strong>: Select this option to have Harris-Jacobson include headers and subheaders in its analysis, but exclude lists and tables.</p>
+<p><strong>Use system default</strong>: Select this option to have Harris-Jacobson use the <a href="#sec-options-text-exclusion">default text exclusion</a> method used by other tests.</p>
+</div>
+<div class="notesection">
+<p>The <strong>text exclusion</strong> option will affect any custom test using the following functions:</p>
+<ul>
+<li><code>CustomHarrisJacobson()</code></li>
+<li><code>UnfamiliarHarrisJacobsonWordCount()</code></li>
+<li><code>UniqueUnfamiliarHarrisJacobsonWordCount()</code></li>
+<li><code>FamiliarHarrisJacobsonWordCount()</code></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="scores" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="scores">Scores</h3>
+<p>The options on this page customize which results to include in the <strong>Readability Scores</strong> section and how grade-level scores and reading ages are displayed. Most readability tests use U.S. K–12 (+college) grade levels to represent their scores; however, <em>Readability Studio</em> can display these scores in other formats as well. For example, a score of 4 could be shown as <em>Key stage 2 (year 5)</em> if using the Key Stages grade scale.</p>
+<section id="results" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="results">Results</h4>
+<p><strong>Include test-summary report</strong>: Check this option to include a summary report of the test scores in the results.</p>
+</section>
+<section id="grade-display" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="grade-display">Grade Display</h4>
+<p><strong>Grade scale</strong>: Select from this list the grade scale that you wish to use. This will affect:</p>
+<ul>
+<li>The score explanations shown in the <a href="reviewing-standard-projects.html#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> window.</li>
+<li>The score display shown in the <strong>Readability Scores</strong> window (if <strong>long format</strong> is selected).</li>
+<li>Selection labels on the Fry, Raygor, and Gilliam-Peña-Mountain graphs.</li>
+<li>The <a href="reviewing-batch-project.html#sec-reviewing-batch-scores">raw and aggregated score</a> display in batch projects (if <strong>long format</strong> is selected).</li>
+<li>The labels on the grade-level <a href="reviewing-batch-project.html#sec-reviewing-batch-box-plots">box plot</a>.</li>
+<li>The bin labels on the grade-level <a href="reviewing-batch-project.html#sec-reviewing-batch-histograms">histograms</a>.</li>
+</ul>
+<p>Refer to <a href="scoring-notes.html#sec-grade-scales" class="quarto-xref"><span>Section 22.2</span></a> for a list of available scales.</p>
+<p><strong>Display scores in long format</strong>: Check this to display readability scores in long format (e.g., <em>2<sup>nd</sup> grade</em>) within the score grid.</p>
+</section>
+<section id="reading-age-display" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="reading-age-display">Reading Age Display</h4>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Calculation</p>
+</div>
+<p>Reading ages are included in the <a href="reviewing-standard-projects.html#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> section within <strong>Standard</strong> projects next to each grade level score. Although most tests do not include reading ages, the program can calculate them from the grade-level scores. The following options are available for customizing how these ages are calculated from their respective grade-level score:</p>
+<p><strong>School-year range</strong>: Select this option to display the full age range from a given grade level. For example, if a test scores at <em>5.3</em> (fifth grade), then the age range for fifth graders (i.e., <em>10–11</em>) will be used.</p>
+<p>Note that when calculating the reading-age aggregate statistics (e.g., the average reading age), the middle point of each range is used. For example, the average for two ranges such as <em>10–11</em> and <em>11–12</em> would be 11. The middle point of <em>10–11</em> is 10.5, the middle point of <em>11–12</em> is 11.5; therefore, (10.5+11.5)/2 = 11.</p>
+<p><strong>Round to semester</strong>: Select this option to calculate a reading age from a grade level by rounding the grade level. For example, a grade level score of <em>5.3</em> will be seen as the first semester of fifth grade and the starting age of most fifth graders (i.e., <em>10</em>) will be used as the reading age. As another example, a grade level score of <em>5.6</em> will be seen as the second semester of fifth grade and the graduating age of most fifth graders (i.e., <em>11</em>) will be used as the reading age.</p>
+<p>Note that reading ages do not contain floating-point precision, even if their respective grade-level scores do. This is because students’ ages within the same grade can widely vary; therefore, a grade-level score’s <a href="scoring-notes.html#sec-grade-level-results">mantissa</a> cannot accurately be carried over to a group’s reading age. A grade-level score can homogeneously represent a group of students in the same grade; however, a reading age must be more generalized to accurately apply to the same group (whose ages differ).</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="sec-options-statistics" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="sec-options-statistics"><span class="header-section-number">9.5</span> Statistics</h2>
+<p>The options on this page customize which statistics to include in your reports and results.</p>
+<section id="results-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="results-1">Results</h3>
+<p><strong>Formatted Report</strong>: Check this to include the statistics report in the results.</p>
+<p><strong>Tabular Report</strong>: Check this to include the statistics (tabular format) in the results.</p>
+</section>
+<section id="summary-report" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="summary-report">Summary Report</h3>
+<p><strong>Paragraphs</strong>: Check this to include the paragraph statistics in the report.</p>
+<p><strong>Sentences</strong>: Check this to include the sentence statistics in the report.</p>
+<p><strong>Words</strong>: Check this to include the word statistics in the report.</p>
+<p><strong>Extended Words</strong>: Check this to include extended word statistics (e.g., numerals) in the report.</p>
+<p><strong>Grammar</strong>: Check this to include grammar statistics in the report.</p>
+<p><strong>Notes</strong>: Check this to include the notes in the report.</p>
+<p><strong>Extended Information</strong>: Check this to include more verbose statistics and notes in the results. These additional results will appear in the summary report, the scores grid, and batch statistics.</p>
+</section>
+<section id="dolch-report" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dolch-report">Dolch Report</h3>
+<p><strong>Coverage</strong>: Check this to include the word coverage statistics in the report.</p>
+<p><strong>Words</strong>: Check this to include the word statistics in the report.</p>
+<p><strong>Explanation</strong>: Check this to include an explanation of Dolch in the report.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-options-words-breakdown" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="sec-options-words-breakdown"><span class="header-section-number">9.6</span> Words Breakdown</h2>
+<p>The options on this page customize which results are included in the <a href="reviewing-standard-projects.html#sec-reviewing-word-breakdowns"><strong>Words Breakdown</strong></a> section.</p>
+<section id="results-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="results-2">Results</h3>
+<p><strong>Word Counts</strong>: Check this to include the word barchart in the results.</p>
+<p><strong>Syllable Counts</strong>: Check this to include the syllable histogram and pie chart in the results.</p>
+<p><strong>3+ Syllables</strong>: Check this to include the 3+ syllable words list in the results.</p>
+<p><strong>6+ Characters</strong>: Check this to include the 6+ character words in the results.</p>
+<p><strong>Dale-Chall</strong>: Check this to include the New Dale-Chall unfamiliar words list in the results. (If a Dale-Chall-based test is included in the project).</p>
+<p><strong>Spache</strong>: Check this to include the Spache unfamiliar words list in the results. (If Spache is included in the project).</p>
+<p><strong>Harris-Jacobson</strong>: Check this to include the Harris-Jacobson unfamiliar words list in the results. (If Harris-Jacobson is included in the project).</p>
+<p><strong>Custom Tests</strong>: Check this to include any custom tests’ unfamiliar words lists in the results.</p>
+<p><strong>All Words</strong>: Check this to include a list of all words in the results.</p>
+<p><strong>Key Words</strong>: Check this to include a list of all uncommon and non-numeric words (in condensed form) in the results. Words with the same root (e.g., <em>run</em> and <em>running</em>) will be combined into one row.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-options-sentences-breakdown" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="sec-options-sentences-breakdown"><span class="header-section-number">9.7</span> Sentences Breakdown</h2>
+<p>The options on this page customize which results are included in the <a href="reviewing-standard-projects.html#sec-reviewing-sentences-breakdown"><strong>Sentences Breakdown</strong></a> section.</p>
+<section id="results-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="results-3">Results</h3>
+<p><strong>Long Sentences</strong>: Check this to include the overly-long sentences list in the results.</p>
+<p><strong>Lengths (Spread)</strong>: Check this to include a sentence-lengths box plot in the results.</p>
+<p><strong>Lengths (Distribution)</strong>: Check this to include a sentence-lengths histogram in the results.</p>
+<p><strong>Lengths (Density)</strong>: Check this to include a sentence-lengths <a href="reviewing-standard-projects.html#sec-reviewing-sentences-breakdown">heatmap</a> in the results.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-options-grammar" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="sec-options-grammar"><span class="header-section-number">9.8</span> Grammar</h2>
+<p>The options on this page customize grammar analysis.</p>
+<section id="results-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="results-4">Results</h3>
+<p>The options in this section customize which features are included in the grammar analysis.</p>
+<p><strong>Highlighted Report</strong>: Check this to include the <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">highlighted grammar report</a> in the results.</p>
+<p><strong>Wording Errors &amp; Misspellings</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">wording errors and known misspellings</a> in the results.</p>
+<p><strong>Possible Misspellings</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">possible misspellings</a> in the results.</p>
+<p><strong>Repeated Words</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">repeated words</a> in the results.</p>
+<p><strong>Article Mismatches</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">article mismatches</a> in the results.</p>
+<p><strong>Redundant Phrases</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">redundant phrases</a> in the results.</p>
+<p><strong>Overused Words (by Sentence)</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">overused words (by sentence)</a> in the results.</p>
+<p><strong>Wordy Items</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">wordy phrases</a> in the results.</p>
+<p><strong>Clichés</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">clichés</a> in the results.</p>
+<p><strong>Passive Voice</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">passive voice</a> in the results.</p>
+<p><strong>Conjunction-starting Sentences</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">conjunction-starting sentences</a> in the results.</p>
+<p><strong>Lowercased Sentences</strong>: Check this to include <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar">lowercased sentences</a> in the results.</p>
+</section>
+<section id="spell-checker" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="spell-checker">Spell Checker</h3>
+<p>The options in this section select what the spell checker should ignore.</p>
+<p><strong>Ignore proper nouns</strong>: Check this to not spell check proper nouns. This is useful for excluding names and places that the spell checker may not recognize.</p>
+<p><strong>Ignore UPPERCASED words</strong>: Check this to not spell check uppercased words (e.g., <em>FORTRAN</em> or <em>S.C.U.B.A.</em>).</p>
+<p><strong>Ignore numerals</strong>: Check this to not spell check numerals. Numerals are words that consist of 50% (or more) numbers.</p>
+<p><strong>Ignore Internet and file addresses</strong>: Check this to not spell check file paths and website addresses.</p>
+<p><strong>Ignore programmer code</strong>: Check this to not spell check words with mixed upper and lower case words. This is useful for excluding programming syntax which may appear in computer-related documents. For example:</p>
+<div class="fancyquotes">
+<div class="FlushLeft">
+<p>Projects can be exported via Lua like this:</p>
+<p>a = StandardProject(“CrawfordValidation.rsp”)</p>
+<p>a:ExportAll(“Results”)</p>
+</div>
+</div>
+<p>Checking this option will instruct the program to not spell check words such as <em>StandardProject</em> and <em>ExportAll</em>.</p>
+<p><strong>Allow colloquialisms</strong>: Check this to allow colloquialisms, such as <em>ing</em> at the end of a word being replaced with <em>in’</em>. For example:</p>
+<div class="fancyquotes">
+<p>He’s been takin’ that test for five hours. He ain’t never goin’ to finish.</p>
+</div>
+<p>Checking this option will instruct the program to not consider words such as <em>takin’</em> and <em>goin’</em> as misspellings.</p>
+<p><strong>Ignore social media hashtags</strong>: Check this to ignore hashtags, such as <em>#ReadabilityFormulasRock</em> or <em>@AskLibreOffice</em>.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-options-highlighted-reports" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="sec-options-highlighted-reports"><span class="header-section-number">9.9</span> Highlighted Reports</h2>
+<section id="general" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="general">General</h3>
+<p>The options on this page customize the display of the text views.</p>
+<section id="formatting" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="formatting">Formatting</h4>
+<p><strong>Font</strong>: Click this button to select the font used in the document viewing area.</p>
+</section>
+<section id="highlighting" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="highlighting">Highlighting</h4>
+<p><strong>Excluded text color</strong>: Click this button to select the color to highlight excluded text in the document viewing area. This is only applicable when <a href="analysis-notes.html#sec-how-text-is-excluded">incomplete sentences</a> are being ignored.</p>
+<p><strong>Difficult words and sentences color</strong>: Click this button to select the color to highlight words and sentences considered difficult in the document viewing area.</p>
+<p><strong>Grammar errors color</strong>: Click this button to select the color to highlight grammar errors (e.g., repeated words and misspellings). This highlighting will appear in the <a href="reviewing-standard-projects.html#sec-reviewing-standard-grammar"><strong>Grammar</strong></a> document view.</p>
+<p><strong>Wordy items color</strong>: Click this button to select the color to highlight wordy phrases and difficult words. This highlighting will appear in the <strong>Grammar</strong> document view.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Highlight text by changing its</p>
+</div>
+<p><strong>Background color</strong>: Select this option to highlight text by changing its background color.</p>
+<p><strong>Font color</strong>: Select this option to highlight text by changing its foreground (font) color.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="dolch-sight-words" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dolch-sight-words">Dolch Sight Words</h3>
+<p>The options on this page select which categories of <a href="reviewing-standard-projects.html#sec-reviewing-dolch">Dolch</a> words to highlight and how to highlight them.</p>
+<section id="highlighting-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="highlighting-1">Highlighting</h4>
+<p><strong>Dolch conjunctions color</strong>: Select this checkbox to highlight Dolch conjunctions in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch prepositions color</strong>: Select this checkbox to highlight Dolch prepositions in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch pronouns color</strong>: Select this checkbox to highlight Dolch pronouns in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch adverbs color</strong>: Select this checkbox to highlight Dolch adverbs in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch adjectives color</strong>: Select this checkbox to highlight Dolch adjectives in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch verbs color</strong>: Select this checkbox to highlight Dolch verbs in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<p><strong>Dolch nouns color</strong>: Select this checkbox to highlight Dolch nouns in the text report. Click the adjacent button to select the color to highlight these words.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="sec-options-graphs" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="sec-options-graphs"><span class="header-section-number">9.10</span> Graphs</h2>
+<section id="general-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="general-1">General</h3>
+<p>The options on this page customize your graphs.</p>
+<p><strong>Color Scheme</strong>: Select from here the color scheme to apply to pie charts, word clouds, and grouped histograms (in batch projects).</p>
+<section id="background" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="background">Background</h4>
+<p><strong>Color</strong>: Selects the color for the graphs’ background. Note that if you are displaying an image, then the image will be shown on top of this color.</p>
+<p><strong>Fade</strong>: Check this to apply a downward fade to the background color of your graphs. The background of your graphs will fade (top-to-bottom) starting with the color that you have selected into white.</p>
+</section>
+<section id="plot-background" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="plot-background">Plot Background</h4>
+<p><strong>Color</strong>: Selects the color for the plot area background of the graphs.</p>
+<p><strong>Opacity</strong>: Sets the transparency of the plot background color. A value of 255 will set the background to be fully opaque, whereas 0 will set the background to be transparent.</p>
+<p><strong>Image</strong>: Selects the image for the graphs’ plot background. This image will be drawn within the area between x- and y-axes of the graphs.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Effect</p>
+</div>
+<p>The following options can be applied to the background image:</p>
+<p><strong>No effect</strong>: Does not apply any effect.</p>
+<p><strong>Grayscale</strong>: Converts the image to shades of gray (i.e., black &amp; white).</p>
+<p><strong>Blur horizontally</strong>: Applies a horizontal blur across the image.</p>
+<p><strong>Blur vertically</strong>: Applies a vertical blur across the image.</p>
+<p><strong>Sepia</strong>: Applies a sepia tone (i.e., faded photograph).</p>
+<p><strong>Frosted glass</strong>: Applies a frosted glass window effect. In other words, the image as it may appear when viewed through frosted glass.</p>
+<p><strong>Oil painting</strong>: Applies an oil painting effect.</p>
+</div>
+<p><strong>Opacity</strong>: Sets the transparency of the background image. A value of 255 will set the background to be fully opaque, whereas 0 will set the background to be transparent.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Fit</p>
+</div>
+<p>The following options can be used to fit the image to the plot background:</p>
+<p><strong>Crop &amp; center</strong>: Crop the image to the dimensions of the plot area, with the center of the image as the origin.</p>
+<p><strong>Shrink to fit</strong>: Shrink the image to the plot area, maintaining its aspect ratio.</p>
+</div>
+</section>
+<section id="logos" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="logos">Logos</h4>
+<p><strong>Logo image</strong>: Enter the path to the image file used as your graphs’ logo into this field. The logo will be displayed in the lower right-hand corner of each graph.</p>
+<p>The logo will also have a light transparency added so that the underlying graph slightly shows through it. If the image already has transparent pixels, then those pixels will remain transparent. For example, PNG files support transparency and can be used to create logos with rounded edges.</p>
+<p>The logo will also be scaled down to a maximum width and height of 100x100 pixels.</p>
+<p>Note that logos will also appear when you <a href="publishing.html#sec-printing">print</a> or <a href="publishing.html#sec-exporting">save</a> a graph.</p>
+</section>
+<section id="effects" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="effects">Effects</h4>
+<p><strong>Stipple image</strong>: Enter into this field the file path to the image used for a stipple brush. A stipple brush can be used to draw stacked images across <a href="#sec-options-graphs">bars and boxes</a>.</p>
+<p><strong>Stipple shape</strong>: Select from here which shape to use for a stipple brush. A stipple brush can be used to draw stacked shapes across <a href="#sec-options-graphs">bars and boxes</a>.</p>
+<p><strong>Common image</strong>: Enter into this field the file path to the image used for drawing underneath all the bars or boxes on the graphs.</p>
+<p><strong>Color</strong>: Selects the color used for certain stipple shapes (e.g., <em>Book</em>). Note that this color will not be applied to shapes which have their own color scheme (e.g., <em>Sun</em>).</p>
+<p><strong>Display drop shadows</strong>: Check this to include shadows underneath items such as boxes, bars, and labels. Unchecking this option will give your graphs a flat look.</p>
+<p><strong>Showcase key items</strong>: Check this to draw attention to the complex (i.e., 3+ syllable) word groups on syllable histograms and pie charts (standard projects). This is done by lowering the opacity of the bars and slices for 1- and 2-syllable word groups. Also, the labels for these bars and slices will be removed. Finally, the cumulative bar for the simple-words bar group will be removed on the histogram.</p>
+</section>
+</section>
+<section id="axes" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="axes">Axes</h3>
+<p>The options on this page customize the axis settings of your graphs.</p>
+<section id="fonts" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fonts">Fonts</h4>
+<p><strong>x-axis</strong>: Sets the font for the x-axis labels in your graphs.</p>
+<p><strong>y-axis</strong>: Sets the font for the y-axis labels in your graphs.</p>
+</section>
+</section>
+<section id="titles" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="titles">Titles</h3>
+<p>The options on this page customize the title fonts of your graphs.</p>
+<section id="fonts-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fonts-1">Fonts</h4>
+<p><strong>Top titles</strong>: Click this button to select the font for the top title in your graphs.</p>
+<p><strong>Bottom titles</strong>: Click this button to select the font for the bottom title in your graphs.</p>
+<p><strong>Left titles</strong>: Click this button to select the font for the left title in your graphs.</p>
+<p><strong>Right titles</strong>: Click this button to select the font for the right title in your graphs.</p>
+</section>
+</section>
+<section id="readability-graphs" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="readability-graphs">Readability Graphs</h3>
+<p>The options on this page customize various readability graph settings.</p>
+<section id="frygpmraygorschwartz-invalid-regions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frygpmraygorschwartz-invalid-regions">Fry/GPM/Raygor/Schwartz Invalid Regions</h4>
+<p><strong>Color</strong>: Selects the color for the invalid sentence/word regions.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Raygor style</p>
+</div>
+<p>Selects the layout style of the Raygor graph. These options include:</p>
+<p><strong>Original</strong>: As the graph appeared in the original presentation <span class="citation" data-cites="raygor">(<a href="references.html#ref-raygor" role="doc-biblioref">Raygor 261</a>)</span>. This will show grade labels being closer together, abbreviated, and with a sans-serif font. Also, invalid region polygons are not included.</p>
+<p><strong>Baldwin-Kaufman</strong>: As the graph appeared in the Baldwin-Kaufman article <span class="citation" data-cites="baldwin-kaufman">(<a href="references.html#ref-baldwin-kaufman" role="doc-biblioref">149</a>)</span>. This is the same as the original, except that it includes invalid region polygons.</p>
+<p><strong>Modern</strong>: This is a modernized version of Baldwin-Kaufman, where the labels are serif, not abbreviated, and spread out further. The axis labels and titles are also more descriptive.</p>
+</div>
+</section>
+<section id="flesch-chart" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="flesch-chart">Flesch Chart</h4>
+<p><strong>Connect points</strong>: Check this to connect the factor and score points on the <a href="readability-tests-english.html#sec-flesch-test">Flesch</a> chart.</p>
+<p><strong>Display grouped documents on syllable ruler</strong>: Check this to display document names grouped along the syllable ruler.</p>
+<p>This will display brackets along the right-most ruler, divided into ranges of twenty. Next to these brackets, the documents that fall into them (based on syllables per hundred words) will be shown. The documents in the upper brackets will be easier, the lower ones more difficult.</p>
+<p>This option only applies to batch projects, and only for batches containing fifty or less documents. Also, this feature will remove the legend (if grouping is in use).</p>
+</section>
+<section id="lix-gauge" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="lix-gauge">Lix Gauge</h4>
+<p><strong>Use English translations for German Lix gauge</strong>: Check this to display Schulz’s <span class="citation" data-cites="schulz">(<a href="references.html#ref-schulz" role="doc-biblioref">53</a>)</span> English translated bracket labels on the <a href="readability-tests-german.html#sec-lix-german-technical">German Lix</a> gauge.</p>
+</section>
+</section>
+<section id="bar-charts" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bar-charts">Bar Charts</h3>
+<p>The options on this page customize your bar charts’ settings.</p>
+<section id="bar-appearance" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="bar-appearance">Bar Appearance</h4>
+<p><strong>Color</strong>: Click this button to select the color used for your bars.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Effect</p>
+</div>
+<p><strong>Solid</strong>: Select this option to use a solid color for your bars.</p>
+<p><strong>Glass effect</strong>: Select this option to add a glassy look to your bars.</p>
+<p><strong>Color fade, bottom to top</strong>: Select this option to apply a color fade across your bars (starting from the bottom).</p>
+<p><strong>Color fade, top to bottom</strong>: Select this option to apply a color fade across your bars (starting from the top).</p>
+<p><strong>Stipple image</strong>: Select this option to draw a stack of images across your bars. The image for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Stipple shape</strong>: Select this option to draw a shape across your bars. The shape for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Watercolor</strong>: Select this option to draw a watercolor-like effect across the bars. This will appear as if bars are warped and look like they were filled in with watercolor paint (or a marker).</p>
+<p><strong>Thick watercolor</strong>: This is the same as <strong>Watercolor</strong>, but will use a more opaque brush and apply a second coat of paint.</p>
+<p><strong>Common image</strong>: Select this option to draw an image under the graph, with it only showing through where the bars are at.</p>
+</div>
+<p><strong>Opacity</strong>: Sets the transparency of the bars. A value of 255 will set the bars to be fully opaque, whereas 0 will set the bars to be transparent.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Orientation</p>
+</div>
+<p><strong>Horizontal</strong>: Select this option to display the bars horizontally.</p>
+<p><strong>Vertical</strong>: Select this option to display the bars vertically.</p>
+</div>
+<p><strong>Display labels on bars</strong>: Check this to display labels on the bars.</p>
+</section>
+</section>
+<section id="histograms" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="histograms">Histograms</h3>
+<p>The options on this page customize the test score histograms included in <a href="creating-a-new-project.html#sec-creating-batch-project">batch projects</a> and the <strong>Syllable Counts</strong> in <a href="creating-a-new-project.html#sec-creating-standard-project">standard projects</a>.</p>
+<section id="bar-appearance-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="bar-appearance-1">Bar Appearance</h4>
+<p><strong>Color</strong>: Click this button to select the color used for your bars.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Effect</p>
+</div>
+<p><strong>Solid</strong>: Select this option to use a solid color for your bars.</p>
+<p><strong>Glass effect</strong>: Select this option to add a glassy look to your bars.</p>
+<p><strong>Color fade, bottom to top</strong>: Select this option to apply a color fade across your bars (starting from the bottom).</p>
+<p><strong>Color fade, top to bottom</strong>: Select this option to apply a color fade across your bars (starting from the top).</p>
+<p><strong>Stipple image</strong>: Select this option to draw a stack of images across your bars. The image for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Stipple shape</strong>: Select this option to draw a shape across your bars. The shape for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Watercolor</strong>: Select this option to draw a watercolor-like effect across the bars. This will appear as if bars are warped and look like they were filled in with watercolor paint (or a marker).</p>
+<p><strong>Common image</strong>: Select this option to draw an image under the graph, with it only showing through where the bars are at.</p>
+</div>
+<p><strong>Opacity</strong>: Sets the transparency of the bars. A value of 255 will set the bars to be fully opaque, whereas 0 will set the bars to be transparent.</p>
+</section>
+<section id="binning-options" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="binning-options">Binning Options</h4>
+<p>Bin sorting refers to how values (e.g., index and grade scores) are categorized into separate classes. Each class (or bin) is displayed on a histogram as a bar. The options listed here control how these bins are created and how your data are sorted into them.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Sorting</p>
+</div>
+<p><strong>Create a bin for each unique value</strong>: Select this option to create a bin (i.e., a bar) for every unique value. If you have floating-point grade scores and are not rounding your values, then a bin for every unique floating-point value will be created. If you select this option, then it is recommended to set the rounding option to <strong>Round down</strong>.</p>
+<p><strong>Sort by interval</strong>: Select this option to have the program select the best bin sizes based on the range of your data. Rather than having a bin for each unique value, bins will be created for ranges of values. For example, you may have a bin representing values for grades 2–4, rather than having separate bins for 2, 3, and 4.</p>
+<p><strong>Sort by neat interval</strong>: Select this option to have the program select the best integral bin sizes based on the range of your data. This option is the same as <strong>Sort by interval</strong>, except that it will force the bin ranges and bin sizes to be integer values. This will prevent having ranges beginning at values such as 2.4 and will also force the bin widths into sizes such as 2 or 3 (rather than 3.2). By selecting this option, your intervals will precisely represent grade ranges (e.g., grades 2–4) and prevent any overlap between the grades in your bins (if rounding the values).</p>
+<p>Note that if you are not rounding down your values, then scores with no mantissa (fractional part) may fall into a bin different from the same values with fractional parts. For example, if you have a bin ranging from 1–2 and another ranging from 2–3, then:</p>
+<ul>
+<li>The first bin represents values &gt; 1 and ≤ 2</li>
+<li>The second bin represents values &gt; 2 and ≤ 3</li>
+</ul>
+<p>If you are not rounding down your scores, then a score of 2 will fall into the 1–2 bin, whereas a score of 2.1 will fall into the 2–3 bin. If you select this option, then it is recommended to set the rounding option to <strong>Round down</strong>. This will ensure that values such as 2 and 2.1 fall into the same bin.</p>
+<p>Also note that if data for a particular histogram contain four or fewer unique values, then unique value binning will be used.</p>
+</div>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Grade level/index value rounding</p>
+</div>
+<p>This option controls how <a href="scoring-notes.html#sec-grade-level-results">floating-point</a> values are rounded when being sorted into bins. You may choose from the following options:</p>
+<p><strong>Round</strong>: Select this option to round grade-level scores up or down (based on their fractional part) when sorting them into the histogram’s bins. Values such as 4 and 4.3 will be sorted as 4, whereas 4.5 and 4.9 will be sorted as 5.</p>
+<p><strong>Round down</strong>: Select this option to round grade-level scores down when sorting them into the histogram’s bins. Values such as 4, 4.3, and 4.9 will be sorted as 4. This selection is recommended.</p>
+<p><strong>Round up</strong>: Select this option to round grade-level scores up when sorting them into the histogram’s bins. Values such as 4 will be sorted as 4, whereas 4.1, 4.3, and 4.9 will be sorted as 5. This selection is not recommended and should only be used for special cases.</p>
+<p><strong>Do not round</strong>: Select this option to not round any grade-level scores. Scores will be sorted into the bins exactly as they appear with their fractional parts. This selection is not recommended and should only be used for special cases.</p>
+</div>
+</section>
+<section id="bin-display" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="bin-display">Bin Display</h4>
+<p>These options control the display of the axis labels, bar labels, and side title of the histogram.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Interval Display</p>
+</div>
+<p><strong>Cutpoints</strong>: Select this option to display the axis bin intervals on the sides of the bars. The label on the left side of a bar will be the ending value of the previous bin. The label on the right side of the bar will be the end of the current bin.</p>
+<p><strong>Midpoints</strong>: Select this option to display the axis bin intervals centered under the bars. For neat intervals, the label will be the range of the bin; otherwise, it will be the midpoint. This option is recommended if using neat intervals because it may be easier to interpret.</p>
+</div>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Labels</p>
+</div>
+<p><strong>Counts</strong>: Select this option to display the number of items in the bin as its label. This label will appear at the top of each bar.</p>
+<p><strong>Percentages</strong>: Select this option to display the percentage of items that fall into the bin as its label. This label will appear at the top of each bar.</p>
+<p><strong>Counts &amp; percentages</strong>: Select this option to display the number of items and percentage of items that fall into the bin as its label. This label will appear at the top of each bar.</p>
+<p><strong>No labels</strong>: Select this option to not display bin labels.</p>
+</div>
+</section>
+</section>
+<section id="box-plots" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="box-plots">Box Plots</h3>
+<p>The options on this page customize the test-score box plots included in <a href="creating-a-new-project.html#sec-creating-batch-project">batch projects</a> and the <strong>Sentence Lengths</strong> box plot in <a href="creating-a-new-project.html#sec-creating-standard-project">standard projects</a>.</p>
+<section id="box-appearance" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="box-appearance">Box Appearance</h4>
+<p><strong>Color</strong>: Click this button to select the color used for the boxes.</p>
+<div class="optionssection">
+<div class="optionssectiontitle">
+<p>Effect</p>
+</div>
+<p><strong>Solid</strong>: Select this option to use a solid color for your boxes.</p>
+<p><strong>Glass effect</strong>: Select this option to add a glassy look to your boxes.</p>
+<p><strong>Color fade, left to right</strong>: Select this option to apply a color fade across your boxes (starting from the left).</p>
+<p><strong>Color fade, right to left</strong>: Select this option to apply a color fade across your boxes (starting from the right).</p>
+<p><strong>Stipple image</strong>: Select this option to draw a stack of images across your boxes. The image for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Stipple shape</strong>: Select this option to draw a shape across your boxes. The shape for this brush is specified on the <a href="#sec-options-graphs"><strong>General</strong></a> page.</p>
+<p><strong>Watercolor</strong>: Select this option to draw a watercolor-like effect across the boxes. This will appear as if boxes are warped and look like they were filled in with watercolor paint (or a marker).</p>
+<p><strong>Common image</strong>: Select this option to draw an image under the graph, with it only showing through where the boxes are at.</p>
+</div>
+<p><strong>Opacity</strong>: Sets the transparency of the box. A value of 255 will set the box to be fully opaque, whereas 0 will set the box to be transparent.</p>
+</section>
+<section id="box-options" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="box-options">Box Options:</h4>
+<p><strong>Display box &amp; whisker labels</strong>: Check this to display labels on the middle points, upper/lower control limits, and whiskers.</p>
+<p><strong>Connect middle points</strong>: Check this to display a line connecting the middle points of each box. This only applies to plots with multiple boxes.</p>
+<p><strong>Show all data points</strong>: Check this to display all data points on the box and whiskers. If this is unchecked, then only outliers will be shown.</p>
+<p><strong>Box coefficient</strong>: Enter the coefficient here to specify the percentiles range used for the upper and lower control limits. For example, a coefficient of 25 will use the 25<sup>th</sup> and 75<sup>th</sup> percentiles range (i.e., the quartiles range).</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-amstad" class="csl-entry" role="listitem">
+Amstad, Toni. <em>Wie Verstandlich Sind Unsere Zeitungen?</em> Universitat Zurich, 1978.
+</div>
+<div id="ref-anderson:1981" class="csl-entry" role="listitem">
+Anderson, Jonathan. <em>Analysing the Readability of English and Non-English Texts in the Classroom with Lix</em>. Aug. 1981.
+</div>
+<div id="ref-anderson:1983" class="csl-entry" role="listitem">
+---. <span>“Lix and Rix: Variations of a Little-Known Readability Index.”</span> <em>Journal of Reading</em>, vol. 26, no. 6, 1983, pp. 490–96.
+</div>
+<div id="ref-aquino" class="csl-entry" role="listitem">
+Aquino, Milagros R. <span>“The Validity of the Miller-Coleman Readability Scale.”</span> <em>Reading Research Quarterly</em>, vol. 4, no. 3, Spring, 1969, pp. 342–57.
+</div>
+<div id="ref-baldwin-kaufman" class="csl-entry" role="listitem">
+Baldwin, R. Scott, and Rhonda K. Kaufman. <span>“A Concurrent Validity Study of the Raygor Readability Estimate.”</span> <em>Journal of Reading</em>, vol. 23, no. 2, 1979, pp. 148–53.
+</div>
+<div id="ref-bamberger-vanecek" class="csl-entry" role="listitem">
+Bamberger, Richard, and Erich Vanecek. <em>Lesen-Verstehen-Lernen-Schreiben: Die Schwierigkeitsstufen von Texten in Deutscher Sprache</em>. Jugend und Volk/Diesterweg/Sauerl<span>ä</span>nder, 1984.
+</div>
+<div id="ref-barrio-cantalejo-simon-lorda-melguizo-escalona-marijuan-hernando" class="csl-entry" role="listitem">
+Barrio-Cantalejo, Inés Marı́a, et al. <span>“Validaci<span>ó</span>n de la Escala INFLESZ para evaluar la legibilidad de los textos dirigidos a pacientes.”</span> <em>Anales del Sistema Sanitario de Navarra</em>, vol. 31, no. 2, 2008, pp. 135–52.
+</div>
+<div id="ref-bjornsson:1983" class="csl-entry" role="listitem">
+Björnsson, C. H. <span>“Readability of Newspapers in 11 Languages.”</span> <em>Reading Research Quarterly</em>, vol. 18, no. 4, 1983, pp. 480–97.
+</div>
+<div id="ref-bjornsson:1979" class="csl-entry" role="listitem">
+Björnsson, C. H., and Birgit Hård af Segerstad. <em>Lix p<span>å</span> Franska Och Tio Andra Spr<span>å</span>k</em>. Pedagogiskt centrum Stockholms skolf<span>ö</span>rvaltning, 1979.
+</div>
+<div id="ref-bormuth:1969" class="csl-entry" role="listitem">
+Bormuth, John R. <em>Development of Readability Analyses</em>. United States Department of Health, Education, <span>&amp;</span> Welfare, 1969.
+</div>
+<div id="ref-bormuth:1966" class="csl-entry" role="listitem">
+---. <span>“Readability: A New Approach.”</span> <em>Reading Research Quarterly</em>, vol. 1, no. 3, Spring, 1966, pp. 79–132.
+</div>
+<div id="ref-carver:1985" class="csl-entry" role="listitem">
+Carver, Ronald P. <span>“Measuring Readability Using DPR Units.”</span> <em>Journal of Reading</em>, vol. 27, no. 4, 1985, pp. 303–16.
+</div>
+<div id="ref-caylor-sticht-fox-ford" class="csl-entry" role="listitem">
+Caylor, John S., et al. <em>Methodologies for Determining Reading Requirements of Military Occupational Specialties</em>. United States Office of the Chief of Research; Development, 1973.
+</div>
+<div id="ref-chall-dale:manual:1995" class="csl-entry" role="listitem">
+Chall, Jeanne S., and Edgar Dale. <em>Manual for the New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-chall-dale:revisited:1995" class="csl-entry" role="listitem">
+---. <em>Readability Revisited: The New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-coleman-liau" class="csl-entry" role="listitem">
+Coleman, Meri, and T. L. Liau. <span>“A Computer Readability Formula Designed for Machine Scoring.”</span> <em>Journal of Applied Psychology</em>, vol. 60, no. 2, 1975, pp. 283–84.
+</div>
+<div id="ref-contreras" class="csl-entry" role="listitem">
+Contreras, Alfonso, et al. <span>“The SOL Formulas for Converting SMOG Readability Scores Between Health Education Materials Written in Spanish, English, and French.”</span> <em>Journal of Health Communications</em>, vol. 4, 1999, pp. 21–29.
+</div>
+<div id="ref-crawford" class="csl-entry" role="listitem">
+Crawford, Alan. <span>“A Spanish Language Fry-Type Readability Procedure: Elementary Level.”</span> <em>Bilingual Education Paper Series</em>, vol. 7, no. 8, 1984, pp. 1–17.
+</div>
+<div id="ref-cuayahuitl" class="csl-entry" role="listitem">
+Cuayáhuitl, Heriberto. <span>“A Syllabification Algorithm for Spanish.”</span> <em>Lecture Notes in Computer Science</em>, vol. 2945, 2004, pp. 412–15.
+</div>
+<div id="ref-dale-chall:1948" class="csl-entry" role="listitem">
+Dale, Edgar, and Jeanne S. Chall. <span>“A Formula for Predicting Readability.”</span> <em>Educational Research Bulletin</em>, vol. 27, no. 1, 1948, pp. 11–20, 28.
+</div>
+<div id="ref-danielson-bryan" class="csl-entry" role="listitem">
+Danielson, Wayne A., and Sam Dunn Bryan. <span>“Computer Automation of Two Readability Formulas.”</span> <em>Journalism Quarterly</em>, vol. 40, 1963, pp. 201–06.
+</div>
+<div id="ref-decicco" class="csl-entry" role="listitem">
+DeCicco, Laura. <em>Exploring Ggplot2 Boxplots - Defining Limits and Adjusting Style</em>. Water Data For The Nation Blog; https://www.waterdata.usgs.gov/blog/boxplots/, 10 Aug. 2018.
+</div>
+<div id="ref-dolch" class="csl-entry" role="listitem">
+Dolch, E. W. <span>“A Basic Sight Vocabulary.”</span> <em>Elementary School Journal</em>, vol. 36, no. 6, 1936, pp. 456–60.
+</div>
+<div id="ref-fang" class="csl-entry" role="listitem">
+Fang, Irving. <span>“The <span>‘</span>Easy Listening Formula’<span></span>.”</span> <em>Journal of Broadcasting</em>, vol. 10, no. 1, 1966, pp. 63–68.
+</div>
+<div id="ref-farr-jenkins-paterson" class="csl-entry" role="listitem">
+Farr, James N., et al. <span>“Simplification of the Flesch Reading Ease Formula.”</span> <em>Journal of Applied Psychology</em>, vol. 35, no. 5, 1951, pp. 333–37.
+</div>
+<div id="ref-flesch:1979" class="csl-entry" role="listitem">
+Flesch, Rudolf Franz. <em>How to Write Plain English: A Book for Lawyers and Consumers</em>. Harper <span>&amp;</span> Row, 1979.
+</div>
+<div id="ref-flesch:1949" class="csl-entry" role="listitem">
+---. <em>The Art of Readable Writing</em>. Harper <span>&amp;</span> Row, 1949.
+</div>
+<div id="ref-fry:1968" class="csl-entry" role="listitem">
+Fry, Edward. <span>“A Readability Formula That Saves Time.”</span> <em>Journal of Reading</em>, vol. 11, no. 7, 1968, pp. 513–16, 575–78.
+</div>
+<div id="ref-fry:elementary:1977" class="csl-entry" role="listitem">
+---. <em>Elementary Reading Instruction</em>. McGraw-Hill, 1977.
+</div>
+<div id="ref-fry:extensions:1977" class="csl-entry" role="listitem">
+---. <span>“Fry’s Readability Graph: Clarifications, Validity, and Extension to Level 17.”</span> <em>Journal of Reading</em>, vol. 21, no. 3, 1977, pp. 242–52.
+</div>
+<div id="ref-gilliam-pena-mountain" class="csl-entry" role="listitem">
+Gilliam, Bettye, et al. <span>“The Fry Graph Applied to Spanish Readability.”</span> <em>Reading Teacher</em>, vol. 33, 1980, pp. 426–30.
+</div>
+<div id="ref-grundner" class="csl-entry" role="listitem">
+Grundner, T. M. <span>“How to Make Consent Forms More Readable.”</span> <em>IRB: Ethics <span>&amp;</span> Human Research</em>, vol. 3, no. 7, 1981, pp. 9–10.
+</div>
+<div id="ref-gunning" class="csl-entry" role="listitem">
+Gunning, Robert. <em>The Technique of Clear Writing</em>. Rev. ed., McGraw-Hill, 1968.
+</div>
+<div id="ref-harris-jacobson" class="csl-entry" role="listitem">
+Harris, A. J., and M. D. Jacobson. <em>Basic Reading Vocabularies</em>. Macmillan, 1982.
+</div>
+<div id="ref-hooke-deleo-slaughter" class="csl-entry" role="listitem">
+Hooke, Lydia R., et al. <em>Readability of Air Force Publications: A Criterion Referenced Evaluation. Final Report</em>. United States Air Force Human Resources Lab, 1979.
+</div>
+<div id="ref-kibby" class="csl-entry" role="listitem">
+Kibby, Michael W. <span>“Test Review: The Degrees of Reading Power.”</span> <em>Journal of Reading</em>, vol. 24, no. 5, 1981, pp. 416–27.
+</div>
+<div id="ref-kincaid-fishburne-rogers-chissom:1975" class="csl-entry" role="listitem">
+Kincaid, J. Peter, Jr. Lt. Robert P. Fishburne, et al. <em>Derivation of New Readability Formulas (Automated Readability Index, Fog Count and Flesch Reading Ease Formula) for Navy Enlisted Personnel</em>. United States Naval Technical Training Command, 1975.
+</div>
+<div id="ref-kincaid-aagard-ohara:1980" class="csl-entry" role="listitem">
+Kincaid, J. Peter, James A. Aagard, et al. <em>Development and Test of a Computer Readability Editing System (CRES). Final Report, June 1978 Through December 1979</em>. United States Naval Training Analysis; Evaluation Group, 1980.
+</div>
+<div id="ref-kincaid:1972" class="csl-entry" role="listitem">
+Kincaid, J. Peter, John Van Deusen, et al. <em>Use of the Automated Readability Index for Evaluating Peer-Prepared Material for Use in Adult Reading Education</em>. United States Department of Health, Education, <span>&amp;</span> Welfare; Office of Education, 1972.
+</div>
+<div id="ref-mcalpine" class="csl-entry" role="listitem">
+McAlpine, Rachel. <em>From Plain English to Global English</em>. Quality Web Content; https://www.webpagecontent.com/arc_archive/139/5/, 2006.
+</div>
+<div id="ref-mccall-crabbs:1926" class="csl-entry" role="listitem">
+McCall, W. A., and L. M. Crabbs. <em>Standard Test Lessons in Reading</em>. Columbia University Teachers College, 1926.
+</div>
+<div id="ref-mccall-crabbs:1950" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1950.
+</div>
+<div id="ref-mccall-crabbs:1961" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1961.
+</div>
+<div id="ref-mclaughlin" class="csl-entry" role="listitem">
+McLaughlin, Harry. <span>“SMOG Grading - a New Readability Formula.”</span> <em>Journal of Reading</em>, vol. 12, no. 8, 1969, pp. 639–46.
+</div>
+<div id="ref-miller-coleman" class="csl-entry" role="listitem">
+Miller, G. R., and E. B. Coleman. <span>“A Set of Thirty-Six Prose Passages Calibrated for Complexity.”</span> <em>Journal of Verbal Learning and Verbal Behavior</em>, vol. 6, 1967, pp. 851–54.
+</div>
+<div id="ref-powers-sumner-kearl" class="csl-entry" role="listitem">
+Powers, R. D., et al. <span>“A Recalculation of Four Adult Readability Formulas.”</span> <em>Journal of Educational Psychology</em>, vol. 49, no. 2, 1958, pp. 99–105.
+</div>
+<div id="ref-raygor" class="csl-entry" role="listitem">
+Raygor, Alton L. <em>The Raygor Readability Estimate: A Quick and Easy Way to Determine Difficulty</em>. Dec. 1977, pp. 259–63.
+</div>
+<div id="ref-renstrom" class="csl-entry" role="listitem">
+Renström, Jan. <span>“Texte Und Textbehandlung Im Deutschunterricht.”</span> <em>Die Unterrichtspraxis / Teaching German</em>, vol. 13, no. 2, Autumn, 1980, pp. 150–55.
+</div>
+<div id="ref-schulz" class="csl-entry" role="listitem">
+Schulz, Renate A. <span>“Literature and Readability: Bridging the Gap in Foreign Language Reading.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 1, Spring, 1981, pp. 43–53.
+</div>
+<div id="ref-schwartz" class="csl-entry" role="listitem">
+Schwartz, Roswitha E. W. <em>An Exploratory Effort to Design a Readability Graph for German Material</em>. State University of New York at Albany, Reading Department, 1975.
+</div>
+<div id="ref-esmith" class="csl-entry" role="listitem">
+Smith, E. A., and R. J. Senter. <em>Automated Readability Index</em>. United States Aerospace Medical Research Laboratorties, 1967.
+</div>
+<div id="ref-lsmith" class="csl-entry" role="listitem">
+Smith, Lawrence L. <span>“Using a Modified SMOG in Primary and Intermediate Grades.”</span> <em>Reading Horizons</em>, vol. 24, no. 2, 1984, pp. 129–32.
+</div>
+<div id="ref-spache:1953" class="csl-entry" role="listitem">
+Spache, George. <span>“A New Readability Formula for Primary-Grade Reading Materials.”</span> <em>The Elementary School Journal</em>, vol. 53, no. 7, 1953, pp. 410–13.
+</div>
+<div id="ref-spache:1974" class="csl-entry" role="listitem">
+---. <em>Good Reading for Poor Readers</em>. Garrard Publishing Company, 1974.
+</div>
+<div id="ref-stocker" class="csl-entry" role="listitem">
+Stocker, Leonard P. <span>“Increasing the Precision of the Dale-Chall Readability Formula.”</span> <em>Reading Improvement</em>, vol. 8, no. 3, Winter, 1971, pp. 87–89.
+</div>
+<div id="ref-tufte:eyes" class="csl-entry" role="listitem">
+Tufte, Edward. <em>Seeing with Fresh Eyes</em>. Graphics <span>Press</span> LLC, 2020.
+</div>
+<div id="ref-vari-cartier" class="csl-entry" role="listitem">
+Vari-Cartier, Patricia. <span>“Development and Validation of a New Instrument to Assess the Readability of Spanish Prose.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 2, 1981, pp. 141–48.
+</div>
+<div id="ref-wheeler-smith" class="csl-entry" role="listitem">
+Wheeler, Lester R., and Edwin H. Smith. <span>“A Practical Readability Formula for the Classroom Teacher in Elementary Grades.”</span> <em>Elementary English</em>, vol. 31, 1954, pp. 397–99.
+</div>
+<div id="ref-wolinski" class="csl-entry" role="listitem">
+Wolinski, John T., and Maurice W. Bozman. <span>“Using the Raygor Readability Estimate for Social Studies.”</span> <em>The Social Studies</em>, vol. 74, no. 5, 1983, pp. 215–19.
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    window.setColorSchemeToggle(window.hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./publishing.html" class="pagination-link" aria-label="Publishing the Results">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./additional-features.html" class="pagination-link" aria-label="Additional Features">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Additional Features</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

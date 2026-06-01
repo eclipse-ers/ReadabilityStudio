@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Readability analysis software">
+
+<title>5&nbsp; Reviewing Standard Projects – Readability Studio 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./reviewing-batch-project.html" rel="next">
+<link href="./creating-a-new-project.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6c49c5477b92c77c9eb341f9299c235f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fa1f459854a8ab2e5f5e8b32f437b5d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-bea1faba1e5b2a22eff78f92ed81a375.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    window.setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      window.setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    window.hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(darkModeDefault) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !window.hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (window.hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./creating-a-new-project.html">Projects</a></li><li class="breadcrumb-item"><a href="./reviewing-standard-projects.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Readability Studio 2026</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Overviews</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Technical Overviews</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Program Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./overviews/new-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">New Features and Enhancements</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./creating-a-new-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating a New Project</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-standard-projects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reviewing-batch-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reviewing Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./customizing-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Customizing the Results</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Publishing the Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Options &amp; Features</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./program-options.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Program &amp; Project Options</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Additional Features</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Readability Tests</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-english.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">English Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-spanish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Spanish Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./readability-tests-german.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">German Readability Tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./custom-tests-and-bundles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Custom Tests &amp; Bundles</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced Examples</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-editing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Editing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Customizing Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-batch-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Batch Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples-creating-custom-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Creating Custom Tests</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analysis-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Analysis Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scoring-notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Scoring Notes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Libraries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements/tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open-Source Tools &amp; Content</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/shortcuts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Keyboard Shortcuts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-reviewing-test-scores" id="toc-sec-reviewing-test-scores" class="nav-link active" data-scroll-target="#sec-reviewing-test-scores"><span class="header-section-number">5.1</span> Test Scores</a></li>
+  <li><a href="#sec-reviewing-readability-graphs" id="toc-sec-reviewing-readability-graphs" class="nav-link" data-scroll-target="#sec-reviewing-readability-graphs"><span class="header-section-number">5.2</span> Readability Graphs</a></li>
+  <li><a href="#sec-reviewing-goals" id="toc-sec-reviewing-goals" class="nav-link" data-scroll-target="#sec-reviewing-goals"><span class="header-section-number">5.3</span> Goals</a></li>
+  <li><a href="#sec-reviewing-statistics" id="toc-sec-reviewing-statistics" class="nav-link" data-scroll-target="#sec-reviewing-statistics"><span class="header-section-number">5.4</span> Statistics</a></li>
+  <li><a href="#sec-reviewing-word-breakdowns" id="toc-sec-reviewing-word-breakdowns" class="nav-link" data-scroll-target="#sec-reviewing-word-breakdowns"><span class="header-section-number">5.5</span> Words Breakdown</a></li>
+  <li><a href="#sec-reviewing-sentences-breakdown" id="toc-sec-reviewing-sentences-breakdown" class="nav-link" data-scroll-target="#sec-reviewing-sentences-breakdown"><span class="header-section-number">5.6</span> Sentences Breakdown</a></li>
+  <li><a href="#sec-reviewing-standard-grammar" id="toc-sec-reviewing-standard-grammar" class="nav-link" data-scroll-target="#sec-reviewing-standard-grammar"><span class="header-section-number">5.7</span> Grammar</a></li>
+  <li><a href="#sec-reviewing-dolch" id="toc-sec-reviewing-dolch" class="nav-link" data-scroll-target="#sec-reviewing-dolch"><span class="header-section-number">5.8</span> Dolch Sight Words</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./creating-a-new-project.html">Projects</a></li><li class="breadcrumb-item"><a href="./reviewing-standard-projects.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reviewing Standard Projects</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="sec-reviewing-test-scores" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-reviewing-test-scores"><span class="header-section-number">5.1</span> Test Scores</h2>
+<p>After opening a project, click on the <strong>Readability Scores</strong> icon on the project sidebar, and then click on <strong>Scores</strong> beneath that. Here you can view all the test scores, as well as their respective explanations and recommendations.</p>
+<p>The top area of the <strong>Scores</strong> window is the score grid. In here there are four columns:</p>
+<ul>
+<li><strong>Test</strong>: the name of the readability test.</li>
+<li><strong>Grade Level</strong>: the minimum grade level that the test determined the document is suitable for.</li>
+<li><strong>Reader Age</strong>: the minimum reader age that the test determined the document is suitable for. The reader age is determined from the test’s score. It can be shown as either a <a href="program-options.html#sec-readability-test-options">range</a> for the entire grade, or be rounded to the semester that the grade score falls into.</li>
+<li><strong>Scale Value</strong>: the index value for tests that use special scales.</li>
+<li><a href="scoring-notes.html#sec-cloze"><strong>Predicted Cloze Score</strong></a>: the estimated score if the document were to be used for a cloze test. Note that cloze scores will be displayed in percentage format (i.e., 0–100) instead of floating-point format (i.e., .0–1.0) for easier reading.</li>
+</ul>
+<p>Note that most tests have just one type of result (e.g., grade level), so non-applicable columns are left blank. For example, a <a href="readability-tests-english.html#sec-gunning-fog-test">Gunning Fog</a> result may be a grade level of 8.3. This translates to an eighth grade level reader (in his or her third month of class). Because this test only returns a grade level and age, the <strong>Scale Value</strong> and <strong>Predicted Cloze Score</strong> columns are empty. Another example is a result for the <a href="readability-tests-english.html#sec-flesch-test">Flesch Reading Ease</a> test, which could be a scale value of 79. This test has its own scale (instead of a grade level) so its age, grade level, and cloze columns are empty.</p>
+<p>When a grade-level test scores a document at its maximum value, a <em>+</em> will be appended to the score. Although most grade-level tests can score up to 19, some tests which are designed for primary and secondary education materials will have lower maximum scores. For example, <a href="readability-tests-english.html#sec-wheeler-smith">Wheeler-Smith</a> is designed for primary-age materials and its maximum score is the fourth-grade level. If a document’s Wheeler-Smith score is 4, then it will be displayed as <em>4+</em>.</p>
+<p>Select any test in the results grid to display an explanation of its score in the window below.</p>
+<p><img src="images/scores.png" class="img-fluid"></p>
+<p>Along with an explanation of the test’s results, the factors that it uses to determine difficulty are also shown. For example, if <strong>Sentence Length</strong> and <strong>Word Length</strong> have an <em>X</em> next to them, then these variables are used in the test’s equation. To lower the score for a given test, try to improve its factors (e.g., lower the document’s average sentence length).</p>
+<p>Finally, the averages (means) of your test scores and ages are displayed at the bottom of the results window. Their respective <a href="glossary/glossary.html#sec-stat-terms">modes</a>, <a href="glossary/glossary.html#sec-stat-terms">medians</a>, and <a href="glossary/glossary.html#sec-stat-terms">standard deviations</a> are also included if <a href="program-options.html#sec-options-statistics"><strong>Extended Information</strong></a> is enabled. Note that scores are truncated when searching for the grade-level mode. For example, <em>6.7</em> and <em>6.2</em> will both be treated as <em>6</em>. Mode generally requires discrete data to produce meaningful results; therefore, grade-level scores are converted to their base grades for this statistic.</p>
+<p>When calculating these statistics, failed test scores are treated as missing observations and not included. For example, let us say that you included 5 tests, but one of them could not be calculated. In this case, the valid 4 scores will be added and divided by 4 (not 5) to acquire the means. Also, grade range scores–such as <em>5–6</em> from <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a>–will be converted to its own average (e.g., <em>5–6</em> will be 5.5).</p>
+<p>To remove any test from this list, select it and press <span class="keys">Ctrl</span>+<span class="keys">Del</span> (<svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"></path></svg>, <svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"></path></svg>) or <span class="keys">⌘</span>+<span class="keys">⌫</span> (<svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>) on your keyboard. To edit a <a href="custom-tests-and-bundles.html#sec-creating-custom-test">custom test</a>, double-click on it in this list. To view the help for a standard test, double-click on it in this list.</p>
+<p>There will also be readability graphs in this section if you included their respective tests. Refer to <a href="#sec-reviewing-readability-graphs" class="quarto-xref"><span>Section 5.2</span></a> for further information.</p>
+</section>
+<section id="sec-reviewing-readability-graphs" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-reviewing-readability-graphs"><span class="header-section-number">5.2</span> Readability Graphs</h2>
+<p>There are numerous readability tests that are graphically plotted, including <a href="readability-tests-english.html#sec-fry-test">Fry</a>, <a href="readability-tests-english.html#sec-raygor-test">Raygor</a>, <a href="readability-tests-english.html#sec-flesch-test">Flesch</a>, <a href="readability-tests-english.html#sec-lix-test">Lix</a>, <a href="readability-tests-spanish.html#sec-gilliam-pena-mountain-fry-graph">Gilliam-Peña-Mountain</a>, <a href="readability-tests-spanish.html#sec-frase">FRASE</a>, <a href="readability-tests-spanish.html#sec-crawford">Crawford</a>, and <a href="readability-tests-german.html#sec-schwartz">Schwartz</a>. These graphs consist of either grade-level or reading-level regions that a document may fall within. They also include indicators for the most influential factor for the document’s reported level (i.e., word difficulty vs.&nbsp;sentence difficulty).</p>
+<p>To view these graphs, click on the <strong>Graphs</strong> icon in a <a href="creating-a-new-project.html#sec-creating-standard-project">standard project</a> or the <strong>Readability Graphs</strong> icon in a <a href="creating-a-new-project.html#sec-creating-batch-project">batch project</a>.</p>
+<p>Let us first review a Fry graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/frygraph.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Fry graph</figcaption>
+</figure>
+</div>
+<p>To read this graph, search for the red data point–this value represents the document’s score. Note that there are numbers 1 through 17+ on this chart, each partitioned into small slices. The band that the data point falls into is the grade level of this document. In the example above, the data point is inside of the 8<sup>th</sup> grade slice (notice that the 8 is marked in blue).</p>
+<p>Running through each slice is a gray line, which is a separator to help show the most predominant cause of the document’s difficulty. If the data point is above the gray line, then the strongest influence on the document’s difficulty is high-syllable words. If it is below the line, then the strongest influence is long sentences. In the above example, it is above the line, implying that it is slightly more influenced by high-syllable words. However, because it is fairly close to the line, this document is well balanced between difficult words and difficult sentences.</p>
+<p>If the data point does not fall inside of a slice then the test will fail. For example, the Raygor graph below indicates that the document’s overly-long words caused the test to fail:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/raygorbadgrade.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Raygor Estimate graph</figcaption>
+</figure>
+</div>
+<p>The document was almost classified as 12<sup>th</sup> grade level material, but its long words make it too difficult to be assigned to any grade. At this point, you would want to review the document’s lengthy sentences (select <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> under the <strong>Grammar</strong> sidebar item) and try to shorten some of them.</p>
+<p>The Gilliam-Peña-Mountain graph is a variation of Fry designed for Spanish text. It is identical to Fry, except that its x-axis begins at 175 (instead of 108). This enables this graph to plot Spanish text, which usually has a much higher syllable count than its English counterpart. Below is an example of a Gilliam-Peña-Mountain graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gpm-fry.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Gilliam-Peña-Mountain graph</figcaption>
+</figure>
+</div>
+<p>The Schwartz graph is another Fry-like graph, which is designed for German (primary and secondary-reader) text. Although similar in appearance to Fry, this graph uses its own reading-level regions mapped to the German materials it was trained on. This approach differs from Gilliam-Peña-Mountain, which uses the original Fry template and adjusts its axis ranges to accommodate Spanish text. Below is an example of a Schwartz graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/schwartz.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Schwartz graph</figcaption>
+</figure>
+</div>
+<p>The Fry and Raygor graphs are very similar and are both interpreted in the same manner; however, there are a few differences between them. The Fry graph classifies documents within the 1<sup>st</sup> grade to doctorate level. In contrast, Raygor concentrates on the range of 3<sup>rd</sup> grade to the sophomore collegiate level. It is recommended to only use Raygor graphs for secondary-age materials.</p>
+<p>Another difference is that the Fry graph is influenced by high-syllable words, while the Raygor graph is influenced by long words. Long sentences remain a key factor for both of these graphs, though.</p>
+<p>The other difference between the two graphs is that they are inverted from one another. In a Fry graph, the long-sentence region is in the bottom left-hand corner (going downward), whereas in a Raygor graph the long-sentence region is in the top left-hand corner (going upward). However, the same rules apply for how to interpret the grade level and influence of difficult words vs.&nbsp;difficult sentences.</p>
+<p>The FRASE graph is similar to Fry in terms of factors used and axis orientation. Its most influential factor (i.e., word vs.&nbsp;sentence difficulty) is determined in the same manner, and its Y (sentence) axis is descending. Below is an example of a FRASE graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/frase-graph.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>FRASE graph</figcaption>
+</figure>
+</div>
+<p>A key difference with FRASE is its use of reading levels (rather than grade levels). In the above example, we can see that the document has been scored at the <em>Intermediate</em> level. The other difference is that it is designed for Spanish text—note how its X (syllable-count) axis begins at 182, not 108.</p>
+<p>The Crawford graph is also similar to Fry in terms of factors used. However, it differs from most other graphs in that it uses the interior of the plot to find its sentence-count factor (instead of an axis). Below is an example of a Crawford graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/crawford-graph.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Crawford graph</figcaption>
+</figure>
+</div>
+<p>In the above graph, we can see that the intersection of the factors is 175 and 7. The number of syllables is 175 (y-axis). The number of sentences is approximately 7 (between 8.4 and 5.9 on the plot [corresponding to 175 on the y-axis]). From this intersection, the point’s x-axis value is 3.7. Hence, 3.7 is the grade-level score for this graph.</p>
+<p>The Flesch chart plots a document’s factors onto a pair of “rulers” and then connects them to determine the Flesch score. This score ranges from 0 (“very difficult”) to 100 (“very easy”). Below is an example of a Flesch chart:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/flesch-chart.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Flesch chart</figcaption>
+</figure>
+</div>
+<p>Danielson-Bryan 2—a variation of Flesch Reading Ease— includes a similar graphic, which also includes grade-level information:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/db2-plot.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Danielson-Bryan 2 plot</figcaption>
+</figure>
+</div>
+<p>The INFLESZ Scale—another variation— plots a score (based on an adjusted FRE calculation) on a 0–100 scale. This score can then be compared between three different classification scales: INFLESZ, Szigriszt, and Flesch Reading Ease. (INFLESZ is preferred over Szigriszt, and Flesch Reading Ease is only included for reference.) Similar to Flesch, it groups its scores from “<em>MUY DIFÍCIL</em>” (“very difficult”) to “<em>MUY FÁCIL</em>” (“very easy”).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/inflesz-graph.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>INFLESZ</figcaption>
+</figure>
+</div>
+<p>Similar to a Flesch chart, the Lix gauge plots a document’s Lix index score on a chart showing its difficulty level:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/lix-gauge.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Lix gauge</figcaption>
+</figure>
+</div>
+<p>In the above chart, we can see that Lix scores can range from 0 (“very easy”) to 60+ (“very difficult”).</p>
+<p>There is also a variation of the Lix gauge that is adjusted for German materials:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/german-lix-gauge.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>German Lix gauge</figcaption>
+</figure>
+</div>
+<p>This version adjusts the scaling of the score, assuming that German text is inherently more difficult than other languages. It also includes additional levels of difficulty (e.g., “children and young adult”).</p>
+<p>Note that if you plot any of these graphs, its score can also be viewed in the <a href="#sec-reviewing-test-scores"><strong>Readability Scores</strong></a> area.</p>
+<p>As a final note, <a href="creating-a-new-project.html#sec-creating-batch-project">batch projects</a> include multi-document versions of all these graphs:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/multiple-fry.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Multiple documents on a Fry graph</figcaption>
+</figure>
+</div>
+<p>Here, we can see that an entire collection of documents is plotted onto a single Fry graph. This is useful for visualizing the grade-level layout of a group of documents. In the above example, we can see that the documents are clustering in the high-school region. We can also interpret that complex words are heavily influencing the documents’ difficulty.</p>
+<p>You can also print or save a blank copy of any of these graphs. This is useful for printing handouts for instructors or students to use. To print a blank graph, go to the <strong>Readability</strong> tab on the ribbon, click the <span class="keys">Blank Graphs</span> button, and select the graph that you wish to save.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="sec-reviewing-goals" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-reviewing-goals"><span class="header-section-number">5.3</span> Goals</h2>
+<p>Goals are recommended score ranges that a document should fall within.</p>
+<p>If a project contains goals, then a <strong>Goals</strong> section will be available to show whether they were met. For example:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/standard-project-goals.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>In the above image, we can see that this project is recommending:</p>
+<ul>
+<li>Fry should not be higher than 10</li>
+<li>Flesch Reading Ease should be higher than 60</li>
+<li>Easy Listening Formula should not be higher than 12</li>
+</ul>
+<p>Also, the warning icons indicate that currently the document is failing to meet all these criteria.</p>
+<p>Goals can be created through a <a href="custom-tests-and-bundles.html#sec-test-bundles">test bundle</a>. When the bundle is applied, both its tests and goals will be added to the project.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="sec-reviewing-statistics" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-reviewing-statistics"><span class="header-section-number">5.4</span> Statistics</h2>
+<p>After opening a project, click on the <strong>Summary Statistics</strong> icon on the project sidebar to view the document’s statistics:</p>
+<p><img src="images/featuresstats.png" class="img-fluid"></p>
+<p>The <strong>Report</strong> and <strong>Tabular Report</strong> windows display the document’s statistics in two formats: a formatted report and a tabular report, respectively. Both of these reports contain the following statistics:</p>
+<ul>
+<li>number of paragraphs and average number of sentences per paragraph</li>
+<li>number of sentences and average number of words per sentence</li>
+<li>number and percentage of difficult sentences</li>
+<li>number of <a href="glossary/glossary.html">units</a>/independent clauses (This statistic is only available if <a href="program-options.html#sec-options-statistics"><strong>Extended Information</strong></a> is enabled.)</li>
+<li>number of interrogative sentences (questions)</li>
+<li>number of exclamatory sentences</li>
+<li>number of words</li>
+<li>number of unique words</li>
+<li>number of syllables and average number of syllables per word</li>
+<li>number of characters (with and without punctuation) and average number of characters per word</li>
+<li>number and percentage of numerals</li>
+<li>number and percentage of proper nouns (not available for German projects)</li>
+<li>number and percentage of total (and unique) monosyllabic words</li>
+<li>number and percentage of total (and unique) 3+ syllable words</li>
+<li>number and percentage of total (and unique) hard <a href="readability-tests-english.html#sec-smog-test">SMOG</a> words. This statistic is only available if SMOG is included in the project</li>
+<li>number and percentage of total (and unique) hard <a href="readability-tests-english.html#sec-gunning-fog-test">Fog</a> words. This statistic is only available if Fog is included in the project</li>
+<li>number and percentage of total (and unique) 6+ letter words</li>
+<li>number and percentage of total (and unique) unfamiliar words (This includes word lists such as <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> and <a href="readability-tests-english.html#sec-spache-test">Spache</a>. These statistics are only available if the respective tests are included in the project.)</li>
+<li>number of grammar errors</li>
+<li>text size (the size of the text in a document, not the actual file size). (This statistic is only available if <a href="program-options.html#sec-options-statistics"><strong>Extended Information</strong></a> is enabled.)</li>
+</ul>
+<p>Statistics for any custom familiar-word tests will also be included in this window.</p>
+<p>A <strong>Notes</strong> section may be included at the bottom of the formatted report if there are any items of interest detected (e.g., a high sentence-length average). If your document requires improvement, then this section is usually a good place to begin.</p>
+<div class="notesection">
+<p>3+ syllable words and <a href="readability-tests-english.html#sec-gunning-fog-test">Fog</a> and <a href="readability-tests-english.html#sec-smog-test">SMOG</a> hard words are all the same except for how numerals (e.g., phone numbers and dates) are handled. SMOG always sounds out each digit of a numeric word, whereas Fog ignores numeric words. You can control how numeric words are handled from the <a href="program-options.html#sec-document-analysis"><strong>Document Indexing</strong></a> section of the <a href="program-options.html"><strong>Options</strong></a> dialog (available on the <strong>Tools</strong> tab).</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="sec-reviewing-word-breakdowns" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-reviewing-word-breakdowns"><span class="header-section-number">5.5</span> Words Breakdown</h2>
+<p>After opening a project, click on the <strong>Words Breakdown</strong> icon on the project sidebar to view the lists, highlighted reports, and graphs of difficult words:</p>
+<p><img src="images/difficultwords.png" class="img-fluid"></p>
+<section id="reviewing-word-lists" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-word-lists">Reviewing Word Lists</h3>
+<p>The types of word lists that may be shown are:</p>
+<p><strong>3+ Syllables</strong>: This list displays all the document’s words that are three or more syllables. It also displays how many syllables each word contains and their respective frequency counts. This window is only available if the document contains 3+ syllable words.</p>
+<p><strong>6+ Characters</strong>: This list displays all the document’s words that are six or more characters. It also displays how many characters each word contains and their respective frequency counts. This window is only available if the document contains 6+ character words.</p>
+<p><strong>Dale-Chall (Unfamiliar)</strong>: This list displays all the document’s words that are not in the <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> familiar words list and their respective frequency counts. The New Dale-Chall word list is a collection of words that are considered to be familiar to most fourth grade readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if a Dale-Chall related test is included in the project.</p>
+<p><strong>Spache (Unfamiliar)</strong>: This list displays all the document’s words that are not in the Spache familiar words list and their respective frequency counts. The <a href="readability-tests-english.html#sec-spache-test">Spache</a> word list is a collection of words that are considered to be familiar to most primary-age readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if the Spache test is included in the project.</p>
+<p><strong>Harris-Jacobson (Unfamiliar)</strong>: This list displays all the document’s words that are not in the Harris-Jacobson familiar words list and their respective frequency counts. The <a href="readability-tests-english.html#sec-harris-jacobson">Harris-Jacobson</a> word list is a collection of words that are considered to be familiar to most second-grade readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if the Harris-Jacobson test is included in the project.</p>
+<p><strong>All Words</strong>: This list displays all the words from the document and their respective frequency counts.</p>
+<p><strong>Key Words</strong>: This list is the same as <strong>All Words</strong>, except that it excludes filenames, numeric words, and common words, and then combines the remaining words. In regards to combining words, words with the same root will be merged into a single row. For example, <em>report</em>, <em>reports</em>, and <em>reporting</em> will be combined into one row, with the frequency counts for all three words also combined. As for excluding words, common words (e.g., <em>the</em>), numerals, and filenames are not included in this list. (If no words can be combined and there are no common words to ignore, then this list will not be shown.)</p>
+<div class="notesection">
+<p>If you are ignoring incomplete sentences, then these lists will only include the words from complete sentences. If you need to review all the words from the document, then select the option <a href="program-options.html#sec-options-text-exclusion"><strong>Do not exclude any text</strong></a>. Refer to <a href="analysis-notes.html#sec-how-text-is-excluded" class="quarto-xref"><span>Section 21.1</span></a> to learn more about how <em>Readability Studio</em> handles incomplete sentences.</p>
+</div>
+<p>To find the most complex words, sort the <strong>Syllable Count</strong> column of the <strong>3+ Syllables</strong> list. You can sort any of the columns by clicking on the column header. To change the sorting order to either ascending or descending, click the column header a second time. As you can see below, the words with the most syllables are now shown at the top of the list.</p>
+<p><img src="images/difficultwords.png" class="img-fluid"></p>
+<p>If your test scores indicate that the document is too difficult for your audience, then you should review overly complex or long words. You may consider seeing if any shorter synonyms could be used in their place. The same type of review can also be performed with the <strong>6+ Characters</strong> list by sorting the <strong>Character Count</strong> column.</p>
+<p>To help find the most difficult words for the New Dale-Chall list, select the <strong>Dale-Chall (Unfamiliar)</strong> subitem and sort the <strong>Frequency</strong> column. The most frequently occurring words are the ones that should be replaced with more familiar synonyms that most readers would recognize.</p>
+<p>To find a specific word in a list, type the word into the <strong>Search</strong> bar at the top of program and hit the <span class="keys">Enter</span> (<svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"></path></svg>, <svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"></path></svg>) or <span class="keys">⌤</span> (<svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>) button on your keyboard. You can also select the list and begin typing the word. If the word is in the list, then the selection will move to it.</p>
+<p>Double-click on any word in these lists to display the respective highlighted text report with the first instance of that word selected.</p>
+</section>
+<section id="reviewing-word-reports" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-word-reports">Reviewing Word Reports</h3>
+<p>The different types of text reports that may be shown are:</p>
+<p><strong>3+ Syllables</strong>: This text report contains the document with all the words that are three or more syllables highlighted. This window is only available if the document contains 3+ syllable words.</p>
+<p><strong>6+ Characters</strong>: This text report contains the document with all the words that are six or more characters long highlighted. This window is only available if the document contains 6+ character words.</p>
+<p><strong>Dale-Chall (Unfamiliar)</strong>: This text report contains the document with all the <a href="readability-tests-english.html#sec-dale-chall-test">New Dale-Chall</a> unfamiliar words highlighted. The New Dale-Chall word list is a collection of words that are considered to be familiar to most fourth grade readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if a Dale-Chall related test is included in the project.</p>
+<p><strong>Spache (Unfamiliar)</strong>: This text report contains the document with all the <a href="readability-tests-english.html#sec-spache-test">Spache</a> unfamiliar words highlighted. The Spache word list is a collection of words that are considered to be familiar to most primary-age readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if the Spache test is included in the project.</p>
+<p><strong>Harris-Jacobson (Unfamiliar)</strong>: This text report contains the document with all the <a href="readability-tests-english.html#sec-harris-jacobson">Harris-Jacobson</a> unfamiliar words highlighted. The Harris-Jacobson word list is a collection of words that are considered to be familiar to most primary-age readers. Words in the document that are not found on this list may be less familiar to younger readers and hence more difficult. This window is only available if the Harris-Jacobson test is included in the project.</p>
+<p>You can change both the font and highlighting color by opening the <a href="program-options.html"><strong>Project Properties</strong></a> dialog and selecting <a href="program-options.html#sec-options-highlighted-reports"><strong>Highlighted Reports</strong></a>. Note that changing these options from the <strong>Project Properties</strong> dialog will only affect the current project. If you want to make changes to any future projects, then go to the <strong>Options</strong> dialog from the <strong>Tools</strong> tab instead.</p>
+</section>
+<section id="reviewing-word-based-graphs" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-word-based-graphs">Reviewing Word-based Graphs</h3>
+<p>The different types of graphs that may be shown are:</p>
+<div class="minipage">
+<p><strong>Word Counts</strong> <a href="program-options.html#sec-options-graphs">bar chart</a>: This graph shows the total counts of each type of word (e.g., 3+ syllable words) and how each category compares to one another. This bar chart will appear like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/barchart.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>In the above example, we can see that there are 70 unfamiliar New Dale-Chall words, but only 42 three+ syllable words. From this, we could infer that we should first concentrate on replacing these unfamiliar words. Lists of these words can be found by clicking on the <a href="#sec-reviewing-word-breakdowns"><strong>Difficult Words</strong></a> icon on the project sidebar.</p>
+</div>
+<div class="minipage">
+<p><strong>Syllable Counts</strong>: This is a histogram of the words, grouped by syllable count.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/syllable-count-histogram.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>In the above histogram, we see that most of the words are either 1 or 2 syllables. There are only 25 three-syllable words and 17 four-syllable words in the document. (Note that selecting a bar will display the first 25 words within that syllable group.) Combined, there are 42 complex words, as shown by the cumulative group bar above the <strong>3</strong> and <strong>4</strong> bars.</p>
+<div class="notesection">
+<p>The total value of a word count reflects the number of words, including repeats of the same word. The unique value of a word count reflects the number of words, excluding repeats. For example, a document contains the word <em>liquidation</em> three times. This word will be tallied three times when factored into the total word count, but only once into the unique word count. Most tests use the total word count variable, although there are some that use unique counts (e.g., Spache uses its unique unfamiliar word count).</p>
+</div>
+</div>
+<div class="minipage">
+<p><strong>Syllable Counts</strong>: This is a donut chart of the words, grouped by syllable count (along the inner ring). Additionally, an outer ring categorizes these subgroups into simple and complex words. (One- and two-syllable words are considered simple, while three [and higher] syllable words are complex.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/syllables-pie-chart.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>The above donut chart shows similar results to the previous histogram. With this visualization, however, it is easier to compare the overall complex- and simple-word groups. In this case, less than 10% of the document consists of complex words. Also, looking at the inner ring, we can see that ~two-thirds of the words are one-syllable.</p>
+</div>
+<div class="minipage">
+<p><strong>Key Word Cloud</strong>: In conjunction with the <strong>Key Words</strong> list, a key word cloud is also included to visualize the main concepts of the document(s).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/non-generated/key-word-cloud.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>A word cloud shows words from a document in a random layout with randomly assigned colors. The size of each word is based on its relative frequency within the document. In other words, the larger the word, the more often it is used compared to other words.</p>
+<p>This particular word cloud displays the ~100 most frequently occurring key words appearing in the document. Like the <strong>Key Words</strong> list, these will be combined words with uncommon ones (e.g., <em>the</em>) removed. In the case of combined words, the most frequent instance of similar words will be shown. For example, if the word <em>report</em> appears more times than <em>reporting</em> and <em>reports</em>, then <em>report</em> will appear in the word cloud. Also, the size of the word <em>report</em> will be based on the number of times <em>report</em>, <em>reporting</em>, and <em>reports</em> all appear.</p>
+<p>To focus on important topics, only words occurring two or more times will be shown (unless there are fewer than one unique hundred words).</p>
+<p>In a batch project, this word cloud will show the key words across all documents.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-reviewing-sentences-breakdown" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="sec-reviewing-sentences-breakdown"><span class="header-section-number">5.6</span> Sentences Breakdown</h2>
+<p>After opening a project, click on the <strong>Sentences Breakdown</strong> icon on the project sidebar to view a breakdown of the document’s sentences. This includes the following:</p>
+<p>A list of overly-long sentences:</p>
+<p><img src="images/featuressentencelist.png" class="img-fluid"></p>
+<p>Note that if you are ignoring incomplete sentences, then this list will only include the complete sentences. If you need to review all the sentences from the document, then select the option <a href="program-options.html#sec-options-text-exclusion"><strong>Do not exclude any text</strong></a>. Refer to <a href="analysis-notes.html#sec-how-text-is-excluded" class="quarto-xref"><span>Section 21.1</span></a> to learn more about how <em>Readability Studio</em> handles incomplete sentences.</p>
+<p>To find the longest sentence, <a href="customizing-results.html#sec-column-sorting">sort</a> the <strong>Word Count</strong> column into descending order. As you can see below, the longest sentence is now shown at the top of the list.</p>
+<p><img src="images/featuressentencelistsorted.png" class="img-fluid"></p>
+<p>To view any sentence in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that sentence selected.</p>
+<p>If the test scores indicate that the document is too difficult for your audience, then review the overly-long sentences. You should consider splitting these sentences into smaller ones and revising any <a href="#sec-reviewing-standard-grammar">wordy items</a>.</p>
+<p>Note that if there are no long sentences in your document, then this window will not be included.</p>
+<p>A box plot of the sentence lengths (measured by word count) is also available:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/sentences-boxplot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>The first item to review is the box, which measures the percentiles range. Above, we see that this range is 4.5–19.5, meaning that half of the sentences are between 4.5–19.5 words.</p>
+<p>Next, note the line drawn across the box—this represents the <a href="glossary/glossary.html#sec-stat-terms">median</a>. In this case, the median is 12.5, which means that the middle sentence is 12.5 words. This median line is almost equidistant, which implies that the sentence lengths in this range are evenly distributed.</p>
+<p>The last items to review are the whiskers, which represent the non-outlier range. The datapoints in this range are outside the middle half the data, but still within a reasonable limit. Above, we can see that the remaining sentences are skewed towards having longer sentences, with the largest being 33 words. Although 33 words is reasonable (compared to the box’s range), you may want to review some of these longer sentences.</p>
+<p>Finally, any sentence lengths outside the non-outlier range will be displayed as red dots. These points represent sentences which are significantly longer (or shorter) than the others. Clicking on an outlier will display the sentence’s number, along with a preview of it.</p>
+<p>A histogram is also available to visualize how the sentence lengths are distributed:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/sentences-histogram.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>In the above graph, we can see a large portion of short sentences, with the rest falling into a normal distribution.</p>
+<p>A heatmap of these sentence lengths is also included:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/sentences-heatmap.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>This graph displays the document’s sentence, going from left-to-right, top-to-bottom. Each square represents a sentence, and the square’s color represents its word count. The darker a square, the higher the sentence’s word count (relative to the document). Likewise, lighter squares represent the shorter sentences in the document. This is useful for visualizing the trend and density of a document’s longer sentences. For example, if sections of the grid are darker than others, then the sentences are longer in these spots and should be reviewed. The example below demonstrates this:</p>
+<p>In the above graph, note how the first couple of sentences are the longest. After that, the middle section has relatively shorter sentences. Finally, the last section contains a significant block of the document’s longer sentences.</p>
+<p>Although black squares refer to the longer sentences, this may not imply that these sentences are overly long. It only means that they are the longest, relative to the rest of the document. With this in mind, this heatmap is useful for locating overly-dense sections of longer sentences. In other words, clusters of black squares indicate problematic areas where lengthy sentences are running together.</p>
+<p>To find the location of a sentence, click on the square and its sentence number will be shown. Also, if the sentence’s length is an outlier (compared to the other sentences), then a preview of it will also be shown.</p>
+<p>Refer to example <a href="examples-getting-started.html#sec-finding-difficult-sections" class="quarto-xref"><span>Section 15.6</span></a> for a more detailed tutorial on sentence heatmaps.</p>
+<p></p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="sec-reviewing-standard-grammar" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="sec-reviewing-standard-grammar"><span class="header-section-number">5.7</span> Grammar</h2>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Highlighted report</strong> subitem. This text report will display the document with its difficult sentences and wordy items highlighted.</p>
+<p><img src="images/featuressentences.png" class="img-fluid"></p>
+<p>Note that each sentence is followed by its respective word count (in parentheses).</p>
+<p>You can change both the font and highlighting color by opening the <a href="program-options.html"><strong>Project Properties</strong></a> dialog and selecting <a href="program-options.html#sec-options-highlighted-reports"><strong>Highlighted Reports</strong></a>. Note that changing these options from the <strong>Project Properties</strong> dialog will only affect the current project. If you want to make configuration changes for future projects, then go to the <strong>Options</strong> dialog from the <strong>Tools</strong> tab instead.</p>
+<p>For documents with numerous sentences over twenty words, it is recommended to use outlier searching. Open the <strong>Project Properties</strong> dialog, select <a href="program-options.html#sec-document-analysis"><strong>Document Indexing</strong></a>, and select the option <strong>Outside sentence-length outlier range</strong>. This will make it so that only the extremely long sentences (compared to the other sentences in the document) are highlighted. This helps pinpoint the most troublesome sentences that need to be shortened.</p>
+<section id="reviewing-lowercased-sentences" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-lowercased-sentences">Reviewing Lowercased Sentences</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Lowercased Sentences</strong> subitem. This window will display a list of all sentences that begin with lowercased words (which is usually a typo).</p>
+<p><img src="images/lowercasedsent.png" class="img-fluid"></p>
+<p>Lowercased sentence searching is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>Also note that if the option <a href="program-options.html#sec-document-analysis"><strong>Sentences must begin with capitalized words</strong></a> is enabled, then this feature will be limited to sentences that begin new paragraphs. If you want to search for any possible sentences that begin with lowercased words, then you should leave this option unchecked.</p>
+<p>To view any sentence in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that sentence selected.</p>
+<p>Note that if there are no lowercased sentences in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-conjunction-starting-sentences" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-conjunction-starting-sentences">Reviewing Conjunction-starting Sentences</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Conjunction-starting Sentences</strong> subitem. This window will display a list of all sentences which begin with coordinating conjunctions.</p>
+<p><img src="images/conjunctionsent.png" class="img-fluid"></p>
+<p>Beginning sentences with conjunctions is not an issue for most writing, but should be avoided with professional publications. This feature is provided to grammatically improve professional documents.</p>
+<p>The conjunctions that <em>Readability Studio</em> searches for are the most common coordinating conjunctions. These are:</p>
+<div class="minipage">
+<ul>
+<li>and</li>
+<li>nor</li>
+<li>but</li>
+<li>or</li>
+<li>yet</li>
+<li>so</li>
+</ul>
+</div>
+<p>Generally for technical writing, only separate clauses should begin with these words, not sentences. Any sentence that begins with these words should be combined with the previous sentence. Another option would be to replace the conjunction. For example, <em>and</em> could be replaced with <em>In addition</em>.</p>
+<p>This search is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any sentence in its original context, double-click on it. This will take you to the <strong>Highlighted Report</strong> page with that sentence selected.</p>
+<p>Note that if there are no conjunction-starting sentences in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-repeated-words" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-repeated-words">Reviewing Repeated Words</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Repeated Words</strong> subitem. This window will display a list of all repeated words from the document.</p>
+<p><img src="images/repeatedwords.png" class="img-fluid"></p>
+<p>A repeated word is when the same word appears after itself (which is usually a typo). For example:</p>
+<div class="fancyquotes">
+<p>Gabi gave her report <em>to to</em> the manager.</p>
+</div>
+<p>In this case, the word <em>to</em> was accidentally typed twice. <em>Readability Studio</em> will consider this a repeated word and include it in this list.</p>
+<p>Repeated words are bound to the sentence level. If the same word ends one sentence and begins the next, then it will not be considered a repeated word. For example, <em>Blake</em> would not be considered a repeated word here:</p>
+<!--quneiform-suppress-begin-->
+<div class="fancyquotes">
+<p>Gabi gave her sales report to <em>Blake. Blake</em> really appreciated Gabi’s promptness.</p>
+</div>
+<!--quneiform-suppress-end-->
+<p>Repeated word searching is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any repeated word in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that repeated word selected.</p>
+<p>Note that if there are no repeated words in your document, then this window will not be included.</p>
+<p>Refer to <a href="analysis-notes.html#sec-repeated-word-exceptions" class="quarto-xref"><span>Section 21.6</span></a> for more information on how repeated words are detected.</p>
+</section>
+<section id="reviewing-article-mismatches" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-article-mismatches">Reviewing Article Mismatches</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Article Mismatches</strong> subitem. This window will display a list of articles (i.e., <em>a</em> and <em>an</em>) that do not match their following noun.</p>
+<p><img src="images/articlemismatches.png" class="img-fluid"></p>
+<p>For example, the following articles would be marked as mismatching:</p>
+<ul>
+<li>a electronic</li>
+<li>an textbook</li>
+</ul>
+<p>This search is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any item in its original context, double-click on it. This will take you to the <strong>Highlighted Report</strong> page with that item selected.</p>
+<p>Note that if there are no article mismatches in your document, then this window will not be included.</p>
+<p>Refer to <a href="analysis-notes.html#sec-article-mismatching" class="quarto-xref"><span>Section 21.7</span></a> to learn more.</p>
+</section>
+<section id="reviewing-wording-errors-misspellings" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-wording-errors-misspellings">Reviewing Wording Errors &amp; Misspellings</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Errors &amp; Misspellings</strong> subitem. This window will display a list of misused phrases, grammatically incorrect wording, and known misspellings from each document.</p>
+<p><img src="images/wordingerrors.png" class="img-fluid"></p>
+<p>For example:</p>
+<div class="fancyquotes">
+<p><em>We is</em> offering standard benefits (e.g., 401K matching and health <em>ensurance</em>), as well as <em>French benefits</em> to all new employees.</p>
+</div>
+<p>In this case, <em>We is</em> is not grammatically correct, and <em>We are</em> will be offered as a suggested replacement. Also, <em>ensurance</em> is a misspelling of <em>insurance</em> (which will be the suggested replacement). Finally, <em>French benefits</em> is not the correct expression and <em>fringe benefits</em> will be offered as a suggested replacement. All of these will be considered wording errors and shown in this list.</p>
+<p>Wording errors are bound to the sentence level. If part of a phrase ends one sentence and begins the next, then it will not be considered an error.</p>
+<p>This search is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any wording error in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that phrase selected.</p>
+<p>Note that if there are no errors in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-possible-misspellings" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-possible-misspellings">Reviewing Possible Misspellings</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Possible Misspellings</strong> subitem. This window will display a list of all possible misspellings from the document.</p>
+<p><img src="images/misspellings.png" class="img-fluid"></p>
+<p>Options for controlling how misspellings are searched for are available in the <a href="program-options.html#sec-options-grammar"><strong>Grammar</strong></a> options.</p>
+<p>Misspelling searching is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any misspelling in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that word selected.</p>
+<p>To add words to your dictionary, first select them in this list. Then, click on the <strong>Document</strong> tab, and click the arrow next to the <span class="keys">Spell Checker</span> button. Then, select <strong>Add Selected Words</strong> and the selected words in this list will no longer be reported as misspellings.</p>
+<p>To edit your custom dictionary, click on the arrow next to the <span class="keys">Spell Checker</span> button and select <strong>Edit…</strong> to show the <strong>Edit Custom Dictionary</strong> dialog. From here, you can add, remove, or edit the words in your custom dictionary.</p>
+<p>To change your spell-checking options, click on the arrow next to the <span class="keys">Spell Checker</span> button and select <strong>Settings…</strong> to edit your <a href="program-options.html#sec-options-grammar">grammar</a> settings.</p>
+<p>Note that if there are no misspellings in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-redundant-phrases" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-redundant-phrases">Reviewing Redundant Phrases</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Redundant Phrases</strong> subitem. This window will display a list of redundant phrases (and suggested replacements) from the document.</p>
+<p><img src="images/redundantphrases.png" class="img-fluid"></p>
+<p>A redundant phrase is when a modifier expresses something that is already implied by the noun it is modifying. For example:</p>
+<!--quneiform-suppress-begin-->
+<div class="fancyquotes">
+<p>Gabi and Blake <em>collaborated together</em> on the report. They should have a <em>brief summary</em> ready later today.</p>
+</div>
+<!--quneiform-suppress-end-->
+<p>In this case, <em>collaborated together</em> and <em>brief summary</em> are redundant. Collaboration already implies two or more people working together. The <em>together</em> in this phrase adds nothing and just makes this sentence wordy. As for <em>brief summary</em>, summaries are always brief; hence, the redundancy in that phrase. <em>Readability Studio</em> will consider these as redundant phrases and include them in this list.</p>
+<!--quneiform-suppress-begin-->
+<p>Redundant phrases are bound to the sentence level. If part of a phrase ends one sentence and begins the next, then it will not be considered a redundant phrase. For example, <em>brief. Summaries</em> would not be considered a redundant phrase here because the words are in different sentences:</p>
+<div class="fancyquotes">
+<p>Gabi and Blake need to be <strong>brief. Summaries</strong> are very important before presenting a report.</p>
+</div>
+<!--quneiform-suppress-end-->
+<p>Redundant phrase searching is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any redundant phrase in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that phrase selected.</p>
+<p>Note that if there are no redundant phrases in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-wordy-items" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-wordy-items">Reviewing Wordy Items</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Wordy Items</strong> subitem. This window will display a list of wordy phrases and difficult words (and their suggested replacements) from the document.</p>
+<p><img src="images/wordylist.png" class="img-fluid"></p>
+<p>A phrase is wordy if it contains too many words or contains complex words that could be replaced by simpler ones. For example:</p>
+<div class="fancyquotes">
+<p><em>Over the course of</em> the presentation, Blake amazed the Provost with his data visualizations.</p>
+</div>
+<p>In this case, <em>Over the course of</em> is wordy. <em>Readability Studio</em> will consider this a wordy phrase and offer <em>during</em> or <em>throughout</em> as replacements.</p>
+<p>Wordy phrases are bound to the sentence level. If part of a phrase ends one sentence and begins the next, then it will not be considered a wordy phrase. For example, <em>a host of</em> would not be considered a wordy phrase here because its words are in two different sentences:</p>
+<!--quneiform-suppress-begin-->
+<div class="fancyquotes">
+<p>For the party, we need <strong>a host. Of</strong> course he should be very funny.</p>
+</div>
+<!--quneiform-suppress-end-->
+<p>Wordy-item searching does not affect readability calculations, so this analysis is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any wordy item in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that item selected.</p>
+<p>Note that if there are no wordy items in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-passive-voice" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-passive-voice">Reviewing Passive Voice</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Passive Voice</strong> subitem. This window will display a list of passive phrases.</p>
+<p><img src="images/passivevoice.png" class="img-fluid"></p>
+<p>For example, the following would be marked as passive:</p>
+<div class="fancyquotes">
+<p>The show had been given many awards by the academy.</p>
+</div>
+<p>Although not a grammatical error, passive voice can cause confusion as to who is doing what to whom. In the above example, the ordering of words makes it difficult for early readers to understand who was giving the awards. The following would be direct and clear:</p>
+<div class="fancyquotes">
+<p>The academy gave the show many awards.</p>
+</div>
+<p>This search is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any item in its original context, double-click on it. This will take you to the <strong>Highlighted Report</strong> page with that item selected.</p>
+<p>Note that if there are no passive phrases in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-clichés" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-clichés">Reviewing Clichés</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Clichés</strong> subitem. This window will display a list of clichés (and their suggested replacements) from the document.</p>
+<p><img src="images/clichelist.png" class="img-fluid"></p>
+<p>A cliché is an overused phrase that should be avoided if you are writing professional documents. In the context of readability, clichés can be unfamiliar to early (young or ESL) readers. For example:</p>
+<div class="fancyquotes">
+<p>He is acting very <em>off the wall</em>.</p>
+</div>
+<p>In this case, <em>off the wall</em> is a cliché and will be listed with <em>unusual</em> being offered as a replacement. A phrase such as this is considered <em>tired</em> and would not appear professional in a business report or technical document. Also, those new to English may not understand what this expression means. If you are targeting early readers, then you should avoid clichés for clarity.</p>
+<p>Clichés are bound to the sentence level. If part of a phrase ends one sentence and begins the next, then it will not be considered a cliché.</p>
+<p>Cliché-searching is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>To view any cliché in its original context, double-click on it. This will take you to the <strong>Highlighted Report</strong> page with that cliché selected.</p>
+<p>Note that if there are no clichés in your document, then this window will not be included.</p>
+</section>
+<section id="reviewing-overused-words-x-sentence" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-overused-words-x-sentence">Reviewing Overused Words (x Sentence)</h3>
+<p>After opening a project, click on the <strong>Grammar</strong> icon on the project sidebar and select the <strong>Overused Words (x Sentence)</strong> subitem. This window will display a list of all sentences that use the same word multiple times. (These are more of style suggestions, rather than grammar issues.) When reviewing these, it is recommended to change some of the repeated words to add more variety to your content.</p>
+<p><img src="images/overusedwordsbysentence.png" class="img-fluid"></p>
+<p>This check is applied to all sentences. <a href="analysis-notes.html#sec-how-text-is-excluded">Incomplete sentences</a> will be reviewed for this, even if they are excluded from the analysis.</p>
+<p>Numeric words, proper nouns, words containing less than three letters, and common words (e.g., <em>the</em>) are excluded from this review.</p>
+<p>Also, a sentence with a pair of repeated words that may be part of the same phrase are ignored. For example:</p>
+<div class="fancyquotes">
+<p>When they asked Blake if he would be willing to work over the weekend, he just <em>laughed</em> and <em>laughed</em>.</p>
+</div>
+<p>Finally, a word must appear on average once every fifth word in the sentence. For example, a word appearing twice in an eleven-word sentence will not be counted. If the sentence is 10 words, however, it will be counted.</p>
+<p>Note that if there are no sentences with overused words in your document, then this window will not be included.</p>
+<p>To view any sentence in its original context, double-click on it. This will take you to the <a href="#sec-reviewing-standard-grammar"><strong>Highlighted Report</strong></a> page with that sentence selected.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="sec-reviewing-dolch" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="sec-reviewing-dolch"><span class="header-section-number">5.8</span> Dolch Sight Words</h2>
+<p>The Dolch Sight Words <span class="citation" data-cites="dolch">(<a href="references.html#ref-dolch" role="doc-biblioref">456–60</a>)</span> represent the most frequently occurring service words<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in most text, especially children’s literature. Early readers need to learn and recognize these words to attain reading fluency. Many of these words cannot be sounded out or represented by pictures; therefore, they must be learned by sight<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>If you are writing educational materials for early readers, then use as many of these words as possible to help readers practice them. Also, keep the percentage of non-Dolch words low so that readers can better focus on the sight words.</p>
+<p><em>Readability Studio</em> offers a suite of Dolch statistics and graphs as a tool for educators and writers targeting early readers. If you are creating material intended to help early readers practice Dolch words, then it is recommended to include this in your project. To add Dolch statistics to your project, go to the <strong>Readability</strong> tab and select either <strong>Primary-age Reading</strong> or <strong>Second Language Reading</strong> and then <strong>Dolch Sight Words</strong>. A <strong>Dolch Sight Words</strong> icon will appear at the bottom of the project sidebar—clicking on that will display all the Dolch information.</p>
+<section id="reviewing-the-dolch-statistics" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-the-dolch-statistics">Reviewing the Dolch Statistics</h3>
+<p>After opening a project, click on the <strong>Dolch Sight Words</strong> icon on the project sidebar and select the <strong>Dolch Summary</strong> subitem to view the document’s Dolch statistics:</p>
+<p><img src="images/dolchsummary.png" class="img-fluid"></p>
+<p>There are two types of statistics included: Dolch coverage and raw Dolch word counts.</p>
+<p>The <strong>Dolch Word Coverage</strong> section displays how much of each category is used in the document. For example, if six of the conjunction Dolch words are used in the document, then 6 will be displayed next to <strong>Conjunctions used</strong>. The percentage will also be included in parentheses after these counts. In this case, it will be 100% because there are six words on the Dolch conjunction list.</p>
+<p>Notes will be shown at the bottom of the <strong>Dolch Word Coverage</strong> section to indicate which (if any) categories are being used well by your document. This is the best way to see whether or not your document is useful as a Dolch practice tool.</p>
+<p>If a document does not provide good coverage for any of the categories and/or contains numerous non-Dolch words, then it will not be an appropriate Dolch training document. This does not necessarily mean that it is not an appropriate document for younger readers. It simply means that the document does not use enough of the Dolch words to help readers learn these words. For example, <em>The Tale of Peter Rabbit</em> has decent coverage of the Dolch conjunctions and prepositions, but it also contains a large percentage of non-Dolch words. This book’s readability levels indicate that it is proper for young readers. However, its high non-Dolch words percentage will make it inappropriate for readers to use it for practicing Dolch words.</p>
+<p>To graphically view the Dolch coverage, click on the <a href="#sec-reviewing-dolch"><strong>Coverage Chart</strong></a> icon. This will display a bar chart of these statistics, listed by category.</p>
+<p>Below this is the <strong>Dolch Words</strong> section, which lists all the raw Dolch word counts, broken down by category. Each category includes its total and unique counts of words found in the document. For example, let us say that four unique words from the pronoun list are found in the document, each appearing twice. In this case, <strong>Number of Pronoun Dolch words</strong> will be eight (four words each appearing twice) and <strong>Number of unique Pronoun Dolch words</strong> will be four.</p>
+<p>Note that there may be a slight discrepancy between a category’s coverage value and its unique word count. This will happen if your document contains variations of certain words, such as <em>ask</em> and <em>asked</em>. The program will treat morphological variations of a word the same as its root word when calculating coverage statistics. However, when calculating unique word statistics, different forms of words will be counted separately. For example, the words <em>asked</em> and <em>asking</em> will be counted as separate unique words; however, they both will be seen as “ask” when calculating the verb-list coverage.</p>
+<p>To graphically view the Dolch words breakdown, click on the <a href="#sec-reviewing-dolch"><strong>Word Counts</strong></a> subitem. This will display a bar chart of these statistics, listed by category.</p>
+</section>
+<section id="reviewing-the-dolch-graphs" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-the-dolch-graphs">Reviewing the Dolch Graphs</h3>
+<p>After opening a project, click on the <strong>Dolch Sight Words</strong> icon on the project sidebar. There are two graphs available for review: <strong>Dolch Coverage</strong> and <strong>Word Counts</strong>.</p>
+<p>The <strong>Dolch Coverage</strong> graph displays how much of each category is used in the document. Refer to <a href="#sec-reviewing-dolch" class="quarto-xref"><span>Section 5.8</span></a> for more information.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dolch-coverage-chart.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>As we can see in the above graph, 87.5% of the Dolch prepositions are used in the document. Pronouns and adverbs are also well covered with 76.9% and 73.5%, respectively. However, less than half of the Dolch adjectives and nouns are used in the document. From this, we can see that this document may be useful for some Dolch categories, but not others.</p>
+<p>The <strong>Words Breakdown</strong> graph displays all the raw Dolch word counts, broken down by category. Refer to <a href="#sec-reviewing-dolch" class="quarto-xref"><span>Section 5.8</span></a> for more information.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dolch-word-breakdown.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>As we can see in the above graph, there are 938 total Dolch words used in this document. Unfortunately, there are also 489 non-Dolch words. Although there is a strong number of Dolch words, the high number of non-Dolch words may make this document a poor candidate for practicing Dolch sight words.</p>
+</section>
+<section id="reviewing-the-dolch-highlighted-text" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-the-dolch-highlighted-text">Reviewing the Dolch Highlighted Text</h3>
+<p>After opening a project, click on the <strong>Dolch Sight Words</strong> icon on the project sidebar. There will be two types of highlighted text reports available: <strong>Dolch Words</strong> and <strong>Non-Dolch Words</strong>.</p>
+<p>The <strong>Dolch Words</strong> subitem will display the document with the Dolch words highlighted:</p>
+<p><img src="images/dolchhighlightedwords.png" class="img-fluid"></p>
+<p>Each category (e.g., nouns) will be highlighted by a different color.</p>
+<p>To customize category highlighting, click the <span class="keys">Properties</span> button on the <strong>Home</strong> tab to display the <strong>Project Properties</strong> dialog. Then select the <strong>Highlighted Reports</strong> icon and select the <a href="program-options.html#sec-options-highlighted-reports"><strong>Dolch Sight Words</strong></a> subitem.</p>
+<div class="menu">
+<div class="keys">
+<p>Home</p>
+</div>
+<div class="arrow right">
+
+</div>
+<div class="keys">
+<p>Project Properties</p>
+</div>
+<div class="arrow right">
+
+</div>
+<div class="keys">
+<p>Highlighted Reports</p>
+</div>
+<div class="arrow right">
+
+</div>
+<div class="keys">
+Dolch Sight Words
+</div>
+</div>
+<p>Here you can choose which categories to highlight and select their respective highlight colors.</p>
+<p>The <strong>Non-Dolch Words</strong> subitem will display the document with all the non-Dolch words (words that do not appear in any of the Dolch lists) highlighted:</p>
+<p><img src="images/dolchhighlightednonwords.png" class="img-fluid"></p>
+</section>
+<section id="reviewing-the-dolch-word-lists" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reviewing-the-dolch-word-lists">Reviewing the Dolch Word Lists</h3>
+<p>After opening a project, click on the <strong>Dolch Sight Words</strong> icon on the project sidebar. There will be three types of word lists available: <strong>Dolch Words</strong>, <strong>Non-Dolch Words</strong>, and <strong>Unused Dolch Words</strong>.</p>
+<p>The <strong>Dolch Words</strong> subitem will display a list of the Dolch words from the document:</p>
+<p><img src="images/dolchwordslist.png" class="img-fluid"></p>
+<p>Next to each word will be two columns. The first column is <strong>Frequency</strong>, which will represent the number of times the word appears in the file. The second column is <strong>Category</strong>, which represents the Dolch category to which the word belongs.</p>
+<p>Double-click on any word in this list to display the <a href="#sec-reviewing-dolch"><strong>Dolch Words</strong></a> text report with the first instance of that word selected.</p>
+<p>The <strong>Non-Dolch Words</strong> subitem will display a list of the words from the document that do not appear on any of the Dolch lists:</p>
+<p><img src="images/dolchnonwordslist.png" class="img-fluid"></p>
+<p>Next to each word will be a <strong>Frequency</strong> column, which will represent the number of times the word appears in the file.</p>
+<p>A high volume of non-Dolch words will adversely affect a document’s ability to be a good Dolch practice tool. If the non-Dolch word count is high, consider replacing or removing words from this list that have high frequency counts.</p>
+<p>Double-click on any word in this list to display the <a href="#sec-reviewing-dolch"><strong>Non-Dolch Words</strong></a> text report with the first instance of that word selected.</p>
+<p>The <strong>Unused Dolch Words</strong> subitem will display a list of the Dolch words that do not appear in the document:</p>
+<p><img src="images/dolchunusedwordslist.png" class="img-fluid"></p>
+<p>Next to each word will be a <strong>Category</strong> column, which represents the Dolch category that the word belongs to. If your document has low <a href="#sec-reviewing-dolch">coverage</a> of a category that you are targeting, try adding the words listed here to the document.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-amstad" class="csl-entry" role="listitem">
+Amstad, Toni. <em>Wie Verstandlich Sind Unsere Zeitungen?</em> Universitat Zurich, 1978.
+</div>
+<div id="ref-anderson:1981" class="csl-entry" role="listitem">
+Anderson, Jonathan. <em>Analysing the Readability of English and Non-English Texts in the Classroom with Lix</em>. Aug. 1981.
+</div>
+<div id="ref-anderson:1983" class="csl-entry" role="listitem">
+---. <span>“Lix and Rix: Variations of a Little-Known Readability Index.”</span> <em>Journal of Reading</em>, vol. 26, no. 6, 1983, pp. 490–96.
+</div>
+<div id="ref-aquino" class="csl-entry" role="listitem">
+Aquino, Milagros R. <span>“The Validity of the Miller-Coleman Readability Scale.”</span> <em>Reading Research Quarterly</em>, vol. 4, no. 3, Spring, 1969, pp. 342–57.
+</div>
+<div id="ref-baldwin-kaufman" class="csl-entry" role="listitem">
+Baldwin, R. Scott, and Rhonda K. Kaufman. <span>“A Concurrent Validity Study of the Raygor Readability Estimate.”</span> <em>Journal of Reading</em>, vol. 23, no. 2, 1979, pp. 148–53.
+</div>
+<div id="ref-bamberger-vanecek" class="csl-entry" role="listitem">
+Bamberger, Richard, and Erich Vanecek. <em>Lesen-Verstehen-Lernen-Schreiben: Die Schwierigkeitsstufen von Texten in Deutscher Sprache</em>. Jugend und Volk/Diesterweg/Sauerl<span>ä</span>nder, 1984.
+</div>
+<div id="ref-barrio-cantalejo-simon-lorda-melguizo-escalona-marijuan-hernando" class="csl-entry" role="listitem">
+Barrio-Cantalejo, Inés Marı́a, et al. <span>“Validaci<span>ó</span>n de la Escala INFLESZ para evaluar la legibilidad de los textos dirigidos a pacientes.”</span> <em>Anales del Sistema Sanitario de Navarra</em>, vol. 31, no. 2, 2008, pp. 135–52.
+</div>
+<div id="ref-bjornsson:1983" class="csl-entry" role="listitem">
+Björnsson, C. H. <span>“Readability of Newspapers in 11 Languages.”</span> <em>Reading Research Quarterly</em>, vol. 18, no. 4, 1983, pp. 480–97.
+</div>
+<div id="ref-bjornsson:1979" class="csl-entry" role="listitem">
+Björnsson, C. H., and Birgit Hård af Segerstad. <em>Lix p<span>å</span> Franska Och Tio Andra Spr<span>å</span>k</em>. Pedagogiskt centrum Stockholms skolf<span>ö</span>rvaltning, 1979.
+</div>
+<div id="ref-bormuth:1969" class="csl-entry" role="listitem">
+Bormuth, John R. <em>Development of Readability Analyses</em>. United States Department of Health, Education, <span>&amp;</span> Welfare, 1969.
+</div>
+<div id="ref-bormuth:1966" class="csl-entry" role="listitem">
+---. <span>“Readability: A New Approach.”</span> <em>Reading Research Quarterly</em>, vol. 1, no. 3, Spring, 1966, pp. 79–132.
+</div>
+<div id="ref-carver:1985" class="csl-entry" role="listitem">
+Carver, Ronald P. <span>“Measuring Readability Using DPR Units.”</span> <em>Journal of Reading</em>, vol. 27, no. 4, 1985, pp. 303–16.
+</div>
+<div id="ref-caylor-sticht-fox-ford" class="csl-entry" role="listitem">
+Caylor, John S., et al. <em>Methodologies for Determining Reading Requirements of Military Occupational Specialties</em>. United States Office of the Chief of Research; Development, 1973.
+</div>
+<div id="ref-chall-dale:manual:1995" class="csl-entry" role="listitem">
+Chall, Jeanne S., and Edgar Dale. <em>Manual for the New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-chall-dale:revisited:1995" class="csl-entry" role="listitem">
+---. <em>Readability Revisited: The New Dale-Chall Readability Formula</em>. Brookline Books, 1995.
+</div>
+<div id="ref-coleman-liau" class="csl-entry" role="listitem">
+Coleman, Meri, and T. L. Liau. <span>“A Computer Readability Formula Designed for Machine Scoring.”</span> <em>Journal of Applied Psychology</em>, vol. 60, no. 2, 1975, pp. 283–84.
+</div>
+<div id="ref-contreras" class="csl-entry" role="listitem">
+Contreras, Alfonso, et al. <span>“The SOL Formulas for Converting SMOG Readability Scores Between Health Education Materials Written in Spanish, English, and French.”</span> <em>Journal of Health Communications</em>, vol. 4, 1999, pp. 21–29.
+</div>
+<div id="ref-crawford" class="csl-entry" role="listitem">
+Crawford, Alan. <span>“A Spanish Language Fry-Type Readability Procedure: Elementary Level.”</span> <em>Bilingual Education Paper Series</em>, vol. 7, no. 8, 1984, pp. 1–17.
+</div>
+<div id="ref-cuayahuitl" class="csl-entry" role="listitem">
+Cuayáhuitl, Heriberto. <span>“A Syllabification Algorithm for Spanish.”</span> <em>Lecture Notes in Computer Science</em>, vol. 2945, 2004, pp. 412–15.
+</div>
+<div id="ref-dale-chall:1948" class="csl-entry" role="listitem">
+Dale, Edgar, and Jeanne S. Chall. <span>“A Formula for Predicting Readability.”</span> <em>Educational Research Bulletin</em>, vol. 27, no. 1, 1948, pp. 11–20, 28.
+</div>
+<div id="ref-danielson-bryan" class="csl-entry" role="listitem">
+Danielson, Wayne A., and Sam Dunn Bryan. <span>“Computer Automation of Two Readability Formulas.”</span> <em>Journalism Quarterly</em>, vol. 40, 1963, pp. 201–06.
+</div>
+<div id="ref-decicco" class="csl-entry" role="listitem">
+DeCicco, Laura. <em>Exploring Ggplot2 Boxplots - Defining Limits and Adjusting Style</em>. Water Data For The Nation Blog; https://www.waterdata.usgs.gov/blog/boxplots/, 10 Aug. 2018.
+</div>
+<div id="ref-dolch" class="csl-entry" role="listitem">
+Dolch, E. W. <span>“A Basic Sight Vocabulary.”</span> <em>Elementary School Journal</em>, vol. 36, no. 6, 1936, pp. 456–60.
+</div>
+<div id="ref-fang" class="csl-entry" role="listitem">
+Fang, Irving. <span>“The <span>‘</span>Easy Listening Formula’<span></span>.”</span> <em>Journal of Broadcasting</em>, vol. 10, no. 1, 1966, pp. 63–68.
+</div>
+<div id="ref-farr-jenkins-paterson" class="csl-entry" role="listitem">
+Farr, James N., et al. <span>“Simplification of the Flesch Reading Ease Formula.”</span> <em>Journal of Applied Psychology</em>, vol. 35, no. 5, 1951, pp. 333–37.
+</div>
+<div id="ref-flesch:1979" class="csl-entry" role="listitem">
+Flesch, Rudolf Franz. <em>How to Write Plain English: A Book for Lawyers and Consumers</em>. Harper <span>&amp;</span> Row, 1979.
+</div>
+<div id="ref-flesch:1949" class="csl-entry" role="listitem">
+---. <em>The Art of Readable Writing</em>. Harper <span>&amp;</span> Row, 1949.
+</div>
+<div id="ref-fry:1968" class="csl-entry" role="listitem">
+Fry, Edward. <span>“A Readability Formula That Saves Time.”</span> <em>Journal of Reading</em>, vol. 11, no. 7, 1968, pp. 513–16, 575–78.
+</div>
+<div id="ref-fry:elementary:1977" class="csl-entry" role="listitem">
+---. <em>Elementary Reading Instruction</em>. McGraw-Hill, 1977.
+</div>
+<div id="ref-fry:extensions:1977" class="csl-entry" role="listitem">
+---. <span>“Fry’s Readability Graph: Clarifications, Validity, and Extension to Level 17.”</span> <em>Journal of Reading</em>, vol. 21, no. 3, 1977, pp. 242–52.
+</div>
+<div id="ref-gilliam-pena-mountain" class="csl-entry" role="listitem">
+Gilliam, Bettye, et al. <span>“The Fry Graph Applied to Spanish Readability.”</span> <em>Reading Teacher</em>, vol. 33, 1980, pp. 426–30.
+</div>
+<div id="ref-grundner" class="csl-entry" role="listitem">
+Grundner, T. M. <span>“How to Make Consent Forms More Readable.”</span> <em>IRB: Ethics <span>&amp;</span> Human Research</em>, vol. 3, no. 7, 1981, pp. 9–10.
+</div>
+<div id="ref-gunning" class="csl-entry" role="listitem">
+Gunning, Robert. <em>The Technique of Clear Writing</em>. Rev. ed., McGraw-Hill, 1968.
+</div>
+<div id="ref-harris-jacobson" class="csl-entry" role="listitem">
+Harris, A. J., and M. D. Jacobson. <em>Basic Reading Vocabularies</em>. Macmillan, 1982.
+</div>
+<div id="ref-hooke-deleo-slaughter" class="csl-entry" role="listitem">
+Hooke, Lydia R., et al. <em>Readability of Air Force Publications: A Criterion Referenced Evaluation. Final Report</em>. United States Air Force Human Resources Lab, 1979.
+</div>
+<div id="ref-kibby" class="csl-entry" role="listitem">
+Kibby, Michael W. <span>“Test Review: The Degrees of Reading Power.”</span> <em>Journal of Reading</em>, vol. 24, no. 5, 1981, pp. 416–27.
+</div>
+<div id="ref-kincaid-fishburne-rogers-chissom:1975" class="csl-entry" role="listitem">
+Kincaid, J. Peter, Jr. Lt. Robert P. Fishburne, et al. <em>Derivation of New Readability Formulas (Automated Readability Index, Fog Count and Flesch Reading Ease Formula) for Navy Enlisted Personnel</em>. United States Naval Technical Training Command, 1975.
+</div>
+<div id="ref-kincaid-aagard-ohara:1980" class="csl-entry" role="listitem">
+Kincaid, J. Peter, James A. Aagard, et al. <em>Development and Test of a Computer Readability Editing System (CRES). Final Report, June 1978 Through December 1979</em>. United States Naval Training Analysis; Evaluation Group, 1980.
+</div>
+<div id="ref-kincaid:1972" class="csl-entry" role="listitem">
+Kincaid, J. Peter, John Van Deusen, et al. <em>Use of the Automated Readability Index for Evaluating Peer-Prepared Material for Use in Adult Reading Education</em>. United States Department of Health, Education, <span>&amp;</span> Welfare; Office of Education, 1972.
+</div>
+<div id="ref-mcalpine" class="csl-entry" role="listitem">
+McAlpine, Rachel. <em>From Plain English to Global English</em>. Quality Web Content; https://www.webpagecontent.com/arc_archive/139/5/, 2006.
+</div>
+<div id="ref-mccall-crabbs:1926" class="csl-entry" role="listitem">
+McCall, W. A., and L. M. Crabbs. <em>Standard Test Lessons in Reading</em>. Columbia University Teachers College, 1926.
+</div>
+<div id="ref-mccall-crabbs:1950" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1950.
+</div>
+<div id="ref-mccall-crabbs:1961" class="csl-entry" role="listitem">
+---. <em>Standard Test Lessons in Reading</em>. Rev. ed., Columbia University Teachers College, 1961.
+</div>
+<div id="ref-mclaughlin" class="csl-entry" role="listitem">
+McLaughlin, Harry. <span>“SMOG Grading - a New Readability Formula.”</span> <em>Journal of Reading</em>, vol. 12, no. 8, 1969, pp. 639–46.
+</div>
+<div id="ref-miller-coleman" class="csl-entry" role="listitem">
+Miller, G. R., and E. B. Coleman. <span>“A Set of Thirty-Six Prose Passages Calibrated for Complexity.”</span> <em>Journal of Verbal Learning and Verbal Behavior</em>, vol. 6, 1967, pp. 851–54.
+</div>
+<div id="ref-powers-sumner-kearl" class="csl-entry" role="listitem">
+Powers, R. D., et al. <span>“A Recalculation of Four Adult Readability Formulas.”</span> <em>Journal of Educational Psychology</em>, vol. 49, no. 2, 1958, pp. 99–105.
+</div>
+<div id="ref-raygor" class="csl-entry" role="listitem">
+Raygor, Alton L. <em>The Raygor Readability Estimate: A Quick and Easy Way to Determine Difficulty</em>. Dec. 1977, pp. 259–63.
+</div>
+<div id="ref-renstrom" class="csl-entry" role="listitem">
+Renström, Jan. <span>“Texte Und Textbehandlung Im Deutschunterricht.”</span> <em>Die Unterrichtspraxis / Teaching German</em>, vol. 13, no. 2, Autumn, 1980, pp. 150–55.
+</div>
+<div id="ref-schulz" class="csl-entry" role="listitem">
+Schulz, Renate A. <span>“Literature and Readability: Bridging the Gap in Foreign Language Reading.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 1, Spring, 1981, pp. 43–53.
+</div>
+<div id="ref-schwartz" class="csl-entry" role="listitem">
+Schwartz, Roswitha E. W. <em>An Exploratory Effort to Design a Readability Graph for German Material</em>. State University of New York at Albany, Reading Department, 1975.
+</div>
+<div id="ref-esmith" class="csl-entry" role="listitem">
+Smith, E. A., and R. J. Senter. <em>Automated Readability Index</em>. United States Aerospace Medical Research Laboratorties, 1967.
+</div>
+<div id="ref-lsmith" class="csl-entry" role="listitem">
+Smith, Lawrence L. <span>“Using a Modified SMOG in Primary and Intermediate Grades.”</span> <em>Reading Horizons</em>, vol. 24, no. 2, 1984, pp. 129–32.
+</div>
+<div id="ref-spache:1953" class="csl-entry" role="listitem">
+Spache, George. <span>“A New Readability Formula for Primary-Grade Reading Materials.”</span> <em>The Elementary School Journal</em>, vol. 53, no. 7, 1953, pp. 410–13.
+</div>
+<div id="ref-spache:1974" class="csl-entry" role="listitem">
+---. <em>Good Reading for Poor Readers</em>. Garrard Publishing Company, 1974.
+</div>
+<div id="ref-stocker" class="csl-entry" role="listitem">
+Stocker, Leonard P. <span>“Increasing the Precision of the Dale-Chall Readability Formula.”</span> <em>Reading Improvement</em>, vol. 8, no. 3, Winter, 1971, pp. 87–89.
+</div>
+<div id="ref-tufte:eyes" class="csl-entry" role="listitem">
+Tufte, Edward. <em>Seeing with Fresh Eyes</em>. Graphics <span>Press</span> LLC, 2020.
+</div>
+<div id="ref-vari-cartier" class="csl-entry" role="listitem">
+Vari-Cartier, Patricia. <span>“Development and Validation of a New Instrument to Assess the Readability of Spanish Prose.”</span> <em>The Modern Language Journal</em>, vol. 65, no. 2, 1981, pp. 141–48.
+</div>
+<div id="ref-wheeler-smith" class="csl-entry" role="listitem">
+Wheeler, Lester R., and Edwin H. Smith. <span>“A Practical Readability Formula for the Classroom Teacher in Elementary Grades.”</span> <em>Elementary English</em>, vol. 31, 1954, pp. 397–99.
+</div>
+<div id="ref-wolinski" class="csl-entry" role="listitem">
+Wolinski, John T., and Maurice W. Bozman. <span>“Using the Raygor Readability Estimate for Social Studies.”</span> <em>The Social Studies</em>, vol. 74, no. 5, 1983, pp. 215–19.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Pronouns, adjectives, adverbs, prepositions, conjunctions, and verbs.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>A separate list of nouns commonly found in children’s literature is also included with the Dolch collection. However, the sight words are generally the focus of most Dolch activities.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    window.setColorSchemeToggle(window.hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./creating-a-new-project.html" class="pagination-link" aria-label="Creating a New Project">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating a New Project</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./reviewing-batch-project.html" class="pagination-link" aria-label="Reviewing Batch Projects">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reviewing Batch Projects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

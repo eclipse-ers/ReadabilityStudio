@@ -56,5 +56,5 @@ If you build the "Release" version of *{{< var PROGRAM_NAME >}}*, then the *CMak
 - Go to `r menu(c('installers', 'windows'))`
 - Digitally sign "release/{{< var BUILD_TARGET >}}.exe"
 - Open "{{< var BUILD_TARGET >}}.iss" in *Inno Setup* and build the installer
-  - The installer will be placed in "output/rssetup{{< var FULL_VERSION >}}.exe"
+  - The installer will be placed in "output/ers-setup.exe"
 - Digitally sign the installer
