@@ -345,8 +345,10 @@ sp:SelectWindow(SideBarSection.Statistics, ReportType.StatisticsSummaryReport)
 ScreenshotLib.SnapScreenshot(ImagePath .. "examplestats." .. FileExtension)
 sp:SelectWindow(SideBarSection.ReadabilityScores, ReportType.ReadabilityScoresTabularReport)
 ScreenshotLib.SnapScreenshot(ImagePath .. "testscores." .. FileExtension)
-sp:SelectTextGrammarWindow("Put the cocoa in a small saucepan; add the cold water and stir until perfectly smooth; then the hot water, and cook for one or two minutes, add vanilla and a speck of salt, then stir in enough sugar to make it stiff enough to spread nicely.")
-ScreenshotLib.SnapScreenshotOfActiveProject(ImagePath .. "longsentenceselected." .. FileExtension, 1)
+sp:SelectWindow(SideBarSection.Grammar, ReportType.StatisticsSummaryReport)
+ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "longsentenceselected." .. FileExtension,
+    HighlightedReportType.GrammarHighlightedIssues, true,
+    "Put the cocoa in a small saucepan; add the cold water and stir until perfectly smooth; then the hot water, and cook for one or two minutes, add vanilla and a speck of salt, then stir in enough sugar to make it stiff enough to spread nicely.")
 
 sp:DelayReloading(true)
 sp:SetDocumentFilePath("/home/mcrane/Cocoa Desserts.rtf") -- use generic filepath
@@ -783,7 +785,6 @@ ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "exclusion-example-long-se
     "RP Number of characters, in this context being letters, numbers, and punctuation (except for sentence-ending punctuation, such as periods)")
 
 sp:ScrollTextWindow(HighlightedReportType.GrammarHighlightedIssues, "Danielson, Wayne A., and")
-
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "exclusion-example-copyright-included." .. FileExtension,
     HighlightedReportType.GrammarHighlightedIssues, true,
     "©2011 Oleander Software, all rights reserved.")
@@ -870,7 +871,8 @@ ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "exclusion-tags-example-li
 sp:SelectWindow(SideBarSection.Grammar, HighlightedReportType.GrammarHighlightedIssues)
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "exclusion-tags-example-not-excluding." .. FileExtension,
     HighlightedReportType.GrammarHighlightedIssues, true,
-    "<Platforms>", "<Note that this is not intended for general distribution. (9)  This is a preliminary draft, final approval pending>")
+    "<Platforms>",
+    "<Note that this is not intended for general distribution. (9)  This is a preliminary draft, final approval pending>")
 
 sp:SetBlockExclusionTags("<>")
 sp:Reload()
@@ -925,10 +927,9 @@ ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "summer-code-camp-upper-ha
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "summer-code-camp-upper-half2." .. FileExtension,
     HighlightedReportType.ThreePlusSyllableHighlightedWords, true,
     "No previous computer programming experience required!")
-
-sp:ScrollTextWindow(SideBarSection.WordsBreakdown, "Please fill out and return no later than May 25th")
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "summer-code-camp-lower-half." .. FileExtension,
-    HighlightedReportType.ThreePlusSyllableHighlightedWords, true)
+    HighlightedReportType.ThreePlusSyllableHighlightedWords, true,
+    "Please fill out and return no later than May 25th")
 sp:Close(false)
 
 -- addendum example
@@ -943,12 +944,12 @@ sp:AddTest(Test.Flesch)
 sp:ExportGraph(GraphType.Flesch, ImagePath .. "addendum-flesch1." .. FileExtension)
 sp:SelectWindow(SideBarSection.WordsBreakdown, HighlightedReportType.ThreePlusSyllableHighlightedWords)
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "addendum-highlighted-text1." .. FileExtension,
-    HighlightedReportType.ThreePlusSyllableHighlightedWords, false,
+    HighlightedReportType.ThreePlusSyllableHighlightedWords, true,
     "Preparing young minds for an exciting career* in enterprise-level software development and deployment.")
-sp:ScrollTextWindow(SideBarSection.WordsBreakdown,
-    "(Previous computer experience recommended).")
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "addendum-highlighted-text2." .. FileExtension,
-    HighlightedReportType.ThreePlusSyllableHighlightedWords, false)
+    HighlightedReportType.ThreePlusSyllableHighlightedWords, true,
+    "(Previous computer experience recommended).",
+    "Participants are entirely responsible for disclosing all food allergies and special dietary needs prior to enrollment.")
 
 sp:SetAppendedDocumentFilePath(ScreenshotProjectsFolder .. "Instructional Disclaimer.odt")
 
@@ -958,11 +959,9 @@ ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "addendum-highlighted-text
     HighlightedReportType.ThreePlusSyllableHighlightedWords, true,
     "Any instruction, advice, or products provided by Company do not include any sort of warranty or guarantee of Customer's perceived quality.  Although Company has provided quality instruction in the past, this performance being represented is historical; past performance is not a reliable indicator of current or future results and Customer's expectations of quality is in no way guaranteed.  The quality of instruction may fluctuate and Company cannot be held responsible for lower level of quality that Customer may experience.  Customer hereby releases Company and Owners from any perceived obligation or expectations related to Customer's subjective measurements of instructional quality.  Customer also releases Company and Owners from any legal responsibilities as a result of interaction with Company's products, services, advice, or third-party catering services (e.g., allergic reactions, inaccurate educational materials, Customer “disappointment”).")
 sp:SelectWindow(SideBarSection.Grammar, HighlightedReportType.GrammarHighlightedIssues)
-
-sp:ScrollTextWindow(SideBarSection.Grammar, 
-    "Customer also releases Company and Owners from any legal")
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "addendum-highlighted-text4." .. FileExtension,
-    HighlightedReportType.GrammarHighlightedIssues, true)
+    HighlightedReportType.GrammarHighlightedIssues, true,
+    "Customer also releases Company and Owners from any legal responsibilities as a result of interaction with Company's products, services, advice, or third-party catering services (e.g., allergic reactions, inaccurate educational materials, Customer “disappointment”).")
 
 -- show a generic set of file paths in the properties dialog and get a screenshot of that
 sp:DelayReloading(true)

@@ -2890,6 +2890,16 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     runBar->AddButton(XRCID("ID_SCRIPT_STOP"), _(L"Stop"), ReadSvgIcon(L"ribbon/stop.svg"),
                       _(L"Stop the currently running script."));
 
+    auto* clipboardBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Clipboard"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    clipboardBar->AddButton(XRCID("ID_SCRIPT_PASTE"), _(L"Paste"), ReadSvgIcon(L"ribbon/paste.svg"),
+                            _(L"Paste."));
+    clipboardBar->AddButton(XRCID("ID_SCRIPT_CUT"), _(L"Cut"), ReadSvgIcon(L"ribbon/cut.svg"),
+                            _(L"Cut."));
+    clipboardBar->AddButton(XRCID("ID_SCRIPT_COPY"), _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
+                            _(L"Copy."));
+
     auto* editBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Edit"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
@@ -2897,6 +2907,8 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
                        _(L"Undo."));
     editBar->AddButton(XRCID("ID_SCRIPT_REDO"), _(L"Redo"), ReadSvgIcon(L"ribbon/redo.svg"),
                        _(L"Redo."));
+    editBar->AddButton(XRCID("ID_SCRIPT_SELECT_ALL"), _(L"Select All"),
+                       ReadSvgIcon(L"ribbon/select-all.svg"), _(L"Select all text."));
     editBar->AddButton(XRCID("ID_SCRIPT_FIND"), _(L"Find"), ReadSvgIcon(L"ribbon/find.svg"),
                        _(L"Find text."));
     editBar->AddButton(XRCID("ID_SCRIPT_REPLACE"), _(L"Replace"),
@@ -3821,6 +3833,29 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
         { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanRedo()); },
         XRCID("ID_SCRIPT_REDO"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Cut(); }),
+         XRCID("ID_SCRIPT_CUT"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Copy(); }),
+         XRCID("ID_SCRIPT_COPY"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Paste(); }),
+         XRCID("ID_SCRIPT_PASTE"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->SelectAll(); }),
+         XRCID("ID_SCRIPT_SELECT_ALL"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanCut()); },
+        XRCID("ID_SCRIPT_CUT"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanCopy()); },
+        XRCID("ID_SCRIPT_COPY"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanPaste()); },
+        XRCID("ID_SCRIPT_PASTE"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_SELECT_ALL"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),

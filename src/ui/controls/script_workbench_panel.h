@@ -45,10 +45,20 @@ class ScriptWorkbenchPanel final : public wxPanel
     void ShowReplaceDialog();
     void Undo();
     void Redo();
+    void Cut();
+    void Copy();
+    void Paste();
+    void SelectAll();
     [[nodiscard]]
     bool CanUndo() const;
     [[nodiscard]]
     bool CanRedo() const;
+    [[nodiscard]]
+    bool CanCut() const;
+    [[nodiscard]]
+    bool CanCopy() const;
+    [[nodiscard]]
+    bool CanPaste() const;
     /// @}
 
     /// @brief Apply the current theme background color to the workbench surfaces.

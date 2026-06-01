@@ -570,6 +570,62 @@ void ScriptWorkbenchPanel::Redo()
     }
 
 //-------------------------------------------------------
+void ScriptWorkbenchPanel::Cut()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->Cut();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::Copy()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->Copy();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::Paste()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->Paste();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::SelectAll()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->SelectAll();
+        }
+    }
+
+//-------------------------------------------------------
+bool ScriptWorkbenchPanel::CanCut() const
+    {
+    return GetCurrentEditor() != nullptr &&
+           GetCurrentEditor()->GetSelectionStart() != GetCurrentEditor()->GetSelectionEnd();
+    }
+
+//-------------------------------------------------------
+bool ScriptWorkbenchPanel::CanCopy() const
+    {
+    return GetCurrentEditor() != nullptr &&
+           GetCurrentEditor()->GetSelectionStart() != GetCurrentEditor()->GetSelectionEnd();
+    }
+
+//-------------------------------------------------------
+bool ScriptWorkbenchPanel::CanPaste() const
+    {
+    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanPaste();
+    }
+
+//-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanUndo() const
     {
     return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanUndo();
