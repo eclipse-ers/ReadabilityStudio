@@ -172,9 +172,9 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
         long lineNumber{ 0 };
         if (ParseLuaError(errorMessage, lineNumber))
             {
-            const bool isUnsafeLibError = errorMessage.Contains(L"(global 'os')") ||
-                                          errorMessage.Contains(L"(global 'io')") ||
-                                          errorMessage.Contains(L"(global 'debug')");
+            const bool isUnsafeLibError = errorMessage.Contains(_DT(L"(global 'os')")) ||
+                                          errorMessage.Contains(_DT(L"(global 'io')")) ||
+                                          errorMessage.Contains(_DT(L"(global 'debug')"));
             wxMessageBox(
                 _(L"Line #") + errorMessage +
                     (isUnsafeLibError ?

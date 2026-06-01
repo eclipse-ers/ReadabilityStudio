@@ -782,6 +782,7 @@ void ScriptWorkbenchPanel::DebugClear()
         {
         return;
         }
+    // TRANSLATORS: %d placeholders are the major, minor, and release version numbers of Lua
     m_debugContent = wxString::Format(_(L"Lua version %d.%d.%d, ready..."), LUA_VERSION_MAJOR_N,
                                       LUA_VERSION_MINOR_N, LUA_VERSION_RELEASE_N);
 
