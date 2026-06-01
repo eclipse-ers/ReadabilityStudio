@@ -747,7 +747,7 @@ class BaseProjectView : public wxView
 
     constexpr static int LEFT_PANE = wxID_HIGHEST + 78;
     constexpr static int SPLITTER_ID = wxID_HIGHEST + 79;
-    
+
   private:
     void OnActivateView(bool activate, wxView* oldView, wxView* newView) override;
 

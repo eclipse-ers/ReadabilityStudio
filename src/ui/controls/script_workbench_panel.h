@@ -43,6 +43,12 @@ class ScriptWorkbenchPanel final : public wxPanel
     void ToggleFunctionBrowser();
     void ShowFindDialog();
     void ShowReplaceDialog();
+    void Undo();
+    void Redo();
+    [[nodiscard]]
+    bool CanUndo() const;
+    [[nodiscard]]
+    bool CanRedo() const;
     /// @}
 
     /// @brief Apply the current theme background color to the workbench surfaces.

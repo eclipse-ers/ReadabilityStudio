@@ -552,6 +552,36 @@ void ScriptWorkbenchPanel::ShowFindDialog()
     }
 
 //-------------------------------------------------------
+void ScriptWorkbenchPanel::Undo()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->Undo();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::Redo()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->Redo();
+        }
+    }
+
+//-------------------------------------------------------
+bool ScriptWorkbenchPanel::CanUndo() const
+    {
+    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanUndo();
+    }
+
+//-------------------------------------------------------
+bool ScriptWorkbenchPanel::CanRedo() const
+    {
+    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanRedo();
+    }
+
+//-------------------------------------------------------
 void ScriptWorkbenchPanel::OnFindDialog(wxFindDialogEvent& event)
     {
     auto* currentScript = GetCurrentEditor();

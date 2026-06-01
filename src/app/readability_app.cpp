@@ -63,13 +63,13 @@
 #include "../projects/batch_project_view.h"
 #include "../projects/standard_project_doc.h"
 #include "../projects/standard_project_view.h"
+#include "../ui/controls/script_workbench_panel.h"
 #include "../ui/dialogs/custom_test_dlg.h"
 #include "../ui/dialogs/edit_word_list_dlg.h"
 #include "../ui/dialogs/new_custom_test_simple_dlg.h"
 #include "../ui/dialogs/project_wizard_dlg.h"
 #include "../ui/dialogs/test_bundle_dlg.h"
 #include "../ui/dialogs/tools_options_dlg.h"
-#include "../ui/controls/script_workbench_panel.h"
 #include <algorithm>
 #include <utility>
 #include <wx/dir.h>
@@ -2893,6 +2893,10 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     auto* editBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Edit"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    editBar->AddButton(XRCID("ID_SCRIPT_UNDO"), _(L"Undo"), ReadSvgIcon(L"ribbon/undo.svg"),
+                       _(L"Undo."));
+    editBar->AddButton(XRCID("ID_SCRIPT_REDO"), _(L"Redo"), ReadSvgIcon(L"ribbon/redo.svg"),
+                       _(L"Redo."));
     editBar->AddButton(XRCID("ID_SCRIPT_FIND"), _(L"Find"), ReadSvgIcon(L"ribbon/find.svg"),
                        _(L"Find text."));
     editBar->AddButton(XRCID("ID_SCRIPT_REPLACE"), _(L"Replace"),
@@ -3805,6 +3809,18 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_STOP"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_TOGGLE_DEBUG"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Undo(); }),
+         XRCID("ID_SCRIPT_UNDO"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Redo(); }),
+         XRCID("ID_SCRIPT_REDO"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanUndo()); },
+        XRCID("ID_SCRIPT_UNDO"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanRedo()); },
+        XRCID("ID_SCRIPT_REDO"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),
