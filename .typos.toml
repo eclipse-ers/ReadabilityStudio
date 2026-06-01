@@ -79,7 +79,7 @@ extend-glob = ["*.svg"]
 check-file = false
 
 [files]
-extend-exclude = ["src/Catch2/", "src/lua/", "docs/projects",
+extend-exclude = ["docs-online", "src/Catch2/", "src/lua/", "docs/projects",
                   "resources/words", "locale/*.po", "examples",
                   "tests/Dictionaries", "tests/germansyllabletests.cpp",
                   "docs/lua-5.4", "installers/windows/messages/messages-es.isl",
