@@ -3677,7 +3677,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         [this]([[maybe_unused]] wxRibbonButtonBarEvent&)
         {
             const wxString manualPath =
-                GetHelpDirectory() + wxFileName::GetPathSeparator() + _DT(L"system-admin.pdf");
+                GetHelpDirectory() + wxFileName::GetPathSeparator() + _DT(L"sysadmin-manual.pdf");
             wxLaunchDefaultApplication(manualPath);
         },
         XRCID("ID_SYSADMIN"));
