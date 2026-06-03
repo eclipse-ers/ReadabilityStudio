@@ -283,9 +283,7 @@ if (buildUserManual)
   quarto::quarto_render(output_format="pdf", as_job=F, profile="manual")
   thumbNail <- image_convert(image_read_pdf(glue("{docFolder}/readability-studio-manual/docs-manual/readability-studio-manual.pdf"), 1),
                              format="png") %>%
-    image_scale(thumbnailWidth)  %>%
-    image_border(color="darkgrey", geometry = "2x2") %>%
-    image_shadow()
+    image_scale(thumbnailWidth)
   image_write(thumbNail, glue("{docFolder}/readability-studio-manual/docs-manual/readability-studio-manual-thumb.png"))
   # note that the online build using the thumbnail that was just generated
   quarto::quarto_render(output_format="html", as_job=F, profile="online")
