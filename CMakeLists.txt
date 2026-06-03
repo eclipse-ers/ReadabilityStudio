@@ -78,7 +78,7 @@ set(MIN_RAM "2 GB")
 set(RAM_RECOMMENDED "4 GB")
 
 # Edit these values when bumping the release version
-project(readstudio VERSION 2026.0.0.0 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
+project(readstudio VERSION 2026.0.0.1 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
 enable_language(CXX)
 if(APPLE)
     enable_language(OBJCXX)
