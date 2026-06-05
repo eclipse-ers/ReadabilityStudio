@@ -129,6 +129,7 @@ if(NOT ${readstudio_VERSION_TWEAK} EQUAL 0)
     string(APPEND FULL_DISPLAY_VERSION ".${readstudio_VERSION_TWEAK}")
 endif()
 string(TIMESTAMP BUILD_YEAR "%Y")
+string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${MIN_GCC_REQUIRED})
   message(FATAL_ERROR "Insufficient GCC version. ${MIN_GCC_REQUIRED} is required, but only ${CMAKE_CXX_COMPILER_VERSION} found.")
@@ -181,9 +182,8 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/resource.h.in"
 if(UNIX AND NOT APPLE)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/readstudio.desktop.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/readstudio.desktop")
-    # AppImage tools have issues with building correct appdata.xml files, so turn this off for now
-    # configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.appdata.xml.in"
-    #               "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.appdata.xml")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml")
 elseif(WIN32)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl")

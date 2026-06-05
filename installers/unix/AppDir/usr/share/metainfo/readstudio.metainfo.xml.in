@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>${PROGRAM_RDNS_IDENTIFIER}</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>EPL-2.0</project_license>
+	<name>${PROGRAM_LONGNAME}</name>
+	<summary>${PROGRAM_COMMENTS}</summary>
+	<description>
+		<p>${PROGRAM_LONGNAME} is readability analysis software for evaluating the complexity of documents and passages of text.</p>
+	</description>
+	<developer>
+		<name>${PUBLISHER}</name>
+	</developer>
+	<launchable type="desktop-id">readstudio.desktop</launchable>
+	<url type="homepage">${readstudio_HOMEPAGE_URL}</url>
+	<url type="bugtracker">${ISSUE_PAGE}</url>
+	<releases>
+		<release version="${FULL_DISPLAY_VERSION}" date="${BUILD_DATE}" />
+	</releases>
+	<content_rating type="oars-1.1" />
+</component>
