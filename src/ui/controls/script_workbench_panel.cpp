@@ -16,6 +16,7 @@
 #include "../../app/readability_app.h"
 #include "../../lua-scripting/lua_interface.h"
 #include "../../lua/lua.h"
+#include <algorithm>
 #include <array>
 #include <utility>
 #include <wx/filedlg.h>
@@ -840,20 +841,11 @@ bool ScriptWorkbenchPanel::PromptToSaveUnsavedScripts()
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::HasUnsavedOrLoadedScripts() const
     {
-    for (const auto& entry : m_scripts)
-        {
-        if (entry.m_editor == nullptr)
-            {
-            continue;
-            }
-        if (entry.m_editor->GetModify())
-            {
-            return true;
-            }
-        if (!entry.m_editor->GetScriptFilePath().empty())
-            {
-            return true;
-            }
-        }
-    return false;
+    return std::ranges::any_of(m_scripts,
+                               [](const auto& entry)
+                               {
+                                   return entry.m_editor != nullptr &&
+                                          (entry.m_editor->GetModify() ||
+                                           !entry.m_editor->GetScriptFilePath().empty());
+                               });
     }
