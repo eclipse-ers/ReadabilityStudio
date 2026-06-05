@@ -180,8 +180,8 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/citations.apa.in"
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/resource.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/resource.h")
 if(UNIX AND NOT APPLE)
-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/readstudio.desktop.in"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/readstudio.desktop")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml")
 elseif(WIN32)

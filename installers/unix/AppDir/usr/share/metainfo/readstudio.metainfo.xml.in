@@ -11,7 +11,7 @@
 	<developer>
 		<name>${PUBLISHER}</name>
 	</developer>
-	<launchable type="desktop-id">readstudio.desktop</launchable>
+	<launchable type="desktop-id">org.eclipse.readabilitystudio.desktop</launchable>
 	<url type="homepage">${readstudio_HOMEPAGE_URL}</url>
 	<url type="bugtracker">${ISSUE_PAGE}</url>
 	<releases>
