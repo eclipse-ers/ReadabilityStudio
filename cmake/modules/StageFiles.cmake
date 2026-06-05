@@ -38,7 +38,8 @@
 #      • Variables used:
 #            PROJECT_NAME           – name of the CMake target
 #            RESOURCE_FOLDER        – relative path to the runtime resource directory
-#            APPIMAGE_STAGING_DIR   – path to the AppImage packaging root
+#            APPIMAGE_STAGING_DIR   – path to the AppImage binary directory (usually usr/bin)
+#            APPIMAGE_LOCALE_DIR    – path to the AppImage locale directory (usually usr/share/locale)
 #            WINDOWS_STAGING_DIR    – path to the Windows packaging root
 # ==========================================================================================
 # Requires: CMake's FindGettext module (built-in)
@@ -98,12 +99,22 @@ function(copy_translations LANG)
                 COMMAND "${_MSGFMT}" -o "${_BIN_MO}" "${_SRC_PO}")
         endif()
 
+        # AppImage destination (standard Linux path is usr/share/locale)
+        if(DEFINED APPIMAGE_LOCALE_DIR)
+            set(_APPIMAGE_MO_DEST "${APPIMAGE_LOCALE_DIR}/${LANG}/LC_MESSAGES/readstudio.mo")
+            set(_APPIMAGE_MO_DIR  "${APPIMAGE_LOCALE_DIR}/${LANG}/LC_MESSAGES")
+        else()
+            set(_APPIMAGE_MO_DEST "${APPIMAGE_STAGING_DIR}/${LANG}/readstudio.mo")
+            set(_APPIMAGE_MO_DIR  "${APPIMAGE_STAGING_DIR}/${LANG}")
+        endif()
+
         # Always copy .mo file to destinations
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "Copying ${LANG} translations to build and installer folders."
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/${LANG}/readstudio.mo"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${APPIMAGE_STAGING_DIR}/${LANG}/readstudio.mo"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_APPIMAGE_MO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_APPIMAGE_MO_DEST}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/readstudio.mo")
     endif()
 
@@ -142,12 +153,22 @@ function(copy_translations LANG)
                 COMMAND "${_MSGFMT}" -o "${_WX_BIN_MO}" "${_WX_SRC_PO}")
         endif()
 
+        # AppImage destination (standard Linux path is usr/share/locale)
+        if(DEFINED APPIMAGE_LOCALE_DIR)
+            set(_APPIMAGE_WXMO_DEST "${APPIMAGE_LOCALE_DIR}/${LANG}/LC_MESSAGES/wxstd.mo")
+            set(_APPIMAGE_WXMO_DIR  "${APPIMAGE_LOCALE_DIR}/${LANG}/LC_MESSAGES")
+        else()
+            set(_APPIMAGE_WXMO_DEST "${APPIMAGE_STAGING_DIR}/${LANG}/wxstd.mo")
+            set(_APPIMAGE_WXMO_DIR  "${APPIMAGE_STAGING_DIR}/${LANG}")
+        endif()
+
         # Always copy wxstd.mo if available
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "Copying wxWidgets ${LANG} translations to build and installer folders."
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/${LANG}/wxstd.mo"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${APPIMAGE_STAGING_DIR}/${LANG}/wxstd.mo"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_APPIMAGE_WXMO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_APPIMAGE_WXMO_DEST}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/wxstd.mo")
     endif()
 endfunction()

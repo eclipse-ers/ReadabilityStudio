@@ -644,6 +644,7 @@ else()
 endif()
 
 set(APPIMAGE_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/bin")
+set(APPIMAGE_LOCALE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/locale")
 set(WINDOWS_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows")
 
 include(cmake/modules/StageFiles.cmake)
