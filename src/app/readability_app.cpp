@@ -2907,12 +2907,25 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
                        _(L"Undo."));
     editBar->AddButton(XRCID("ID_SCRIPT_REDO"), _(L"Redo"), ReadSvgIcon(L"ribbon/redo.svg"),
                        _(L"Redo."));
+    editBar->AddButton(XRCID("ID_SCRIPT_DUPLICATE_LINE"), _(L"Duplicate Line"),
+                       ReadSvgIcon(L"ribbon/duplicate-files.svg"),
+                       _(L"Duplicate the current line."));
     editBar->AddButton(XRCID("ID_SCRIPT_SELECT_ALL"), _(L"Select All"),
                        ReadSvgIcon(L"ribbon/select-all.svg"), _(L"Select all text."));
-    editBar->AddButton(XRCID("ID_SCRIPT_FIND"), _(L"Find"), ReadSvgIcon(L"ribbon/find.svg"),
+    editBar->AddButton(XRCID("ID_SCRIPT_COMMENT"), _(L"Comment"),
+                       ReadSvgIcon(L"ribbon/comment.svg"), _(L"Comment the selected lines."));
+    editBar->AddButton(XRCID("ID_SCRIPT_UNCOMMENT"), _(L"Uncomment"),
+                       ReadSvgIcon(L"ribbon/uncomment.svg"), _(L"Uncomment the selected lines."));
+
+    auto* findBar = new wxRibbonButtonBar(new wxRibbonPanel(
+        GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Find"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
+    findBar->AddButton(XRCID("ID_SCRIPT_FIND"), _(L"Find"), ReadSvgIcon(L"ribbon/find.svg"),
                        _(L"Find text."));
-    editBar->AddButton(XRCID("ID_SCRIPT_REPLACE"), _(L"Replace"),
+    findBar->AddButton(XRCID("ID_SCRIPT_REPLACE"), _(L"Replace"),
                        ReadSvgIcon(L"ribbon/find-replace.svg"), _(L"Replace text."));
+    findBar->AddButton(XRCID("ID_SCRIPT_GOTO_LINE"), _(L"Go To Line"),
+                       ReadSvgIcon(L"ribbon/go-to-line.svg"), _(L"Go to a specific line."));
 
     auto* debugBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Debug"), wxNullBitmap,
@@ -3825,6 +3838,8 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_UNDO"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Redo(); }),
          XRCID("ID_SCRIPT_REDO"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->DuplicateLine(); }),
+         XRCID("ID_SCRIPT_DUPLICATE_LINE"));
     Bind(
         wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
         { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanUndo()); },
@@ -3833,6 +3848,9 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
         { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanRedo()); },
         XRCID("ID_SCRIPT_REDO"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_DUPLICATE_LINE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Cut(); }),
          XRCID("ID_SCRIPT_CUT"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Copy(); }),
@@ -3841,6 +3859,10 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_PASTE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->SelectAll(); }),
          XRCID("ID_SCRIPT_SELECT_ALL"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Comment(); }),
+         XRCID("ID_SCRIPT_COMMENT"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Uncomment(); }),
+         XRCID("ID_SCRIPT_UNCOMMENT"));
     Bind(
         wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
         { evt.Enable(GetScriptWorkbench() != nullptr && GetScriptWorkbench()->CanCut()); },
@@ -3856,10 +3878,18 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(
         wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
         { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_SELECT_ALL"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_COMMENT"));
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_UNCOMMENT"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowFindDialog(); }),
          XRCID("ID_SCRIPT_FIND"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ShowReplaceDialog(); }),
          XRCID("ID_SCRIPT_REPLACE"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->GotoLineDialog(); }),
+         XRCID("ID_SCRIPT_GOTO_LINE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->DebugClear(); }),
          XRCID("ID_SCRIPT_CLEAR_DEBUG"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ToggleDebugWindow(); }),
@@ -3867,6 +3897,10 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(wxEVT_MENU,
          withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ToggleFunctionBrowser(); }),
          XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
+
+    Bind(
+        wxEVT_UPDATE_UI, [this](wxUpdateUIEvent& evt)
+        { evt.Enable(GetScriptWorkbench() != nullptr); }, XRCID("ID_SCRIPT_GOTO_LINE"));
     Bind(
         wxEVT_MENU,
         [](wxCommandEvent&)

@@ -24,6 +24,7 @@
 /installers/windows/setup.isl
 /installers/windows/icons.isl
 /installers/windows/readstudio.iss
+/installers/unix/AppDir/usr/share/locale/es/LC_MESSAGES
 /docs/version_info.txt
 /docs/coding-bible/.quarto
 /docs/readability-studio-manual/_quarto.yml

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- context text lines -->
+  <rect x="28" y="30" width="172" height="20" rx="5" fill="#6b7280"/>
+  <rect x="28" y="58" width="144" height="20" rx="5" fill="#6b7280"/>
+  <!-- source line being duplicated -->
+  <rect x="24" y="90" width="192" height="26" rx="6" fill="#3b82f6"/>
+  <!-- downward arrow (duplicate action) -->
+  <rect x="122" y="120" width="12" height="16" rx="3" fill="#3b82f6"/>
+  <polygon points="108,134 128,150 148,134" fill="#3b82f6"/>
+  <!-- duplicate line (copy of source) -->
+  <rect x="24" y="154" width="192" height="26" rx="6" fill="#3b82f6" opacity="0.5"/>
+  <!-- more context text lines -->
+  <rect x="28" y="188" width="156" height="20" rx="5" fill="#6b7280"/>
+  <rect x="28" y="216" width="112" height="20" rx="5" fill="#6b7280"/>
+</svg>

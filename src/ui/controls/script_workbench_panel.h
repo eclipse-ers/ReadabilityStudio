@@ -45,6 +45,10 @@ class ScriptWorkbenchPanel final : public wxPanel
     void ShowReplaceDialog();
     void Undo();
     void Redo();
+    void DuplicateLine();
+    void GotoLineDialog();
+    void Comment();
+    void Uncomment();
     void Cut();
     void Copy();
     void Paste();

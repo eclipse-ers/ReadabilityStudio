@@ -38,6 +38,7 @@ ribbon/citation.svg
 ribbon/clear.svg
 ribbon/clock.svg
 ribbon/color-wheel.svg
+ribbon/comment.svg
 ribbon/configure.svg
 ribbon/copy.svg
 ribbon/cut.svg
@@ -50,6 +51,7 @@ ribbon/documents.svg
 ribbon/donut-subgrouped.svg
 ribbon/down-arrow.svg
 ribbon/duplicate-files.svg
+ribbon/duplicate-line.svg
 ribbon/edit-document.svg
 ribbon/edit-report.svg
 ribbon/edit.svg
@@ -73,6 +75,7 @@ ribbon/function-dark.svg
 ribbon/function.svg
 ribbon/gears.svg
 ribbon/german2english.svg
+ribbon/go-to-line.svg
 ribbon/grade-display.svg
 ribbon/grammar.svg
 ribbon/group.svg
@@ -148,6 +151,7 @@ ribbon/system-admin.svg
 ribbon/tests-overview.svg
 ribbon/toggle-sidebar.svg
 ribbon/top-titles.svg
+ribbon/uncomment.svg
 ribbon/undo.svg
 ribbon/up-arrow.svg
 ribbon/updates.svg

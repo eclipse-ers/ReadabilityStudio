@@ -262,6 +262,16 @@ Select all                              `r keys(c('Ctrl','A'))` (`r os_logo('win
 
 Duplicate current line                  `r keys(c('Ctrl','D'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
                                         `r keys(c('\\cmd','D'))` (`r os_logo('apple')`)
+
+&nbsp;                                  &nbsp;
+
+Go to line                              `r keys(c('Ctrl','G'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\cmd','G'))` (`r os_logo('apple')`)
+
+&nbsp;                                  &nbsp;
+
+Comment/uncomment selection             `r keys(c('Ctrl','/'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
+                                        `r keys(c('\\cmd','/'))` (`r os_logo('apple')`)
 ------------------------------------------------------------------------------------------------
 :::
 

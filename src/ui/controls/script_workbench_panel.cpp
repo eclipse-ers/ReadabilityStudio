@@ -22,6 +22,7 @@
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
+#include <wx/numdlg.h>
 #include <wx/srchctrl.h>
 #include <wx/stc/minimap.h>
 
@@ -200,6 +201,29 @@ void ScriptWorkbenchPanel::BindEvents()
                 evt.SetFindString(m_findData.GetFindString());
                 evt.SetFlags(m_findData.GetFlags());
                 OnFindDialog(evt);
+                }
+            else if (event.GetKeyCode() == L'G' && event.ControlDown())
+                {
+                GotoLineDialog();
+                return;
+                }
+            else if (event.GetKeyCode() == L'/' && event.ControlDown())
+                {
+                auto* editor = GetCurrentEditor();
+                if (editor != nullptr)
+                    {
+                    const int lineStart = editor->LineFromPosition(editor->GetSelectionStart());
+                    const wxString lineText = editor->GetLine(lineStart).Trim(false);
+                    if (lineText.StartsWith(L"--"))
+                        {
+                        Uncomment();
+                        }
+                    else
+                        {
+                        Comment();
+                        }
+                    }
+                return;
                 }
             event.Skip(true);
         },
@@ -568,6 +592,96 @@ void ScriptWorkbenchPanel::Redo()
         {
         GetCurrentEditor()->Redo();
         }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::DuplicateLine()
+    {
+    if (GetCurrentEditor() != nullptr)
+        {
+        GetCurrentEditor()->LineDuplicate();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::GotoLineDialog()
+    {
+    auto* editor = GetCurrentEditor();
+    if (editor == nullptr)
+        {
+        return;
+        }
+
+    const long lineCount = editor->GetLineCount();
+    const long currentLine = editor->GetCurrentLine() + 1;
+    const long newLine = wxGetNumberFromUser(_(L"Enter line number:"), wxEmptyString,
+                                             _(L"Go To Line"), currentLine, 1, lineCount, this);
+    if (newLine != -1)
+        {
+        editor->GotoLine(newLine - 1);
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::Comment()
+    {
+    auto* editor = GetCurrentEditor();
+    if (editor == nullptr)
+        {
+        return;
+        }
+
+    const int lineStart = editor->LineFromPosition(editor->GetSelectionStart());
+    int lineEnd = editor->LineFromPosition(editor->GetSelectionEnd());
+
+    // If the selection ends at the start of a line, don't include that line
+    if (lineEnd > lineStart && editor->GetColumn(editor->GetSelectionEnd()) == 0)
+        {
+        lineEnd--;
+        }
+
+    editor->BeginUndoAction();
+    for (int i = lineStart; i <= lineEnd; ++i)
+        {
+        editor->InsertText(editor->PositionFromLine(i), L"--");
+        }
+    editor->EndUndoAction();
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::Uncomment()
+    {
+    auto* editor = GetCurrentEditor();
+    if (editor == nullptr)
+        {
+        return;
+        }
+
+    const int lineStart = editor->LineFromPosition(editor->GetSelectionStart());
+    int lineEnd = editor->LineFromPosition(editor->GetSelectionEnd());
+
+    // If the selection ends at the start of a line, don't include that line
+    if (lineEnd > lineStart && editor->GetColumn(editor->GetSelectionEnd()) == 0)
+        {
+        lineEnd--;
+        }
+
+    editor->BeginUndoAction();
+    for (int i = lineStart; i <= lineEnd; ++i)
+        {
+        const wxString lineText = editor->GetLine(i);
+        int firstCharPos = 0;
+        while (firstCharPos < static_cast<int>(lineText.length()) &&
+               (lineText[firstCharPos] == L' ' || lineText[firstCharPos] == L'\t'))
+            {
+            firstCharPos++;
+            }
+        if (lineText.Mid(firstCharPos).StartsWith(L"--"))
+            {
+            editor->DeleteRange(editor->PositionFromLine(i) + firstCharPos, 2);
+            }
+        }
+    editor->EndUndoAction();
     }
 
 //-------------------------------------------------------
