@@ -2104,8 +2104,6 @@ void BaseProject::AddCustomReadabilityTests()
 //-------------------------------------------------------
 void BaseProject::LoadHardWords()
     {
-    PROFILE();
-
     // helper to strip possessive suffix from a word (e.g., "John's" -> "John")
     const auto stripPossessiveSuffix = [](auto the_word)
     {
@@ -4566,7 +4564,6 @@ std::pair<bool, std::wstring> BaseProject::ExtractMarkdownRawText(std::string_vi
 std::pair<bool, std::wstring> BaseProject::ExtractRawText(std::string_view sourceFileText,
                                                           const wxString& fileExtension)
     {
-    PROFILE();
     if (sourceFileText.empty())
         {
         return std::make_pair(false, std::wstring{});
@@ -6611,7 +6608,6 @@ bool BaseProject::AddColemanLiauTest(const bool setFocus)
 //-------------------------------------------------------
 bool BaseProject::AddStandardReadabilityTest(const wxString& id, const bool setFocus /*= true*/)
     {
-    PROFILE();
     const auto theTest = GetReadabilityTests().get_test(id);
     if (!theTest.second)
         {

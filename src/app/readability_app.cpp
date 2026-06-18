@@ -2608,12 +2608,6 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         toolButtonBar->AddButton(XRCID("ID_VIEW_LOG_REPORT"), _(L"Log Report"),
                                  ReadSvgIcon(L"ribbon/log-book.svg"),
                                  _(L"View diagnostic information being logged by the program."));
-#ifndef NDEBUG
-    #ifdef ENABLE_PROFILING
-        toolButtonBar->AddButton(XRCID("ID_VIEW_PROFILE_REPORT"), _(L"Profile Report"),
-                                 ReadSvgIcon(L"ribbon/clock.svg"));
-    #endif
-#endif
         }
     }
 
@@ -2814,12 +2808,6 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
                                                      L"ribbon/lua-dark-mode.svg" :
                                                      L"ribbon/lua.svg"));
             }
-#ifndef NDEBUG
-    #ifdef ENABLE_PROFILING
-        toolButtonBar->AddButton(XRCID("ID_VIEW_PROFILE_REPORT"), _(L"Profile Report"),
-                                 ReadSvgIcon(L"ribbon/clock.svg"));
-    #endif
-#endif
         }
     }
 
@@ -3115,73 +3103,6 @@ void MainFrame::OnRibbonBarHelpClicked([[maybe_unused]] wxRibbonBarEvent& event)
     {
     wxCommandEvent cmd;
     OnHelpContents(cmd);
-    }
-
-//-------------------------------------------------------
-void MainFrame::OnViewProfileReport([[maybe_unused]] wxRibbonButtonBarEvent& event)
-    {
-    DUMP_PROFILER_REPORT();
-
-    const wxSize screenSize{ wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_X),
-                             wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) };
-    Wisteria::UI::ListDlg profileReportDialog(
-        wxGetApp().GetParentingWindow(), wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-        wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-        wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
-        Wisteria::UI::LD_SAVE_BUTTON | Wisteria::UI::LD_COPY_BUTTON |
-            Wisteria::UI::LD_PRINT_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
-            Wisteria::UI::LD_FIND_BUTTON | Wisteria::UI::LD_COLUMN_HEADERS |
-            Wisteria::UI::LD_SORT_BUTTON,
-        wxID_ANY, _(L"Profile Report"), wxString{}, wxDefaultPosition,
-        wxSize{ static_cast<int>(screenSize.GetWidth() * math_constants::half),
-                static_cast<int>(screenSize.GetHeight() * math_constants::half) });
-
-    wxGetApp().UpdateRibbonTheme(profileReportDialog.GetRibbon());
-    profileReportDialog.GetListCtrl()->ClearAll();
-    profileReportDialog.GetListCtrl()->InsertColumn(0,
-                                                    _DT(L"Function", DTExplanation::DebugMessage));
-    profileReportDialog.GetListCtrl()->InsertColumn(1, _DT(L"Times Called"));
-    profileReportDialog.GetListCtrl()->InsertColumn(2, _DT(L"Total Time (Milliseconds)"));
-    profileReportDialog.GetListCtrl()->InsertColumn(3, _DT(L"Total Time (%)"));
-    profileReportDialog.GetListCtrl()->InsertColumn(4, _DT(L"Lowest Call Time"));
-    profileReportDialog.GetListCtrl()->InsertColumn(5, _DT(L"Highest Call Time"));
-    profileReportDialog.GetListCtrl()->InsertColumn(6, _DT(L"Average Call Time"));
-
-    wxString filePath = wxGetApp().GetProfileReportPath();
-    wxString buffer;
-    Wisteria::TextStream::ReadFile(filePath, buffer);
-
-    const lily_of_the_valley::text_column_delimited_character_parser parser(L'\t');
-    lily_of_the_valley::text_column<lily_of_the_valley::text_column_delimited_character_parser>
-        myColumn(parser, std::nullopt);
-    lily_of_the_valley::text_row<Wisteria::UI::ListCtrlExDataProvider::ListCellString> myRow(
-        std::nullopt);
-    myRow.add_column(myColumn);
-    myRow.treat_consecutive_delimiters_as_one(false);
-
-    lily_of_the_valley::text_matrix<Wisteria::UI::ListCtrlExDataProvider::ListCellString> importer(
-        &profileReportDialog.GetData()->GetMatrix());
-
-    // header row, which will just be skipped
-    importer.add_row_definition(
-        lily_of_the_valley::text_row<Wisteria::UI::ListCtrlExDataProvider::ListCellString>(1));
-    importer.add_row_definition(myRow);
-
-    // see how many lines are in the file
-    lily_of_the_valley::text_preview preview;
-    size_t rowCount = preview(buffer, L'\t', true, false);
-    // now read it
-    rowCount = importer.read(buffer, rowCount, 7, true);
-
-    profileReportDialog.GetListCtrl()->SetVirtualDataSize(rowCount, 7);
-    profileReportDialog.GetListCtrl()->SetItemCount(static_cast<long>((rowCount)));
-
-    // fit the columns
-    profileReportDialog.GetListCtrl()->DistributeColumns(-1);
-    // sort by time, largest to smallest
-    profileReportDialog.GetListCtrl()->SortColumn(2, Wisteria::SortDirection::SortDescending);
-
-    profileReportDialog.ShowModal();
     }
 
 //-------------------------------------------------------
@@ -3602,17 +3523,6 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
             OnViewLogReport(event);
         },
         XRCID("ID_VIEW_LOG_REPORT"));
-
-    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnViewProfileReport, this,
-         XRCID("ID_VIEW_PROFILE_REPORT"));
-    Bind(
-        wxEVT_MENU,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            wxRibbonButtonBarEvent event;
-            OnViewProfileReport(event);
-        },
-        XRCID("ID_VIEW_PROFILE_REPORT"));
 
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnHelpCheckForUpdates, this,
          XRCID("ID_CHECK_FOR_UPDATES"));

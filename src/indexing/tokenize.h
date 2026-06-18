@@ -51,7 +51,6 @@
 #define INDEXING_TOKENIZE_H
 
 #include "../OleanderStemmingLibrary/src/common_lang_constants.h"
-#include "../Wisteria-Dataviz/src/debug/debug_profile.h"
 #include "../Wisteria-Dataviz/src/util/i18n_string_util.h"
 #include "abbreviation.h"
 #include "characters.h"
@@ -110,7 +109,6 @@ namespace tokenize
         [[nodiscard]]
         const wchar_t* operator()()
             {
-            PROFILE();
             // should only happen if text was null to begin with
             if (m_current_char == nullptr)
                 {

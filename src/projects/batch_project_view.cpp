@@ -2666,7 +2666,6 @@ void BatchProjectView::OnExportScoresAndStatistics([[maybe_unused]] wxCommandEve
 //---------------------------------------------------
 void BatchProjectView::OnExportStatisticsReport([[maybe_unused]] wxCommandEvent& event)
     {
-    PROFILE();
     auto* doc = dynamic_cast<BatchProjectDoc*>(GetDocument());
     wxFileDialog fdialog(GetDocFrame(), _(L"Export Statistics Report"), wxString{},
                          wxString::Format(

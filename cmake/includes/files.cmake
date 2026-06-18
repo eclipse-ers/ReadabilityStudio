@@ -99,7 +99,6 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/data/join_inner.cpp
     src/Wisteria-Dataviz/src/data/join_left.cpp
     src/Wisteria-Dataviz/src/data/odsreader.cpp
-    src/Wisteria-Dataviz/src/debug/debug_profile.cpp
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
     src/Wisteria-Dataviz/src/graphs/boxplot.cpp

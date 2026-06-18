@@ -1653,7 +1653,6 @@ void ProjectDoc::OnRealTimeTimer([[maybe_unused]] wxTimerEvent& event)
 //-------------------------------------------------------
 void ProjectDoc::DisplayWordsBreakdown()
     {
-    PROFILE();
     // if working with an empty project
     if (GetWords() == nullptr)
         {
@@ -2220,7 +2219,6 @@ void ProjectDoc::DisplayWordsBreakdown()
 //-------------------------------------------------------
 void ProjectDoc::DisplaySentenceCharts()
     {
-    PROFILE();
     // if working with an empty project
     if (GetWords() == nullptr)
         {
@@ -2423,7 +2421,6 @@ void ProjectDoc::DisplaySentenceCharts()
 //-------------------------------------------------------
 void ProjectDoc::DisplayWordCharts()
     {
-    PROFILE();
     // if working with an empty project
     if (GetWords() == nullptr)
         {
@@ -5857,7 +5854,6 @@ ProjectDoc::BuildHeader(const wxColour& backgroundColor,
 //-------------------------------------------------------
 void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wxFont& textViewFont)
     {
-    PROFILE();
     if (GetWords() == nullptr)
         {
         return;
@@ -6913,7 +6909,6 @@ bool ProjectDoc::OnSaveDocument(const wxString& filename)
 //-------------------------------------------------------
 void ProjectDoc::DisplayOverlyLongSentences()
     {
-    PROFILE();
     // if working with an empty project
     if (GetWords() == nullptr)
         {
@@ -7031,7 +7026,6 @@ void ProjectDoc::DisplayOverlyLongSentences()
 //-------------------------------------------------------
 void ProjectDoc::DisplayGrammar()
     {
-    PROFILE();
     // if working with an empty project
     if (GetWords() == nullptr)
         {
@@ -7823,7 +7817,6 @@ void ProjectDoc::DisplayGrammar()
 //-------------------------------------------------------
 void ProjectDoc::DisplaySightWords()
     {
-    PROFILE();
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     wxASSERT_MSG(view, "Error getting view when displaying sight words!");
     if (view == nullptr)

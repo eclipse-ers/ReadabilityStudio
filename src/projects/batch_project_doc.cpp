@@ -443,7 +443,6 @@ bool BatchProjectDoc::OnNewDocument()
 //------------------------------------------------
 void BatchProjectDoc::InitializeDocuments()
     {
-    PROFILE();
     for (auto& doc : m_docs)
         {
         wxDELETE(doc);
@@ -765,7 +764,6 @@ void BatchProjectDoc::RefreshProject()
 //------------------------------------------------------------
 void BatchProjectDoc::LoadDolchSection()
     {
-    PROFILE();
     m_dolchCompletionData->DeleteAllItems();
     m_dolchCompletionData->SetSize(m_docs.size(), 9);
     m_dolchWordsBatchData->DeleteAllItems();
@@ -1006,7 +1004,6 @@ void BatchProjectDoc::LoadDolchSection()
 //------------------------------------------------------------
 void BatchProjectDoc::LoadHardWordsSection()
     {
-    PROFILE();
     m_hardWordsData->DeleteAllItems();
     size_t extraColumnCount = 0;
     if (GetStatisticsReportInfo().IsExtendedWordsEnabled())
@@ -2946,7 +2943,6 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
 //------------------------------------------------------------
 void BatchProjectDoc::LoadScoresSection()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
 
     // update any stats goals (test goals are reviewed as the tests are added below).
@@ -3856,7 +3852,6 @@ void BatchProjectDoc::DisplayWarnings()
 //------------------------------------------------------------
 void BatchProjectDoc::DisplayScores()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
 
         // main scores grid
@@ -4963,7 +4958,6 @@ void BatchProjectDoc::DisplayLixGauge()
 //------------------------------------------------------------
 void BatchProjectDoc::DisplayReadabilityGraphs()
     {
-    PROFILE();
     DisplayFleschChart();
     DisplayDB2Plot();
     DisplayCrawfordGraph();
@@ -5382,7 +5376,6 @@ void BatchProjectDoc::DisplayReadabilityGraphs()
 //------------------------------------------------------------
 void BatchProjectDoc::DisplayBoxPlots()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
 
     // standard tests
@@ -5854,7 +5847,6 @@ void BatchProjectDoc::DisplayBoxPlots()
 //------------------------------------------------------------
 void BatchProjectDoc::DisplayHistograms()
     {
-    PROFILE();
     // First, remove any custom-test histograms that had their test removed from the project.
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
     std::set<wxWindowID> validTestNames;
@@ -6908,7 +6900,6 @@ void BatchProjectDoc::LoadProjectFile(const char* projectFileText, const size_t 
 //-------------------------------------------------------
 void BatchProjectDoc::DisplayGrammar()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
     assert(view);
 
@@ -7554,7 +7545,6 @@ void BatchProjectDoc::DisplaySentencesBreakdown()
 //-------------------------------------------------------
 void BatchProjectDoc::DisplayHardWords()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
 
     // Difficult words
@@ -7787,7 +7777,6 @@ void BatchProjectDoc::DisplayHardWords()
 //-------------------------------------------------------
 void BatchProjectDoc::DisplaySightWords()
     {
-    PROFILE();
     auto* view = dynamic_cast<BatchProjectView*>(GetFirstView());
 
     auto* listView =
@@ -7998,7 +7987,6 @@ void BatchProjectDoc::SetScoreStatsRow(
     const std::vector<double>& data, const int decimalSize, const VarianceMethod varianceMethod,
     const bool allowCustomFormatting)
     {
-    PROFILE();
     size_t currentColumn = 0;
     dataGrid->SetItemText(rowNum, currentColumn++, rowName,
                           Wisteria::NumberFormatInfo{

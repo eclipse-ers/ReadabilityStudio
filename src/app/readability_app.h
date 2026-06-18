@@ -138,7 +138,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnBlankGraph(const wxCommandEvent& event);
     void OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnViewLogReport([[maybe_unused]] wxRibbonButtonBarEvent& event);
-    void OnViewProfileReport([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnEditWordList([[maybe_unused]] wxCommandEvent& event);

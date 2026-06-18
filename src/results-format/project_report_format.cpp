@@ -1529,7 +1529,6 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
     const wxColour& attentionColor,
     const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData)
     {
-    PROFILE();
     if (project == nullptr)
         {
         return {};

@@ -51,7 +51,6 @@
 #define WORD_COLLECTION_H
 
 #include "../OleanderStemmingLibrary/src/common_lang_constants.h"
-#include "../Wisteria-Dataviz/src/debug/debug_profile.h"
 #include "../Wisteria-Dataviz/src/math/mathematics.h"
 #include "../Wisteria-Dataviz/src/util/frequencymap.h"
 #include "../Wisteria-Dataviz/src/util/i18n_string_util.h"
@@ -130,7 +129,6 @@ class document
 
     void load(const wchar_t* words, const size_t length)
         {
-        PROFILE();
         reset();
         // on average, every 5 or 6 characters in a text stream is a single word
         reserve_word_size(length / 5);
@@ -166,7 +164,6 @@ class document
             // because they are usually connected to the word on the next line.
             else
                 {
-                PROFILE_SECTION_START("document::load(): split word");
                 // Review versions of the word with and without hyphens to see which one we should
                 // use. Also strip out newlines.
                 Tword_type currentWord{};
@@ -212,7 +209,6 @@ class document
                         countSyllables(currentChar, tokenizeText.get_current_word_length()),
                         countPunctuation({ currentChar, tokenizeText.get_current_word_length() }));
                     }
-                PROFILE_SECTION_END();
                 }
             update_sentence_paragraph_info(tokenizeText.get_current_sentence_index(),
                                            tokenizeText.get_current_paragraph_index(),
@@ -275,7 +271,6 @@ class document
         update sentence information, etc.*/
     void finalize(const wchar_t sentence_ending_punctuation)
         {
-        PROFILE();
         if (m_words.empty())
             {
             return;
@@ -1424,7 +1419,6 @@ class document
   private:
     void search_for_excluded_words()
         {
-        PROFILE();
         for (auto wordPos = m_words.begin(); wordPos != m_words.end(); ++wordPos)
             {
             if (is_excluding_file_addresses() && wordPos->is_file_address())
@@ -1524,7 +1518,6 @@ class document
         from being erroneously seen as the same word.*/
     void search_for_proper_nouns()
         {
-        PROFILE();
         constexpr grammar::is_acronym IS_ACRONYM;
         // this collection is forced to be case-sensitive because it relies on words being
         // capitalized to match
@@ -1953,7 +1946,6 @@ class document
     /// Searches for negated phrases (e.g., "not happy", "doesn't care").
     void search_for_negated_phrases()
         {
-        PROFILE();
         constexpr grammar::is_negating IS_NEGATING;
         assert(searches_for_negated_phrases() &&
                "Negated phrase searching should be enabled if searching for negated phrases.");
@@ -2028,7 +2020,6 @@ class document
     /// (i.e., more than one consecutive proper noun that makes up a larger word).
     void search_for_proper_noun_phrases()
         {
-        PROFILE();
         assert(searches_for_proper_nouns() &&
                "Proper nouns searching should be enabled if searching for proper phrases.");
         m_proper_phrase_indices.clear();
@@ -2103,7 +2094,6 @@ class document
     void search_for_n_grams(std::vector<std::pair<size_t, size_t>>& phraseIndices,
                             const size_t phraseSize) const
         {
-        PROFILE();
         auto punctPos = !m_punctuation.empty() ? m_punctuation.cbegin() : m_punctuation.cend();
         for (const auto& theSentence : m_sentences)
             {
@@ -2151,7 +2141,6 @@ class document
     /// @brief Searches for grammar issues
     void analyze_grammar()
         {
-        PROFILE();
         const grammar::phrase_collection& isKnownPhrase = *is_known_phrase;
         auto punctPos = !m_punctuation.empty() ? m_punctuation.cbegin() : m_punctuation.cend();
         // NOLINTNEXTLINE(misc-const-correctness): written to as a parameter later
@@ -2371,7 +2360,6 @@ class document
     /// in each sentence.
     void calculate_sentence_units_and_punctuation()
         {
-        PROFILE();
         m_valid_punctuation_count = 0;
         size_t currentSentence = 0;
         // sentences will have at least one unit
@@ -2440,7 +2428,6 @@ class document
     /// @brief Looks for repeated (uncommon) words on a sentence-by-sentence basis.
     void search_for_sentences_with_overused_words_by_sentence()
         {
-        PROFILE();
         std::wstring stemmedWord;
         multi_value_aggregate_map<traits::case_insensitive_wstring_ex, size_t> uncommonWords;
         // go through the sentences
@@ -2548,7 +2535,6 @@ class document
     /// more sentence and still be fairly strict.)
     void ignore_copyright_notice_paragraphs_simple()
         {
-        PROFILE();
         const size_t maxSentenceCount = (is_exclusion_aggressive() ? 3 : 2);
         for (auto& currentParagraph : m_paragraphs)
             {
@@ -2600,7 +2586,6 @@ class document
     /// trailing paragraphs of a document.
     void ignore_paragraph_if_copyright_notice_aggressive(grammar::paragraph_info& currentParagraph)
         {
-        PROFILE();
         const grammar::phrase_collection& isCopyrightPhrase = *is_copyright_phrase;
         if (currentParagraph.get_sentence_count() >= 1 &&
             currentParagraph.get_sentence_count() <= 2)
@@ -2798,7 +2783,6 @@ class document
 
     void ignore_tagged_blocks()
         {
-        PROFILE();
         for (auto blockTagPos = get_exclusion_block_tags().cbegin();
              blockTagPos != get_exclusion_block_tags().cend(); ++blockTagPos)
             {
@@ -2839,7 +2823,6 @@ class document
     /// @brief Looks for a trailing References section in the document and excludes it.
     void update_citation_info()
         {
-        PROFILE();
         const auto citationBlockStopPoint =
             safe_divide<size_t>(m_words.size(), is_exclusion_aggressive() ? 4 : 2);
         // first, move to the last valid paragraph as our starting point. This will help us skip
