@@ -435,11 +435,11 @@ msgstr "flecha derecha"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:430
 msgid "horizontal line"
-msgstr "horizontalmente"
+msgstr "línea horizontal"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:432
 msgid "vertical line"
-msgstr "verticalmente"
+msgstr "línea vertical"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:434
 msgid "circle"
@@ -471,7 +471,7 @@ msgstr ""
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:448
 msgid "diamond"
-msgstr "diamond"
+msgstr "diamante"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:450
 msgid "plus sign"
@@ -700,7 +700,7 @@ msgstr "cápsula"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:562
 msgid "cold thermometer"
-msgstr "termómetro (caliente)"
+msgstr "termómetro (frío)"
 
 #: Wisteria-Dataviz/src/base/shapes.cpp:564
 msgid "hot thermometer"
@@ -1353,7 +1353,7 @@ msgstr ""
 "Figura de \"Palabras por Oración\" (izquierda) con su\n"
 "Figura \"Sílabas por cada 100 Palabras\" (derecha).  El\n"
 "intersección del lápiz o la regla con el\n"
-"La línea central muestra su puntaje de \"Facilidad de Lectura\"."
+"La línea central muestra su puntuación de \"Facilidad de Lectura\"."
 
 #: Wisteria-Dataviz/src/graphs/ganttchart.cpp:64
 #, c-format
@@ -4260,9 +4260,9 @@ msgstr ""
 "\n"
 "Este paquete incluye las pruebas Fry, Flesch Reading Ease, SMOG y la Easy "
 "Listening Formula, según lo recomendado por T. M. Grundner (\"Consent "
-"Forms\" 9-10). También se incluyen los puntajes de las pruebas recomendados "
+"Forms\" 9-10). También se incluyen las puntuaciones de las pruebas recomendadas "
 "(es decir, los objetivos) en los que deben estar los formularios de "
-"consentimiento. (Tenga en cuenta que SMOG no tenía un puntaje de prueba "
+"consentimiento. (Tenga en cuenta que SMOG no tenía una puntuación de prueba "
 "recomendado)."
 
 #: app/readability_app.cpp:800 projects/base_project.cpp:8647
@@ -5367,7 +5367,7 @@ msgstr "Puntuación de Cloze"
 
 #: app/readability_app.cpp:3193
 msgid "Grade level and cloze score"
-msgstr "Nivel de grado y puntaje de cloze"
+msgstr "Nivel de grado y puntuación de cloze"
 
 #: app/readability_app.cpp:3202 results-format/project_report_format.cpp:69
 #: ui/dialogs/project_wizard_dlg.cpp:285 ui/dialogs/project_wizard_dlg.cpp:370
@@ -6205,7 +6205,7 @@ msgstr "Gráfico de FRASE"
 
 #: graphs/frasegraph.cpp:72 graphs/frygraph.cpp:81
 msgid "Average number of sentences per 100 words"
-msgstr "Número medio de frases por cada 100 palabras"
+msgstr "Número medio de oraciones por cada 100 palabras"
 
 #: graphs/frasegraph.cpp:73 graphs/frygraph.cpp:83
 msgid "Average number of syllables per 100 words"
@@ -6936,7 +6936,7 @@ msgid ""
 "sentence length, word length, and number of familiar Dale-Chall words."
 msgstr ""
 "Degrees of Reading Power está diseñado para hacer coincidir los documentos "
-"con la capacidad de lectura de un estudiante (en función de su puntaje DRP). "
+"con la capacidad de lectura de un estudiante (en función de su puntuación DRP). "
 "Esta prueba está influenciada por la longitud de la oración, la longitud de "
 "las palabras y el número de palabras conocidas de Dale-Chall."
 
@@ -6949,7 +6949,7 @@ msgid ""
 msgstr ""
 "Degrees of Reading Power (GE) está diseñado para hacer coincidir los "
 "documentos con la capacidad de lectura de un estudiante (en función de su "
-"puntaje DRP). Esta prueba es una conversión de un puntaje DRP (dificultad) "
+"puntuación DRP). Esta prueba es una conversión de una puntuación DRP (dificultad) "
 "en un nivel de grado."
 
 #. TRANSLATORS: "Bormuth Grade Placement" should not be translated.
@@ -8456,7 +8456,7 @@ msgstr "Cargando gráficos..."
 #: projects/batch_project_doc.cpp:327 projects/batch_project_doc.cpp:703
 #: projects/batch_project_doc.cpp:6802
 msgid "Loading scores..."
-msgstr "Cargando puntajes de pruebas..."
+msgstr "Cargando puntuaciones de pruebas..."
 
 #: projects/batch_project_doc.cpp:333 projects/batch_project_doc.cpp:706
 #: projects/batch_project_doc.cpp:6808
@@ -8633,7 +8633,7 @@ msgstr "Número de palabras difíciles de Fog"
 #: projects/batch_project_doc.cpp:1257 projects/batch_project_doc.cpp:1455
 #: results-format/project_report_format.cpp:2722
 msgid "Number of unique Fog hard words"
-msgstr "Número de palabras difíciles de niebla únicas"
+msgstr "Número de palabras difíciles de Fog únicas"
 
 #: projects/batch_project_doc.cpp:1262 projects/batch_project_doc.cpp:1463
 #: results-format/project_report_format.cpp:321
@@ -9803,7 +9803,7 @@ msgstr "Umbral para Oraciones Incompletas"
 msgid ""
 "Unable to find test bundle: internal error, please contact software vendor."
 msgstr ""
-"No se puede encontrar el paquete de prueba \"%s\": error interno, "
+"No se puede encontrar el paquete de prueba: error interno, "
 "comuníquese con el proveedor del software."
 
 #: projects/project_frame.cpp:2557
@@ -10020,7 +10020,7 @@ msgstr "Distribución de Longitud de Oraciones"
 
 #: projects/standard_project_doc.cpp:2342
 msgid "Number of Words per Sentence"
-msgstr "Número de palabras por frase"
+msgstr "Número de palabras por oración"
 
 #: projects/standard_project_doc.cpp:2393
 msgid ""
@@ -10195,7 +10195,7 @@ msgstr "Porcentaje"
 
 #: projects/standard_project_doc.cpp:4181
 msgid "Summary"
-msgstr "Resume"
+msgstr "Resumen"
 
 #: projects/standard_project_doc.cpp:4182
 msgid "Dolch Summary"
@@ -10207,7 +10207,7 @@ msgid ""
 "3+ syllable words in the text primarily influenced this grade level score."
 msgstr ""
 "Las palabras de 3+ sílabas en el texto influyeron principalmente en este "
-"puntaje de nivel de grado."
+"puntuación de nivel de grado."
 
 #: projects/standard_project_doc.cpp:4328
 #: projects/standard_project_doc.cpp:4490
@@ -10216,14 +10216,14 @@ msgid ""
 "The sentence lengths in the text primarily influenced this grade level score."
 msgstr ""
 "La longitud de las oraciones en el texto influyó principalmente en este "
-"puntaje de nivel de grado."
+"puntuación de nivel de grado."
 
 #: projects/standard_project_doc.cpp:4652
 msgid ""
 "6+ character words in the text primarily influenced this grade level score."
 msgstr ""
 "Las palabras de 6+ caracteres en el texto influyeron principalmente en este "
-"puntaje de nivel de grado."
+"puntuación de nivel de grado."
 
 #: projects/standard_project_doc.cpp:4694
 msgid ""
@@ -10613,7 +10613,7 @@ msgstr ""
 "estándar: %s<br />Puntuación de cloze pronosticada desviación estándar: %s</"
 "p><p>La desviación estándar es la medida de hasta qué punto los valores de "
 "un rango de datos están separados entre sí.</p><p>Tenga en cuenta que se "
-"requieren al menos dos puntajes de prueba válidos para tener cualquier "
+"requieren al menos dos puntuaciones de prueba válidas para tener cualquier "
 "desviación estándar. Tenga en cuenta también que una desviación estándar de "
 "los valores de la escala no es aplicable porque las escalas utilizadas entre "
 "las pruebas son diferentes.</p>"
@@ -10679,7 +10679,7 @@ msgstr "Conjunciones utilizadas:"
 #: results-format/project_report_format.cpp:336
 #, c-format
 msgid "%s%% of all Dolch conjunctions"
-msgstr "(%s%% de todas las conjunciones de Dolch)"
+msgstr "%s%% de todas las conjunciones de Dolch"
 
 #: results-format/project_report_format.cpp:364
 #: results-format/project_report_format.cpp:369
@@ -10694,7 +10694,7 @@ msgstr "Preposiciones utilizadas:"
 #: results-format/project_report_format.cpp:394
 #, c-format
 msgid "%s%% of all Dolch prepositions"
-msgstr "(%s%% de todas las preposiciones de Dolch)"
+msgstr "%s%% de todas las preposiciones de Dolch"
 
 #: results-format/project_report_format.cpp:422
 #: results-format/project_report_format.cpp:427
@@ -10709,7 +10709,7 @@ msgstr "Pronombres utilizados:"
 #: results-format/project_report_format.cpp:452
 #, c-format
 msgid "%s%% of all Dolch pronouns"
-msgstr "(%s%% de todos los pronombres de Dolch)"
+msgstr "%s%% de todos los pronombres de Dolch"
 
 #: results-format/project_report_format.cpp:480
 #: results-format/project_report_format.cpp:485
@@ -10724,7 +10724,7 @@ msgstr "Adverbios utilizados:"
 #: results-format/project_report_format.cpp:510
 #, c-format
 msgid "%s%% of all Dolch adverbs"
-msgstr "(%s%% de todos los adverbios de Dolch)"
+msgstr "%s%% de todos los adverbios de Dolch"
 
 #: results-format/project_report_format.cpp:538
 #: results-format/project_report_format.cpp:543
@@ -10739,7 +10739,7 @@ msgstr "Adjetivos utilizados:"
 #: results-format/project_report_format.cpp:568
 #, c-format
 msgid "%s%% of all Dolch adjectives"
-msgstr "(%s%% de todos los adjetivos de Dolch)"
+msgstr "%s%% de todos los adjetivos de Dolch"
 
 #: results-format/project_report_format.cpp:596
 #: results-format/project_report_format.cpp:601
@@ -10754,7 +10754,7 @@ msgstr "Verbos utilizados:"
 #: results-format/project_report_format.cpp:626
 #, c-format
 msgid "%s%% of all Dolch verbs"
-msgstr "(%s%% de todos los verbos de Dolch)"
+msgstr "%s%% de todos los verbos de Dolch"
 
 #: results-format/project_report_format.cpp:654
 #: results-format/project_report_format.cpp:659
@@ -10769,7 +10769,7 @@ msgstr "Sustantivos utilizados:"
 #: results-format/project_report_format.cpp:684
 #, c-format
 msgid "%s%% of all Dolch nouns"
-msgstr "(%s%% de todos los sustantivos de Dolch)"
+msgstr "%s%% de todos los sustantivos de Dolch"
 
 #: results-format/project_report_format.cpp:701
 msgid "This document makes excellent use of:"
@@ -11016,11 +11016,11 @@ msgstr "Número de párrafos:"
 
 #: results-format/project_report_format.cpp:1643
 msgid "Average number of sentences per paragraph:"
-msgstr "Número medio de frases por párrafo:"
+msgstr "Número medio de oraciones por párrafo:"
 
 #: results-format/project_report_format.cpp:1653
 msgid "Average number of sentences per paragraph"
-msgstr "Número medio de frases por párrafo"
+msgstr "Número medio de oraciones por párrafo"
 
 #: results-format/project_report_format.cpp:1677
 msgid ""
@@ -11083,14 +11083,14 @@ msgstr "Número de oraciones difíciles (más de %d palabras):"
 #: results-format/project_report_format.cpp:1981
 #, c-format
 msgid "(%s%% of all sentences)"
-msgstr "(%s%% of todas las oraciones)"
+msgstr "(%s%% de todas las oraciones)"
 
 #: results-format/project_report_format.cpp:1823
 #: results-format/project_report_format.cpp:1950
 #: results-format/project_report_format.cpp:2006
 #, c-format
 msgid "%s%% of all sentences"
-msgstr "(%s%% of todas las oraciones)"
+msgstr "%s%% de todas las oraciones"
 
 #: results-format/project_report_format.cpp:1848
 #, c-format
@@ -11116,7 +11116,7 @@ msgstr "Número de oraciones exclamativas:"
 #: results-format/project_report_format.cpp:2019
 #: results-format/project_report_format.cpp:3819
 msgid "A large percentage of sentences are overly long."
-msgstr "Un gran porcentaje de las sentencias son demasiado largas."
+msgstr "Un gran porcentaje de las oraciones son demasiado largas."
 
 #: results-format/project_report_format.cpp:2024
 #: results-format/project_report_format.cpp:3825
@@ -11282,7 +11282,7 @@ msgstr "Número de palabras difíciles de Fog (3+ sílabas, con excepciones)"
 
 #: results-format/project_report_format.cpp:2712
 msgid "Number of unique Fog hard words:"
-msgstr "Número de palabras difíciles de niebla únicas:"
+msgstr "Número de palabras difíciles de Fog únicas:"
 
 #: results-format/project_report_format.cpp:2764
 msgid "Dale-Chall Unfamiliar Words"
@@ -15067,7 +15067,7 @@ msgstr ""
 msgid ""
 "The options in this section customize how the grade scores are displayed."
 msgstr ""
-"Las opciones de esta sección personalizan cómo se muestran los puntajes del "
+"Las opciones de esta sección personalizan cómo se muestran las puntuaciones del "
 "nivel de grado."
 
 #: ui/dialogs/tools_options_dlg.cpp:3918
@@ -15503,7 +15503,7 @@ msgstr "Color de los sustantivos Dolch:"
 
 #: ui/dialogs/tools_options_dlg.cpp:4902
 msgid "Project:"
-msgstr "Nuevo Proyecto:"
+msgstr "Proyecto:"
 
 #: ui/dialogs/tools_options_dlg.cpp:4906
 msgid "Reviewer:"
@@ -16144,7 +16144,7 @@ msgstr "Mostrar documentos agrupados en una regla de sílabas"
 
 #: ui/dialogs/tools_options_dlg.h:331
 msgid "Use English translations for German Lix gauge"
-msgstr "Usar traducciones al español para el calibre de Lix alemán"
+msgstr "Usar traducciones en inglés para el calibre de Lix alemán"
 
 #: ui/dialogs/tools_options_dlg.h:337
 msgid "Color"
@@ -16527,7 +16527,7 @@ msgstr "Crear un nuevo proyecto"
 
 #: xrc_menu_strings.cpp:22 xrc_menu_strings.cpp:33 xrc_menu_strings.cpp:55
 msgid "Creates a new project from the text on the clipboard"
-msgstr "Crea un nuevo proyecto a partir del texto en la carpeta"
+msgstr "Crea un nuevo proyecto a partir del texto en el portapapeles"
 
 #: xrc_menu_strings.cpp:23 xrc_menu_strings.cpp:34 xrc_menu_strings.cpp:57
 msgid "Opens a project"
