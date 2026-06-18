@@ -6842,19 +6842,19 @@ msgstr ""
 
 #: projects/base_project.cpp:1151
 msgid ""
-"The <a href=\"#GPMFryGraph\">Gilliam-Peña-Mountain graph</a> is designed for "
+"The <a href=\"#gilliam-pena-mountain-graph\">Gilliam-Peña-Mountain graph</a> is designed for "
 "most text, including literature and technical documents."
 msgstr ""
-"El <a href=\"#GPMFryGraph\">gráfico de Gilliam-Peña-Mountain</a> está "
+"El <a href=\"#gilliam-pena-mountain-graph\">gráfico de Gilliam-Peña-Mountain</a> está "
 "diseñado para la mayoría de los textos, incluida la literatura y los "
 "documentos técnicos."
 
 #: projects/base_project.cpp:1181
 msgid ""
-"The <a href=\"#FRASE\">FRASE graph</a> is designed for educational materials "
+"The <a href=\"#frase-graph\">FRASE graph</a> is designed for educational materials "
 "(primarily Spanish as a secondary language)."
 msgstr ""
-"El <a href=\"#FRASE\">gráfico FRASE</a> está diseñado para materiales "
+"El <a href=\"#frase-graph\">gráfico FRASE</a> está diseñado para materiales "
 "educativos (principalmente español como segunda lengua)."
 
 #: projects/base_project.cpp:1205
@@ -6913,18 +6913,18 @@ msgstr ""
 
 #: projects/base_project.cpp:1358
 msgid ""
-"The <a href=\"#FryGraph\">Fry graph</a> is designed for most text, including "
+"The <a href=\"#fry-graph\">Fry graph</a> is designed for most text, including "
 "literature and technical documents."
 msgstr ""
-"El <a href=\"#FryGraph\">gráfico de Fry</a> está diseñado para la mayoría de "
+"El <a href=\"#fry-graph\">gráfico de Fry</a> está diseñado para la mayoría de "
 "los textos, incluida la literatura y los documentos técnicos."
 
 #: projects/base_project.cpp:1389
 msgid ""
-"The <a href=\"#RaygorGraph\">Raygor estimate graph</a> is designed for most "
+"The <a href=\"#raygor-graph\">Raygor estimate graph</a> is designed for most "
 "text, including literature and technical documents."
 msgstr ""
-"El <a href=\"#RaygorGraph\">gráfico de estimación de Raygor</a> está "
+"El <a href=\"#raygor-graph\">gráfico de estimación de Raygor</a> está "
 "diseñado para la mayoría de los textos, incluida la literatura y los "
 "documentos técnicos."
 
@@ -7057,12 +7057,12 @@ msgstr "Danielson-Bryan 1 está diseñado para materiales estudiantiles."
 msgid ""
 "Danielson-Bryan 2 is designed for student materials. It is a variation of "
 "Flesch Reading Ease that uses character counts instead of syllable counts. A "
-"<a href=\"#DB2\">chart</a> is also available to visualize the score."
+"<a href=\"#danielson-bryan-2\">chart</a> is also available to visualize the score."
 msgstr ""
 "Danielson-Bryan 2 está diseñado para materiales estudiantiles. Es una "
 "variación de Flesch Reading Ease que utiliza recuentos de caracteres en "
 "lugar de recuentos de sílabas. También está disponible un <a "
-"href=\"#DB2\">gráfico</a> para visualizar la puntuación."
+"href=\"#danielson-bryan-2\">gráfico</a> para visualizar la puntuación."
 
 #: projects/base_project.cpp:1745
 msgid ""
@@ -10656,9 +10656,9 @@ msgstr "No usar lematización"
 
 #: results-format/project_report_format.cpp:233
 msgid ""
-"No Dolch statistics <a href=\"#SelectStatistics\">currently selected</a>."
+"No Dolch statistics <a href=\"#select-statistics\">currently selected</a>."
 msgstr ""
-"No hay estadísticas de Dolch <a href=\"#SelectStatistics\">seleccionadas "
+"No hay estadísticas de Dolch <a href=\"#select-statistics\">seleccionadas "
 "actualmente</a>."
 
 #: results-format/project_report_format.cpp:241
@@ -10815,10 +10815,10 @@ msgstr ""
 #: results-format/project_report_format.cpp:743
 msgid ""
 "Dolch words that are not being used in this document may be viewed in the <a "
-"href=\"#UnusedDolchWords\">Unused Dolch Words</a> output."
+"href=\"#unused-dolch-words\">Unused Dolch Words</a> output."
 msgstr ""
 "Las palabras Dolch que no se utilizan en este documento se pueden ver en la "
-"salida <a href=\"#UnusedDolchWords\">Palabras Dolch no utilizadas</a> ."
+"salida <a href=\"#unused-dolch-words\">Palabras Dolch no utilizadas</a> ."
 
 #: results-format/project_report_format.cpp:770
 #: results-format/project_report_format.cpp:776
@@ -10999,9 +10999,9 @@ msgstr ""
 "mayoría de las actividades de Dolch."
 
 #: results-format/project_report_format.cpp:1568
-msgid "No statistics <a href=\"#SelectStatistics\">currently selected</a>."
+msgid "No statistics <a href=\"#select-statistics\">currently selected</a>."
 msgstr ""
-"No hay estadísticas <a href=\"#SelectStatistics\">seleccionadas actualmente</"
+"No hay estadísticas <a href=\"#select-statistics\">seleccionadas actualmente</"
 "a>."
 
 #. TRANSLATORS: This is really a placeholder string used for measuring, but
@@ -11065,10 +11065,10 @@ msgstr "Número de unidades/cláusulas independientes:"
 #: results-format/project_report_format.cpp:1763
 #, c-format
 msgid ""
-"Number of <a href=\"#DifficultSentences\">difficult sentences</a> (more than "
+"Number of <a href=\"#difficult-sentences\">difficult sentences</a> (more than "
 "%d words):"
 msgstr ""
-"Número de <a href=\"#DifficultSentences\">oraciones difíciles</a> (más que "
+"Número de <a href=\"#difficult-sentences\">oraciones difíciles</a> (más que "
 "%d palabras):"
 
 #: results-format/project_report_format.cpp:1770
@@ -11215,8 +11215,8 @@ msgid "Number of unique monosyllabic words:"
 msgstr "Número de palabras monosilábicas únicas:"
 
 #: results-format/project_report_format.cpp:2426
-msgid "Number of <a href=\"#HardWords\">complex (3+ syllable)</a> words:"
-msgstr "Número de palabras <a href=\"#HardWords\">complejas (3+ sílabas)</a>:"
+msgid "Number of <a href=\"#hard-words\">complex (3+ syllable)</a> words:"
+msgstr "Número de palabras <a href=\"#hard-words\">complejas (3+ sílabas)</a>:"
 
 #: results-format/project_report_format.cpp:2430
 msgid "Number of complex (3+ syllable) words:"
@@ -11231,8 +11231,8 @@ msgid "Long Words"
 msgstr "Palabras Largas"
 
 #: results-format/project_report_format.cpp:2504
-msgid "Number of <a href=\"#LongWords\">long (6+ characters)</a> words:"
-msgstr "Número de palabras <a href=\"#LongWords\">largas (6+ caracteres)</a>:"
+msgid "Number of <a href=\"#long-words\">long (6+ characters)</a> words:"
+msgstr "Número de palabras <a href=\"#long-words\">largas (6+ caracteres)</a>:"
 
 #: results-format/project_report_format.cpp:2508
 msgid "Number of long (6+ characters) words:"
@@ -11271,10 +11271,10 @@ msgstr "Palabras Fog"
 #: results-format/project_report_format.cpp:2664
 msgid ""
 "Number of Fog hard words (3+ syllables, with <a "
-"href=\"#FogHelp\">exceptions</a>):"
+"href=\"#fog-help\">exceptions</a>):"
 msgstr ""
 "Número de palabras difíciles de Fog (3+ sílabas, con <a "
-"href=\"#FogHelp\">excepciones</a>):"
+"href=\"#fog-help\">excepciones</a>):"
 
 #: results-format/project_report_format.cpp:2684
 msgid "Number of Fog hard words (3+ syllables, with exceptions)"
@@ -11289,9 +11289,9 @@ msgid "Dale-Chall Unfamiliar Words"
 msgstr "Palabras Desconocidas de Dale-Chall"
 
 #: results-format/project_report_format.cpp:2769
-msgid "Number of <a href=\"#DaleChallWords\">Dale-Chall</a> unfamiliar words:"
+msgid "Number of <a href=\"#dale-chall-words\">Dale-Chall</a> unfamiliar words:"
 msgstr ""
-"Número de palabras desconocidas de <a href=\"#DaleChallWords\">Dale-Chall</"
+"Número de palabras desconocidas de <a href=\"#dale-chall-words\">Dale-Chall</"
 "a> :"
 
 #: results-format/project_report_format.cpp:2773
@@ -11331,10 +11331,10 @@ msgstr "Harris-Jacobson Palabras Desconocidas"
 
 #: results-format/project_report_format.cpp:2880
 msgid ""
-"Number of <a href=\"#HarrisJacobsonWords\">Harris-Jacobson</a> unfamiliar "
+"Number of <a href=\"#harris-jacobson-words\">Harris-Jacobson</a> unfamiliar "
 "words:"
 msgstr ""
-"Número de palabras desconocidas de <a href=\"#HarrisJacobsonWords\">Harris-"
+"Número de palabras desconocidas de <a href=\"#harris-jacobson-words\">Harris-"
 "Jacobson</a> :"
 
 #: results-format/project_report_format.cpp:2885
@@ -11364,9 +11364,9 @@ msgid "Spache Unfamiliar Words"
 msgstr "Palabras Desconocidas de Spache"
 
 #: results-format/project_report_format.cpp:2979
-msgid "Number of <a href=\"#SpacheWords\">Spache</a> unfamiliar words:"
+msgid "Number of <a href=\"#spache-words\">Spache</a> unfamiliar words:"
 msgstr ""
-"Número de palabras desconocidas de <a href=\"#SpacheWords\">Spache</a> :"
+"Número de palabras desconocidas de <a href=\"#spache-words\">Spache</a> :"
 
 #: results-format/project_report_format.cpp:2983
 msgid "Number of Spache unfamiliar words:"

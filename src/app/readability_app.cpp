@@ -1577,7 +1577,7 @@ void ReadabilityApp::FillBlankGraphsMenu(wxMenu& blankGraphsMenu)
     blankGraphsMenu.Append(menuItem);
 
     menuItem = new wxMenuItem(&blankGraphsMenu, XRCID("ID_BLANK_GPM_GRAPH"),
-                              _DT(L"Gilliam-Pe\U000000F1a-Mountain"));
+                              _DT(L"Gilliam-Peña-Mountain"));
     menuItem->SetBitmap(
         wxGetApp().GetResourceManager().GetSVG(L"tests/gilliam-pena-mountain-fry-graph.svg"));
     blankGraphsMenu.Append(menuItem);
@@ -3413,7 +3413,7 @@ void MainFrame::OnBlankGraph(const wxCommandEvent& event)
         {
         Wisteria::UI::GraphDlg graphDlg(
             wxGetApp().GetParentingWindow(), wxID_ANY,
-            wxString::Format(_(L"Blank \"%s\" Graph"), _DT(L"Gilliam-Pe\U000000F1a-Mountain")));
+            wxString::Format(_(L"Blank \"%s\" Graph"), _DT(L"Gilliam-Peña-Mountain")));
         auto gFryGraph = std::make_shared<Wisteria::Graphs::FryGraph>(
             graphDlg.GetCanvas(), Wisteria::Graphs::FryGraph::FryGraphType::GPM);
         // update custom settings on graph

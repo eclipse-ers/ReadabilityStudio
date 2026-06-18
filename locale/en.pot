@@ -6908,14 +6908,14 @@ msgstr ""
 
 #: projects/base_project.cpp:1151
 msgid ""
-"The <a href=\"#GPMFryGraph\">Gilliam-Peña-Mountain graph</"
+"The <a href=\"#gilliam-pena-mountain-graph\">Gilliam-Peña-Mountain graph</"
 "a> is designed for most text, including literature and "
 "technical documents."
 msgstr ""
 
 #: projects/base_project.cpp:1181
 msgid ""
-"The <a href=\"#FRASE\">FRASE graph</a> is designed for "
+"The <a href=\"#frase-graph\">FRASE graph</a> is designed for "
 "educational materials (primarily Spanish as a secondary "
 "language)."
 msgstr ""
@@ -6964,13 +6964,13 @@ msgstr ""
 
 #: projects/base_project.cpp:1358
 msgid ""
-"The <a href=\"#FryGraph\">Fry graph</a> is designed for "
+"The <a href=\"#fry-graph\">Fry graph</a> is designed for "
 "most text, including literature and technical documents."
 msgstr ""
 
 #: projects/base_project.cpp:1389
 msgid ""
-"The <a href=\"#RaygorGraph\">Raygor estimate graph</a> is "
+"The <a href=\"#raygor-graph\">Raygor estimate graph</a> is "
 "designed for most text, including literature and "
 "technical documents."
 msgstr ""
@@ -7078,7 +7078,7 @@ msgid ""
 "Danielson-Bryan 2 is designed for student materials. It "
 "is a variation of Flesch Reading Ease that uses character "
 "counts instead of syllable counts. A <a "
-"href=\"#DB2\">chart</a> is also available to visualize "
+"href=\"#danielson-bryan-2\">chart</a> is also available to visualize "
 "the score."
 msgstr ""
 
@@ -10801,7 +10801,7 @@ msgstr ""
 #: results-format/project_report_format.cpp:233
 msgid ""
 "No Dolch statistics <a "
-"href=\"#SelectStatistics\">currently selected</a>."
+"href=\"#select-statistics\">currently selected</a>."
 msgstr ""
 
 #: results-format/project_report_format.cpp:241
@@ -10956,7 +10956,7 @@ msgstr ""
 #: results-format/project_report_format.cpp:743
 msgid ""
 "Dolch words that are not being used in this document may "
-"be viewed in the <a href=\"#UnusedDolchWords\">Unused "
+"be viewed in the <a href=\"#unused-dolch-words\">Unused "
 "Dolch Words</a> output."
 msgstr ""
 
@@ -11131,7 +11131,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:1568
 msgid ""
-"No statistics <a href=\"#SelectStatistics\">currently "
+"No statistics <a href=\"#select-statistics\">currently "
 "selected</a>."
 msgstr ""
 
@@ -11188,7 +11188,7 @@ msgstr ""
 #: results-format/project_report_format.cpp:1763
 #, c-format
 msgid ""
-"Number of <a href=\"#DifficultSentences\">difficult "
+"Number of <a href=\"#difficult-sentences\">difficult "
 "sentences</a> (more than %d words):"
 msgstr ""
 
@@ -11333,7 +11333,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:2426
 msgid ""
-"Number of <a href=\"#HardWords\">complex (3+ syllable)</"
+"Number of <a href=\"#hard-words\">complex (3+ syllable)</"
 "a> words:"
 msgstr ""
 
@@ -11351,7 +11351,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:2504
 msgid ""
-"Number of <a href=\"#LongWords\">long (6+ characters)</a> "
+"Number of <a href=\"#long-words\">long (6+ characters)</a> "
 "words:"
 msgstr ""
 
@@ -11392,7 +11392,7 @@ msgstr ""
 #: results-format/project_report_format.cpp:2664
 msgid ""
 "Number of Fog hard words (3+ syllables, with <a "
-"href=\"#FogHelp\">exceptions</a>):"
+"href=\"#fog-help\">exceptions</a>):"
 msgstr ""
 
 #: results-format/project_report_format.cpp:2684
@@ -11410,7 +11410,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:2769
 msgid ""
-"Number of <a href=\"#DaleChallWords\">Dale-Chall</a> "
+"Number of <a href=\"#dale-chall-words\">Dale-Chall</a> "
 "unfamiliar words:"
 msgstr ""
 
@@ -11445,7 +11445,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:2880
 msgid ""
-"Number of <a href=\"#HarrisJacobsonWords\">Harris-"
+"Number of <a href=\"#harris-jacobson-words\">Harris-"
 "Jacobson</a> unfamiliar words:"
 msgstr ""
 
@@ -11473,7 +11473,7 @@ msgstr ""
 
 #: results-format/project_report_format.cpp:2979
 msgid ""
-"Number of <a href=\"#SpacheWords\">Spache</a> unfamiliar "
+"Number of <a href=\"#spache-words\">Spache</a> unfamiliar "
 "words:"
 msgstr ""
 

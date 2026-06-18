@@ -471,7 +471,7 @@ class BaseProjectView : public wxView
     [[nodiscard]]
     static wxString GetGilliamPenaMountainFryLabel()
         {
-        return _(L"Gilliam-Pe\U000000F1a-Mountain Graph");
+        return _(L"Gilliam-Peña-Mountain Graph");
         }
 
     [[nodiscard]]

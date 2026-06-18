@@ -51,6 +51,7 @@
 #define BASE_PROJECT_DOC_H
 
 #include "../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
+#include "../Wisteria-Dataviz/src/ui/controls/htmltablewin.h"
 #include "../graphs/raygorgraph.h"
 #include "../ui/controls/explanation_listctrl.h"
 #include "base_project.h"

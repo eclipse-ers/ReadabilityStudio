@@ -49,8 +49,9 @@
 
 #include "explanation_listctrl.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.h"
+#include "../../projects/project_navigation_links.h"
 
-wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxSplitterWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxPanel)
 
     ExplanationListExportOptions ExplanationListCtrl::m_lastCopyOption =
         ExplanationListExportOptions::ExportGrid;
@@ -62,22 +63,41 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
                                          const wxPoint& point /*= wxDefaultPosition*/,
                                          const wxSize& size /*= wxDefaultSize*/,
                                          const wxString& name /*= wxString{}*/)
-    : wxSplitterWindow(parent, id, point, size, wxCLIP_CHILDREN | wxSP_NOBORDER, name)
+    : wxPanel(parent, id, point, size, wxTAB_TRAVERSAL | wxBORDER_NONE | wxCLIP_CHILDREN, name)
     {
     // NOLINTBEGIN(cppcoreguidelines-prefer-member-initializer)
+    auto* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                          wxSP_LIVE_UPDATE | wxSP_3DSASH | wxBORDER_NONE);
     m_results_view = new Wisteria::UI::ListCtrlEx(
-        this, id, wxDefaultPosition, wxDefaultSize,
+        splitter, id, wxDefaultPosition, wxDefaultSize,
         wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL | wxBORDER_SUNKEN, wxDefaultValidator);
     GetResultsListCtrl()->SetVirtualDataProvider(m_data);
     GetResultsListCtrl()->SetVirtualDataSize(0);
     GetResultsListCtrl()->EnableGridLines();
     GetResultsListCtrl()->EnableAlternateRowColours(false);
-    m_explanation_view = new Wisteria::UI::HtmlTableWindow(this);
+    m_explanation_view = wxWebView::New(splitter, wxID_ANY);
     // NOLINTEND(cppcoreguidelines-prefer-member-initializer)
-    wxSplitterWindow::SplitHorizontally(GetResultsListCtrl(), GetExplanationView());
-    GetResultsListCtrl()->SetLabel(_(L"Scores"));
-    GetExplanationView()->SetLabel(_(L"Score Summary"));
-    SetMinimumPaneSize(100 * wxWindow::GetDPIScaleFactor());
+    if (GetExplanationView() == nullptr)
+        {
+        wxLogError(_(L"Failed to create wxWebView. No backend available."));
+        }
+    else
+        {
+        // suppress the browser's reload/view-source context menu
+        GetExplanationView()->EnableContextMenu(false);
+        GetExplanationView()->Bind(wxEVT_WEBVIEW_LOADED, &ExplanationListCtrl::OnExplanationLoaded,
+                                   this);
+        }
+
+    wxWindow* explanationWindow = (GetExplanationView() != nullptr) ?
+                                      static_cast<wxWindow*>(GetExplanationView()) :
+                                      new wxPanel(splitter);
+    splitter->SplitHorizontally(m_results_view, explanationWindow);
+    splitter->SetSashGravity(0.75);
+
+    auto* sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(splitter, wxSizerFlags{ 1 }.Expand());
+    SetSizer(sizer);
 
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnPreview, this, wxID_PREVIEW);
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnCopy, this, wxID_COPY);
@@ -91,8 +111,50 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
     Bind(wxEVT_FIND_NEXT, &ExplanationListCtrl::OnFind, this);
     Bind(wxEVT_FIND_CLOSE, &ExplanationListCtrl::OnFind, this);
 
-    Bind(wxEVT_SIZE, &ExplanationListCtrl::OnResize, this);
     Bind(wxEVT_LIST_ITEM_SELECTED, &ExplanationListCtrl::OnItemSelected, this, id);
+    Bind(wxEVT_SHOW, &ExplanationListCtrl::OnShow, this);
+    }
+
+//------------------------------------------------------
+ExplanationListCtrl::~ExplanationListCtrl()
+    {
+    Unbind(wxEVT_SHOW, &ExplanationListCtrl::OnShow, this);
+    }
+
+//------------------------------------------------------
+void ExplanationListCtrl::OnShow(wxShowEvent& event)
+    {
+    if (event.IsShown())
+        {
+        Layout();
+        const long selected = GetResultsListCtrl()->GetFirstSelected();
+        if (selected != wxNOT_FOUND && GetExplanationView() != nullptr && !IsBeingDeleted() &&
+            !GetExplanationView()->IsBeingDeleted())
+            {
+            GetExplanationView()->Hide();
+            GetExplanationView()->SetPage(
+                NavLink::AnchorsToExplanationScheme(wxString::Format(
+                    _DT(L"<!DOCTYPE html><html><head>"
+                        "<meta name='color-scheme' content='light dark' />"
+                        "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                        "</head><body>%s</body></html>"),
+                    m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
+                wxString{});
+            }
+        }
+    event.Skip();
+    }
+
+//------------------------------------------------------
+void ExplanationListCtrl::OnExplanationLoaded(wxWebViewEvent& event)
+    {
+    if (GetExplanationView() != nullptr && !IsBeingDeleted() &&
+        !GetExplanationView()->IsBeingDeleted() && !GetExplanationView()->IsShown())
+        {
+        GetExplanationView()->Show();
+        Layout();
+        }
+    event.Skip();
     }
 
 //------------------------------------------------------
@@ -275,7 +337,10 @@ void ExplanationListCtrl::OnCopy([[maybe_unused]] wxCommandEvent& event)
         GetResultsListCtrl()->Copy(false, true);
         break;
     case 2:
-        GetExplanationView()->Copy();
+        if (GetExplanationView() != nullptr)
+            {
+            GetExplanationView()->Copy();
+            }
         break;
     default:
         // noop
@@ -293,51 +358,37 @@ void ExplanationListCtrl::OnFind(wxFindDialogEvent& event)
     }
 
 //------------------------------------------------------
-void ExplanationListCtrl::OnResize(wxSizeEvent& event)
-    {
-    FitWindows();
-    event.Skip();
-    }
-
-//------------------------------------------------------
 void ExplanationListCtrl::OnItemSelected(const wxListEvent& event)
     {
-    GetExplanationView()->SetPage(
-        wxString::Format(L"<body>%s</body>",
-                         m_explanations[GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0)]));
-    }
-
-//------------------------------------------------------
-void ExplanationListCtrl::FitWindows()
-    {
-    if (IsSplit())
+    if (GetExplanationView() == nullptr)
         {
-        if (GetResultsListCtrl()->GetItemCount() != 0)
-            {
-            wxRect rect;
-            GetResultsListCtrl()->GetItemRect(GetResultsListCtrl()->GetItemCount() - 1, rect);
-            SetSashPosition(
-                std::min<double>(
-                    rect.GetBottom() +
-                        wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, GetResultsListCtrl()) + 5,
-                    GetSize().GetHeight() * .5),
-                true);
-            }
-        else
-            {
-            SetSashPosition(static_cast<int>(GetSize().GetHeight() * .33), true);
-            }
+        return;
         }
+    GetExplanationView()->Hide();
+    GetExplanationView()->SetPage(
+        NavLink::AnchorsToExplanationScheme(wxString::Format(
+            _DT(L"<!DOCTYPE html><html><head><meta name='color-scheme' content='light dark' />"
+                "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                "</head><body>%s</body></html>"),
+            m_explanations[GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0)])),
+        wxString{});
     }
 
 //------------------------------------------------------
 void ExplanationListCtrl::UpdateExplanationDisplay()
     {
     const long selected = GetResultsListCtrl()->GetFirstSelected();
-    if (selected != wxNOT_FOUND)
+    if (selected != wxNOT_FOUND && GetExplanationView() != nullptr)
         {
-        GetExplanationView()->SetPage(wxString::Format(
-            L"<body>%s</body>", m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)]));
+        GetExplanationView()->Hide();
+        GetExplanationView()->SetPage(
+            NavLink::AnchorsToExplanationScheme(wxString::Format(
+                _DT(L"<!DOCTYPE html><html><head>"
+                    "<meta name='color-scheme' content='light dark' />"
+                    "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                    "</head><body>%s</body></html>"),
+                m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
+            wxString{});
         }
     }
 

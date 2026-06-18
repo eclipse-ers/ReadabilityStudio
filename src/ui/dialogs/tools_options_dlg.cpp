@@ -5835,7 +5835,7 @@ void ToolsOptionsDlg::CreateGraphReadabilitySection()
     m_readabilityGraphPropertyGrid->Append(new wxPropertyCategory(GetFryLikeLabel()));
     m_readabilityGraphPropertyGrid->SetPropertyHelpString(
         GetFryLikeLabel(),
-        _(L"The options in this section customize the Fry, Gilliam-Pe\U000000F1a-Mountain, "
+        _(L"The options in this section customize the Fry, Gilliam-Peña-Mountain, "
           "Raygor, and Schwartz graphs."));
     m_readabilityGraphPropertyGrid->Append(
         new wxColourProperty(GetInvalidRegionsColorLabel(), wxPG_LABEL,

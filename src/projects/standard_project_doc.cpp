@@ -66,8 +66,10 @@
 #include "../results-format/project_report_format.h"
 #include "../results-format/word_collectiont_text_formatting.h"
 #include "../ui/dialogs/project_wizard_dlg.h"
+#include "project_navigation_links.h"
 #include "standard_project_view.h"
 #include <wx/richmsgdlg.h>
+#include <wx/webview.h>
 #include <wx/wfstream.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -1135,7 +1137,6 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
         view->GetReadabilityScoresList()->UpdateExplanationDisplay();
         view->GetReadabilityScoresList()->GetResultsListCtrl()->SortColumn(
             0, Wisteria::SortDirection::SortAscending);
-        view->GetReadabilityScoresList()->FitWindows();
         if (setFocus)
             {
             view->GetSideBar()->SelectFolder(view->GetSideBar()->FindFolder(
@@ -1149,34 +1150,35 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                 {
                 text = _(L"No tests are currently in the project.");
                 }
-            auto* scoresReport = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
-                view->GetReadabilityResultsView().FindWindowById(
+            auto* scoresReport =
+                dynamic_cast<wxWebView*>(view->GetReadabilityResultsView().FindWindowById(
                     BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID));
             if (scoresReport == nullptr)
                 {
-                scoresReport = new Wisteria::UI::HtmlTableWindow(
-                    view->GetSplitter(),
-                    BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID);
-                scoresReport->Hide();
-                scoresReport->SetName(_(L"Summary Report"));
-                scoresReport->SetLabel(_(L"Summary Report"));
-                scoresReport->SetPrinterSettings(wxGetApp().GetPrintData());
-                scoresReport->SetLeftPrinterHeader(
-                    wxGetApp().GetAppOptions()->GetLeftPrinterHeader());
-                scoresReport->SetCenterPrinterHeader(
-                    wxGetApp().GetAppOptions()->GetCenterPrinterHeader());
-                scoresReport->SetRightPrinterHeader(
-                    wxGetApp().GetAppOptions()->GetRightPrinterHeader());
-                scoresReport->SetLeftPrinterFooter(
-                    wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
-                scoresReport->SetCenterPrinterFooter(
-                    wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
-                scoresReport->SetRightPrinterFooter(
-                    wxGetApp().GetAppOptions()->GetRightPrinterFooter());
-                view->GetReadabilityResultsView().InsertWindow(1, scoresReport);
+                scoresReport =
+                    wxWebView::New(view->GetSplitter(),
+                                   BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID);
+                if (scoresReport != nullptr)
+                    {
+                    scoresReport->Hide();
+                    scoresReport->SetName(_(L"Summary Report"));
+                    scoresReport->SetLabel(_(L"Summary Report"));
+                    scoresReport->EnableContextMenu(true);
+                    scoresReport->Bind(wxEVT_WEBVIEW_NAVIGATING,
+                                       &ProjectView::OnExplanationNavigating, view);
+                    view->GetReadabilityResultsView().InsertWindow(1, scoresReport);
+                    }
                 }
-            scoresReport->SetPage(ProjectReportFormat::FormatHtmlReportStart() + text +
-                                  ProjectReportFormat::FormatHtmlReportEnd());
+            if (scoresReport != nullptr)
+                {
+                scoresReport->SetPage(
+                    NavLink::AnchorsToExplanationScheme(
+                        ProjectReportFormat::FormatHtmlReportStart(
+                            wxString::Format( // TRANSLATORS: %s is the project name
+                                _(L"Summary Report [%s]"), GetTitle())) +
+                        text + ProjectReportFormat::FormatHtmlReportEnd()),
+                    wxString{});
+                }
             }
         else
             {

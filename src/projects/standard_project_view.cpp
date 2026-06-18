@@ -64,8 +64,10 @@
 #include "../ui/dialogs/filtered_text_export_options_dlg.h"
 #include "../ui/dialogs/filtered_text_preview_dlg.h"
 #include "../ui/dialogs/tools_options_dlg.h"
+#include "project_navigation_links.h"
 #include "standard_project_doc.h"
 #include "wx/richmsgdlg.h"
+#include <wx/webview.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -165,6 +167,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(ProjectView, BaseProjectView)
     Bind(wxEVT_FIND_CLOSE, &ProjectView::OnFind, this);
 
     Bind(wxEVT_HTML_LINK_CLICKED, &ProjectView::OnHyperlinkClicked, this);
+    Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating, this);
 
     Bind(wxEVT_MENU, &ProjectView::OnMenuCommand, this, XRCID("ID_PRINT"));
     Bind(wxEVT_MENU, &ProjectView::OnGradeScale, this, XRCID("ID_K12_US"));
@@ -558,17 +561,35 @@ void ProjectView::OnEditGraphOptions(wxCommandEvent& event)
     }
 
 //------------------------------------------------------
-void ProjectView::OnHyperlinkClicked(wxHtmlLinkEvent& event)
+bool ProjectView::NavigateToHref(const wxString& href)
     {
-    if (event.GetLinkInfo().GetHref() == L"#UnusedDolchWords")
+    // non-anchor links are help topics or URLs; hand them to the help system
+    if (href.empty() || href.GetChar(0) != L'#')
+        {
+        if (!href.empty())
+            {
+            wxGetApp().GetMainFrame()->DisplayHelp(href);
+            }
+        return true;
+        }
+
+    // compare the bare anchor (without '#') against the centralized link names
+    const std::wstring hrefStr{ href.wc_str() };
+    if (hrefStr.size() < 2)
+        {
+        return false;
+        }
+    const std::wstring_view anchor{ std::wstring_view{ hrefStr }.substr(1) };
+
+    if (anchor == NavLink::UnusedDolchWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(UNUSED_DOLCH_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#Dolch")
+    else if (anchor == NavLink::Dolch)
         {
         GetSideBar()->SelectFolder(GetSideBar()->FindFolder(SIDEBAR_DOLCH_SECTION_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#SelectStatistics")
+    else if (anchor == NavLink::SelectStatistics)
         {
         auto* theProject = dynamic_cast<BaseProjectDoc*>(GetDocument());
         ToolsOptionsDlg optionsDlg(GetDocFrame(), theProject, ToolsOptionsDlg::Statistics);
@@ -578,134 +599,166 @@ void ProjectView::OnHyperlinkClicked(wxHtmlLinkEvent& event)
             theProject->RefreshStatisticsReports();
             }
         }
-    else if (event.GetLinkInfo().GetHref() == L"#FryGraph")
+    else if (anchor == NavLink::FryGraph)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(FRY_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#flesch-chart")
+    else if (anchor == NavLink::FleschChart)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(FLESCH_CHART_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#DB2")
+    else if (anchor == NavLink::DanielsonBryan2)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(DB2_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#lix-gauge")
+    else if (anchor == NavLink::LixGauge)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(LIX_GAUGE_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#german-lix-gauge")
+    else if (anchor == NavLink::GermanLixGauge)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(LIX_GAUGE_GERMAN_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#crawford-graph")
+    else if (anchor == NavLink::CrawfordGraph)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(CRAWFORD_GRAPH_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#inflesz")
+    else if (anchor == NavLink::Inflesz)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(INFLESZ_GRAPH_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#GPMFryGraph")
+    else if (anchor == NavLink::GilliamPenaMountainGraph)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(GPM_FRY_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#FRASE")
+    else if (anchor == NavLink::FraseGraph)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(FRASE_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#schwartz")
+    else if (anchor == NavLink::Schwartz)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(SCHWARTZ_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#RaygorGraph")
+    else if (anchor == NavLink::RaygorGraph)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(RAYGOR_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#DifficultSentences")
+    else if (anchor == NavLink::DifficultSentences)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(LONG_SENTENCES_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#SentenceStartingWithConjunctions")
+    else if (anchor == NavLink::SentenceStartingWithConjunctions)
         {
         GetSideBar()->SelectSubItem(
             GetSideBar()->FindSubItem(SENTENCES_CONJUNCTION_START_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#SentenceStartingWithLowercase")
+    else if (anchor == NavLink::SentenceStartingWithLowercase)
         {
         GetSideBar()->SelectSubItem(
             GetSideBar()->FindSubItem(SENTENCES_LOWERCASE_START_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#Misspellings")
+    else if (anchor == NavLink::Misspellings)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(MISSPELLED_WORD_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#RepeatedWords")
+    else if (anchor == NavLink::RepeatedWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(DUPLICATES_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#MismatchedArticles")
+    else if (anchor == NavLink::MismatchedArticles)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(INCORRECT_ARTICLE_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#PassiveVoice")
+    else if (anchor == NavLink::PassiveVoice)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(PASSIVE_VOICE_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#WordyPhrases")
+    else if (anchor == NavLink::WordyPhrases)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(WORDY_PHRASES_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#RedundantPhrases")
+    else if (anchor == NavLink::RedundantPhrases)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(REDUNDANT_PHRASE_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#OverusedWordsBySentence")
+    else if (anchor == NavLink::OverusedWordsBySentence)
         {
         GetSideBar()->SelectSubItem(
             GetSideBar()->FindSubItem(OVERUSED_WORDS_BY_SENTENCE_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#WordingErrors")
+    else if (anchor == NavLink::WordingErrors)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(WORDING_ERRORS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#Cliches")
+    else if (anchor == NavLink::Cliches)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(CLICHES_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#LongWords")
+    else if (anchor == NavLink::LongWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(LONG_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#HardWords")
+    else if (anchor == NavLink::HardWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(HARD_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#DaleChallWords")
+    else if (anchor == NavLink::DaleChallWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(DC_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#SpacheWords")
+    else if (anchor == NavLink::SpacheWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(SPACHE_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#HarrisJacobsonWords")
+    else if (anchor == NavLink::HarrisJacobsonWords)
         {
         GetSideBar()->SelectSubItem(GetSideBar()->FindSubItem(HARRIS_JACOBSON_WORDS_LIST_PAGE_ID));
         }
-    else if (event.GetLinkInfo().GetHref() == L"#FogHelp")
+    else if (anchor == NavLink::FogHelp)
         {
         wxGetApp().GetMainFrame()->DisplayHelp(L"online/readability-tests-english.html");
         }
-    else if ((!event.GetLinkInfo().GetHref().empty()) &&
-             event.GetLinkInfo().GetHref().GetChar(0) == L'#')
+    else
+        {
+        // unrecognized in-app anchor
+        return false;
+        }
+    return true;
+    }
+
+//------------------------------------------------------
+void ProjectView::OnHyperlinkClicked(wxHtmlLinkEvent& event)
+    {
+    if (!NavigateToHref(event.GetLinkInfo().GetHref()))
         {
         event.Skip();
         }
-    else
+    }
+
+//------------------------------------------------------
+void ProjectView::OnExplanationNavigating(wxWebViewEvent& event)
+    {
+    const wxString url = event.GetURL();
+    const wxString scheme{ NavLink::ExplanationScheme.data(), NavLink::ExplanationScheme.length() };
+    // let the initial page load and any non-app navigations proceed
+    if (!url.StartsWith(scheme))
         {
-        wxGetApp().GetMainFrame()->DisplayHelp(event.GetLinkInfo().GetHref());
+        event.Skip();
+        return;
         }
+    // an in-app explanation link was clicked; handle it ourselves instead of
+    // letting the web view navigate to the (fake) custom-scheme URL
+    event.Veto();
+    wxString anchor = url.substr(scheme.length());
+    // some backends append a trailing slash to a bare authority
+    if (anchor.ends_with(L"/"))
+        {
+        anchor.RemoveLast();
+        }
+    // navigation is already vetoed, so whether the anchor is recognized or not
+    // makes no difference here
+    [[maybe_unused]]
+    const bool handled = NavigateToHref(wxString{ L"#" } + anchor);
     }
 
 //------------------------------------------------------
@@ -1576,6 +1629,37 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         html->ProcessWindowEvent(event);
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
+             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
+        {
+        auto* webview = dynamic_cast<wxWebView*>(GetActiveProjectWindow());
+        webview->SetLabel(wxString::Format(L"%s [%s]", webview->GetName(),
+                                           wxFileName::StripExtension(doc->GetTitle())));
+        if (event.GetId() == wxID_SAVE)
+            {
+            wxFileDialog dialog(GetFrame(), _(L"Save As"), wxString{}, webview->GetLabel(),
+                                L"HTML (*.htm;*.html)|*.htm;*.html",
+                                wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+            if (dialog.ShowModal() != wxID_OK)
+                {
+                return;
+                }
+            wxFileName filePath = dialog.GetPath();
+            if (filePath.GetExt().empty())
+                {
+                filePath.SetExt(L"htm");
+                }
+            std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+            lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+            wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+            wxFile file(filePath.GetFullPath(), wxFile::write);
+            file.Write(htmlText);
+            }
+        else
+            {
+            webview->Print(*wxGetApp().GetPrintData(), wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
+            }
+        }
+    else if ((GetActiveProjectWindow() != nullptr) &&
              GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
         {
         auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(GetActiveProjectWindow());
@@ -1610,14 +1694,44 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
 //---------------------------------------------------
 void ProjectView::OnFind(wxFindDialogEvent& event)
     {
-    // if they were just hitting Cancel then close
-    if (event.GetEventType() == wxEVT_COMMAND_FIND_CLOSE)
+    if (GetActiveProjectWindow() == nullptr)
         {
         return;
         }
 
-    if (GetActiveProjectWindow() != nullptr)
+    if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
         {
+        auto* webview = dynamic_cast<wxWebView*>(GetActiveProjectWindow());
+        if (event.GetEventType() == wxEVT_COMMAND_FIND_CLOSE)
+            {
+            webview->Find(wxString{});
+            return;
+            }
+        int webFlags = wxWEBVIEW_FIND_WRAP | wxWEBVIEW_FIND_HIGHLIGHT_RESULT;
+        const int frFlags = event.GetFlags();
+        if ((frFlags & wxFR_MATCHCASE) != 0)
+            {
+            webFlags |= wxWEBVIEW_FIND_MATCH_CASE;
+            }
+        if ((frFlags & wxFR_WHOLEWORD) != 0)
+            {
+            webFlags |= wxWEBVIEW_FIND_ENTIRE_WORD;
+            }
+        if ((frFlags & wxFR_DOWN) == 0)
+            {
+            webFlags |= wxWEBVIEW_FIND_BACKWARDS;
+            }
+        if (webview->Find(event.GetFindString(), webFlags) == wxNOT_FOUND)
+            {
+            wxMessageBox(_(L"The text could not be found."), _(L"Text Not Found"));
+            }
+        }
+    else
+        {
+        if (event.GetEventType() == wxEVT_COMMAND_FIND_CLOSE)
+            {
+            return;
+            }
         const ParentEventBlocker blocker(GetActiveProjectWindow());
         GetActiveProjectWindow()->ProcessWindowEvent(event);
         }
@@ -1669,9 +1783,16 @@ bool ProjectView::OnCreate(wxDocument* doc, long flags)
         3, _(L"Scale Value"), wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
     readabilityScoresView->GetResultsListCtrl()->InsertColumn(
         4, _(L"Predicted Cloze Score"), wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
-    readabilityScoresView->GetExplanationView()->SetPage(
-        wxString(L"<html><body>") + _(L"No readability test results currently available.") +
-        wxString(L"</body></html>"));
+    if (readabilityScoresView->GetExplanationView() != nullptr)
+        {
+        readabilityScoresView->GetExplanationView()->SetPage(
+            wxString::Format(
+                _DT(L"<!DOCTYPE html><html><head><meta name='color-scheme' content='light dark' "
+                    "/><style>body{background-color:Canvas;color:CanvasText;}</style></head>"
+                    "<body>%s</body></html>"),
+                _(L"No readability test results currently available.")),
+            wxString{});
+        }
     readabilityScoresView->GetResultsListCtrl()->AssignContextMenu(
         wxXmlResource::Get()->LoadMenu(L"IDM_READABILITY_SCORE_LIST"));
     readabilityScoresView->SetPrinterSettings(wxGetApp().GetPrintData());
@@ -2191,7 +2312,10 @@ void ProjectView::OnTestDelete([[maybe_unused]] wxRibbonButtonBarEvent& event)
 
         GetReadabilityScoresList()->GetResultsListCtrl()->DeleteItem(selectedIndex);
         UpdateStatistics();
-        GetReadabilityScoresList()->GetExplanationView()->SetPage(wxString{});
+        if (GetReadabilityScoresList()->GetExplanationView() != nullptr)
+            {
+            GetReadabilityScoresList()->GetExplanationView()->SetPage(wxString{}, wxString{});
+            }
 
         auto* doc = dynamic_cast<ProjectDoc*>(GetDocument());
         doc->RemoveTest(testToRemove);
@@ -2212,9 +2336,14 @@ void ProjectView::OnTestDelete([[maybe_unused]] wxRibbonButtonBarEvent& event)
             }
         if (GetReadabilityScoresList()->GetResultsListCtrl()->GetItemCount() == 0)
             {
-            GetReadabilityScoresList()->GetExplanationView()->SetPage(
-                wxString(L"<html><body>") + _(L"No readability test results currently available.") +
-                wxString(L"</body></html>"));
+            if (GetReadabilityScoresList()->GetExplanationView() != nullptr)
+                {
+                GetReadabilityScoresList()->GetExplanationView()->SetPage(
+                    wxString(L"<html><body>") +
+                        _(L"No readability test results currently available.") +
+                        wxString(L"</body></html>"),
+                    wxString{});
+                }
             }
         // which tests are included may affect which stats and bars on the bar chart are included
         doc->RefreshRequired(ProjectRefresh::Minimal);
@@ -2321,7 +2450,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
 
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxHtmlWindow)))
+                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxHtmlWindow)) ||
+                    GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editSummaryReportButtonBarWindow->Show();
                     }
@@ -2824,6 +2954,21 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
                             wxFileName::GetPathSeparator() + reportWindow->GetLabel() + L".htm");
                         }
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
+                        {
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
+                                             wxFileName::StripExtension(doc->GetTitle())));
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
+                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        wxFileName(savePath).SetPermissions(wxS_DEFAULT);
+                        wxFile file(savePath, wxFile::write);
+                        file.Write(htmlText);
+                        }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
                         auto* list = dynamic_cast<Wisteria::UI::ListCtrlEx*>(activeWindow);
@@ -3251,6 +3396,22 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                              htmlEncode({ html->GetName().wc_str() }, true).c_str(), htmlText);
     };
 
+    const auto formatWebViewReport = [&outputText, &htmlEncode, pageBreak](
+                                         wxWebView* webview, const bool includeLeadingPageBreak)
+    {
+        if (webview == nullptr)
+            {
+            return;
+            }
+        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+        htmlText = lily_of_the_valley::html_extract_text::get_body(htmlText);
+        outputText +=
+            wxString::Format(L"\n%s<div class='caption'>%s</div>\n%s\n",
+                             (includeLeadingPageBreak ? pageBreak : wxString{}),
+                             htmlEncode({ webview->GetName().wc_str() }, true).c_str(), htmlText);
+    };
+
     bool hasSections{ false };
 
     // scores section
@@ -3288,6 +3449,12 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     {
                     formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
                                      includeLeadingPageBreak);
+                    includeLeadingPageBreak = true;
+                    }
+                else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
+                    {
+                    formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                        includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))

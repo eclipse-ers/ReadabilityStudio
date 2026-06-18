@@ -51,12 +51,13 @@
 #define EXPLANATION_LISTCTRL_H
 
 #include "../../Wisteria-Dataviz/src/base/canvas.h"
-#include "../../Wisteria-Dataviz/src/ui/controls/htmltablewin.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../../Wisteria-Dataviz/src/util/parentblocker.h"
 #include <map>
 #include <wx/html/htmprint.h>
+#include <wx/panel.h>
 #include <wx/splitter.h>
+#include <wx/webview.h>
 #include <wx/xrc/xmlres.h>
 
 /// @brief What to export when saving from an ExplanationListCtrl.
@@ -72,7 +73,7 @@ enum class ExplanationListExportOptions
 
 /// @brief A list control with an HTML buddy window.
 /// @details Selecting an item in the list will display its associated text in the HTML window.
-class ExplanationListCtrl final : public wxSplitterWindow
+class ExplanationListCtrl final : public wxPanel
     {
   public:
     /** @brief Constructor.
@@ -85,12 +86,12 @@ class ExplanationListCtrl final : public wxSplitterWindow
                         const wxSize& size = wxDefaultSize,
                         const wxString& name = L"ExplanationListCtrl");
     /// @private
+    ~ExplanationListCtrl();
+    /// @private
     ExplanationListCtrl(const ExplanationListCtrl&) = delete;
     /// @private
     ExplanationListCtrl& operator=(const ExplanationListCtrl&) = delete;
 
-    /// @brief Splits the windows to show the items in the list control.
-    void FitWindows();
     /// @brief Updates the HTML window to display the associated text
     ///     for the currently selected item in the list.
     void UpdateExplanationDisplay();
@@ -220,7 +221,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
 
     /// @returns The HTML window.
     [[nodiscard]]
-    Wisteria::UI::HtmlTableWindow* GetExplanationView() const noexcept
+    wxWebView* GetExplanationView() const noexcept
         {
         return m_explanation_view;
         }
@@ -229,7 +230,10 @@ class ExplanationListCtrl final : public wxSplitterWindow
     void Clear()
         {
         m_explanations.clear();
-        m_explanation_view->SetPage(wxString{});
+        if (m_explanation_view != nullptr)
+            {
+            m_explanation_view->SetPage(wxString{}, wxString{});
+            }
         m_results_view->DeleteAllItems();
         }
 
@@ -260,7 +264,8 @@ class ExplanationListCtrl final : public wxSplitterWindow
     void OnCopy([[maybe_unused]] wxCommandEvent& event);
     void OnFind(wxFindDialogEvent& event);
     void OnItemSelected(const wxListEvent& event);
-    void OnResize(wxSizeEvent& event);
+    void OnShow(wxShowEvent& event);
+    void OnExplanationLoaded(wxWebViewEvent& event);
     void OnMenuCommand(wxCommandEvent& event);
 
     std::shared_ptr<Wisteria::UI::ListCtrlExNumericDataProvider> m_data{
@@ -268,7 +273,7 @@ class ExplanationListCtrl final : public wxSplitterWindow
     };
     std::map<wxString, wxString> m_explanations;
     // view classes
-    Wisteria::UI::HtmlTableWindow* m_explanation_view{ nullptr };
+    wxWebView* m_explanation_view{ nullptr };
     Wisteria::UI::ListCtrlEx* m_results_view{ nullptr };
 
     wxPrintData* m_printData{ nullptr };

@@ -57,6 +57,8 @@
 #include "../ui/dialogs/edit_text_dlg.h"
 #include "base_project_view.h"
 
+class wxWebViewEvent;
+
 /// @brief The results window interface for a standard project.
 class ProjectView final : public BaseProjectView
     {
@@ -229,6 +231,12 @@ class ProjectView final : public BaseProjectView
     void OnListDblClick(wxListEvent& event);
     void OnTestListDblClick([[maybe_unused]] wxListEvent& event);
     void OnHyperlinkClicked(wxHtmlLinkEvent& event);
+    // handles link clicks in the explanation wxWebView (the 'rsexplain://' scheme)
+    void OnExplanationNavigating(wxWebViewEvent& event);
+    // Routes an in-app navigation link (e.g. "#fry-graph") to the matching
+    // sidebar window or help topic. Returns true if the link was handled.
+    [[nodiscard]]
+    bool NavigateToHref(const wxString& href);
     void OnSummation([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnFind(wxFindDialogEvent& event);
 

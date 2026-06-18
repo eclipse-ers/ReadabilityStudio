@@ -230,7 +230,8 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
 
     if (!statsInfo.HasDolchStatisticsEnabled())
         {
-        htmlText += _(L"No Dolch statistics <a href=\"#SelectStatistics\">currently selected</a>.");
+        htmlText +=
+            _(L"No Dolch statistics <a href=\"#select-statistics\">currently selected</a>.");
         }
 
     wxBitmap bmp{ 100, 100 };
@@ -741,7 +742,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
         htmlText += FormatHtmlNoteSection(
             useDescription +
             _(L"Dolch words that are not being used in this document may be viewed in the "
-              "<a href=\"#UnusedDolchWords\">Unused Dolch Words</a> output."));
+              "<a href=\"#unused-dolch-words\">Unused Dolch Words</a> output."));
         }
 
     // total words
@@ -1509,6 +1510,7 @@ wxString ProjectReportFormat::FormatHtmlReportStart(const wxString& title /*= wx
         "\n<html>"
         "\n<head>"
         "\n    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />"
+        "\n    <meta name='color-scheme' content='light dark' />"
         "\n    <title>%s</title>"
         "\n    <style>"
         "\n    %s"
@@ -1565,7 +1567,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
     if (!statsInfo.HasStatisticsEnabled())
         {
-        htmlText += _(L"No statistics <a href=\"#SelectStatistics\">currently selected</a>.");
+        htmlText += _(L"No statistics <a href=\"#select-statistics\">currently selected</a>.");
         }
 
     wxBitmap bmp(100, 100);
@@ -1760,7 +1762,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
         if (project->GetTotalOverlyLongSentences() > 0)
             {
             currentLabel =
-                wxString::Format(_(L"Number of <a href=\"#DifficultSentences\">difficult "
+                wxString::Format(_(L"Number of <a href=\"#difficult-sentences\">difficult "
                                    "sentences</a> (more than %d words):"),
                                  project->GetDifficultSentenceLength());
             }
@@ -2423,7 +2425,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
         htmlText += tableStart + formatHeader(_(L"Complex Words"));
         if (project->GetTotal3PlusSyllabicWords() > 0)
             {
-            currentLabel = _(L"Number of <a href=\"#HardWords\">complex (3+ syllable)</a> words:");
+            currentLabel = _(L"Number of <a href=\"#hard-words\">complex (3+ syllable)</a> words:");
             }
         else
             {
@@ -2501,7 +2503,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
         htmlText += tableStart + formatHeader(_(L"Long Words"));
         if (project->GetTotalLongWords() > 0)
             {
-            currentLabel = _(L"Number of <a href=\"#LongWords\">long (6+ characters)</a> words:");
+            currentLabel = _(L"Number of <a href=\"#long-words\">long (6+ characters)</a> words:");
             }
         else
             {
@@ -2662,7 +2664,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                         formatHeader(_(L"Fog Words")) +
                         // TRANSLATORS: "Fog" is the name of a test, don't translate that part.
                         formatRow(_(L"Number of Fog hard words (3+ syllables, with <a "
-                                    "href=\"#FogHelp\">exceptions</a>):"),
+                                    "href=\"#fog-help\">exceptions</a>):"),
                                   wxNumberFormatter::ToString(
                                       project->GetTotalHardWordsFog(), 0,
                                       wxNumberFormatter::Style::Style_NoTrailingZeroes |
@@ -2766,7 +2768,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             if (project->GetTotalHardWordsDaleChall() > 0)
                 {
                 currentLabel =
-                    _(L"Number of <a href=\"#DaleChallWords\">Dale-Chall</a> unfamiliar words:");
+                    _(L"Number of <a href=\"#dale-chall-words\">Dale-Chall</a> unfamiliar words:");
                 }
             else
                 {
@@ -2877,8 +2879,9 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             htmlText += tableStart + formatHeader(_(L"Harris-Jacobson Unfamiliar Words"));
             if (project->GetTotalHardWordsHarrisJacobson() > 0)
                 {
-                currentLabel = _(L"Number of <a href=\"#HarrisJacobsonWords\">Harris-Jacobson</a> "
-                                 "unfamiliar words:");
+                currentLabel =
+                    _(L"Number of <a href=\"#harris-jacobson-words\">Harris-Jacobson</a> "
+                      "unfamiliar words:");
                 }
             else
                 {
@@ -2976,7 +2979,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             if (project->GetTotalHardWordsSpache() > 0)
                 {
                 currentLabel =
-                    _(L"Number of <a href=\"#SpacheWords\">Spache</a> unfamiliar words:");
+                    _(L"Number of <a href=\"#spache-words\">Spache</a> unfamiliar words:");
                 }
             else
                 {
@@ -3236,7 +3239,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             currentLabel.clear();
             if (project->GetMisspelledWordCount() != 0)
                 {
-                currentLabel += L"<a href=\"#Misspellings\">";
+                currentLabel += L"<a href=\"#misspellings\">";
                 }
             currentLabel += _(L"Misspellings:");
             if (project->GetMisspelledWordCount() != 0)
@@ -3273,7 +3276,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             currentLabel.clear();
             if (project->GetDuplicateWordCount() != 0)
                 {
-                currentLabel += L"<a href=\"#RepeatedWords\">";
+                currentLabel += L"<a href=\"#repeated-words\">";
                 }
             currentLabel += _(L"Repeated words:");
             if (project->GetDuplicateWordCount() != 0)
@@ -3313,7 +3316,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetMismatchedArticleCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#MismatchedArticles\">";
+                    currentLabel += L"<a href=\"#mismatched-articles\">";
                     }
                 currentLabel += _(L"Article mismatches:");
                 if (project->GetMismatchedArticleCount() != 0)
@@ -3350,7 +3353,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetWordingErrorCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#WordingErrors\">";
+                    currentLabel += L"<a href=\"#wording-errors\">";
                     }
                 currentLabel += _(L"Wording errors & misspellings:");
                 if (project->GetWordingErrorCount() != 0)
@@ -3387,7 +3390,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetRedundantPhraseCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#RedundantPhrases\">";
+                    currentLabel += L"<a href=\"#redundant-phrases\">";
                     }
                 currentLabel += _(L"Redundant phrases:");
                 if (project->GetRedundantPhraseCount() != 0)
@@ -3424,7 +3427,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetOverusedWordsBySentenceCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#OverusedWordsBySentence\">";
+                    currentLabel += L"<a href=\"#overused-words-by-sentence\">";
                     }
                 currentLabel += _(L"Overused words (x sentence):");
                 if (project->GetOverusedWordsBySentenceCount() != 0)
@@ -3461,7 +3464,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetWordyPhraseCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#WordyPhrases\">";
+                    currentLabel += L"<a href=\"#wordy-phrases\">";
                     }
                 currentLabel += _(L"Wordy items:");
                 if (project->GetWordyPhraseCount() != 0)
@@ -3498,7 +3501,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetClicheCount() > 0)
                     {
-                    currentLabel += L"<a href=\"#Cliches\">";
+                    currentLabel += L"<a href=\"#cliches\">";
                     }
                 currentLabel += BaseProjectView::GetClichesTabLabel() + L":";
                 if (project->GetClicheCount() != 0)
@@ -3535,7 +3538,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                 currentLabel.clear();
                 if (project->GetPassiveVoicesCount() != 0)
                     {
-                    currentLabel += L"<a href=\"#PassiveVoice\">";
+                    currentLabel += L"<a href=\"#passive-voice\">";
                     }
                 currentLabel += _(L"Passive voice:");
                 if (project->GetPassiveVoicesCount() != 0)
@@ -3573,7 +3576,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             currentLabel.clear();
             if (project->GetSentenceStartingWithConjunctionsCount() > 0)
                 {
-                currentLabel += L"<a href=\"#SentenceStartingWithConjunctions\">";
+                currentLabel += L"<a href=\"#sentence-starting-with-conjunctions\">";
                 }
             currentLabel += BaseProjectView::GetSentenceStartingWithConjunctionsLabel() + L":";
             if (project->GetSentenceStartingWithConjunctionsCount() != 0)
@@ -3610,7 +3613,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             currentLabel.clear();
             if (project->GetSentenceStartingWithLowercaseCount() > 0)
                 {
-                currentLabel += L"<a href=\"#SentenceStartingWithLowercase\">";
+                currentLabel += L"<a href=\"#sentence-starting-with-lowercase\">";
                 }
             if (project->GetSentenceStartMustBeUppercased())
                 {

@@ -1146,9 +1146,10 @@ void BaseProject::InitializeStandardSpanishReadabilityTests()
         // GPM (Spanish) fry graph
         {
         readability::readability_test test(
-            ReadabilityMessages::GPM_FRY(), XRCID("ID_GPM_FRY"),
-            _DT(L"Gilliam-Pe\U000000F1a-Mountain"), _DT(L"Gilliam-Pe\U000000F1a-Mountain Graph"),
-            _(L"The <a href=\"#GPMFryGraph\">Gilliam-Pe\U000000F1a-Mountain graph</a> "
+            ReadabilityMessages::GPM_FRY(), XRCID("ID_GPM_FRY"), _DT(L"Gilliam-Peña-Mountain"),
+            _DT(L"Gilliam-Peña-Mountain Graph"),
+            _(L"The <a href=\"#gilliam-pena-mountain-graph\">Gilliam-Peña-Mountain "
+              L"graph</a> "
               "is designed for most text, including literature and technical documents."),
             readability::readability_test_type::grade_level, true, L"");
         test.add_document_classification(readability::document_classification::general_document,
@@ -1178,7 +1179,7 @@ void BaseProject::InitializeStandardSpanishReadabilityTests()
         {
         readability::readability_test test(
             ReadabilityMessages::FRASE(), XRCID("ID_FRASE"), _DT(L"FRASE"), _DT(L"FRASE Graph"),
-            _(L"The <a href=\"#FRASE\">FRASE graph</a> is designed for educational materials "
+            _(L"The <a href=\"#frase-graph\">FRASE graph</a> is designed for educational materials "
               "(primarily Spanish as a secondary language)."),
             readability::readability_test_type::index_value, true, L"");
         test.add_document_classification(
@@ -1355,7 +1356,7 @@ void BaseProject::InitializeStandardEnglishGraphReadabilityTests()
         {
         readability::readability_test test(
             ReadabilityMessages::FRY(), XRCID("ID_FRY"), _DT(L"Fry"), _DT(L"Fry"),
-            _(L"The <a href=\"#FryGraph\">Fry graph</a> is designed for most text, "
+            _(L"The <a href=\"#fry-graph\">Fry graph</a> is designed for most text, "
               "including literature and technical documents."),
             readability::readability_test_type::grade_level, true, L"");
         test.add_document_classification(readability::document_classification::general_document,
@@ -1386,7 +1387,7 @@ void BaseProject::InitializeStandardEnglishGraphReadabilityTests()
         readability::readability_test test(
             ReadabilityMessages::RAYGOR(), XRCID("ID_RAYGOR"), _DT(L"Raygor Estimate"),
             _DT(L"Raygor Estimate"),
-            _(L"The <a href=\"#RaygorGraph\">Raygor estimate graph</a> is designed for most text, "
+            _(L"The <a href=\"#raygor-graph\">Raygor estimate graph</a> is designed for most text, "
               "including literature and technical documents."),
             readability::readability_test_type::grade_level, true, L"");
         test.add_document_classification(readability::document_classification::general_document,
@@ -1727,7 +1728,8 @@ void BaseProject::InitializeStandardEnglishRegressionReadabilityTests()
             _DT(L"Danielson-Bryan 2"), _DT(L"Danielson-Bryan 2"),
             _(L"Danielson-Bryan 2 is designed for student materials. It is a variation of "
               "Flesch Reading Ease that uses character counts instead of syllable counts. "
-              "A <a href=\"#DB2\">chart</a> is also available to visualize the score."),
+              "A <a href=\"#danielson-bryan-2\">chart</a> is also available to visualize the "
+              "score."),
             readability::readability_test_type::index_value, true,
             _DT(L"ROUND(131.059 - 10.364*(RP/W) - .194*(RP/S))"));
         test.add_teaching_level(readability::test_teaching_level::secondary_grade);

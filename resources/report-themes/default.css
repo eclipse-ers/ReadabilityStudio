@@ -1,6 +1,8 @@
 body
   {
   font-family: Baskerville, 'Gill Sans', 'Palatino', Verdana, Geneva, Tahoma, sans-serif;
+  background-color: Canvas;
+  color: CanvasText;
   }
 
 .report-header
