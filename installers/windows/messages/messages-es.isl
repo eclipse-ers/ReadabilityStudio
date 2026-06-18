@@ -1,5 +1,5 @@
 ﻿[CustomMessages]
-FolderCreationError=No fue posible realizar el registro, problemas al crear el directorio de instalación. La instalación parará ahora.
+FolderCreationError=No fue posible crear la carpeta de instalación. La instalación se cancelará ahora.
 ProgramFiles=Archivos de Programa
 HelpFiles=Archivos de Ayuda
 Examples=Ejemplos
