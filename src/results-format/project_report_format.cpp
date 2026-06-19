@@ -1676,12 +1676,11 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
         if (project->GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis)
             {
             currentLabel = _(L"Number of sentences (excluding incomplete sentences, "
-                             "see notes <a href=\"#incompsent\">below</a>):");
+                             "see notes below):");
             }
         else if (project->GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings)
             {
-            currentLabel = _(L"Number of sentences (excluding lists and tables, see notes <a "
-                             "href=\"#incompsent\">below</a>):");
+            currentLabel = _(L"Number of sentences (excluding lists and tables, see notes below):");
             }
         else
             {
@@ -1717,15 +1716,13 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
             if (project->GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis)
                 {
                 currentLabel = _(L"Number of units/independent clauses (excluding incomplete "
-                                 "sentences, see notes "
-                                 "<a href=\"#incompsent\">below</a>):");
+                                 "sentences, see notes below):");
                 }
             else if (project->GetInvalidSentenceMethod() ==
                      InvalidSentence::ExcludeExceptForHeadings)
                 {
-                currentLabel =
-                    _(L"Number of units/independent clauses (excluding lists and tables, see notes "
-                      "<a href=\"#incompsent\">below</a>):");
+                currentLabel = _(L"Number of units/independent clauses (excluding lists and "
+                                 L"tables, see notes below):");
                 }
             else
                 {
@@ -3770,75 +3767,76 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
          exclamatorySentencePercentage >= 25 || averageCharacterCount >= 6 ||
          averageSyllableCount >= 4 || !project->GetAppendedDocumentFilePath().empty()))
         {
-        htmlText += tableStart + formatNoteHeader(_(L"Notes"));
+        htmlText.append(tableStart).append(formatNoteHeader(_(L"Notes")));
         if (project->GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis)
             {
-            htmlText += L"\n<tr><td style='width:100%;'><a name=\"incompsent\">";
-            htmlText += _(L"Incomplete sentences have been excluded from the analysis. "
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"Incomplete sentences have been excluded from the analysis. "
                           "All words from incomplete sentences were ignored and not factored into "
-                          "these statistics (except for grammar information).");
-            htmlText += L"</a></td></tr>";
+                          "these statistics (except for grammar information)."))
+                .append(L"</td></tr>");
             }
         else if (project->GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings)
             {
-            htmlText += L"\n<tr><td style='width:100%;'><a name=\"incompsent\">";
-            htmlText += _(L"Lists and tables have been excluded from the analysis. "
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"Lists and tables have been excluded from the analysis. "
                           "All words from these sentences were ignored and not factored into these "
-                          "statistics (except for grammar information).");
-            htmlText += L"</a></td></tr>";
+                          "statistics (except for grammar information)."))
+                .append(L"</td></tr>");
             }
         if (!project->GetAppendedDocumentFilePath().empty())
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText +=
-                wxString::Format(_(L"An additional document (\"%s\") has been appended and "
-                                   "included in the analysis."),
-                                 wxFileName(project->GetAppendedDocumentFilePath()).GetFullName());
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(wxString::Format(
+                    _(L"An additional document (\"%s\") has been appended and "
+                      "included in the analysis."),
+                    wxFileName(project->GetAppendedDocumentFilePath()).GetFullName()))
+                .append(L"</td></tr>");
             }
         if (statsInfo.IsExtendedInformationEnabled())
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText +=
-                _(L"Averages are calculated using arithmetic mean "
-                  "(the summation of all values in a range divided by the number of items).");
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(
+                    _(L"Averages are calculated using arithmetic mean "
+                      "(the summation of all values in a range divided by the number of items)."))
+                .append(L"</td></tr>");
             }
         if (project->GetTotalWords() < 300)
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText += wxString::Format(
-                _(L"This document only contains %s words. "
-                  "Most readability tests require a minimum of 300 words to be able to generate "
-                  "meaningful results."),
-                wxNumberFormatter::ToString(project->GetTotalWords(), 0,
-                                            wxNumberFormatter::Style::Style_NoTrailingZeroes));
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(wxString::Format(
+                    _(L"This document only contains %s words. "
+                      "Most readability tests require a minimum of 300 words to be able to "
+                      "generate "
+                      "meaningful results."),
+                    wxNumberFormatter::ToString(project->GetTotalWords(), 0,
+                                                wxNumberFormatter::Style::Style_NoTrailingZeroes)))
+                .append(L"</td></tr>");
             }
         if (overlyLongSentencePercentage >= 40)
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText += _(L"A large percentage of sentences are overly long.");
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"A large percentage of sentences are overly long."))
+                .append(L"</td></tr>");
             }
         if (exclamatorySentencePercentage >= 25)
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText += _(L"A large percentage of sentences are exclamatory, "
-                          "giving the document an overall angry/excited tone. Is this intended?");
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"A large percentage of sentences are exclamatory, "
+                          "giving the document an overall angry/excited tone. Is this intended?"))
+                .append(L"</td></tr>");
             }
         if (averageCharacterCount >= 6)
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText += _(L"The average word length is high.");
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"The average word length is high."))
+                .append(L"</td></tr>");
             }
         if (averageSyllableCount >= 4)
             {
-            htmlText += L"\n<tr><td style='width:100%;'>";
-            htmlText += _(L"The average word complexity (syllable count) is high.");
-            htmlText += L"</td></tr>";
+            htmlText.append(L"\n<tr><td style='width:100%;'>")
+                .append(_(L"The average word complexity (syllable count) is high."))
+                .append(L"</td></tr>");
             }
         htmlText += L"\n</table>";
         }

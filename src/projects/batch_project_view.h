@@ -53,8 +53,8 @@
 #include "../Wisteria-Dataviz/src/graphs/crawfordgraph.h"
 #include "../Wisteria-Dataviz/src/graphs/fleschchart.h"
 #include "../Wisteria-Dataviz/src/graphs/histogram.h"
-#include "../Wisteria-Dataviz/src/ui/dialogs/htmltablepanel.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
+#include <wx/webview.h>
 #include "../Wisteria-Dataviz/src/util/windowcontainer.h"
 #include "../graphs/frygraph.h"
 #include "base_project_view.h"
@@ -517,8 +517,8 @@ class BatchProjectView final : public BaseProjectView
     Wisteria::Canvas* m_raygorGraph{ nullptr };
     Wisteria::Canvas* m_crawfordGraph{ nullptr };
     Wisteria::Canvas* m_infleszGraph{ nullptr };
-    Wisteria::UI::HtmlTablePanel* m_testExplanations{ nullptr };
-    Wisteria::UI::HtmlTablePanel* m_statsReport{ nullptr };
+    wxWebView* m_testExplanations{ nullptr };
+    wxWebView* m_statsReport{ nullptr };
 
     wxDECLARE_DYNAMIC_CLASS(BatchProjectView);
     };

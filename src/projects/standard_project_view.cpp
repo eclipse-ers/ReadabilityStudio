@@ -1169,9 +1169,9 @@ void ProjectView::UpdateSideBarIcons()
             {
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_STATS_SUMMARY_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)) ? 17 :
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))      ? 15 :
-                                                                               9);
+                window->IsKindOf(wxCLASSINFO(wxWebView))                ? 17 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) ? 15 :
+                                                                          9);
             }
         }
 
@@ -1242,7 +1242,7 @@ void ProjectView::UpdateSideBarIcons()
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_DOLCH_SECTION_ID, window->GetName(), window->GetId(),
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl))               ? 0 :
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow))                 ? 17 :
+                window->IsKindOf(wxCLASSINFO(wxWebView))                                     ? 17 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart))) ? 16 :
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                      ? 15 :
                                                                                                9);
@@ -1619,16 +1619,6 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             }
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
-             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
-        {
-        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(GetActiveProjectWindow());
-        doc->UpdatePrinterSettings(html);
-        html->SetLabel(wxString::Format(L"%s [%s]", html->GetName(),
-                                        wxFileName::StripExtension(doc->GetTitle())));
-        const ParentEventBlocker blocker(html);
-        html->ProcessWindowEvent(event);
-        }
-    else if ((GetActiveProjectWindow() != nullptr) &&
              GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
         {
         auto* webview = dynamic_cast<wxWebView*>(GetActiveProjectWindow());
@@ -1656,7 +1646,7 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             }
         else
             {
-            webview->Print(*wxGetApp().GetPrintData(), wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
+            webview->Print();
             }
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
@@ -2626,8 +2616,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                     {
                     editStatsListButtonBarWindow->Show();
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(
-                             wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editStatsReportButtonBarWindow->Show();
                     }
@@ -2793,8 +2782,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                     {
                     editReportButtonBarWindow->Show();
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(
-                             wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editStatsReportButtonBarWindow->Show();
                     }
@@ -2927,10 +2915,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        list->Save(folder + wxFileName::GetPathSeparator() +
-                                       _DT(L"Readability Scores") + wxFileName::GetPathSeparator() +
-                                       list->GetLabel() + L".htm",
-                                   ExplanationListExportOptions::ExportGrid);
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
+                            wxFileName::GetPathSeparator() + list->GetLabel() + L".htm";
+                        if (!list->Save(savePath, ExplanationListExportOptions::ExportGrid))
+                            {
+                            wxLogError(L"Failed to save list: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -2938,21 +2929,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         graphWindow->SetLabel(
                             wxString::Format(L"%s [%s]", graphWindow->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        graphWindow->Save(
+                        const wxString savePath =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
-                                wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
-                            graphOptions);
-                        }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
-                        {
-                        auto* reportWindow =
-                            dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
-                        reportWindow->SetLabel(
-                            wxString::Format(L"%s [%s]", reportWindow->GetName(),
-                                             wxFileName::StripExtension(doc->GetTitle())));
-                        reportWindow->Save(
-                            folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
-                            wxFileName::GetPathSeparator() + reportWindow->GetLabel() + L".htm");
+                            wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt;
+                        if (!graphWindow->Save(savePath, graphOptions))
+                            {
+                            wxLogError(L"Failed to save graph: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                         {
@@ -2965,9 +2948,12 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
                         std::wstring htmlText = webview->GetPageSource().ToStdWstring();
                         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        wxFileName(savePath).SetPermissions(wxS_DEFAULT);
-                        wxFile file(savePath, wxFile::write);
-                        file.Write(htmlText);
+                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+                        wxFile file{ savePath, wxFile::write };
+                        if (!file.Write(htmlText))
+                            {
+                            wxLogError(L"Failed to save report: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
@@ -2975,10 +2961,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        list->Save(folder + wxFileName::GetPathSeparator() +
-                                       _DT(L"Readability Scores") + wxFileName::GetPathSeparator() +
-                                       list->GetLabel() + listExt,
-                                   Wisteria::UI::GridExportOptions());
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
+                            wxFileName::GetPathSeparator() + list->GetLabel() + listExt;
+                        if (!list->Save(savePath, Wisteria::UI::GridExportOptions()))
+                            {
+                            wxLogError(L"Failed to save list: (%s).", savePath);
+                            }
                         }
                     }
                 }
@@ -3001,15 +2990,23 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 wxWindow* activeWindow = GetSummaryView().GetWindow(i);
                 if (activeWindow != nullptr)
                     {
-                    if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                    if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                         {
-                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
-                        html->SetLabel(
-                            wxString::Format(L"%s [%s]", html->GetName(),
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        html->Save(folder + wxFileName::GetPathSeparator() +
-                                   _DT(L"Summary Statistics") + wxFileName::GetPathSeparator() +
-                                   html->GetLabel() + L".htm");
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Summary Statistics") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
+                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+                        wxFile file{ savePath, wxFile::write };
+                        if (!file.Write(htmlText))
+                            {
+                            wxLogError(L"Failed to save report: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
                              includeLists)
@@ -3018,10 +3015,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        list->Save(folder + wxFileName::GetPathSeparator() +
-                                       _DT(L"Summary Statistics") + wxFileName::GetPathSeparator() +
-                                       list->GetLabel() + listExt,
-                                   Wisteria::UI::GridExportOptions());
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Summary Statistics") +
+                            wxFileName::GetPathSeparator() + list->GetLabel() + listExt;
+                        if (!list->Save(savePath, Wisteria::UI::GridExportOptions()))
+                            {
+                            wxLogError(L"Failed to save list: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -3029,10 +3029,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         graphWindow->SetLabel(
                             wxString::Format(L"%s [%s]", graphWindow->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        graphWindow->Save(
+                        const wxString savePath =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Summary Statistics") +
-                                wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
-                            graphOptions);
+                            wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt;
+                        if (!graphWindow->Save(savePath, graphOptions))
+                            {
+                            wxLogError(L"Failed to save graph: (%s).", savePath);
+                            }
                         }
                     }
                 }
@@ -3062,10 +3065,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         list->SetLabel(
                             wxString::Format(L"%s [%s]", list->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        list->Save(folder + wxFileName::GetPathSeparator() +
-                                       _DT(L"Sentences Breakdown") +
-                                       wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
-                                   Wisteria::UI::GridExportOptions());
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Sentences Breakdown") +
+                            wxFileName::GetPathSeparator() + list->GetLabel() + listExt;
+                        if (!list->Save(savePath, Wisteria::UI::GridExportOptions()))
+                            {
+                            wxLogError(L"Failed to save list: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -3073,10 +3079,13 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         graphWindow->SetLabel(
                             wxString::Format(L"%s [%s]", graphWindow->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        graphWindow->Save(
+                        const wxString savePath =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Sentences Breakdown") +
-                                wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
-                            graphOptions);
+                            wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt;
+                        if (!graphWindow->Save(savePath, graphOptions))
+                            {
+                            wxLogError(L"Failed to save graph: (%s).", savePath);
+                            }
                         }
                     }
                 }
@@ -3164,15 +3173,6 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
                                    Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
-                        {
-                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
-                        html->SetLabel(
-                            wxString::Format(L"%s [%s]", html->GetName(),
-                                             wxFileName::StripExtension(doc->GetTitle())));
-                        html->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
-                                   wxFileName::GetPathSeparator() + html->GetLabel() + L".htm");
-                        }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                              includeTextReports)
                         {
@@ -3215,14 +3215,23 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
                                    Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                         {
-                        auto* html = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow);
-                        html->SetLabel(
-                            wxString::Format(L"%s [%s]", html->GetName(),
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        html->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
-                                   wxFileName::GetPathSeparator() + html->GetLabel() + L".htm");
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
+                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+                        wxFile file{ savePath, wxFile::write };
+                        if (!file.Write(htmlText))
+                            {
+                            wxLogError(L"Failed to save report: (%s).", savePath);
+                            }
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
                              includeTextReports)
@@ -3379,23 +3388,6 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             htmlEncode({ textWindow->GetLabel().wc_str() }, true).c_str(), htmlText);
     };
 
-    const auto formatHTMLReport =
-        [&outputText, &htmlEncode, pageBreak](Wisteria::UI::HtmlTableWindow* html,
-                                              const bool includeLeadingPageBreak)
-    {
-        if (html == nullptr)
-            {
-            return;
-            }
-        std::wstring htmlText = (html->GetParser()->GetSource())->wc_string();
-        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-        htmlText = lily_of_the_valley::html_extract_text::get_body(htmlText);
-        outputText +=
-            wxString::Format(L"\n%s<div class='caption'>%s</div>\n%s\n",
-                             (includeLeadingPageBreak ? pageBreak : wxString{}),
-                             htmlEncode({ html->GetName().wc_str() }, true).c_str(), htmlText);
-    };
-
     const auto formatWebViewReport = [&outputText, &htmlEncode, pageBreak](
                                          wxWebView* webview, const bool includeLeadingPageBreak)
     {
@@ -3445,12 +3437,6 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                       includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
-                    {
-                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
-                                     includeLeadingPageBreak);
-                    includeLeadingPageBreak = true;
-                    }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
@@ -3482,10 +3468,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxWindow* activeWindow = GetSummaryView().GetWindow(i);
             if (activeWindow != nullptr)
                 {
-                if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
-                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
-                                     includeLeadingPageBreak);
+                    formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                        includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
@@ -3627,10 +3613,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::HtmlTableWindow)))
+                else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
-                    formatHTMLReport(dynamic_cast<Wisteria::UI::HtmlTableWindow*>(activeWindow),
-                                     includeLeadingPageBreak);
+                    formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                        includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
@@ -3714,7 +3700,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             wxFile cssFile(cssPath, wxFile::OpenMode::write_append);
             if (cssFile.IsOpened())
                 {
-                cssFile.Write(textWindowStyleSection);
+                if (!cssFile.Write(textWindowStyleSection))
+                    {
+                    wxLogError(L"Failed to save CSS file: (%s).", cssPath);
+                    }
                 }
             }
         }

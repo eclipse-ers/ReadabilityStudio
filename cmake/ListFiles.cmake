@@ -5,7 +5,7 @@ set(SRC_FILES_TO_REMOVE_FILTER "(wxSimpleJSON|demo[.]cpp|main[.]cpp|Wisteria-Dat
 Wisteria-Dataviz/src/app/|Wisteria-Dataviz/src/ui/dialogs/editors/|\
 Wisteria-Dataviz/src/ui/dialogs/projectsettingsdlg[.]cpp|debug_profile[.]cpp|\
 Catch2|OleanderStemmingLibrary/tests|tinyexpr-plusplus/tests|utfcpp/tests|\
-utfcpp/samples|utfcpp/extern|cxxopts|xmltest[.]cpp|html5-printer[.]cpp|\
+utfcpp/samples|utfcpp/extern|cxxopts|xmltest[.]cpp|html5-printer[.]cpp|htmltablepanel[.]cpp|\
 textclassifier[.]cpp|candlestickplot[.]cpp|ganttchart[.]cpp|lrroadmap[.]cpp|proconroadmap[.]cpp|\
 roadmap[.]cpp|sankeydiagram[.]cpp|table[.]cpp|wcurveplot[.]cpp|variableselectdlg[.]cpp|reportbuilder[.]cpp|reporttableloader[.]cpp|datasetimportdlg[.]cpp|\
 win_loss_sparkline[.]cpp|multi_series_lineplot[.]cpp|likertchart[.]cpp|waffle_chart[.]cpp|\

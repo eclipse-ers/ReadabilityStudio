@@ -611,18 +611,23 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         return false;
         }
 
-    m_testExplanations =
-        new Wisteria::UI::HtmlTablePanel(GetDocFrame(), wxID_ANY, wxColour{ 255, 255, 255 });
-    m_testExplanations->Hide();
-    m_testExplanations->GetHtmlWindow()->SetLabel(_(L"Test Explanations"));
+    m_testExplanations = wxWebView::New(GetDocFrame(), wxID_ANY);
+    if (m_testExplanations != nullptr)
+        {
+        m_testExplanations->Hide();
+        m_testExplanations->SetLabel(_(L"Test Explanations"));
+        m_testExplanations->EnableContextMenu(true);
+        GetWorkSpaceSizer()->Add(m_testExplanations, wxSizerFlags{ 1 }.Expand());
+        }
 
-    m_statsReport =
-        new Wisteria::UI::HtmlTablePanel(GetDocFrame(), wxID_ANY, wxColour{ 255, 255, 255 });
-    m_statsReport->Hide();
-    m_statsReport->GetHtmlWindow()->SetLabel(_(L"Summary Statistics"));
-
-    GetWorkSpaceSizer()->Add(m_testExplanations, wxSizerFlags{}.Expand());
-    GetWorkSpaceSizer()->Add(m_statsReport, wxSizerFlags{}.Expand());
+    m_statsReport = wxWebView::New(GetDocFrame(), wxID_ANY);
+    if (m_statsReport != nullptr)
+        {
+        m_statsReport->Hide();
+        m_statsReport->SetLabel(_(L"Summary Statistics"));
+        m_statsReport->EnableContextMenu(true);
+        GetWorkSpaceSizer()->Add(m_statsReport, wxSizerFlags{ 1 }.Expand());
+        }
 
     m_warningsView =
         new Wisteria::UI::ListCtrlEx(GetSplitter(), ID_WARNING_LIST_PAGE_ID, wxDefaultPosition,
@@ -1022,8 +1027,20 @@ void BatchProjectView::OnDocumentDelete([[maybe_unused]] wxRibbonButtonBarEvent&
         doc->RefreshProject();
         if (activeListCtrl->GetItemCount() == 0)
             {
-            m_testExplanations->GetHtmlWindow()->SetPage(_(L"No documents available."));
-            m_statsReport->GetHtmlWindow()->SetPage(_(L"No documents available."));
+            const wxString noDocsHtml =
+                L"<!DOCTYPE html><html><head>"
+                L"<meta name='color-scheme' content='light dark' />"
+                L"<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                L"</head><body>" +
+                _(L"No documents available.") + L"</body></html>";
+            if (m_testExplanations != nullptr)
+                {
+                m_testExplanations->SetPage(noDocsHtml, wxString{});
+                }
+            if (m_statsReport != nullptr)
+                {
+                m_statsReport->SetPage(noDocsHtml, wxString{});
+                }
             }
         }
     else
@@ -1714,12 +1731,14 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
         }
 
     std::wstring scoreTextStrippedLinks{ scoreText };
-    lily_of_the_valley::html_format::strip_hyperlinks(scoreTextStrippedLinks);
+    lily_of_the_valley::html_format::strip_hyperlinks(scoreTextStrippedLinks, false);
     if (m_testExplanations != nullptr)
         {
-        m_testExplanations->GetHtmlWindow()->SetPage(ProjectReportFormat::FormatHtmlReportStart() +
-                                                     scoreTextStrippedLinks +
-                                                     ProjectReportFormat::FormatHtmlReportEnd());
+        m_testExplanations->SetPage(
+            ProjectReportFormat::FormatHtmlReportStart(wxString::Format(
+                _(L"Test Explanations [%s]"), wxFileName(m_currentlySelectedFileName).GetName())) +
+                scoreTextStrippedLinks + ProjectReportFormat::FormatHtmlReportEnd(),
+            wxString{});
         }
 
     const wxString docName = list->GetItemTextEx(scoreListItem, 0);
@@ -1738,10 +1757,12 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
                                doc->GetStatisticsReportInfo(),
                                wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr);
             std::wstring textStripped{ text };
-            lily_of_the_valley::html_format::strip_hyperlinks(textStripped);
-            m_statsReport->GetHtmlWindow()->SetPage(ProjectReportFormat::FormatHtmlReportStart() +
-                                                    textStripped +
-                                                    ProjectReportFormat::FormatHtmlReportEnd());
+            lily_of_the_valley::html_format::strip_hyperlinks(textStripped, false);
+            m_statsReport->SetPage(
+                ProjectReportFormat::FormatHtmlReportStart(wxString::Format(
+                    _(L"Summary Statistics [%s]"), wxFileName(docName).GetName())) +
+                    textStripped + ProjectReportFormat::FormatHtmlReportEnd(),
+                wxString{});
             break;
             }
         }

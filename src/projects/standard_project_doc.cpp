@@ -4081,47 +4081,45 @@ void ProjectDoc::DisplayStatistics()
 
     if (GetStatisticsInfo().IsReportEnabled())
         {
-        auto* summaryReportWindow = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
+        auto* summaryReportWindow = dynamic_cast<wxWebView*>(
             view->GetSummaryView().FindWindowById(BaseProjectView::STATS_REPORT_PAGE_ID));
         if (summaryReportWindow == nullptr)
             {
-            summaryReportWindow = new Wisteria::UI::HtmlTableWindow(
-                view->GetSplitter(), BaseProjectView::STATS_REPORT_PAGE_ID);
-            summaryReportWindow->Hide();
-            summaryReportWindow->SetLabel(BaseProjectView::GetFormattedReportLabel());
-            summaryReportWindow->SetName(BaseProjectView::GetFormattedReportLabel());
-            summaryReportWindow->SetPrinterSettings(wxGetApp().GetPrintData());
-            summaryReportWindow->SetLeftPrinterHeader(
-                wxGetApp().GetAppOptions()->GetLeftPrinterHeader());
-            summaryReportWindow->SetCenterPrinterHeader(
-                wxGetApp().GetAppOptions()->GetCenterPrinterHeader());
-            summaryReportWindow->SetRightPrinterHeader(
-                wxGetApp().GetAppOptions()->GetRightPrinterHeader());
-            summaryReportWindow->SetLeftPrinterFooter(
-                wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
-            summaryReportWindow->SetCenterPrinterFooter(
-                wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
-            summaryReportWindow->SetRightPrinterFooter(
-                wxGetApp().GetAppOptions()->GetRightPrinterFooter());
+            summaryReportWindow =
+                wxWebView::New(view->GetSplitter(), BaseProjectView::STATS_REPORT_PAGE_ID);
+            if (summaryReportWindow != nullptr)
+                {
+                summaryReportWindow->Hide();
+                summaryReportWindow->SetLabel(BaseProjectView::GetFormattedReportLabel());
+                summaryReportWindow->SetName(BaseProjectView::GetFormattedReportLabel());
+                summaryReportWindow->EnableContextMenu(true);
+                summaryReportWindow->Bind(wxEVT_WEBVIEW_NAVIGATING,
+                                          &ProjectView::OnExplanationNavigating, view);
+                }
             }
 
-        wxString formattedStats =
-            ProjectReportFormat::FormatHtmlReportStart() +
-            ProjectReportFormat::FormatStatisticsInfo(
-                this, GetStatisticsReportInfo(), wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT),
-                view->GetSummaryStatisticsListData()) +
-            ProjectReportFormat::FormatHtmlReportEnd();
-        // if document failed to be loaded, and we are just showing the basic stats,
-        // then remove the links to the various windows that won't be shown
-        if (!LoadingOriginalTextSucceeded())
+        if (summaryReportWindow != nullptr)
             {
-            std::wstring strippedStatsText{ formattedStats };
-            lily_of_the_valley::html_format::strip_hyperlinks(strippedStatsText);
-            formattedStats = strippedStatsText;
+            wxString formattedStats = ProjectReportFormat::FormatHtmlReportStart(
+                                          wxString::Format( // TRANSLATORS: %s is the project name
+                                              _(L"Statistics Report [%s]"), GetTitle())) +
+                                      ProjectReportFormat::FormatStatisticsInfo(
+                                          this, GetStatisticsReportInfo(),
+                                          wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT),
+                                          view->GetSummaryStatisticsListData()) +
+                                      ProjectReportFormat::FormatHtmlReportEnd();
+            // if document failed to be loaded, and we are just showing the basic stats,
+            // then remove the links to the various windows that won't be shown
+            if (!LoadingOriginalTextSucceeded())
+                {
+                std::wstring strippedStatsText{ formattedStats };
+                lily_of_the_valley::html_format::strip_hyperlinks(strippedStatsText);
+                formattedStats = strippedStatsText;
+                }
+            summaryReportWindow->SetPage(NavLink::AnchorsToExplanationScheme(formattedStats),
+                                         wxString{});
+            view->GetSummaryView().InsertWindow(0, summaryReportWindow);
             }
-
-        summaryReportWindow->SetPage(formattedStats);
-        view->GetSummaryView().InsertWindow(0, summaryReportWindow);
         }
     else
         {
@@ -4170,31 +4168,35 @@ void ProjectDoc::DisplayStatistics()
 
     if (IsIncludingDolchSightWords())
         {
-        auto* sumWindow = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
+        auto* sumWindow = dynamic_cast<wxWebView*>(
             view->GetDolchSightWordsView().FindWindowById(BaseProjectView::DOLCH_STATS_PAGE_ID));
         if (sumWindow == nullptr)
             {
-            sumWindow = new Wisteria::UI::HtmlTableWindow(view->GetSplitter(),
-                                                          BaseProjectView::DOLCH_STATS_PAGE_ID);
-            sumWindow->Hide();
-            sumWindow->SetLabel(_(L"Summary"));
-            sumWindow->SetName(_(L"Dolch Summary"));
-            sumWindow->SetPrinterSettings(wxGetApp().GetPrintData());
-            sumWindow->SetLeftPrinterHeader(wxGetApp().GetAppOptions()->GetLeftPrinterHeader());
-            sumWindow->SetCenterPrinterHeader(wxGetApp().GetAppOptions()->GetCenterPrinterHeader());
-            sumWindow->SetRightPrinterHeader(wxGetApp().GetAppOptions()->GetRightPrinterHeader());
-            sumWindow->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
-            sumWindow->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
-            sumWindow->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
-
-            view->GetDolchSightWordsView().AddWindow(sumWindow);
+            sumWindow = wxWebView::New(view->GetSplitter(), BaseProjectView::DOLCH_STATS_PAGE_ID);
+            if (sumWindow != nullptr)
+                {
+                sumWindow->Hide();
+                sumWindow->SetLabel(_(L"Summary"));
+                sumWindow->SetName(_(L"Dolch Summary"));
+                sumWindow->EnableContextMenu(true);
+                sumWindow->Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating,
+                                view);
+                view->GetDolchSightWordsView().AddWindow(sumWindow);
+                }
             }
-        assert(sumWindow);
-        sumWindow->SetPage(ProjectReportFormat::FormatHtmlReportStart() +
-                           ProjectReportFormat::FormatDolchStatisticsInfo(
-                               this, GetStatisticsReportInfo(), true,
-                               wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr) +
-                           ProjectReportFormat::FormatHtmlReportEnd());
+        if (sumWindow != nullptr)
+            {
+            sumWindow->SetPage(
+                NavLink::AnchorsToExplanationScheme(
+                    ProjectReportFormat::FormatHtmlReportStart(
+                        wxString::Format( // TRANSLATORS: %s is the project name
+                            _(L"Dolch Summary [%s]"), GetTitle())) +
+                    ProjectReportFormat::FormatDolchStatisticsInfo(
+                        this, GetStatisticsReportInfo(), true,
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr) +
+                    ProjectReportFormat::FormatHtmlReportEnd()),
+                wxString{});
+            }
         }
     else
         {

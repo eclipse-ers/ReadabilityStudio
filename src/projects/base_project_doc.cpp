@@ -540,23 +540,6 @@ void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::ListCtrlEx* window) con
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::HtmlTableWindow* window) const
-    {
-    if (window == nullptr)
-        {
-        return;
-        }
-    window->SetPrinterSettings(GetPrintData());
-    window->SetLeftPrinterHeader(wxGetApp().GetAppOptions()->GetLeftPrinterHeader());
-    window->SetCenterPrinterHeader(wxGetApp().GetAppOptions()->GetCenterPrinterHeader());
-    window->SetRightPrinterHeader(wxGetApp().GetAppOptions()->GetRightPrinterHeader());
-    window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
-    window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
-    window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
-    window->SetWatermark(GetWatermark());
-    }
-
-//------------------------------------------------
 void BaseProjectDoc::UpdateListOptions(Wisteria::UI::ListCtrlEx* list) const
     {
     if (list == nullptr)

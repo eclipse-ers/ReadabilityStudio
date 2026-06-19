@@ -151,7 +151,6 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/getdirdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/gridexportdlg.cpp
-    src/Wisteria-Dataviz/src/ui/dialogs/htmltablepanel.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/imageexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/imagemergedlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/listctrlitemviewdlg.cpp

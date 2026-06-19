@@ -48,6 +48,7 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "lua_standard_project.h"
+#include <wx/webview.h>
 #include "../Wisteria-Dataviz/src/base/label.h"
 #include "../Wisteria-Dataviz/src/base/reportbuilder.h"
 #include "../app/readability_app.h"
@@ -3979,34 +3980,32 @@ namespace LuaScripting
                 }
             if (windowId == BaseProjectView::STATS_REPORT_PAGE_ID)
                 {
-                auto* window = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
-                    view->GetSummaryView().FindWindowById(windowId));
+                auto* window =
+                    dynamic_cast<wxWebView*>(view->GetSummaryView().FindWindowById(windowId));
                 if (window != nullptr)
                     {
-                    const wxString originalLabel = window->GetName();
-                    window->SetLabel(
-                        originalLabel +
-                        wxString::Format(L" [%s]", wxFileName::StripExtension(doc->GetTitle())));
-                    lua_pushboolean(
-                        L, window->Save(wxString{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 }));
-                    window->SetLabel(originalLabel);
+                    const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
+                    std::wstring htmlText = window->GetPageSource().ToStdWstring();
+                    lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+                    wxFile file(filePath, wxFile::write);
+                    lua_pushboolean(L, file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;
                     }
                 }
             else if (windowId == BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID)
                 {
-                auto* window = dynamic_cast<Wisteria::UI::HtmlTableWindow*>(
+                auto* window = dynamic_cast<wxWebView*>(
                     view->GetReadabilityResultsView().FindWindowById(windowId));
                 if (window != nullptr)
                     {
-                    const wxString originalLabel = window->GetName();
-                    window->SetLabel(
-                        originalLabel +
-                        wxString::Format(L" [%s]", wxFileName::StripExtension(doc->GetTitle())));
-                    lua_pushboolean(
-                        L, window->Save(wxString{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 }));
-                    window->SetLabel(originalLabel);
+                    const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
+                    std::wstring htmlText = window->GetPageSource().ToStdWstring();
+                    lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+                    wxFile file(filePath, wxFile::write);
+                    lua_pushboolean(L, file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;
                     }

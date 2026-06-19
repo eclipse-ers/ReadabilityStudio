@@ -48,8 +48,8 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "explanation_listctrl.h"
-#include "../../Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.h"
 #include "../../projects/project_navigation_links.h"
+#include "../../Wisteria-Dataviz/src/import/html_encode.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxPanel)
 

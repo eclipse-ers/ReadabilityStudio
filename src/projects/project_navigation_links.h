@@ -14,6 +14,7 @@
 #ifndef PROJECT_NAVIGATION_LINKS_H
 #define PROJECT_NAVIGATION_LINKS_H
 
+#include <array>
 #include <string_view>
 #include <wx/string.h>
 
@@ -72,18 +73,54 @@ namespace NavLink
     ///     anchors are rewritten to this scheme just before display.
     inline constexpr std::wstring_view ExplanationScheme{ L"rsexplain://" };
 
-    /// @brief Rewrites in-app anchor links (`href="#id"`) to the custom scheme
+    /// @brief Rewrites known in-app anchor links (`href="#id"`) to the custom scheme
     ///     (`href="rsexplain://id"`) so a @c wxWebView fires a vetoable
     ///     navigation for them.
     /// @param html The explanation HTML to display.
     /// @returns The HTML with its in-app anchors rewritten to the custom scheme.
-    /// @note Only affects the displayed copy; the stored explanations keep their
-    ///     `#anchor` form for export and the @c wxHtmlWindow-based reports.
+    /// @note Only the known nav-anchor IDs are rewritten; unrecognized anchors are left as-is.
     [[nodiscard]]
     inline wxString AnchorsToExplanationScheme(wxString html)
         {
-        html.Replace(L"href=\"#", wxString{ L"href=\"" } + wxString{ ExplanationScheme.data(),
-                                                                     ExplanationScheme.length() });
+        constexpr static auto knownAnchors =
+            std::to_array<std::wstring_view>({ FryGraph,
+                                               RaygorGraph,
+                                               GilliamPenaMountainGraph,
+                                               FraseGraph,
+                                               DanielsonBryan2,
+                                               Schwartz,
+                                               Inflesz,
+                                               CrawfordGraph,
+                                               LixGauge,
+                                               GermanLixGauge,
+                                               FleschChart,
+                                               Misspellings,
+                                               RepeatedWords,
+                                               MismatchedArticles,
+                                               WordingErrors,
+                                               RedundantPhrases,
+                                               OverusedWordsBySentence,
+                                               WordyPhrases,
+                                               Cliches,
+                                               PassiveVoice,
+                                               SentenceStartingWithConjunctions,
+                                               SentenceStartingWithLowercase,
+                                               DifficultSentences,
+                                               HardWords,
+                                               LongWords,
+                                               DaleChallWords,
+                                               HarrisJacobsonWords,
+                                               SpacheWords,
+                                               UnusedDolchWords,
+                                               Dolch,
+                                               SelectStatistics,
+                                               FogHelp });
+        const wxString scheme(ExplanationScheme.data(), ExplanationScheme.length());
+        for (const auto anchor : knownAnchors)
+            {
+            const wxString id(anchor.data(), anchor.length());
+            html.Replace(L"href=\"#" + id + L"\"", L"href=\"" + scheme + id + L"\"");
+            }
         return html;
         }
     } // namespace NavLink

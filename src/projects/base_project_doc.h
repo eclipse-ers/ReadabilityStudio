@@ -51,7 +51,6 @@
 #define BASE_PROJECT_DOC_H
 
 #include "../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
-#include "../Wisteria-Dataviz/src/ui/controls/htmltablewin.h"
 #include "../graphs/raygorgraph.h"
 #include "../ui/controls/explanation_listctrl.h"
 #include "base_project.h"
@@ -1133,9 +1132,6 @@ class BaseProjectDoc : public BaseProject, public wxDocument
     /// @brief Updates printer settings for an explanation list control.
     /// @param window The explanation list control to update.
     void UpdatePrinterSettings(ExplanationListCtrl* window) const;
-    /// @brief Updates printer settings for an HTML report.
-    /// @param window The HTML report to update.
-    void UpdatePrinterSettings(Wisteria::UI::HtmlTableWindow* window) const;
 
     virtual void RefreshGraphs() {}
 
