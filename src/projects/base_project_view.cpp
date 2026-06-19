@@ -575,8 +575,6 @@ bool BaseProjectView::OnClose(bool deleteWindow)
         return false;
         }
 
-    wxGetApp().GetMainFrameEx()->DestroyLogWindow();
-
     if (deleteWindow)
         {
         m_frame->Destroy();

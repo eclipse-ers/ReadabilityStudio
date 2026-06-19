@@ -788,6 +788,8 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       // log options
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
       m_logAppendDailyLog(wxGetApp().GetAppOptions()->IsAppendingDailyLog()),
+      m_showLogTab(wxGetApp().GetAppOptions()->IsShowingLogTab()),
+      m_logAutoRefresh(wxGetApp().GetAppOptions()->IsLogAutoRefresh()),
       // scripting options
       m_showDeveloperTab(wxGetApp().GetAppOptions()->IsShowingDeveloperTab()),
       m_luaUnsafeMode(wxGetApp().GetAppOptions()->IsLuaUnsafeModeEnabled()),
@@ -1836,6 +1838,33 @@ void ToolsOptionsDlg::SaveOptions()
                         }
                     }
                 }
+            }
+        }
+    if (m_showLogTab.has_changed())
+        {
+        wxGetApp().GetAppOptions()->ShowLogTab(m_showLogTab.get_value());
+        if (wxGetApp().GetMainFrameEx() != nullptr &&
+            wxGetApp().GetMainFrameEx()->GetRibbon() != nullptr &&
+            wxGetApp().GetMainFrameEx()->GetLogRibbonPage() != nullptr)
+            {
+            if (!m_showLogTab.get_value() && wxGetApp().GetMainFrameEx()->IsLogTabActive())
+                {
+                wxGetApp().GetMainFrameEx()->GetRibbon()->SetActivePage(
+                    wxGetApp().GetMainFrameEx()->GetHomeRibbonPage());
+                }
+            wxGetApp().GetMainFrameEx()->GetRibbon()->ShowPage(
+                wxGetApp().GetMainFrameEx()->GetRibbon()->GetPageNumber(
+                    wxGetApp().GetMainFrameEx()->GetLogRibbonPage()),
+                m_showLogTab.get_value());
+            wxGetApp().GetMainFrameEx()->GetRibbon()->Realize();
+            }
+        }
+    if (m_logAutoRefresh.has_changed())
+        {
+        wxGetApp().GetAppOptions()->SetLogAutoRefresh(m_logAutoRefresh.get_value());
+        if (wxGetApp().GetMainFrameEx() != nullptr)
+            {
+            wxGetApp().GetMainFrameEx()->SetLogAutoRefresh(m_logAutoRefresh.get_value());
             }
         }
     if (m_luaUnsafeMode.has_changed())
@@ -5316,6 +5345,17 @@ void ToolsOptionsDlg::CreateControls()
             optionsSizer = new wxBoxSizer(wxVERTICAL);
             docPanelSizer->Add(optionsSizer,
                                wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Show Log tab"),
+                                             wxDefaultPosition, wxDefaultSize, 0,
+                                             wxGenericValidator(&m_showLogTab.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
+
+            optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY,
+                                             _(L"Auto refresh log report"), wxDefaultPosition,
+                                             wxDefaultSize, 0,
+                                             wxGenericValidator(&m_logAutoRefresh.get_value())),
+                              wxSizerFlags{}.Expand().Border(wxTOP));
 
             optionsSizer->Add(new wxCheckBox(generalSettingsPage, wxID_ANY, _(L"Verbose logging"),
                                              wxDefaultPosition, wxDefaultSize, 0,

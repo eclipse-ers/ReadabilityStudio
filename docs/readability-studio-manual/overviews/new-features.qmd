@@ -26,8 +26,8 @@ source('../R/appdown.r')
 - Added document's last modified time to the summary statistics (standard projects).
 - **Web Harvester** improvements:
   - Previous download folder is now saved.
-
 - [Command-line options](#sec-command-line-options) have changed.
+- Log report is now integrated into the main window (instead of being a floating window).
 
 ### Graph Enhancements {-}
 

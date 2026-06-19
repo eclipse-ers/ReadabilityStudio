@@ -138,6 +138,13 @@ The following are informational messages shown interactively in the program:
 
 ### Log {-}
 
+**Show Log tab**: Select this option to show the **Log** tab on the ribbon.
+The **Log** tab displays the application's log report directly in the main window.
+Uncheck this to hide the tab if you do not need to review log information.
+
+**Auto refresh log tab**: Select this option to automatically refresh the log list every few seconds while the **Log** tab is open.
+This is useful for monitoring log output in real time without manually clicking **Refresh**.
+
 **Verbose logging**: Select this option to include extended information in the log report.
 
 **Append daily log**: Select this option to append to the previous log report (when running the program on the same day).

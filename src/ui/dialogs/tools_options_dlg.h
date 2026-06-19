@@ -1028,6 +1028,8 @@ class ToolsOptionsDlg final : public wxDialog
     // log settings
     BackupVariable<bool> m_logVerbose;
     BackupVariable<bool> m_logAppendDailyLog;
+    BackupVariable<bool> m_showLogTab;
+    BackupVariable<bool> m_logAutoRefresh;
 
     // scripting settings
     BackupVariable<bool> m_showDeveloperTab;

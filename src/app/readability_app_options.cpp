@@ -404,6 +404,8 @@ void ReadabilityAppOptions::ResetSettings()
     m_logAppendDailyLog = false;
     m_luaUnsafeMode = false;
     m_showDeveloperTab = true;
+    m_showLogTab = true;
+    m_logAutoRefresh = false;
 
     m_textHighlight = TextHighlight::HighlightBackground;
     m_dolchConjunctionsColor = wxColour(255, 255, 0);
@@ -2465,6 +2467,17 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             ShowDeveloperTab(
                 int_to_bool(showDeveloperTabNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
             }
+        auto* showLogTabNode = logSettingsNode->FirstChildElement(XML_SHOW_LOG_TAB.data());
+        if (showLogTabNode != nullptr)
+            {
+            ShowLogTab(int_to_bool(showLogTabNode->ToElement()->IntAttribute(XML_VALUE.data(), 1)));
+            }
+        auto* logAutoRefreshNode = logSettingsNode->FirstChildElement(XML_LOG_AUTO_REFRESH.data());
+        if (logAutoRefreshNode != nullptr)
+            {
+            SetLogAutoRefresh(
+                int_to_bool(logAutoRefreshNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
+            }
         }
     // printer settings
     auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
@@ -3213,6 +3226,14 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* showDeveloperTab = doc.NewElement(XML_SHOW_DEVELOPER_TAB.data());
     showDeveloperTab->SetAttribute(XML_VALUE.data(), bool_to_int(IsShowingDeveloperTab()));
     logSection->InsertEndChild(showDeveloperTab);
+
+    auto* showLogTab = doc.NewElement(XML_SHOW_LOG_TAB.data());
+    showLogTab->SetAttribute(XML_VALUE.data(), bool_to_int(IsShowingLogTab()));
+    logSection->InsertEndChild(showLogTab);
+
+    auto* logAutoRefresh = doc.NewElement(XML_LOG_AUTO_REFRESH.data());
+    logAutoRefresh->SetAttribute(XML_VALUE.data(), bool_to_int(IsLogAutoRefresh()));
+    logSection->InsertEndChild(logAutoRefresh);
 
     configSection->InsertEndChild(logSection);
 

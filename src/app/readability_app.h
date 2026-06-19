@@ -55,7 +55,6 @@
 #include "../Wisteria-Dataviz/src/ui/controls/codeeditor.h"
 #include "../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
-#include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/printerheaderfooterdlg.h"
 #include "../Wisteria-Dataviz/src/ui/mainframe.h"
 #include "../Wisteria-Dataviz/src/util/donttranslate.h"
@@ -119,15 +118,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     MainFrame(const MainFrame&) = delete;
     MainFrame& operator=(const MainFrame&) = delete;
 
-    ~MainFrame() override
-        {
-        wxLogDebug(__func__);
-        // modeless dialogs that do not have parents
-        if (m_logWindow != nullptr)
-            {
-            m_logWindow->Destroy();
-            }
-        }
+    ~MainFrame() override { wxLogDebug(__func__); }
 
     void OnAbout([[maybe_unused]] wxCommandEvent& event);
     void OnStartPageClick(const wxCommandEvent& event);
@@ -137,7 +128,6 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnPrintWatermark([[maybe_unused]] wxCommandEvent& event);
     void OnBlankGraph(const wxCommandEvent& event);
     void OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event);
-    void OnViewLogReport([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnEditWordList([[maybe_unused]] wxCommandEvent& event);
@@ -319,21 +309,26 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     /// @brief Show MainFrame and switch the ribbon to the Home tab.
     void ActivateHomePage();
 
-    /// @returns The log report dialog.
-    Wisteria::UI::ListDlg* GetLogWindow() noexcept { return m_logWindow; }
-
-    /// @brief Resets the log window.
-    /// @note This should be called from document view's close event
-    ///     to ensure that this window gets cleaned up and re-parented.
-    void DestroyLogWindow()
+    /// @returns The Log ribbon tab page.
+    [[nodiscard]]
+    wxRibbonPage* GetLogRibbonPage() const noexcept
         {
-        if (m_logWindow != nullptr)
-            {
-            m_logWindow->Hide();
-            m_logWindow->Destroy();
-            m_logWindow = nullptr;
-            }
+        return m_logRibbonPage;
         }
+
+    /// @returns @c true if the Log ribbon tab is currently the active page.
+    [[nodiscard]]
+    bool IsLogTabActive() const noexcept
+        {
+        return (GetRibbon() != nullptr && GetLogRibbonPage() != nullptr &&
+                GetRibbon()->GetActivePage() == GetRibbon()->GetPageNumber(GetLogRibbonPage()));
+        }
+
+    /// @brief Show MainFrame, switch the ribbon to the Log tab, and refresh the log list.
+    void ActivateLogTab();
+
+    /// @brief Enables or disables log auto-refresh, syncing the ribbon button and timer.
+    void SetLogAutoRefresh(bool enable);
 
   private:
     static std::map<int, wxString> m_testBundleMenuIds;
@@ -344,9 +339,15 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 
     wxStartPage* m_startPage{ nullptr };
     ScriptWorkbenchPanel* m_scriptWorkbench{ nullptr };
+    wxPanel* m_logPanel{ nullptr };
+    Wisteria::UI::ListCtrlEx* m_logListCtrl{ nullptr };
+    std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider> m_logDataProvider;
+    wxTimer m_logAutoRefreshTimer;
+    bool m_logAutoRefresh{ false };
+    wxRibbonButtonBar* m_logEditButtonBar{ nullptr };
     wxRibbonPage* m_homeRibbonPage{ nullptr };
     wxRibbonPage* m_developerRibbonPage{ nullptr };
-    Wisteria::UI::ListDlg* m_logWindow{ nullptr };
+    wxRibbonPage* m_logRibbonPage{ nullptr };
 
     wxDECLARE_CLASS(MainFrame);
     };
@@ -455,6 +456,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonDeveloperPage(wxRibbonBar* ribbon);
+    void LoadRibbonLogPage(wxRibbonBar* ribbon);
     void LoadRibbonHelpPage(wxRibbonBar* ribbon);
 
     // menu creation
@@ -469,8 +471,8 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void UpdateDocumentThemes();
     void UpdateStartPageTheme();
     void UpdateScriptEditorTheme();
-    void UpdateLogWindowTheme();
     void UpdateSideBarTheme(Wisteria::UI::SideBar* sidebar);
+    void ReadLogIntoListCtrl(Wisteria::UI::ListCtrlEx* listCtrl);
     void UpdateRibbonTheme(const wxRibbonBar* ribbon);
 
     /// Adds a list of words to the custom dictionary
