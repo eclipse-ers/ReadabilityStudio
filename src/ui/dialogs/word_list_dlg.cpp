@@ -218,16 +218,12 @@ void WordListDlg::CreateControls()
                 new wxRibbonPanel(homePage, wxID_ANY, _(L"Export"), wxNullBitmap, wxDefaultPosition,
                                   wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
             auto* buttonBar = new wxRibbonButtonBar(exportPage);
-            buttonBar->AddButton(
-                wxID_SAVE, _(L"Save"),
-                wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_BUTTON, FromDIP(wxSize{ 32, 32 }))
-                    .ConvertToImage(),
-                _(L"Save the list."));
-            buttonBar->AddButton(
-                wxID_PRINT, _(L"Print"),
-                wxArtProvider::GetBitmap(wxART_PRINT, wxART_BUTTON, FromDIP(wxSize{ 32, 32 }))
-                    .ConvertToImage(),
-                _(L"Print the list."));
+            buttonBar->AddButton(wxID_SAVE, _(L"Save"),
+                                 wxGetApp().ReadSvgIcon(L"ribbon/file-save.svg"),
+                                 _(L"Save the list."));
+            buttonBar->AddButton(wxID_PRINT, _(L"Print"),
+                                 wxGetApp().ReadSvgIcon(L"ribbon/print.svg"),
+                                 _(L"Print the list."));
             }
             // edit
             {
@@ -235,21 +231,14 @@ void WordListDlg::CreateControls()
                 new wxRibbonPanel(homePage, wxID_ANY, _(L"Edit"), wxNullBitmap, wxDefaultPosition,
                                   wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
             auto* buttonBar = new wxRibbonButtonBar(editPage);
-            buttonBar->AddButton(
-                wxID_COPY, _(L"Copy Selection"),
-                wxArtProvider::GetBitmap(wxART_COPY, wxART_BUTTON, FromDIP(wxSize{ 32, 32 }))
-                    .ConvertToImage(),
-                _(L"Copy the selected items."));
-            buttonBar->AddButton(
-                wxID_SELECTALL, _(L"Select All"),
-                wxArtProvider::GetBitmap(L"ID_SELECT_ALL", wxART_BUTTON, FromDIP(wxSize{ 32, 32 }))
-                    .ConvertToImage(),
-                _(L"Select the entire list."));
-            buttonBar->AddButton(
-                XRCID("ID_LIST_SORT"), _(L"Sort"),
-                wxArtProvider::GetBitmap(L"ID_LIST_SORT", wxART_BUTTON, FromDIP(wxSize{ 32, 32 }))
-                    .ConvertToImage(),
-                _(L"Sort the list."));
+            buttonBar->AddButton(wxID_COPY, _(L"Copy Selection"),
+                                 wxGetApp().ReadSvgIcon(L"ribbon/copy.svg"),
+                                 _(L"Copy the selected items."));
+            buttonBar->AddButton(wxID_SELECTALL, _(L"Select All"),
+                                 wxGetApp().ReadSvgIcon(L"ribbon/select-all.svg"),
+                                 _(L"Select the entire list."));
+            buttonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"),
+                                 wxGetApp().ReadSvgIcon(L"ribbon/sort.svg"), _(L"Sort the list."));
             }
         ribbon->SetArtProvider(new wxRibbonMSWArtProvider);
         wxGetApp().UpdateRibbonTheme(ribbon);
