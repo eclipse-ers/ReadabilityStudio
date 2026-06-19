@@ -6290,7 +6290,7 @@ void ToolsOptionsDlg::CreateLabelHeader(wxWindow* parent, wxSizer* parentSizer,
                                         const wxString& title,
                                         const bool addSidePadding /*= false*/)
     {
-    assert(parent && parentSizer);
+    wxASSERT_MSG(parent && parentSizer, L"Invalid parent or parent sizer!");
     if ((parent == nullptr) || (parentSizer == nullptr))
         {
         return;

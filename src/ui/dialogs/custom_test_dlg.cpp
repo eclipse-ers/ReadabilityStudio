@@ -105,7 +105,7 @@ bool CustomTestDlg::ValidateFormula(const bool promptOnSuccess /*= false*/)
         const bool isUsingActiveProject =
             ((activeProject != nullptr) && activeProject->IsKindOf(CLASSINFO(ProjectDoc)));
         BaseProjectDoc* project = isUsingActiveProject ? activeProject : blankProject.get();
-        assert(project);
+        wxASSERT_MSG(project, L"Invalid project!");
 
         if (!project->GetFormulaParser().compile(GetFormula().ToStdString()))
             {
@@ -332,8 +332,8 @@ bool CustomTestDlg::ValidateFormula(const bool promptOnSuccess /*= false*/)
 //-------------------------------------------------------------
 void CustomTestDlg::UpdateOptions()
     {
-    assert(m_wordListsPropertyGrid);
-    assert(m_properNounsNumbersPropertyGrid);
+    wxASSERT_MSG(m_wordListsPropertyGrid, L"Invalid word list property grid!");
+    wxASSERT_MSG(m_properNounsNumbersPropertyGrid, L"Invalid noun list property grid!");
     if ((m_wordListsPropertyGrid == nullptr) || (m_properNounsNumbersPropertyGrid == nullptr))
         {
         return;

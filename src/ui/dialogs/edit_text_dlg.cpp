@@ -596,7 +596,8 @@ void EditTextDlg::OnClose([[maybe_unused]] wxCloseEvent& event)
             }
         else if ((m_parentDoc != nullptr) && m_parentDoc->IsKindOf(CLASSINFO(BatchProjectDoc)))
             {
-            assert(IsModal() && L"Text editor should be modal when called from a batch project!");
+            wxASSERT_MSG(IsModal(),
+                         L"Text editor should be modal when called from a batch project!");
             if (wxMessageBox(_(L"Do you wish to save your unsaved changes?"), _(L"Save Changes"),
                              wxYES_NO | wxICON_QUESTION) == wxYES)
                 {
@@ -792,7 +793,7 @@ void EditTextDlg::Save()
     if ((m_parentDoc != nullptr) && m_parentDoc->IsKindOf(CLASSINFO(ProjectDoc)))
         {
         auto* projectDoc = dynamic_cast<ProjectDoc*>(m_parentDoc);
-        assert(projectDoc && L"Bad cast to standard project!");
+        wxASSERT_MSG(projectDoc, L"Bad cast to standard project!");
         if (projectDoc != nullptr)
             {
             projectDoc->SetDocumentText(m_value.wc_string());
@@ -813,7 +814,7 @@ void EditTextDlg::EnableSaveButton(const bool enable /*= true*/)
         saveButtonBarWindow->IsKindOf(CLASSINFO(wxRibbonButtonBar)))
         {
         auto* saveButtonBar = dynamic_cast<wxRibbonButtonBar*>(saveButtonBarWindow);
-        assert(saveButtonBar && L"Error casting ribbon bar!");
+        wxASSERT_MSG(saveButtonBar, L"Error casting ribbon bar!");
         if (saveButtonBar != nullptr)
             {
             saveButtonBar->EnableButton(wxID_SAVE, enable);
@@ -835,7 +836,7 @@ void EditTextDlg::UpdateButtons()
         paragraphButtonBarWindow->IsKindOf(CLASSINFO(wxRibbonButtonBar)))
         {
         auto* paragraphButtonBar = dynamic_cast<wxRibbonButtonBar*>(paragraphButtonBarWindow);
-        assert(paragraphButtonBar && L"Error casting ribbon bar!");
+        wxASSERT_MSG(paragraphButtonBar, L"Error casting ribbon bar!");
         if (paragraphButtonBar != nullptr)
             {
             paragraphButtonBar->ToggleButton(wxID_JUSTIFY_LEFT, false);
@@ -866,7 +867,7 @@ void EditTextDlg::UpdateButtons()
         editButtonBarWindow->IsKindOf(CLASSINFO(wxRibbonButtonBar)))
         {
         auto* editButtonBar = dynamic_cast<wxRibbonButtonBar*>(editButtonBarWindow);
-        assert(editButtonBar && L"Error casting ribbon bar!");
+        wxASSERT_MSG(editButtonBar, L"Error casting ribbon bar!");
         if (editButtonBar != nullptr)
             {
             editButtonBar->EnableButton(wxID_UNDO, m_textEntry->CanUndo());

@@ -144,8 +144,8 @@ Wisteria::UI::ListCtrlEx* WordListDlg::GetActiveList()
         listCtrl = m_sideBar->GetCurrentPage()->FindWindow(DOLCH_LIST_ID);
         }
 
-    assert(listCtrl && listCtrl->IsKindOf(CLASSINFO(Wisteria::UI::ListCtrlEx)) &&
-           L"Invalid list control in word list dialog?!");
+    wxASSERT_MSG(listCtrl && listCtrl->IsKindOf(CLASSINFO(Wisteria::UI::ListCtrlEx)),
+                 L"Invalid list control in word list dialog?!");
     return ((listCtrl != nullptr) && listCtrl->IsKindOf(CLASSINFO(Wisteria::UI::ListCtrlEx))) ?
                dynamic_cast<Wisteria::UI::ListCtrlEx*>(listCtrl) :
                nullptr;
@@ -199,7 +199,7 @@ void WordListDlg::AddSingleColumnPage(
 void WordListDlg::CreateControls()
     {
     auto* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->SetMinSize(FromDIP(wxSize(800, 600)));
+    mainSizer->SetMinSize(FromDIP(wxSize{ 800, 600 }));
 
     auto* searchSizer = new wxBoxSizer(wxHORIZONTAL);
     searchSizer->AddStretchSpacer(1);

@@ -237,7 +237,7 @@ class CustomReadabilityTestInterface
     [[nodiscard]]
     const std::shared_ptr<Wisteria::UI::ListCtrlExNumericDataProvider>& GetListViewData() const
         {
-        assert(m_listViewData);
+        wxASSERT_MSG(m_listViewData, L"List view data provider is null in GetListViewData()!");
         return m_listViewData;
         }
 
@@ -2737,7 +2737,8 @@ class BaseProjectProcessingLock
   public:
     explicit BaseProjectProcessingLock(BaseProject* project) : m_project(project)
         {
-        assert(m_project);
+        wxASSERT_MSG(m_project,
+                     L"Project pointer is null in BaseProjectProcessingLock CTOR!");
         m_project->SetProcessing(true);
         }
 

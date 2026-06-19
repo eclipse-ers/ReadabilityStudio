@@ -97,9 +97,9 @@ namespace Wisteria
         [[nodiscard]]
         size_t GetScore() const noexcept
             {
-            assert(m_score1 == m_score2 &&
-                   L"GetScore() called, but there are two different scores for this point! "
-                   "Did you mean to call GetScoreRange() or GetScoreAverage()?");
+            wxASSERT_MSG(m_score1 == m_score2,
+                         L"GetScore() called, but there are two different scores for this point! "
+                         "Did you mean to call GetScoreRange() or GetScoreAverage()?");
             return m_score1;
             }
 

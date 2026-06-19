@@ -3037,7 +3037,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
 //------------------------------------------------
 bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxString{}*/)
     {
-    wxASSERT(!m_optionsFile.empty());
+    wxASSERT_MSG(!m_optionsFile.empty(), L"Options filepath is empty in SaveOptionsFile()!");
 
     constexpr lily_of_the_valley::html_encode_text ENCODE;
 

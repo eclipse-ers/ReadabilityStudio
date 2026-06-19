@@ -508,7 +508,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     wxBitmap GetScaledImage(const wxString& image, const wxBitmapType type = wxBITMAP_TYPE_PNG,
                             const wxSize imageSize = wxSize{ 32, 32 })
         {
-        wxASSERT(GetMainFrame());
+        wxASSERT_MSG(GetMainFrame(), L"Main frame is null in GetScaledImage()!");
         if (GetMainFrame() == nullptr)
             {
             return wxNullBitmap;

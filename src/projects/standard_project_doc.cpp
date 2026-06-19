@@ -2311,7 +2311,8 @@ void ProjectDoc::DisplaySentenceCharts()
 
         auto sentenceHistogram = std::dynamic_pointer_cast<Wisteria::Graphs::Histogram>(
             sentenceHistogramCanvas->GetFixedObject(0, 0));
-        assert(sentenceHistogram);
+        wxASSERT_MSG(sentenceHistogram,
+                     L"Sentence histogram dynamic cast failed in DisplaySentenceCharts()!");
 
         sentenceHistogram->GetTitle().SetText(_(L"Sentence-lengths Distribution"));
         sentenceHistogram->GetTitle().SetRelativeAlignment(Wisteria::RelativeAlignment::Centered);
@@ -2458,7 +2459,7 @@ void ProjectDoc::DisplayWordCharts()
 
         auto wordBarChart = std::dynamic_pointer_cast<Wisteria::Graphs::BarChart>(
             wordBarChartCanvas->GetFixedObject(0, 0));
-        assert(wordBarChart);
+        wxASSERT_MSG(wordBarChart, L"Word bar chart dynamic cast failed in DisplayWordCharts()!");
 
         wordBarChart->ClearBars();
         wordBarChart->GetBarAxis().ClearBrackets();
@@ -2625,7 +2626,8 @@ void ProjectDoc::DisplayWordCharts()
                 (threeSyllableBarPos.value() * math_constants::half), _("Familiarity\nFactors")));
             }
 
-        assert(threeSyllableBarPos && monoSyllableBarPos && L"Can't find bars in word bar chart!");
+        wxASSERT_MSG(threeSyllableBarPos && monoSyllableBarPos,
+                     L"Can't find bars in word bar chart in DisplayWordCharts()!");
         if (threeSyllableBarPos && monoSyllableBarPos)
             {
             wordBarChart->GetBarAxis().AddBracket(Wisteria::GraphItems::Axis::AxisBracket(
@@ -2691,7 +2693,8 @@ void ProjectDoc::DisplayWordCharts()
 
         auto syllableHistogram = std::dynamic_pointer_cast<Wisteria::Graphs::Histogram>(
             histoCanvas->GetFixedObject(0, 0));
-        assert(syllableHistogram);
+        wxASSERT_MSG(syllableHistogram,
+                     L"Syllable histogram dynamic cast failed in DisplayWordCharts()!");
 
         syllableHistogram->GetTitle().SetText(_(L"Words (by Syllable Count)"));
         syllableHistogram->GetTitle().SetRelativeAlignment(Wisteria::RelativeAlignment::Centered);
@@ -2795,7 +2798,8 @@ void ProjectDoc::DisplayWordCharts()
 
         auto syllablePieChart = std::dynamic_pointer_cast<Wisteria::Graphs::PieChart>(
             syllablePieCanvas->GetFixedObject(0, 0));
-        assert(syllablePieChart);
+        wxASSERT_MSG(syllablePieChart,
+                     L"Syllable pie chart dynamic cast failed in DisplayWordCharts()!");
 
         // add a donut hole
         syllablePieChart->IncludeDonutHole(true);
@@ -2813,8 +2817,9 @@ void ProjectDoc::DisplayWordCharts()
         if (IsShowcasingKeyItems())
             {
             auto groupCol = m_syllableCounts->GetCategoricalColumn(GetWordTypeGroupColumnName());
-            assert(groupCol != m_syllableCounts->GetCategoricalColumns().cend() &&
-                   L"Unable to get group column for syllable dataset!");
+            wxASSERT_MSG(
+                groupCol != m_syllableCounts->GetCategoricalColumns().cend(),
+                L"Unable to get group column for syllable dataset in DisplayWordCharts()!");
             // get the complex words label from the string table
             if (groupCol != m_syllableCounts->GetCategoricalColumns().cend())
                 {
@@ -2864,7 +2869,7 @@ void ProjectDoc::DisplayWordCharts()
 
         auto wordCloud = std::dynamic_pointer_cast<Wisteria::Graphs::WordCloud>(
             wordCloudCanvas->GetFixedObject(0, 0));
-        assert(wordCloud);
+        wxASSERT_MSG(wordCloud, L"Word cloud dynamic cast failed in DisplayWordCharts()!");
         // top 100 words, with a min frequency of 2
         // (unless less than 100 words, then include everything)
         wordCloud->SetData(m_keyWordsDataset, GetWordsColumnName(), GetWordsCountsColumnName(),
@@ -3252,7 +3257,8 @@ void ProjectDoc::AddFleschChart(const bool setFocus)
             std::make_shared<Wisteria::Colors::Schemes::ColorScheme>(
                 Wisteria::Colors::Schemes::ColorScheme{ Wisteria::Colors::ColorBrewer::GetColor(
                     Wisteria::Colors::Color::CelestialBlue) }));
-        assert(fleschChart);
+        wxASSERT_MSG(fleschChart,
+                     L"Flesch chart creation failed in DisplayReadabilityLinePlots()!");
         fleschChart->SetData(scoreDataset, wordsColumnName, scoresColumnName, syllablesColumnName);
         fleschChartCanvas->SetFixedObject(0, 0, fleschChart);
 
@@ -3323,7 +3329,8 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
         {
         auto schwartzGraph = std::dynamic_pointer_cast<Wisteria::Graphs::SchwartzGraph>(
             schwartzGraphView->GetFixedObject(0, 0));
-        assert(schwartzGraph);
+        wxASSERT_MSG(schwartzGraph,
+                     L"Schwartz graph dynamic cast failed in DisplayReadabilityLinePlots()!");
         schwartzGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
                                sentencesColumnName);
         }
@@ -3354,7 +3361,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
 
     auto schwartzGraph = std::dynamic_pointer_cast<Wisteria::Graphs::SchwartzGraph>(
         schwartzGraphView->GetFixedObject(0, 0));
-    assert(schwartzGraph);
+    wxASSERT_MSG(schwartzGraph, L"Schwartz graph is null in DisplayReadabilityLinePlots()!");
 
     schwartzGraph->SetInvalidAreaColor(GetInvalidAreaColor());
     schwartzGraph->ShowcaseScore(IsShowcasingKeyItems());
@@ -3484,7 +3491,8 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
         {
         auto fraseGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FraseGraph>(
             fraseGraphView->GetFixedObject(0, 0));
-        assert(fraseGraph);
+        wxASSERT_MSG(fraseGraph,
+                     L"Frase graph dynamic cast failed in DisplayReadabilityLinePlots()!");
         fraseGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName,
                             sentencesColumnName);
         }
@@ -3523,7 +3531,7 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
 
     auto fraseGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FraseGraph>(
         fraseGraphView->GetFixedObject(0, 0));
-    assert(fraseGraph);
+    wxASSERT_MSG(fraseGraph, L"Frase graph is null in DisplayReadabilityLinePlots()!");
     if (fraseGraph->GetScores().front().IsScoreInvalid())
         {
         const wxString description =
@@ -3682,7 +3690,8 @@ void ProjectDoc::DisplayReadabilityGraphs()
 
             auto coverageBarChart = std::dynamic_pointer_cast<Wisteria::Graphs::BarChart>(
                 coverageBarChartCanvas->GetFixedObject(0, 0));
-            assert(coverageBarChart);
+            wxASSERT_MSG(coverageBarChart,
+                         L"Coverage bar chart dynamic cast failed in DisplayDolch()!");
 
             coverageBarChart->ClearBars();
             coverageBarChart->SetBarOrientation(
@@ -3895,7 +3904,7 @@ void ProjectDoc::DisplayReadabilityGraphs()
             UpdateGraphOptions(wordBarChartCanvas);
             auto dolchBarChart = std::dynamic_pointer_cast<Wisteria::Graphs::BarChart>(
                 wordBarChartCanvas->GetFixedObject(0, 0));
-            assert(dolchBarChart);
+            wxASSERT_MSG(dolchBarChart, L"Dolch bar chart dynamic cast failed in DisplayDolch()!");
 
             dolchBarChart->ClearBars();
             dolchBarChart->SetBarOrientation(
@@ -4077,7 +4086,7 @@ void ProjectDoc::DisplayStatistics()
     {
     // this area can be included for an empty project, just won't show anything
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    assert(view);
+    wxASSERT_MSG(view, L"Project view is null in DisplayStatistics()!");
 
     if (GetStatisticsInfo().IsReportEnabled())
         {
@@ -4252,7 +4261,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
         {
         auto gFryGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FryGraph>(
             fryGraphView->GetFixedObject(0, 0));
-        assert(gFryGraph);
+        wxASSERT_MSG(gFryGraph, L"GPM Fry graph dynamic cast failed in DisplayFryGPM()!");
         gFryGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName, sentencesColumnName);
         }
     else
@@ -4413,7 +4422,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
         {
         auto fryGraph = std::dynamic_pointer_cast<Wisteria::Graphs::FryGraph>(
             fryGraphView->GetFixedObject(0, 0));
-        assert(fryGraph);
+        wxASSERT_MSG(fryGraph, L"Fry graph dynamic cast failed in DisplayFry()!");
         fryGraph->SetData(scoreDataset, wordsColumnName, syllablesColumnName, sentencesColumnName);
         }
     else
@@ -4576,7 +4585,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
         {
         auto raygorGraph = std::dynamic_pointer_cast<Wisteria::Graphs::RaygorGraph>(
             raygorGraphView->GetFixedObject(0, 0));
-        assert(raygorGraph);
+        wxASSERT_MSG(raygorGraph, L"Raygor graph dynamic cast failed in DisplayRaygor()!");
         raygorGraph->SetData(scoreDataset, wordsColumnName, sixCharWordsColumnName,
                              sentencesColumnName);
         }
@@ -8104,7 +8113,9 @@ void ProjectDoc::CalculateGraphData()
                 (GetInvalidSentenceMethod() == InvalidSentence::IncludeAsFullSentences) ?
                     GetWords()->get_sentences()[sentenceIndex].get_word_count() :
                     GetWords()->get_sentences()[sentenceIndex].get_valid_word_count();
-            assert(debugWordCount == *labelsPos);
+            wxASSERT_MSG(
+                debugWordCount == *labelsPos,
+                L"Sentence length does not match label position in DisplayOverlyLongSentences()!");
 #endif
             if (*labelsPos > outlierInfo.get_upper_outlier_boundary() ||
                 *labelsPos < outlierInfo.get_lower_outlier_boundary())

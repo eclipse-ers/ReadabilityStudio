@@ -1320,7 +1320,7 @@ void ReadabilityApp::LoadInterface()
     // create the menubar (macOS only)
 #ifdef __WXOSX__
     wxMenuBar* menuBar = wxXmlResource::Get()->LoadMenuBar(_DT(L"ID_MENUBAR"));
-    wxASSERT(menuBar);
+    wxASSERT_MSG(menuBar, L"Menubar failed to load in OnInit()!");
     if (menuBar != nullptr)
         {
         GetMainFrame()->SetMenuBar(menuBar);
@@ -4550,12 +4550,14 @@ void MainFrame::FillReadabilityMenu(wxMenu* primaryMenu, wxMenu* secondaryMenu, 
         if (project->GetProjectLanguage() == readability::test_language::english_test)
             {
             const auto bp = wxGetApp().GetResourceManager().GetSVG(L"tests/dolch.svg");
-            wxASSERT(bp.IsOk());
 
                 {
                 auto* dolchItem = new wxMenuItem(primaryMenu, XRCID("ID_DOLCH"),
                                                  _(L"Dolch Sight Words"), _(L"Dolch Sight Words"));
-                dolchItem->SetBitmap(bp);
+                if (bp.IsOk())
+                    {
+                    dolchItem->SetBitmap(bp);
+                    }
                 primaryMenu->AppendSeparator();
                 primaryMenu->Append(dolchItem);
                 }
@@ -4563,7 +4565,10 @@ void MainFrame::FillReadabilityMenu(wxMenu* primaryMenu, wxMenu* secondaryMenu, 
                 {
                 auto* dolchItem = new wxMenuItem(secondLanguageMenu, XRCID("ID_DOLCH"),
                                                  _(L"Dolch Sight Words"), _(L"Dolch Sight Words"));
-                dolchItem->SetBitmap(bp);
+                if (bp.IsOk())
+                    {
+                    dolchItem->SetBitmap(bp);
+                    }
                 secondLanguageMenu->AppendSeparator();
                 secondLanguageMenu->Append(dolchItem);
                 }
