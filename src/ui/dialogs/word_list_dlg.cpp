@@ -240,7 +240,7 @@ void WordListDlg::CreateControls()
             buttonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"),
                                  wxGetApp().ReadSvgIcon(L"ribbon/sort.svg"), _(L"Sort the list."));
             }
-        ribbon->SetArtProvider(new wxRibbonMSWArtProvider);
+        ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
         wxGetApp().UpdateRibbonTheme(ribbon);
 
         mainSizer->Add(ribbon, wxSizerFlags{}.Expand().Border());
