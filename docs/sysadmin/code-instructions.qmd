@@ -12,7 +12,7 @@ source('R/appdown.r')
 Do the following to add a new option both to the program and its projects:
 
 - Add the variable and `GetXXX()/SetXXX()` functions to `r file_path(c("src", "app", "readability_app_options.h"))`
-- Add an XML constant tag for aforementioned variable in `r file_path(c("src", "app", "readability_app_options.h"))`
+- Add an XML constant tag for the aforementioned variable in `r file_path(c("src", "app", "readability_app_options.h"))`
 - Add reset logic for the variable in `ResetSettings()` (in `r file_path(c("src", "app", "readability_app_options.cpp"))`).\
   (This should be the same value as the initializer value in the header file.)
 - Add logic to read value in `LoadOptionsFile()` (in `r file_path(c("src", "app", "readability_app_options.cpp"))`)
@@ -58,7 +58,7 @@ If wanting to edit this option from the ribbon:
   "batch_project_view"/"standard_project_view" files instead
 - Map the event handler in `BaseProjectView`'s constructor (or `BatchProjectView`'s and `ProjectView`'s constructors)
 
-## Adding a New Option to a Graph's Ribbon
+## Adding a New Option to a Graph's Ribbon {-}
 
 For options specific to a graph that needs to be added to the ribbon:
 
@@ -83,12 +83,12 @@ For options specific to a graph that needs to be added to the ribbon:
   `r file_path(c("src", "projects", "project_frame.cpp"))` to handle the new ribbon button being clicked\
   Refer to `ProjectDocChildFrame::OnShowcaseKeyItems()` as an example
 
-## Adding a New Test {-#add-a-new-test}
+## Adding a New Test {#add-a-new-test .unnumbered}
 
 - Add the actual function to `r file_path(c("src", "readability", "english_readability.h"))` (or other file if a different language).
   (This only applies to linear-regression based tests with a formula, not tests that calculate their values graphically [e.g., Fry].)
 - Add its definition to `BaseProject::InitializeStandardReadabilityTests()` (or subfunction)
-- Add internal name constant to `r file_path(c("src", "results_format", "readability_messages.h"))`.
+- Add internal name constant to `r file_path(c("src", "results-format", "readability_messages.h"))`.
   This will be a string ID that is used throughout the program, documentation, and resources to identify the test.
 - Add its `AddXXXTest()` function to `r file_path(c("src", "projects", "base_project.cpp"))`
 - If a graphical test (e.g., Fry), then also do the following:
@@ -167,7 +167,7 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
 - In `BaseProject::LoadHardWords()`, delete all the items in the data provider, and then resize it to the size of the word map
 - In the aforementioned unfamiliar word handler in `BaseProject::LoadHardWords()` (e.g., `isDCWord`), fill the data provider with the unfamiliar words
 - In `ProjectDoc::DisplayWordsBreakdown()`, add logic to add a page for the data provider and show it in a list control.
-  (Should involved showing or hiding these windows if the test is included.)
+  (Should involve showing or hiding these windows if the test is included.)
 - Add `EVT_LIST_ITEM_ACTIVATED` message mapping for list ID to `ProjectView::OnListDblClick()`
 - Add handler for ID to jump to the respective highlighted text window in `ProjectView::OnListDblClick()` (see following instructions for highlighted test window)
 
@@ -231,9 +231,9 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
 
 ### Custom Test Formula {-}
 
-- Add a `GetCustomXXXSignature()` function in `r file_path(c("src", "test_helpers", "readability_formula_parser.h"))` that returns the label `"CustomXXX()"` (where `XXX` is the name of the word-list test)
+- Add a `GetCustomXXXSignature()` function in `r file_path(c("src", "test-helpers", "readability_formula_parser.h"))` that returns the label `"CustomXXX()"` (where `XXX` is the name of the word-list test)
 - Add a `static double CustomXXX(const te_expr* context)` function in\
-  `r file_path(c("src", "test_helpers", "readability_formula_parser.cpp"))` that handles a custom version of the original test\
+  `r file_path(c("src", "test-helpers", "readability_formula_parser.cpp"))` that handles a custom version of the original test\
   This function is what gets mapped to `"CustomXXX()."` (Refer to `CustomNewDaleChall()` as an example.)
 - Map this function in `ReadabilityFormulaParser::ReadabilityFormulaParser()`
 - Add the new `CustomXXX()` function to `m_customFamiliarWords` in `CustomTestDlg::Create()`
@@ -249,7 +249,7 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
 
 ### Word List Dialog {-}
 
-- Add page and list IDs for the word list to `r file_path(c("src", "dialogs", "word_list_dlg.h"))`
+- Add page and list IDs for the word list to `r file_path(c("src", "ui", "dialogs", "word_list_dlg.h"))`
 - Handle the list being selected in `WordListDlg::GetActiveList()`
 - Create the list by calling `AddSingleColumnPage()` in `WordListDlg::CreateControls()`
 
@@ -265,7 +265,7 @@ If it is a more complex word list (with categories, like Dolch), then that will 
 ## Adding a New Custom-Test Formula Function {-}
 
 - Add a static function wrapper to the function you wish to call from the program in\
-  `r file_path(c("src", "test_helpers", "readability_formula_parser.cpp"))` (e.g., `HardFogWordCount`)
+  `r file_path(c("src", "test-helpers", "readability_formula_parser.cpp"))` (e.g., `HardFogWordCount`)
 - Map the function (and shortcut, if applicable) in\
   `ReadabilityFormulaParser::ReadabilityFormulaParser()`
 - Document the function in `CustomTestDlg::Create()`
@@ -289,7 +289,7 @@ When a new color scheme is added to the `r file_path("Wisteria-Dataviz")` submod
   `r file_path(c("src", "app", "readability_app.cpp"))`.
   (This will need to be the internal keys, not the displayable name.)
 
-## Adding New Files
+## Adding New Files {-}
 
 If adding a new source file, image, or word list to the build, run the configuration step for the main "CMakeLists.txt."
 This will re-generate the following files, which the build script will include:

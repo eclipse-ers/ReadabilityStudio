@@ -28,7 +28,7 @@ source('R/appdown.r')
   - Enter ["{{< var GIT_REPO >}}.git"]({{< var GIT_REPO >}}.git) and clone it to the same level as the "wxWidgets" folder
 - Once the "ReadabilityStudio" folder is cloned, open it in *Visual Studio*
 - Select the "Visual Studio {{< var MIN_MSVC_REQUIRED >}} Release" configuration and build it
-- Optionally, the "manuals" target can also be ran to rebuild the documentation
+- Optionally, the "manuals" target can also be run to rebuild the documentation
 
 ::: {.tipsection data-latex=""}
 To create a debug build, select the "Visual Studio {{< var MIN_MSVC_REQUIRED >}} Debug" configuration.

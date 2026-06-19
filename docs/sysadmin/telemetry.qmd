@@ -46,4 +46,4 @@ From the **Log Report** dialog, you can review, save, and print this information
 The program has two interfaces for internet connectivity.
 The first is that it can analyze a webpage provided by the user.
 The second is its **Web Harvester** feature, which can crawl a user-provided website, where it will read and download its links.
-When connecting to these websites, the program will only send basic page request information; user's personal information is not transmitted.
+When connecting to these websites, the program will only send basic page request information; users' personal information is not transmitted.

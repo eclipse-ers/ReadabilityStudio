@@ -51,7 +51,7 @@ The project folders `r file_path("readability-test-reference")`, `r file_path("r
 They are dynamically built by the build script and should not be edited.
 :::
 
-## Screenshots {-#creating-screenshots}
+## Screenshots {#creating-screenshots .unnumbered}
 
 ### Generating Screenshots {-}
 
@@ -60,7 +60,7 @@ All screenshots are generated from a script; they should never be created manual
 To generate screenshots, run the script `r file_path(c("docs", "generate-screenshots.lua"))` from *{{< var PROGRAM_NAME >}}*.
 This will generate all new screenshots in the folder `r file_path(c("docs", "readability-studio-manual", "images"))`.
 
-The subdirectory `r file_path("non-generated")` will not be affected, but does not need to be.
+The subdirectory `r file_path("non-generated")` will not be affected and does not need to be regenerated.
 The `r file_path("non-generated")` folder should not contain images affected by the program's UI changes.
 It also should not contain images with content that should be localized.
 
@@ -81,7 +81,7 @@ After generating new screenshots, [build](#building-help) the help and review th
 - "creating-a-custom-index-test.html"
 - "finding-difficult-sections.html"
 
-## Building {-#building-help}
+## Building {#building-help .unnumbered}
 
 The following software is required to build the manuals:
 
@@ -91,4 +91,4 @@ The following software is required to build the manuals:
 
 Run `r file_path(c("docs", "build-help-projects.R"))` to build all help projects.
 This should install all needed {{< fa brands r-project title="R" >}} and {{< latex >}} packages the first time you run it.
-If there are any errors while installing the {{< latex >}} packages, run the script again; you may experience connection issues to *ctan* and re-running the script will fix it.
+If there are any errors while installing the {{< latex >}} packages, run the script again; you may experience connection issues to *CTAN* and re-running the script will fix it.

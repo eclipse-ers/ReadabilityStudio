@@ -103,7 +103,7 @@ On Windows (`r os_logo('Windows')`), *Inno Setup* installer scripts are generate
 - Universal binary: `arm64` and `x86_64` architectures
 - Deployment target: {{< var MACOS_REQUIRED >}}
 - Hardened runtime enabled
-- *GCC* flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`
+- *AppleClang* flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`
 
 ### Linux `r os_logo('linux')` {-}
 

@@ -1,3 +1,10 @@
+```{r}
+#| include: false
+#| eval: true
+
+source('R/appdown.r')
+```
+
 # Coding Style Guide
 
 ## Naming Conventions {-}
@@ -85,4 +92,4 @@ enum DebugSettings
 - Exception messages should be translatable, unless in low-level code where *gettext* mechanisms aren't available
 - Strings consisting of only proper nouns (e.g., "Dale-Chall") should not be translatable
 - Standard i18n guidelines apply (e.g., do not expose internal codes or numbers to translation)
-- Formatting code (e.g., HTML tags) should not in translatable strings when possible
+- Formatting code (e.g., HTML tags) should not be in translatable strings when possible

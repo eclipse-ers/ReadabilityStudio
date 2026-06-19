@@ -51,11 +51,11 @@ Please refer to the following file & folder breakdown for reference:
   All forms of a given word (e.g., plural, possessive) should go in here.
   Note that proper nouns should not go in here
 - "base-non-personal.txt": places (e.g., cities, countries), company names, species names, etc. should go in here
-- "base-personal.txt": person names should go in there
+- "base-personal.txt": person names should go in here
 - `r file_path(c("abbreviations"))`:
-  - "abbreviations.txt": list of abbreviations that the program uses to determine abbreviations.
-    (Words in here must include their periods.)
-  - "non-abbreviations.txt": list of words that should never been seen as abbreviations.
+  - "abbreviations.txt": list of abbreviations that the program recognizes in text.
+    (Words in this file must include their periods.)
+  - "non-abbreviations.txt": list of words that should never be seen as abbreviations.
     This will be long words that contain no vowels, but are still an actual word.
 - `r file_path(c("articles"))`:
   - "a-exceptions.txt": these are words that are correct to follow an **a** that the program would otherwise misclassify
