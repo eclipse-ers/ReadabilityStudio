@@ -175,7 +175,7 @@ On this dialog, you can select whether to use your documents' descriptions as th
 This is useful when document names may not be descriptive enough; this will show the document's description next to its name.
 
 **Use a grouping label**: Select this to use your provided label as a grouping label for the selected documents.
-This is useful when you want to cluster the documents in you batch into subgroups.
+This is useful when you want to cluster the documents in your batch into subgroups.
 (These subgroups are visualized on various graphs, such as Fry\index{Fry} and the histograms.)
 
 **Use the last common folder between files**: Select this to group documents by folder.

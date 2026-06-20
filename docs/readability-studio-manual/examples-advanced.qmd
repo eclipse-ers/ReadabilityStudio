@@ -331,7 +331,7 @@ Scrolling to the disclaimer portion of the document, note the numerous, meanderi
 
 ![](images/addendum-highlighted-text4.png){width=75% fig-align="center"}
 
-At this point, we will have quite of a bit of improvements to make to both the flyer and disclaimer.
+At this point, we will have quite a bit of improvements to make to both the flyer and disclaimer.
 (And parents may want to start looking for a different summer camp.)
 
 \newpage

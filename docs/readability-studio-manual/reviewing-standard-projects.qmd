@@ -144,11 +144,11 @@ This score ranges from 0 ("very difficult") to 100 ("very easy"). Below is an ex
 
 ![Flesch chart](images/flesch-chart.png){width=75% fig-align="center"}
 
-Danielson-Bryan 2\index{Danielson-Bryan 2!plot}—a variation of Flesch Reading Ease— includes a similar graphic, which also includes grade-level information:
+Danielson-Bryan 2\index{Danielson-Bryan 2!plot}—a variation of Flesch Reading Ease—includes a similar graphic, which also includes grade-level information:
 
 ![Danielson-Bryan 2 plot](images/db2-plot.png){width=75% fig-align="center"}
 
-The INFLESZ Scale\index{INFLESZ}—another variation— plots a score (based on an adjusted FRE calculation) on a 0–100 scale.
+The INFLESZ Scale\index{INFLESZ}—another variation—plots a score (based on an adjusted FRE calculation) on a 0–100 scale.
 This score can then be compared between three different classification scales: INFLESZ, Szigriszt, and Flesch Reading Ease.
 (INFLESZ is preferred over Szigriszt, and Flesch Reading Ease is only included for reference.)
 Similar to Flesch, it groups its scores from "*MUY DIFÍCIL*" ("very difficult") to "*MUY FÁCIL*" ("very easy").
@@ -314,7 +314,7 @@ The same type of review can also be performed with the **6+ Characters** list by
 To help find the most difficult words for the New Dale-Chall list, select the **Dale-Chall (Unfamiliar)** subitem and sort the **Frequency** column.
 The most frequently occurring words are the ones that should be replaced with more familiar synonyms that most readers would recognize.
 
-To find a specific word in a list, type the word into the **Search** bar at the top of program and hit the `r keys("Enter")` (`r os_logo('windows')`, `r os_logo('linux')`) or `r keys("\\enter")` (`r os_logo('apple')`)  button on your keyboard.
+To find a specific word in a list, type the word into the **Search** bar at the top of the program and hit the `r keys("Enter")` (`r os_logo('windows')`, `r os_logo('linux')`) or `r keys("\\enter")` (`r os_logo('apple')`) button on your keyboard.
 You can also select the list and begin typing the word.
 If the word is in the list, then the selection will move to it.
 
@@ -411,7 +411,7 @@ In the case of combined words, the most frequent instance of similar words will 
 For example, if the word *report* appears more times than *reporting* and *reports*, then *report* will appear in the word cloud.
 Also, the size of the word *report* will be based on the number of times *report*, *reporting*, and *reports* all appear.
 
-To focus on important topics, only words occurring two or more times will be shown (unless there are fewer than one unique hundred words).
+To focus on important topics, only words occurring two or more times will be shown (unless there are fewer than one hundred unique words).
 
 In a batch project, this word cloud will show the key words across all documents.
 :::

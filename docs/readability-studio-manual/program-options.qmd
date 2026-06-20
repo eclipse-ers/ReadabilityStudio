@@ -127,7 +127,7 @@ This dialog enables you to display or suppress various warnings and prompts, inc
   ClearType makes fonts smoother and easier to read.
   This applies to the Windows^®^ edition of *{{< var PROGRAM_NAME >}}* only.
 - **Prompt about whether to set the application's word exclusion list from a project.**
-  When adding a word exclusion list from the ribbon for the first time, you will be prompted about setting this list to be included in all future projects. 
+  When adding a word exclusion list from the ribbon for the first time, you will be prompted about setting this list to be included in all future projects.
 
 The following are informational messages shown interactively in the program:
 
@@ -347,7 +347,7 @@ Also, if **Aggressively exclude** is enabled, then list items with more words th
 
 Note that if you are not excluding any text, this option will still take effect for tests which explicitly exclude headers (e.g., Harris-Jacobson\index{Harris-Jacobson Wide Range!customizing!header exclusion}).
 
-**Aggressively exclude**: Select this option to mark any valid sentence as incomplete if a). it is between at least two incomplete sentences and b). is less than 10 words.
+**Aggressively exclude**: Select this option to mark any valid sentence as incomplete if a) it is between at least two incomplete sentences and b) is less than 10 words.
 For example:
 
 ::: {.fancyquotes data-latex=''}
@@ -738,13 +738,13 @@ The options on this page customize which results are included in the [**Words Br
 **6+ Characters**: Check this to include the 6+ character words in the results.
 
 **Dale-Chall**: Check this to include the New Dale-Chall\index{New Dale-Chall!reviewing unfamiliar words} unfamiliar words list in the results.
-(If a Dale-Chall-based test is included in the project).
+(If a Dale-Chall-based test is included in the project.)
 
 **Spache**: Check this to include the Spache\index{Spache Revised!reviewing unfamiliar words} unfamiliar words list in the results.
-(If Spache is included in the project).
+(If Spache is included in the project.)
 
 **Harris-Jacobson**: Check this to include the Harris-Jacobson\index{Harris-Jacobson Wide Range!reviewing unfamiliar words} unfamiliar words list in the results.
-(If Harris-Jacobson\index{Harris-Jacobson Wide Range} is included in the project).
+(If Harris-Jacobson\index{Harris-Jacobson Wide Range} is included in the project.)
 
 **Custom Tests**: Check this to include any custom tests' unfamiliar words lists in the results.
 

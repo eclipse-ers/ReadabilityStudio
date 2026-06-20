@@ -53,7 +53,7 @@ When located, the position in the table will indicate the grade level.
 Examples of table-based tests include Wheeler-Smith and New Dale-Chall.
 (Refer to @tbl-wheeler-smith-conversion-table for an example.)
 
-The final method also relies on finding the intersection of factors, but on a graph instead of a table.
+The final method relies on finding the intersection of factors, but on a graph instead of a table.
 Most of these plots are divided into bands or brackets, with each of these regions representing a grade or difficulty level.
 For example, Fry and Raygor use polygonal bands, while Flesch Reading Ease uses brackets along a "ruler":
 

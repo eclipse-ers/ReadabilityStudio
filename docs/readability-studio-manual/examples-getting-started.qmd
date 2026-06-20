@@ -286,7 +286,7 @@ Once the project is finished loading, click on the **Words Breakdown** icon on t
 
 Note how some text is highlighted gray.
 These are [incomplete sentences](#sec-how-text-is-excluded), and because *{{< var PROGRAM_NAME >}}*, by default, ignores incomplete sentences, nothing highlighted gray is factored into the analysis.
-That is, nothing highlighted gray here counts towards the overall sentence, paragraph, and word totals and are also not included in any readability test calculation.
+That is, nothing highlighted gray here counts towards the overall sentence, paragraph, and word totals and is also not included in any readability test calculation.
 Aside from non-narrative forms, it is normally recommended to ignore incomplete sentences.
 This is especially true for webpages, because often HTML tables and lists are used on websites to display menus—items that are not normally part of the page's narrative.
 

@@ -174,7 +174,7 @@ When the **New Project** wizard appears, leave the defaults and click `r keys("F
 Once the project has finished loading, select **Words Breakdown** on the sidebar, then click **Word Counts** beneath that.
 A bar chart showing a breakdown of word categories will be displayed.
 First, let's remove the labels to simplify the graph.
-On the **Home** tab of the ribbon, click the `r keys("Labels")` button so that is it unpressed.
+On the **Home** tab of the ribbon, click the `r keys("Labels")` button so that it is unpressed.
 
 Next, we will use an image to be displayed across all the bars.
 On the **Home** tab, click `r menu(c('Bar Style', 'Common Image'))`.
@@ -221,7 +221,7 @@ When the **New Project** wizard appears, leave the defaults and click `r keys("F
 
 Once the project has finished loading, select **Words Breakdown** on the sidebar, then click **Word Counts** beneath that.
 First, let's remove the labels to simplify the graph.
-On the **Home** tab of the ribbon, click the `r keys("Labels")` button so that is it unpressed.
+On the **Home** tab of the ribbon, click the `r keys("Labels")` button so that it is unpressed.
 
 Next, we will remove any visual effect from the bars.
 On the **Home** tab, click `r menu(c('Bar Style', 'Solid'))`.

@@ -346,16 +346,16 @@ You can also click the button next to this field to select and edit your word li
 Once the file has been selected, the words from that file will be loaded.
 
 There are two ways that our custom words can be compared to words in the press release that we will be analyzing.
-The first is to simply compare words between our list and the recipe exactly as they appear.
+The first is to simply compare words between our list and the document exactly as they appear.
 This is accomplished by setting **Use stemming to search for similar words** to **Do not use stemming**.
 The advantage of this is that we will have precise control over which variations of our words will be counted as familiar.
-For example, we could add *glaze* and *glazes* to our list and only these variations of *glaze* would be counted as familiar.
-This way, other variations (e.g., *innovates*) will remain unfamiliar.
+For example, we could add *innovate* and *innovates* to our list and only these variations of *innovate* would be counted as familiar.
+This way, other variations (e.g., *innovating*) will remain unfamiliar.
 The disadvantage of this method is that we must explicitly add every variation of *innovate* to our list that we want to be familiar.
 For larger lists, this can be tedious and error prone.
 
 The other option is to use stemming.
-Stemming will compare the roots of the words between our list and our recipe, rather than the words themselves.
+Stemming will compare the roots of the words between our list and our document, rather than the words themselves.
 For example, say that we have **English** stemming selected and the word *innovate* is on our list.
 In this case, *innovate* will be stemmed to *innovate*. As our file is analyzed, words such as *innovates*, *innovated*, and *innovating* will also be stemmed to *innovate*.
 Because these words all share the same root as a word from our list, they will all be counted as familiar.
