@@ -31,8 +31,8 @@ jobs:
              cd ${{ github.workspace }}/tests
              cmake -S . -B build
              cmake --build build --config Debug
-             cd build\Debug
-             ./${{ env.testrunner }} --reporter JUnit::out=${{ env.outfile }}
+             cd bin\Debug
+             .\${{ env.testrunner }} --reporter JUnit::out=${{ env.outfile }}
              cat ${{ env.outfile }}
              $FileContent = Get-Content ${{ env.outfile }}
              $errors = (Select-String -InputObject $FileContent -Pattern 'errors="([0-9]+)"' | % { $($_.matches.groups[1]) } )
