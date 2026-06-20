@@ -721,8 +721,15 @@ bool ReadabilityApp::OnInit()
     GetAppOptions()->LoadOptionsFile(appSettingFolderPath + L"Settings.xml", false);
 
     // sync log ribbon button states now that options are fully loaded
-    // (InitStartPage runs inside LoadInterface above, before the XML is loaded)
     GetMainFrameEx()->SetLogAutoRefresh(GetAppOptions()->IsLogAutoRefresh());
+    // sync tab visibility
+    GetMainFrameEx()->GetRibbon()->ShowPage(
+        GetMainFrameEx()->GetRibbon()->GetPageNumber(GetMainFrameEx()->GetLogRibbonPage()),
+        GetAppOptions()->IsShowingLogTab());
+    GetMainFrameEx()->GetRibbon()->ShowPage(
+        GetMainFrameEx()->GetRibbon()->GetPageNumber(GetMainFrameEx()->GetDeveloperRibbonPage()),
+        GetAppOptions()->IsShowingDeveloperTab());
+    GetMainFrameEx()->GetRibbon()->Realize();
 
     // initialize Lua interpreter (after options are loaded so it can check unsafe mode setting)
     m_LuaRunner.Initialize();
