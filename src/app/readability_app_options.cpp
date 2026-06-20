@@ -404,7 +404,7 @@ void ReadabilityAppOptions::ResetSettings()
     m_logAppendDailyLog = false;
     m_luaUnsafeMode = false;
     m_showDeveloperTab = true;
-    m_showLogTab = true;
+    m_showLogTab = false;
     m_logAutoRefresh = false;
 
     m_textHighlight = TextHighlight::HighlightBackground;

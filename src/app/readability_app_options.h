@@ -2652,7 +2652,7 @@ class ReadabilityAppOptions
     // Lua scripting - enables os, io, debug libraries (security risk)
     bool m_luaUnsafeMode{ false };
     bool m_showDeveloperTab{ true };
-    bool m_showLogTab{ true };
+    bool m_showLogTab{ false };
     bool m_logAutoRefresh{ false };
 
     wxColour m_dolchConjunctionsColor{ wxColour{ 255, 255, 0 } };
