@@ -2807,9 +2807,7 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         if (GetAppOptions()->IsShowingDeveloperTab())
             {
             toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Developer Tools"),
-                                     ReadSvgIcon(wxSystemSettings::GetAppearance().IsDark() ?
-                                                     L"ribbon/lua-dark-mode.svg" :
-                                                     L"ribbon/lua.svg"));
+                                     ReadSvgIcon(L"ribbon/dev-tools.svg"));
             }
         }
     }

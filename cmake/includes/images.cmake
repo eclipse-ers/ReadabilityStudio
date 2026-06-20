@@ -44,6 +44,7 @@ ribbon/copy.svg
 ribbon/cut.svg
 ribbon/delete-document.svg
 ribbon/delete.svg
+ribbon/dev-tools.svg
 ribbon/difficult.svg
 ribbon/document-structure.svg
 ribbon/document.svg
