@@ -94,7 +94,8 @@ set(PROGRAM_RDNS_IDENTIFIER "org.eclipse.readabilitystudio")
 set(GIT_REPO "https://github.com/eclipse-ers/ReadabilityStudio.git")
 string(REGEX REPLACE "[.]git$" "" ISSUE_PAGE "${GIT_REPO}")
 string(APPEND ISSUE_PAGE "/issues")
-set(REMOTE_VERSION_FILE "https://raw.githubusercontent.com/eclipse-ers/ReadabilityStudio/main/current-version.txt")
+set(REMOTE_VERSION_FILE "${readstudio_HOMEPAGE_URL}")
+string(APPEND REMOTE_VERSION_FILE "/download/current-version.txt")
 set(DOWNLOAD_PAGE "${readstudio_HOMEPAGE_URL}")
 string(APPEND DOWNLOAD_PAGE "/download")
 set(INNOSETUP_GUID "{FBFBEAB6-622A-4E16-893D-216C25FF6A69}")
@@ -167,8 +168,6 @@ message(STATUS "Published by: ${PUBLISHER}")
 message(STATUS "Homepage: ${readstudio_HOMEPAGE_URL}")
 message(STATUS "Output binary: ${CMAKE_PROJECT_NAME}")
 message(STATUS "Writing program info to build peripheral files")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/current-version.txt.in"
-               "${CMAKE_CURRENT_SOURCE_DIR}/current-version.txt")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/src/app/version.h")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/citations.bib.in"
