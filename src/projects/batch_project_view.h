@@ -54,10 +54,10 @@
 #include "../Wisteria-Dataviz/src/graphs/fleschchart.h"
 #include "../Wisteria-Dataviz/src/graphs/histogram.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
-#include <wx/webview.h>
 #include "../Wisteria-Dataviz/src/util/windowcontainer.h"
 #include "../graphs/frygraph.h"
 #include "base_project_view.h"
+#include <wx/webview.h>
 
 class BatchProjectView final : public BaseProjectView
     {

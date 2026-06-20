@@ -48,7 +48,6 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "lua_standard_project.h"
-#include <wx/webview.h>
 #include "../Wisteria-Dataviz/src/base/label.h"
 #include "../Wisteria-Dataviz/src/base/reportbuilder.h"
 #include "../app/readability_app.h"
@@ -56,6 +55,7 @@
 #include "../projects/batch_project_view.h"
 #include "../projects/standard_project_doc.h"
 #include "../ui/dialogs/tools_options_dlg.h"
+#include <wx/webview.h>
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)

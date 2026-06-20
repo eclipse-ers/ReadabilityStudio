@@ -2737,8 +2737,7 @@ class BaseProjectProcessingLock
   public:
     explicit BaseProjectProcessingLock(BaseProject* project) : m_project(project)
         {
-        wxASSERT_MSG(m_project,
-                     L"Project pointer is null in BaseProjectProcessingLock CTOR!");
+        wxASSERT_MSG(m_project, L"Project pointer is null in BaseProjectProcessingLock CTOR!");
         m_project->SetProcessing(true);
         }
 

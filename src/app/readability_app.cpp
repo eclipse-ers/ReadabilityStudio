@@ -48,16 +48,16 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "readability_app.h"
-#include "../Wisteria-Dataviz/src/import/text_matrix.h"
 #include "../Wisteria-Dataviz/src/CRCpp/inc/CRC.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
 #include "../Wisteria-Dataviz/src/graphs/inflesz.h"
 #include "../Wisteria-Dataviz/src/graphs/lixgauge.h"
 #include "../Wisteria-Dataviz/src/graphs/lixgaugegerman.h"
+#include "../Wisteria-Dataviz/src/import/text_matrix.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/filelistdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
-#include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/graphdlg.h"
+#include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.h"
 #include "../document-helpers/chapter_split.h"
 #include "../graphs/schwartzgraph.h"
