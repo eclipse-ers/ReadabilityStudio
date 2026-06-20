@@ -12,5 +12,5 @@ SetBarChartOrientation(Orientation barOrientation)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| [`Orientation`](#orientation) barOrientation | The bar charts' orientation. |
+| [`Orientation`](#orientation) barOrientation | The bar chart orientation. |
 :::

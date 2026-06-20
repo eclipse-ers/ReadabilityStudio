@@ -6,7 +6,7 @@ Sets bar appearance (in histograms\index{graphs!histograms}) for new projects.
 #### Syntax {-}
 
 ``` {.lua}
-SetHistogramBarEffect(BoxEffect barEffect)
+SetHistogramBarEffect(BoxEffect effect)
 ```
 
 #### Parameters {-}

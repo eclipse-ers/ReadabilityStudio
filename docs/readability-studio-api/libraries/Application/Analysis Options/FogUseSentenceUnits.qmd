@@ -13,5 +13,5 @@ FogUseSentenceUnits(boolean use)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `boolean` use | `true` to count independent clauses when calculating Gunning Fog. |
+| `boolean` use | `true` to count independent clauses when calculating Gunning Fog, `false` to not count them. |
 :::

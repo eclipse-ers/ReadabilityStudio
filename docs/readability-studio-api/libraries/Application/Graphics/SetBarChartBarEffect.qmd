@@ -12,5 +12,5 @@ SetBarChartBarEffect(BoxEffect barEffect)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| [`BoxEffect`](#boxeffect) barEffect | The used to display bars in bar charts. |
+| [`BoxEffect`](#boxeffect) barEffect | The effect used to display bars in bar charts. |
 :::

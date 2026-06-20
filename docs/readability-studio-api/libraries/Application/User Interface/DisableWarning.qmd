@@ -9,6 +9,8 @@ Disables\index{warnings!disabling} the specified warning.
 DisableWarning(string warningId)
 ```
 
+#### Parameters {-}
+
 **Parameter** | **Description**
 | :-- | :-- |
 | `string` warningId | The warning's string ID. |

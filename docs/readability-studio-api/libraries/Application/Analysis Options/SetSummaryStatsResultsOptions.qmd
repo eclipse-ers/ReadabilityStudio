@@ -7,7 +7,7 @@ Sets which results in the summary statistics section should be included for new 
 
 ``` {.lua}
 SetSummaryStatsResultsOptions(boolean includeFormattedReport,
-                              boolean TabularReport)
+                              boolean tabularReport)
 ```
 
 #### Parameters {-}
@@ -15,5 +15,5 @@ SetSummaryStatsResultsOptions(boolean includeFormattedReport,
 **Parameter** | **Description**
 | :-- | :-- |
 | `boolean` includeFormattedReport | (Optional) `true` to include a formatted report of the statistics. | 
-| `boolean` TabularReport | (Optional) `true` to include the statistics in a list. |
+| `boolean` tabularReport | (Optional) `true` to include the statistics in a list. |
 :::

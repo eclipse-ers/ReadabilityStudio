@@ -13,5 +13,5 @@ SetTextSource(TextSource storageMethod)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `TextSource` storageMethod | Where the project is getting its content from. |
+| [`TextSource`](#textsource) source | Where the project is getting its content from. |
 :::

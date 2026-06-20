@@ -10,15 +10,17 @@ Saves\index{log report!exporting} the program's log report to a tab-delimited te
 boolean ExportLogReport(string outPath)
 ```
 
-#### Return value {-}
-
-Type: `boolean`
-
 #### Parameters {-}
 
 **Parameter** | **Description**
 | :-- | :-- |
 | `string` outPath | The path to save a copy of the log file to. |
+
+#### Return value {-}
+
+Type: `boolean`
+
+Returns `true` if the log report was saved successfully.
 
 #### Example {-}
 

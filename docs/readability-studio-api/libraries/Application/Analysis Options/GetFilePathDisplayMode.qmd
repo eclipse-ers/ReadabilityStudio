@@ -13,5 +13,5 @@ FilePathDisplayMode GetFilePathDisplayMode()
 
 Type: [`FilePathDisplayMode`](#filepathdisplaymode)
 
-How filepaths are being displayed in lists.
+How filepaths are displayed in lists.
 :::

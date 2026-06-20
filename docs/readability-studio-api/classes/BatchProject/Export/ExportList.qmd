@@ -20,7 +20,7 @@ ExportList(ListType type,
            number fromColumn = 1,
            number toColumn = -1,
            boolean includeHeaders = true,
-           boolean IncludePageBreaks = false)
+           boolean includePageBreaks = false)
 ```
 
 #### Parameters {-}
@@ -31,8 +31,8 @@ ExportList(ListType type,
 | `string` outputFilePath | The folder to save the list. |
 | `number` fromRow | (Optional) Specifies the row to begin from. |
 | `number` toRow | (Optional) Specifies the last row.<br>\linebreak Enter -1 to specify the last row in the list. |
-| `number` fromColumn | (Optional) Specifies the row to column from. |
+| `number` fromColumn | (Optional) Specifies the column to begin from. |
 | `number` toColumn | (Optional) Specifies the last column.<br>\linebreak Enter -1 to specify the last column in the list. |
 | `boolean` includeHeaders | (Optional) Specifies whether to include the column headers. |
-| `boolean` includePageBreaks | (Optional) Specifies whether to insert page breaks.<br>\linebreak (This only applies if exporting as HTML). |
+| `boolean` includePageBreaks | (Optional) Specifies whether to insert page breaks.<br>\linebreak (This only applies if exporting as HTML.) |
 :::

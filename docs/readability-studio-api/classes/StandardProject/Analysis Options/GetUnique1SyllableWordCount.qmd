@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `GetUnique1SyllableWordCount`
 
-Returns the number of unique words consisting of three or more syllables from the document.
+Returns the number of unique words consisting of one syllable from the document.
 
 #### Syntax {-}
 

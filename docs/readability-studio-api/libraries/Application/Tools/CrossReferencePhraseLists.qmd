@@ -23,8 +23,8 @@ Returns `true` if cross reference file was successfully saved.
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` wordList | The first phrase list. | 
-| `string` otherWordList | The second phrase list. | 
+| `string` phraseList | The first phrase list. | 
+| `string` otherPhraseList | The second phrase list. | 
 | `string` outputFile | The output containing only phrase found in both files. |
 
 #### See also {-}

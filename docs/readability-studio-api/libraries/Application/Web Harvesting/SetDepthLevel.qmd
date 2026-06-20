@@ -13,5 +13,5 @@ SetDepthLevel(number depthLevel)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `number` depthLevel | The number of level to crawl from the first website. |
+| `number` depthLevel | The number of levels to crawl from the first website. |
 :::

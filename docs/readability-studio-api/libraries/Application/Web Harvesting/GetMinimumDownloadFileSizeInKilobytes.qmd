@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `GetMinimumDownloadFileSizeInKilobytes`
 
-Returns whether files being downloaded\index{web harvester!settings} will replace existing ones.
+Returns the minimum file size (in kilobytes)\index{web harvester!settings} that a file must be to be downloaded.
 
 #### Syntax {-}
 

@@ -13,5 +13,5 @@ SetBarChartBarOpacity(number opacity)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `number` opacity | The opacity level (should be between 0--255) |
+| `number` opacity | The opacity level (should be between 0--255). |
 :::

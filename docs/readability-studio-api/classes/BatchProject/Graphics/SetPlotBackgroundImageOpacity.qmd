@@ -13,5 +13,5 @@ SetPlotBackgroundImageOpacity(number opacity)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `number` opacity | The opacity level to apply to the image (should be between 0--255) |
+| `number` opacity | The opacity level to apply to the image (should be between 0--255). |
 :::

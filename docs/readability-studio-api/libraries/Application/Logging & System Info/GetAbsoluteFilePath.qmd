@@ -6,7 +6,7 @@ Combines a base path\index{file paths!getting absolute path} with a relative pat
 #### Syntax {-}
 
 ``` {.lua}
-string GetAbsoluteFilePath(string basePath
+string GetAbsoluteFilePath(string basePath,
                            string relativePath)
 ```
 

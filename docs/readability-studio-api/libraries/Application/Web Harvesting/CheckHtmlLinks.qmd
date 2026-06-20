@@ -19,7 +19,7 @@ CheckHtmlLinks(string folderPath,
 
 :::: {.notesection data-latex=""}
 Issues are recorded into the program's log.
-View the log report(**Log Report** on the **Tools** tab) to see any issues that were found after calling this.
+View the log report (**Log Report** on the **Tools** tab) to see any issues that were found after calling this.
 ::::
 
 #### See also {-}

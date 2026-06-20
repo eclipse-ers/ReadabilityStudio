@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `GetReadingAgeDisplay`
 
-Returns the age display for test scores to display for new projects.
+Returns the age display format for test scores for new projects.
 
 #### Syntax {-}
 

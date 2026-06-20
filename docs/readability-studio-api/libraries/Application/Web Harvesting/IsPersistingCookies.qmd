@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `IsPersistingCookies`
 
-Returns whether the web harvester uses keeps cookies read from JavaScript between harvests.
+Returns whether the web harvester keeps cookies read from JavaScript between harvests.
 
 #### Syntax {-}
 

@@ -13,7 +13,7 @@ ReplaceExistingFiles(boolean use)
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `boolean` use | `true` to overwrite existing files while web harvester. |
+| `boolean` use | `true` to overwrite existing files while web harvesting. |
 
 :::: {.notesection data-latex=""}
 If `false`, then files will be appended with sequential numbers if necessary to prevent overwriting files with the same name.

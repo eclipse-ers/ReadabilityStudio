@@ -23,7 +23,7 @@ Close(boolean saveChanges = false)
 consentForm = StandardProject(Application.GetUserFolder(UserPath.Documents) ..
                               "Consent Form.rsp")
 consentForm:ExportReport(ReportType.ReadabilityScoresTabularReport,
-                Application.GetUserFolder(UserPath.Documents)() ..
+                Application.GetUserFolder(UserPath.Documents) ..
                 "Review/ConsentScoresSummary.htm")
 -- Close, don't bother saving.
 consentForm:Close(false)

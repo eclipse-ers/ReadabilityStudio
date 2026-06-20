@@ -3,7 +3,7 @@
 
 Sets the printer paper orientation\index{printing!paper orientation}.
 
-[`Orientation.Vertical`](#orientation) is portrait and [`Orientation:Horizontal`](#orientation) is landscape.
+[`Orientation.Vertical`](#orientation) is portrait and [`Orientation.Horizontal`](#orientation) is landscape.
 
 #### Syntax {-}
 

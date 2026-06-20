@@ -14,7 +14,7 @@ ExcludeNumerals(boolean exclude)
 
 **Parameter** | **Description**
 | :-- | :-- |
-`boolean` exclude | `true` to exclude numerals.
+| `boolean` exclude | `true` to exclude numerals. |
 
 #### Example {-}
 

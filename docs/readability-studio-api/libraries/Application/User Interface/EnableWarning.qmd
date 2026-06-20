@@ -10,6 +10,8 @@ Enables\index{warnings!enabling} the specified warning.
 EnableWarning(string warningId)
 ```
 
+#### Parameters {-}
+
 **Parameter** | **Description**
 | :-- | :-- |
 | `string` warningId | The warning's string ID. |

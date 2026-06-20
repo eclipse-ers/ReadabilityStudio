@@ -15,6 +15,6 @@ SelectHighlightedWordReport(HighlightedReportType windowToSelect,
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `HighlightedReportType` windowToSelect | The text window to select. | 
+| [`HighlightedReportType`](#highlightedreporttype) windowToSelect | The text window to select. | 
 | `string` contentToHighlight | An optional string to search for and highlight in the text window. |
 :::

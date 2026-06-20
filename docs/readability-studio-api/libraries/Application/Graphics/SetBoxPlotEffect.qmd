@@ -6,12 +6,12 @@ Sets box appearance\index{graphs!box plots} (in box plots) for new projects.
 #### Syntax {-}
 
 ``` {.lua}
-SetBoxPlotEffect(BoxEffect barEffect)
+SetBoxPlotEffect(BoxEffect effect)
 ```
 
 #### Parameters {-}
 
 **Parameter** | **Description**
 | :-- | :-- |
-| [`BoxEffect`](#boxeffect) effect | The effect to apply to the bars. |
+| [`BoxEffect`](#boxeffect) effect | The effect to apply to the boxes. |
 :::

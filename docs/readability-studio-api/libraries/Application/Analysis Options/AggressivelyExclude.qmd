@@ -13,7 +13,7 @@ AggressivelyExclude(boolean beAggressive)
 
 **Parameter** | **Description**
 | :-- | :-- |
-`boolean` beAggressive | Specifies whether to use aggressive text exclusion.
+| `boolean` beAggressive | Specifies whether to use aggressive text exclusion. |
 
 #### Example {-}
 

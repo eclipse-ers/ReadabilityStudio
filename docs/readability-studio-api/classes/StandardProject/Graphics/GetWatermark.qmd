@@ -1,7 +1,7 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `GetWatermark`
 
-Returns the watermark drawn on graphs for.
+Returns the watermark drawn on graphs.
 
 #### Syntax {-}
 
