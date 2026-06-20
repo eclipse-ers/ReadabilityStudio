@@ -3641,7 +3641,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         },
         XRCID("ID_LOG_TAB_REALTIME_UPDATE"));
     Bind(
-        wxEVT_RIBBONBUTTONBAR_CLICKED, [this]([[maybe_unused]] wxRibbonButtonBarEvent&)
+        wxEVT_RIBBONBUTTONBAR_CLICKED, []([[maybe_unused]] wxRibbonButtonBarEvent&)
         { wxLog::SetVerbose(!wxLog::GetVerbose()); }, XRCID("ID_LOG_TAB_VERBOSE"));
     Bind(
         wxEVT_TIMER,
