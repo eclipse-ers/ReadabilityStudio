@@ -29,9 +29,9 @@ jobs:
              cd ..
              git clone https://github.com/catchorg/Catch2.git
              cd ${{ github.workspace }}/tests
-             cmake ./
-             msbuild ${{ env.testrunner }}.sln
-             cd bin\Debug
+             cmake -S . -B build
+             cmake --build build --config Debug
+             cd build\Debug
              ./${{ env.testrunner }} --reporter JUnit::out=${{ env.outfile }}
              cat ${{ env.outfile }}
              $FileContent = Get-Content ${{ env.outfile }}
