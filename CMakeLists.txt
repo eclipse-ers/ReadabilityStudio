@@ -590,6 +590,10 @@ if(WIN32 OR APPLE)
     # because that library is not included by default with the OS (XCode installs it)
     # and it is not signed.
     target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
+    # Needed to get GPU info
+    if(WIN32)
+        target_link_libraries(${PROJECT_NAME} dxgi)
+    endif()
 elseif(UNIX)
     # Add OpenMP for multithreading.
     # TBB is required for GCC linkage sometimes, although this app is not explicitly using it,
