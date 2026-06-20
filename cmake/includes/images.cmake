@@ -93,6 +93,7 @@ ribbon/ignore-copyright.svg
 ribbon/ignore-numerals.svg
 ribbon/image.svg
 ribbon/indenting.svg
+ribbon/info.svg
 ribbon/internet.svg
 ribbon/invalid-region.svg
 ribbon/justified.svg

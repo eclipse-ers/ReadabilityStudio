@@ -2974,7 +2974,7 @@ void ReadabilityApp::LoadRibbonLogPage(wxRibbonBar* ribbon)
         XRCID("ID_LOG_TAB_REALTIME_UPDATE"), _(L"Auto Refresh"),
         ReadSvgIcon(L"ribbon/realtime.svg"), _(L"Refresh the log report automatically."));
     GetMainFrameEx()->m_logEditButtonBar->AddToggleButton(
-        XRCID("ID_LOG_TAB_VERBOSE"), _(L"Verbose"), ReadSvgIcon(L"ribbon/log-book.svg"),
+        XRCID("ID_LOG_TAB_VERBOSE"), _(L"Verbose"), ReadSvgIcon(L"ribbon/info.svg"),
         _(L"Toggles whether the logging system includes more detailed information."));
     }
 
