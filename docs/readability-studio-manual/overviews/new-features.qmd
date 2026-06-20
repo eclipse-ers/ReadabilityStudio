@@ -58,6 +58,7 @@ source('../R/appdown.r')
 ### Importing/Exporting Enhancements {-}
 
 - Publicly accessible *OneDrive* documents are now supported.
+- Lists can now be saved as PDF.
 
 ### Documentation Enhancements {-}
 
