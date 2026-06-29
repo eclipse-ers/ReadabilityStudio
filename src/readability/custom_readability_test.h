@@ -222,8 +222,8 @@ namespace readability
             {
             return (
                 (m_name == that.m_name) &&
-                (string_util::remove_all_whitespace<string_type>(get_formula()) ==
-                 string_util::remove_all_whitespace<string_type>(that.get_formula())) &&
+                (string_util::remove_breaks<string_type>(get_formula()) ==
+                 string_util::remove_breaks<string_type>(that.get_formula())) &&
                 (m_result_type == that.m_result_type) &&
                 (m_familiar_word_list_file_path == that.m_familiar_word_list_file_path) &&
                 (m_stemming_type == that.m_stemming_type) &&
