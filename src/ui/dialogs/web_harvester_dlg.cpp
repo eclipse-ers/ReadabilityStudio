@@ -286,7 +286,6 @@ void WebHarvesterDlg::CreateControls()
     auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
-    wxGetApp().UpdateSideBarTheme(m_sideBarBook->GetSideBar());
 
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());
 

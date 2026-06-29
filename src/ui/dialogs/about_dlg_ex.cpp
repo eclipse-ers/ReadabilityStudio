@@ -298,15 +298,7 @@ void AboutDialogEx::CreateControls()
         productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY,
                                               // TRANSLATORS: Operating System
                                               _(L"Platform:")));
-        productInfoGrid->Add(
-            new wxStaticText(mainPage, wxID_ANY,
-#ifdef __WXGTK__
-                             wxGetOsDescription() + L" (" +
-                                 wxPlatformInfo::Get().GetLinuxDistributionInfo().Description + L")"
-#else
-                             wxGetOsDescription()
-#endif
-                             ));
+        productInfoGrid->Add(new wxStaticText(mainPage, wxID_ANY, wxGetOsDescription()));
         productInfoGrid->Add(new wxStaticText(
             mainPage, wxID_ANY, /* TRANSLATORS: Computer CPU information */ _(L"Architecture:")));
         productInfoGrid->Add(
@@ -347,8 +339,6 @@ void AboutDialogEx::CreateControls()
             Wisteria::GraphItems::Label::GetFirstAvailableFont(
                 { DONTTRANSLATE(L"Inter"), DONTTRANSLATE(L"Roboto"), DONTTRANSLATE(L"Orbitron"),
                   DONTTRANSLATE(L"Georgia") })));
-        appLabel->SetForegroundColour(wxSystemSettings::SelectLightDark(
-            Wisteria::Colors::ColorBrewer::GetEclipseOrange(), *wxWHITE));
         appLabelSizer->Add(appLabel);
         auto* appTitleSizer = new wxBoxSizer(wxHORIZONTAL);
         appTitleSizer->Add(

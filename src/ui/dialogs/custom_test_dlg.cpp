@@ -728,8 +728,6 @@ void CustomTestDlg::CreateControls()
 
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
 
-    wxGetApp().UpdateSideBarTheme(m_sideBarBook->GetSideBar());
-
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());
 
     m_sideBarBook->GetImageList().push_back(wxGetApp().GetResourceManager().GetSVG(
@@ -842,7 +840,6 @@ void CustomTestDlg::CreateControls()
             {
             auto* functionBrowser =
                 new Wisteria::UI::FunctionBrowserCtrl(m_generalPage, m_formulaCtrl);
-            wxGetApp().UpdateSideBarTheme(functionBrowser->GetSidebar());
             functionBrowser->Hide();
             functionBrowser->SetParameterSeparator(FormulaFormat::GetListSeparator());
 

@@ -118,7 +118,6 @@ void ScriptWorkbenchPanel::CreateControls()
         wxSystemSettings::GetAppearance().IsDark() ? L"ribbon/lua-dark-mode.svg" :
                                                      L"ribbon/lua.svg") });
     m_scriptSidebar->InsertItem(0, _(L"Scripts"), m_scriptsFolderId, std::nullopt);
-    wxGetApp().UpdateSideBarTheme(m_scriptSidebar);
 
     // func browser splitter (right of sidebar): left = editor book, right = func browser
     m_funcBrowserSplitter = new wxSplitterWindow(m_sidebarSplitter, wxID_ANY, wxDefaultPosition,
@@ -129,7 +128,6 @@ void ScriptWorkbenchPanel::CreateControls()
     m_editorBook = new wxSimplebook(m_funcBrowserSplitter, wxID_ANY);
 
     m_functionBrowser = new Wisteria::UI::FunctionBrowserCtrl(m_funcBrowserSplitter, this);
-    wxGetApp().UpdateSideBarTheme(m_functionBrowser->GetSidebar());
     m_functionBrowser->SetParameterSeparator(FormulaFormat::GetListSeparator());
     m_functionBrowser->AddCategory(_(L"Libraries"), 1000);
     m_functionBrowser->AddCategory(_(L"Classes"), 1001);
@@ -855,15 +853,6 @@ void ScriptWorkbenchPanel::SetThemeColor(const wxColour& color)
                     wxC2S_HTML_SYNTAX)) +
             m_debugContent + L"\n</body>\n</html>";
         m_debugMessageWindow->SetPage(debugReportBody, wxString{});
-        }
-
-    if (m_scriptSidebar != nullptr)
-        {
-        wxGetApp().UpdateSideBarTheme(m_scriptSidebar);
-        }
-    if (m_functionBrowser != nullptr)
-        {
-        wxGetApp().UpdateSideBarTheme(m_functionBrowser->GetSidebar());
         }
 
     Refresh();

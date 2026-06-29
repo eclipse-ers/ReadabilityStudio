@@ -5241,8 +5241,6 @@ void ToolsOptionsDlg::CreateControls()
     m_sideBar = new Wisteria::UI::SideBarBook(this, wxID_ANY);
     mainSizer->Add(m_sideBar, wxSizerFlags{ 1 }.Expand().Border());
 
-    wxGetApp().UpdateSideBarTheme(m_sideBar->GetSideBar());
-
     if (GetSectionsBeingShown() == AllSections)
         {
         if (IsGeneralSettings())

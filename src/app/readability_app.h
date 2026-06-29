@@ -469,9 +469,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     // theming
     void UpdateRibbonTheme();
     void UpdateDocumentThemes();
-    void UpdateStartPageTheme();
     void UpdateScriptEditorTheme();
-    void UpdateSideBarTheme(Wisteria::UI::SideBar* sidebar);
     void ReadLogIntoListCtrl(Wisteria::UI::ListCtrlEx* listCtrl);
     void UpdateRibbonTheme(const wxRibbonBar* ribbon);
 

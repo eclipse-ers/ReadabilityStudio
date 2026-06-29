@@ -1800,27 +1800,10 @@ void ReadabilityApp::FillPrintMenu(wxMenu& printMenu, const RibbonType rtype)
     }
 
 //-----------------------------------
-void ReadabilityApp::UpdateSideBarTheme(Wisteria::UI::SideBar* sidebar)
-    {
-    Wisteria::UI::SideBarColorScheme colorScheme;
-    colorScheme.m_backgroundColor = GetAppOptions()->GetSideBarBackgroundColor();
-    colorScheme.m_foregroundColor = GetAppOptions()->GetSideBarFontColor();
-    colorScheme.m_selectedColor = GetAppOptions()->GetSideBarActiveColor();
-    colorScheme.m_selectedFontColor = GetAppOptions()->GetSideBarActiveFontColor();
-    colorScheme.m_highlightColor = GetAppOptions()->GetSideBarHoverColor();
-    colorScheme.m_highlightFontColor = GetAppOptions()->GetSideBarHoverFontColor();
-    colorScheme.m_parentColor = GetAppOptions()->GetSideBarParentColor();
-
-    sidebar->SetColorScheme(colorScheme);
-    }
-
-//-----------------------------------
 Wisteria::UI::SideBar* ReadabilityApp::CreateSideBar(wxWindow* frame, const wxWindowID id)
     {
     auto* sideBar = new Wisteria::UI::SideBar(frame, id);
     sideBar->SetImageList(dynamic_cast<MainFrame*>(GetMainFrame())->GetProjectSideBarImageList());
-
-    UpdateSideBarTheme(sideBar);
 
     return sideBar;
     }
@@ -3145,7 +3128,6 @@ void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
                          wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName(),
                          wxGetApp().GetVendorDisplayName()),
         eula, mlaCitation, apaCitation, bibTexCitation);
-    wxGetApp().UpdateSideBarTheme(aboutDlg.GetSideBar());
 
     aboutDlg.ShowModal();
     }
@@ -4030,15 +4012,6 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     }
 
 //---------------------------------------------------
-void ReadabilityApp::UpdateStartPageTheme()
-    {
-    GetMainFrameEx()->GetStartPage()->SetButtonAreaBackgroundColor(
-        GetAppOptions()->GetSideBarBackgroundColor());
-    GetMainFrameEx()->GetStartPage()->SetMRUBackgroundColor(
-        wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
-    }
-
-//---------------------------------------------------
 void ReadabilityApp::UpdateScriptEditorTheme()
     {
     if (GetMainFrameEx()->GetScriptWorkbench() != nullptr)
@@ -4198,8 +4171,6 @@ void ReadabilityApp::InitStartPage()
     GetMainFrameEx()->GetStartPage()->AddButton(
         GetResourceManager().GetSVG(L"ribbon/configure.svg"), _(L"Review Program Options"));
 
-    UpdateStartPageTheme();
-
     GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->GetStartPage(), wxSizerFlags{ 1 }.Expand());
 
     // The script workbench and log panel share the same sizer slot as the start page;
@@ -4235,7 +4206,6 @@ void ReadabilityApp::UpdateDocumentThemes()
             if (view != nullptr)
                 {
                 UpdateRibbonTheme(view->GetRibbon());
-                UpdateSideBarTheme(view->GetSideBar());
                 view->GetQuickToolbar()->SetBackgroundColour(
                     GetAppOptions()->GetRibbonInactiveTabColor());
                 view->GetSearchPanel()->SetBackgroundColour(

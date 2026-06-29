@@ -1163,7 +1163,7 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                     scoresReport->Hide();
                     scoresReport->SetName(_(L"Summary Report"));
                     scoresReport->SetLabel(_(L"Summary Report"));
-                    scoresReport->EnableContextMenu(true);
+                    scoresReport->EnableContextMenu(false);
                     scoresReport->Bind(wxEVT_WEBVIEW_NAVIGATING,
                                        &ProjectView::OnExplanationNavigating, view);
                     view->GetReadabilityResultsView().InsertWindow(1, scoresReport);
@@ -4101,7 +4101,7 @@ void ProjectDoc::DisplayStatistics()
                 summaryReportWindow->Hide();
                 summaryReportWindow->SetLabel(BaseProjectView::GetFormattedReportLabel());
                 summaryReportWindow->SetName(BaseProjectView::GetFormattedReportLabel());
-                summaryReportWindow->EnableContextMenu(true);
+                summaryReportWindow->EnableContextMenu(false);
                 summaryReportWindow->Bind(wxEVT_WEBVIEW_NAVIGATING,
                                           &ProjectView::OnExplanationNavigating, view);
                 }
@@ -4187,7 +4187,7 @@ void ProjectDoc::DisplayStatistics()
                 sumWindow->Hide();
                 sumWindow->SetLabel(_(L"Summary"));
                 sumWindow->SetName(_(L"Dolch Summary"));
-                sumWindow->EnableContextMenu(true);
+                sumWindow->EnableContextMenu(false);
                 sumWindow->Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating,
                                 view);
                 view->GetDolchSightWordsView().AddWindow(sumWindow);

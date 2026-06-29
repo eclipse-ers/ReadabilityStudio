@@ -7744,10 +7744,9 @@ bool BaseProject::AddEflawTest(const bool setFocus)
         return false;
         }
 
-    readability::eflaw_difficulty diffLevel{};
-
     try
         {
+        readability::eflaw_difficulty diffLevel{};
         const size_t val = readability::eflaw(diffLevel, GetTotalWords(), GetTotalMiniWords(),
                                               GetTotalSentences());
 

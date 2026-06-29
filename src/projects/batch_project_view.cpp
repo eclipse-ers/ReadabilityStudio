@@ -616,7 +616,7 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         {
         m_testExplanations->Hide();
         m_testExplanations->SetLabel(_(L"Test Explanations"));
-        m_testExplanations->EnableContextMenu(true);
+        m_testExplanations->EnableContextMenu(false);
         GetWorkSpaceSizer()->Add(m_testExplanations, wxSizerFlags{ 1 }.Expand());
         }
 
@@ -625,7 +625,7 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         {
         m_statsReport->Hide();
         m_statsReport->SetLabel(_(L"Summary Statistics"));
-        m_statsReport->EnableContextMenu(true);
+        m_statsReport->EnableContextMenu(false);
         GetWorkSpaceSizer()->Add(m_statsReport, wxSizerFlags{ 1 }.Expand());
         }
 
