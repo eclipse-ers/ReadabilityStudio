@@ -1,18 +1,38 @@
+/* ==========================================================================
+   Readability Studio — default report theme
+   ========================================================================== */
+
+/* ---------- Base --------------------------------------------- */
+
+:root
+  {
+  --header-accent: #00CC66;       /* card headers, primary green */
+  --banner-color: #2E86AB;        /* report banner title and accent bar */
+  --accent-width: 8px;            /* card header and data-row left accent */
+  --banner-accent-width: 10px;    /* banner accent bar width */
+  --border-color: rgba(128, 128, 128, 0.3);       /* general borders */
+  --border-color-light: rgba(128, 128, 128, 0.25); /* subtle dividers */
+  --note-color: #0078D4;          /* note callout accent */
+  --warning-color: #F59E0B;       /* warning callout accent (amber) */
+  --data-row-color: #059669;      /* data row hover accent (emerald) */
+}
+
 body
   {
-  font-family: Baskerville, 'Gill Sans', 'Palatino', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   background-color: Canvas;
   color: CanvasText;
   }
+
+/* ---------- Report header ------------------------------------ */
 
 .report-header
   {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  border-style: solid;
-  border-color: gray;
-  border-radius:10px;
-  border-width: 1px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
   }
 
 .report-header-top-box
@@ -20,36 +40,32 @@ body
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 1;
-  font-weight:bold;
-  border-bottom-style: solid;
-  border-color: gray;
-  border-width: 1px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
   text-align: center;
   }
 
 .report-header .report-header-first-column
   {
-  font-weight:bold;
+  font-weight: bold;
   }
 
 .report-header div
   {
-  padding: 0 10px 0 10px;
+  padding: 0 10px;
   }
 
 .report-header .report-header-inner-cell
   {
-  border-bottom-style: solid;
-  border-color: gray;
-  border-width: 1px;
+  border-bottom: 1px solid var(--border-color);
   }
+
+/* ---------- Report body -------------------------------------- */
 
 .text-report-body
   {
-  border-style: solid;
-  border-color: gray;
-  border-radius:10px;
-  border-width: 1px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
   }
 
 .toc-section
@@ -59,13 +75,64 @@ body
   {
   font-size: large;
   border-bottom-style: dotted;
-  border-bottom-color: gray;
-  padding: 5px 0px 5px 0px;
-  margin: 5px 0px 5px 0px;
+  border-bottom-color: var(--border-color);
+  padding: 5px 0;
+  margin: 5px 0;
   }
 
-h4
-  { color: gray; }
+/* ---------- Report banner -------------------------------------- */
+
+.report-banner
+  {
+  display: flex;
+  flex-direction: row;
+  margin: 24px 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  }
+
+.report-banner-accent
+  {
+  width: var(--banner-accent-width);
+  flex-shrink: 0;
+  background-color: var(--banner-color);
+  }
+
+.report-banner-content
+  {
+  flex: 1;
+  padding: 20px 24px;
+  background-color: color-mix(in srgb, var(--banner-color) 8%, Canvas);
+  }
+
+.report-banner-content h1
+  {
+  margin: 0 0 4px 0;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--banner-color);
+  }
+
+.report-banner-content p
+  {
+  margin: 0;
+  font-size: 0.95em;
+  color: CanvasText;
+  opacity: 0.7;
+  }
+
+/* ---------- Utility classes ----------------------------------- */
+
+.emphasis
+  { font-weight: bold; }
+
+.page-break
+  { page-break-before: always; }
+
+.report-info-table
+  { display: flex; }
+
+/* ---------- Figures and captions ----------------------------- */
 
 .figure
   {
@@ -76,28 +143,229 @@ h4
 
 img
   {
-  max-width:75%;
+  max-width: 75%;
   }
 
 .caption
   {
-  color: #777;
-  margin: 5px 0px 5px 0px;
+  color: CanvasText;
+  opacity: 0.6;
+  margin: 5px 0;
   text-align: left;
   }
 
-tr:hover
-  {
-  background-color: yellow !important;
-  color: black !important;
-  }
-
-/* prevents a section from being split by a page break.*/
+/* prevents a section from being split by a page break. */
 .minipage
   {
   break-inside: avoid-page;
   page-break-inside: avoid;
   }
+
+/* ---------- Explanation cards -------------------------------- */
+/* Used for test explanations and statistics summaries.          */
+/* --header-accent is set inline per card for left border and    */
+/* a translucent tinted background via color-mix().              */
+
+.explanation-card
+  {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 10px;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+.explanation-card:hover
+  {
+  border-color: color-mix(in srgb, var(--header-accent) 50%, CanvasText);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+.explanation-card-header
+  {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 1.05em;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--border-color);
+  border-left: var(--accent-width) solid var(--header-accent);
+  background: color-mix(in srgb, var(--header-accent) 10%, Canvas);
+  color: CanvasText;
+  transition: border-left-color 0.4s ease, background 0.4s ease;
+  }
+
+.explanation-card:hover .explanation-card-header
+  {
+  border-left-color: color-mix(in srgb, var(--header-accent) 70%, black);
+  background: color-mix(in srgb, var(--header-accent) 15%, Canvas);
+  }
+
+.explanation-card-body
+  {
+  padding: 12px 14px;
+  line-height: 1.5;
+  }
+
+.explanation-card-body p
+  {
+  margin: 0 0 8px 0;
+  }
+
+.explanation-card-body p:last-child
+  {
+  margin-bottom: 0;
+  }
+
+/* ---------- Test result layout ------------------------------- */
+/* Two-column flex layout: score on the left, factors on right.  */
+
+.test-result
+  {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin: 6px 0;
+  }
+
+.test-result-info
+  {
+  flex: 3;
+  min-width: 0;
+  }
+
+.test-result-factors
+  {
+  flex: 2;
+  min-width: 0;
+  }
+
+/* ---------- Difficulty prediction factors --------------------- */
+
+.test-factors
+  {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--border-color-light);
+  border-radius: 6px;
+  overflow: hidden;
+  }
+
+.test-factors-header
+  {
+  padding: 6px 10px;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color-light);
+  }
+
+.data-row
+  {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  border-left: var(--accent-width) solid transparent;
+  transition: border-left-color 0.2s ease;
+  }
+
+.data-row:nth-child(even)
+  {
+  background-color: rgba(128, 128, 128, 0.06);
+  }
+
+.data-row:hover,
+.data-row:nth-child(even):hover
+  {
+  border-left-color: var(--data-row-color);
+  background-color: color-mix(in srgb, var(--data-row-color) 6%, Canvas);
+  }
+
+.checkmark
+  {
+  color: #16A34A;
+  font-weight: bold;
+  }
+
+.data-row-muted span
+  {
+  color: color-mix(in srgb, currentColor 50%, transparent);
+  }
+
+/* ---------- Note and warning callouts ------------------------ */
+
+.callout
+  {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 20px 10px;
+  }
+
+.callout-icon
+  {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  padding: 10px 8px;
+  font-weight: bold;
+  white-space: nowrap;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla',
+    sans-serif;
+  }
+
+.callout-content
+  {
+  flex: 1;
+  padding: 10px 12px;
+  border-left: 1px solid var(--border-color-light);
+  }
+
+.callout-note
+  {
+  border-color: color-mix(in srgb, var(--note-color) 35%, transparent);
+  background-color: color-mix(in srgb, var(--note-color) 4%, transparent);
+  }
+
+.callout-note .callout-icon
+  {
+  background-color: var(--note-color);
+  color: white;
+  }
+
+.callout-note .callout-content
+  {
+  border-left-color: color-mix(in srgb, var(--note-color) 25%, transparent);
+  }
+
+.callout-warning
+  {
+  border-color: color-mix(in srgb, var(--warning-color) 40%, transparent);
+  background-color: color-mix(in srgb, var(--warning-color) 5%, transparent);
+  }
+
+.callout-warning .callout-icon
+  {
+  background-color: var(--warning-color);
+  color: black;
+  }
+
+.callout-warning .callout-content
+  {
+  border-left-color: color-mix(in srgb, var(--warning-color) 30%, transparent);
+  }
+
+/* ---------- Print -------------------------------------------- */
 
 @media print
   {

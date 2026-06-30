@@ -50,6 +50,7 @@
 #include "explanation_listctrl.h"
 #include "../../Wisteria-Dataviz/src/import/html_encode.h"
 #include "../../projects/project_navigation_links.h"
+#include "../../results-format/project_report_format.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxPanel)
 
@@ -136,8 +137,10 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
                 NavLink::AnchorsToExplanationScheme(wxString::Format(
                     _DT(L"<!DOCTYPE html><html><head>"
                         "<meta name='color-scheme' content='light dark' />"
-                        "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                        "<meta name='generator' content='%s' />"
+                        "<style>%s</style>"
                         "</head><body>%s</body></html>"),
+                    wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
                     m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
                 wxString{});
             }
@@ -251,9 +254,12 @@ bool ExplanationListCtrl::Save(
         0, wxString::Format(
                L"<!DOCTYPE html>\n<html>\n<head>"
                "\n    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />"
+               "\n    <meta name='color-scheme' content='light dark' />"
+               "\n    <meta name='generator' content='%s' />"
                "\n    <title>%s</title>"
+               "\n    <style>%s</style>"
                "\n</head>\n<body>\n",
-               GetLabel()));
+               wxTheApp->GetAppName(), GetLabel(), ProjectReportFormat::GetThemeCss()));
     resultsHtml += L"\n<br />\n" + descriptionHtml + L"\n</body>\n</html>";
 
     lily_of_the_valley::html_format::strip_hyperlinks(resultsHtml);
@@ -367,9 +373,12 @@ void ExplanationListCtrl::OnItemSelected(const wxListEvent& event)
     GetExplanationView()->Hide();
     GetExplanationView()->SetPage(
         NavLink::AnchorsToExplanationScheme(wxString::Format(
-            _DT(L"<!DOCTYPE html><html><head><meta name='color-scheme' content='light dark' />"
-                "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+            _DT(L"<!DOCTYPE html><html><head>"
+                "<meta name='color-scheme' content='light dark' />"
+                "<meta name='generator' content='%s' />"
+                "<style>%s</style>"
                 "</head><body>%s</body></html>"),
+            wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
             m_explanations[GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0)])),
         wxString{});
     }
@@ -382,12 +391,14 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
         {
         GetExplanationView()->Hide();
         GetExplanationView()->SetPage(
-            NavLink::AnchorsToExplanationScheme(wxString::Format(
-                _DT(L"<!DOCTYPE html><html><head>"
-                    "<meta name='color-scheme' content='light dark' />"
-                    "<style>body{background-color:Canvas;color:CanvasText;}</style>"
-                    "</head><body>%s</body></html>"),
-                m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
+            NavLink::AnchorsToExplanationScheme(
+                wxString::Format(_DT(L"<!DOCTYPE html><html><head>"
+                                     "<meta name='color-scheme' content='light dark' />"
+                                     "<meta name='generator' content='%s' />"
+                                     "<style>%s</style>"
+                                     "</head><body>%s</body></html>"),
+                                 wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
+                                 m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
             wxString{});
         }
     }
@@ -404,10 +415,6 @@ wxString ExplanationListCtrl::GetExplanationsText() const
             if (pos != m_explanations.end())
                 {
                 descriptionHtml += pos->second;
-                if (i < (GetResultsListCtrl()->GetItemCount() - 1))
-                    {
-                    descriptionHtml += L"<br />\n";
-                    }
                 }
             }
         }

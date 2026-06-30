@@ -1640,6 +1640,10 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
                 }
             std::wstring htmlText = webview->GetPageSource().ToStdWstring();
             lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+            if (!htmlText.starts_with(L"<!DOCTYPE"))
+                {
+                htmlText.insert(0, L"<!DOCTYPE html>\n");
+                }
             wxFileName(filePath).SetPermissions(wxS_DEFAULT);
             wxFile file(filePath.GetFullPath(), wxFile::write);
             file.Write(htmlText);
@@ -1972,14 +1976,9 @@ void ProjectView::UpdateStatistics()
 
         // format the explanation of the averages
         wxString explanationString =
-            L"<table class='minipage' style='width:100%;'>" +
-            wxString::Format(
-                L"\n\t<thead><tr><td style='background:%s;'><span style='color:%s;'>",
-                ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-                ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX));
-        explanationString += _(L"Averages");
-        explanationString += L"</span></td></tr></thead>\n\t<tr><td>";
-        explanationString +=
+            L"<div class='explanation-card'>"
+            "<div class='explanation-card-header'>" +
+            _(L"Averages") + L"</div><div class='explanation-card-body'>" +
             wxString::Format(
                 _(L"<p>Average grade level: %s<br />Average reading age: %s<br />"
                   "Average predicted cloze score: %s</p><p>Note that an average of the "
@@ -1990,7 +1989,7 @@ void ProjectView::UpdateStatistics()
                     Wisteria::NumberFormatInfo{
                         Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting }),
                 ageAverage, clozeAverage) +
-            L"</td></tr>\n</table>";
+            L"</div></div>";
 
         GetReadabilityScoresList()->GetExplanations()[GetAverageLabel()] = explanationString;
 
@@ -2011,14 +2010,9 @@ void ProjectView::UpdateStatistics()
 
             // format the explanation of the modes
             explanationString =
-                L"<table class='minipage' style='width:100%;'>" +
-                wxString::Format(
-                    L"\n\t<thead><tr><td style='background:%s;'><span style='color:%s;'>",
-                    ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-                    ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX));
-            explanationString += _(L"Modes");
-            explanationString += L"</span></td></tr></thead>\n\t<tr><td>";
-            explanationString +=
+                L"<div class='explanation-card'>"
+                "<div class='explanation-card-header'>" +
+                _(L"Modes") + L"</div><div class='explanation-card-body'>" +
                 wxString::Format(
                     _(L"<p>Grade level modes: %s<br />Reading age modes: %s<br />"
                       "Predicted cloze score modes: %s</p><p>The mode is the most frequently "
@@ -2027,7 +2021,7 @@ void ProjectView::UpdateStatistics()
                       "scale values is not applicable because the scales used between "
                       "tests are different.</p>"),
                     gradeMode, ageMode, clozeMode) +
-                L"</td></tr>\n</table>";
+                L"</div></div>";
 
             GetReadabilityScoresList()->GetExplanations()[GetModeLabel()] = explanationString;
 
@@ -2049,14 +2043,9 @@ void ProjectView::UpdateStatistics()
 
             // format the explanation of the medians
             explanationString =
-                L"<table class='minipage' style='width:100%;'>" +
-                wxString::Format(
-                    L"\n\t<thead><tr><td style='background:%s;'><span style='color:%s;'>",
-                    ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-                    ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX));
-            explanationString += _(L"Medians");
-            explanationString += L"</span></td></tr></thead>\n\t<tr><td>";
-            explanationString +=
+                L"<div class='explanation-card'>"
+                "<div class='explanation-card-header'>" +
+                _(L"Medians") + L"</div><div class='explanation-card-body'>" +
                 wxString::Format(
                     _(L"<p>Grade level median: %s<br />Reading age median: %s<br />"
                       "Predicted cloze score median: %s</p><p>The median is the midpoint of a "
@@ -2068,7 +2057,7 @@ void ProjectView::UpdateStatistics()
                         Wisteria::NumberFormatInfo{
                             Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting }),
                     ageMedian, clozeMedian) +
-                L"</td></tr>\n</table>";
+                L"</div></div>";
 
             GetReadabilityScoresList()->GetExplanations()[GetMedianLabel()] = explanationString;
 
@@ -2115,14 +2104,9 @@ void ProjectView::UpdateStatistics()
 
             // format the explanation of the variances
             explanationString =
-                L"<table class='minipage' style='width:100%'>" +
-                wxString::Format(
-                    L"\n    <thead><tr><td style='background:%s;'><span style='color:%s;'>",
-                    ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-                    ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX));
-            explanationString += _(L"Standard Deviations");
-            explanationString += L"</span></td></tr></thead>\n    <tr><td>";
-            explanationString +=
+                L"<div class='explanation-card'>"
+                "<div class='explanation-card-header'>" +
+                _(L"Standard Deviations") + L"</div><div class='explanation-card-body'>" +
                 wxString::Format(
                     // TRANSLATORS: %s are formatted numbers.
                     // Also, "std. dev." is standard deviation.
@@ -2138,7 +2122,7 @@ void ProjectView::UpdateStatistics()
                         Wisteria::NumberFormatInfo{
                             Wisteria::NumberFormatInfo::NumberFormatType::CustomFormatting }),
                     ageStdDev, clozeStdDev) +
-                L"</td></tr>\n</table>";
+                L"</div></div>";
 
             GetReadabilityScoresList()->GetExplanations()[GetStdDevLabel()] = explanationString;
             }
@@ -2329,9 +2313,12 @@ void ProjectView::OnTestDelete([[maybe_unused]] wxRibbonButtonBarEvent& event)
             if (GetReadabilityScoresList()->GetExplanationView() != nullptr)
                 {
                 GetReadabilityScoresList()->GetExplanationView()->SetPage(
-                    wxString(L"<html><body>") +
-                        _(L"No readability test results currently available.") +
-                        wxString(L"</body></html>"),
+                    wxString::Format(
+                        _DT(L"<!DOCTYPE html><html><head>"
+                            "<meta name='color-scheme' content='light dark' />"
+                            "<style>body{background-color:Canvas;color:CanvasText;}</style>"
+                            "</head><body>%s</body></html>"),
+                        _(L"No readability test results currently available.")),
                     wxString{});
                 }
             }
@@ -2948,6 +2935,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
                         std::wstring htmlText = webview->GetPageSource().ToStdWstring();
                         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        if (!htmlText.starts_with(L"<!DOCTYPE"))
+                            {
+                            htmlText.insert(0, L"<!DOCTYPE html>\n");
+                            }
                         wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
                         wxFile file{ savePath, wxFile::write };
                         if (!file.Write(htmlText))
@@ -3001,6 +2992,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
                         std::wstring htmlText = webview->GetPageSource().ToStdWstring();
                         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        if (!htmlText.starts_with(L"<!DOCTYPE"))
+                            {
+                            htmlText.insert(0, L"<!DOCTYPE html>\n");
+                            }
                         wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
                         wxFile file{ savePath, wxFile::write };
                         if (!file.Write(htmlText))
@@ -3226,6 +3221,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
                         std::wstring htmlText = webview->GetPageSource().ToStdWstring();
                         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        if (!htmlText.starts_with(L"<!DOCTYPE"))
+                            {
+                            htmlText.insert(0, L"<!DOCTYPE html>\n");
+                            }
                         wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
                         wxFile file{ savePath, wxFile::write };
                         if (!file.Write(htmlText))
@@ -3320,7 +3319,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
     size_t figureCounter = 0;
     size_t tableCounter = 0;
 
-    const wxString pageBreak = L"<div style='page-break-before:always'></div><br />\n";
+    const wxString pageBreak = L"<div class='page-break'></div><br />\n";
 
     const auto formatImageOutput =
         [&outputText, &sectionCounter, &figureCounter, pageBreak, doc, htmlEncode, graphExt,
@@ -3638,7 +3637,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
 
     wxString toc, infoTable;
     infoTable = wxString::Format(
-        L"<div style='display:flex;'>\n"
+        L"<div class='report-info-table'>\n"
         "<div class='report-header'>\n"
         "<div class='report-header-inner-cell report-header-first-column'>%s</div>\n"
         "<div class='report-header-inner-cell'>%s</div>\n"

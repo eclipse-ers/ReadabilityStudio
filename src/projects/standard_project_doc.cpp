@@ -1122,9 +1122,7 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
            but point user in the right direction.*/
         SetReadabilityTestResult(
             ReadabilityMessages::GetDolchLabel(), ReadabilityMessages::GetDolchLabel(),
-            L"<tr><td>" +
-                wxString(_(L"Refer to the <a href=\"#Dolch\">Dolch Sight Words</a> section.")) +
-                L"</td></tr>",
+            wxString(_(L"Refer to the <a href=\"#dolch\">Dolch Sight Words</a> section.")),
             std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}), wxString{},
             std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
             false);
@@ -1176,6 +1174,8 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                         ProjectReportFormat::FormatHtmlReportStart(
                             wxString::Format( // TRANSLATORS: %s is the project name
                                 _(L"Summary Report [%s]"), GetTitle())) +
+                        ProjectReportFormat::FormatReportBanner(_(L"Readability Score Summary"),
+                                                                GetTitle()) +
                         text + ProjectReportFormat::FormatHtmlReportEnd()),
                     wxString{});
                 }
@@ -3375,8 +3375,7 @@ bool ProjectDoc::AddSchwartzTest(const bool setFocus)
 
     if (schwartzGraph->GetScores().front().IsScoreInvalid())
         {
-        const wxString description =
-            L"<tr><td>" + wxString(_(L"Text is too difficult to be plotted.")) + L"</td></tr>";
+        const wxString description = wxString(_(L"Text is too difficult to be plotted."));
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -3534,8 +3533,7 @@ bool ProjectDoc::AddFraseTest(const bool setFocus)
     wxASSERT_MSG(fraseGraph, L"Frase graph is null in DisplayReadabilityLinePlots()!");
     if (fraseGraph->GetScores().front().IsScoreInvalid())
         {
-        const wxString description =
-            L"<tr><td>" + wxString(_(L"Text is too difficult to be plotted.")) + L"</td></tr>";
+        const wxString description = wxString(_(L"Text is too difficult to be plotted."));
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -4109,14 +4107,16 @@ void ProjectDoc::DisplayStatistics()
 
         if (summaryReportWindow != nullptr)
             {
-            wxString formattedStats = ProjectReportFormat::FormatHtmlReportStart(
-                                          wxString::Format( // TRANSLATORS: %s is the project name
-                                              _(L"Statistics Report [%s]"), GetTitle())) +
-                                      ProjectReportFormat::FormatStatisticsInfo(
-                                          this, GetStatisticsReportInfo(),
-                                          wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT),
-                                          view->GetSummaryStatisticsListData()) +
-                                      ProjectReportFormat::FormatHtmlReportEnd();
+            wxString formattedStats =
+                ProjectReportFormat::FormatHtmlReportStart(
+                    wxString::Format( // TRANSLATORS: %s is the project name
+                        _(L"Statistics Report [%s]"), GetTitle())) +
+                ProjectReportFormat::FormatReportBanner(_(L"Statistics Summary"), GetTitle()) +
+                ProjectReportFormat::FormatStatisticsInfo(
+                    this, GetStatisticsReportInfo(),
+                    wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT),
+                    view->GetSummaryStatisticsListData()) +
+                ProjectReportFormat::FormatHtmlReportEnd();
             // if document failed to be loaded, and we are just showing the basic stats,
             // then remove the links to the various windows that won't be shown
             if (!LoadingOriginalTextSucceeded())
@@ -4200,6 +4200,8 @@ void ProjectDoc::DisplayStatistics()
                     ProjectReportFormat::FormatHtmlReportStart(
                         wxString::Format( // TRANSLATORS: %s is the project name
                             _(L"Dolch Summary [%s]"), GetTitle())) +
+                    ProjectReportFormat::FormatReportBanner(_(L"Dolch Sight Words Summary"),
+                                                            GetTitle()) +
                     ProjectReportFormat::FormatDolchStatisticsInfo(
                         this, GetStatisticsReportInfo(), true,
                         wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr) +
@@ -4302,8 +4304,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
 
     if (gFryGraph->GetScores().front().IsScoreInvalid())
         {
-        const wxString description =
-            L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>";
+        const wxString description = _(L"Text is too difficult to be plotted.");
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -4321,7 +4322,7 @@ bool ProjectDoc::AddGilliamPenaMountainFryTest(const bool setFocus)
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many long sentences.");
 
-        const wxString description = L"<tr><td>" + tooDifficultDescription + L"</td></tr>";
+        const wxString description = tooDifficultDescription;
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -4464,8 +4465,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
 
     if (fryGraph->GetScores().front().IsScoreInvalid())
         {
-        const wxString description =
-            L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>";
+        const wxString description = _(L"Text is too difficult to be plotted.");
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -4483,7 +4483,7 @@ bool ProjectDoc::AddFryTest(const bool setFocus)
                 _(L"Text is too difficult to be classified to a specific "
                   "grade level because it contains too many long sentences.");
 
-        const wxString description = L"<tr><td>" + tooDifficultDescription + L"</td></tr>";
+        const wxString description = tooDifficultDescription;
 
         SetReadabilityTestResult(
             currentTestKey, theTest.first->get_test().get_long_name().c_str(), description,
@@ -4630,13 +4630,13 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
 
     if (raygorGraph->GetScores().at(0).IsScoreInvalid())
         {
-        SetReadabilityTestResult(
-            currentTestKey, theTest.first->get_test().get_long_name().c_str(),
-            L"<tr><td>" + _(L"Text is too difficult to be plotted.") + L"</td></tr>",
-            std::make_pair(std::numeric_limits<double>::quiet_NaN(),
-                           BaseProjectView::GetFailedLabel()),
-            BaseProjectView::GetFailedLabel(), std::numeric_limits<double>::quiet_NaN(),
-            std::numeric_limits<double>::quiet_NaN(), setFocus);
+        SetReadabilityTestResult(currentTestKey, theTest.first->get_test().get_long_name().c_str(),
+                                 _(L"Text is too difficult to be plotted."),
+                                 std::make_pair(std::numeric_limits<double>::quiet_NaN(),
+                                                BaseProjectView::GetFailedLabel()),
+                                 BaseProjectView::GetFailedLabel(),
+                                 std::numeric_limits<double>::quiet_NaN(),
+                                 std::numeric_limits<double>::quiet_NaN(), setFocus);
         }
     else if (raygorGraph->GetScores().at(0).IsScoreOutOfGradeRange())
         {
@@ -4648,7 +4648,7 @@ bool ProjectDoc::AddRaygorTest(const bool setFocus)
                   "grade level because it contains too many long sentences.");
 
         SetReadabilityTestResult(currentTestKey, theTest.first->get_test().get_long_name().c_str(),
-                                 L"<tr><td>" + tooDifficultDescription + L"</td></tr>",
+                                 tooDifficultDescription,
                                  std::make_pair(std::numeric_limits<double>::quiet_NaN(),
                                                 BaseProjectView::GetFailedLabel()),
                                  BaseProjectView::GetFailedLabel(),
@@ -4743,13 +4743,12 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
         return;
         }
     // format the explanation window
-    const wxString explanationString = wxString::Format(
-        L"<table class='minipage' style='width:100%%;'><tr>\n"
-        "<th colspan='2' style='background:%s; text-align:left'>"
-        "<span style='color:%s;'>%s</span></th></tr>\n%s\n</table>",
-        ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-        ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX), testName,
-        description);
+    const wxString explanationString =
+        wxString::Format(L"<div class='explanation-card'>"
+                         "<div class='explanation-card-header'>%s</div>"
+                         "<div class='explanation-card-body'>%s</div>"
+                         "</div>",
+                         testName, description);
 
     const wxWindowUpdateLocker noUpdates(view->GetReadabilityScoresList());
     long location = view->GetReadabilityScoresList()->GetResultsListCtrl()->FindEx(testName);

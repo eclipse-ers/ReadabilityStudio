@@ -42,6 +42,10 @@ source('../R/appdown.r')
 - Added PDF export support.
 - Added WebP image support.
 
+### Report Enhancements {-}
+
+- Modernized the look of the test and statistics reports.
+
 ### Analysis/Test Enhancements {-}
 
 - [Combined accents](#diacritics) (i.e., diacritics) are now supported.

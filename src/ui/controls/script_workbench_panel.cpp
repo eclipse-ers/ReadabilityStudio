@@ -845,7 +845,7 @@ void ScriptWorkbenchPanel::SetThemeColor(const wxColour& color)
         {
         const auto debugReportBody =
             wxString::Format(
-                L"<html>\n<body "
+                L"<!DOCTYPE html>\n<html>\n<body "
                 L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:11pt;"
                 L"margin:10px;\">",
                 color.GetAsString(wxC2S_HTML_SYNTAX),
@@ -869,7 +869,7 @@ void ScriptWorkbenchPanel::DebugOutput(const wxString& str)
 
     const wxColour bkColor = GetBackgroundColour();
     const auto debugReportBody =
-        wxString::Format(L"<html>\n<body "
+        wxString::Format(L"<!DOCTYPE html>\n<html>\n<body "
                          L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
                          L"11pt;margin:10px;\">",
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),
@@ -892,7 +892,7 @@ void ScriptWorkbenchPanel::DebugClear()
 
     const wxColour bkColor = GetBackgroundColour();
     const auto debugReportBody =
-        wxString::Format(L"<html>\n<body "
+        wxString::Format(L"<!DOCTYPE html>\n<html>\n<body "
                          L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
                          L"11pt;margin:10px;\">",
                          bkColor.GetAsString(wxC2S_HTML_SYNTAX),

@@ -60,25 +60,41 @@ class ProjectReportFormat
         @param text The HTML text to trim.*/
     [[nodiscard]]
     static wxString TrimTrailingBreaks(const wxString& text);
+    /// @returns The contents of a theme CSS file from the report-themes resource directory.
+    /// @param fileName The CSS file to load (defaults to "default.css").
+    /// @param overrideFileName An optional CSS file to load after @p fileName,
+    ///     allowing its declarations to override the base theme via the cascade.
+    [[nodiscard]]
+    static wxString GetThemeCss(const wxString& fileName = _DT(L"default.css"),
+                                const wxString& overrideFileName = wxEmptyString);
     /// @returns The html/head/body start sections for a report.
     /// @param title The page's title.
+    /// @param overrideCssFile An optional CSS file to load after the base theme.
     /// @note This will include various (internal) CSS styling necessary for the HTML.
     [[nodiscard]]
-    static wxString FormatHtmlReportStart(const wxString& title = wxEmptyString);
+    static wxString FormatHtmlReportStart(const wxString& title = wxEmptyString,
+                                          const wxString& overrideCssFile = wxEmptyString);
     /// @returns The html/head/body start sections for a report.
     [[nodiscard]]
     static wxString FormatHtmlReportEnd();
-    /** @brief Formats a message into a fancy "Note" tip (in the form of an HTML table).
+    /** @brief Formats a report banner with a title and subtitle.
+        @param title The main title.
+        @param subtitle An optional subtitle (e.g., project name).
+        @returns The banner formatted in HTML.*/
+    [[nodiscard]]
+    static wxString FormatReportBanner(const wxString& title,
+                                       const wxString& subtitle = wxEmptyString);
+    /** @brief Formats a message into a "Note" callout.
         @param note The message to format.
         @returns The note formatted in HTML.*/
     [[nodiscard]]
     static wxString FormatHtmlNoteSection(const wxString& note);
-    /** @brief Formats a message into a fancy "Warning" (in the form of an HTML table).
+    /** @brief Formats a message into a "Warning" callout.
         @param note The message to format.
         @returns The note formatted in HTML.*/
     [[nodiscard]]
     static wxString FormatHtmlWarningSection(const wxString& note);
-    /** @returns A test's results, description, and notes formatted into an HTML table.
+    /** @returns A test's results, description, and notes formatted into HTML.
         @param score The calculated score.
         @param theTest The test to format.
         @param note An optional note to include.*/
@@ -180,21 +196,19 @@ class ProjectReportFormat
     [[nodiscard]]
     static wxString FormatDolchHeader(const wxString& label)
         {
-        return wxString::Format(L"\n<tr class='report-column-header' style='background:%s;'>"
-                                "<td colspan='3'><span style='color:%s;'>%s</span></td></tr>",
-                                GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX),
-                                GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX), label);
+        return wxString::Format(L"\n<div class='explanation-card-header'>%s</div>"
+                                "<div class='explanation-card-body'>",
+                                label);
         }
 
     [[nodiscard]]
-    static wxString FormatDolchRow(const long labelColumnWidth, const long numberColumnWidth,
-                                   const wxString& label, const wxString& value,
+    static wxString FormatDolchRow(const wxString& label, const wxString& value,
                                    const wxString& percent)
         {
-        return wxString::Format(L"\n<tr><td style='min-width:%ldpx; width:40%%;'>%s</td>"
-                                "<td style='text-align:right; width:%ldpx;'>%s</td>"
-                                "<td style='text-align:left;'>%s</td></tr>",
-                                labelColumnWidth, label, numberColumnWidth, value, percent);
+        return wxString::Format(L"\n<div class='data-row'>"
+                                "<span>%s</span>"
+                                "<span>%s %s</span></div>",
+                                label, value, percent);
         }
 
     /** @returns A test's factors formatted into an HTML table.

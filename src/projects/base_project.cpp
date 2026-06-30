@@ -8415,7 +8415,6 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                     }
                 customDescription += wxString(L"\r\n</ul>");
                 }
-            customDescription = L"<tr><td>" + customDescription + L"</td></tr>";
             SetCurrentCustomTest(pos->GetIterator()->get_name().c_str());
 
             try
@@ -8451,10 +8450,9 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                             SetReadabilityTestResult(
                                 wxString(pos->GetIterator()->get_name().c_str()),
                                 wxString(pos->GetIterator()->get_name().c_str()),
-                                L"<tr><td>" +
-                                    GetReadabilityMessageCatalog().GetGradeScaleDescription(
-                                        static_cast<size_t>(gradeBegin)) +
-                                    L"</td></tr>" + customDescription,
+                                GetReadabilityMessageCatalog().GetGradeScaleDescription(
+                                    static_cast<size_t>(gradeBegin)) +
+                                    customDescription,
                                 std::make_pair(
                                     gradeBegin,
                                     wxNumberFormatter::ToString(
@@ -8471,10 +8469,9 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                             SetReadabilityTestResult(
                                 wxString(pos->GetIterator()->get_name().c_str()),
                                 wxString(pos->GetIterator()->get_name().c_str()),
-                                L"<tr><td>" +
-                                    GetReadabilityMessageCatalog().GetGradeScaleDescription(
-                                        gradeBegin, gradeEnd) +
-                                    L"</td></tr>\n" + customDescription,
+                                GetReadabilityMessageCatalog().GetGradeScaleDescription(gradeBegin,
+                                                                                        gradeEnd) +
+                                    L"\n" + customDescription,
                                 std::make_pair(
                                     safe_divide<double>(gradeBegin + gradeEnd, 2),
                                     wxNumberFormatter::ToString(
@@ -8498,9 +8495,8 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                         SetReadabilityTestResult(
                             wxString(pos->GetIterator()->get_name().c_str()),
                             wxString(pos->GetIterator()->get_name().c_str()),
-                            L"<tr><td>" +
-                                GetReadabilityMessageCatalog().GetGradeScaleDescription(score) +
-                                L"</td></tr>\n" + customDescription,
+                            GetReadabilityMessageCatalog().GetGradeScaleDescription(score) + L"\n" +
+                                customDescription,
                             std::make_pair(
                                 score,
                                 wxNumberFormatter::ToString(
@@ -8518,10 +8514,10 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                     SetReadabilityTestResult(
                         wxString(pos->GetIterator()->get_name().c_str()),
                         wxString(pos->GetIterator()->get_name().c_str()),
-                        L"<tr><td>" + _(L"Score: ") +
+                        _(L"Score: ") +
                             wxNumberFormatter::ToString(
                                 score, 1, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
-                            L"</td></tr>\n" + customDescription,
+                            L"\n" + customDescription,
                         std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}),
                         wxString{}, score, std::numeric_limits<double>::quiet_NaN(), false);
                     }
@@ -8532,10 +8528,10 @@ bool BaseProject::AddCustomReadabilityTest(const wxString& name, const bool calc
                     SetReadabilityTestResult(
                         wxString(pos->GetIterator()->get_name().c_str()),
                         wxString(pos->GetIterator()->get_name().c_str()),
-                        L"<tr><td>" + _(L"Predicted cloze score: ") +
+                        _(L"Predicted cloze score: ") +
                             wxNumberFormatter::ToString(
                                 score, 1, wxNumberFormatter::Style::Style_NoTrailingZeroes) +
-                            L"</td></tr>\n" + customDescription,
+                            L"\n" + customDescription,
                         std::make_pair(std::numeric_limits<double>::quiet_NaN(), wxString{}),
                         wxString{}, std::numeric_limits<double>::quiet_NaN(), score, false);
                     }
