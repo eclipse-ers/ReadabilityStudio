@@ -1648,6 +1648,14 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             wxFile file(filePath.GetFullPath(), wxFile::write);
             file.Write(htmlText);
             }
+        else if (event.GetId() == wxID_COPY)
+            {
+            webview->Copy();
+            }
+        else if (event.GetId() == wxID_SELECTALL)
+            {
+            webview->SelectAll();
+            }
         else
             {
             webview->Print();
