@@ -45,6 +45,7 @@ source('../R/appdown.r')
 ### Report Enhancements {-}
 
 - Modernized the look of the test and statistics reports.
+- Test and statistics reports can now be exported as PDF.
 
 ### Analysis/Test Enhancements {-}
 

@@ -1627,26 +1627,38 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         if (event.GetId() == wxID_SAVE)
             {
             wxFileDialog dialog(GetFrame(), _(L"Save As"), wxString{}, webview->GetLabel(),
-                                L"HTML (*.htm;*.html)|*.htm;*.html",
+                                _DT(L"HTML (*.htm;*.html)|*.htm;*.html|PDF (*.pdf)|*.pdf"),
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
             if (dialog.ShowModal() != wxID_OK)
                 {
                 return;
                 }
             wxFileName filePath = dialog.GetPath();
-            if (filePath.GetExt().empty())
+            // PDF filter
+            if (dialog.GetFilterIndex() == 1)
                 {
-                filePath.SetExt(L"htm");
+                if (filePath.GetExt().empty())
+                    {
+                    filePath.SetExt(L"pdf");
+                    }
+                webview->PrintToPDF(filePath.GetFullPath());
                 }
-            std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-            lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-            if (!htmlText.starts_with(L"<!DOCTYPE"))
+            else
                 {
-                htmlText.insert(0, L"<!DOCTYPE html>\n");
+                if (filePath.GetExt().empty())
+                    {
+                    filePath.SetExt(L"htm");
+                    }
+                std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                if (!htmlText.starts_with(L"<!DOCTYPE"))
+                    {
+                    htmlText.insert(0, L"<!DOCTYPE html>\n");
+                    }
+                wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+                wxFile file(filePath.GetFullPath(), wxFile::write);
+                file.Write(htmlText);
                 }
-            wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-            wxFile file(filePath.GetFullPath(), wxFile::write);
-            file.Write(htmlText);
             }
         else if (event.GetId() == wxID_COPY)
             {
