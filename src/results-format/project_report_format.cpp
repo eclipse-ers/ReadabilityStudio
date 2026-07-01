@@ -3940,7 +3940,7 @@ wxString ProjectReportFormat::TrimTrailingBreaks(const wxString& text)
 //------------------------------------------------
 wxString ProjectReportFormat::FormatHtmlWarningSection(const wxString& note)
     {
-    return wxString::Format(L"\n<div class='callout callout-warning'>"
+    return wxString::Format(L"\n<div class='callout callout-warning minipage'>"
                             "<div class='callout-icon'>%s %s</div>"
                             "<div class='callout-content'>%s</div></div>\n",
                             BaseProjectView::GetWarningEmoji(), _(L"Warning"), note);
@@ -3949,7 +3949,7 @@ wxString ProjectReportFormat::FormatHtmlWarningSection(const wxString& note)
 //------------------------------------------------
 wxString ProjectReportFormat::FormatHtmlNoteSection(const wxString& note)
     {
-    return wxString::Format(L"\n<div class='callout callout-note'>"
+    return wxString::Format(L"\n<div class='callout callout-note minipage'>"
                             "<div class='callout-icon'>%s %s</div>"
                             "<div class='callout-content'>%s</div></div>\n",
                             BaseProjectView::GetNoteEmoji(), _(L"Note"), note);
