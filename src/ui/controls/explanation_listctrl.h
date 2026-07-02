@@ -267,6 +267,7 @@ class ExplanationListCtrl final : public wxPanel
     void OnShow(wxShowEvent& event);
     void OnExplanationLoaded(wxWebViewEvent& event);
     void OnMenuCommand(wxCommandEvent& event);
+    void InitializeSashPosition();
 
     std::shared_ptr<Wisteria::UI::ListCtrlExNumericDataProvider> m_data{
         std::make_shared<Wisteria::UI::ListCtrlExNumericDataProvider>()
@@ -275,6 +276,8 @@ class ExplanationListCtrl final : public wxPanel
     // view classes
     wxWebView* m_explanation_view{ nullptr };
     Wisteria::UI::ListCtrlEx* m_results_view{ nullptr };
+    wxSplitterWindow* m_splitter{ nullptr };
+    bool m_sashPositionInitialized{ false };
 
     wxPrintData* m_printData{ nullptr };
     // headers

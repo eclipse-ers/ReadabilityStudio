@@ -67,16 +67,16 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
     : wxPanel(parent, id, point, size, wxTAB_TRAVERSAL | wxBORDER_NONE | wxCLIP_CHILDREN, name)
     {
     // NOLINTBEGIN(cppcoreguidelines-prefer-member-initializer)
-    auto* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          wxSP_LIVE_UPDATE | wxSP_3DSASH | wxBORDER_NONE);
+    m_splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                      wxSP_LIVE_UPDATE | wxSP_3DSASH | wxBORDER_NONE);
     m_results_view = new Wisteria::UI::ListCtrlEx(
-        splitter, id, wxDefaultPosition, wxDefaultSize,
+        m_splitter, id, wxDefaultPosition, wxDefaultSize,
         wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL | wxBORDER_SUNKEN, wxDefaultValidator);
     GetResultsListCtrl()->SetVirtualDataProvider(m_data);
     GetResultsListCtrl()->SetVirtualDataSize(0);
     GetResultsListCtrl()->EnableGridLines();
     GetResultsListCtrl()->EnableAlternateRowColours(false);
-    m_explanation_view = wxWebView::New(splitter, wxID_ANY);
+    m_explanation_view = wxWebView::New(m_splitter, wxID_ANY);
     // NOLINTEND(cppcoreguidelines-prefer-member-initializer)
     if (GetExplanationView() == nullptr)
         {
@@ -92,12 +92,12 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
 
     wxWindow* explanationWindow = (GetExplanationView() != nullptr) ?
                                       static_cast<wxWindow*>(GetExplanationView()) :
-                                      new wxPanel(splitter);
-    splitter->SplitHorizontally(m_results_view, explanationWindow);
-    splitter->SetSashGravity(0.75);
+                                      new wxPanel(m_splitter);
+    m_splitter->SplitHorizontally(m_results_view, explanationWindow);
+    m_splitter->SetSashGravity(0.75);
 
     auto* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(splitter, wxSizerFlags{ 1 }.Expand());
+    sizer->Add(m_splitter, wxSizerFlags{ 1 }.Expand());
     SetSizer(sizer);
 
     Bind(wxEVT_MENU, &ExplanationListCtrl::OnPreview, this, wxID_PREVIEW);
@@ -128,6 +128,15 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
     if (event.IsShown())
         {
         Layout();
+        if (!m_sashPositionInitialized)
+            {
+            m_sashPositionInitialized = true;
+            // defer until the splitter has fully finished processing this show/resize
+            // (including its own sash-gravity adjustment); setting the sash position
+            // synchronously here races with that internal logic and can drive
+            // the sash to the wrong extreme
+            CallAfter(&ExplanationListCtrl::InitializeSashPosition);
+            }
         const long selected = GetResultsListCtrl()->GetFirstSelected();
         if (selected != wxNOT_FOUND && GetExplanationView() != nullptr && !IsBeingDeleted() &&
             !GetExplanationView()->IsBeingDeleted())
@@ -146,6 +155,18 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
             }
         }
     event.Skip();
+    }
+
+//------------------------------------------------------
+void ExplanationListCtrl::InitializeSashPosition()
+    {
+    if (m_splitter != nullptr)
+        {
+        // give the explanation webview a taller default height than
+        // the sash gravity alone would produce
+        m_splitter->SetSashPosition(
+            static_cast<int>(m_splitter->GetClientSize().GetHeight() * 0.5));
+        }
     }
 
 //------------------------------------------------------
