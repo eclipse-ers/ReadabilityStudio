@@ -138,6 +138,9 @@ The following are informational messages shown interactively in the program:
 
 ### Reports {-}
 
+**Theme**: Select the color theme applied to reports (e.g., test explanations, summary statistics).
+This changes the accent colors used for banners, notes, and warnings throughout reports.
+
 **Disable GPU acceleration for reports**: Select this option to disable GPU acceleration when rendering reports.
 This can be useful if reports are displaying incorrectly (or not at all) due to graphics driver issues.
 This option requires restarting the program to take effect.

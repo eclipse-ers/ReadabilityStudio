@@ -1752,8 +1752,10 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
     if (m_testExplanations != nullptr)
         {
         m_testExplanations->SetPage(
-            ProjectReportFormat::FormatHtmlReportStart(wxString::Format(
-                _(L"Test Explanations [%s]"), wxFileName(m_currentlySelectedFileName).GetName())) +
+            ProjectReportFormat::FormatHtmlReportStart(
+                wxString::Format(_(L"Test Explanations [%s]"),
+                                 wxFileName(m_currentlySelectedFileName).GetName()),
+                wxGetApp().GetAppOptions()->GetReportTheme()) +
                 ProjectReportFormat::FormatReportBanner(
                     _(L"Test Explanations"), wxFileName(m_currentlySelectedFileName).GetName()) +
                 scoreTextStrippedLinks + ProjectReportFormat::FormatHtmlReportEnd(),
@@ -1778,8 +1780,9 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
             std::wstring textStripped{ text };
             lily_of_the_valley::html_format::strip_hyperlinks(textStripped, false);
             m_statsReport->SetPage(
-                ProjectReportFormat::FormatHtmlReportStart(wxString::Format(
-                    _(L"Summary Statistics [%s]"), wxFileName(docName).GetName())) +
+                ProjectReportFormat::FormatHtmlReportStart(
+                    wxString::Format(_(L"Summary Statistics [%s]"), wxFileName(docName).GetName()),
+                    wxGetApp().GetAppOptions()->GetReportTheme()) +
                     ProjectReportFormat::FormatReportBanner(_(L"Summary Statistics"),
                                                             wxFileName(docName).GetName()) +
                     textStripped + ProjectReportFormat::FormatHtmlReportEnd(),

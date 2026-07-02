@@ -1476,7 +1476,9 @@ wxString ProjectReportFormat::GetThemeCss(const wxString& fileName /*= _DT(L"def
         {
         Wisteria::TextStream::ReadFile(cssPath, styleInfo);
         }
-    if (!overrideFileName.empty())
+    // "emerald-isles.css" just restates default.css's color variables,
+    // so overlaying it would be a no-op
+    if (!overrideFileName.empty() && overrideFileName.CmpNoCase(_DT(L"emerald-isles.css")) != 0)
         {
         wxString overridePath = resourceDir + overrideFileName;
         if (wxFile::Exists(overridePath))

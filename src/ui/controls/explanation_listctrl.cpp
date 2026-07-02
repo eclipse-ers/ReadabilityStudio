@@ -49,8 +49,11 @@
 
 #include "explanation_listctrl.h"
 #include "../../Wisteria-Dataviz/src/import/html_encode.h"
+#include "../../app/readability_app.h"
 #include "../../projects/project_navigation_links.h"
 #include "../../results-format/project_report_format.h"
+
+wxDECLARE_APP(ReadabilityApp);
 
 wxIMPLEMENT_DYNAMIC_CLASS(ExplanationListCtrl, wxPanel)
 
@@ -149,7 +152,9 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
                         "<meta name='generator' content='%s' />"
                         "<style>%s</style>"
                         "</head><body>%s</body></html>"),
-                    wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
+                    wxTheApp->GetAppName(),
+                    ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                                     wxGetApp().GetAppOptions()->GetReportTheme()),
                     m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
                 wxString{});
             }
@@ -280,7 +285,9 @@ bool ExplanationListCtrl::Save(
                "\n    <title>%s</title>"
                "\n    <style>%s</style>"
                "\n</head>\n<body>\n",
-               wxTheApp->GetAppName(), GetLabel(), ProjectReportFormat::GetThemeCss()));
+               wxTheApp->GetAppName(), GetLabel(),
+               ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                                wxGetApp().GetAppOptions()->GetReportTheme())));
     resultsHtml += L"\n<br />\n" + descriptionHtml + L"\n</body>\n</html>";
 
     lily_of_the_valley::html_format::strip_hyperlinks(resultsHtml);
@@ -399,7 +406,9 @@ void ExplanationListCtrl::OnItemSelected(const wxListEvent& event)
                 "<meta name='generator' content='%s' />"
                 "<style>%s</style>"
                 "</head><body>%s</body></html>"),
-            wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
+            wxTheApp->GetAppName(),
+            ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                             wxGetApp().GetAppOptions()->GetReportTheme()),
             m_explanations[GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0)])),
         wxString{});
     }
@@ -412,14 +421,16 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
         {
         GetExplanationView()->Hide();
         GetExplanationView()->SetPage(
-            NavLink::AnchorsToExplanationScheme(
-                wxString::Format(_DT(L"<!DOCTYPE html><html><head>"
-                                     "<meta name='color-scheme' content='light dark' />"
-                                     "<meta name='generator' content='%s' />"
-                                     "<style>%s</style>"
-                                     "</head><body>%s</body></html>"),
-                                 wxTheApp->GetAppName(), ProjectReportFormat::GetThemeCss(),
-                                 m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
+            NavLink::AnchorsToExplanationScheme(wxString::Format(
+                _DT(L"<!DOCTYPE html><html><head>"
+                    "<meta name='color-scheme' content='light dark' />"
+                    "<meta name='generator' content='%s' />"
+                    "<style>%s</style>"
+                    "</head><body>%s</body></html>"),
+                wxTheApp->GetAppName(),
+                ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                                 wxGetApp().GetAppOptions()->GetReportTheme()),
+                m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
             wxString{});
         }
     }

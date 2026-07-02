@@ -331,6 +331,10 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void SetLogAutoRefresh(bool enable);
 
   private:
+    /// @brief Redisplays the reports of all open projects if @c previousReportTheme differs
+    ///     from the currently configured report theme.
+    static void RefreshOpenProjectsIfThemeChanged(const wxString& previousReportTheme);
+
     static std::map<int, wxString> m_testBundleMenuIds;
     static std::map<int, wxString> m_customTestMenuIds;
     static std::map<int, wxString> m_examplesMenuIds;

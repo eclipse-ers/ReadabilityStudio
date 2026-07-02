@@ -64,6 +64,7 @@
 #include "edit_word_list_dlg.h"
 #include <wx/bannerwindow.h>
 #include <wx/colordlg.h>
+#include <wx/dir.h>
 #include <wx/valgen.h>
 #include <wx/wx.h>
 
@@ -71,8 +72,32 @@ wxDECLARE_APP(ReadabilityApp);
 
 wxIMPLEMENT_CLASS(ToolsOptionsDlg, wxDialog)
 
-    //-------------------------------------------------------------
-    void ToolsOptionsDlg::OnExcludeNumeralsCheck(wxCommandEvent& event)
+    namespace
+    {
+    // "oceanic.css" -> "Oceanic"
+    wxString ThemeFileNameToLabel(const wxString& fileName)
+        {
+        wxString label{ wxFileName(fileName).GetName() };
+        label.Replace(L"-", L" ");
+        if (!label.empty())
+            {
+            label[0] = wxToupper(label[0]);
+            }
+        return label;
+        }
+
+    // "Oceanic" -> "oceanic.css"
+    wxString ThemeLabelToFileName(const wxString& label)
+        {
+        wxString fileName{ label.Lower() };
+        fileName.Replace(L" ", L"-");
+        fileName += L".css";
+        return fileName;
+        }
+    } // namespace
+
+//-------------------------------------------------------------
+void ToolsOptionsDlg::OnExcludeNumeralsCheck(wxCommandEvent& event)
     {
     if (m_syllableLabel != nullptr)
         {
@@ -786,6 +811,7 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       m_persistJsCookies(wxGetApp().GetAppOptions()->IsPersistingJavaScriptCookies()),
       m_uiLanguage(static_cast<int>(wxGetApp().GetAppOptions()->GetUiLanguage())),
       // report options
+      m_reportTheme(ThemeFileNameToLabel(wxGetApp().GetAppOptions()->GetReportTheme())),
       m_disableGpuAcceleration(wxGetApp().GetAppOptions()->IsGpuAccelerationDisabled()),
       // log options
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
@@ -1799,6 +1825,10 @@ void ToolsOptionsDlg::SaveOptions()
     if (m_disableGpuAcceleration.has_changed())
         {
         wxGetApp().GetAppOptions()->DisableGpuAcceleration(m_disableGpuAcceleration.get_value());
+        }
+    if (m_reportTheme.has_changed())
+        {
+        wxGetApp().GetAppOptions()->SetReportTheme(ThemeLabelToFileName(m_reportTheme.get_value()));
         }
     if (m_logVerbose.has_changed() && wxGetApp().GetLogFile() != nullptr)
         {
@@ -5349,6 +5379,31 @@ void ToolsOptionsDlg::CreateControls()
             optionsSizer = new wxBoxSizer(wxVERTICAL);
             docPanelSizer->Add(optionsSizer,
                                wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            auto* themeSizer = new wxBoxSizer(wxHORIZONTAL);
+            optionsSizer->Add(themeSizer, wxSizerFlags{}.Expand().Border(wxBOTTOM));
+
+            themeSizer->Add(new wxStaticText(generalSettingsPage, wxID_STATIC, _(L"Theme:")),
+                            wxSizerFlags{}.CenterVertical());
+
+            wxArrayString themeFiles;
+            wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"report-themes")), &themeFiles,
+                               _DT(L"*.css"), wxDIR_FILES);
+            wxArrayString themeChoices;
+            for (const auto& themeFile : themeFiles)
+                {
+                if (wxFileName(themeFile).GetName().CmpNoCase(_DT(L"default")) != 0)
+                    {
+                    themeChoices.Add(ThemeFileNameToLabel(themeFile));
+                    }
+                }
+            themeChoices.Sort();
+
+            auto* themeCombo =
+                new wxComboBox(generalSettingsPage, wxID_ANY, wxString{}, wxDefaultPosition,
+                               wxDefaultSize, themeChoices, wxCB_DROPDOWN | wxCB_READONLY);
+            themeCombo->SetValidator(wxGenericValidator(&m_reportTheme.get_value()));
+            themeSizer->Add(themeCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
 
             optionsSizer->Add(
                 new wxCheckBox(generalSettingsPage, wxID_ANY,

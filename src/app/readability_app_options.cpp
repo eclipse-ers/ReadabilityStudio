@@ -367,6 +367,7 @@ void ReadabilityAppOptions::ResetSettings()
     m_showLogTab = false;
     m_logAutoRefresh = false;
     m_disableGpuAcceleration = false;
+    m_reportTheme = _DT(L"emerald-isles.css");
 
     m_textHighlight = TextHighlight::HighlightBackground;
     m_dolchConjunctionsColor = wxColour(255, 255, 0);
@@ -2446,6 +2447,9 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             DisableGpuAcceleration(int_to_bool(
                 disableGpuAccelerationNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
             }
+        SetReportTheme(
+            TiXmlNodeAttributeToString(logSettingsNode->FirstChildElement(XML_REPORT_THEME.data()),
+                                       XML_VALUE.data(), GetReportTheme()));
         }
     // printer settings
     auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
@@ -3207,6 +3211,11 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     disableGpuAcceleration->SetAttribute(XML_VALUE.data(),
                                          bool_to_int(IsGpuAccelerationDisabled()));
     logSection->InsertEndChild(disableGpuAcceleration);
+
+    auto* reportTheme = doc.NewElement(XML_REPORT_THEME.data());
+    reportTheme->SetAttribute(XML_VALUE.data(),
+                              wxString(ENCODE({ GetReportTheme().wc_str() }, false)).utf8_str());
+    logSection->InsertEndChild(reportTheme);
 
     configSection->InsertEndChild(logSection);
 

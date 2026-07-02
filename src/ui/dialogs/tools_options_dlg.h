@@ -1026,6 +1026,7 @@ class ToolsOptionsDlg final : public wxDialog
     BackupVariable<int> m_uiLanguage;
 
     // report settings
+    BackupVariable<wxString> m_reportTheme;
     BackupVariable<bool> m_disableGpuAcceleration;
 
     // log settings

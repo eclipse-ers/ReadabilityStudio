@@ -4200,11 +4200,13 @@ void MainFrame::OnStartPageClick(const wxCommandEvent& event)
             }
         else if (event.GetId() == GetStartPage()->GetButtonID(6))
             {
+            const wxString previousReportTheme = wxGetApp().GetAppOptions()->GetReportTheme();
             ToolsOptionsDlg optionsDlg(wxGetApp().GetParentingWindow());
             optionsDlg.SelectPage(ToolsOptionsDlg::GENERAL_SETTINGS_PAGE);
             if (optionsDlg.ShowModal() == wxID_OK)
                 {
                 wxGetApp().GetAppOptions()->SaveOptionsFile();
+                RefreshOpenProjectsIfThemeChanged(previousReportTheme);
                 }
             }
         }
@@ -4295,11 +4297,13 @@ void MainFrame::OnEditEnglishDictionary([[maybe_unused]] wxCommandEvent& event)
 //---------------------------------------------------
 void MainFrame::OnEditDictionarySettings([[maybe_unused]] wxCommandEvent& event)
     {
+    const wxString previousReportTheme = wxGetApp().GetAppOptions()->GetReportTheme();
     ToolsOptionsDlg optionsDlg(wxGetApp().GetParentingWindow());
     optionsDlg.SelectPage(ToolsOptionsDlg::GRAMMAR_PAGE);
     if (optionsDlg.ShowModal() == wxID_OK)
         {
         wxGetApp().GetAppOptions()->SaveOptionsFile();
+        RefreshOpenProjectsIfThemeChanged(previousReportTheme);
         }
     }
 
@@ -5569,12 +5573,33 @@ void MainFrame::OnHelpCheckForUpdates([[maybe_unused]] wxRibbonButtonBarEvent& e
     }
 
 //-------------------------------------------------------
+void MainFrame::RefreshOpenProjectsIfThemeChanged(const wxString& previousReportTheme)
+    {
+    if (wxGetApp().GetAppOptions()->GetReportTheme() == previousReportTheme)
+        {
+        return;
+        }
+    auto& docs = wxGetApp().GetDocManager()->GetDocuments();
+    for (size_t i = 0; i < docs.GetCount(); ++i)
+        {
+        auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
+        if (doc != nullptr)
+            {
+            doc->RefreshRequired(ProjectRefresh::Minimal);
+            doc->RefreshProject();
+            }
+        }
+    }
+
+//-------------------------------------------------------
 void MainFrame::OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
+    const wxString previousReportTheme = wxGetApp().GetAppOptions()->GetReportTheme();
     ToolsOptionsDlg optionsDlg(wxGetApp().GetParentingWindow());
     if (optionsDlg.ShowModal() == wxID_OK)
         {
         wxGetApp().GetAppOptions()->SaveOptionsFile();
+        RefreshOpenProjectsIfThemeChanged(previousReportTheme);
         }
     }
 

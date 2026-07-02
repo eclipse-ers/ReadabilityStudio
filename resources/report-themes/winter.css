@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — winter theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #B8D4E3;
+  --banner-color: #5B84A6;
+  --note-color: #3E5C76;
+  --warning-color: #C99B3E;
+  --data-row-color: #8FB8D9;
+  }

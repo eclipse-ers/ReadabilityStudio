@@ -743,6 +743,16 @@ class ReadabilityAppOptions
     /// @note This takes effect after the program is restarted.
     void DisableGpuAcceleration(const bool disable) noexcept { m_disableGpuAcceleration = disable; }
 
+    /// @returns The CSS theme overlaid on top of "default.css" for reports.
+    [[nodiscard]]
+    wxString GetReportTheme() const
+        {
+        return m_reportTheme;
+        }
+
+    /// @brief Sets the CSS theme overlaid on top of "default.css" for reports.
+    void SetReportTheme(const wxString& theme) { m_reportTheme = theme; }
+
     void SetTextHighlightMethod(const TextHighlight highlight) noexcept
         {
         m_textHighlight = highlight;
@@ -2483,6 +2493,7 @@ class ReadabilityAppOptions
     bool m_showLogTab{ false };
     bool m_logAutoRefresh{ false };
     bool m_disableGpuAcceleration{ false };
+    wxString m_reportTheme{ _DT(L"emerald-isles.css") };
 
     wxColour m_dolchConjunctionsColor{ wxColour{ 255, 255, 0 } };
     wxColour m_dolchPrepositionsColor{ wxColour{ 0, 245, 255 } };
@@ -2775,6 +2786,7 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_LOG_AUTO_REFRESH{ _DT("log-auto-refresh") };
     inline constexpr static std::string_view XML_DISABLE_GPU_ACCELERATION{ _DT(
         "disable-gpu-acceleration") };
+    inline constexpr static std::string_view XML_REPORT_THEME{ _DT("report-theme") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_PATH{ _DT(
         "excluded-phrases-filepath") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE{ _DT(

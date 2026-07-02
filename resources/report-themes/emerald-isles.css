@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — emerald isles theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #00CC66;
+  --banner-color: #2E86AB;
+  --note-color: #0078D4;
+  --warning-color: #F59E0B;
+  --data-row-color: #059669;
+  }

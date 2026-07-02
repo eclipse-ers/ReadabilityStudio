@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — dusk theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #7C3AED;
+  --banner-color: #6D28D9;
+  --note-color: #0284C7;
+  --warning-color: #F59E0B;
+  --data-row-color: #8B5CF6;
+  }

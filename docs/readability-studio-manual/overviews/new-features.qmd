@@ -42,10 +42,11 @@ source('../R/appdown.r')
 - Added PDF export support.
 - Added WebP image support.
 
-### Report Enhancements {-}
+### Summary Report Enhancements {-}
 
-- Modernized the look of the test and statistics reports.
-- Test and statistics reports can now be exported as PDF.
+- Modernized the look of summary reports.
+- Reports can now be exported as PDF.
+- Added a **Theme** option, allowing you to select the accent colors used for banners, notes, and warnings.
 
 ### Analysis/Test Enhancements {-}
 

@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — lavender fields theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #7C6A9C;
+  --banner-color: #6B5B95;
+  --note-color: #4B6584;
+  --warning-color: #C99B3E;
+  --data-row-color: #9B8FB5;
+  }

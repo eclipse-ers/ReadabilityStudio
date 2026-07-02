@@ -1173,7 +1173,8 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                     NavLink::AnchorsToExplanationScheme(
                         ProjectReportFormat::FormatHtmlReportStart(
                             wxString::Format( // TRANSLATORS: %s is the project name
-                                _(L"Summary Report [%s]"), GetTitle())) +
+                                _(L"Summary Report [%s]"), GetTitle()),
+                            wxGetApp().GetAppOptions()->GetReportTheme()) +
                         ProjectReportFormat::FormatReportBanner(_(L"Readability Score Summary"),
                                                                 GetTitle()) +
                         text + ProjectReportFormat::FormatHtmlReportEnd()),
@@ -4107,7 +4108,8 @@ void ProjectDoc::DisplayStatistics()
             wxString formattedStats =
                 ProjectReportFormat::FormatHtmlReportStart(
                     wxString::Format( // TRANSLATORS: %s is the project name
-                        _(L"Statistics Report [%s]"), GetTitle())) +
+                        _(L"Statistics Report [%s]"), GetTitle()),
+                    wxGetApp().GetAppOptions()->GetReportTheme()) +
                 ProjectReportFormat::FormatReportBanner(_(L"Statistics Summary"), GetTitle()) +
                 ProjectReportFormat::FormatStatisticsInfo(
                     this, GetStatisticsReportInfo(),
@@ -4196,7 +4198,8 @@ void ProjectDoc::DisplayStatistics()
                 NavLink::AnchorsToExplanationScheme(
                     ProjectReportFormat::FormatHtmlReportStart(
                         wxString::Format( // TRANSLATORS: %s is the project name
-                            _(L"Dolch Summary [%s]"), GetTitle())) +
+                            _(L"Dolch Summary [%s]"), GetTitle()),
+                        wxGetApp().GetAppOptions()->GetReportTheme()) +
                     ProjectReportFormat::FormatReportBanner(_(L"Dolch Sight Words Summary"),
                                                             GetTitle()) +
                     ProjectReportFormat::FormatDolchStatisticsInfo(
