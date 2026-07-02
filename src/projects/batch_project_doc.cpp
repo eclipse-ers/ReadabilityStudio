@@ -515,10 +515,8 @@ bool BatchProjectDoc::CheckForFailedDocuments()
     wxASSERT_MSG(view->GetFrame(), L"Invalid frame for newly created document!");
     // show the names of the failed documents somehow so the user can review it before removing them
     Wisteria::UI::ListDlg listDlg(
-        view->GetFrame(), failedDocs, false, wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-        wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-        wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(), Wisteria::UI::LD_YES_NO_BUTTONS,
-        wxID_ANY, _(L"Warning"),
+        view->GetFrame(), failedDocs, false, wxNullColour, wxNullColour, wxNullColour,
+        Wisteria::UI::LD_YES_NO_BUTTONS, wxID_ANY, _(L"Warning"),
         _(L"The following documents could not be loaded because they either do not contain "
           "enough valid text or could not be found. Do you wish to remove these documents "
           "from this project?"));

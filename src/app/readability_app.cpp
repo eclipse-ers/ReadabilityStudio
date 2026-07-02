@@ -2998,53 +2998,11 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     LoadRibbonHelpPage(ribbon);
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
-    UpdateRibbonTheme(ribbon);
 
     ribbon->Realize();
 
     return ribbon;
     }
-
-//---------------------------------------------------
-void ReadabilityApp::UpdateRibbonTheme(const wxRibbonBar* ribbon)
-    {
-    wxASSERT_MSG(ribbon != nullptr, L"Attempting to theme a null ribbon!");
-    if (ribbon != nullptr)
-        {
-        ribbon->GetArtProvider()->SetColourScheme(GetAppOptions()->GetRibbonActiveTabColor(),
-                                                  GetAppOptions()->GetRibbonInactiveTabColor(),
-                                                  GetAppOptions()->GetRibbonHoverColor());
-
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR,
-                                            GetAppOptions()->GetRibbonInactiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(
-            wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR,
-            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR,
-                                            GetAppOptions()->GetRibbonHoverFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_TAB_ACTIVE_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_PANEL_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonActiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonHoverFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_TAB_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonInactiveFontColor());
-        ribbon->GetArtProvider()->SetColour(wxRIBBON_ART_TAB_HOVER_LABEL_COLOUR,
-                                            GetAppOptions()->GetRibbonHoverFontColor());
-        }
-    }
-
-//---------------------------------------------------
-void ReadabilityApp::UpdateRibbonTheme() { UpdateRibbonTheme(GetMainFrameEx()->GetRibbon()); }
 
 //---------------------------------------------------
 void ReadabilityApp::RemoveAllCustomTestBundles()
@@ -3196,9 +3154,7 @@ void MainFrame::OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event)
                              wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) };
     // test overview dialog
     Wisteria::UI::ListDlg testsOverviewDlg(
-        wxGetApp().GetParentingWindow(), wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-        wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-        wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
+        wxGetApp().GetParentingWindow(), wxNullColour, wxNullColour, wxNullColour,
         Wisteria::UI::LD_SAVE_BUTTON | Wisteria::UI::LD_COPY_BUTTON |
             Wisteria::UI::LD_PRINT_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
             Wisteria::UI::LD_COLUMN_HEADERS | Wisteria::UI::LD_FIND_BUTTON |
@@ -3207,7 +3163,6 @@ void MainFrame::OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event)
         wxSize{ static_cast<int>(screenSize.GetWidth() * math_constants::three_quarters),
                 static_cast<int>(screenSize.GetHeight() * math_constants::half) });
 
-    wxGetApp().UpdateRibbonTheme(testsOverviewDlg.GetRibbon());
     testsOverviewDlg.GetListCtrl()->ClearAll();
     testsOverviewDlg.GetListCtrl()->InsertColumn(0, _(L"Name"));
     testsOverviewDlg.GetListCtrl()->InsertColumn(1, _(L"Score Type"));
@@ -4191,29 +4146,6 @@ void ReadabilityApp::InitStartPage()
     logPanelSizer->Add(GetMainFrameEx()->m_logListCtrl, wxSizerFlags{ 1 }.Expand());
     GetMainFrameEx()->m_logPanel->SetSizer(logPanelSizer);
     GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->m_logPanel, wxSizerFlags{ 1 }.Expand());
-    }
-
-//---------------------------------------------------
-void ReadabilityApp::UpdateDocumentThemes()
-    {
-    const auto& docs = GetDocManager()->GetDocuments();
-    for (size_t i = 0; i < docs.GetCount(); ++i)
-        {
-        const auto* doc = dynamic_cast<BaseProjectDoc*>(docs.Item(i)->GetData());
-        if (doc != nullptr)
-            {
-            auto* view = dynamic_cast<BaseProjectView*>(doc->GetFirstView());
-            if (view != nullptr)
-                {
-                UpdateRibbonTheme(view->GetRibbon());
-                view->GetQuickToolbar()->SetBackgroundColour(
-                    GetAppOptions()->GetRibbonInactiveTabColor());
-                view->GetSearchPanel()->SetBackgroundColour(
-                    GetAppOptions()->GetRibbonInactiveTabColor());
-                doc->GetDocumentWindow()->Refresh();
-                }
-            }
-        }
     }
 
 //---------------------------------------------------

@@ -1580,12 +1580,9 @@ bool ProjectDoc::OnNewDocument()
         if (warningIter != WarningManager::GetWarnings().end() && warningIter->ShouldBeShown())
             {
             Wisteria::UI::ListDlg listDlg(
-                view->GetFrame(), longIncompleteSentences, false,
-                wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-                wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-                wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
-                Wisteria::UI::LD_CLOSE_BUTTON | Wisteria::UI::LD_DONT_SHOW_AGAIN, wxID_ANY,
-                warningIter->GetTitle(),
+                view->GetFrame(), longIncompleteSentences, false, wxNullColour, wxNullColour,
+                wxNullColour, Wisteria::UI::LD_CLOSE_BUTTON | Wisteria::UI::LD_DONT_SHOW_AGAIN,
+                wxID_ANY, warningIter->GetTitle(),
                 wxString::Format(
                     wxPLURAL(
                         L"This document contains %zu incomplete sentence longer than %zu words "

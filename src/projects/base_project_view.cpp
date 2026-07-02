@@ -1194,7 +1194,6 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
     GetQuickToolbar()->Realize();
 
     m_searchCtrl = new Wisteria::UI::SearchPanel(m_frame, wxID_ANY);
-    GetSearchPanel()->SetBackgroundColour(wxGetApp().GetAppOptions()->GetRibbonInactiveTabColor());
     quickAccessToolbarSizer->Add(GetSearchPanel());
     mainSizer->Add(quickAccessToolbarSizer, wxSizerFlags{}.Expand());
 

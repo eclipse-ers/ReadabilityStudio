@@ -467,11 +467,8 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     static void FillBlankGraphsMenu(wxMenu& blankGraphsMenu);
 
     // theming
-    void UpdateRibbonTheme();
-    void UpdateDocumentThemes();
     void UpdateScriptEditorTheme();
     void ReadLogIntoListCtrl(Wisteria::UI::ListCtrlEx* listCtrl);
-    void UpdateRibbonTheme(const wxRibbonBar* ribbon);
 
     /// Adds a list of words to the custom dictionary
     ///     (based on language of the project that it is coming from).

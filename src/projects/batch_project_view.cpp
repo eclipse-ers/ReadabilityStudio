@@ -482,15 +482,11 @@ void BatchProjectView::OnAddToDictionary([[maybe_unused]] wxCommandEvent& event)
             startingQuote = reportString.find(L'\"', endingQuote + 1);
             }
         Wisteria::UI::ListDlg misspellingDlg(
-            GetDocFrame(), misspellings, true,
-            wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-            wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-            wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
+            GetDocFrame(), misspellings, true, wxNullColour, wxNullColour, wxNullColour,
             Wisteria::UI::LD_COPY_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
                 Wisteria::UI::LD_OK_CANCEL_BUTTONS,
             wxID_ANY, _(L"Add to Dictionary"),
             _(L"Check the words to add to your custom dictionary and click OK:"));
-        wxGetApp().UpdateRibbonTheme(misspellingDlg.GetRibbon());
         if (misspellingDlg.ShowModal() == wxID_OK)
             {
             wxGetApp().AddWordsToDictionaries(
@@ -541,15 +537,11 @@ void BatchProjectView::OnDblClick(wxListEvent& event)
             startingQuote = reportString.find(L'\"', endingQuote + 1);
             }
         Wisteria::UI::ListDlg misspellingDlg(
-            GetDocFrame(), misspellings, true,
-            wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-            wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-            wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
+            GetDocFrame(), misspellings, true, wxNullColour, wxNullColour, wxNullColour,
             Wisteria::UI::LD_COPY_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
                 Wisteria::UI::LD_OK_CANCEL_BUTTONS,
             wxID_ANY, _(L"Add to Dictionary"),
             _(L"Check the words to add to your custom dictionary and click OK:"));
-        wxGetApp().UpdateRibbonTheme(misspellingDlg.GetRibbon());
         if (misspellingDlg.ShowModal() == wxID_OK)
             {
             wxGetApp().AddWordsToDictionaries(
@@ -986,10 +978,7 @@ void BatchProjectView::OnDocumentDelete([[maybe_unused]] wxRibbonButtonBarEvent&
         if (warningIter != WarningManager::GetWarnings().end() && warningIter->ShouldBeShown())
             {
             Wisteria::UI::ListDlg listDlg(
-                GetDocFrame(), filesToRemove, false,
-                wxGetApp().GetAppOptions()->GetRibbonActiveTabColor(),
-                wxGetApp().GetAppOptions()->GetRibbonHoverColor(),
-                wxGetApp().GetAppOptions()->GetRibbonActiveFontColor(),
+                GetDocFrame(), filesToRemove, false, wxNullColour, wxNullColour, wxNullColour,
                 Wisteria::UI::LD_YES_NO_BUTTONS | Wisteria::UI::LD_DONT_SHOW_AGAIN, wxID_ANY,
                 _(L"Remove Documents"),
                 _(L"Do you wish to remove these documents from the project?"));

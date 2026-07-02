@@ -324,46 +324,6 @@ void ReadabilityAppOptions::SetFonts()
 void ReadabilityAppOptions::SetColorsFromSystem()
     {
     m_fontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    // Ribbon colors
-    m_ribbonActiveTabColor = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-    m_ribbonInactiveTabColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-    // if active and inactive colors are close, then change the inactive color slightly
-    if (std::abs(m_ribbonActiveTabColor.GetLuminance() - m_ribbonInactiveTabColor.GetLuminance()) <
-        .05)
-        {
-        // if active is darker, then lighten inactive
-        if (m_ribbonActiveTabColor.GetLuminance() < m_ribbonInactiveTabColor.GetLuminance())
-            {
-            m_ribbonInactiveTabColor = m_ribbonInactiveTabColor.ChangeLightness(105);
-            }
-        else
-            {
-            m_ribbonInactiveTabColor = m_ribbonInactiveTabColor.ChangeLightness(95);
-            }
-        }
-    m_ribbonHoverColor = wxColour{ 253, 211, 155 }; // light orange
-    m_ribbonHoverFontColor = Wisteria::Colors::ColorContrast::ShadeOrTint(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_ribbonActiveFontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    m_ribbonInactiveFontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-
-    // Sidebar colors
-    // if ugly Windows default gray, then override the system with prettier colors
-    if (wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE) == wxColour{ 240, 240, 240 })
-        {
-        m_sideBarBackgroundColor = wxColour{ 200, 211, 231 }; // Serenity
-        m_sideBarParentColor = wxColour{ 180, 189, 207 };     // slightly darker
-        }
-    else
-        {
-        m_sideBarBackgroundColor = m_ribbonInactiveTabColor;
-        m_sideBarParentColor = m_ribbonActiveTabColor;
-        }
-    m_sideBarActiveColor = L"#FDB759"; // bright orange
-    m_sideBarActiveFontColor = wxColour{ 0, 0, 0 };
-    m_sideBarHoverColor = m_ribbonHoverColor;
-    m_sideBarHoverFontColor = wxColour{ 0, 0, 0 };
-    m_sideBarFontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     }
 
 //------------------------------------------------

@@ -336,7 +336,6 @@ void EditTextDlg::CreateControls()
             }
 
         m_ribbon->SetArtProvider(new wxRibbonMSWArtProvider);
-        wxGetApp().UpdateRibbonTheme(m_ribbon);
 
         mainSizer->Add(m_ribbon, wxSizerFlags{}.Expand().Border());
         m_ribbon->Realise();
