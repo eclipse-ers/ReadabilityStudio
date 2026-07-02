@@ -785,6 +785,8 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       m_useJsCookies(wxGetApp().GetAppOptions()->IsUsingJavaScriptCookies()),
       m_persistJsCookies(wxGetApp().GetAppOptions()->IsPersistingJavaScriptCookies()),
       m_uiLanguage(static_cast<int>(wxGetApp().GetAppOptions()->GetUiLanguage())),
+      // report options
+      m_disableGpuAcceleration(wxGetApp().GetAppOptions()->IsGpuAccelerationDisabled()),
       // log options
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
       m_logAppendDailyLog(wxGetApp().GetAppOptions()->IsAppendingDailyLog()),
@@ -1793,6 +1795,10 @@ void ToolsOptionsDlg::SaveOptions()
         {
         wxGetApp().GetAppOptions()->SetUiLanguage(
             static_cast<UiLanguage>(m_uiLanguage.get_value()));
+        }
+    if (m_disableGpuAcceleration.has_changed())
+        {
+        wxGetApp().GetAppOptions()->DisableGpuAcceleration(m_disableGpuAcceleration.get_value());
         }
     if (m_logVerbose.has_changed() && wxGetApp().GetLogFile() != nullptr)
         {
@@ -5337,6 +5343,19 @@ void ToolsOptionsDlg::CreateControls()
             auto* warningsButton =
                 new wxButton(generalSettingsPage, ID_WARNING_MESSAGES_BUTTON, _(L"Customize..."));
             optionsSizer->Add(warningsButton, wxSizerFlags{}.Border(wxTOP | wxBOTTOM));
+
+            CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Reports:"), true);
+
+            optionsSizer = new wxBoxSizer(wxVERTICAL);
+            docPanelSizer->Add(optionsSizer,
+                               wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
+
+            optionsSizer->Add(
+                new wxCheckBox(generalSettingsPage, wxID_ANY,
+                               _(L"Disable GPU acceleration for reports (requires restart)"),
+                               wxDefaultPosition, wxDefaultSize, 0,
+                               wxGenericValidator(&m_disableGpuAcceleration.get_value())),
+                wxSizerFlags{}.Expand().Border(wxTOP | wxBOTTOM));
 
             CreateLabelHeader(generalSettingsPage, docPanelSizer, _(L"Log:"), true);
 

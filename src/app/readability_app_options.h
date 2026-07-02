@@ -731,6 +731,18 @@ class ReadabilityAppOptions
     /// @brief Enables or disables Log tab auto-refresh.
     void SetLogAutoRefresh(const bool refresh) noexcept { m_logAutoRefresh = refresh; }
 
+    /// @returns @c true if GPU acceleration is disabled for reports.
+    [[nodiscard]]
+    bool IsGpuAccelerationDisabled() const noexcept
+        {
+        return m_disableGpuAcceleration;
+        }
+
+    /// @brief Disables (or re-enables) GPU acceleration for reports.
+    /// @param disable @c true to disable GPU acceleration.
+    /// @note This takes effect after the program is restarted.
+    void DisableGpuAcceleration(const bool disable) noexcept { m_disableGpuAcceleration = disable; }
+
     void SetTextHighlightMethod(const TextHighlight highlight) noexcept
         {
         m_textHighlight = highlight;
@@ -2470,6 +2482,7 @@ class ReadabilityAppOptions
     bool m_showDeveloperTab{ true };
     bool m_showLogTab{ false };
     bool m_logAutoRefresh{ false };
+    bool m_disableGpuAcceleration{ false };
 
     wxColour m_dolchConjunctionsColor{ wxColour{ 255, 255, 0 } };
     wxColour m_dolchPrepositionsColor{ wxColour{ 0, 245, 255 } };
@@ -2760,6 +2773,8 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_SHOW_DEVELOPER_TAB{ _DT("show-developer-tab") };
     inline constexpr static std::string_view XML_SHOW_LOG_TAB{ _DT("show-log-tab") };
     inline constexpr static std::string_view XML_LOG_AUTO_REFRESH{ _DT("log-auto-refresh") };
+    inline constexpr static std::string_view XML_DISABLE_GPU_ACCELERATION{ _DT(
+        "disable-gpu-acceleration") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_PATH{ _DT(
         "excluded-phrases-filepath") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE{ _DT(

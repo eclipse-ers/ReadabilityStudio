@@ -76,6 +76,7 @@
 #include <utility>
 #include <wx/dir.h>
 #include <wx/richmsgdlg.h>
+#include <wx/webview.h>
 
 // ===========================================================================
 // implementation
@@ -719,6 +720,12 @@ bool ReadabilityApp::OnInit()
 
     // load the full set of user settings
     GetAppOptions()->LoadOptionsFile(appSettingFolderPath + L"Settings.xml", false);
+
+    // this must be done before any report web views are created
+    if (GetAppOptions()->IsGpuAccelerationDisabled())
+        {
+        wxWebViewConfiguration::DisableGPUAcceleration();
+        }
 
     // sync log ribbon button states now that options are fully loaded
     GetMainFrameEx()->SetLogAutoRefresh(GetAppOptions()->IsLogAutoRefresh());

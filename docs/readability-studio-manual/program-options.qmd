@@ -136,6 +136,12 @@ The following are informational messages shown interactively in the program:
 - Prompt about how background images will not be upscaled beyond their original size when zooming into a graph.
 - Prompt about how settings are embedded in projects and how to edit them.
 
+### Reports {-}
+
+**Disable GPU acceleration for reports**: Select this option to disable GPU acceleration when rendering reports.
+This can be useful if reports are displaying incorrectly (or not at all) due to graphics driver issues.
+This option requires restarting the program to take effect.
+
 ### Log {-}
 
 **Show Log tab**: Select this option to show the **Log** tab on the ribbon.

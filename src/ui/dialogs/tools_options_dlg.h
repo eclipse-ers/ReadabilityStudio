@@ -1025,6 +1025,9 @@ class ToolsOptionsDlg final : public wxDialog
 
     BackupVariable<int> m_uiLanguage;
 
+    // report settings
+    BackupVariable<bool> m_disableGpuAcceleration;
+
     // log settings
     BackupVariable<bool> m_logVerbose;
     BackupVariable<bool> m_logAppendDailyLog;

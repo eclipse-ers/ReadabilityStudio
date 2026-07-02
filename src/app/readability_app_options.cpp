@@ -366,6 +366,7 @@ void ReadabilityAppOptions::ResetSettings()
     m_showDeveloperTab = true;
     m_showLogTab = false;
     m_logAutoRefresh = false;
+    m_disableGpuAcceleration = false;
 
     m_textHighlight = TextHighlight::HighlightBackground;
     m_dolchConjunctionsColor = wxColour(255, 255, 0);
@@ -2438,6 +2439,13 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             SetLogAutoRefresh(
                 int_to_bool(logAutoRefreshNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
             }
+        auto* disableGpuAccelerationNode =
+            logSettingsNode->FirstChildElement(XML_DISABLE_GPU_ACCELERATION.data());
+        if (disableGpuAccelerationNode != nullptr)
+            {
+            DisableGpuAcceleration(int_to_bool(
+                disableGpuAccelerationNode->ToElement()->IntAttribute(XML_VALUE.data(), 0)));
+            }
         }
     // printer settings
     auto* printerSettingsNode = configRootNode->FirstChildElement(XML_PRINTER_SETTINGS.data());
@@ -3194,6 +3202,11 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* logAutoRefresh = doc.NewElement(XML_LOG_AUTO_REFRESH.data());
     logAutoRefresh->SetAttribute(XML_VALUE.data(), bool_to_int(IsLogAutoRefresh()));
     logSection->InsertEndChild(logAutoRefresh);
+
+    auto* disableGpuAcceleration = doc.NewElement(XML_DISABLE_GPU_ACCELERATION.data());
+    disableGpuAcceleration->SetAttribute(XML_VALUE.data(),
+                                         bool_to_int(IsGpuAccelerationDisabled()));
+    logSection->InsertEndChild(disableGpuAcceleration);
 
     configSection->InsertEndChild(logSection);
 
