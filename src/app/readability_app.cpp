@@ -2873,7 +2873,8 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
     runBar->AddButton(XRCID("ID_SCRIPT_RUN"), _(L"Run"), ReadSvgIcon(L"ribbon/run.svg"),
                       _(L"Execute the script (or selection)."));
-    runBar->AddButton(XRCID("ID_SCRIPT_CONTINUE"), _(L"Continue"), ReadSvgIcon(L"ribbon/run.svg"),
+    runBar->AddButton(XRCID("ID_SCRIPT_CONTINUE"), _(L"Continue"),
+                      ReadSvgIcon(L"ribbon/continue.svg"),
                       _(L"Continue running the script from the current breakpoint."));
     runBar->AddButton(XRCID("ID_SCRIPT_STOP"), _(L"Stop"), ReadSvgIcon(L"ribbon/stop.svg"),
                       _(L"Stop the currently running script."));

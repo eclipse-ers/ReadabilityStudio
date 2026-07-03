@@ -40,6 +40,7 @@ ribbon/clock.svg
 ribbon/color-wheel.svg
 ribbon/comment.svg
 ribbon/configure.svg
+ribbon/continue.svg
 ribbon/copy.svg
 ribbon/cut.svg
 ribbon/delete-document.svg
