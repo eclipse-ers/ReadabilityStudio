@@ -240,6 +240,27 @@ void ScriptWorkbenchPanel::BindEvents()
         },
         wxID_ANY);
 
+    // re-render the debug webview so its color-scheme CSS picks up the new theme
+    Bind(wxEVT_SYS_COLOUR_CHANGED,
+         [this](wxSysColourChangedEvent& event)
+         {
+             RefreshDebugWindow();
+             // each editor re-themes itself asynchronously off this same system
+             // event, but its minimap only copies colors once (when created), so
+             // force the editor to re-theme now and re-sync its minimap in lockstep
+             for (const auto& entry : m_scripts)
+                 {
+                 if (entry.m_editor == nullptr || entry.m_miniMap == nullptr)
+                     {
+                     continue;
+                     }
+                 entry.m_editor->UpdateSystemThemeColors();
+                 entry.m_miniMap->SetEdit(nullptr);
+                 entry.m_miniMap->SetEdit(entry.m_editor);
+                 }
+             event.Skip();
+         });
+
     // sidebar selection swaps the visible editor
     Bind(Wisteria::UI::wxEVT_SIDEBAR_CLICK, &ScriptWorkbenchPanel::OnSidebarClick, this);
     }
@@ -321,7 +342,7 @@ Wisteria::UI::CodeEditor* ScriptWorkbenchPanel::AddScriptEntry(const wxString& l
     m_scriptSidebar->Realize();
     m_scriptSidebar->SelectSubItemById(m_scriptsFolderId, subId, false, false);
 
-    m_scripts.push_back(ScriptEntry{ subId, page, codeEditor });
+    m_scripts.push_back(ScriptEntry{ subId, page, codeEditor, miniMap });
 
     codeEditor->Bind(wxEVT_STC_SAVEPOINTLEFT,
                      [this, codeEditor](wxStyledTextEvent&) { UpdateDirtyMark(codeEditor); });
@@ -916,75 +937,36 @@ void ScriptWorkbenchPanel::OnFindDialog(wxFindDialogEvent& event)
     }
 
 //-------------------------------------------------------
-void ScriptWorkbenchPanel::SetThemeColor(const wxColour& color)
+void ScriptWorkbenchPanel::RefreshDebugWindow()
     {
-    if (!color.IsOk())
+    if (m_debugMessageWindow == nullptr)
         {
         return;
         }
-
-    SetBackgroundColour(color);
-
-    // re-render the debug window with a body bg matching the theme
-    if (m_debugMessageWindow != nullptr)
-        {
-        const auto debugReportBody =
-            wxString::Format(
-                L"<!DOCTYPE html>\n<html>\n<body "
-                L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:11pt;"
-                L"margin:10px;\">",
-                color.GetAsString(wxC2S_HTML_SYNTAX),
-                Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
-                    wxC2S_HTML_SYNTAX)) +
-            m_debugContent + L"\n</body>\n</html>";
-        m_debugMessageWindow->SetPage(debugReportBody, wxString{});
-        }
-
-    Refresh();
+    const auto debugReportBody =
+        L"<!DOCTYPE html>\n<html>\n<head><meta name=\"color-scheme\" content=\"light dark\">"
+        L"<style>html,body{height:100%;margin:0;background-color:Canvas;color:CanvasText;}"
+        L"body{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',"
+        L"'Twemoji Mozilla',sans-serif;font-size:11pt;padding:10px;box-sizing:border-box;}"
+        L"</style></head>\n<body>" +
+        m_debugContent + L"\n</body>\n</html>";
+    m_debugMessageWindow->SetPage(debugReportBody, wxString{});
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::DebugOutput(const wxString& str)
     {
-    if (m_debugMessageWindow == nullptr)
-        {
-        return;
-        }
     m_debugContent += L"\n<br />" + str;
-
-    const wxColour bkColor = GetBackgroundColour();
-    const auto debugReportBody =
-        wxString::Format(L"<!DOCTYPE html>\n<html>\n<body "
-                         L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
-                         L"11pt;margin:10px;\">",
-                         bkColor.GetAsString(wxC2S_HTML_SYNTAX),
-                         Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
-                             wxC2S_HTML_SYNTAX)) +
-        m_debugContent + L"\n</body>\n</html>";
-    m_debugMessageWindow->SetPage(debugReportBody, wxString{});
+    RefreshDebugWindow();
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::DebugClear()
     {
-    if (m_debugMessageWindow == nullptr)
-        {
-        return;
-        }
     // TRANSLATORS: %d placeholders are the major, minor, and release version numbers of Lua
     m_debugContent = wxString::Format(_(L"Lua version %d.%d.%d, ready..."), LUA_VERSION_MAJOR_N,
                                       LUA_VERSION_MINOR_N, LUA_VERSION_RELEASE_N);
-
-    const wxColour bkColor = GetBackgroundColour();
-    const auto debugReportBody =
-        wxString::Format(L"<!DOCTYPE html>\n<html>\n<body "
-                         L"style=\"background-color:%s;color:%s;font-family:sans-serif;font-size:"
-                         L"11pt;margin:10px;\">",
-                         bkColor.GetAsString(wxC2S_HTML_SYNTAX),
-                         Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(bkColor).GetAsString(
-                             wxC2S_HTML_SYNTAX)) +
-        m_debugContent + L"\n</body>\n</html>";
-    m_debugMessageWindow->SetPage(debugReportBody, wxString{});
+    RefreshDebugWindow();
     }
 
 //-------------------------------------------------------

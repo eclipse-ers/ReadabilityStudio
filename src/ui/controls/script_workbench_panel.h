@@ -25,6 +25,8 @@
 #include <wx/splitter.h>
 #include <wx/webview.h>
 
+class wxStyledTextCtrlMiniMap;
+
 /// @brief Script workbench: script sidebar, single-editor area, debug output,
 ///     and an optional function-browser column.
 class ScriptWorkbenchPanel final : public wxPanel
@@ -67,9 +69,6 @@ class ScriptWorkbenchPanel final : public wxPanel
     bool CanPaste() const;
     /// @}
 
-    /// @brief Apply the current theme background color to the workbench surfaces.
-    void SetThemeColor(const wxColour& color);
-
     /// @brief Append a message to the debug output window.
     void DebugOutput(const wxString& str);
     /// @brief Clear the debug output window.
@@ -111,6 +110,7 @@ class ScriptWorkbenchPanel final : public wxPanel
         wxWindowID m_sidebarId{ wxID_ANY };
         wxWindow* m_page{ nullptr };
         Wisteria::UI::CodeEditor* m_editor{ nullptr };
+        wxStyledTextCtrlMiniMap* m_miniMap{ nullptr };
         };
 
     void ImportAPI();
@@ -123,6 +123,9 @@ class ScriptWorkbenchPanel final : public wxPanel
     /// @brief Callback registered with LuaInterpreter::SetPauseStateChangedCallback().
     /// @param line The 1-based line execution paused at, or -1 when resumed/ended.
     void OnLuaPauseStateChanged(int line);
+
+    /// @brief Re-renders the debug webview.
+    void RefreshDebugWindow();
 
     /// @returns @p zeroBasedLines (CodeEditor line numbers) converted to Lua's 1-based lines.
     [[nodiscard]]
