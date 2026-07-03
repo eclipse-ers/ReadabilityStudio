@@ -155,6 +155,23 @@ void LuaInterpreter::Initialize()
     }
 
 //------------------------------------------------------
+void LuaInterpreter::Restart()
+    {
+    if (IsRunning())
+        {
+        return;
+        }
+
+    if (m_L != nullptr)
+        {
+        lua_gc(m_L, LUA_GCCOLLECT, 0);
+        lua_close(m_L);
+        m_L = nullptr;
+        }
+    Initialize();
+    }
+
+//------------------------------------------------------
 LuaInterpreter::~LuaInterpreter()
     {
     if (m_L != nullptr)

@@ -44,6 +44,7 @@ class ScriptWorkbenchPanel final : public wxPanel
     void RunCurrentScript();
     void ContinueScript();
     void StopScript();
+    void RestartInterpreter();
     void ToggleFunctionBrowser();
     void ShowFindDialog();
     void ShowReplaceDialog();

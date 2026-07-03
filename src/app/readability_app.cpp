@@ -2878,6 +2878,9 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
                       _(L"Continue running the script from the current breakpoint."));
     runBar->AddButton(XRCID("ID_SCRIPT_STOP"), _(L"Stop"), ReadSvgIcon(L"ribbon/stop.svg"),
                       _(L"Stop the currently running script."));
+    runBar->AddButton(
+        XRCID("ID_SCRIPT_CLEAR_GLOBALS"), _(L"Clear Globals"), ReadSvgIcon(L"ribbon/reload.svg"),
+        _(L"Restart the Lua interpreter, clearing all global variables from previous runs."));
 
     auto* clipboardBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Clipboard"), wxNullBitmap,
@@ -3823,6 +3826,9 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_CONTINUE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->StopScript(); }),
          XRCID("ID_SCRIPT_STOP"));
+    Bind(wxEVT_MENU,
+         withWorkbench([](ScriptWorkbenchPanel* panel) { panel->RestartInterpreter(); }),
+         XRCID("ID_SCRIPT_CLEAR_GLOBALS"));
     auto updateUIHandler = [this](wxUpdateUIEvent& evt)
     {
         const bool isRunning = LuaInterpreter::IsRunning();
@@ -3838,6 +3844,10 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         else if (evt.GetId() == XRCID("ID_SCRIPT_STOP"))
             {
             evt.Enable(GetScriptWorkbench() != nullptr && isRunning);
+            }
+        else if (evt.GetId() == XRCID("ID_SCRIPT_CLEAR_GLOBALS"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr && !isRunning);
             }
         else if (evt.GetId() == XRCID("ID_SCRIPT_FUNCTION_BROWSER"))
             {
@@ -3855,6 +3865,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_RUN"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_CONTINUE"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_STOP"));
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_CLEAR_GLOBALS"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_TOGGLE_DEBUG"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->Undo(); }),

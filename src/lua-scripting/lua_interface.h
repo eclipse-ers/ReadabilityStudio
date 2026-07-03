@@ -70,6 +70,10 @@ class LuaInterpreter
     /// @brief Initializes the Lua state and registers custom libraries.
     /// @note Must be called before running any Lua code.
     void Initialize();
+    /// @brief Closes and reinitializes the Lua state, discarding all global
+    ///     variables and other session state from any prior runs.
+    /// @note Has no effect while a script is currently running.
+    void Restart();
     /// @private
     ~LuaInterpreter();
     /// @private

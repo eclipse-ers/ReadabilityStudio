@@ -574,6 +574,17 @@ void ScriptWorkbenchPanel::StopScript()
     }
 
 //-------------------------------------------------------
+void ScriptWorkbenchPanel::RestartInterpreter()
+    {
+    if (LuaInterpreter::IsRunning())
+        {
+        return;
+        }
+    wxGetApp().GetLuaRunner().Restart();
+    DebugOutput(_(L"Lua interpreter restarted; all global variables have been cleared."));
+    }
+
+//-------------------------------------------------------
 bool ScriptWorkbenchPanel::IsFunctionBrowserVisible() const noexcept
     {
     return (m_funcBrowserSplitter != nullptr && m_funcBrowserSplitter->IsSplit());
