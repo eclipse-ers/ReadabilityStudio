@@ -2873,6 +2873,8 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
     runBar->AddButton(XRCID("ID_SCRIPT_RUN"), _(L"Run"), ReadSvgIcon(L"ribbon/run.svg"),
                       _(L"Execute the script (or selection)."));
+    runBar->AddButton(XRCID("ID_SCRIPT_CONTINUE"), _(L"Continue"), ReadSvgIcon(L"ribbon/run.svg"),
+                      _(L"Continue running the script from the current breakpoint."));
     runBar->AddButton(XRCID("ID_SCRIPT_STOP"), _(L"Stop"), ReadSvgIcon(L"ribbon/stop.svg"),
                       _(L"Stop the currently running script."));
 
@@ -3816,6 +3818,8 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
          XRCID("ID_SCRIPT_SAVE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->RunCurrentScript(); }),
          XRCID("ID_SCRIPT_RUN"));
+    Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->ContinueScript(); }),
+         XRCID("ID_SCRIPT_CONTINUE"));
     Bind(wxEVT_MENU, withWorkbench([](ScriptWorkbenchPanel* panel) { panel->StopScript(); }),
          XRCID("ID_SCRIPT_STOP"));
     auto updateUIHandler = [this](wxUpdateUIEvent& evt)
@@ -3823,7 +3827,12 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         const bool isRunning = LuaInterpreter::IsRunning();
         if (evt.GetId() == XRCID("ID_SCRIPT_RUN"))
             {
+            // disabled for the whole duration of a run, including while paused
             evt.Enable(GetScriptWorkbench() != nullptr && !isRunning);
+            }
+        else if (evt.GetId() == XRCID("ID_SCRIPT_CONTINUE"))
+            {
+            evt.Enable(GetScriptWorkbench() != nullptr && LuaInterpreter::IsPaused());
             }
         else if (evt.GetId() == XRCID("ID_SCRIPT_STOP"))
             {
@@ -3843,6 +3852,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
             }
     };
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_RUN"));
+    Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_CONTINUE"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_STOP"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_FUNCTION_BROWSER"));
     Bind(wxEVT_UPDATE_UI, updateUIHandler, XRCID("ID_SCRIPT_TOGGLE_DEBUG"));

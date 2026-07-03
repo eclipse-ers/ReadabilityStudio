@@ -54,6 +54,7 @@
 #include "lua_debug.h"
 #include "lua_screenshot.h"
 #include "lua_standard_project.h"
+#include <cstring>
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)
@@ -62,6 +63,11 @@ wxDECLARE_APP(ReadabilityApp);
 
 bool LuaInterpreter::m_isRunning = false;
 bool LuaInterpreter::m_quitRequested = false;
+bool LuaInterpreter::m_isPaused = false;
+bool LuaInterpreter::m_continueRequested = false;
+int LuaInterpreter::m_pausedLine = -1;
+std::set<int> LuaInterpreter::m_breakpointLines;
+std::function<void(int)> LuaInterpreter::m_pauseStateChangedCallback;
 
 //------------------------------------------------------
 bool LuaInterpreter::ParseLuaError(wxString& errorMessage, long& lineNumber)
@@ -70,10 +76,18 @@ bool LuaInterpreter::ParseLuaError(wxString& errorMessage, long& lineNumber)
         L"BREAK_LINE:", DTExplanation::InternalKeyword,
         L"String is from Lua itself and always in English") };
     const bool isUserStop = errorMessage.find(BREAK_LINE.data()) != wxString::npos;
-    const auto endOfErrorHeader = errorMessage.find(L"]:");
-    if (endOfErrorHeader != wxString::npos)
+    // strip whichever chunk-name header Lua prepended: "[string ...]:" for
+    // ad-hoc code (e.g., RunLuaFile()), or "workbench:" for the fixed chunk
+    // name used by RunLuaCode()
+    const wxString workbenchHeader = wxString(WORKBENCH_CHUNK_NAME + 1) + L":";
+    if (const auto endOfErrorHeader = errorMessage.find(L"]:"); endOfErrorHeader != wxString::npos)
         {
         errorMessage.erase(0, endOfErrorHeader + 2);
+        }
+    else if (const auto workbenchHeaderPos = errorMessage.find(workbenchHeader);
+             workbenchHeaderPos != wxString::npos)
+        {
+        errorMessage.erase(0, workbenchHeaderPos + workbenchHeader.length());
         }
     if (isUserStop)
         {
@@ -162,6 +176,11 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
         }
     m_quitRequested = false;
     m_isRunning = true;
+    // no UI to service a pause here, so never break on stale breakpoints from the workbench
+    m_isPaused = false;
+    m_pausedLine = -1;
+    m_continueRequested = false;
+    m_breakpointLines.clear();
     SetScriptFilePath(filePath);
 
     lua_sethook(m_L, &LuaInterpreter::LineHookCallback, LUA_MASKLINE, 0);
@@ -206,6 +225,9 @@ void LuaInterpreter::RunLuaFile(const wxString& filePath)
 
     m_quitRequested = false;
     m_isRunning = false;
+    m_isPaused = false;
+    m_pausedLine = -1;
+    m_breakpointLines.clear();
     }
 
 //------------------------------------------------------
@@ -222,11 +244,18 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
     errorMessage.clear();
     m_quitRequested = false;
     m_isRunning = true;
+    m_isPaused = false;
+    m_pausedLine = -1;
+    m_continueRequested = false;
     SetScriptFilePath(filePath);
 
     lua_sethook(m_L, &LuaInterpreter::LineHookCallback, LUA_MASKLINE, 0);
     const wxDateTime startTime(wxDateTime::Now());
-    if (luaL_dostring(m_L, code.utf8_str()) != 0)
+    const auto codeUtf8 = code.utf8_str();
+    // load with a fixed chunk name (rather than luaL_dostring's default of using
+    // the code itself) so breakpoints can be scoped to this specific chunk
+    if (luaL_loadbuffer(m_L, codeUtf8.data(), codeUtf8.length(), WORKBENCH_CHUNK_NAME) != 0 ||
+        lua_pcall(m_L, 0, LUA_MULTRET, 0) != 0)
         {
         errorMessage = wxString{ luaL_checkstring(m_L, -1), wxConvUTF8 };
         long lineNumber{ 0 };
@@ -260,6 +289,10 @@ void LuaInterpreter::RunLuaCode(const wxString& code, const wxString& filePath,
 
     m_quitRequested = false;
     m_isRunning = false;
+    m_isPaused = false;
+    m_pausedLine = -1;
+    m_breakpointLines.clear();
+    m_pauseStateChangedCallback = nullptr;
 
     // in case the script window was hidden and the script either forgot to show it again
     // or the script failed, then show it
@@ -281,6 +314,50 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
         // NOLINTBEGIN(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         luaL_error(L, "BREAK_LINE:%d", ar->currentline);
         // NOLINTEND(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+        }
+
+    // checked on every line (not just every 10th, like the yield above) so a
+    // breakpoint can never be stepped over
+    bool isWorkbenchBreakpointLine = false;
+    if (!m_isPaused && m_breakpointLines.contains(ar->currentline))
+        {
+        // Only pause if this line actually belongs to the workbench's own chunk,
+        // otherwise, a coincidentally-matching line number inside a dofile()'d/
+        // required chunk (e.g., the Lua constants file) could falsely trigger this.
+        lua_getinfo(L, "S", ar);
+        isWorkbenchBreakpointLine = (std::strcmp(ar->short_src, WORKBENCH_CHUNK_NAME + 1) == 0);
+        }
+
+    if (isWorkbenchBreakpointLine)
+        {
+        m_isPaused = true;
+        m_pausedLine = ar->currentline;
+        m_continueRequested = false;
+        if (m_pauseStateChangedCallback)
+            {
+            m_pauseStateChangedCallback(m_pausedLine);
+            }
+
+        while (!m_continueRequested && !m_quitRequested)
+            {
+            wxMilliSleep(20);
+            wxSafeYield(wxGetApp().GetMainFrameEx(), true);
+            }
+
+        m_isPaused = false;
+        m_pausedLine = -1;
+        m_continueRequested = false;
+        if (m_pauseStateChangedCallback)
+            {
+            m_pauseStateChangedCallback(-1);
+            }
+
+        if (m_quitRequested)
+            {
+            // NOLINTBEGIN(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+            luaL_error(L, "BREAK_LINE:%d", ar->currentline);
+            // NOLINTEND(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+            }
         }
     }
 

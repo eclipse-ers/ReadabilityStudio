@@ -51,6 +51,8 @@
 #define LUAINTERFACE_H
 
 #include "luna.h"
+#include <functional>
+#include <set>
 #include <wx/wx.h>
 
 // NOLINTBEGIN(readability-identifier-length)
@@ -97,6 +99,36 @@ class LuaInterpreter
     /// @brief Stop running the current script.
     static void Quit() { m_quitRequested = true; }
 
+    /// @brief Sets which (1-based) script lines should pause execution when hit.
+    /// @param lines The line numbers to break on.
+    void SetBreakpointLines(std::set<int> lines) { m_breakpointLines = std::move(lines); }
+
+    /// @brief Registers a callback invoked when the pause state changes.
+    /// @details Called with the 1-based line number execution paused at,
+    ///     or @c -1 when execution resumes or the run ends/errors/is stopped.
+    /// @param callback The callback to invoke.
+    void SetPauseStateChangedCallback(std::function<void(int)> callback)
+        {
+        m_pauseStateChangedCallback = std::move(callback);
+        }
+
+    /// @returns @c true if execution is currently paused at a breakpoint.
+    [[nodiscard]]
+    static bool IsPaused() noexcept
+        {
+        return m_isPaused;
+        }
+
+    /// @returns The 1-based line currently paused at, or @c -1 if not paused.
+    [[nodiscard]]
+    static int GetPausedLine() noexcept
+        {
+        return m_pausedLine;
+        }
+
+    /// @brief Resumes a paused script from exactly where it stopped.
+    static void ContinueExecution() noexcept { m_continueRequested = true; }
+
     /// @returns The file path of the currently running script
     ///     (might be empty if RunLuaCode() was called with no defined file path).
     [[nodiscard]]
@@ -119,9 +151,22 @@ class LuaInterpreter
             @c false if the error was a user-requested stop (via @c Quit()).*/
     static bool ParseLuaError(wxString& errorMessage, long& lineNumber);
 
+    // fixed chunk name for workbench-run code (the leading '=' tells Lua to use
+    // the rest verbatim as the chunk's source name, with no added formatting).
+    // This lets the debug hook tell the running script apart from any nested
+    // chunks it loads via dofile()/require(), which get their own distinct
+    // source names -- without it, a breakpoint's line number could coincidentally
+    // match a line inside a dofile()'d file and pause there instead.
+    static constexpr const char* WORKBENCH_CHUNK_NAME = "=workbench";
+
     lua_State* m_L{ nullptr };
     static bool m_isRunning;
     static bool m_quitRequested;
+    static bool m_isPaused;
+    static bool m_continueRequested;
+    static int m_pausedLine;
+    static std::set<int> m_breakpointLines;
+    static std::function<void(int)> m_pauseStateChangedCallback;
     wxString m_scriptFilePath;
     };
 

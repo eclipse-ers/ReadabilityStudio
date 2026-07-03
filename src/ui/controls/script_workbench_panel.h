@@ -17,6 +17,7 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/codeeditor.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebar.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
+#include <set>
 #include <vector>
 #include <wx/fdrepdlg.h>
 #include <wx/panel.h>
@@ -39,6 +40,7 @@ class ScriptWorkbenchPanel final : public wxPanel
     void OpenScriptFromFile(const wxString& path);
     void SaveCurrentScript();
     void RunCurrentScript();
+    void ContinueScript();
     void StopScript();
     void ToggleFunctionBrowser();
     void ShowFindDialog();
@@ -118,6 +120,14 @@ class ScriptWorkbenchPanel final : public wxPanel
     void OnFindDialog(wxFindDialogEvent& event);
     void OnSidebarClick(wxCommandEvent& event);
 
+    /// @brief Callback registered with LuaInterpreter::SetPauseStateChangedCallback().
+    /// @param line The 1-based line execution paused at, or -1 when resumed/ended.
+    void OnLuaPauseStateChanged(int line);
+
+    /// @returns @p zeroBasedLines (CodeEditor line numbers) converted to Lua's 1-based lines.
+    [[nodiscard]]
+    static std::set<int> ToLuaLines(const std::vector<int>& zeroBasedLines);
+
     /// @brief Updates the sidebar label of the entry that owns @p editor to
     ///     reflect its current dirty state (appends " *" when modified).
     void UpdateDirtyMark(Wisteria::UI::CodeEditor* editor);
@@ -147,6 +157,9 @@ class ScriptWorkbenchPanel final : public wxPanel
     wxWindowID m_scriptsFolderId{ wxNewId() };
     int m_nextSidebarSubId{ 10000 };
     bool m_isScriptRunning{ false };
+    // the editor actually executing/paused; may differ from GetCurrentEditor()
+    // if the user switches tabs mid-run
+    Wisteria::UI::CodeEditor* m_runningEditor{ nullptr };
 
     std::vector<ScriptEntry> m_scripts;
 

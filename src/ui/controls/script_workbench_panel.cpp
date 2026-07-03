@@ -18,6 +18,7 @@
 #include "../../lua/lua.h"
 #include <algorithm>
 #include <array>
+#include <set>
 #include <utility>
 #include <wx/filedlg.h>
 #include <wx/filename.h>
@@ -27,6 +28,18 @@
 #include <wx/stc/minimap.h>
 
 wxDECLARE_APP(ReadabilityApp);
+
+//-------------------------------------------------------
+// CodeEditor lines are 0-based; Lua reports 1-based line numbers
+std::set<int> ScriptWorkbenchPanel::ToLuaLines(const std::vector<int>& zeroBasedLines)
+    {
+    std::set<int> result;
+    for (const int line : zeroBasedLines)
+        {
+        result.insert(line + 1);
+        }
+    return result;
+    }
 
 //-------------------------------------------------------
 ScriptWorkbenchPanel::ScriptWorkbenchPanel(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
@@ -256,6 +269,7 @@ Wisteria::UI::CodeEditor* ScriptWorkbenchPanel::CreateLuaScript(wxWindow* parent
     codeEditor->Show(false);
     codeEditor->IncludeNumberMargin(true);
     codeEditor->IncludeFoldingMargin(true);
+    codeEditor->IncludeBreakpointMargin(true);
     codeEditor->SetDefaultHeader(
         L"-- " +
         wxString::Format(_(L"Imports %s specific enumerations"), wxGetApp().GetAppDisplayName()) +
@@ -398,33 +412,60 @@ void ScriptWorkbenchPanel::SaveCurrentScript()
     }
 
 //-------------------------------------------------------
+void ScriptWorkbenchPanel::ContinueScript()
+    {
+    if (!LuaInterpreter::IsPaused() || m_runningEditor == nullptr)
+        {
+        return;
+        }
+    auto& luaRunner = wxGetApp().GetLuaRunner();
+    // re-sync in case breakpoints were toggled in the margin while paused
+    luaRunner.SetBreakpointLines(ToLuaLines(m_runningEditor->GetBreakpointLines()));
+    luaRunner.ContinueExecution();
+    }
+
+//-------------------------------------------------------
 void ScriptWorkbenchPanel::RunCurrentScript()
     {
+    if (LuaInterpreter::IsRunning())
+        {
+        return;
+        }
+
+    auto& luaRunner = wxGetApp().GetLuaRunner();
     auto* editor = GetCurrentEditor();
     if (editor == nullptr)
         {
         return;
         }
     editor->AnnotationClearAll();
+    editor->ClearExecutionHighlight();
+
+    const bool isSelectionRun = (editor->GetSelectionStart() != editor->GetSelectionEnd());
+    // selection runs never pause on breakpoints
+    luaRunner.SetBreakpointLines(isSelectionRun ? std::set<int>{} :
+                                                  ToLuaLines(editor->GetBreakpointLines()));
+    luaRunner.SetPauseStateChangedCallback([this](const int line)
+                                           { OnLuaPauseStateChanged(line); });
 
     wxString errorMessage;
     m_isScriptRunning = true;
+    m_runningEditor = editor;
 
-    wxGetApp().GetLuaRunner().RunLuaCode(
-        (editor->GetSelectionStart() == editor->GetSelectionEnd()) ? editor->GetValue() :
-                                                                     editor->GetSelectedText(),
-        editor->GetScriptFilePath(), errorMessage);
+    luaRunner.RunLuaCode(isSelectionRun ? editor->GetSelectedText() : editor->GetValue(),
+                         editor->GetScriptFilePath(), errorMessage);
 
+    editor->ClearExecutionHighlight();
     m_isScriptRunning = false;
+    m_runningEditor = nullptr;
 
     if (errorMessage.empty())
         {
         return;
         }
 
-    const int lineOffset = (editor->GetSelectionStart() == editor->GetSelectionEnd()) ?
-                               0 :
-                               editor->LineFromPosition(editor->GetSelectionStart());
+    const int lineOffset =
+        isSelectionRun ? editor->LineFromPosition(editor->GetSelectionStart()) : 0;
 
     long lineNumber{ 0 };
     errorMessage.ToLong(&lineNumber);
@@ -461,10 +502,54 @@ void ScriptWorkbenchPanel::RunCurrentScript()
     }
 
 //-------------------------------------------------------
+void ScriptWorkbenchPanel::OnLuaPauseStateChanged(const int line)
+    {
+    // Force the ribbon's Run/Continue/Stop enabled-state to refresh immediately,
+    // rather than waiting for the next idle-time wxUpdateUIEvent. This callback
+    // fires from deep inside a nested Lua hook loop, so it can't be left to chance.
+    wxGetApp().GetMainFrameEx()->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+
+    if (m_runningEditor == nullptr)
+        {
+        return;
+        }
+
+    if (line < 0)
+        {
+        m_runningEditor->ClearExecutionHighlight();
+        return;
+        }
+
+    // jump to the paused tab (and its sidebar entry) so the highlight is
+    // visible, even if a different script currently has focus
+    for (const auto& entry : m_scripts)
+        {
+        if (entry.m_editor == m_runningEditor)
+            {
+            const int idx = m_editorBook->FindPage(entry.m_page);
+            if (idx != wxNOT_FOUND && m_editorBook->GetSelection() != idx)
+                {
+                m_editorBook->SetSelection(idx);
+                }
+            m_scriptSidebar->SelectSubItemById(m_scriptsFolderId, entry.m_sidebarId, false, false);
+            break;
+            }
+        }
+
+    // Lua 1-based -> Scintilla 0-based
+    m_runningEditor->HighlightExecutionLine(line - 1);
+    DebugOutput(wxString::Format(_(L"Paused at breakpoint, line #%d"), line));
+    }
+
+//-------------------------------------------------------
 void ScriptWorkbenchPanel::StopScript()
     {
     LuaInterpreter::Quit();
     m_isScriptRunning = false;
+    if (m_runningEditor != nullptr)
+        {
+        m_runningEditor->ClearExecutionHighlight();
+        }
     }
 
 //-------------------------------------------------------
