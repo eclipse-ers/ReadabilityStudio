@@ -5424,6 +5424,15 @@ void MainFrame::OnPrintWatermark([[maybe_unused]] wxCommandEvent& event)
 //-------------------------------------------------------
 void MainFrame::OnClose(wxCloseEvent& event)
     {
+    if (LuaInterpreter::IsRunning())
+        {
+        ActivateScriptWorkbench();
+        wxMessageBox(_(L"A script is still running. Please stop it before closing."),
+                     _(L"Script Running"), wxOK | wxICON_EXCLAMATION);
+        event.Veto();
+        return;
+        }
+
     const auto& docs = wxGetApp().GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
