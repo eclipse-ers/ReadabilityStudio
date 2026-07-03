@@ -3974,16 +3974,6 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     }
 
 //---------------------------------------------------
-void ReadabilityApp::UpdateScriptEditorTheme()
-    {
-    if (GetMainFrameEx()->GetScriptWorkbench() != nullptr)
-        {
-        GetMainFrameEx()->GetScriptWorkbench()->SetThemeColor(
-            wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
-        }
-    }
-
-//---------------------------------------------------
 void ReadabilityApp::ReadLogIntoListCtrl(Wisteria::UI::ListCtrlEx* listCtrl)
     {
     if (listCtrl == nullptr || GetLogFile() == nullptr)

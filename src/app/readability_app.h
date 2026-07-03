@@ -470,8 +470,6 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     static void FillWordListsMenu(wxMenu& wordListMenu);
     static void FillBlankGraphsMenu(wxMenu& blankGraphsMenu);
 
-    // theming
-    void UpdateScriptEditorTheme();
     void ReadLogIntoListCtrl(Wisteria::UI::ListCtrlEx* listCtrl);
 
     /// Adds a list of words to the custom dictionary
