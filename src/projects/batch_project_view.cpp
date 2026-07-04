@@ -482,7 +482,7 @@ void BatchProjectView::OnAddToDictionary([[maybe_unused]] wxCommandEvent& event)
             startingQuote = reportString.find(L'\"', endingQuote + 1);
             }
         Wisteria::UI::ListDlg misspellingDlg(
-            GetDocFrame(), misspellings, true, wxNullColour, wxNullColour, wxNullColour,
+            GetDocFrame(), misspellings, true,
             Wisteria::UI::LD_COPY_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
                 Wisteria::UI::LD_OK_CANCEL_BUTTONS,
             wxID_ANY, _(L"Add to Dictionary"),
@@ -537,7 +537,7 @@ void BatchProjectView::OnDblClick(wxListEvent& event)
             startingQuote = reportString.find(L'\"', endingQuote + 1);
             }
         Wisteria::UI::ListDlg misspellingDlg(
-            GetDocFrame(), misspellings, true, wxNullColour, wxNullColour, wxNullColour,
+            GetDocFrame(), misspellings, true,
             Wisteria::UI::LD_COPY_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
                 Wisteria::UI::LD_OK_CANCEL_BUTTONS,
             wxID_ANY, _(L"Add to Dictionary"),
@@ -978,7 +978,7 @@ void BatchProjectView::OnDocumentDelete([[maybe_unused]] wxRibbonButtonBarEvent&
         if (warningIter != WarningManager::GetWarnings().end() && warningIter->ShouldBeShown())
             {
             Wisteria::UI::ListDlg listDlg(
-                GetDocFrame(), filesToRemove, false, wxNullColour, wxNullColour, wxNullColour,
+                GetDocFrame(), filesToRemove, false,
                 Wisteria::UI::LD_YES_NO_BUTTONS | Wisteria::UI::LD_DONT_SHOW_AGAIN, wxID_ANY,
                 _(L"Remove Documents"),
                 _(L"Do you wish to remove these documents from the project?"));

@@ -3167,7 +3167,7 @@ void MainFrame::OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event)
                              wxSystemSettings::GetMetric(wxSystemMetric::wxSYS_SCREEN_Y) };
     // test overview dialog
     Wisteria::UI::ListDlg testsOverviewDlg(
-        wxGetApp().GetParentingWindow(), wxNullColour, wxNullColour, wxNullColour,
+        wxGetApp().GetParentingWindow(),
         Wisteria::UI::LD_SAVE_BUTTON | Wisteria::UI::LD_COPY_BUTTON |
             Wisteria::UI::LD_PRINT_BUTTON | Wisteria::UI::LD_SELECT_ALL_BUTTON |
             Wisteria::UI::LD_COLUMN_HEADERS | Wisteria::UI::LD_FIND_BUTTON |
