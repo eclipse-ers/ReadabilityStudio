@@ -12,7 +12,7 @@ source('R/appdown.r')
 Along with offering standard tests, such as [New Dale-Chall](#sec-dale-chall-test)\index{New Dale-Chall!custom test} and [Spache Revised](#sec-spache-test)\index{Spache Revised!custom test}, *{{< var PROGRAM_NAME >}}* also includes the ability to create your own tests.
 Many customizable features are offered for new tests, such as being able to select your own familiar-word list and which formula to use.
 
-To create a custom test, go to the **Readability** tab, click the arrow beneath the `r keys("Custom Tests")` button and select **Add Test...** from the menu.
+To create a custom test, go to the **Readability** tab, click the arrow beneath the `r keys("Custom Tests")` button, and select **Add Test...** from the menu.
 At this point, the **Add Custom Test** dialog will be displayed:
 
 ![](images/add-custom-test.png)

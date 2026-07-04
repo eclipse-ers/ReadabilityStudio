@@ -11,8 +11,20 @@ source('R/appdown.r')
 
 The following styles should be applied to all help projects:
 
+- Grammar and punctuation should follow the latest edition of the *MLA Handbook*
+- American English spelling should be used
+- Instructions should be written in the second person, imperative mood (e.g., "Click **New**")
+- Tutorials and worked examples may shift to first-person plural ("we") when walking through a scenario
+- Tone should be formal and technical, yet approachable; mild humor is acceptable in examples, but avoid casual language elsewhere
+- Explanations should state why a behavior occurs, not just how to trigger it
+- Recommendations should be hedged (e.g., "is recommended") rather than commanded ("must," "should")
 - Software and library names should be italicized
+  - The program's name should never be hardcoded; reference the `PROGRAM_NAME` variable, rendered italicized
 - References to dialog/menu/button/tab names should be in bold
+- Menu and ribbon navigation should be spelled out in prose (or via the `menu()` helper), not shorthand such as "File > Open"
+- Keyboard shortcuts should use the `keys()` helper, showing OS-specific variants where they differ
+- Readability test names should be capitalized as proper nouns and cross-referenced to their topic (e.g., "New Dale-Chall")
+- Literal example text (e.g., sample document content) should be italicized, not quoted
 - File and folder names should be double quoted
 - File paths should be put in `file_path` blocks
 - Data types (programming docs) should be in typewriter font
@@ -21,6 +33,14 @@ The following styles should be applied to all help projects:
 - Values elsewhere:
   - Numbers should not be formatted
   - Strings and single characters should be italicized (quoting them makes them difficult to read)
+- Asides, tips, and warnings should use the `notesection`, `tipsection`, and `warningsection` divs, respectively
+- Mutually exclusive option sets should use the `optionssection`/`optionssectiontitle` divs
+- Simulated in-text document examples should use the `fancyquotes` div
+- Sequential steps should be written as consecutive imperative sentences (e.g., "First... Then... Finally...") rather than numbered lists
+- Topics should follow a structure consistent with their type:
+  - Test-definition topics: definition, citation-backed suitability, formula, variable/score tables, then an example
+  - How-to topics: a brief task preview, followed by step-by-step instructions with a screenshot per step
+  - Options/reference topics: a one-line summary, followed by a flat list of bold field names and descriptions
 
 ## Editing {-}
 

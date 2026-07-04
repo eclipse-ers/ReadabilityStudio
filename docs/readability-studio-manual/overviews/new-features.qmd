@@ -48,6 +48,11 @@ source('../R/appdown.r')
 - Reports can now be exported as PDF.
 - Added a **Theme** option, allowing you to select the accent colors used for banners, notes, and warnings.
 
+### List Enhancements {-}
+
+- Lists can now be saved as PDF.
+- Lists exported as HTML now support light and dark mode in your browser.
+
 ### Analysis/Test Enhancements {-}
 
 - [Combined accents](#diacritics) (i.e., diacritics) are now supported.
@@ -61,10 +66,9 @@ source('../R/appdown.r')
     - The functions `MIN`, `MAX`, `SUM`, `AVERAGE`, `OR`, and `AND` now support 24 arguments.
       (These were limited to 7 arguments previously.)
 
-### Importing/Exporting Enhancements {-}
+### Importing Enhancements {-}
 
 - Publicly accessible *OneDrive* documents are now supported.
-- Lists can now be saved as PDF.
 
 ### Documentation Enhancements {-}
 

@@ -206,12 +206,19 @@ Save the script                         `r keys(c('Ctrl','Shift','S'))` (`r os_l
 &nbsp;                                  &nbsp;
 
 Run selection<br>\linebreak             `r keys('F5')`
-(or full script if no selection)
+(or full script if no selection);<br>\linebreak
+also continues execution when
+paused at a breakpoint
 
 &nbsp;                                  &nbsp;
 
 Stop running                            `r keys(c('Shift','F5'))` (`r os_logo('windows')`, `r os_logo('linux')`) or<br>\linebreak
                                         `r keys(c('\\shift','F5'))` (`r os_logo('apple')`)
+
+&nbsp;                                  &nbsp;
+
+Toggle breakpoint on the                `r keys('F9')`
+current line
 
 &nbsp;                                  &nbsp;
 

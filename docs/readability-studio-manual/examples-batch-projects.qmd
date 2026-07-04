@@ -166,7 +166,7 @@ On the **Select Directory** dialog, enter the folder path containing your docume
 Now we will be shown the **Select Labeling** dialog.
 
 On this dialog, we can either specify a single label for all documents or use the documents' metadata to create unique descriptions for each one.
-For this example, we are wanting to group this folders' documents together, so select **Use a grouping label**, enter a label (e.g., *Notes*) and click `r keys('OK')`.
+For this example, we are wanting to group this folders' documents together, so select **Use a grouping label**, enter a label (e.g., *Notes*), and click `r keys('OK')`.
 
 ![](images/group-label-notes.png){width=50% fig-align="center"}
 

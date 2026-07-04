@@ -204,7 +204,7 @@ This means that excluding words will affect the sentences that they appear in.
 For example, by excluding *Danielson-Bryan*, *1*, and *206*, the first sentence will have a word count of 20 instead of 23.
 
 Another section of text that could be excluded is the citation at the bottom.
-Go to the **Document Indexing** options, check **Also exclude trailing citations** and click `r keys("OK")`.
+Go to the **Document Indexing** options, check **Also exclude trailing citations**, and click `r keys("OK")`.
 Scroll to the bottom of the document and note how everything below the header *Citations* is now excluded:
 
 ![](images/exclusion-example-citation-excluded.png){width=75% fig-align="center"}

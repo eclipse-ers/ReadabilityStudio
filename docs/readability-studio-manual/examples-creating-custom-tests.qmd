@@ -392,7 +392,7 @@ Choose the defaults in the standard [**New Project**](#sec-creating-standard-pro
 
 Once the file is processed, click the **Highlighted Reports** icon on the sidebar to view the document.
 After doing a quick reading of this press release, there may be some concern about the author's enthusiasm for marketing speak.
-To confirm this, select the **Readability** tab on the ribbon, click **Custom Tests** and select **Buzz Index**.
+To confirm this, select the **Readability** tab on the ribbon, click **Custom Tests**, and select **Buzz Index**.
 Next, click the **Readability Scores** icon on the sidebar and select **Scores** underneath that.
 As we had feared, the document is scoring at the unacceptable level of 3:
 
