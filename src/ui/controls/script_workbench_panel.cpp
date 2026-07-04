@@ -178,7 +178,7 @@ void ScriptWorkbenchPanel::CreateControls()
     m_localsWindow->AppendColumn(_(L"Type"));
     m_debugNotebook->AddPage(m_localsWindow, _(L"Locals"), false);
 
-    m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(150));
+    m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(225));
 
     auto* outerSizer = new wxBoxSizer(wxVERTICAL);
     outerSizer->Add(m_outerSplitter, wxSizerFlags{ 1 }.Expand());
@@ -555,6 +555,10 @@ void ScriptWorkbenchPanel::OnLuaPauseStateChanged(const int line)
         return;
         }
 
+    // bring the workbench to the front in case it's hidden or behind other windows;
+    // the paused script would otherwise be invisible with no obvious way to resume it
+    wxGetApp().GetMainFrameEx()->ActivateScriptWorkbench();
+
     // jump to the paused tab (and its sidebar entry) so the highlight is
     // visible, even if a different script currently has focus
     for (const auto& entry : m_scripts)
@@ -691,7 +695,7 @@ void ScriptWorkbenchPanel::ToggleDebugWindow()
     else
         {
         m_debugNotebook->Show();
-        m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(150));
+        m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(225));
         }
     }
 
