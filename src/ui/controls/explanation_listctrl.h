@@ -268,6 +268,7 @@ class ExplanationListCtrl final : public wxPanel
     void OnExplanationLoaded(wxWebViewEvent& event);
     void OnMenuCommand(wxCommandEvent& event);
     void InitializeSashPosition();
+    void ShowNoTestsMessage();
 
     std::shared_ptr<Wisteria::UI::ListCtrlExNumericDataProvider> m_data{
         std::make_shared<Wisteria::UI::ListCtrlExNumericDataProvider>()

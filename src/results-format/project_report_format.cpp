@@ -231,7 +231,9 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     if (!statsInfo.HasDolchStatisticsEnabled())
         {
         htmlText +=
-            _(L"No Dolch statistics <a href=\"#select-statistics\">currently selected</a>.");
+            L"<div style='margin:20px 10px;'><span class='pill'>" +
+            _(L"No Dolch statistics <a href=\"#select-statistics\">currently selected</a>.") +
+            L"</span></div>";
         }
 
     const wxString tableStart = L"<div class='explanation-card'>";
@@ -1578,7 +1580,9 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
     if (!statsInfo.HasStatisticsEnabled())
         {
-        htmlText += _(L"No statistics <a href=\"#select-statistics\">currently selected</a>.");
+        htmlText += L"<div style='margin:20px 10px;'><span class='pill'>" +
+                    _(L"No statistics <a href=\"#select-statistics\">currently selected</a>.") +
+                    L"</span></div>";
         }
 
     const wxString tableStart = L"<div class='explanation-card'>";

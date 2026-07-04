@@ -1146,7 +1146,8 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
             wxString text = view->GetReadabilityScoresList()->GetExplanationsText();
             if (text.empty())
                 {
-                text = _(L"No tests are currently in the project.");
+                text = L"<div style='margin:20px 10px;'><span class='pill'>" +
+                       _(L"No tests are currently in the project.") + L"</span></div>";
                 }
             auto* scoresReport =
                 dynamic_cast<wxWebView*>(view->GetReadabilityResultsView().FindWindowById(

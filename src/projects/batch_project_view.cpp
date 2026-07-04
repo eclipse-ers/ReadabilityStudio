@@ -1016,12 +1016,15 @@ void BatchProjectView::OnDocumentDelete([[maybe_unused]] wxRibbonButtonBarEvent&
         doc->RefreshProject();
         if (activeListCtrl->GetItemCount() == 0)
             {
-            const wxString noDocsHtml =
-                L"<!DOCTYPE html><html><head>"
-                L"<meta name='color-scheme' content='light dark' />"
-                L"<style>body{background-color:Canvas;color:CanvasText;}</style>"
-                L"</head><body>" +
-                _(L"No documents available.") + L"</body></html>";
+            const wxString noDocsHtml = wxString::Format(
+                _DT(L"<!DOCTYPE html><html><head>"
+                    "<meta name='color-scheme' content='light dark' />"
+                    "<style>%s</style>"
+                    "</head><body><div style='text-align:center;margin-top:60px;'>"
+                    "<span class='pill'>%s</span></div></body></html>"),
+                ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                                 wxGetApp().GetAppOptions()->GetReportTheme()),
+                _(L"No documents available."));
             if (m_testExplanations != nullptr)
                 {
                 m_testExplanations->SetPage(noDocsHtml, wxString{});

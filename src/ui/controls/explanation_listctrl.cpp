@@ -158,6 +158,10 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
                     m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
                 wxString{});
             }
+        else if (GetResultsListCtrl()->GetItemCount() == 0)
+            {
+            ShowNoTestsMessage();
+            }
         }
     event.Skip();
     }
@@ -171,6 +175,26 @@ void ExplanationListCtrl::InitializeSashPosition()
         // the sash gravity alone would produce
         m_splitter->SetSashPosition(
             static_cast<int>(m_splitter->GetClientSize().GetHeight() * 0.5));
+        }
+    }
+
+//------------------------------------------------------
+void ExplanationListCtrl::ShowNoTestsMessage()
+    {
+    if (GetExplanationView() != nullptr && !IsBeingDeleted() &&
+        !GetExplanationView()->IsBeingDeleted())
+        {
+        GetExplanationView()->Hide();
+        GetExplanationView()->SetPage(
+            wxString::Format(_DT(L"<!DOCTYPE html><html><head>"
+                                 "<meta name='color-scheme' content='light dark' />"
+                                 "<style>%s</style>"
+                                 "</head><body><div style='text-align:center;margin-top:60px;'>"
+                                 "<span class='pill'>%s</span></div></body></html>"),
+                             ProjectReportFormat::GetThemeCss(
+                                 _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme()),
+                             _(L"No readability test results currently available.")),
+            wxString{});
         }
     }
 
