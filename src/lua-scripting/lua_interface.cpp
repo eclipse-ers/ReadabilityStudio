@@ -66,6 +66,7 @@ bool LuaInterpreter::m_quitRequested = false;
 bool LuaInterpreter::m_isPaused = false;
 bool LuaInterpreter::m_continueRequested = false;
 int LuaInterpreter::m_pausedLine = -1;
+int LuaInterpreter::m_justResumedFromLine = -1;
 std::set<int> LuaInterpreter::m_breakpointLines;
 std::function<void(int)> LuaInterpreter::m_pauseStateChangedCallback;
 
@@ -345,6 +346,13 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
         isWorkbenchBreakpointLine = (std::strcmp(ar->short_src, WORKBENCH_CHUNK_NAME + 1) == 0);
         }
 
+    // ignore a single spurious re-hit of the line just resumed from; only ever suppresses once
+    if (ar->currentline == m_justResumedFromLine)
+        {
+        isWorkbenchBreakpointLine = false;
+        }
+    m_justResumedFromLine = -1;
+
     if (isWorkbenchBreakpointLine)
         {
         m_isPaused = true;
@@ -362,6 +370,7 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
             }
 
         m_isPaused = false;
+        m_justResumedFromLine = m_pausedLine;
         m_pausedLine = -1;
         m_continueRequested = false;
         if (m_pauseStateChangedCallback)

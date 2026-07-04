@@ -171,6 +171,14 @@ class LuaInterpreter
     static int m_pausedLine;
     static std::set<int> m_breakpointLines;
     static std::function<void(int)> m_pauseStateChangedCallback;
+    // line just resumed from, kept only until the next line-hook check; guards
+    // against the single spurious extra line-hook call that Lua's own docs
+    // Line just resumed from, kept only until the next line-hook check.
+    // Guards against the single spurious extra line-hook call that Lua's own docs
+    // acknowledge can happen right after a call returns (see the 'oldpc' comment
+    // on luaG_traceexec() in ldebug.c), which would otherwise re-trigger the
+    // same breakpoint immediately and require a second Continue click
+    static int m_justResumedFromLine;
     wxString m_scriptFilePath;
     };
 

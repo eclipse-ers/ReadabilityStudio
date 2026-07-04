@@ -559,7 +559,7 @@ void ScriptWorkbenchPanel::OnLuaPauseStateChanged(const int line)
 
     // Lua 1-based -> Scintilla 0-based
     m_runningEditor->HighlightExecutionLine(line - 1);
-    DebugOutput(wxString::Format(_(L"Paused at breakpoint, line #%d"), line));
+    DebugOutput(wxString::Format(_(L"⏸️Paused at breakpoint, line #%d"), line));
     }
 
 //-------------------------------------------------------

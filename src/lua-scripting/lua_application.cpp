@@ -874,7 +874,7 @@ namespace LuaScripting
             if (workbench != nullptr)
                 {
                 workbench->DebugOutput(wxString::Format(
-                    _DT(L"Broken link in '<span style='font-weight:bold;'>%s</span>': "
+                    _DT(L"❌Broken link in '<span style='font-weight:bold;'>%s</span>': "
                         "<span style='color:#FF7386; font-weight:bold;'>%s</span>",
                         DTExplanation::DebugMessage),
                     badLink.first, badLink.second));
@@ -892,7 +892,8 @@ namespace LuaScripting
             if (workbench != nullptr)
                 {
                 workbench->DebugOutput(wxString::Format(
-                    _DT(L"Bad image size in '<span style='font-weight:bold;'>%s</span>%s</span>': "
+                    _DT(L"❌Bad image size in "
+                        "'<span style='font-weight:bold;'>%s</span>%s</span>': "
                         "<span style='color:#FF7386; font-weight:bold;'>%s</span>"),
                     badImage.first, badImage.second));
                 }
