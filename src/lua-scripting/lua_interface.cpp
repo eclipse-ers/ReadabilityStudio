@@ -69,6 +69,9 @@ int LuaInterpreter::m_pausedLine = -1;
 int LuaInterpreter::m_justResumedFromLine = -1;
 std::set<int> LuaInterpreter::m_breakpointLines;
 std::function<void(int)> LuaInterpreter::m_pauseStateChangedCallback;
+lua_Debug* LuaInterpreter::m_pausedDebugInfo = nullptr;
+std::vector<int> LuaInterpreter::m_tableRefs;
+std::set<std::string> LuaInterpreter::m_baselineGlobalNames;
 
 //------------------------------------------------------
 bool LuaInterpreter::ParseLuaError(wxString& errorMessage, long& lineNumber)
@@ -153,6 +156,22 @@ void LuaInterpreter::Initialize()
     Luna<LuaScripting::StandardProject>::Register(m_L);
     Luna<LuaScripting::BatchProject>::Register(m_L);
     // NOLINTEND(readability-math-missing-parentheses,cppcoreguidelines-pro-bounds-array-to-pointer-decay,hicpp-no-array-decay)
+
+    // snapshot every global registered above so GetLocalVariables() can later
+    // tell the user script's own (undeclared, hence global) variables apart
+    // from library plumbing
+    m_baselineGlobalNames.clear();
+    lua_pushglobaltable(m_L);
+    lua_pushnil(m_L);
+    while (lua_next(m_L, -2) != 0)
+        {
+        if (lua_type(m_L, -2) == LUA_TSTRING)
+            {
+            m_baselineGlobalNames.insert(lua_tostring(m_L, -2));
+            }
+        lua_pop(m_L, 1);
+        }
+    lua_pop(m_L, 1); // pop the globals table
     }
 
 //------------------------------------------------------
@@ -169,6 +188,9 @@ void LuaInterpreter::Restart()
         lua_close(m_L);
         m_L = nullptr;
         }
+    // any registry refs handed out to the Locals window are invalid once the state is closed
+    m_tableRefs.clear();
+    m_pausedDebugInfo = nullptr;
     Initialize();
     }
 
@@ -357,6 +379,9 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
         {
         m_isPaused = true;
         m_pausedLine = ar->currentline;
+        // ar stays valid for the lifetime of this pause (nothing returns until
+        // continue/quit), so the Locals window can query locals off of it
+        m_pausedDebugInfo = ar;
         m_continueRequested = false;
         if (m_pauseStateChangedCallback)
             {
@@ -372,6 +397,8 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
         m_isPaused = false;
         m_justResumedFromLine = m_pausedLine;
         m_pausedLine = -1;
+        m_pausedDebugInfo = nullptr;
+        ReleaseTableRefs(L);
         m_continueRequested = false;
         if (m_pauseStateChangedCallback)
             {
@@ -385,6 +412,178 @@ void LuaInterpreter::LineHookCallback(lua_State* L, lua_Debug* ar)
             // NOLINTEND(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
             }
         }
+    }
+
+//------------------------------------------------------
+void LuaInterpreter::ReleaseTableRefs(lua_State* L)
+    {
+    for (const int ref : m_tableRefs)
+        {
+        luaL_unref(L, LUA_REGISTRYINDEX, ref);
+        }
+    m_tableRefs.clear();
+    }
+
+//------------------------------------------------------
+wxString LuaInterpreter::KeyToString(const int idx) const
+    {
+    // duplicate the key so tolstring's pushed result doesn't disturb the
+    // original key/value pair that lua_next() expects on the stack
+    lua_pushvalue(m_L, idx);
+    size_t len{ 0 };
+    const char* str = luaL_tolstring(m_L, lua_gettop(m_L), &len);
+    const wxString result = wxString::FromUTF8(str, len);
+    // the tolstring result and the duplicated key
+    lua_pop(m_L, 2);
+    return result;
+    }
+
+//------------------------------------------------------
+bool LuaInterpreter::IsTableEmpty(const int idx) const
+    {
+    lua_pushvalue(m_L, idx);
+    lua_pushnil(m_L);
+    const bool empty = (lua_next(m_L, -2) == 0);
+    if (!empty)
+        {
+        // lua_next left the key and value it found on the stack
+        lua_pop(m_L, 2);
+        }
+    // the table copy pushed above
+    lua_pop(m_L, 1);
+    return empty;
+    }
+
+//------------------------------------------------------
+std::optional<LuaInterpreter::LuaVariableInfo>
+LuaInterpreter::DescribeStackValue(const wxString& name, const int idx) const
+    {
+    LuaVariableInfo info;
+    info.m_name = name;
+
+    const int type = lua_type(m_L, idx);
+    info.m_type = wxString::FromUTF8(lua_typename(m_L, type));
+
+    if (type == LUA_TTABLE && IsTableEmpty(idx))
+        {
+        return std::nullopt;
+        }
+
+    size_t len{ 0 };
+    const char* str = luaL_tolstring(m_L, idx, &len);
+    info.m_value = wxString::FromUTF8(str, len);
+    // pop the string luaL_tolstring pushed
+    lua_pop(m_L, 1);
+
+    if (type == LUA_TTABLE)
+        {
+        info.m_isExpandable = true;
+        lua_pushvalue(m_L, idx);
+        info.m_tableRef = luaL_ref(m_L, LUA_REGISTRYINDEX);
+        m_tableRefs.push_back(info.m_tableRef);
+        }
+    else if (type == LUA_TUSERDATA)
+        {
+        // Luna's __tostring gives "ClassName (0xptr)"; surface the class name
+        // as the type column rather than the generic "userdata". There is no
+        // generic way to safely enumerate a Luna object's fields (its API
+        // surface is exposed as methods, some with side effects), so custom
+        // objects are shown as this opaque leaf rather than expanded.
+        if (const auto parenPos = info.m_value.Find(L" ("); parenPos != wxNOT_FOUND)
+            {
+            info.m_type = info.m_value.Left(parenPos);
+            }
+        }
+
+    return info;
+    }
+
+//------------------------------------------------------
+std::vector<LuaInterpreter::LuaVariableInfo> LuaInterpreter::GetLocalVariables() const
+    {
+    std::vector<LuaVariableInfo> result;
+    if (!m_isPaused || m_pausedDebugInfo == nullptr || m_L == nullptr)
+        {
+        return result;
+        }
+
+    for (int i = 1;; ++i)
+        {
+        const char* name = lua_getlocal(m_L, m_pausedDebugInfo, i);
+        if (name == nullptr)
+            {
+            break;
+            }
+        // skip Lua's internal control-variable slots (e.g., "(for state)")
+        if (name[0] == '(')
+            {
+            lua_pop(m_L, 1);
+            continue;
+            }
+        if (auto info = DescribeStackValue(wxString::FromUTF8(name), lua_gettop(m_L)); info)
+            {
+            result.push_back(std::move(*info));
+            }
+        lua_pop(m_L, 1);
+        }
+
+    // workbench scripts run as flat top-level code, so any bare assignment
+    // (no "local" keyword) creates a *global*, not a stack local.
+    // Show those too, filtering out the libraries/functions already present when
+    // the interpreter was initialized
+    lua_pushglobaltable(m_L);
+    const int globalsIdx = lua_gettop(m_L);
+    lua_pushnil(m_L);
+    while (lua_next(m_L, globalsIdx) != 0)
+        {
+        const int valueIdx = lua_gettop(m_L);
+        const int keyIdx = valueIdx - 1;
+        if (lua_type(m_L, keyIdx) == LUA_TSTRING &&
+            !m_baselineGlobalNames.contains(lua_tostring(m_L, keyIdx)))
+            {
+            if (auto info = DescribeStackValue(KeyToString(keyIdx), valueIdx); info)
+                {
+                result.push_back(std::move(*info));
+                }
+            }
+        lua_pop(m_L, 1);
+        }
+    // pop the globals table
+    lua_pop(m_L, 1);
+
+    return result;
+    }
+
+//------------------------------------------------------
+std::vector<LuaInterpreter::LuaVariableInfo>
+LuaInterpreter::GetTableEntries(const int tableRef) const
+    {
+    std::vector<LuaVariableInfo> result;
+    if (!m_isPaused || m_L == nullptr || tableRef == LUA_NOREF)
+        {
+        return result;
+        }
+
+    lua_rawgeti(m_L, LUA_REGISTRYINDEX, tableRef);
+    const int tableIdx = lua_gettop(m_L);
+
+    // first key
+    lua_pushnil(m_L);
+    while (lua_next(m_L, tableIdx) != 0)
+        {
+        const int valueIdx = lua_gettop(m_L);
+        const int keyIdx = valueIdx - 1;
+        if (auto info = DescribeStackValue(KeyToString(keyIdx), valueIdx); info)
+            {
+            result.push_back(std::move(*info));
+            }
+        // drop value, keep key on top for the next lua_next()
+        lua_pop(m_L, 1);
+        }
+
+    // drop the table itself
+    lua_pop(m_L, 1);
+    return result;
     }
 
 // NOLINTEND(readability-implicit-bool-conversion)

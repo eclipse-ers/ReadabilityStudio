@@ -52,7 +52,10 @@
 
 #include "luna.h"
 #include <functional>
+#include <optional>
 #include <set>
+#include <string>
+#include <vector>
 #include <wx/wx.h>
 
 // NOLINTBEGIN(readability-identifier-length)
@@ -133,6 +136,30 @@ class LuaInterpreter
     /// @brief Resumes a paused script from exactly where it stopped.
     static void ContinueExecution() noexcept { m_continueRequested = true; }
 
+    /// @brief Describes a single local variable (or table entry) for the Locals window.
+    struct LuaVariableInfo
+        {
+        wxString m_name;
+        wxString m_value;
+        wxString m_type;
+        /// @brief @c true if this is a table whose entries can be queried via GetTableEntries().
+        bool m_isExpandable{ false };
+        /// @brief Registry reference handle for an expandable table's value,
+        ///     valid only while paused. @c LUA_NOREF if not expandable.
+        int m_tableRef{ LUA_NOREF };
+        };
+
+    /// @returns The local variables in scope at the currently paused line
+    ///     (empty if not currently paused).
+    [[nodiscard]]
+    std::vector<LuaVariableInfo> GetLocalVariables() const;
+
+    /// @brief Returns the key/value entries of a table previously reported
+    ///     as expandable by GetLocalVariables() or GetTableEntries().
+    /// @param tableRef The table's LuaVariableInfo::m_tableRef handle.
+    [[nodiscard]]
+    std::vector<LuaVariableInfo> GetTableEntries(int tableRef) const;
+
     /// @returns The file path of the currently running script
     ///     (might be empty if RunLuaCode() was called with no defined file path).
     [[nodiscard]]
@@ -147,6 +174,22 @@ class LuaInterpreter
 
   private:
     static void LineHookCallback(lua_State* L, lua_Debug* ar);
+
+    /// @returns A LuaVariableInfo describing the value at stack index @p idx
+    ///     (an absolute, not relative, index), or @c std::nullopt if it's an
+    ///     empty table (these are filtered out of the Locals window as clutter,
+    ///     e.g. the read-only enum proxies returned by protect_enum()).
+    [[nodiscard]]
+    std::optional<LuaVariableInfo> DescribeStackValue(const wxString& name, int idx) const;
+    /// @returns @c true if the table at stack index @p idx has no entries.
+    [[nodiscard]]
+    bool IsTableEmpty(int idx) const;
+    /// @returns A display string for the table key at stack index @p idx.
+    [[nodiscard]]
+    wxString KeyToString(int idx) const;
+    /// @brief Releases any table registry references handed out during the
+    ///     most recent pause.
+    static void ReleaseTableRefs(lua_State* L);
     /** @brief Strips the Lua error header from @c errorMessage in place.
         @param[in,out] errorMessage The raw error string from the Lua interpreter.
         @param[out] lineNumber The script line where the stop was requested.
@@ -161,7 +204,7 @@ class LuaInterpreter
     // chunks it loads via dofile()/require(), which get their own distinct
     // source names -- without it, a breakpoint's line number could coincidentally
     // match a line inside a dofile()'d file and pause there instead.
-    static constexpr const char* WORKBENCH_CHUNK_NAME = "=workbench";
+    constexpr static const char* WORKBENCH_CHUNK_NAME = "=workbench";
 
     lua_State* m_L{ nullptr };
     static bool m_isRunning;
@@ -171,14 +214,20 @@ class LuaInterpreter
     static int m_pausedLine;
     static std::set<int> m_breakpointLines;
     static std::function<void(int)> m_pauseStateChangedCallback;
-    // line just resumed from, kept only until the next line-hook check; guards
-    // against the single spurious extra line-hook call that Lua's own docs
+    // the debug frame execution is currently paused at; only valid while m_isPaused
+    static lua_Debug* m_pausedDebugInfo;
     // Line just resumed from, kept only until the next line-hook check.
     // Guards against the single spurious extra line-hook call that Lua's own docs
     // acknowledge can happen right after a call returns (see the 'oldpc' comment
     // on luaG_traceexec() in ldebug.c), which would otherwise re-trigger the
     // same breakpoint immediately and require a second Continue click
     static int m_justResumedFromLine;
+    // registry refs for tables handed out to the Locals window this pause; released on resume
+    static std::vector<int> m_tableRefs;
+    // names present in _G right after Initialize() registers the standard/custom
+    // libraries; GetLocalVariables() filters these out of its global-variable scan
+    // so only the user script's own (undeclared, hence global) variables show up
+    static std::set<std::string> m_baselineGlobalNames;
     wxString m_scriptFilePath;
     };
 

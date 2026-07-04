@@ -166,10 +166,19 @@ void ScriptWorkbenchPanel::CreateControls()
     // sidebar | (editor + func browser)
     m_sidebarSplitter->SplitVertically(m_scriptSidebar, m_funcBrowserSplitter, FromDIP(200));
 
-    // debug output (bottom half)
-    m_debugMessageWindow = wxWebView::New(m_outerSplitter, wxID_ANY);
+    // bottom half: tabbed "Output" (debug webview) and "Locals" (paused-frame variables)
+    m_debugNotebook = new wxNotebook(m_outerSplitter, wxID_ANY);
 
-    m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugMessageWindow, -FromDIP(150));
+    m_debugMessageWindow = wxWebView::New(m_debugNotebook, wxID_ANY);
+    m_debugNotebook->AddPage(m_debugMessageWindow, _(L"Output"), true);
+
+    m_localsWindow = new wxTreeListCtrl(m_debugNotebook, wxID_ANY);
+    m_localsWindow->AppendColumn(_(L"Name"));
+    m_localsWindow->AppendColumn(_(L"Value"));
+    m_localsWindow->AppendColumn(_(L"Type"));
+    m_debugNotebook->AddPage(m_localsWindow, _(L"Locals"), false);
+
+    m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(150));
 
     auto* outerSizer = new wxBoxSizer(wxVERTICAL);
     outerSizer->Add(m_outerSplitter, wxSizerFlags{ 1 }.Expand());
@@ -263,6 +272,10 @@ void ScriptWorkbenchPanel::BindEvents()
 
     // sidebar selection swaps the visible editor
     Bind(Wisteria::UI::wxEVT_SIDEBAR_CLICK, &ScriptWorkbenchPanel::OnSidebarClick, this);
+
+    // lazily fetch a table's entries the first time it's expanded in the Locals window
+    m_localsWindow->Bind(wxEVT_TREELIST_ITEM_EXPANDING,
+                         &ScriptWorkbenchPanel::OnLocalsItemExpanding, this);
     }
 
 //-------------------------------------------------------
@@ -538,6 +551,7 @@ void ScriptWorkbenchPanel::OnLuaPauseStateChanged(const int line)
     if (line < 0)
         {
         m_runningEditor->ClearExecutionHighlight();
+        ClearLocalsWindow();
         return;
         }
 
@@ -560,6 +574,77 @@ void ScriptWorkbenchPanel::OnLuaPauseStateChanged(const int line)
     // Lua 1-based -> Scintilla 0-based
     m_runningEditor->HighlightExecutionLine(line - 1);
     DebugOutput(wxString::Format(_(L"⏸️Paused at breakpoint, line #%d"), line));
+
+    PopulateLocalsWindow();
+    if (!IsDebugWindowVisible())
+        {
+        ToggleDebugWindow();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::ClearLocalsWindow()
+    {
+    if (m_localsWindow != nullptr)
+        {
+        m_localsWindow->DeleteAllItems();
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::PopulateLocalsWindow()
+    {
+    ClearLocalsWindow();
+    for (const auto& local : wxGetApp().GetLuaRunner().GetLocalVariables())
+        {
+        AddLocalsTreeItem(m_localsWindow->GetRootItem(), local);
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::AddLocalsTreeItem(wxTreeListItem parent,
+                                             const LuaInterpreter::LuaVariableInfo& info)
+    {
+    const wxTreeListItem item = m_localsWindow->AppendItem(parent, info.m_name);
+    m_localsWindow->SetItemText(item, LOCALS_VALUE_COLUMN, info.m_value);
+    m_localsWindow->SetItemText(item, LOCALS_TYPE_COLUMN, info.m_type);
+
+    if (info.m_isExpandable)
+        {
+        m_localsWindow->SetItemData(item, new LocalsTableItemData(info.m_tableRef));
+        // seed a placeholder child so the expand arrow renders; swapped out
+        // for the table's real entries the first time it's expanded
+        m_localsWindow->AppendItem(item, wxString{});
+        }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::OnLocalsItemExpanding(wxTreeListEvent& event)
+    {
+    const wxTreeListItem item = event.GetItem();
+    auto* data = dynamic_cast<LocalsTableItemData*>(m_localsWindow->GetItemData(item));
+    if (data == nullptr || data->m_populated)
+        {
+        return;
+        }
+    data->m_populated = true;
+
+    const wxTreeListItem placeholder = m_localsWindow->GetFirstChild(item);
+    const auto entries = wxGetApp().GetLuaRunner().GetTableEntries(data->m_tableRef);
+    for (const auto& entry : entries)
+        {
+        AddLocalsTreeItem(item, entry);
+        }
+
+    // Drop the placeholder only after real entries are added.
+    if (!entries.empty())
+        {
+        m_localsWindow->DeleteItem(placeholder);
+        }
+    else
+        {
+        m_localsWindow->SetItemText(placeholder, _(L"(empty)"));
+        }
     }
 
 //-------------------------------------------------------
@@ -601,12 +686,12 @@ void ScriptWorkbenchPanel::ToggleDebugWindow()
     {
     if (m_outerSplitter->IsSplit())
         {
-        m_outerSplitter->Unsplit(m_debugMessageWindow);
+        m_outerSplitter->Unsplit(m_debugNotebook);
         }
     else
         {
-        m_debugMessageWindow->Show();
-        m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugMessageWindow, -FromDIP(150));
+        m_debugNotebook->Show();
+        m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(150));
         }
     }
 

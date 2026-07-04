@@ -2922,8 +2922,8 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     auto* debugBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Debug"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
-    debugBar->AddButton(XRCID("ID_SCRIPT_TOGGLE_DEBUG"), _(L"Output"),
-                        ReadSvgIcon(L"ribbon/ladybug.svg"), _(L"Toggle the debug output window."),
+    debugBar->AddButton(XRCID("ID_SCRIPT_TOGGLE_DEBUG"), _(L"Debug Pane"),
+                        ReadSvgIcon(L"ribbon/ladybug.svg"), _(L"Toggle the debug windows."),
                         wxRIBBON_BUTTON_TOGGLE);
     debugBar->AddButton(XRCID("ID_SCRIPT_CLEAR_DEBUG"), _(L"Clear"),
                         ReadSvgIcon(L"ribbon/clear.svg"), _(L"Clear the log window."));

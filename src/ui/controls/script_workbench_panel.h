@@ -17,12 +17,15 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/codeeditor.h"
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebar.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
+#include "../../lua-scripting/lua_interface.h"
 #include <set>
 #include <vector>
 #include <wx/fdrepdlg.h>
+#include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
 #include <wx/splitter.h>
+#include <wx/treelist.h>
 #include <wx/webview.h>
 
 class wxStyledTextCtrlMiniMap;
@@ -114,12 +117,36 @@ class ScriptWorkbenchPanel final : public wxPanel
         wxStyledTextCtrlMiniMap* m_miniMap{ nullptr };
         };
 
+    // attached to a Locals-window row that represents an expandable table;
+    // tracks the table's registry handle and whether its placeholder child
+    // has already been swapped out for its real entries
+    class LocalsTableItemData : public wxClientData
+        {
+      public:
+        explicit LocalsTableItemData(const int tableRef) : m_tableRef(tableRef) {}
+
+        int m_tableRef{ LUA_NOREF };
+        bool m_populated{ false };
+        };
+
     void ImportAPI();
     void CreateControls();
     void BindEvents();
 
     void OnFindDialog(wxFindDialogEvent& event);
     void OnSidebarClick(wxCommandEvent& event);
+    void OnLocalsItemExpanding(wxTreeListEvent& event);
+
+    /// @brief Rebuilds the Locals window from the currently paused frame's
+    ///     local variables.
+    void PopulateLocalsWindow();
+    /// @brief Clears the Locals window (called on resume/stop).
+    void ClearLocalsWindow();
+    /// @brief Appends @p info as a child of @p parent, seeding an expandable
+    ///     table with a placeholder child so its arrow renders before it's
+    ///     ever expanded (its real children are fetched lazily, on demand,
+    ///     in OnLocalsItemExpanding()).
+    void AddLocalsTreeItem(wxTreeListItem parent, const LuaInterpreter::LuaVariableInfo& info);
 
     /// @brief Callback registered with LuaInterpreter::SetPauseStateChangedCallback().
     /// @param line The 1-based line execution paused at, or -1 when resumed/ended.
@@ -154,7 +181,12 @@ class ScriptWorkbenchPanel final : public wxPanel
 
     Wisteria::UI::SideBar* m_scriptSidebar{ nullptr };
     wxSimplebook* m_editorBook{ nullptr };
+    // bottom pane: tabbed "Output" (debug webview) and "Locals" (paused-frame variables)
+    wxNotebook* m_debugNotebook{ nullptr };
     wxWebView* m_debugMessageWindow{ nullptr };
+    wxTreeListCtrl* m_localsWindow{ nullptr };
+    constexpr static unsigned int LOCALS_VALUE_COLUMN{ 1 };
+    constexpr static unsigned int LOCALS_TYPE_COLUMN{ 2 };
     wxString m_debugContent;
     Wisteria::UI::FunctionBrowserCtrl* m_functionBrowser{ nullptr };
 
