@@ -311,11 +311,11 @@ namespace LuaScripting
 
         wxCoord x{ wxDefaultCoord }, y{ wxDefaultCoord };
 
-        if (lua_gettop(L) >= 1)
+        if (lua_gettop(L) >= 2)
             {
             x = lua_tonumber(L, 2);
             }
-        if (lua_gettop(L) >= 2)
+        if (lua_gettop(L) >= 3)
             {
             y = lua_tonumber(L, 3);
             }
@@ -467,7 +467,7 @@ namespace LuaScripting
                 }
             else
                 {
-                lastButtonBarID = lua_tonumber(L, 3);
+                lastButtonBarID = lua_tonumber(L, 4);
                 }
             }
         lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshotOfRibbon(
@@ -480,7 +480,7 @@ namespace LuaScripting
     int SnapScreenshotOfListControl(lua_State* L)
         {
         ::wxSleep(2);
-        if (!VerifyParameterCount(L, 1, __func__))
+        if (!VerifyParameterCount(L, 2, __func__))
             {
             return 0;
             }
@@ -1717,7 +1717,7 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int ShowWebHarvesterDlg([[maybe_unused]] lua_State* L)
         {
-        if (LuaSelectProjectType == nullptr)
+        if (LuaWebHarvesterDlg == nullptr)
             {
             LuaWebHarvesterDlg =
                 new WebHarvesterDlg(wxGetApp().GetMainFrame(), wxGetApp().GetLastSelectedWebPages(),

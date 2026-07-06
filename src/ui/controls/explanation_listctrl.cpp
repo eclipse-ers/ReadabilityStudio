@@ -386,26 +386,23 @@ void ExplanationListCtrl::OnCopy([[maybe_unused]] wxCommandEvent& event)
         {
         return;
         }
-    switch (choiceDlg.GetSelection())
+    const auto option = static_cast<ExplanationListExportOptions>(choiceDlg.GetSelection());
+    switch (option)
         {
-    case 0:
+    case ExplanationListExportOptions::ExportGrid:
         GetResultsListCtrl()->Copy(true, false);
         break;
-    case 1:
+    case ExplanationListExportOptions::ExportExplanations:
         GetResultsListCtrl()->Copy(false, true);
         break;
-    case 2:
+    case ExplanationListExportOptions::ExportBoth:
         if (GetExplanationView() != nullptr)
             {
             GetExplanationView()->Copy();
             }
         break;
-    default:
-        // noop
-        break;
         }
-    // NOLINTNEXTLINE(clang-analyzer-optin.core.EnumCastOutOfRange)
-    m_lastCopyOption = static_cast<ExplanationListExportOptions>(choiceDlg.GetSelection());
+    m_lastCopyOption = option;
     }
 
 //------------------------------------------------------

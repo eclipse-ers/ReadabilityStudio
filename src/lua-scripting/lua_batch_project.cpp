@@ -421,7 +421,6 @@ namespace LuaScripting
 
         m_project->ExcludeTrailingCitations(int_to_bool(lua_toboolean(L, 2)));
         ReloadIfNotDelayed();
-        lua_pushboolean(L, true);
         return 0;
         }
 

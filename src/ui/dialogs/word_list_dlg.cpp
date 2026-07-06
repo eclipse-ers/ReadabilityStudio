@@ -122,26 +122,31 @@ void WordListDlg::OnRibbonButton(wxRibbonButtonBarEvent& event)
 Wisteria::UI::ListCtrlEx* WordListDlg::GetActiveList()
     {
     wxWindow* listCtrl{ nullptr };
-    const auto currentId{ m_sideBar->GetCurrentPage()->GetId() };
+    const auto* currentPage = m_sideBar->GetCurrentPage();
+    if (currentPage == nullptr)
+        {
+        return nullptr;
+        }
+    const auto currentId{ currentPage->GetId() };
     if (currentId == DALE_CHALL_PAGE_ID)
         {
-        listCtrl = m_sideBar->GetCurrentPage()->FindWindow(DALE_CHALL_LIST_ID);
+        listCtrl = currentPage->FindWindow(DALE_CHALL_LIST_ID);
         }
     else if (currentId == STOCKER_PAGE_ID)
         {
-        listCtrl = m_sideBar->GetCurrentPage()->FindWindow(STOCKER_LIST_ID);
+        listCtrl = currentPage->FindWindow(STOCKER_LIST_ID);
         }
     else if (currentId == SPACHE_PAGE_ID)
         {
-        listCtrl = m_sideBar->GetCurrentPage()->FindWindow(SPACHE_LIST_ID);
+        listCtrl = currentPage->FindWindow(SPACHE_LIST_ID);
         }
     else if (currentId == HARRIS_JACOBSON_PAGE_ID)
         {
-        listCtrl = m_sideBar->GetCurrentPage()->FindWindow(HARRIS_JACOBSON_LIST_ID);
+        listCtrl = currentPage->FindWindow(HARRIS_JACOBSON_LIST_ID);
         }
     else if (currentId == DOLCH_PAGE_ID)
         {
-        listCtrl = m_sideBar->GetCurrentPage()->FindWindow(DOLCH_LIST_ID);
+        listCtrl = currentPage->FindWindow(DOLCH_LIST_ID);
         }
 
     wxASSERT_MSG(listCtrl && listCtrl->IsKindOf(CLASSINFO(Wisteria::UI::ListCtrlEx)),

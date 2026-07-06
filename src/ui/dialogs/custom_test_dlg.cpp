@@ -977,8 +977,7 @@ void CustomTestDlg::CreateControls()
 
             pgMan->SelectProperty(GetCustomFamiliarWordListLabel());
 
-            Connect(pgMan->GetId(), wxEVT_PG_CHANGED,
-                    wxPropertyGridEventHandler(CustomTestDlg::OnPropertyGridChange));
+            pgMan->Bind(wxEVT_PG_CHANGED, &CustomTestDlg::OnPropertyGridChange, this);
 
             panelSizer->Add(pgMan, wxSizerFlags{ 1 }.Expand());
             }

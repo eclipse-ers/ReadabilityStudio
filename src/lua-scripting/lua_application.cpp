@@ -816,6 +816,7 @@ namespace LuaScripting
 
             std::set<wxString> bookmarksInCurrentPage;
             std::pair<const wchar_t*, std::wstring> foundBookMark;
+            foundBookMark.first = fileContent.c_str();
             const wchar_t* const htmlEnd = foundBookMark.first + fileContent.length();
             while (foundBookMark.first)
                 {

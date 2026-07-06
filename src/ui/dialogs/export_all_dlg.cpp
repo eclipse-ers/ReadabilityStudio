@@ -84,7 +84,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     m_folderPath = exportDir;
 
     wxString exportFile = (doc != nullptr) ? doc->GetExportFile() : wxString{};
-    if (exportFile.empty())
+    if (exportFile.empty() && doc != nullptr)
         {
         // if export path not specified yet, then try the path of the project (if saved already)
         const wxFileName fn(doc->GetFilename());

@@ -94,7 +94,7 @@ wxString ProjectReportFormat::GetStemmingDisplayName(const stemming::stemming_ty
         break;
     case stemming::stemming_type::no_stemming:
     default:
-        return _(L"Do not using stemming");
+        return _(L"Do not use stemming");
         break;
         }
     }
@@ -109,7 +109,7 @@ wxString ProjectReportFormat::FormatFormulaToHtml(const wxString& formula)
     wxString formattedFormula = L"<tt>";
     const wxString wordFormatStart = L"<span>";
     const wxString operatorFormatStart = L"<span style='font-weight:bold;'>";
-    for (size_t i = 0; i < formula.length(); /*handled in lop*/)
+    for (size_t i = 0; i < formula.length(); /*handled in loop*/)
         {
         if (string_util::is_one_of<wchar_t>(
                 formula[i], L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))

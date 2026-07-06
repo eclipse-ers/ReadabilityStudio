@@ -94,120 +94,50 @@ bool AboutDialogEx::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
     CreateControls();
     Centre();
 
-    Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
+    const auto copyToClipboard = [](const wxString& source, const bool stripHtml = false)
+    {
+        if (wxTheClipboard->Open())
+            {
+            if (!source.empty())
                 {
-                if (!m_mlaCitation.empty())
-                    {
-                    // has italics in it
-                    lily_of_the_valley::html_extract_text htmlExtract;
-                    const wxString strippedText =
-                        htmlExtract(m_mlaCitation.wc_str(), m_mlaCitation.length(), true, true);
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(strippedText));
-                    wxTheClipboard->SetData(obj);
-                    }
-                wxTheClipboard->Close();
-                }
-        },
-        AboutDialogEx::ID_COPYMLA);
-
-    Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
-                {
-                if (!m_apaCitation.empty())
-                    {
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(m_apaCitation));
-                    wxTheClipboard->SetData(obj);
-                    }
-                wxTheClipboard->Close();
-                }
-        },
-        AboutDialogEx::ID_COPYAPA);
-
-    Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
-                {
-                if (!m_bibtexCitation.empty())
-                    {
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(m_bibtexCitation));
-                    wxTheClipboard->SetData(obj);
-                    }
-                wxTheClipboard->Close();
-                }
-        },
-        AboutDialogEx::ID_COPYBIBTEX);
-
-    Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
-                {
-                if (!m_components.empty())
+                wxString textToCopy = source;
+                if (stripHtml)
                     {
                     lily_of_the_valley::html_extract_text htmlExtract;
-                    const wxString strippedText =
-                        htmlExtract(m_components.wc_str(), m_components.length(), true, true);
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(strippedText));
-                    wxTheClipboard->SetData(obj);
+                    textToCopy = htmlExtract(source.wc_str(), source.length(), true, true);
                     }
-                wxTheClipboard->Close();
+                wxTheClipboard->Clear();
+                auto* obj = new wxDataObjectComposite();
+                obj->Add(new wxTextDataObject(textToCopy));
+                wxTheClipboard->SetData(obj);
                 }
-        },
-        AboutDialogEx::ID_COPY_COMPONENTS);
+            wxTheClipboard->Close();
+            }
+    };
 
     Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
-                {
-                if (!m_eula.empty())
-                    {
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(m_eula));
-                    wxTheClipboard->SetData(obj);
-                    }
-                wxTheClipboard->Close();
-                }
-        },
-        AboutDialogEx::ID_COPY_LICENSE);
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_mlaCitation, true); }, AboutDialogEx::ID_COPYMLA);
 
     Bind(
-        wxEVT_BUTTON,
-        [this]([[maybe_unused]] wxCommandEvent&)
-        {
-            if (wxTheClipboard->Open())
-                {
-                if (!m_productInfo.empty())
-                    {
-                    wxTheClipboard->Clear();
-                    auto* obj = new wxDataObjectComposite();
-                    obj->Add(new wxTextDataObject(m_productInfo));
-                    wxTheClipboard->SetData(obj);
-                    }
-                wxTheClipboard->Close();
-                }
-        },
-        AboutDialogEx::ID_COPY_PRODUCT_INFO);
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_apaCitation); }, AboutDialogEx::ID_COPYAPA);
+
+    Bind(
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_bibtexCitation); }, AboutDialogEx::ID_COPYBIBTEX);
+
+    Bind(
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_components, true); }, AboutDialogEx::ID_COPY_COMPONENTS);
+
+    Bind(
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_eula); }, AboutDialogEx::ID_COPY_LICENSE);
+
+    Bind(
+        wxEVT_BUTTON, [this, copyToClipboard]([[maybe_unused]] wxCommandEvent&)
+        { copyToClipboard(m_productInfo); }, AboutDialogEx::ID_COPY_PRODUCT_INFO);
 
     return true;
     }

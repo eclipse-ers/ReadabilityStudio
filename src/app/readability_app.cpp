@@ -269,7 +269,6 @@ void ReadabilityApp::AddWordsToDictionaries(const wxArrayString& theWords,
     wxString customDictionaryPath = m_CustomEnglishDictionaryPath;
     if (lang == readability::test_language::english_test)
         {
-        customDictionaryPath = m_CustomEnglishDictionaryPath;
         // add words to the currently loaded (custom) dictionary
         for (size_t i = 0; i < theWords.GetCount(); ++i)
             {
@@ -633,7 +632,6 @@ bool ReadabilityApp::OnInit()
         { 8056, BaseProjectView::STATS_LIST_PAGE_ID },
         { 8057, BaseProjectView::READABILITY_SCORES_PAGE_ID },
         { 8058, BaseProjectView::READABILITY_SCORES_SUMMARY_REPORT_PAGE_ID },
-        { 8059, BaseProjectView::READABILITY_GOALS_PAGE_ID },
         { 8060, BaseProjectView::READABILITY_GOALS_PAGE_ID },
         { 8061, BaseProjectView::LONG_WORDS_TEXT_PAGE_ID },
         { 8062, BaseProjectView::DC_WORDS_TEXT_PAGE_ID },
@@ -756,7 +754,10 @@ bool ReadabilityApp::OnInit()
     pskBundle.SetLanguage(readability::test_language::english_test);
     pskBundle.Lock();
     BaseProject::m_testBundles.insert(pskBundle);
-    dynamic_cast<MainFrame*>(GetMainFrame())->AddTestBundleToMenus(pskBundle.GetName().c_str());
+    if (auto* mainFrame = dynamic_cast<MainFrame*>(GetMainFrame()))
+        {
+        mainFrame->AddTestBundleToMenus(pskBundle.GetName().c_str());
+        }
 
     // Kincaid's Navy Personnel tests
     TestBundle navyBundle(ReadabilityMessages::GetKincaidNavyBundleName().wc_str());
@@ -769,7 +770,10 @@ bool ReadabilityApp::OnInit()
     navyBundle.SetLanguage(readability::test_language::english_test);
     navyBundle.Lock();
     BaseProject::m_testBundles.insert(navyBundle);
-    dynamic_cast<MainFrame*>(GetMainFrame())->AddTestBundleToMenus(navyBundle.GetName().c_str());
+    if (auto* mainFrame = dynamic_cast<MainFrame*>(GetMainFrame()))
+        {
+        mainFrame->AddTestBundleToMenus(navyBundle.GetName().c_str());
+        }
 
     // Grundner's Consent Forms
     TestBundle consentFormsBundle(ReadabilityMessages::GetConsentFormsBundleName().wc_str());
@@ -801,7 +805,10 @@ bool ReadabilityApp::OnInit()
     consentFormsBundle.SetLanguage(readability::test_language::english_test);
     consentFormsBundle.Lock();
     BaseProject::m_testBundles.insert(consentFormsBundle);
-    dynamic_cast<MainFrame*>(GetMainFrame())->AddTestBundleToMenus(consentFormsBundle.GetName().c_str());
+    if (auto* mainFrame = dynamic_cast<MainFrame*>(GetMainFrame()))
+        {
+        mainFrame->AddTestBundleToMenus(consentFormsBundle.GetName().c_str());
+        }
     // clang-format on
 
     // See if ClearType is turned on. If not, then graphs will look awful,
@@ -899,7 +906,7 @@ bool ReadabilityApp::OnCmdLineParsed(wxCmdLineParser& cmdParser)
         {
         for (size_t i = 0; i < cmdParser.GetParamCount(); ++i)
             {
-            wxFileName fn(cmdParser.GetParam(0));
+            wxFileName fn(cmdParser.GetParam(i));
             fn.Normalize(wxPATH_NORM_LONG | wxPATH_NORM_DOTS | wxPATH_NORM_TILDE |
                          wxPATH_NORM_ABSOLUTE);
             m_commandLineFilesToOpen.push_back(fn.GetFullPath());

@@ -78,7 +78,18 @@ class StatisticsInfo
 
     void EnableAll() noexcept { m_statItemsToInclude.set(); }
 
-    void Set(const wxString& val) { m_statItemsToInclude = std::bitset<64>(val.ToStdString()); }
+    void Set(const wxString& val)
+        {
+        try
+            {
+            m_statItemsToInclude = std::bitset<64>(val.ToStdString());
+            }
+        catch (const std::exception&)
+            {
+            wxLogError(L"Invalid statistics info settings value.");
+            m_statItemsToInclude = 0;
+            }
+        }
 
     [[nodiscard]]
     wxString ToString() const
@@ -124,7 +135,15 @@ class StatisticsReportInfo
 
     void Set(const wxString& val)
         {
-        m_statReportItemsToInclude = std::bitset<10>(val.ToStdString());
+        try
+            {
+            m_statReportItemsToInclude = std::bitset<10>(val.ToStdString());
+            }
+        catch (const std::exception&)
+            {
+            wxLogError(L"Invalid statistics report settings value.");
+            m_statReportItemsToInclude = 0;
+            }
         }
 
     [[nodiscard]]
@@ -239,7 +258,18 @@ class GrammarInfo
 
     void EnableAll() noexcept { m_grammarItemsToInclude.set(); }
 
-    void Set(const wxString& val) { m_grammarItemsToInclude = std::bitset<64>(val.ToStdString()); }
+    void Set(const wxString& val)
+        {
+        try
+            {
+            m_grammarItemsToInclude = std::bitset<64>(val.ToStdString());
+            }
+        catch (const std::exception&)
+            {
+            wxLogError(L"Invalid grammar info settings value.");
+            m_grammarItemsToInclude = 0;
+            }
+        }
 
     [[nodiscard]]
     wxString ToString() const
@@ -374,7 +404,15 @@ class WordsBreakdownInfo
 
     void Set(const wxString& val)
         {
-        m_wordsBreakdownItemsToInclude = std::bitset<64>(val.ToStdString());
+        try
+            {
+            m_wordsBreakdownItemsToInclude = std::bitset<64>(val.ToStdString());
+            }
+        catch (const std::exception&)
+            {
+            wxLogError(L"Invalid words breakdown settings value.");
+            m_wordsBreakdownItemsToInclude = 0;
+            }
         }
 
     [[nodiscard]]
@@ -515,7 +553,15 @@ class SentencesBreakdownInfo
 
     void Set(const wxString& val)
         {
-        m_sentenceBreakdownItemsToInclude = std::bitset<64>(val.ToStdString());
+        try
+            {
+            m_sentenceBreakdownItemsToInclude = std::bitset<64>(val.ToStdString());
+            }
+        catch (const std::exception&)
+            {
+            wxLogError(L"Invalid sentences breakdown settings value.");
+            m_sentenceBreakdownItemsToInclude = 0;
+            }
         }
 
     [[nodiscard]]

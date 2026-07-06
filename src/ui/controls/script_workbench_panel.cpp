@@ -455,7 +455,7 @@ void ScriptWorkbenchPanel::ContinueScript()
     auto& luaRunner = wxGetApp().GetLuaRunner();
     // re-sync in case breakpoints were toggled in the margin while paused
     luaRunner.SetBreakpointLines(ToLuaLines(m_runningEditor->GetBreakpointLines()));
-    luaRunner.ContinueExecution();
+    LuaInterpreter::ContinueExecution();
     }
 
 //-------------------------------------------------------
@@ -502,7 +502,7 @@ void ScriptWorkbenchPanel::RunCurrentScript()
         isSelectionRun ? editor->LineFromPosition(editor->GetSelectionStart()) : 0;
 
     long lineNumber{ 0 };
-    errorMessage.ToLong(&lineNumber);
+    const bool parsed = errorMessage.ToLong(&lineNumber);
     --lineNumber; // zero-indexed
     lineNumber += lineOffset;
 
@@ -515,7 +515,7 @@ void ScriptWorkbenchPanel::RunCurrentScript()
         wxString::Format(_(L"Line #%s: %s"), std::to_wstring(lineNumber + 1), errorMessage),
         _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
 
-    if (lineNumber < 0)
+    if (!parsed || lineNumber < 0 || lineNumber >= editor->GetLineCount())
         {
         return;
         }
@@ -783,27 +783,30 @@ void ScriptWorkbenchPanel::ShowFindDialog()
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::Undo()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->Undo();
+        editor->Undo();
         }
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::Redo()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->Redo();
+        editor->Redo();
         }
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::DuplicateLine()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->LineDuplicate();
+        editor->LineDuplicate();
         }
     }
 
@@ -875,7 +878,7 @@ void ScriptWorkbenchPanel::Uncomment()
         {
         const wxString lineText = editor->GetLine(i);
         int firstCharPos = 0;
-        while (firstCharPos < static_cast<int>(lineText.length()) &&
+        while (std::cmp_less(firstCharPos, lineText.length()) &&
                (lineText[firstCharPos] == L' ' || lineText[firstCharPos] == L'\t'))
             {
             firstCharPos++;
@@ -891,69 +894,76 @@ void ScriptWorkbenchPanel::Uncomment()
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::Cut()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->Cut();
+        editor->Cut();
         }
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::Copy()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->Copy();
+        editor->Copy();
         }
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::Paste()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->Paste();
+        editor->Paste();
         }
     }
 
 //-------------------------------------------------------
 void ScriptWorkbenchPanel::SelectAll()
     {
-    if (GetCurrentEditor() != nullptr)
+    auto* editor = GetCurrentEditor();
+    if (editor != nullptr)
         {
-        GetCurrentEditor()->SelectAll();
+        editor->SelectAll();
         }
     }
 
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanCut() const
     {
-    return GetCurrentEditor() != nullptr &&
-           GetCurrentEditor()->GetSelectionStart() != GetCurrentEditor()->GetSelectionEnd();
+    const auto* editor = GetCurrentEditor();
+    return editor != nullptr && editor->GetSelectionStart() != editor->GetSelectionEnd();
     }
 
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanCopy() const
     {
-    return GetCurrentEditor() != nullptr &&
-           GetCurrentEditor()->GetSelectionStart() != GetCurrentEditor()->GetSelectionEnd();
+    const auto* editor = GetCurrentEditor();
+    return editor != nullptr && editor->GetSelectionStart() != editor->GetSelectionEnd();
     }
 
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanPaste() const
     {
-    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanPaste();
+    const auto* editor = GetCurrentEditor();
+    return editor != nullptr && editor->CanPaste();
     }
 
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanUndo() const
     {
-    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanUndo();
+    const auto* editor = GetCurrentEditor();
+    return editor != nullptr && editor->CanUndo();
     }
 
 //-------------------------------------------------------
 bool ScriptWorkbenchPanel::CanRedo() const
     {
-    return GetCurrentEditor() != nullptr && GetCurrentEditor()->CanRedo();
+    const auto* editor = GetCurrentEditor();
+    return editor != nullptr && editor->CanRedo();
     }
 
 //-------------------------------------------------------
@@ -1046,8 +1056,8 @@ void ScriptWorkbenchPanel::RefreshDebugWindow()
     const auto debugReportBody =
         L"<!DOCTYPE html>\n<html>\n<head><meta name=\"color-scheme\" content=\"light dark\">"
         L"<style>html,body{height:100%;margin:0;background-color:Canvas;color:CanvasText;}"
-        L"body{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',"
-        L"'Twemoji Mozilla',sans-serif;font-size:11pt;padding:10px;box-sizing:border-box;}"
+        L"body{font-family:system-ui,sans-serif,'Apple Color Emoji','Segoe UI Emoji',"
+        L"'Noto Color Emoji','Twemoji Mozilla';font-size:11pt;padding:10px;box-sizing:border-box;}"
         L"</style></head>\n<body>" +
         m_debugContent + L"\n</body>\n</html>";
     m_debugMessageWindow->SetPage(debugReportBody, wxString{});

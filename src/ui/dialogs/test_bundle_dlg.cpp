@@ -524,6 +524,7 @@ void TestBundleDlg::SelectPage(const wxWindowID pageId)
         if ((page != nullptr) && page->GetId() == pageId)
             {
             m_sideBarBook->SetSelection(i);
+            break;
             }
         }
     }
