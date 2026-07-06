@@ -56,7 +56,7 @@
 #include "../indexing/word_collection.h"
 
 template<typename documentT, typename highlightDeterminantT>
-static size_t FormatWordCollectionHighlightedWords(
+size_t FormatWordCollectionHighlightedWords(
     const std::shared_ptr<documentT>& theDocument, const highlightDeterminantT& shouldHighlight,
     std::wstring& text, const std::wstring& headerSection, const std::wstring& endSection,
     const std::wstring& legend, const std::wstring& ignoreHighlightBegin,
@@ -283,7 +283,7 @@ static size_t FormatWordCollectionHighlightedWords(
 
 //-----------------------------------------------------------
 template<typename documentT>
-static size_t FormatWordCollectionHighlightedGrammarIssues(
+size_t FormatWordCollectionHighlightedGrammarIssues(
     const std::shared_ptr<documentT>& theDocument, const size_t longSentenceValue,
     std::wstring& text, const std::wstring& headerSection, const std::wstring& endSection,
     const std::wstring& legend, const std::wstring& highlightBegin,
@@ -604,10 +604,10 @@ static size_t FormatWordCollectionHighlightedGrammarIssues(
 
 //------------------------------------------------
 template<typename documentT>
-static size_t
-FormatFilteredWordCollection(const std::shared_ptr<documentT>& theDocument, std::wstring& text,
-                             const InvalidTextFilterFormat validTextFormatting,
-                             const bool removeFilePaths, const bool stripAbbreviations)
+size_t FormatFilteredWordCollection(const std::shared_ptr<documentT>& theDocument,
+                                    std::wstring& text,
+                                    const InvalidTextFilterFormat validTextFormatting,
+                                    const bool removeFilePaths, const bool stripAbbreviations)
     {
     text.clear();
     // punctuation markers

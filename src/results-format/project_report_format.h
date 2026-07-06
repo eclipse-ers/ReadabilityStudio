@@ -105,19 +105,16 @@ class ProjectReportFormat
     /** @returns Project statistics information from a project.
         @param project The project to analyze statistics from.
         @param statsInfo Information about which statistics to include.
-        @param attentionColor Color to highlight important details.
         @param[out] listData An optional data grid to store tabular results.\n
             Pass in null to ignore this parameter.*/
     [[nodiscard]]
     static wxString
     FormatStatisticsInfo(const BaseProject* project, const StatisticsReportInfo& statsInfo,
-                         const wxColour& attentionColor,
                          const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     /** @returns Dolch statistics information from a project.
         @param project The project to analyze Dolch statistics from.
         @param statsInfo Information about which statistics to include.
         @param includeExplanation True to include detailed explanations in the report.
-        @param attentionColor Color to highlight important details.
         @param[out] listData An optional data grid to store tabular results.\n
                Pass in null to ignore this parameter.\n
                Caller is responsible for clearing this data grid before calling this function
@@ -127,7 +124,6 @@ class ProjectReportFormat
     [[nodiscard]]
     static wxString FormatDolchStatisticsInfo(
         const BaseProject* project, const StatisticsReportInfo& statsInfo, bool includeExplanation,
-        const wxColour& attentionColor,
         const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     /** @brief Formats a full sentence from a project's sentence information structure.
         @param project The project containing the sentence and words.
@@ -144,28 +140,6 @@ class ProjectReportFormat
     FormatSentence(const BaseProject* project, const grammar::sentence_info& sentence,
                    std::vector<punctuation::punctuation_mark>::const_iterator& punctStart,
                    const std::vector<punctuation::punctuation_mark>::const_iterator& punctEnd);
-
-    /// @returns The `<span>` start for something in the report that should be in red.
-    [[nodiscard]]
-    static wxString GetIssueSpanStart()
-        {
-        return wxSystemSettings::GetAppearance().IsDark() ? L"<span style=\"color:#ED5C7A\">" :
-                                                            L"<span style=\"color:#FF0000\">";
-        }
-
-    /// @returns The header color for a report table.
-    [[nodiscard]]
-    static wxColour GetReportHeaderColor()
-        {
-        return { L"#C3D7D7" };
-        }
-
-    /// @returns The header color for a report table.
-    [[nodiscard]]
-    static wxColour GetReportHeaderFontColor()
-        {
-        return wxColour{ 0, 0, 0 };
-        }
 
     /** @returns A formula formatted into HTML.
         @param formula The formula to format.*/
@@ -188,12 +162,6 @@ class ProjectReportFormat
 
   private:
     [[nodiscard]]
-    static wxColour GetReportNoteHeaderColor()
-        {
-        return { L"#55A8E6" };
-        }
-
-    [[nodiscard]]
     static wxString FormatDolchHeader(const wxString& label)
         {
         return wxString::Format(L"\n<div class='explanation-card-header'>%s</div>"
@@ -211,10 +179,66 @@ class ProjectReportFormat
                                 label, value, percent);
         }
 
+    /** @brief Formats a Dolch coverage row, highlighting the value when the
+            percentage is high enough to warrant attention.
+        @returns HTML for the row, and updates listData if provided.
+        @param rowLabel The label for the row.
+        @param count The number of words found.
+        @param percentage The percentage of the category.
+        @param percentText The already-localized "(NN% of all Dolch X)" text for the HTML row.
+        @param listPercentText The already-localized "NN% of all Dolch X" text for the list data.
+        @param listDataLabel The label for the list data item.
+        @param listDataItemCount The current list data item count (updated).
+        @param listData The list data provider.*/
+    [[nodiscard]]
+    static wxString FormatDolchCoverageRow(
+        const wxString& rowLabel, size_t count, double percentage, const wxString& percentText,
+        const wxString& listPercentText, const wxString& listDataLabel, size_t& listDataItemCount,
+        const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
+
+    /** @brief Formats a Dolch word count row with total and unique counts.
+        @returns HTML for the rows, and updates listData if provided.
+        @param rowLabel The label for the total row.
+        @param count The total count for the category.
+        @param totalWords The total word count in the document.
+        @param uniqueRowLabel The label for the unique row.
+        @param uniqueCount The unique count for the category.
+        @param listDataCountLabel The label for the total list data item.
+        @param listDataUniqueLabel The label for the unique list data item.
+        @param listDataItemCount The current list data item count (updated).
+        @param listData The list data provider.*/
+    [[nodiscard]]
+    static wxString
+    FormatDolchWordsRow(const wxString& rowLabel, size_t count, size_t totalWords,
+                        const wxString& uniqueRowLabel, size_t uniqueCount,
+                        const wxString& listDataCountLabel, const wxString& listDataUniqueLabel,
+                        size_t& listDataItemCount,
+                        const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
+
     /** @returns A test's factors formatted into an HTML table.
         @param test The test to format.*/
     [[nodiscard]]
     static wxString FormatTestFactors(const readability::readability_test& test);
+
+    /** @brief Populates a two-column list data row (label + value).
+        @param label The label for the row.
+        @param value The formatted value string.
+        @param listDataItemCount The current row index (incremented).
+        @param listData The list data provider.*/
+    static void
+    PopulateListRow(const wxString& label, const wxString& value, size_t& listDataItemCount,
+                    const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
+
+    /** @brief Populates a three-column list data row (label + value + percent).
+        @param label The label for the row.
+        @param value The formatted value string.
+        @param percent The formatted percentage string.
+        @param listDataItemCount The current row index (incremented).
+        @param listData The list data provider.*/
+    static void
+    PopulateListRow(const wxString& label, const wxString& value, const wxString& percent,
+                    size_t& listDataItemCount,
+                    const std::shared_ptr<Wisteria::UI::ListCtrlExDataProviderBase>& listData);
     };
 
 #endif // PROJECT_REPORT_FORMAT_H

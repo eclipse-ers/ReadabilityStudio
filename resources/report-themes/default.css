@@ -80,6 +80,17 @@ body
   margin: 5px 0;
   }
 
+/* ---------- Issue text ----------------------------------------- */
+
+.issue
+  { color: light-dark(#FF0000, #F85149); }
+
+.attention
+  { color: light-dark(#1A7F37, #3FB950); }
+
+.warning
+  { color: light-dark(#9A6700, #D29922); }
+
 /* ---------- Report banner -------------------------------------- */
 
 .report-banner

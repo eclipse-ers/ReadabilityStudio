@@ -4112,10 +4112,8 @@ void ProjectDoc::DisplayStatistics()
                         _(L"Statistics Report [%s]"), GetTitle()),
                     wxGetApp().GetAppOptions()->GetReportTheme()) +
                 ProjectReportFormat::FormatReportBanner(_(L"Statistics Summary"), GetTitle()) +
-                ProjectReportFormat::FormatStatisticsInfo(
-                    this, GetStatisticsReportInfo(),
-                    wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT),
-                    view->GetSummaryStatisticsListData()) +
+                ProjectReportFormat::FormatStatisticsInfo(this, GetStatisticsReportInfo(),
+                                                          view->GetSummaryStatisticsListData()) +
                 ProjectReportFormat::FormatHtmlReportEnd();
             // if document failed to be loaded, and we are just showing the basic stats,
             // then remove the links to the various windows that won't be shown
@@ -4195,19 +4193,17 @@ void ProjectDoc::DisplayStatistics()
             }
         if (sumWindow != nullptr)
             {
-            sumWindow->SetPage(
-                NavLink::AnchorsToExplanationScheme(
-                    ProjectReportFormat::FormatHtmlReportStart(
-                        wxString::Format( // TRANSLATORS: %s is the project name
-                            _(L"Dolch Summary [%s]"), GetTitle()),
-                        wxGetApp().GetAppOptions()->GetReportTheme()) +
-                    ProjectReportFormat::FormatReportBanner(_(L"Dolch Sight Words Summary"),
-                                                            GetTitle()) +
-                    ProjectReportFormat::FormatDolchStatisticsInfo(
-                        this, GetStatisticsReportInfo(), true,
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr) +
-                    ProjectReportFormat::FormatHtmlReportEnd()),
-                wxString{});
+            sumWindow->SetPage(NavLink::AnchorsToExplanationScheme(
+                                   ProjectReportFormat::FormatHtmlReportStart(
+                                       wxString::Format( // TRANSLATORS: %s is the project name
+                                           _(L"Dolch Summary [%s]"), GetTitle()),
+                                       wxGetApp().GetAppOptions()->GetReportTheme()) +
+                                   ProjectReportFormat::FormatReportBanner(
+                                       _(L"Dolch Sight Words Summary"), GetTitle()) +
+                                   ProjectReportFormat::FormatDolchStatisticsInfo(
+                                       this, GetStatisticsReportInfo(), true, nullptr) +
+                                   ProjectReportFormat::FormatHtmlReportEnd()),
+                               wxString{});
             }
         }
     else

@@ -155,18 +155,27 @@ static double UniqueUnfamiliarDaleChallWordCount(const te_expr* context)
         ->GetTotalUniqueDCHardWords();
     }
 
-/// Performs a New Dale-Chall test with a custom familiar word list.
-/// @param context The TinyEpr++ expression object.
+/// @returns The project and current custom test name from the expression context.
+/// @throws std::runtime_error if the custom test cannot be found.
 [[nodiscard]]
-static double CustomNewDaleChall(const te_expr* context)
+static std::pair<const BaseProject*, wxString> GetProjectAndCustomTestName(const te_expr* context)
     {
     const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
+    wxString testName = project->GetCurrentCustomTest();
     if (!project->HasCustomTest(testName))
         {
         throw std::runtime_error(
             _(L"Internal error: unable to find custom test by name.").ToUTF8());
         }
+    return { project, std::move(testName) };
+    }
+
+/// Performs a New Dale-Chall test with a custom familiar word list.
+/// @param context The TinyEpr++ expression object.
+[[nodiscard]]
+static double CustomNewDaleChall(const te_expr* context)
+    {
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     if (!project->GetCustomTest(testName)->GetIterator()->is_using_familiar_words())
         {
         throw std::runtime_error(_(L"Test has not defined what an unfamiliar word is. "
@@ -215,13 +224,7 @@ static double CustomNewDaleChall(const te_expr* context)
 [[nodiscard]]
 static double CustomSpache(const te_expr* context)
     {
-    const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
-    if (!project->HasCustomTest(testName))
-        {
-        throw std::runtime_error(
-            _(L"Internal error: unable to find custom test by name.").ToUTF8());
-        }
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     if (!project->GetCustomTest(testName)->GetIterator()->is_using_familiar_words())
         {
         throw std::runtime_error(_(L"Test has not defined what an unfamiliar word is. "
@@ -256,13 +259,7 @@ static double CustomSpache(const te_expr* context)
 [[nodiscard]]
 static double CustomHarrisJacobson(const te_expr* context)
     {
-    const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
-    if (!project->HasCustomTest(testName))
-        {
-        throw std::runtime_error(
-            _(L"Internal error: unable to find custom test by name.").ToUTF8());
-        }
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     if (!project->GetCustomTest(testName)->GetIterator()->is_using_familiar_words())
         {
         throw std::runtime_error(_(L"Test has not defined what an unfamiliar word is. "
@@ -308,13 +305,7 @@ static double CustomHarrisJacobson(const te_expr* context)
 [[nodiscard]]
 static double UnfamiliarWordCount(const te_expr* context)
     {
-    const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
-    if (!project->HasCustomTest(testName))
-        {
-        throw std::runtime_error(
-            _(L"Internal error: unable to find custom test by name.").ToUTF8());
-        }
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     return project->GetCustomTest(testName)->GetUnfamiliarWordCount();
     }
 
@@ -323,13 +314,7 @@ static double UnfamiliarWordCount(const te_expr* context)
 [[nodiscard]]
 static double UniqueUnfamiliarWordCount(const te_expr* context)
     {
-    const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
-    if (!project->HasCustomTest(testName))
-        {
-        throw std::runtime_error(
-            _(L"Internal error: unable to find custom test by name.").ToUTF8());
-        }
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     return project->GetCustomTest(testName)->GetUniqueUnfamiliarWordCount();
     }
 
@@ -338,13 +323,7 @@ static double UniqueUnfamiliarWordCount(const te_expr* context)
 [[nodiscard]]
 static double FamiliarWordCount(const te_expr* context)
     {
-    const BaseProject* project = (dynamic_cast<const FormulaProject*>(context))->GetProject();
-    const wxString testName = project->GetCurrentCustomTest();
-    if (!project->HasCustomTest(testName))
-        {
-        throw std::runtime_error(
-            _(L"Internal error: unable to find custom test by name.").ToUTF8());
-        }
+    const auto [project, testName] = GetProjectAndCustomTestName(context);
     return project->GetTotalWords() - project->GetCustomTest(testName)->GetUnfamiliarWordCount();
     }
 
@@ -641,6 +620,10 @@ ReadabilityFormulaParser::ReadabilityFormulaParser(const BaseProject* project,
                                                    const wchar_t listSeparator)
     : m_formulaProject(project)
     {
+    if (project == nullptr)
+        {
+        throw std::invalid_argument("Project must not be null.");
+        }
     wxASSERT(decimalSeparator <= 255);
     wxASSERT(listSeparator <= 255);
     if (decimalSeparator <= 255 && listSeparator <= 255)

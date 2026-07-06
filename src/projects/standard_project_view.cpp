@@ -1848,14 +1848,10 @@ void ProjectView::UpdateStatistics()
     {
     auto* doc = dynamic_cast<ProjectDoc*>(GetDocument());
 
-    // Determine the stats rows color from the list control's background color.
-    const wxColour listRowColor = GetReadabilityScoresList()->GetBackgroundColour();
-    // Depending on the background, stats row color
-    // will be 3% more dark or 50% brighter.
-    const int alpha = listRowColor.GetRGB() > 0x808080 ? 97 : 150;
-
+    // Neutral slate gray at ~50% luminance so it reads well against both light
+    // and dark list backgrounds (and against both light and dark row text).
     wxListItemAttr statRowAttribs;
-    statRowAttribs.SetBackgroundColour(listRowColor.ChangeLightness(alpha));
+    statRowAttribs.SetBackgroundColour(wxColour{ L"#6B7280" });
 
     const wxString selectedItem =
         GetReadabilityScoresList()->GetResultsListCtrl()->GetSelectedText();

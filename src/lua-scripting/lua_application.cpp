@@ -876,7 +876,7 @@ namespace LuaScripting
                 {
                 workbench->DebugOutput(wxString::Format(
                     _DT(L"❌Broken link in '<span style='font-weight:bold;'>%s</span>': "
-                        "<span style='color:#FF7386; font-weight:bold;'>%s</span>",
+                        "<span class='issue' style='font-weight:bold;'>%s</span>",
                         DTExplanation::DebugMessage),
                     badLink.first, badLink.second));
                 }
@@ -892,11 +892,11 @@ namespace LuaScripting
             {
             if (workbench != nullptr)
                 {
-                workbench->DebugOutput(wxString::Format(
-                    _DT(L"❌Bad image size in "
-                        "'<span style='font-weight:bold;'>%s</span>%s</span>': "
-                        "<span style='color:#FF7386; font-weight:bold;'>%s</span>"),
-                    badImage.first, badImage.second));
+                workbench->DebugOutput(
+                    wxString::Format(_DT(L"❌Bad image size in "
+                                         "'<span style='font-weight:bold;'>%s</span>%s</span>': "
+                                         "<span class='issue' style='font-weight:bold;'>%s</span>"),
+                                     badImage.first, badImage.second));
                 }
             wxLogError(L"Bad image size in '%s': %s", badImage.first, badImage.second);
             }
@@ -963,7 +963,7 @@ namespace LuaScripting
             DebugPrint(wxString::Format( // TRANSLATORS: %s are formatting tags and
                                          // should stay wrapped around "Warning"
                 _(L"⚠️%sWarning%s: unable to make %s path absolute.") + lineInfo,
-                L"<span style='color:#00A2E8; font-weight:bold;'>", L"</span>",
+                L"<span class='warning' style='font-weight:bold;'>", L"</span>",
                 wxString{ luaL_checkstring(L, 2), wxConvUTF8 }));
             DebugPrint(wxString{});
             lua_pushstring(L, wxString{ luaL_checkstring(L, 2), wxConvUTF8 });

@@ -1174,6 +1174,44 @@ void ReadabilityAppOptions::LoadStatsNode(tinyxml2::XMLElement* projectSettings)
     }
 
 //------------------------------------------------
+static void LoadFontFromNode(tinyxml2::XMLElement* fontNode, wxFont& targetFont,
+                             lily_of_the_valley::html_extract_text& filterHtml)
+    {
+    const int pointSize = fontNode->ToElement()->IntAttribute(
+        XmlFormat::FONT_POINT_SIZE_TAG.data(),
+        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+    const int style =
+        fontNode->ToElement()->IntAttribute(XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
+    const int weight =
+        fontNode->ToElement()->IntAttribute(XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
+    const int underlined =
+        fontNode->ToElement()->IntAttribute(XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
+    // get the font point size
+    targetFont.SetPointSize((pointSize > 0) ?
+                                pointSize :
+                                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
+    // get the font style
+    targetFont.SetStyle(static_cast<wxFontStyle>(style));
+    // get the font weight
+    targetFont.SetWeight(static_cast<wxFontWeight>(weight));
+    // get the font underlining
+    targetFont.SetUnderlined(int_to_bool(underlined));
+    // get the font facename
+    const char* faceName = fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
+    if (faceName != nullptr)
+        {
+        const auto faceNameStr =
+            Wisteria::TextStream::CharStreamToUnicode(faceName, std::strlen(faceName));
+        const wchar_t* filteredText =
+            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
+        if ((filteredText != nullptr) && wxFontEnumerator::IsValidFacename(filteredText))
+            {
+            targetFont.SetFaceName(wxString{ filteredText });
+            }
+        }
+    }
+
+//------------------------------------------------
 void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings)
     {
     lily_of_the_valley::html_extract_text filterHtml;
@@ -1546,41 +1584,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = xAxisNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_xAxisFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_xAxisFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_xAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_xAxisFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_xAxisFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_xAxisFont, filterHtml);
                     }
                 }
             auto* yAxisNode = axisNode->FirstChildElement(XML_Y_AXIS.data());
@@ -1594,41 +1598,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = yAxisNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_yAxisFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_yAxisFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_yAxisFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_yAxisFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_yAxisFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_yAxisFont, filterHtml);
                     }
                 }
             }
@@ -1648,41 +1618,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = topTitleNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_topTitleFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_topTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_topTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_topTitleFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_topTitleFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_topTitleFont, filterHtml);
                     }
                 }
             auto* bottomTitleNode = titleNode->FirstChildElement(XML_BOTTOM_TITLE.data());
@@ -1697,41 +1633,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = bottomTitleNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_bottomTitleFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_bottomTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_bottomTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_bottomTitleFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_bottomTitleFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_bottomTitleFont, filterHtml);
                     }
                 }
             auto* leftTitleNode = titleNode->FirstChildElement(XML_LEFT_TITLE.data());
@@ -1746,41 +1648,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = leftTitleNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_leftTitleFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_leftTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_leftTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_leftTitleFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_leftTitleFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_leftTitleFont, filterHtml);
                     }
                 }
             auto* rightTitleNode = titleNode->FirstChildElement(XML_RIGHT_TITLE.data());
@@ -1795,41 +1663,7 @@ void ReadabilityAppOptions::LoadGraphsNode(tinyxml2::XMLElement* projectSettings
                 auto* fontNode = rightTitleNode->FirstChildElement(XML_FONT.data());
                 if (fontNode != nullptr)
                     {
-                    const int pointSize = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    const int style = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                    const int weight = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                    const int underlined = fontNode->ToElement()->IntAttribute(
-                        XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                    // get the font point size
-                    m_rightTitleFont.SetPointSize(
-                        (pointSize > 0) ?
-                            pointSize :
-                            wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                    // get the font style
-                    m_rightTitleFont.SetStyle(static_cast<wxFontStyle>(style));
-                    // get the font weight
-                    m_rightTitleFont.SetWeight(static_cast<wxFontWeight>(weight));
-                    // get the font underlining
-                    m_rightTitleFont.SetUnderlined(int_to_bool(underlined));
-                    // get the font facename
-                    const char* faceName =
-                        fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                    if (faceName != nullptr)
-                        {
-                        const auto faceNameStr = Wisteria::TextStream::CharStreamToUnicode(
-                            faceName, std::strlen(faceName));
-                        const wchar_t* filteredText =
-                            filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                        if ((filteredText != nullptr) &&
-                            wxFontEnumerator::IsValidFacename(filteredText))
-                            {
-                            m_rightTitleFont.SetFaceName(wxString(filteredText));
-                            }
-                        }
+                    LoadFontFromNode(fontNode, m_rightTitleFont, filterHtml);
                     }
                 }
             }
@@ -2515,28 +2349,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
         auto* fontNode = editorSettingsNode->FirstChildElement(XML_EDITOR_FONT.data());
         if (fontNode != nullptr)
             {
-            const int pointSize = fontNode->ToElement()->IntAttribute(
-                XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-            const int style = fontNode->ToElement()->IntAttribute(XmlFormat::FONT_STYLE_TAG.data(),
-                                                                  wxFONTSTYLE_NORMAL);
-            const int weight = fontNode->ToElement()->IntAttribute(
-                XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-            const int underlined =
-                fontNode->ToElement()->IntAttribute(XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-            // get the font point size
-            m_editorFont.SetPointSize(
-                (pointSize > 0) ? pointSize :
-                                  wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-            // get the font style
-            m_editorFont.SetStyle(static_cast<wxFontStyle>(style));
-            // get the font weight
-            m_editorFont.SetWeight(static_cast<wxFontWeight>(weight));
-            // get the font underlining
-            m_editorFont.SetUnderlined(int_to_bool(underlined));
-            // get the font facename
-            m_editorFont.SetFaceName(TiXmlNodeAttributeToString(
-                fontNode, XmlFormat::FONT_FACE_NAME_TAG.data(), m_editorFont.GetFaceName()));
+            LoadFontFromNode(fontNode, m_editorFont, filterHtml);
             }
         auto* indentNode = editorSettingsNode->FirstChildElement(XML_EDITOR_INDENT.data());
         if (indentNode != nullptr)
@@ -2968,41 +2781,7 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             auto* fontNode = textViewNode->FirstChildElement(XML_DOCUMENT_DISPLAY_FONT.data());
             if (fontNode != nullptr)
                 {
-                const int pointSize = fontNode->ToElement()->IntAttribute(
-                    XmlFormat::FONT_POINT_SIZE_TAG.data(),
-                    wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                const int style = fontNode->ToElement()->IntAttribute(
-                    XmlFormat::FONT_STYLE_TAG.data(), wxFONTSTYLE_NORMAL);
-                const int weight = fontNode->ToElement()->IntAttribute(
-                    XmlFormat::FONT_WEIGHT_TAG.data(), wxFONTWEIGHT_NORMAL);
-                const int underlined =
-                    fontNode->ToElement()->IntAttribute(XmlFormat::FONT_UNDERLINE_TAG.data(), 0);
-                // get the font point size
-                m_textViewFont.SetPointSize(
-                    (pointSize > 0) ?
-                        pointSize :
-                        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize());
-                // get the font style
-                m_textViewFont.SetStyle(static_cast<wxFontStyle>(style));
-                // get the font weight
-                m_textViewFont.SetWeight(static_cast<wxFontWeight>(weight));
-                // get the font underlining
-                m_textViewFont.SetUnderlined(int_to_bool(underlined));
-                // get the font facename
-                const char* faceName =
-                    fontNode->ToElement()->Attribute(XmlFormat::FONT_FACE_NAME_TAG.data());
-                if (faceName != nullptr)
-                    {
-                    const auto faceNameStr =
-                        Wisteria::TextStream::CharStreamToUnicode(faceName, std::strlen(faceName));
-                    const wchar_t* filteredText =
-                        filterHtml(faceNameStr.c_str(), faceNameStr.length(), true, false);
-                    if ((filteredText != nullptr) &&
-                        wxFontEnumerator::IsValidFacename(filteredText))
-                        {
-                        m_textViewFont.SetFaceName(wxString(filteredText));
-                        }
-                    }
+                LoadFontFromNode(fontNode, m_textViewFont, filterHtml);
                 }
             }
         }

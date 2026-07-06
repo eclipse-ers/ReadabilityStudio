@@ -410,7 +410,7 @@ namespace LuaScripting
                         // TRANSLATORS: %s are formatting tags and
                         // should stay wrapped around "Warning"
                         _(L"⚠️%sWarning%s: unable to find \"%s\" in text window.") + lineInfo,
-                        L"<span style='color:#00A2E8; font-weight:bold;'>", L"</span>",
+                        L"<span class='warning' style='font-weight:bold;'>", L"</span>",
                         wxString{ contentToFind }.Truncate(10).append(
                             contentToFind.length() > 10 ? wxString{ _DT(L"...") } : wxString{})));
                     DebugPrint(wxString{});

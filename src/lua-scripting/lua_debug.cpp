@@ -156,7 +156,7 @@ namespace LuaScripting
                                          // should stay wrapped around "Error"
                 _(L"❌%sError%s: call to %s returned empty because "
                   "the script has not been saved yet."),
-                L"<span style='color:#FF7386; font-weight:bold;'>", L"</span>", __func__));
+                L"<span class='issue' style='font-weight:bold;'>", L"</span>", __func__));
             lua_pushstring(L, "");
             return 1;
             }

@@ -1773,13 +1773,11 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
             {
             const wxString docTable = L"<br /><span class='emphasis'>" +
                                       list->GetItemTextFormatted(scoreListItem, 0) + L"</span><hr>";
-            const wxString text =
-                docTable + ProjectReportFormat::FormatStatisticsInfo(
-                               doc->GetDocuments()[i],
-                               // use the batches settings, which may have just been updated,
-                               // not the subproject's
-                               doc->GetStatisticsReportInfo(),
-                               wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr);
+            const wxString text = docTable + ProjectReportFormat::FormatStatisticsInfo(
+                                                 doc->GetDocuments()[i],
+                                                 // use the batches settings, which may have just
+                                                 // been updated, not the subproject's
+                                                 doc->GetStatisticsReportInfo(), nullptr);
             std::wstring textStripped{ text };
             lily_of_the_valley::html_format::strip_hyperlinks(textStripped, false);
             m_statsReport->SetPage(
@@ -2601,13 +2599,13 @@ void BatchProjectView::OnExportScoresAndStatistics([[maybe_unused]] wxCommandEve
     {
     const auto* doc = dynamic_cast<const BatchProjectDoc*>(GetDocument());
 
-    wxFileDialog fdialog(GetDocFrame(), _(L"Export Scores & Statistics"), wxString{},
-                         wxString::Format(
-                             // TRANSLATORS: %s is document title
-                             _(L"%s Scores & Statistics"), doc->GetTitle()),
-                         _(L"HTML Files (*.htm;*.html)|*.htm;*.html"),
-                         wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-    if (fdialog.ShowModal() != wxID_OK)
+    wxFileDialog fileDialog(GetDocFrame(), _(L"Export Scores & Statistics"), wxString{},
+                            wxString::Format(
+                                // TRANSLATORS: %s is document title
+                                _(L"%s Scores & Statistics"), doc->GetTitle()),
+                            _(L"HTML Files (*.htm;*.html)|*.htm;*.html"),
+                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (fileDialog.ShowModal() != wxID_OK)
         {
         return;
         }
@@ -2621,93 +2619,72 @@ void BatchProjectView::OnExportScoresAndStatistics([[maybe_unused]] wxCommandEve
         return;
         }
 
-    wxString htmlText =
-        wxString::Format(
-            L"<!DOCTYPE html>\n<html>\n<head>\n    "
-            "<title>%s</title>\n</head>\n<body>\n<table border='1' style='width:100%%; "
-            "border-collapse:collapse;'>",
-            _(L"Scores &amp; Statistics")) +
-        wxString::Format(
-            L"\n<tr style='background:%s;'>",
-            ProjectReportFormat::GetReportHeaderColor().GetAsString(wxC2S_HTML_SYNTAX));
-    const wxString tdStart = wxString::Format(
-        L"\n<td><span style='color:%s;'>",
-        ProjectReportFormat::GetReportHeaderFontColor().GetAsString(wxC2S_HTML_SYNTAX));
-    for (long colCount = 0; colCount < list->GetColumnCount(); ++colCount)
-        {
-        htmlText += tdStart + list->GetColumnName(colCount) + L"</span></td>";
-        }
-    if (doc->GetStatisticsReportInfo().IsParagraphEnabled())
-        {
-        htmlText += tdStart + _(L"Number of Paragraphs") + L"</span></td>";
-        }
-    if (doc->GetStatisticsReportInfo().IsSentencesEnabled())
-        {
-        htmlText += tdStart + _(L"Number of Sentences") + L"</span></td>";
-        }
-    if (doc->GetStatisticsReportInfo().IsWordsEnabled())
-        {
-        htmlText += tdStart + _(L"Number of Words") + L"</span></td>";
-        }
-    if (doc->GetStatisticsReportInfo().IsExtendedInformationEnabled())
-        {
-        htmlText += tdStart + _(L"Text Size") + L"</span></td>";
-        }
-    htmlText += L"</tr>";
+    wxString htmlText = ProjectReportFormat::FormatHtmlReportStart(_(L"Scores &amp; Statistics"));
+
+    const auto formatRow = [](const wxString& label, const wxString& value)
+    {
+        return wxString::Format(L"\n<div class='data-row'><span>%s</span><span>%s</span></div>",
+                                label, value);
+    };
+
     for (long rowCount = 0; rowCount < list->GetItemCount(); ++rowCount)
         {
-        htmlText += L"\n<tr>";
+        htmlText += L"\n<div class='explanation-card'>"
+                    "\n<div class='explanation-card-header'>" +
+                    list->GetItemTextEx(rowCount, 0) +
+                    L"</div>"
+                    "\n<div class='explanation-card-body'>";
         for (long colCount = 0; colCount < list->GetColumnCount(); ++colCount)
             {
-            htmlText += L"<td>" + list->GetItemTextEx(rowCount, colCount) + L"</td>";
+            htmlText +=
+                formatRow(list->GetColumnName(colCount), list->GetItemTextEx(rowCount, colCount));
             }
         const BaseProject* subDoc = doc->GetDocument(list->GetItemTextEx(rowCount, 0));
         if (subDoc != nullptr)
             {
             if (doc->GetStatisticsReportInfo().IsParagraphEnabled())
                 {
-                htmlText += wxString::Format(
-                    L"<td>%s</td>", wxNumberFormatter::ToString(
-                                        subDoc->GetTotalParagraphs(), 0,
-                                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                htmlText += formatRow(_(L"Number of Paragraphs"),
+                                      wxNumberFormatter::ToString(
+                                          subDoc->GetTotalParagraphs(), 0,
+                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                                              wxNumberFormatter::Style::Style_WithThousandsSep));
                 }
             if (doc->GetStatisticsReportInfo().IsSentencesEnabled())
                 {
-                htmlText += wxString::Format(
-                    L"<td>%s</td>", wxNumberFormatter::ToString(
-                                        subDoc->GetTotalSentences(), 0,
-                                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                htmlText += formatRow(_(L"Number of Sentences"),
+                                      wxNumberFormatter::ToString(
+                                          subDoc->GetTotalSentences(), 0,
+                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                                              wxNumberFormatter::Style::Style_WithThousandsSep));
                 }
             if (doc->GetStatisticsReportInfo().IsWordsEnabled())
                 {
-                htmlText += wxString::Format(
-                    L"<td>%s</td>", wxNumberFormatter::ToString(
-                                        subDoc->GetTotalWords(), 0,
-                                        wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                            wxNumberFormatter::Style::Style_WithThousandsSep));
+                htmlText += formatRow(_(L"Number of Words"),
+                                      wxNumberFormatter::ToString(
+                                          subDoc->GetTotalWords(), 0,
+                                          wxNumberFormatter::Style::Style_NoTrailingZeroes |
+                                              wxNumberFormatter::Style::Style_WithThousandsSep));
                 }
             if (doc->GetStatisticsReportInfo().IsExtendedInformationEnabled())
                 {
-                htmlText +=
-                    L"<td>" +
+                htmlText += formatRow(
+                    _(L"Text Size"),
                     wxString::Format(
                         // TRANSLATORS: %s is number of kilobytes in a file
                         _(L"%s Kbs."), wxNumberFormatter::ToString(
                                            safe_divide<double>(subDoc->GetTextSize(), 1024), 2,
                                            wxNumberFormatter::Style::Style_NoTrailingZeroes |
-                                               wxNumberFormatter::Style::Style_WithThousandsSep)) +
-                    L"</td>";
+                                               wxNumberFormatter::Style::Style_WithThousandsSep)));
                 }
             }
-        htmlText += L"</tr>";
+        htmlText += L"\n</div></div>";
         }
-    htmlText += L"\n</table>\n</body>\n</html>";
+    htmlText += ProjectReportFormat::FormatHtmlReportEnd();
     std::wstring strippedHTML{ htmlText };
     lily_of_the_valley::html_format::set_encoding(strippedHTML);
-    wxFileName(fdialog.GetPath()).SetPermissions(wxS_DEFAULT);
-    wxFile outFile(fdialog.GetPath(), wxFile::write);
+    wxFileName{ fileDialog.GetPath() }.SetPermissions(wxS_DEFAULT);
+    wxFile outFile{ fileDialog.GetPath(), wxFile::write };
     outFile.Write(strippedHTML);
     }
 
@@ -2822,8 +2799,7 @@ void BatchProjectView::OnExportStatisticsReport([[maybe_unused]] wxCommandEvent&
             }
 
         wxString formattedStats = ProjectReportFormat::FormatStatisticsInfo(
-            doc->GetDocuments()[i], doc->GetStatisticsReportInfo(),
-            wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT), nullptr);
+            doc->GetDocuments()[i], doc->GetStatisticsReportInfo(), nullptr);
         if (stripLinks(formattedStats.wc_str(), formattedStats.length()) != nullptr)
             {
             formattedStats.assign(stripLinks.get_filtered_text(),

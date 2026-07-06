@@ -145,18 +145,11 @@ void ExplanationListCtrl::OnShow(wxShowEvent& event)
             !GetExplanationView()->IsBeingDeleted())
             {
             GetExplanationView()->Hide();
-            GetExplanationView()->SetPage(
-                NavLink::AnchorsToExplanationScheme(wxString::Format(
-                    _DT(L"<!DOCTYPE html><html><head>"
-                        "<meta name='color-scheme' content='light dark' />"
-                        "<meta name='generator' content='%s' />"
-                        "<style>%s</style>"
-                        "</head><body>%s</body></html>"),
-                    wxTheApp->GetAppName(),
-                    ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
-                                                     wxGetApp().GetAppOptions()->GetReportTheme()),
-                    m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
-                wxString{});
+            const auto explanationIter =
+                m_explanations.find(GetResultsListCtrl()->GetItemTextEx(selected, 0));
+            const wxString& explanationBody =
+                (explanationIter != m_explanations.end()) ? explanationIter->second : wxString{};
+            GetExplanationView()->SetPage(BuildExplanationPage(explanationBody), wxString{});
             }
         else if (GetResultsListCtrl()->GetItemCount() == 0)
             {
@@ -196,6 +189,21 @@ void ExplanationListCtrl::ShowNoTestsMessage()
                              _(L"No readability test results currently available.")),
             wxString{});
         }
+    }
+
+//------------------------------------------------------
+wxString ExplanationListCtrl::BuildExplanationPage(const wxString& body) const
+    {
+    return NavLink::AnchorsToExplanationScheme(
+        wxString::Format(_DT(L"<!DOCTYPE html><html><head>"
+                             "<meta name='color-scheme' content='light dark' />"
+                             "<meta name='generator' content='%s' />"
+                             "<style>%s</style>"
+                             "</head><body>%s</body></html>"),
+                         wxTheApp->GetAppName(),
+                         ProjectReportFormat::GetThemeCss(
+                             _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme()),
+                         body));
     }
 
 //------------------------------------------------------
@@ -420,18 +428,11 @@ void ExplanationListCtrl::OnItemSelected(const wxListEvent& event)
         return;
         }
     GetExplanationView()->Hide();
-    GetExplanationView()->SetPage(
-        NavLink::AnchorsToExplanationScheme(wxString::Format(
-            _DT(L"<!DOCTYPE html><html><head>"
-                "<meta name='color-scheme' content='light dark' />"
-                "<meta name='generator' content='%s' />"
-                "<style>%s</style>"
-                "</head><body>%s</body></html>"),
-            wxTheApp->GetAppName(),
-            ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
-                                             wxGetApp().GetAppOptions()->GetReportTheme()),
-            m_explanations[GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0)])),
-        wxString{});
+    const auto explanationIter =
+        m_explanations.find(GetResultsListCtrl()->GetItemTextEx(event.GetIndex(), 0));
+    const wxString& explanationBody =
+        (explanationIter != m_explanations.end()) ? explanationIter->second : wxString{};
+    GetExplanationView()->SetPage(BuildExplanationPage(explanationBody), wxString{});
     }
 
 //------------------------------------------------------
@@ -441,18 +442,11 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
     if (selected != wxNOT_FOUND && GetExplanationView() != nullptr)
         {
         GetExplanationView()->Hide();
-        GetExplanationView()->SetPage(
-            NavLink::AnchorsToExplanationScheme(wxString::Format(
-                _DT(L"<!DOCTYPE html><html><head>"
-                    "<meta name='color-scheme' content='light dark' />"
-                    "<meta name='generator' content='%s' />"
-                    "<style>%s</style>"
-                    "</head><body>%s</body></html>"),
-                wxTheApp->GetAppName(),
-                ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
-                                                 wxGetApp().GetAppOptions()->GetReportTheme()),
-                m_explanations[GetResultsListCtrl()->GetItemTextEx(selected, 0)])),
-            wxString{});
+        const auto explanationIter =
+            m_explanations.find(GetResultsListCtrl()->GetItemTextEx(selected, 0));
+        const wxString& explanationBody =
+            (explanationIter != m_explanations.end()) ? explanationIter->second : wxString{};
+        GetExplanationView()->SetPage(BuildExplanationPage(explanationBody), wxString{});
         }
     }
 
