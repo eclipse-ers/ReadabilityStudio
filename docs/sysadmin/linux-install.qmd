@@ -10,6 +10,7 @@ source('R/appdown.r')
 | Requirements |
 | :-- |
 | x86_64 processor |
+| {{< var INSTALLED_SIZE_MB >}} MB of disk space |
 | {{< var MIN_RAM >}} of RAM ({{< var RAM_RECOMMENDED >}} recommended) |
 
 ## Installing {-}

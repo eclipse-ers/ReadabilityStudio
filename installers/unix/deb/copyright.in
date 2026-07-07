@@ -1,0 +1,15 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ${readstudio_DESCRIPTION}
+Upstream-Contact: ${PROGRAM_AUTHOR}
+Source: ${ISSUE_PAGE}
+
+Files: *
+Copyright: 2006-${BUILD_YEAR} ${PROGRAM_AUTHOR}
+License: ${PROGRAM_LICENSE}
+
+License: ${PROGRAM_LICENSE}
+ This program is free software: you can use, modify, and/or redistribute it
+ under the terms of the Eclipse Public License 2.0.
+ .
+ On Debian systems, the full text of the Eclipse Public License 2.0 can be
+ found in the file '/usr/share/common-licenses/EPL-2.0'.

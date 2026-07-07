@@ -11,6 +11,7 @@ source('R/appdown.r')
 | :-- |
 | macOS {{< var MACOS_REQUIRED >}} (or higher) |
 | Apple Silicon or Intel processor |
+| {{< var INSTALLED_SIZE_MB >}} MB of disk space |
 | {{< var MIN_RAM >}} of RAM ({{< var RAM_RECOMMENDED >}} recommended) |
 
 ## Installing {-}

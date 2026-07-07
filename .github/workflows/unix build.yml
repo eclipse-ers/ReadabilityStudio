@@ -101,8 +101,23 @@ jobs:
              echo "Signing key fingerprint:"
              "$APPIMAGE" --appimage-signing-key || echo "(signing-key lookup not supported by this runtime)"
 
-      - name: Archive AppImage
-        uses: actions/upload-artifact@v4
+      - name: Build DEB package
+        run: |
+             VERSION=$(grep -oP 'project\(readstudio VERSION \K[0-9.]+' CMakeLists.txt)
+             dpkg-deb --build installers/unix/deb-stage \
+               installers/unix/readstudio_${VERSION}_amd64.deb
+
+      - name: Sign DEB package
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+             DEB=$(ls ./installers/unix/readstudio_*.deb | head -n1)
+             gpg --batch --yes --armor --detach-sign "$DEB"
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v7
         with:
-          name: Linux AppImage
-          path: ${{ github.workspace }}/installers/unix/*.AppImage
+          name: Linux Build Artifacts
+          path: |
+               ${{ github.workspace }}/installers/unix/*.AppImage
+               ${{ github.workspace }}/installers/unix/*.deb
+               ${{ github.workspace }}/installers/unix/*.asc

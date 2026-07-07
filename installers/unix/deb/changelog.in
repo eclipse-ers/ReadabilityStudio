@@ -1,0 +1,9 @@
+readstudio (${FULL_DISPLAY_VERSION}) stable; urgency=low
+
+  * Now open source under the Eclipse Public License 2.0
+  * Now available for Linux
+  * Lua scripting support added
+  * Spanish interface translation
+  * PDF export and WebP image support
+
+ -- ${PROGRAM_AUTHOR}  ${CHANGELOG_DATE_RFC}

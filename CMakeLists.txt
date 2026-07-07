@@ -76,6 +76,9 @@ set(WIN32_DEPLOYMENT_TARGET 10)
 set(UNIX_ARCHITECTURE "x86_64")
 set(MIN_RAM "2 GB")
 set(RAM_RECOMMENDED "4 GB")
+# Approximate installed size in kilobytes
+set(INSTALLED_SIZE 131072)
+math(EXPR INSTALLED_SIZE_MB "${INSTALLED_SIZE} / 1024")
 
 # Edit these values when bumping the release version
 project(readstudio VERSION 2026.0.1.0 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
@@ -131,6 +134,7 @@ if(NOT ${readstudio_VERSION_TWEAK} EQUAL 0)
 endif()
 string(TIMESTAMP BUILD_YEAR "%Y")
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
+string(TIMESTAMP CHANGELOG_DATE_RFC "%a, %d %b %Y %H:%M:%S +0000")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${MIN_GCC_REQUIRED})
   message(FATAL_ERROR "Insufficient GCC version. ${MIN_GCC_REQUIRED} is required, but only ${CMAKE_CXX_COMPILER_VERSION} found.")
@@ -179,10 +183,26 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/citations.apa.in"
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/resource.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/resource.h")
 if(UNIX AND NOT APPLE)
+    # Map CMAKE_SYSTEM_PROCESSOR to Debian architecture name
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+        set(DEB_ARCHITECTURE "amd64")
+    elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+        set(DEB_ARCHITECTURE "arm64")
+    elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
+        set(DEB_ARCHITECTURE "armhf")
+    else()
+        set(DEB_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/control.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/control")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/changelog.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/changelog")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/copyright.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/copyright")
 elseif(WIN32)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl")
@@ -219,6 +239,9 @@ if(APPLE)
     message(STATUS "Supported architectures: ${CMAKE_OSX_ARCHITECTURES}")
 else()
     message(STATUS "Architecture: ${CMAKE_SYSTEM_PROCESSOR}" )
+    if(UNIX AND NOT APPLE)
+        message(STATUS "DEB architecture: ${DEB_ARCHITECTURE}")
+    endif()
 endif()
 
 # Build the project management dashboards
@@ -648,6 +671,7 @@ endif()
 
 set(APPIMAGE_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/bin")
 set(APPIMAGE_LOCALE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/locale")
+set(DEB_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb-stage")
 set(WINDOWS_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows")
 
 include(cmake/modules/StageFiles.cmake)
@@ -741,10 +765,54 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
                            COMMAND ${CMAKE_COMMAND} -E echo "Copying binary to installer folder."
                            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PROJECT_NAME}>" "${WINDOWS_STAGING_DIR}/release/")
     elseif(UNIX AND NOT APPLE)
+        # AppImage packaging
         add_custom_command(TARGET ${PROJECT_NAME}
                            POST_BUILD
                            COMMAND ${CMAKE_COMMAND} -E echo "Copying binary AppImage staging folder."
                            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PROJECT_NAME}>" "${APPIMAGE_STAGING_DIR}/${PROJECT_NAME}")
+        # DEB packaging
+        add_custom_command(TARGET ${PROJECT_NAME}
+                       POST_BUILD
+                       COMMAND ${CMAKE_COMMAND} -E echo "Staging DEB package files."
+                       # Create DEB directory structure
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/DEBIAN"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/bin"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/applications"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/icons/hicolor/scalable/apps"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/metainfo"
+                       COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/doc/readstudio"
+                       # Binary
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "$<TARGET_FILE:${PROJECT_NAME}>" "${DEB_STAGING_DIR}/usr/bin/${PROJECT_NAME}"
+                       # Control file and changelog (already configured)
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/control" "${DEB_STAGING_DIR}/DEBIAN/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/changelog" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/"
+                       # Copyright
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/copyright" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/"
+                       # Desktop file, icon, and metainfo (reuse AppDir sources)
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${APPIMAGE_STAGING_DIR}/../../org.eclipse.readabilitystudio.desktop"
+                           "${DEB_STAGING_DIR}/usr/share/applications/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${APPIMAGE_STAGING_DIR}/../../app-logo.svg"
+                           "${DEB_STAGING_DIR}/usr/share/icons/hicolor/scalable/apps/app-logo.svg"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/metainfo/readstudio.metainfo.xml"
+                           "${DEB_STAGING_DIR}/usr/share/metainfo/readstudio.metainfo.xml"
+                       # Resources
+                       # (citations, Lua scripts/API definitions, report themes, translations,
+                       # help manuals, and examples are staged directly into DEB_STAGING_DIR by
+                       # the copy_dir_to_staging/copy_citation_file/copy_translations calls above)
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${APPIMAGE_STAGING_DIR}/res.wad" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${APPIMAGE_STAGING_DIR}/words.wad" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${APPIMAGE_STAGING_DIR}/LICENSE" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/")
     elseif(APPLE)
         add_custom_command(TARGET ${PROJECT_NAME}
                            POST_BUILD

@@ -11,6 +11,7 @@ source('R/appdown.r')
 | :-- |
 | 64-bit Windows {{< var WIN32_REQUIRED >}} (or higher) |
 | x86_64 processor |
+| {{< var INSTALLED_SIZE_MB >}} MB of disk space |
 | {{< var MIN_RAM >}} of RAM ({{< var RAM_RECOMMENDED >}} recommended) |
 
 The *Microsoft Visual C++ runtime* is also required.

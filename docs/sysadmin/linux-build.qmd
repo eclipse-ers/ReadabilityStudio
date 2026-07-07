@@ -56,11 +56,11 @@ You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support 
 If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
 :::
 
-## Build the AppImage {-}
-
 ::: {.tipsection data-latex=""}
 The following steps are only required if you are distributing builds outside CI, your local machine, or Eclipse's infrastructure.
 :::
+
+## Build the AppImage {-}
 
 ```{.bash}
 linuxdeploy-x86_64.AppImage --appdir installers/unix/AppDir \
@@ -72,4 +72,17 @@ mv Readability_Studio*.AppImage ./installers/unix
 ```
 
 Once built, the AppImage will be available in `r menu(c('installers', 'unix'))`.
+Apply a GPG signature to it before distributing.
+
+## Build the DEB package {-}
+
+After building *{{< var PROGRAM_NAME >}}* in Release mode, the DEB staging directory will be
+populated at `r menu(c('installers', 'unix', 'deb-stage'))`. To package it:
+
+```{.bash}
+dpkg-deb --build installers/unix/deb-stage \
+  installers/unix/readstudio_{{< var FULL_VERSION >}}_amd64.deb
+```
+
+Once built, the DEB package will be available in `r menu(c('installers', 'unix'))`.
 Apply a GPG signature to it before distributing.

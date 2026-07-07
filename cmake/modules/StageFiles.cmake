@@ -14,6 +14,7 @@
 #   • The macOS staging directory
 #   • The AppImage staging directory (for Linux packaging)
 #   • The Windows staging directory
+#   • The DEB staging directory (for Linux packaging)
 #
 #  It also copies wxWidgets stock translations (wxstd.mo) if available.
 #
@@ -41,6 +42,7 @@
 #            APPIMAGE_STAGING_DIR   – path to the AppImage binary directory (usually usr/bin)
 #            APPIMAGE_LOCALE_DIR    – path to the AppImage locale directory (usually usr/share/locale)
 #            WINDOWS_STAGING_DIR    – path to the Windows packaging root
+#            DEB_STAGING_DIR        – path to the DEB packaging root
 # ==========================================================================================
 # Requires: CMake's FindGettext module (built-in)
 # Will set GETTEXT_MSGFMT_EXECUTABLE if found.
@@ -108,6 +110,10 @@ function(copy_translations LANG)
             set(_APPIMAGE_MO_DIR  "${APPIMAGE_STAGING_DIR}/${LANG}")
         endif()
 
+        # DEB destination (mirrors the AppImage locale layout)
+        set(_DEB_MO_DEST "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/readstudio.mo")
+        set(_DEB_MO_DIR  "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
+
         # Always copy .mo file to destinations
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
@@ -115,7 +121,9 @@ function(copy_translations LANG)
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/${LANG}/readstudio.mo"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${_APPIMAGE_MO_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_APPIMAGE_MO_DEST}"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/readstudio.mo")
+            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/readstudio.mo"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_MO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_DEB_MO_DEST}")
     endif()
 
     # ---- wxWidgets stock translation (wxstd.mo) ----
@@ -162,6 +170,10 @@ function(copy_translations LANG)
             set(_APPIMAGE_WXMO_DIR  "${APPIMAGE_STAGING_DIR}/${LANG}")
         endif()
 
+        # DEB destination (mirrors the AppImage locale layout)
+        set(_DEB_WXMO_DEST "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/wxstd.mo")
+        set(_DEB_WXMO_DIR  "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
+
         # Always copy wxstd.mo if available
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
@@ -169,7 +181,9 @@ function(copy_translations LANG)
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/${LANG}/wxstd.mo"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${_APPIMAGE_WXMO_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_APPIMAGE_WXMO_DEST}"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/wxstd.mo")
+            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/wxstd.mo"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_WXMO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_DEB_WXMO_DEST}")
     endif()
 endfunction()
 
@@ -182,6 +196,7 @@ endfunction()
 #      • macOS staging directory
 #      • AppImage staging directory (for Linux packaging)
 #      • Windows staging directory
+#      • DEB staging directory (for Linux packaging)
 #
 #  For each destination, this function:
 #      1. Echoes the copy action to the build log for visibility.
@@ -207,7 +222,7 @@ endfunction()
 #  Behavior:
 #      • If the source directory does not exist, a configure-time warning is printed and
 #        the copy step is skipped.
-#      • The build step echoes each resolved destination path (macOS, AppImage, Windows).
+#      • The build step echoes each resolved destination path (macOS, AppImage, Windows, DEB).
 #      • Directories are created automatically before copying.
 #
 #  Requirements:
@@ -217,6 +232,7 @@ endfunction()
 #            RESOURCE_FOLDER        – relative path to resources in the macOS AppBundle
 #            APPIMAGE_STAGING_DIR   – path to AppImage staging directory
 #            WINDOWS_STAGING_DIR    – path to Windows staging directory
+#            DEB_STAGING_DIR        – path to DEB packaging root
 # ==========================================================================================
 function(copy_dir_to_staging SRC DEST_REL)
     set(_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${SRC}")
@@ -226,10 +242,11 @@ function(copy_dir_to_staging SRC DEST_REL)
         return()
     endif()
 
-    # Build the three destination paths
+    # Build the four destination paths
     set(_MACOS_DEST "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
     set(_APPIMAGE_DEST "${APPIMAGE_STAGING_DIR}/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
     set(_WINDOWS_DEST "${WINDOWS_STAGING_DIR}/resources/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
+    set(_DEB_DEST "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
 
     add_custom_command(TARGET ${PROJECT_NAME}
         POST_BUILD
@@ -238,6 +255,7 @@ function(copy_dir_to_staging SRC DEST_REL)
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_MACOS_DEST}"
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_APPIMAGE_DEST}"
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_WINDOWS_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_DEB_DEST}"
 
         # Ensure dirs exist, then copy
         COMMAND ${CMAKE_COMMAND} -E make_directory "${_MACOS_DEST}"
@@ -248,6 +266,9 @@ function(copy_dir_to_staging SRC DEST_REL)
 
         COMMAND ${CMAKE_COMMAND} -E make_directory "${_WINDOWS_DEST}"
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${_SRC}" "${_WINDOWS_DEST}"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${_SRC}" "${_DEB_DEST}"
     )
 endfunction()
 
@@ -258,6 +279,7 @@ endfunction()
 #    • The macOS staging directory
 #    • The AppImage staging directory (for Linux packaging)
 #    • The Windows staging directory
+#    • The DEB staging directory (for Linux packaging)
 #
 #  Each invocation sets up a custom post-build command for ${PROJECT_NAME} that:
 #    1. Prints an echo message during the build for visibility.
@@ -289,6 +311,7 @@ endfunction()
 #          RESOURCE_FOLDER        – path to macOS AppBundle resource directory
 #          APPIMAGE_STAGING_DIR   – path to AppImage packaging directory
 #          WINDOWS_STAGING_DIR    – path to Windows packaging directory
+#          DEB_STAGING_DIR        – path to DEB packaging root
 # ==========================================================================================
 function(copy_citation_file FILENAME)
     get_filename_component(BASENAME "${FILENAME}" NAME)
@@ -309,5 +332,9 @@ function(copy_citation_file FILENAME)
         COMMAND ${CMAKE_COMMAND} -E copy
             "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}"
             "${WINDOWS_STAGING_DIR}/resources/${BASENAME}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}"
+            "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/${BASENAME}"
     )
 endfunction()
