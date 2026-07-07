@@ -1062,19 +1062,15 @@ bool WebHarvester::HarvestLink(wxString& url, const wxString& fileExtension)
 wxString WebHarvester::GetCharsetFromContentType(const wxString& contentType)
     {
     const auto index = contentType.Lower().find(L"charset=");
-    const auto semicolon = contentType.find(L";");
     if (index != wxString::npos)
         {
         wxString charSet = contentType.substr(index + 8);
-        charSet.Replace(L"\"", L"");
-        charSet.Replace(L"\'", L"");
-        charSet.Trim(false);
-        charSet.Trim(true);
-        return charSet;
-        }
-    if (semicolon != wxString::npos)
-        {
-        wxString charSet = contentType.substr(semicolon + 1);
+        // stop at the next semicolon (end of this MIME parameter)
+        const auto nextSemicolon = charSet.find(L';');
+        if (nextSemicolon != wxString::npos)
+            {
+            charSet.Truncate(nextSemicolon);
+            }
         charSet.Replace(L"\"", L"");
         charSet.Replace(L"\'", L"");
         charSet.Trim(false);
