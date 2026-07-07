@@ -207,7 +207,7 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
             }
         }
 
-    wxYield();
+    wxTheApp->Yield(true);
     if (m_progressDlg != nullptr)
         {
         wxStringTokenizer tkz(url, L"\n\r", wxTOKEN_STRTOK);
@@ -583,10 +583,23 @@ bool WebHarvester::CrawlLinks(wxString& url,
         return false;
         }
 
-    ++m_currentLevel;
+    // RAII guard: ensures m_currentLevel is decremented on every return path
+    struct LevelGuard
+        {
+        int& crawlLevel;
+
+        explicit LevelGuard(int& level) : crawlLevel(level) { ++crawlLevel; }
+
+        ~LevelGuard() { --crawlLevel; }
+
+        LevelGuard(const LevelGuard&) = delete;
+        LevelGuard& operator=(const LevelGuard&) = delete;
+        };
+
+    LevelGuard guard{ m_currentLevel };
+
     if (std::cmp_greater(m_currentLevel, GetDepthLevel()))
         {
-        --m_currentLevel;
         return false;
         }
 
@@ -600,7 +613,6 @@ bool WebHarvester::CrawlLinks(wxString& url,
         int responseCode{ 0 };
         if (!ReadWebPage(url, fileText, contentType, statusText, responseCode, true))
             {
-            --m_currentLevel;
             // don't bother trying to crawl this later if it failed
             m_alreadyCrawledFiles.insert(url);
             return false;
@@ -628,7 +640,6 @@ bool WebHarvester::CrawlLinks(wxString& url,
 
                 if (!ReadWebPage(url, fileText, contentType, statusText, responseCode, true))
                     {
-                    --m_currentLevel;
                     // don't bother trying to crawl this later if it failed
                     m_alreadyCrawledFiles.insert(url);
                     return false;
@@ -645,7 +656,6 @@ bool WebHarvester::CrawlLinks(wxString& url,
         }
     else
         {
-        --m_currentLevel;
         return false;
         }
 
@@ -655,19 +665,17 @@ bool WebHarvester::CrawlLinks(wxString& url,
         {
         // prevent crawling it later if it doesn't meet our criteria
         m_alreadyCrawledFiles.insert(url);
-        --m_currentLevel;
         return false;
         }
     if (HasUrlAlreadyBeenCrawled(url))
         {
-        --m_currentLevel;
         return false;
         }
 
     // it's ready to be crawled now, so marked it as crawled for later
     m_alreadyCrawledFiles.insert(url);
 
-    wxYield();
+    wxTheApp->Yield(true);
     if (m_progressDlg != nullptr)
         {
         wxStringTokenizer tkz(url, L"\n\r", wxTOKEN_STRTOK);
@@ -677,7 +685,6 @@ bool WebHarvester::CrawlLinks(wxString& url,
                                       wxString::Format(_(L"Harvesting \"%s\""), urlLabel)))
             {
             m_isCancelled = true;
-            --m_currentLevel;
             return false;
             }
         }
@@ -709,11 +716,9 @@ bool WebHarvester::CrawlLinks(wxString& url,
             }
         if (m_isCancelled)
             {
-            --m_currentLevel;
             return false;
             }
         }
-    --m_currentLevel;
 
     return true;
     }
