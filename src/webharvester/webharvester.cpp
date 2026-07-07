@@ -56,8 +56,8 @@
 bool wxStringLessWebPath::operator()(const wxString& first, const wxString& second) const
     {
     FilePathResolver resolver;
-    wxString firstPath = resolver.ResolvePath(first, true);
-    wxString secondPath = resolver.ResolvePath(second, true);
+    wxString firstPath = resolver.ResolvePath(first, false);
+    wxString secondPath = resolver.ResolvePath(second, false);
     if (!firstPath.empty() && firstPath[firstPath.length() - 1] == L'/')
         {
         firstPath.RemoveLast();
