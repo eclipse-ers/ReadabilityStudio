@@ -61,7 +61,7 @@
 #include "../indexing/diacritics.h"
 #include "../indexing/romanize.h"
 #include "../results-format/project_report_format.h"
-#include "../results-format/word_collectiont_text_formatting.h"
+#include "../results-format/word_collection_text_formatting.h"
 #include "base_project_view.h"
 #include <wx/richmsgdlg.h>
 

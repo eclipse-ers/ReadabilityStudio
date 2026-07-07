@@ -64,7 +64,7 @@
 #include "../indexing/diacritics.h"
 #include "../readability/readability.h"
 #include "../results-format/project_report_format.h"
-#include "../results-format/word_collectiont_text_formatting.h"
+#include "../results-format/word_collection_text_formatting.h"
 #include "../ui/dialogs/project_wizard_dlg.h"
 #include "project_navigation_links.h"
 #include "standard_project_view.h"
