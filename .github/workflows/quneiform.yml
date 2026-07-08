@@ -34,7 +34,7 @@ jobs:
              --untranslatables="Fry,Degrees of Reading Power,Bormuth Grade Placement,Bormuth Cloze Mean,Automated Readability Index,Gunning Fog,SMOG,PSK Gunning Fog,Rate Index,New Dale-Chall,Flesch,New Fog Count,Modified SMOG,New Automated Readability Index,Flesch Reading Ease,Jakarta,Eclipse Foundation,Eclipse" \
              -o i18nresultsSrcFolder.txt
 
-             ./quneiform/bin/quneiform ./docs -q --enable=allI18N --ignore=readability-studio-manual/acknowledgements/libraries.qmd -o i18nresultsDocsFolder.txt
+             ./quneiform/bin/quneiform ./docs -q --enable=allI18N --ignore=readability-studio-manual/acknowledgements/libraries.qmd,readability-studio-manual/glossary/shortcuts.qmd -o i18nresultsDocsFolder.txt
 
              cat i18nresultsSrcFolder.txt i18nresultsDocsFolder.txt > i18nresults.txt
              
