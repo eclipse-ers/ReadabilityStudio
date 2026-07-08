@@ -3753,6 +3753,16 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     Bind(wxEVT_RIBBONBAR_PAGE_CHANGED,
          [this](wxRibbonBarEvent& evt)
          {
+             // this event bubbles up from child document frames (whose parent window is
+             // the main frame), so ignore anything not coming from the main frame's own
+             // ribbon; otherwise, switching tabs on a project window's ribbon could show/focus
+             // the main frame's log or script workbench controls and steal focus to the main
+             // frame
+             if (evt.GetEventObject() != GetRibbon())
+                 {
+                 evt.Skip();
+                 return;
+                 }
              wxWindowUpdateLocker locker{ this };
              const bool showWorkbench = (evt.GetPage() == GetDeveloperRibbonPage());
              const bool showLog = (evt.GetPage() == GetLogRibbonPage());
