@@ -13,7 +13,9 @@ source('R/appdown.r')
 | {{< var INSTALLED_SIZE_MB >}} MB of disk space |
 | {{< var MIN_RAM >}} of RAM ({{< var RAM_RECOMMENDED >}} recommended) |
 
-## Installing {-}
+## AppImage {-}
+
+### Installing {-}
 
 Make "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" executable.
 This can be done with the following syntax:
@@ -31,11 +33,41 @@ Now "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" can be run direc
 An AppImage is a portable Linux app with all dependencies included, ready to run without installation.
 :::
 
-## Uninstalling {-}
+### Uninstalling {-}
 
 Drag "Readability_Studio-{{< var UNIX_ARCHITECTURE >}}.AppImage" into the Trash.
 
-## Updating {-}
+### Updating {-}
 
 Replace your existing AppImage with the latest version.
 Make the new AppImage executable and then it will be ready to run.
+
+## DEB Package {-}
+
+### Installing {-}
+
+Install "readstudio_{{< var FULL_VERSION >}}_amd64.deb" from the command line:
+
+```{.bash}
+sudo apt install ./readstudio_{{< var FULL_VERSION >}}_amd64.deb
+```
+
+This will also resolve and install any missing dependencies.
+
+::: {.notesection data-latex=""}
+Alternatively, `dpkg -i` can be used, followed by `sudo apt-get install -f` to resolve any missing dependencies.
+:::
+
+The DEB package can also be installed interactively.
+Double-click it to open it in the distribution's graphical package installer (e.g., *GNOME Software* or *Software Install*).
+From there, click **Install** and provide your password when prompted.
+
+### Uninstalling {-}
+
+```{.bash}
+sudo apt remove readstudio
+```
+
+### Updating {-}
+
+Install the newer DEB package the same way as the initial installation; this will upgrade the existing installation.
