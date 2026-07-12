@@ -376,16 +376,20 @@ parse_po <- function(po_path) {
   msgid <- NULL
   msgstr <- NULL
   state <- NULL
+  fuzzy <- FALSE
   
   commit <- function() {
-    if (!is.null(msgid) && !is.null(msgstr) && nzchar(msgid)) {
+    if (!fuzzy && !is.null(msgid) && !is.null(msgstr) && nzchar(msgid)) {
       entries[[msgid]] <<- msgstr
     }
   }
   
   for (ln in lines) {
-    # skip comments
-    if (stringr::str_starts(ln, "#")) next
+    # track fuzzy flag — fuzzy entries are treated as untranslated
+    if (stringr::str_starts(ln, "#")) {
+      if (stringr::str_detect(ln, "#,\\s*fuzzy")) fuzzy <- TRUE
+      next
+    }
     
     # blank line = boundary
     if (stringr::str_trim(ln) == "") {
@@ -393,6 +397,7 @@ parse_po <- function(po_path) {
       msgid  <- NULL
       msgstr <- NULL
       state  <- NULL
+      fuzzy  <- FALSE
       next
     }
     
@@ -558,8 +563,10 @@ qmd2po <- function(input,
       msgstr = purrr::map_chr(
         text_clean,
         ~ {
-          if (has_existing && .x %in% existing$msgid) {
-            old <- dplyr::filter(existing, msgid == .x)$msgstr[1]
+          norm_key <- normalize_msgid(.x)
+          idx <- match(norm_key, existing_norm$norm_key)
+          if (has_existing && !is.na(idx)) {
+            old <- existing_norm$msgstr[idx]
             if (!is.na(old) && nzchar(old)) sprintf('msgstr "%s"', old)
             else 'msgstr ""'
           } else {
@@ -623,9 +630,9 @@ qmd2po_folder <- function(input_dir,
     
     issues <- qmd_check_integrity(buffer, file_path)
     if (dry_run && nrow(issues) > 0) {
-      stop(stringr::str_glue(
-        "❌ Integrity issues detected in {file_path}.
-         Dry run aborted — please fix these issues before extraction."
+      stop(paste0(
+        "❌ Integrity issues detected in ", file_path, ".\n",
+        "Dry run aborted — please fix these issues before extraction."
       ), call. = FALSE)
     }
     
@@ -796,8 +803,8 @@ po2qmd <- function(input, po, output = NULL, show_missing = FALSE) {
             return(original_line)
           }
           
-          # Replace the cleaned extracted text inside the original line
-          sub(
+          # Replace all occurrences of the cleaned extracted text in the original line
+          gsub(
             pattern     = stringr::fixed(clean_segment),
             replacement = translated,
             x           = original_line,

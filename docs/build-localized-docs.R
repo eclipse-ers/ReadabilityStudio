@@ -3,7 +3,7 @@ if (nchar(system.file(package="pacman")) == 0)
   install.packages("pacman")
 }
 library(pacman)
-pacman::p_load(tidyverse, this.path, glue)
+pacman::p_load(tidyverse, this.path, glue, fs)
 
 docFolder <- this.path::this.dir()
 
@@ -30,7 +30,13 @@ source(glue("{docFolder}/qmd2po.R"))
 #'
 #' @export
 build_translated_docs <- function(docFolder, lang, exclude_pattern = NULL,
-                                  updatePoFile = TRUE)
+                                  updatePoFile = TRUE,
+                                  buildSysAdminManual = FALSE,
+                                  buildReleaseNotes = FALSE,
+                                  buildShortcutsCheatsheet = TRUE,
+                                  buildUserManual = FALSE,
+                                  buildProgrammingManual = FALSE,
+                                  buildTestReference = FALSE)
   {
   # output folder under locale/docs/<lang>
   out_dir <- file.path(dirname(docFolder), "locale", "docs", lang)
@@ -82,7 +88,7 @@ build_translated_docs <- function(docFolder, lang, exclude_pattern = NULL,
       po = glue::glue("{out_dir}/{lang}.po"),
       exclude_pattern = exclude_pattern)
     }
-  # Main user manual most be copied as other manuals pull content and scripts from it,
+  # Main user manual must be copied as other manuals pull content and scripts from it,
   # even if we don't build it
   po2qmd_folder(
     input_dir = glue::glue("{docFolder}/readability-studio-manual"),
@@ -108,13 +114,15 @@ build_translated_docs <- function(docFolder, lang, exclude_pattern = NULL,
 
   # --- Step 3: Build it
   child_env <- new.env(parent = environment())
-  assign("docsLanguage", lang, envir = child_env)
-  assign("buildSysAdminManual", buildSysAdminManual, envir = child_env)
-  assign("buildReleaseNotes", buildReleaseNotes, envir = child_env)
-  assign("buildShortcutsCheatsheet", buildShortcutsCheatsheet, envir = child_env)
-  assign("buildProgrammingManual", buildProgrammingManual, envir = child_env)
-  assign("buildTestReference", buildTestReference, envir = child_env)
-  assign("buildUserManual", buildUserManual, envir = child_env)
+  list2env(
+    list(docsLanguage = lang,
+         buildSysAdminManual = buildSysAdminManual,
+         buildReleaseNotes = buildReleaseNotes,
+         buildShortcutsCheatsheet = buildShortcutsCheatsheet,
+         buildUserManual = buildUserManual,
+         buildProgrammingManual = buildProgrammingManual,
+         buildTestReference = buildTestReference),
+    envir = child_env)
   sys.source(glue::glue("{docFolder}/build-help-projects.R"), envir = child_env)
 
   message(glue::glue("\n✅ Completed '{lang}' documentation build."))
@@ -125,10 +133,11 @@ build_translated_docs <- function(docFolder, lang, exclude_pattern = NULL,
 ##########################
 
 # Spanish
-buildSysAdminManual <- F
-buildReleaseNotes <- F
-buildShortcutsCheatsheet <- T
-buildUserManual <- F
-buildProgrammingManual <- F
-buildTestReference <- F
-build_translated_docs(docFolder, "es", "libraries\\.qmd", updatePoFile = T)
+build_translated_docs(docFolder, "es", "libraries\\.qmd",
+                      updatePoFile = TRUE,
+                      buildSysAdminManual = FALSE,
+                      buildReleaseNotes = FALSE,
+                      buildShortcutsCheatsheet = TRUE,
+                      buildUserManual = FALSE,
+                      buildProgrammingManual = FALSE,
+                      buildTestReference = FALSE)
