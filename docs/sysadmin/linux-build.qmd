@@ -76,8 +76,8 @@ Apply a GPG signature to it before distributing.
 
 ## Build the DEB package {-}
 
-After building *{{< var PROGRAM_NAME >}}* in Release mode, the DEB staging directory will be
-populated at `r menu(c('installers', 'unix', 'deb-stage'))`. To package it:
+After building *{{< var PROGRAM_NAME >}}* in Release mode, the DEB staging directory will be populated at `r menu(c('installers', 'unix', 'deb-stage'))`.
+To package it:
 
 ```{.bash}
 dpkg-deb --build installers/unix/deb-stage \

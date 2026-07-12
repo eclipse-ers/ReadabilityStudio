@@ -179,7 +179,8 @@ static double CustomNewDaleChall(const te_expr* context)
     if (!project->GetCustomTest(testName)->GetIterator()->is_using_familiar_words())
         {
         throw std::runtime_error(_(L"Test has not defined what an unfamiliar word is. "
-                                   "Custom unfamiliar word test cannot be calculated."));
+                                   "Custom unfamiliar word test cannot be calculated.")
+                                     .ToUTF8());
         }
     if (project->GetProjectLanguage() != readability::test_language::english_test)
         {
@@ -622,7 +623,7 @@ ReadabilityFormulaParser::ReadabilityFormulaParser(const BaseProject* project,
     {
     if (project == nullptr)
         {
-        throw std::invalid_argument("Project must not be null.");
+        throw std::runtime_error(_("Invalid project in formula parser.").ToUTF8());
         }
     wxASSERT(decimalSeparator <= 255);
     wxASSERT(listSeparator <= 255);
