@@ -213,7 +213,7 @@ This applies to full words lists (e.g., Dale-Chall), not supplements such as Sto
   `r file_path(c("src", "app", "readability_app_options.h"))` (e.g., `XML_INCLUDE_HARRIS_JACOBSON_LIST`)
 - Update any calls to `BaseProjectDoc::AddGlobalCustomReadabilityTest()` to include the word list and respective flag (the `CustomReadabilityTest` typedef passed to this will need these passed to its constructor)
 - Add save and read logic for flag in `r file_path(c("src", "projects", "base_project_doc.cpp"))`
-- Add save and read logic for settings file (`ReadabilityAppOptions::LoadOptionsFile()` and `ReadabilityAppOptions::ReadabilityAppOptions::SaveOptionsFile()`)
+- Add save and read logic for settings file (`ReadabilityAppOptions::LoadOptionsFile()` and `ReadabilityAppOptions::SaveOptionsFile()`)
 - Add logic to `ShowCustomTestDialogFamiliarWords()` and `SetCustomTestDialogIncludedLists()` in `r file_path(c("src", "lua_scripting", "lua_screenshot.cpp"))`
 - Set and read this flag from `EditCustomTest` in `r file_path(c("src", "app", "readability_app.cpp"))`
 - Add logic to `OnAddCustomTest()` in `r file_path(c("src", "app", "readability_app.cpp"))`

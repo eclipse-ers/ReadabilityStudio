@@ -17,7 +17,7 @@ source('R/appdown.r')
 | *Quarto* (optional) |
 | *POEdit* (optional) |
 
-To install home-brew:
+To install Homebrew:
 
 ```{.bash}
 /bin/bash -c  \

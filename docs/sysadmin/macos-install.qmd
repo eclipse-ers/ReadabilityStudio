@@ -17,7 +17,7 @@ source('R/appdown.r')
 ## Installing {-}
 
 Open "ReadabilityStudio.dmg" and drag-and-drop the program into the "Applications" folder.
-This will copy "Readability Studio.app" (the self-contained program) into where the rest of your applications are installed.
+This will copy "Readability Studio.app" (the self-contained program) into the Applications folder alongside your other applications.
 
 ## Uninstalling {-}
 

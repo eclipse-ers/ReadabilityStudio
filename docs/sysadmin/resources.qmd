@@ -10,7 +10,7 @@ source('R/appdown.r')
 ## Art Assets {-}
 
 All art assets are stored in `r file_path(c("resources", "images"))`.
-Images should be saved into the appropriate folder in SVG format (except the `r file_path(c("splash"))` folder, these are JPEGs).
+Images should be saved into the appropriate folder in SVG format (except the `r file_path(c("splash"))` folder; these are JPEGs).
 SVGs should have an aspect ratio with the same width and height.
 
 ### Application Icon {-}

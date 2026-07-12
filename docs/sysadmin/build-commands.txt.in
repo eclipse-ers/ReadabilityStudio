@@ -8,8 +8,8 @@ cmake --build ./build --target readstudio -j $(nproc) --config Release
 # Uncomment to build the help manuals
 #cmake --build ./build --target manuals -j $(nproc) --config Release
 
-git clone ${GIT_REPO}  \
-     --recurse-submodules
+git clone ${GIT_REPO} \
+      --recurse-submodules
 cd ReadabilityStudio
 
 cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release \

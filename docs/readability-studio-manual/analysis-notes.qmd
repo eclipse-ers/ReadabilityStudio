@@ -58,7 +58,7 @@ Refer to @sec-document-analysis for a detailed explanation of these options.
 
 ## How Sentences\index{sentences!counting} are Counted {#sec-how-sentences-are-counted}
 
-*{{< var PROGRAM_NAME >}}* considers periods, question marks, exclamation points, and interabangs (!?) as the end of a sentence, although there are a few exceptions.
+*{{< var PROGRAM_NAME >}}* considers periods, question marks, exclamation points, and interrobangs (!?) as the end of a sentence, although there are a few exceptions.
 
 The first exception is periods that are part of an abbreviation, acronym, or initial.
 For example, the following is seen as only one sentence:

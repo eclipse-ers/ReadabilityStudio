@@ -37,7 +37,7 @@ Refer to the end of this chapter for available command line options.
 
 The program can be uninstalled via the system's **Installed apps** panel or from the command line.
 
-In the installation folder of *{{< var PROGRAM_NAME >}}*, there will be file named similar to "unins???.exe."
+In the installation folder of *{{< var PROGRAM_NAME >}}*, there will be a file named similar to "unins???.exe."
 System Admins can run this program remotely to uninstall the program from workstations.
 
 ::: {.tipsection data-latex=""}

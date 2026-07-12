@@ -111,4 +111,4 @@ The following software is required to build the manuals:
 
 Run `r file_path(c("docs", "build-help-projects.R"))` to build all help projects.
 This should install all needed {{< fa brands r-project title="R" >}} and {{< latex >}} packages the first time you run it.
-If there are any errors while installing the {{< latex >}} packages, run the script again; you may experience connection issues to *CTAN* and re-running the script will fix it.
+If there are any errors while installing the {{< latex >}} packages, run the script again; you may experience connection issues to *CTAN*; re-running the script will resolve them.

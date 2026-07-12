@@ -112,7 +112,7 @@ Although not recommended, it is possible to create a copy of any regression-base
 
 Most readability tests will return a result, even when the document being reviewed contains extreme difficulty factors.
 For example, with table-based tests, documents with long sentences and/or numerous unfamiliar words will fall within the top bracket of the lookup table.
-(Refer to @tbl-wheeler-smith-conversion-table for an example).
+(Refer to @tbl-wheeler-smith-conversion-table for an example.)
 Likewise, plugging a document's statistics into a regression-based test will also produce a result without issue (although extreme results may need to be clamped, see @sec-grade-level-clamping).
 
 It is possible, however, for certain graphical tests to not return a meaningful result.
