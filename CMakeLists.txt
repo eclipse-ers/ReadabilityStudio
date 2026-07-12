@@ -806,9 +806,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
                        # Binary
                        COMMAND ${CMAKE_COMMAND} -E copy
                            "$<TARGET_FILE:${PROJECT_NAME}>" "${DEB_STAGING_DIR}/usr/bin/${PROJECT_NAME}"
-                       # Control file and changelog (already configured)
+                       # Control file, changelog, and maintainer scripts (already configured)
                        COMMAND ${CMAKE_COMMAND} -E copy
                            "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/control" "${DEB_STAGING_DIR}/DEBIAN/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/postinst" "${DEB_STAGING_DIR}/DEBIAN/"
+                       COMMAND ${CMAKE_COMMAND} -E copy
+                           "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/postrm" "${DEB_STAGING_DIR}/DEBIAN/"
+                       # dpkg requires maintainer scripts to be executable
+                       COMMAND chmod 755
+                           "${DEB_STAGING_DIR}/DEBIAN/postinst" "${DEB_STAGING_DIR}/DEBIAN/postrm"
                        COMMAND ${CMAKE_COMMAND} -E copy
                            "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/changelog" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/"
                        # Copyright

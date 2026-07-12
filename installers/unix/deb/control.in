@@ -7,5 +7,6 @@ Installed-Size: ${INSTALLED_SIZE}
 Maintainer: ${PROGRAM_AUTHOR}
 Homepage: ${readstudio_HOMEPAGE_URL}
 Depends: libgtk-3-0 (>= 3.24), libwebkit2gtk-4.1-0, libjavascriptcoregtk-4.1-0, libfontconfig1, libgomp1
+Recommends: desktop-file-utils, hicolor-icon-theme
 Description: ${PROGRAM_LONGNAME}
  ${PROGRAM_COMMENTS}.
