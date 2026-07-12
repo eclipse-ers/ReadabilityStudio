@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Readability Studio — dracula theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #A50021;    /* blood red */
+  --banner-color: #FF79C6;     /* pink */
+  --note-color: #8BE9FD;       /* cyan */
+  --note-text-color: #282A36;  /* dracula background, for contrast on cyan */
+  --warning-color: #FFB86C;    /* orange */
+  --data-row-color: #50FA7B;   /* green */
+  }

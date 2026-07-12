@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Readability Studio — chalkboard theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #3D5A45;    /* chalkboard green */
+  --banner-color: #C9A227;     /* chalk yellow */
+  --banner-text-color: #5B8DB8; /* chalk blue */
+  --note-color: #5B8DB8;       /* chalk blue */
+  --warning-color: #D9838F;    /* chalk pink */
+  --data-row-color: #E0995C;   /* chalk orange */
+  }

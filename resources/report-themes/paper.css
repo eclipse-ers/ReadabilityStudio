@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — paper theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #C9BFAE;    /* recycled paper */
+  --banner-color: #8B7355;     /* aged paper, sepia ink */
+  --note-color: #5B7C99;       /* fountain-pen ink blue */
+  --warning-color: #B8860B;    /* rubber-stamp amber */
+  --data-row-color: #A89C87;   /* graphite taupe */
+  }

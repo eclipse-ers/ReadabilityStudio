@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Readability Studio — coffee shop theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #6F4E37;    /* coffee bean brown */
+  --banner-color: #3C2414;     /* espresso */
+  --banner-text-color: #A9746E; /* cinnamon */
+  --note-color: #2F6F62;       /* chalkboard menu teal */
+  --warning-color: #C68958;    /* caramel */
+  --data-row-color: #A9746E;   /* cinnamon */
+  }

@@ -7,13 +7,16 @@
 :root
   {
   --header-accent: #00CC66;       /* card headers, primary green */
-  --banner-color: #2E86AB;        /* report banner title and accent bar */
+  --banner-color: #2E86AB;        /* report banner accent bar and background tint */
+  --banner-text-color: var(--banner-color); /* report banner title text */
   --accent-width: 8px;            /* card header and data-row left accent */
   --banner-accent-width: 10px;    /* banner accent bar width */
   --border-color: rgba(128, 128, 128, 0.3);       /* general borders */
   --border-color-light: rgba(128, 128, 128, 0.25); /* subtle dividers */
   --note-color: #0078D4;          /* note callout accent */
+  --note-text-color: white;       /* text/icon color on note callout accent */
   --warning-color: #F59E0B;       /* warning callout accent (amber) */
+  --warning-text-color: black;    /* text/icon color on warning callout accent */
   --data-row-color: #059669;      /* data row hover accent (emerald) */
 }
 
@@ -121,7 +124,7 @@ body
   margin: 0 0 4px 0;
   font-size: 1.4em;
   font-weight: 700;
-  color: var(--banner-color);
+  color: var(--banner-text-color);
   }
 
 .report-banner-content p
@@ -232,6 +235,12 @@ img
   {
   padding: 12px 14px;
   line-height: 1.5;
+  transition: background 0.4s ease;
+  }
+
+.explanation-card:hover .explanation-card-body
+  {
+  background: color-mix(in srgb, var(--header-accent) 5%, transparent);
   }
 
 .explanation-card-body p
@@ -362,7 +371,7 @@ img
 .callout-note .callout-icon
   {
   background-color: var(--note-color);
-  color: white;
+  color: var(--note-text-color);
   }
 
 .callout-note .callout-content
@@ -379,7 +388,7 @@ img
 .callout-warning .callout-icon
   {
   background-color: var(--warning-color);
-  color: black;
+  color: var(--warning-text-color);
   }
 
 .callout-warning .callout-content

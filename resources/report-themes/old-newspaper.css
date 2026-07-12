@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Readability Studio — old newspaper theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #4A3C31;    /* sepia ink */
+  --banner-color: #1C1C1C;     /* masthead black */
+  --banner-text-color: #8B7355; /* aged newsprint brown */
+  --note-color: #5C7A89;       /* faded wire-service blue */
+  --warning-color: #A0522D;    /* rust stamp */
+  --data-row-color: #8B7355;   /* aged newsprint brown */
+  }

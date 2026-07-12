@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Readability Studio — candy cane theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #C41E3A;    /* candy-cane red */
+  --banner-color: #146B3A;     /* evergreen */
+  --note-color: #4A90A4;       /* frosty blue */
+  --warning-color: #D4AF37;    /* ornament gold */
+  --data-row-color: #8C97A6;   /* tinsel silver */
+  }
