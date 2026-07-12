@@ -28,7 +28,7 @@ jobs:
           pip install codespell
       - name: Run codespell
         run: |
-          codespell src/ *.md *.rmd --skip="syllable.cpp,negating_word.cpp" -L forcast,ges,ded,sie,ure,nd,claus,compres,ue,oder,pard,als,atleast,oint,tread
+          codespell src/ *.md *.rmd --skip="syllable.cpp,negating_word.cpp,src/Wisteria-Dataviz/src/import/Uni*-UTF16-H,src/Wisteria-Dataviz/src/import/glyphlist.txt" -L forcast,ges,ded,sie,ure,nd,claus,compres,ue,oder,pard,als,atleast,oint,tread,ascript,rturned,Paeth,parms
           rc=$?
           if [ $rc != 0 ]; then
           cat <<EOF

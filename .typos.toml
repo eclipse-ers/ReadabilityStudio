@@ -66,6 +66,12 @@ wher = "wher"
 nin = "nin"
 DOUT = "DOUT"
 optin = "optin"
+Flate = "Flate"
+EDE = "EDE"
+rturned = "rturned"
+Paeth = "Paeth"
+parms = "parms"
+Parms = "Parms"
 # misspelled on purpose in examples
 specifiy = "specifiy"
 Curso = "Curso"
@@ -86,4 +92,5 @@ extend-exclude = ["docs-online", "src/Catch2/", "src/lua/", "docs/projects",
                   "installers/windows/messages/messages-pt.isl",
                   "installers/windows/messages/messages-fr.isl",
                   "docs/readability-studio-manual/_extensions/quarto-ext/fontawesome/assets/css/all.min.css",
-                  "docs/readability-studio-manual/_extensions/quarto-ext/fontawesome/assets/css/all.css"]
+                  "docs/readability-studio-manual/_extensions/quarto-ext/fontawesome/assets/css/all.css",
+                  "src/Wisteria-Dataviz/src/import/Uni*-UTF16-H", "src/Wisteria-Dataviz/src/import/glyphlist.txt"]
