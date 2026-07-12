@@ -280,7 +280,7 @@ class BaseProject : public ProjectRefresh
 
     BaseProject();
     BaseProject(const BaseProject&) = delete;
-    BaseProject& operator==(const BaseProject&) = delete;
+    BaseProject& operator=(const BaseProject&) = delete;
 
     virtual ~BaseProject() = default;
 
@@ -2579,8 +2579,8 @@ class BaseProject : public ProjectRefresh
     double m_unique3PlusSyllabicWordsNumeralsFullySyllabized{ 0 };
 
     // options
-    double m_minDocWordCountForBatch{ 0 };
-    double m_includeIncompleteSentencesIfLongerThan{ 0 };
+    size_t m_minDocWordCountForBatch{ 0 };
+    size_t m_includeIncompleteSentencesIfLongerThan{ 0 };
     int m_difficultSentenceLength{ 0 };
 
     // analysis options
