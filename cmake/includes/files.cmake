@@ -99,6 +99,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/data/join_inner.cpp
     src/Wisteria-Dataviz/src/data/join_left.cpp
     src/Wisteria-Dataviz/src/data/odsreader.cpp
+    src/Wisteria-Dataviz/src/data/pdfreader.cpp
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
     src/Wisteria-Dataviz/src/graphs/boxplot.cpp
@@ -128,6 +129,12 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/import/markdown_extract_text.cpp
     src/Wisteria-Dataviz/src/import/ods_extract_text.cpp
     src/Wisteria-Dataviz/src/import/odt_odp_extract_text.cpp
+    src/Wisteria-Dataviz/src/import/pdf_content_parser.cpp
+    src/Wisteria-Dataviz/src/import/pdf_decrypt.cpp
+    src/Wisteria-Dataviz/src/import/pdf_document.cpp
+    src/Wisteria-Dataviz/src/import/pdf_extract_text.cpp
+    src/Wisteria-Dataviz/src/import/pdf_lexer.cpp
+    src/Wisteria-Dataviz/src/import/pdf_text_decoder.cpp
     src/Wisteria-Dataviz/src/import/postscript_extract_text.cpp
     src/Wisteria-Dataviz/src/import/rtf_extract_text.cpp
     src/Wisteria-Dataviz/src/import/spreadsheet_extract_text.cpp

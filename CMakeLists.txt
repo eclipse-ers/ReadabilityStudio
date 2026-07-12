@@ -521,7 +521,8 @@ add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${APP_SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/brotli/include)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/brotli/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/src/crypto)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:Debug>:
@@ -739,6 +740,26 @@ add_custom_command(TARGET ${PROJECT_NAME}
                    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/words.wad" "${APPIMAGE_STAGING_DIR}/words.wad"
                    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/words.wad" "${WINDOWS_STAGING_DIR}/resources/words.wad"
                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources/words")
+
+# Copying PDF reader support files
+set(PDF_TABLE_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/import")
+set(PDF_TABLES glyphlist.txt UniAKR-UTF16-H UniCNS-UTF16-H UniGB-UTF16-H UniJIS-UTF16-H UniKS-UTF16-H)
+
+add_custom_command(TARGET ${PROJECT_NAME}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/pdf-tables"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${APPIMAGE_STAGING_DIR}/pdf-tables"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${WINDOWS_STAGING_DIR}/resources/pdf-tables"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables")
+foreach(pdf_table ${PDF_TABLES})
+    add_custom_command(TARGET ${PROJECT_NAME}
+                       POST_BUILD
+                       COMMAND ${CMAKE_COMMAND} -E echo "Copying ${pdf_table} to build and installer folders."
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/pdf-tables/${pdf_table}"
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${APPIMAGE_STAGING_DIR}/pdf-tables/${pdf_table}"
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${WINDOWS_STAGING_DIR}/resources/pdf-tables/${pdf_table}"
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables/${pdf_table}")
+endforeach()
 
 if(UNIX)
     set_target_properties(${PROJECT_NAME} PROPERTIES
