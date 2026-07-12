@@ -48,6 +48,7 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "base_project.h"
+#include "../Wisteria-Dataviz/src/data/pdfreader.h"
 #include "../Wisteria-Dataviz/src/import/cpp_extract_text.h"
 #include "../Wisteria-Dataviz/src/import/docx_extract_text.h"
 #include "../Wisteria-Dataviz/src/import/hhc_hhk_extract_text.h"
@@ -4561,6 +4562,39 @@ std::pair<bool, std::wstring> BaseProject::ExtractMarkdownRawText(std::string_vi
     }
 
 //------------------------------------------------
+std::pair<bool, std::wstring> BaseProject::ExtractPdfRawText(std::string_view sourceFileText)
+    {
+    grammar::convert_ligatures_and_diacritics convertDiacritics;
+    Wisteria::Data::PdfReader pdfReader;
+    try
+        {
+        std::wstring extractedText =
+            pdfReader.ReadBuffer(sourceFileText, GetOriginalDocumentFilePath()).ToStdWstring();
+        SetOriginalDocumentDescription(
+            coalesce({ GetOriginalDocumentDescription(), pdfReader.GetTitle(),
+                       wxFileName(GetOriginalDocumentFilePath()).GetName() }));
+        if (convertDiacritics(extractedText))
+            {
+            extractedText = convertDiacritics.get_conversion();
+            }
+        return std::make_pair(true, std::move(extractedText));
+        }
+    catch (const std::runtime_error& readError)
+        {
+        LogMessage(wxString::FromUTF8(readError.what()), _(L"Import Error"),
+                   wxOK | wxICON_EXCLAMATION);
+        return std::make_pair(false, std::wstring{});
+        }
+    catch (...)
+        {
+        LogMessage(_(L"An unknown error occurred while importing. "
+                     "Unable to continue creating project."),
+                   _(L"Import Error"), wxOK | wxICON_EXCLAMATION);
+        return std::make_pair(false, std::wstring{});
+        }
+    }
+
+//------------------------------------------------
 std::pair<bool, std::wstring> BaseProject::ExtractRawText(std::string_view sourceFileText,
                                                           const wxString& fileExtension)
     {
@@ -4636,9 +4670,13 @@ std::pair<bool, std::wstring> BaseProject::ExtractRawText(std::string_view sourc
         }
     if (fileExtension.CmpNoCase(L"pdf") == 0)
         {
+#ifndef NDEBUG
+        return ExtractPdfRawText(sourceFileText);
+#else
         LogMessage(_(L"PDF files are not supported."), _(L"Import Error"),
                    wxOK | wxICON_EXCLAMATION);
         return std::make_pair(false, std::wstring{});
+#endif
         }
     // Unknown (or no) extension
 

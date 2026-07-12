@@ -2331,6 +2331,8 @@ class BaseProject : public ProjectRefresh
     [[nodiscard]]
     std::pair<bool, std::wstring> ExtractPostscriptRawText(std::string_view sourceFileText);
     [[nodiscard]]
+    std::pair<bool, std::wstring> ExtractPdfRawText(std::string_view sourceFileText);
+    [[nodiscard]]
     std::pair<bool, std::wstring> ExtractHtmlRawText(std::string_view sourceFileText,
                                                      const WebPageExtension& isHtmlExtension,
                                                      const wxString& fileExtension);

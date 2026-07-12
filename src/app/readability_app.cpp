@@ -49,6 +49,7 @@
 
 #include "readability_app.h"
 #include "../Wisteria-Dataviz/src/CRCpp/inc/CRC.h"
+#include "../Wisteria-Dataviz/src/data/pdfreader.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
 #include "../Wisteria-Dataviz/src/graphs/inflesz.h"
 #include "../Wisteria-Dataviz/src/graphs/lixgauge.h"
@@ -407,6 +408,28 @@ bool ReadabilityApp::OnInit()
     if (!LoadWordLists(appSettingFolderPath))
         {
         return false;
+        }
+
+    const wxString pdfTablesDir = FindResourceDirectory(_DT(L"pdf-tables"));
+    if (!Wisteria::Data::PdfReader::LoadGlyphNameTableFromFile(
+            pdfTablesDir + wxFileName::GetPathSeparator() + L"glyphlist.txt"))
+        {
+        wxLogDebug(L"Unable to load PDF glyph name table.");
+        }
+    const std::vector<std::pair<wxString, wxString>> pdfCidTables = {
+        { L"Adobe-Japan1", L"UniJIS-UTF16-H" },
+        { L"Adobe-GB1", L"UniGB-UTF16-H" },
+        { L"Adobe-CNS1", L"UniCNS-UTF16-H" },
+        { L"Adobe-Korea1", L"UniKS-UTF16-H" },
+        { L"Adobe-KR", L"UniAKR-UTF16-H" }
+    };
+    for (const auto& [registryOrdering, fileName] : pdfCidTables)
+        {
+        if (!Wisteria::Data::PdfReader::LoadCidToUnicodeTableFromFile(
+                registryOrdering, pdfTablesDir + wxFileName::GetPathSeparator() + fileName))
+            {
+            wxLogDebug(L"Unable to load PDF CID-to-Unicode table for %s.", registryOrdering);
+            }
         }
 
     // init random number generators
