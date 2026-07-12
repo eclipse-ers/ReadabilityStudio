@@ -330,11 +330,11 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     /// @brief Enables or disables log auto-refresh, syncing the ribbon button and timer.
     void SetLogAutoRefresh(bool enable);
 
-  private:
     /// @brief Redisplays the reports of all open projects if @c previousReportTheme differs
     ///     from the currently configured report theme.
     static void RefreshOpenProjectsIfThemeChanged(const wxString& previousReportTheme);
 
+  private:
     static std::map<int, wxString> m_testBundleMenuIds;
     static std::map<int, wxString> m_customTestMenuIds;
     static std::map<int, wxString> m_examplesMenuIds;

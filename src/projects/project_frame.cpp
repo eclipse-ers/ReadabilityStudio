@@ -140,6 +140,8 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          XRCID("ID_EDIT_DICTIONARY"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnProjectSettings, this,
          wxID_PROPERTIES);
+    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnToolsOptions, this,
+         wxID_PREFERENCES);
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnEditStatsReportButton, this,
          XRCID("ID_EDIT_STATS_REPORT"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectDocChildFrame::OnBoxPlotShowAllPointsButton, this,
@@ -490,6 +492,15 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
             OnProjectSettings(event);
         },
         wxID_PROPERTIES);
+
+    Bind(
+        wxEVT_MENU,
+        [this]([[maybe_unused]] wxCommandEvent&)
+        {
+            wxRibbonButtonBarEvent event;
+            OnToolsOptions(event);
+        },
+        wxID_PREFERENCES);
 
     Bind(
         wxEVT_MENU,
@@ -2702,5 +2713,17 @@ void ProjectDocChildFrame::OnProjectSettings([[maybe_unused]] wxRibbonButtonBarE
             {
             view->UpdateRibbonState();
             }
+        }
+    }
+
+//-------------------------------------------------------
+void ProjectDocChildFrame::OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event)
+    {
+    const wxString previousReportTheme = wxGetApp().GetAppOptions()->GetReportTheme();
+    ToolsOptionsDlg optionsDlg(this);
+    if (optionsDlg.ShowModal() == wxID_OK)
+        {
+        wxGetApp().GetAppOptions()->SaveOptionsFile();
+        MainFrame::RefreshOpenProjectsIfThemeChanged(previousReportTheme);
         }
     }

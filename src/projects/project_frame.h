@@ -241,6 +241,8 @@ class ProjectDocChildFrame : public wxDocChildFrame
 
     void OnProjectSettings([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
+    void OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event);
+
     void OnEditDictionaryButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
     void OnIgnoreCopyrights([[maybe_unused]] wxRibbonButtonBarEvent& event);
