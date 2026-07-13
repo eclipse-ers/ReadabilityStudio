@@ -1186,7 +1186,9 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_WORDS_BREAKDOWN_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl))                ? 0 :
+                (window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
+                 window->IsKindOf(wxCLASSINFO(wxWebView))) ?
+                    0 :
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                       ? 15 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::Histogram))) ? 6 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart)))  ? 16 :
@@ -1224,9 +1226,11 @@ void ProjectView::UpdateSideBarIcons()
             {
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_GRAMMAR_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ? 0 :
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))        ? 15 :
-                                                                                 9);
+                (window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
+                 window->IsKindOf(wxCLASSINFO(wxWebView))) ?
+                    0 :
+                window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) ? 15 :
+                                                                          9);
             }
         }
 
@@ -2717,7 +2721,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                         }
                     }
                 else if (GetActiveProjectWindow()->IsKindOf(
-                             wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
+                             wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
+                         GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2739,7 +2744,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
             if (GetRibbon() != nullptr)
                 {
                 if (GetActiveProjectWindow()->IsKindOf(
-                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
+                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
+                    GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -3153,6 +3159,28 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                    _DT(L"Words Breakdown") + wxFileName::GetPathSeparator() +
                                    text->GetTitleName() + textExt);
                         }
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
+                        {
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
+                                             wxFileName::StripExtension(doc->GetTitle())));
+                        const wxString savePath =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Words Breakdown") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
+                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        if (!htmlText.starts_with(L"<!DOCTYPE"))
+                            {
+                            htmlText.insert(0, L"<!DOCTYPE html>\n");
+                            }
+                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+                        wxFile file{ savePath, wxFile::write };
+                        if (!file.Write(htmlText))
+                            {
+                            wxLogError(L"Failed to save report: (%s).", savePath);
+                            }
+                        }
                     }
                 }
             }
@@ -3193,6 +3221,28 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                              wxFileName::StripExtension(doc->GetTitle())));
                         text->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
                                    wxFileName::GetPathSeparator() + text->GetTitleName() + textExt);
+                        }
+                    else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
+                        {
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
+                                             wxFileName::StripExtension(doc->GetTitle())));
+                        const wxString savePath = folder + wxFileName::GetPathSeparator() +
+                                                  _DT(L"Grammar") + wxFileName::GetPathSeparator() +
+                                                  webview->GetLabel() + L".htm";
+                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                        if (!htmlText.starts_with(L"<!DOCTYPE"))
+                            {
+                            htmlText.insert(0, L"<!DOCTYPE html>\n");
+                            }
+                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+                        wxFile file{ savePath, wxFile::write };
+                        if (!file.Write(htmlText))
+                            {
+                            wxLogError(L"Failed to save report: (%s).", savePath);
+                            }
                         }
                     }
                 }
@@ -3540,6 +3590,12 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                      includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
+                else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
+                    {
+                    formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                        includeLeadingPageBreak);
+                    includeLeadingPageBreak = true;
+                    }
                 }
             }
         }
@@ -3602,6 +3658,12 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     {
                     formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
                                      includeLeadingPageBreak);
+                    includeLeadingPageBreak = true;
+                    }
+                else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
+                    {
+                    formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                        includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 }
