@@ -251,7 +251,7 @@ namespace grammar
             // first see if it's a bullet
             if (string_util::is_either<wchar_t>(text[0], 0x95, 0x2022) /* bullet*/ ||
                 text[0] == 0x2023 /* triangle bullet*/ || text[0] == 0x25A0 /* filled in square*/ ||
-                text[0] == 0x25A1 /* hollow square*/ ||
+                text[0] == 0x25A1 /* hollow square*/ || text[0] == 0x2610 /* ballot box*/ ||
                 text[0] == 0x25AA /* filled in small square*/ ||
                 text[0] == 0x25CF /* filled in circle*/ || text[0] == 0x25CB /* hollow circle*/ ||
                 text[0] == 0x25E6 /* hollow bullet*/ || text[0] == 0x2043 /* hyphen bullet*/ ||
