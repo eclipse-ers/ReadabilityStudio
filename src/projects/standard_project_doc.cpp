@@ -5200,7 +5200,7 @@ ProjectDoc::BuildHighlighterTags([[maybe_unused]] const wxColour& highlightColor
             L"{\\cf10 " :
             wxString{};
     highlighterTags.DOLCH_VERB_BEGIN =
-        IsHighlightingDolchNouns() ?
+        IsHighlightingDolchVerbs() ?
             (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
             wxString::Format(L"{\\cb11\\cf%d ", dolchVerbsTextColorIndexBGMode) :
             L"{\\cf11 " :
