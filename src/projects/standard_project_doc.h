@@ -174,6 +174,25 @@ class ProjectDoc final : public BaseProjectDoc
 
     // Text window formatting helpers
     //-------------------------------
+
+    /// @brief The markup flavor to build highlighted-text content for.
+    /// @details Windows and macOS both consume RTF, but their RTF readers interpret
+    ///     background-highlight control words differently, hence the two separate
+    ///     RTF variants.
+    enum class MarkupFormat
+        {
+        RtfWindows,
+        RtfMacOS,
+        Pango
+        };
+
+    /// @returns @c true if @c format is one of the RTF variants (as opposed to Pango).
+    [[nodiscard]]
+    static constexpr bool IsRtf(const MarkupFormat format) noexcept
+        {
+        return format != MarkupFormat::Pango;
+        }
+
     struct HighlighterColors
         {
         wxColour highlightColor;
@@ -219,6 +238,7 @@ class ProjectDoc final : public BaseProjectDoc
         std::wstring BOLD_END;
         std::wstring TAB_SYMBOL;
         std::wstring CRLF;
+        MarkupFormat format{ MarkupFormat::RtfWindows };
         };
 
     struct TextLegendLines
@@ -268,18 +288,21 @@ class ProjectDoc final : public BaseProjectDoc
     HighlighterColors BuildReportColors(const wxColour& highlightColor,
                                         const wxColour& backgroundColor) const;
     /// @brief Builds the tags used to highlight words in RTF or Pango.
+    /// @param format The markup flavor to build the tags for.
     /// @param highlightColor The default highlight color.\n
     ///     This is only used for RTF, not Pango.
     /// @param highlighterColors Highlight colors used for the tags when
     ///     building for Pango (not used for RTF, since that uses indices into a color table).
     /// @returns The tags used to build RTF or Pango content.
     [[nodiscard]]
-    HighlighterTags
-    BuildHighlighterTags([[maybe_unused]] const wxColour& highlightColor,
-                         [[maybe_unused]] const HighlighterColors& highlighterColors) const;
+    HighlighterTags BuildHighlighterTags(const MarkupFormat format, const wxColour& highlightColor,
+                                         const HighlighterColors& highlighterColors) const;
     /// @brief Formats the main font for an RTF's header.
     std::pair<wxString, wxString> FormatRtfHeaderFont(const wxFont& textViewFont,
                                                       const size_t mainFontColorIndex);
+    /// @brief Encodes a legend label for embedding into RTF or Pango content.
+    [[nodiscard]]
+    static wxString EncodeLegendLabel(const wxString& label, const MarkupFormat format);
     [[nodiscard]]
     std::pair<TextLegendLines, size_t>
     BuildLegendLines(const HighlighterTags& highlighterTags) const;
@@ -291,14 +314,14 @@ class ProjectDoc final : public BaseProjectDoc
     BuildColorTable(const wxFont& textViewFont, const HighlighterColors& highlighterColors,
                     const wxColour& backgroundColor);
     [[nodiscard]]
-    TextLegends BuildLegends(const TextLegendLines& legendLines, const wxFont& textViewFont);
+    TextLegends BuildLegends(const MarkupFormat format, const TextLegendLines& legendLines,
+                             const wxFont& textViewFont);
     [[nodiscard]]
-    wxString BuildLegend(const wxString& legendLine, const TextLegendLines& legendLines,
-                         const wxFont& textViewFont);
+    wxString BuildLegend(const MarkupFormat format, const wxString& legendLine,
+                         const TextLegendLines& legendLines, const wxFont& textViewFont);
     [[nodiscard]]
-    TextHeader BuildHeader(const wxColour& backgroundColor,
-                           [[maybe_unused]] const HighlighterColors& highlighterColors,
-                           const wxFont& textViewFont);
+    TextHeader BuildHeader(const MarkupFormat format, const wxColour& backgroundColor,
+                           const HighlighterColors& highlighterColors, const wxFont& textViewFont);
 
     static void
     SetFormattedTextAndRestoreInsertionPoint(Wisteria::UI::FormattedTextCtrl* textWindow,
