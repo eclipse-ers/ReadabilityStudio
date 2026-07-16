@@ -125,6 +125,12 @@ namespace LuaScripting
 
         void SetProject(ProjectDoc* doc) noexcept { m_project = doc; }
 
+        /// @returns A short summary of the project's connected document(s)
+        ///     (or that it's using embedded text), for display in the Script
+        ///     Workbench's Locals window. Empty if the project has been closed.
+        [[nodiscard]]
+        wxString GetDebugSummary() const;
+
         // NOLINTBEGIN(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
         static const char className[];
         static Luna<StandardProject>::FunctionType methods[];

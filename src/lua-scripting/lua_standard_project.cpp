@@ -150,6 +150,38 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
+    wxString StandardProject::GetDebugSummary() const
+        {
+        if (m_project == nullptr)
+            {
+            return {};
+            }
+
+        wxString summary;
+        if (m_project->GetTextSource() == TextSource::EnteredText)
+            {
+            summary = _(L"embedded text");
+            }
+        else if (!m_project->GetOriginalDocumentFilePath().empty())
+            {
+            summary =
+                L"'" + wxFileName(m_project->GetOriginalDocumentFilePath()).GetFullName() + L"'";
+            }
+
+        if (!m_project->GetAppendedDocumentFilePath().empty())
+            {
+            if (!summary.empty())
+                {
+                summary += L" + ";
+                }
+            summary +=
+                L"'" + wxFileName(m_project->GetAppendedDocumentFilePath()).GetFullName() + L"'";
+            }
+
+        return summary;
+        }
+
+    //-------------------------------------------------------------
     bool StandardProject::ReloadIfNotDelayed()
         {
         if (!VerifyProjectIsOpen(__func__))

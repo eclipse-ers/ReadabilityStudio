@@ -493,6 +493,19 @@ LuaInterpreter::DescribeStackValue(const wxString& name, const int idx) const
             {
             info.m_type = info.m_value.Left(parenPos);
             }
+
+        // show reflections when possible for our custom objects
+        if (info.m_type == wxString::FromUTF8(LuaScripting::StandardProject::className))
+            {
+            if (const auto* project = Luna<LuaScripting::StandardProject>::lightcheck(m_L, idx);
+                project != nullptr)
+                {
+                if (const wxString docSummary = project->GetDebugSummary(); !docSummary.empty())
+                    {
+                    info.m_value = docSummary;
+                    }
+                }
+            }
         }
 
     return info;
