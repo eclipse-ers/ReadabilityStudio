@@ -239,9 +239,13 @@ class ProjectView final : public BaseProjectView
     bool NavigateToHref(const wxString& href);
     void OnSummation([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnFind(wxFindDialogEvent& event);
+    // re-themes the stats rows when the OS color scheme changes,
+    // since their background is blended from system colors
+    void OnReadabilityScoresSysColourChanged(wxSysColourChangedEvent& event);
 
     void UpdateSideBarIcons();
     void UpdateStatistics();
+    void RefreshStatRowColours();
     void UpdateRibbonState() final;
     // view classes
     WindowContainer m_readabilityResultsView;

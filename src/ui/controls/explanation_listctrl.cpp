@@ -52,6 +52,7 @@
 #include "../../app/readability_app.h"
 #include "../../projects/project_navigation_links.h"
 #include "../../results-format/project_report_format.h"
+#include <wx/regex.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -293,6 +294,21 @@ bool ExplanationListCtrl::Save(
         {
         wxString buffer;
         GetResultsListCtrl()->FormatToHtml(buffer, false);
+
+        // FormatToHtml() bakes the stats rows' background (and, via luminance, their
+        // text color) as static hex values from the app's current light/dark mode.
+        // Swap that for the ".stat-row" CSS class (added to the <style> block below),
+        // which stays in sync with the browser's own light/dark preference instead.
+        const wxString statRowBackground =
+            GetStatRowBackgroundColour(GetResultsListCtrl()->GetBackgroundColour())
+                .GetAsString(wxC2S_HTML_SYNTAX);
+        buffer.Replace(wxString::Format(L"style='background:%s;'", statRowBackground),
+                       L"class='stat-row'");
+        static const wxRegEx statRowTextColourRegEx{
+            LR"(<span style='color:#[0-9A-Fa-f]{6};'>(.*?)</span>)"
+        };
+        statRowTextColourRegEx.ReplaceAll(&buffer, LR"(\1)");
+
         resultsHtml = buffer;
         }
     if (exportOptions == ExplanationListExportOptions::ExportExplanations ||
@@ -308,6 +324,11 @@ bool ExplanationListCtrl::Save(
             }
         }
 
+    wxString themeCss = ProjectReportFormat::GetThemeCss(
+        _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme());
+    themeCss += L"\n.stat-row { background: color-mix(in srgb, var(--header-accent) 10%, Canvas); "
+                "color: CanvasText; }";
+
     resultsHtml.insert(
         0, wxString::Format(
                L"<!DOCTYPE html>\n<html>\n<head>"
@@ -317,9 +338,7 @@ bool ExplanationListCtrl::Save(
                "\n    <title>%s</title>"
                "\n    <style>%s</style>"
                "\n</head>\n<body>\n",
-               wxTheApp->GetAppName(), GetLabel(),
-               ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
-                                                wxGetApp().GetAppOptions()->GetReportTheme())));
+               wxTheApp->GetAppName(), GetLabel(), themeCss));
     resultsHtml += L"\n<br />\n" + descriptionHtml + L"\n</body>\n</html>";
 
     lily_of_the_valley::html_format::strip_hyperlinks(resultsHtml);
@@ -448,6 +467,40 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
             (explanationIter != m_explanations.end()) ? explanationIter->second : wxString{};
         GetExplanationView()->SetPage(BuildExplanationPage(explanationBody), wxString{});
         }
+    }
+
+//------------------------------------------------------
+wxColour ExplanationListCtrl::GetStatRowBackgroundColour(const wxColour& background)
+    {
+    const wxString css = ProjectReportFormat::GetThemeCss(
+        _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme());
+
+    // fallback: default theme's header accent
+    wxColour accentColour{ L"#00CC66" };
+    const auto tagPos = css.rfind(L"--header-accent:");
+    if (tagPos != wxString::npos)
+        {
+        const auto hashPos = css.find(L'#', tagPos);
+        if (hashPos != wxString::npos && hashPos + 7 <= css.length())
+            {
+            const wxColour parsedColour{ css.substr(hashPos, 7) };
+            if (parsedColour.IsOk())
+                {
+                accentColour = parsedColour;
+                }
+            }
+        }
+
+    // mirror the CSS theme's color mixing
+    constexpr double accentWeight{ 0.10 };
+    const auto blendChannel = [accentWeight](const unsigned char accent, const unsigned char canvas)
+    {
+        return static_cast<unsigned char>((accent * accentWeight) + (canvas * (1 - accentWeight)) +
+                                          0.5);
+    };
+    return wxColour{ blendChannel(accentColour.Red(), background.Red()),
+                     blendChannel(accentColour.Green(), background.Green()),
+                     blendChannel(accentColour.Blue(), background.Blue()) };
     }
 
 //------------------------------------------------------

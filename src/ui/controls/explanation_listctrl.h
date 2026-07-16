@@ -255,6 +255,13 @@ class ExplanationListCtrl final : public wxPanel
             }
         }
 
+    /// @brief Computes a themed background color for statistics rows,
+    ///     blending the report theme's header accent color into @p background.
+    /// @param background The list control's actual background color.
+    /// @returns The themed row background color.
+    [[nodiscard]]
+    static wxColour GetStatRowBackgroundColour(const wxColour& background);
+
   private:
     ExplanationListCtrl() = default;
 

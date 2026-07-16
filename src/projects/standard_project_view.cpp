@@ -1826,6 +1826,10 @@ bool ProjectView::OnCreate(wxDocument* doc, long flags)
         wxGetApp().GetAppOptions()->GetRightPrinterFooter());
     readabilityScoresView->SetResources(wxGetApp().GetMainFrame()->GetHelpDirectory(),
                                         L"online/customizing-results.html");
+    // the stats row background is blended from system colors, so re-apply it
+    // whenever the OS color scheme changes
+    readabilityScoresView->GetResultsListCtrl()->Bind(
+        wxEVT_SYS_COLOUR_CHANGED, &ProjectView::OnReadabilityScoresSysColourChanged, this);
     GetReadabilityResultsView().AddWindow(readabilityScoresView);
     GetSplitter()->SplitVertically(GetSideBar(), readabilityScoresView,
                                    GetSideBar()->GetMinWidth());
@@ -1851,11 +1855,6 @@ bool ProjectView::OnCreate(wxDocument* doc, long flags)
 void ProjectView::UpdateStatistics()
     {
     auto* doc = dynamic_cast<ProjectDoc*>(GetDocument());
-
-    // Neutral slate gray at ~50% luminance so it reads well against both light
-    // and dark list backgrounds (and against both light and dark row text).
-    wxListItemAttr statRowAttribs;
-    statRowAttribs.SetBackgroundColour(wxColour{ L"#6B7280" });
 
     const wxString selectedItem =
         GetReadabilityScoresList()->GetResultsListCtrl()->GetSelectedText();
@@ -1991,8 +1990,6 @@ void ProjectView::UpdateStatistics()
                                                                       _(L"N/A"));
         GetReadabilityScoresList()->GetResultsListCtrl()->SetItemText(firstStatLocation, 4,
                                                                       clozeAverage);
-        GetReadabilityScoresList()->GetResultsListCtrl()->SetRowAttributes(firstStatLocation,
-                                                                           statRowAttribs);
 
         // format the explanation of the averages
         wxString explanationString =
@@ -2025,8 +2022,6 @@ void ProjectView::UpdateStatistics()
                                                                           _(L"N/A"));
             GetReadabilityScoresList()->GetResultsListCtrl()->SetItemText(statLocation, 4,
                                                                           clozeMode);
-            GetReadabilityScoresList()->GetResultsListCtrl()->SetRowAttributes(statLocation,
-                                                                               statRowAttribs);
 
             // format the explanation of the modes
             explanationString =
@@ -2058,8 +2053,6 @@ void ProjectView::UpdateStatistics()
                                                                           _(L"N/A"));
             GetReadabilityScoresList()->GetResultsListCtrl()->SetItemText(statLocation, 4,
                                                                           clozeMedian);
-            GetReadabilityScoresList()->GetResultsListCtrl()->SetRowAttributes(statLocation,
-                                                                               statRowAttribs);
 
             // format the explanation of the medians
             explanationString =
@@ -2119,8 +2112,6 @@ void ProjectView::UpdateStatistics()
                                                                           _(L"N/A"));
             GetReadabilityScoresList()->GetResultsListCtrl()->SetItemText(statLocation, 4,
                                                                           clozeStdDev);
-            GetReadabilityScoresList()->GetResultsListCtrl()->SetRowAttributes(statLocation,
-                                                                               statRowAttribs);
 
             // format the explanation of the variances
             explanationString =
@@ -2162,6 +2153,8 @@ void ProjectView::UpdateStatistics()
         }
     GetReadabilityScoresList()->GetResultsListCtrl()->Resort();
 
+    RefreshStatRowColours();
+
     // select the item user had selected before the update
     const auto selectedItemLocation =
         GetReadabilityScoresList()->GetResultsListCtrl()->FindEx(selectedItem);
@@ -2169,6 +2162,33 @@ void ProjectView::UpdateStatistics()
         {
         GetReadabilityScoresList()->GetResultsListCtrl()->Select(selectedItemLocation);
         }
+    }
+
+//-------------------------------------------------------
+void ProjectView::RefreshStatRowColours()
+    {
+    wxListItemAttr statRowAttribs;
+    statRowAttribs.SetBackgroundColour(ExplanationListCtrl::GetStatRowBackgroundColour(
+        GetReadabilityScoresList()->GetResultsListCtrl()->GetBackgroundColour()));
+
+    for (const auto& label :
+         { GetAverageLabel(), GetMedianLabel(), GetModeLabel(), GetStdDevLabel() })
+        {
+        const long statLocation = GetReadabilityScoresList()->GetResultsListCtrl()->FindEx(label);
+        if (statLocation != wxNOT_FOUND)
+            {
+            GetReadabilityScoresList()->GetResultsListCtrl()->SetRowAttributes(statLocation,
+                                                                               statRowAttribs);
+            }
+        }
+    GetReadabilityScoresList()->GetResultsListCtrl()->Refresh();
+    }
+
+//-------------------------------------------------------
+void ProjectView::OnReadabilityScoresSysColourChanged(wxSysColourChangedEvent& event)
+    {
+    RefreshStatRowColours();
+    event.Skip();
     }
 
 //-------------------------------------------------------
