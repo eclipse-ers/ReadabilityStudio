@@ -67,9 +67,7 @@ namespace Wisteria
             @param wordStatistic The word statistic (e.g., number of hard words).
             @param sentenceStatistic The sentence statistic (e.g., number of sentences).*/
         ScorePoint(const double wordStatistic, const double sentenceStatistic)
-            : m_wordStatistic(wordStatistic), m_sentenceStatistic(sentenceStatistic),
-              m_score1(std::numeric_limits<size_t>::quiet_NaN()),
-              m_score2(std::numeric_limits<size_t>::quiet_NaN())
+            : m_wordStatistic(wordStatistic), m_sentenceStatistic(sentenceStatistic)
             {
             }
 
@@ -82,7 +80,7 @@ namespace Wisteria
         void ResetStatus() noexcept
             {
             m_scoreInfo.reset();
-            m_score1 = m_score2 = std::numeric_limits<size_t>::quiet_NaN();
+            m_score1 = m_score2 = 0;
             }
 
         /// @brief Sets the score.
@@ -176,8 +174,8 @@ namespace Wisteria
       private:
         // invalid score, score out of grade range, etc...
         std::bitset<4> m_scoreInfo{ 0 };
-        size_t m_score1{ std::numeric_limits<size_t>::quiet_NaN() };
-        size_t m_score2{ std::numeric_limits<size_t>::quiet_NaN() };
+        size_t m_score1{ 0 };
+        size_t m_score2{ 0 };
         };
     } // namespace Wisteria
 

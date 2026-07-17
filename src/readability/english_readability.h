@@ -2573,7 +2573,7 @@ namespace readability
             [[fallthrough]];
         default:
             return 11.3;
-            };
+            }
         }
 
     /** FORCAST (J. Patrick FORd, John S. CAylor, and Thomas G. STicht) test,

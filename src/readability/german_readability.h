@@ -74,7 +74,7 @@ namespace readability
     [[nodiscard]]
     inline german_lix_difficulty german_lix_index_to_difficulty_level(const size_t index) noexcept
         {
-        if (index < 29)
+        if (index < 30)
             {
             return german_lix_difficulty::german_lix_very_easy;
             }
