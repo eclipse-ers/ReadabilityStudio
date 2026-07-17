@@ -9,6 +9,7 @@
 /installers/macos/
 /installers/unix/AppDir/usr/bin
 /installers/unix/deb-stage/usr/share
+/installers/unix/rpm-stage/usr/share
 /out/
 /TestResults
 /tests/gui-tests/.vs
