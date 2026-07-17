@@ -89,6 +89,7 @@ endif()
 set(PROGRAM_LONGNAME "Eclipse ${readstudio_DESCRIPTION}")
 set(PROGRAM_NUMBERED_VERSION 9.0)
 set(PUBLISHER "Eclipse Foundation AISBL")
+set(PUBLISHER_RDNS_ID "org.eclipse")
 set(PROGRAM_AUTHOR "Blake Madden")
 set(PROGRAM_AUTHOR_MLA "Madden, Blake")
 set(PROGRAM_AUTHOR_APA "Madden, B.")
@@ -135,6 +136,7 @@ endif()
 string(TIMESTAMP BUILD_YEAR "%Y")
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 string(TIMESTAMP CHANGELOG_DATE_RFC "%a, %d %b %Y %H:%M:%S +0000")
+string(TIMESTAMP RPM_CHANGELOG_DATE "%a %b %d %Y")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${MIN_GCC_REQUIRED})
   message(FATAL_ERROR "Insufficient GCC version. ${MIN_GCC_REQUIRED} is required, but only ${CMAKE_CXX_COMPILER_VERSION} found.")
@@ -183,15 +185,19 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/citations.apa.in"
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/resource.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/resource.h")
 if(UNIX AND NOT APPLE)
-    # Map CMAKE_SYSTEM_PROCESSOR to Debian architecture name
+    # Map CMAKE_SYSTEM_PROCESSOR to Debian and RPM architecture names
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
         set(DEB_ARCHITECTURE "amd64")
+        set(RPM_ARCHITECTURE "x86_64")
     elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
         set(DEB_ARCHITECTURE "arm64")
+        set(RPM_ARCHITECTURE "aarch64")
     elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
         set(DEB_ARCHITECTURE "armhf")
+        set(RPM_ARCHITECTURE "armv7hl")
     else()
         set(DEB_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+        set(RPM_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
     endif()
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/org.eclipse.readabilitystudio.desktop")
@@ -203,6 +209,8 @@ if(UNIX AND NOT APPLE)
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/changelog")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/copyright.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb/copyright")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/rpm/readstudio.spec.in"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/rpm/readstudio.spec")
 elseif(WIN32)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl.in"
                    "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/setup.isl")
@@ -241,6 +249,7 @@ else()
     message(STATUS "Architecture: ${CMAKE_SYSTEM_PROCESSOR}" )
     if(UNIX AND NOT APPLE)
         message(STATUS "DEB architecture: ${DEB_ARCHITECTURE}")
+        message(STATUS "RPM architecture: ${RPM_ARCHITECTURE}")
     endif()
 endif()
 
@@ -673,6 +682,7 @@ endif()
 set(APPIMAGE_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/bin")
 set(APPIMAGE_LOCALE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/AppDir/usr/share/locale")
 set(DEB_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/deb-stage")
+set(RPM_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/unix/rpm-stage")
 set(WINDOWS_STAGING_DIR "${CMAKE_CURRENT_SOURCE_DIR}/installers/windows")
 
 include(cmake/modules/StageFiles.cmake)
@@ -750,7 +760,8 @@ add_custom_command(TARGET ${PROJECT_NAME}
                    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/pdf-tables"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${APPIMAGE_STAGING_DIR}/pdf-tables"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${WINDOWS_STAGING_DIR}/resources/pdf-tables"
-                   COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables")
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${RPM_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables")
 foreach(pdf_table ${PDF_TABLES})
     add_custom_command(TARGET ${PROJECT_NAME}
                        POST_BUILD
@@ -758,7 +769,8 @@ foreach(pdf_table ${PDF_TABLES})
                        COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>${RESOURCE_FOLDER}/pdf-tables/${pdf_table}"
                        COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${APPIMAGE_STAGING_DIR}/pdf-tables/${pdf_table}"
                        COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${WINDOWS_STAGING_DIR}/resources/pdf-tables/${pdf_table}"
-                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables/${pdf_table}")
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables/${pdf_table}"
+                       COMMAND ${CMAKE_COMMAND} -E copy "${PDF_TABLE_SRC_DIR}/${pdf_table}" "${RPM_STAGING_DIR}/usr/share/ReadabilityStudio/pdf-tables/${pdf_table}")
 endforeach()
 
 if(UNIX)
@@ -839,8 +851,14 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
                            "${APPIMAGE_STAGING_DIR}/res.wad" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/"
                        COMMAND ${CMAKE_COMMAND} -E copy
                            "${APPIMAGE_STAGING_DIR}/words.wad" "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/"
-                       COMMAND ${CMAKE_COMMAND} -E copy
-                           "${APPIMAGE_STAGING_DIR}/LICENSE" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/")
+                        COMMAND ${CMAKE_COMMAND} -E copy
+                            "${APPIMAGE_STAGING_DIR}/LICENSE" "${DEB_STAGING_DIR}/usr/share/doc/readstudio/")
+        # RPM packaging (reuse the DEB staging directory, minus the DEBIAN control directory)
+        add_custom_command(TARGET ${PROJECT_NAME}
+                       POST_BUILD
+                       COMMAND ${CMAKE_COMMAND} -E echo "Staging RPM buildroot."
+                       COMMAND ${CMAKE_COMMAND} -E copy_directory "${DEB_STAGING_DIR}" "${RPM_STAGING_DIR}"
+                       COMMAND ${CMAKE_COMMAND} -E remove_directory "${RPM_STAGING_DIR}/DEBIAN")
     elseif(APPLE)
         add_custom_command(TARGET ${PROJECT_NAME}
                            POST_BUILD

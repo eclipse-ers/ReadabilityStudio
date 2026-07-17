@@ -8,7 +8,8 @@
 	<description>
 		<p>${PROGRAM_LONGNAME} is readability analysis software for evaluating the complexity of documents and passages of text.</p>
 	</description>
-	<developer>
+	<developer_name>${PUBLISHER}</developer_name>
+	<developer id="${PUBLISHER_RDNS_ID}">
 		<name>${PUBLISHER}</name>
 	</developer>
 	<launchable type="desktop-id">org.eclipse.readabilitystudio.desktop</launchable>

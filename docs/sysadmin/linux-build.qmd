@@ -15,6 +15,7 @@ Install the following tools to build *{{< var PROGRAM_NAME >}}*:
 | *CMake* {{< var CMAKE_MINIMUM_REQUIRED_VERSION >}} or higher (*cmake* and *cmake-extra*) |
 | *git* |
 | *AppImage* (*libappimage-dev*) |
+| *RPM* (*rpm*) |
 | *R* (*r-base*, optional) |
 | *Quarto* ([https://quarto.org/](https://quarto.org/), optional) |
 | *POEdit* (*poedit*, optional) |
@@ -85,4 +86,30 @@ dpkg-deb --build installers/unix/deb-stage \
 ```
 
 Once built, the DEB package will be available in `r menu(c('installers', 'unix'))`.
+Apply a GPG signature to it before distributing.
+
+## Build the RPM package {-}
+
+After building *{{< var PROGRAM_NAME >}}* in Release mode, the RPM staging directory will be populated at `r menu(c('installers', 'unix', 'rpm-stage'))`.
+To package it, set up an *rpmbuild* tree and run the spec file:
+
+```{.bash}
+VERSION=$(grep -oP 'project\(readstudio VERSION \K[0-9.]+' CMakeLists.txt)
+mkdir -p "$HOME/rpmbuild"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+cp installers/unix/rpm/readstudio.spec "$HOME/rpmbuild/SPECS/"
+rpmbuild -bb \
+  --define "_topdir $HOME/rpmbuild" \
+  --define "_rpmdir ${PWD}/installers/unix" \
+  --define "_build_name_fmt %{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm" \
+  --define "_rpm_staging_dir ${PWD}/installers/unix/rpm-stage" \
+  --undefine "__os_install_post" \
+  "$HOME/rpmbuild/SPECS/readstudio.spec"
+```
+
+::: {.warningsection data-latex=""}
+The RPM must be built on *Fedora* or *RHEL*.
+Building on *Ubuntu* or *Debian* will produce an RPM with incompatible library dependencies.
+:::
+
+Once built, the RPM package will be available in `r menu(c('installers', 'unix'))`.
 Apply a GPG signature to it before distributing.

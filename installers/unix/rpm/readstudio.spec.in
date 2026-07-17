@@ -1,0 +1,58 @@
+#############################################################################
+# Name:        readstudio.spec.in
+# Purpose:     RPM spec file for ${readstudio_DESCRIPTION}
+# Author:      ${PROGRAM_AUTHOR}
+# Created:     ${BUILD_DATE}
+# Copyright:   (c) ${BUILD_YEAR} ${PUBLISHER}
+# License:     ${PROGRAM_LICENSE}
+#############################################################################
+
+Name: ${PROJECT_NAME}
+Version: ${FULL_DISPLAY_VERSION}
+Release: 1%{?dist}
+Summary: ${PROGRAM_LONGNAME}
+License: EPL-2.0
+URL: ${readstudio_HOMEPAGE_URL}
+BuildArch: ${RPM_ARCHITECTURE}
+AutoReqProv: no
+Packager: ${PROGRAM_AUTHOR}
+Vendor: ${PUBLISHER}
+Requires: hicolor-icon-theme
+Requires: desktop-file-utils
+Requires: gtk3 >= 3.24
+Requires: webkit2gtk4.1
+Requires: libcurl
+Requires: gspell
+Requires: libjpeg-turbo
+Requires: fontconfig
+Requires: libgomp
+
+%description
+${PROGRAM_COMMENTS}.
+
+%install
+mkdir -p %{buildroot}
+cp -a %{_rpm_staging_dir}/. %{buildroot}/
+chmod 755 %{buildroot}/usr/bin/%{name}
+
+%post
+gtk-update-icon-cache -f -t /usr/share/icons/hicolor 2>/dev/null || :
+update-desktop-database /usr/share/applications 2>/dev/null || :
+
+%postun
+gtk-update-icon-cache -f -t /usr/share/icons/hicolor 2>/dev/null || :
+update-desktop-database /usr/share/applications 2>/dev/null || :
+
+%files
+%defattr(-,root,root,-)
+/usr/bin/%{name}
+/usr/share/ReadabilityStudio/
+/usr/share/applications/org.eclipse.readabilitystudio.desktop
+/usr/share/icons/hicolor/scalable/apps/app-logo.svg
+/usr/share/metainfo/%{name}.metainfo.xml
+/usr/share/doc/%{name}/
+/usr/share/locale/*/LC_MESSAGES/*.mo
+
+%changelog
+* ${RPM_CHANGELOG_DATE} ${PROGRAM_AUTHOR} - ${FULL_DISPLAY_VERSION}-1
+- Initial RPM release.

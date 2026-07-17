@@ -114,6 +114,10 @@ function(copy_translations LANG)
         set(_DEB_MO_DEST "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/readstudio.mo")
         set(_DEB_MO_DIR  "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
 
+        # RPM destination
+        set(_RPM_MO_DEST "${RPM_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/readstudio.mo")
+        set(_RPM_MO_DIR  "${RPM_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
+
         # Always copy .mo file to destinations
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
@@ -123,7 +127,9 @@ function(copy_translations LANG)
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_APPIMAGE_MO_DEST}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/readstudio.mo"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_MO_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_DEB_MO_DEST}")
+            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_DEB_MO_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_RPM_MO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_USE_MO}" "${_RPM_MO_DEST}")
     endif()
 
     # ---- wxWidgets stock translation (wxstd.mo) ----
@@ -174,6 +180,10 @@ function(copy_translations LANG)
         set(_DEB_WXMO_DEST "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/wxstd.mo")
         set(_DEB_WXMO_DIR  "${DEB_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
 
+        # RPM destination
+        set(_RPM_WXMO_DEST "${RPM_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES/wxstd.mo")
+        set(_RPM_WXMO_DIR  "${RPM_STAGING_DIR}/usr/share/locale/${LANG}/LC_MESSAGES")
+
         # Always copy wxstd.mo if available
         add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD
@@ -183,7 +193,9 @@ function(copy_translations LANG)
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_APPIMAGE_WXMO_DEST}"
             COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${WINDOWS_STAGING_DIR}/resources/${LANG}/wxstd.mo"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_WXMO_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_DEB_WXMO_DEST}")
+            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_DEB_WXMO_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${_RPM_WXMO_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${_WX_USE_MO}" "${_RPM_WXMO_DEST}")
     endif()
 endfunction()
 
@@ -247,6 +259,7 @@ function(copy_dir_to_staging SRC DEST_REL)
     set(_APPIMAGE_DEST "${APPIMAGE_STAGING_DIR}/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
     set(_WINDOWS_DEST "${WINDOWS_STAGING_DIR}/resources/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
     set(_DEB_DEST "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
+    set(_RPM_DEST "${RPM_STAGING_DIR}/usr/share/ReadabilityStudio/$<IF:$<STREQUAL:${DEST_REL},>,,${DEST_REL}>")
 
     add_custom_command(TARGET ${PROJECT_NAME}
         POST_BUILD
@@ -256,6 +269,7 @@ function(copy_dir_to_staging SRC DEST_REL)
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_APPIMAGE_DEST}"
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_WINDOWS_DEST}"
         COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_DEB_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying '${SRC}' → ${_RPM_DEST}"
 
         # Ensure dirs exist, then copy
         COMMAND ${CMAKE_COMMAND} -E make_directory "${_MACOS_DEST}"
@@ -269,6 +283,9 @@ function(copy_dir_to_staging SRC DEST_REL)
 
         COMMAND ${CMAKE_COMMAND} -E make_directory "${_DEB_DEST}"
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${_SRC}" "${_DEB_DEST}"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${_RPM_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${_SRC}" "${_RPM_DEST}"
     )
 endfunction()
 
@@ -336,5 +353,9 @@ function(copy_citation_file FILENAME)
         COMMAND ${CMAKE_COMMAND} -E copy
             "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}"
             "${DEB_STAGING_DIR}/usr/share/ReadabilityStudio/${BASENAME}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${RPM_STAGING_DIR}/usr/share/ReadabilityStudio"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}"
+            "${RPM_STAGING_DIR}/usr/share/ReadabilityStudio/${BASENAME}"
     )
 endfunction()

@@ -159,6 +159,7 @@ In release builds, the binary and resources are automatically staged for install
   An *Inno Setup* script is configured for building the installer.
 - Linux (`r os_logo('linux')`): the executable is copied to the AppImage staging directory at\
   `r file_path(c('installers', 'unix', 'AppDir', 'usr', 'bin'))`.\
-  A `.desktop` file and application icon are also staged.
+  A `.desktop` file and application icon are also staged.\
+  Resources are also staged into `r file_path(c('installers', 'unix', 'deb-stage'))` and `r file_path(c('installers', 'unix', 'rpm-stage'))` for downstream packaging.\
 - macOS (`r os_logo('apple')`): the application bundle is copied to `r file_path(c('installers', 'macos', 'release'))`.\
   The `r file_path("Info.plist")` is configured from its template.
