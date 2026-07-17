@@ -417,11 +417,11 @@ bool ReadabilityApp::OnInit()
         wxLogDebug(L"Unable to load PDF glyph name table.");
         }
     const std::vector<std::pair<wxString, wxString>> pdfCidTables = {
-        { L"Adobe-Japan1", L"UniJIS-UTF16-H" },
-        { L"Adobe-GB1", L"UniGB-UTF16-H" },
-        { L"Adobe-CNS1", L"UniCNS-UTF16-H" },
-        { L"Adobe-Korea1", L"UniKS-UTF16-H" },
-        { L"Adobe-KR", L"UniAKR-UTF16-H" }
+        { _DT(L"Adobe-Japan1"), _DT(L"UniJIS-UTF16-H") },
+        { _DT(L"Adobe-GB1"), _DT(L"UniGB-UTF16-H") },
+        { _DT(L"Adobe-CNS1"), _DT(L"UniCNS-UTF16-H") },
+        { _DT(L"Adobe-Korea1"), _DT(L"UniKS-UTF16-H") },
+        { _DT(L"Adobe-KR"), _DT(L"UniAKR-UTF16-H") }
     };
     for (const auto& [registryOrdering, fileName] : pdfCidTables)
         {

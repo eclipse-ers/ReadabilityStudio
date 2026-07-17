@@ -19,10 +19,10 @@ To export any window, go to the **Home** tab and click the `r keys("Save")` butt
 Numerous formats are available for each type of window:
 
 - [Highlighted text](#sec-text-window-export): HTML, RTF, and Pango (Pango is only available on Linux.)
-- Statistical summaries: HTML
+- Statistical summaries: HTML and PDF
 - [Test results](#sec-scores-export): HTML
-- Word, phrase, and sentence [lists](#sec-export-list): HTML, Text, and {{< latex >}}
-- [Graphs](#sec-image-export): PNG, BMP, TIFF, JPEG, GIF, TARGA, and SVG
+- Word, phrase, and sentence [lists](#sec-export-list): HTML, Text, {{< latex >}}, and PDF
+- [Graphs](#sec-image-export): PNG, BMP, TIFF, JPEG, GIF, TARGA, SVG, WebP, and PDF
 
 All windows can also be exported at once by clicking the arrow beneath `r keys("Save")` and selecting [**Export All...**](#sec-export-all-options).
 
@@ -82,6 +82,10 @@ Note that this image format is limited to 256 colors.
 
 **SVG**: A format that uses vector (rather than raster) drawing.
 Vector-based images can be scaled to much larger sizes, without the loss of quality that raster images would experience.
+
+**WebP**: A replacement for JPEG, PNG, and GIF file formats which supports both lossy and lossless compression.
+
+**PDF**: A vector-based document format that preserves text and graphics at any scale.
 :::
 
 After selecting the image format, these additional options will be provided:
@@ -133,6 +137,8 @@ When [exporting](#sec-exporting)\index{exporting!lists} a list\index{lists!expor
 **HTML**: A format that includes formatting and can be opened in browsers and spreadsheet programs.
 
 **TXT**: A tab-delimited file with no formatting (i.e., colors will be lost).
+
+**PDF**: A vector-based document format that preserves text at any scale.
 
 **LaTeX**: A {{< latex >}} file with the list formatted into a `longtable{}` environment that can be included in a larger {{< latex >}} document.
 :::

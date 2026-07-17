@@ -326,7 +326,7 @@ bool ExplanationListCtrl::Save(
 
     wxString themeCss = ProjectReportFormat::GetThemeCss(
         _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme());
-    themeCss += L"\n.stat-row { background: color-mix(in srgb, var(--header-accent) 10%, Canvas); "
+    themeCss += L"\n.stat-row { background: color-mix(in srgb, var(--header-accent) 30%, Canvas); "
                 "color: CanvasText; }";
 
     resultsHtml.insert(
@@ -477,7 +477,7 @@ wxColour ExplanationListCtrl::GetStatRowBackgroundColour(const wxColour& backgro
 
     // fallback: default theme's header accent
     wxColour accentColour{ L"#00CC66" };
-    const auto tagPos = css.rfind(L"--header-accent:");
+    const auto tagPos = css.rfind(_DT(L"--header-accent:"));
     if (tagPos != wxString::npos)
         {
         const auto hashPos = css.find(L'#', tagPos);
@@ -491,10 +491,10 @@ wxColour ExplanationListCtrl::GetStatRowBackgroundColour(const wxColour& backgro
             }
         }
 
-    // mirror the CSS theme's color mixing
-    constexpr double accentWeight{ 0.10 };
-    const auto blendChannel = [accentWeight](const unsigned char accent, const unsigned char canvas)
+    const auto blendChannel = [](const unsigned char accent, const unsigned char canvas)
     {
+        // mirror the CSS theme's color mixing, but with a little more contrast
+        constexpr double accentWeight{ 0.30 };
         return static_cast<unsigned char>((accent * accentWeight) + (canvas * (1 - accentWeight)) +
                                           0.5);
     };
