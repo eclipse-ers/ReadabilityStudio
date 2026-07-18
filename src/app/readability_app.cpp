@@ -349,15 +349,10 @@ bool ReadabilityApp::OnInit()
         {
         if (!wxFileName::Mkdir(appSettingFolderPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
             {
-/* desperation move that should never happen--
-   just save the settings to the root folder*/
-#ifdef __WXMSW__
-            appSettingFolderPath = L"C:\\";
-#elif defined(__WXOSX__)
-            appSettingFolderPath = L"/Users/Shared/";
-#else
-            appSettingFolderPath = L"/usr/share/";
-#endif
+            /* desperation move that should never happen--
+               just save the settings to the user's config folder */
+            appSettingFolderPath =
+                wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator();
             }
         }
 #ifdef __WXMSW__
