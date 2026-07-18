@@ -48,7 +48,6 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "edit_text_dlg.h"
-#include "../../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../../app/readability_app.h"
 #include "../../projects/base_project_doc.h"
 #include "../../projects/batch_project_doc.h"
@@ -139,14 +138,15 @@ EditTextDlg::EditTextDlg(wxWindow* parent, BaseProjectDoc* parentDoc, wxString v
         {
             wxFontData data;
             data.SetInitialFont(m_style.GetFont());
-            data.SetColour(m_style.GetTextColour());
+            // the editor uses the system's text and window colors, so don't offer
+            // color (or any other effects) in here
+            data.EnableEffects(false);
             wxFontDialog dialog(this, data);
             if (dialog.ShowModal() == wxID_OK)
                 {
                 const bool wasModified = m_textEntry->IsModified();
                 const bool isUndoEnabled = m_textEntry->CanUndo();
                 m_style.SetFont(dialog.GetFontData().GetChosenFont());
-                m_style.SetTextColour(dialog.GetFontData().GetColour());
                 m_textEntry->SetStyle(0, m_textEntry->GetLastPosition(), m_style);
                 // don't mark as modified when just changing the view's appearance
                 m_textEntry->SetModified(wasModified);
@@ -158,7 +158,6 @@ EditTextDlg::EditTextDlg(wxWindow* parent, BaseProjectDoc* parentDoc, wxString v
                 EnableSaveButton(wasModified);
 
                 wxGetApp().GetAppOptions()->SetEditorFont(dialog.GetFontData().GetChosenFont());
-                wxGetApp().GetAppOptions()->SetEditorFontColor(dialog.GetFontData().GetColour());
                 }
         },
         wxID_SELECT_FONT);
@@ -346,34 +345,15 @@ void EditTextDlg::CreateControls()
     // resets the control's wxTextAttr information. It seems that you can only use
     // AppendText() to preserve the default style information, so we need to manually
     // handle connecting the text control to m_value via Save() and OnOK().
-    m_textEntry = new Wisteria::UI::FormattedTextCtrl(this, wxID_ANY, wxDefaultPosition,
-                                                      wxSize(-1, FromDIP(500)),
-                                                      wxTE_AUTO_URL | wxTE_PROCESS_TAB);
+    m_textEntry =
+        new wxTextCtrl(this, wxID_ANY, wxString{}, wxDefaultPosition, wxSize(-1, FromDIP(500)),
+                       wxTE_RICH2 | wxTE_MULTILINE | wxTE_BESTWRAP | wxTE_NOHIDESEL |
+                           wxTE_AUTO_URL | wxTE_PROCESS_TAB);
     m_textEntry->SetMargins(10, 10);
-    if (m_parentDoc != nullptr)
-        {
-        m_textEntry->SetBackgroundColour(m_parentDoc->GetTextReportBackgroundColor());
-        }
-    const wxColour fontColor = [&]()
-    {
-        if (m_parentDoc != nullptr &&
-            // Default white? Just keep their selected font color.
-            m_parentDoc->GetTextReportBackgroundColor() != wxColour{ 255, 255, 255 })
-            {
-            // if they are theming, and it's dark, then explicitly use white
-            return (Wisteria::Colors::ColorContrast::IsDark(
-                        m_parentDoc->GetTextReportBackgroundColor()) ?
-                        wxColour{ 255, 255, 255 } :
-                        // ...otherwise, shade or tint to go with the theme
-                        Wisteria::Colors::ColorContrast::ShadeOrTintIfClose(
-                            wxGetApp().GetAppOptions()->GetEditorFontColor(),
-                            m_parentDoc->GetTextReportBackgroundColor()));
-            }
 
-        return wxGetApp().GetAppOptions()->GetEditorFontColor();
-    }();
-
-    m_style = wxTextAttr{ fontColor, wxNullColour, wxGetApp().GetAppOptions()->GetEditorFont() };
+    // no colors are set here (on the control or in the style); leaving them alone
+    // is what lets the editor follow the system's light and dark modes
+    m_style = wxTextAttr{ wxNullColour, wxNullColour, wxGetApp().GetAppOptions()->GetEditorFont() };
 
     if (wxGetApp().GetAppOptions()->IsEditorIndenting())
         {
@@ -433,13 +413,54 @@ void EditTextDlg::CreateControls()
     }
 
 //------------------------------------------------------
+long EditTextDlg::FindText(const wxString& textToFind, const int findFlags)
+    {
+    const bool searchDown{ (findFlags & wxFR_DOWN) != 0 };
+
+    long selStart{ 0 }, selEnd{ 0 };
+    m_textEntry->GetSelection(&selStart, &selEnd);
+
+    const auto search = wxTextSearch{ textToFind }
+                            .MatchCase((findFlags & wxFR_MATCHCASE) != 0)
+                            .MatchWholeWord((findFlags & wxFR_WHOLEWORD) != 0)
+                            .SearchDirection(searchDown ? wxTextSearch::Direction::Down :
+                                                          wxTextSearch::Direction::Up);
+
+    const auto selectResult = [this](const wxTextSearchResult& result)
+    {
+        m_textEntry->SetSelection(result.m_start, result.m_end);
+        m_textEntry->ShowPosition(result.m_start);
+        return result.m_start;
+    };
+
+    if (const auto result =
+            m_textEntry->SearchText(wxTextSearch{ search }.Start(searchDown ? selEnd : selStart)))
+        {
+        return selectResult(result);
+        }
+
+    // if not found and searching down, ask if they would like to start
+    // from the beginning and try again
+    if (searchDown && selStart > 0 &&
+        wxMessageBox(_(L"Search has reached the end of the document. "
+                       "Do you wish to restart the search from the beginning?"),
+                     _(L"Continue Search"), wxYES_NO | wxICON_QUESTION) == wxYES)
+        {
+        if (const auto result = m_textEntry->SearchText(wxTextSearch{ search }.Start(0)))
+            {
+            return selectResult(result);
+            }
+        }
+
+    return wxNOT_FOUND;
+    }
+
+//------------------------------------------------------
 void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
     {
     if (event.GetEventType() == wxEVT_FIND || event.GetEventType() == wxEVT_FIND_NEXT)
         {
-        auto foundPos = m_textEntry->FindText(
-            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
-            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
+        const auto foundPos = FindText(event.GetFindString(), event.GetFlags());
         if (foundPos != wxNOT_FOUND)
             {
             m_textEntry->SetSelection(foundPos, foundPos + event.GetFindString().length());
@@ -452,9 +473,7 @@ void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
         // force search to start from beginning of selection
         m_textEntry->SetSelection(fromSelection, fromSelection);
 
-        auto foundPos = m_textEntry->FindText(
-            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
-            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
+        auto foundPos = FindText(event.GetFindString(), event.GetFlags());
         if (foundPos != wxNOT_FOUND)
             {
             // if what is being replaced matches what was already selected, then replace it
@@ -466,10 +485,7 @@ void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
                 m_textEntry->SetSelection(foundPos, foundPos + event.GetReplaceString().length());
                 // ...then, find the next occurrence of string being replaced for the next replace
                 // button click
-                foundPos = m_textEntry->FindText(event.GetFindString(),
-                                                 (event.GetFlags() & wxFR_DOWN) != 0,
-                                                 (event.GetFlags() & wxFR_WHOLEWORD) != 0,
-                                                 (event.GetFlags() & wxFR_MATCHCASE) != 0);
+                foundPos = FindText(event.GetFindString(), event.GetFlags());
                 if (foundPos != wxNOT_FOUND)
                     {
                     m_textEntry->SetSelection(foundPos, foundPos + event.GetFindString().length());
@@ -491,9 +507,7 @@ void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
     else if (event.GetEventType() == wxEVT_FIND_REPLACE_ALL)
         {
         m_textEntry->SetSelection(0, 0);
-        auto foundPos = m_textEntry->FindText(
-            event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
-            (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
+        auto foundPos = FindText(event.GetFindString(), event.GetFlags());
         while (foundPos != wxNOT_FOUND)
             {
             m_textEntry->Replace(foundPos, foundPos + event.GetFindString().length(),
@@ -501,9 +515,7 @@ void EditTextDlg::OnFindDialog(const wxFindDialogEvent& event)
             m_textEntry->SetSelection(foundPos + event.GetReplaceString().length(),
                                       foundPos + event.GetReplaceString().length());
             // ...then, find the next occurrence of string being replaced for the next loop
-            foundPos = m_textEntry->FindText(
-                event.GetFindString(), (event.GetFlags() & wxFR_DOWN) != 0,
-                (event.GetFlags() & wxFR_WHOLEWORD) != 0, (event.GetFlags() & wxFR_MATCHCASE) != 0);
+            foundPos = FindText(event.GetFindString(), event.GetFlags());
             }
         }
     else if (event.GetEventType() == wxEVT_FIND_CLOSE)

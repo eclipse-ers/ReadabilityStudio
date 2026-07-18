@@ -351,7 +351,6 @@ void ReadabilityAppOptions::ResetSettings()
     // theme settings
     SetColorsFromSystem();
 
-    m_editorFontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_editorIndent = true;
     m_editorSpaceAfterNewlines = false;
     m_editorTextAlignment = wxTextAttrAlignment::wxTEXT_ALIGNMENT_JUSTIFIED;
@@ -2343,8 +2342,6 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
     auto* editorSettingsNode = configRootNode->FirstChildElement(XML_EDITOR.data());
     if (editorSettingsNode != nullptr)
         {
-        m_editorFontColor = TiXmlNodeToColor(
-            editorSettingsNode->FirstChildElement(XML_EDITOR_FONTCOLOR.data()), m_editorFontColor);
         // font
         auto* fontNode = editorSettingsNode->FirstChildElement(XML_EDITOR_FONT.data());
         if (fontNode != nullptr)
@@ -3044,11 +3041,6 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         // editor section
         {
         auto* editorSection = doc.NewElement(XML_EDITOR.data());
-        auto* fontcolor = doc.NewElement(XML_EDITOR_FONTCOLOR.data());
-        fontcolor->SetAttribute(XmlFormat::RED_TAG.data(), m_editorFontColor.Red());
-        fontcolor->SetAttribute(XmlFormat::GREEN_TAG.data(), m_editorFontColor.Green());
-        fontcolor->SetAttribute(XmlFormat::BLUE_TAG.data(), m_editorFontColor.Blue());
-        editorSection->InsertEndChild(fontcolor);
 
         auto* font = doc.NewElement(XML_EDITOR_FONT.data());
         font->SetAttribute(XmlFormat::FONT_POINT_SIZE_TAG.data(), m_editorFont.GetPointSize());

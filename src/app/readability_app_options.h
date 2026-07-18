@@ -672,20 +672,6 @@ class ReadabilityAppOptions
         }
 
     [[nodiscard]]
-    wxColour GetEditorFontColor() const
-        {
-        return m_editorFontColor;
-        }
-
-    void SetEditorFontColor(const wxColour& color)
-        {
-        if (color.IsOk())
-            {
-            m_editorFontColor = color;
-            }
-        }
-
-    [[nodiscard]]
     bool IsEditorIndenting() const noexcept
         {
         return m_editorIndent;
@@ -2523,7 +2509,6 @@ class ReadabilityAppOptions
 
     // embedded text editor
     wxFont m_editorFont;
-    wxColour m_editorFontColor{ wxColour{ 0, 0, 0 } };
     bool m_editorIndent{ false };
     bool m_editorSpaceAfterNewlines{ false };
     wxTextAttrAlignment m_editorTextAlignment{ wxTextAttrAlignment::wxTEXT_ALIGNMENT_JUSTIFIED };
@@ -2769,7 +2754,6 @@ class ReadabilityAppOptions
   public:
     inline constexpr static std::string_view XML_EDITOR{ _DT("editor") };
     inline constexpr static std::string_view XML_EDITOR_FONT{ _DT("editor-font") };
-    inline constexpr static std::string_view XML_EDITOR_FONTCOLOR{ _DT("editor-font-color") };
     inline constexpr static std::string_view XML_EDITOR_INDENT{ _DT("editor-indent") };
     inline constexpr static std::string_view XML_EDITOR_SPACE_AFTER_PARAGRAPH{ _DT(
         "editor-space-after-paragraph") };

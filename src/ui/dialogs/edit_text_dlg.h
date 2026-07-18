@@ -50,11 +50,11 @@
 #ifndef EDIT_TEXT_DIALOG_H
 #define EDIT_TEXT_DIALOG_H
 
-#include "../../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
 #include <wx/dialog.h>
 #include <wx/fdrepdlg.h>
 #include <wx/ribbon/bar.h>
 #include <wx/ribbon/buttonbar.h>
+#include <wx/textctrl.h>
 #include <wx/wx.h>
 
 class BaseProjectDoc;
@@ -99,7 +99,7 @@ class EditTextDlg final : public wxDialog
         if (m_textEntry != nullptr)
             {
             m_textEntry->SetSelection(0, 0);
-            m_textEntry->FindText(str, true, true, false);
+            FindText(str, wxFR_DOWN | wxFR_WHOLEWORD);
             m_findData.SetFlags(wxFR_DOWN | wxFR_WHOLEWORD | wxFR_MATCHCASE);
             m_findData.SetFindString(str);
             m_findData.SetReplaceString(replaceStr);
@@ -153,6 +153,15 @@ class EditTextDlg final : public wxDialog
     void OnFindDialog(const wxFindDialogEvent& event);
     void OnOK([[maybe_unused]] wxCommandEvent& event);
 
+    /** @brief Searches for a string in the text control, selecting it if found.
+        @details If searching downward and nothing is found, offers to restart
+            the search from the top of the document.
+        @param textToFind The string to search for.
+        @param findFlags The search options, as a combination of @c wxFR_DOWN,
+            @c wxFR_WHOLEWORD, and @c wxFR_MATCHCASE.
+        @returns The position of the found text, or @c wxNOT_FOUND if not found.*/
+    long FindText(const wxString& textToFind, int findFlags);
+
     void Save();
 
     void EnableSaveButton(const bool enable = true);
@@ -165,7 +174,7 @@ class EditTextDlg final : public wxDialog
     wxTextAttrLineSpacing m_lineSpacing{ wxTEXT_ATTR_LINE_SPACING_NORMAL };
 
     BaseProjectDoc* m_parentDoc{ nullptr };
-    Wisteria::UI::FormattedTextCtrl* m_textEntry{ nullptr };
+    wxTextCtrl* m_textEntry{ nullptr };
     wxRibbonBar* m_ribbon{ nullptr };
 
     wxFindReplaceData m_findData{ wxFR_DOWN };
