@@ -549,7 +549,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 if(MSVC)
     target_compile_definitions(${PROJECT_NAME} PUBLIC
         __WXMSW__ CRCPP_USE_CPP11 _CRT_SECURE_NO_WARNINGS _UNICODE
-        $<$<CONFIG:Debug>:__WXDEBUG__ ENABLE_PROFILING ${SANITIZER_DEFS}>
+        $<$<CONFIG:Debug>:__WXDEBUG__ ${SANITIZER_DEFS}>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
         /Zc:__cplusplus /MP /W3 /WX /wd6211 /openmp /permissive- /sdl
@@ -559,7 +559,7 @@ if(MSVC)
 elseif(MINGW OR MSYS)
     target_compile_definitions(${PROJECT_NAME} PUBLIC
         __WXMSW__ CRCPP_USE_CPP11 _CRT_SECURE_NO_WARNINGS _UNICODE
-        $<$<CONFIG:Debug>:__WXDEBUG__ ENABLE_PROFILING>
+        $<$<CONFIG:Debug>:__WXDEBUG__>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
         -Wall -Wextra -Wpedantic -Wshadow -Werror
@@ -573,7 +573,7 @@ elseif(MINGW OR MSYS)
 elseif(APPLE)
     target_compile_definitions(${PROJECT_NAME} PUBLIC
         __WXOSX__ CRCPP_USE_CPP11
-        $<$<CONFIG:Debug>:__WXDEBUG__ ENABLE_PROFILING>
+        $<$<CONFIG:Debug>:__WXDEBUG__>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
         -Wall -Wextra -Wpedantic -Wshadow -Werror
@@ -590,7 +590,7 @@ elseif(UNIX)
 
     target_compile_definitions(${PROJECT_NAME} PUBLIC
         __WXGTK__ CRCPP_USE_CPP11
-        $<$<CONFIG:Debug>:__WXDEBUG__ ENABLE_PROFILING>
+        $<$<CONFIG:Debug>:__WXDEBUG__>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
         -Wall -Wextra -Wpedantic -Wshadow -Werror -fopenmp
@@ -781,13 +781,24 @@ if(UNIX)
 endif()
 
 if(APPLE)
+    # use the display name for the bundle, the way most macOS apps are named
+    # (this also names the executable inside Contents/MacOS, which Info.plist.in
+    # substitutes into CFBundleExecutable)
+    set(MACOS_APP_NAME "${readstudio_DESCRIPTION}")
+
+    # an empty name here would produce a bundle whose CFBundleExecutable points
+    # at nothing, which fails to launch with no useful diagnostic
+    if(MACOS_APP_NAME STREQUAL "")
+        message(FATAL_ERROR "MACOS_APP_NAME is empty; check the DESCRIPTION field of project()")
+    endif()
+
     set_target_properties(${PROJECT_NAME} PROPERTIES
         RESOURCE app-logo.icns
-        OUTPUT_NAME ${PROJECT_NAME}
-        XCODE_ATTRIBUTE_EXECUTABLE_NAME ${PROJECT_NAME} 
+        OUTPUT_NAME "${MACOS_APP_NAME}"
+        XCODE_ATTRIBUTE_EXECUTABLE_NAME "${MACOS_APP_NAME}"
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
 
-        message(STATUS "App Bundle: ${OUTPUT_NAME}")
+        message(STATUS "App Bundle: ${MACOS_APP_NAME}.app")
 endif()
 
 # Copy application (and resources) to installer folders (if a production build)
@@ -863,6 +874,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
         add_custom_command(TARGET ${PROJECT_NAME}
                            POST_BUILD
                            COMMAND ${CMAKE_COMMAND} -E echo "Copying files to DMG staging folder."
-                           COMMAND ${CMAKE_COMMAND} -E copy_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>" "${CMAKE_CURRENT_SOURCE_DIR}/installers/macos/release/")
+                           # copy the whole .app bundle, not just Contents/MacOS
+                           COMMAND ${CMAKE_COMMAND} -E copy_directory "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" "${CMAKE_CURRENT_SOURCE_DIR}/installers/macos/release/$<TARGET_BUNDLE_DIR_NAME:${PROJECT_NAME}>")
     endif()
 endif()

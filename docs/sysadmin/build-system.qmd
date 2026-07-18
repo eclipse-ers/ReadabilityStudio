@@ -86,7 +86,7 @@ On Windows (`r os_logo('Windows')`), *Inno Setup* installer scripts are generate
 ### Windows (MSVC) `r os_logo('Windows')` {-}
 
 - Definitions: `__WXMSW__`, `CRCPP_USE_CPP11`, `_CRT_SECURE_NO_WARNINGS`, `_UNICODE`
-- Debug adds: `__WXDEBUG__`, `ENABLE_PROFILING`, sanitizer definitions
+- Debug adds: `__WXDEBUG__`, sanitizer definitions
 - Key flags: `/Zc:__cplusplus`, `/MP`, `/W3`, `/WX`, `/openmp`, `/permissive-`, `/sdl`, `/utf-8`
 - Release optimization: `/O2`
 

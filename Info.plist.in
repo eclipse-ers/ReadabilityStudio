@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>CFBundleExecutable</key>
-  <string>@CMAKE_PROJECT_NAME@</string>
+  <string>@MACOS_APP_NAME@</string>
 
   <key>CFBundleDisplayName</key>
   <string>@readstudio_DESCRIPTION@</string>
