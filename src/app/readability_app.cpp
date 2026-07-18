@@ -5486,6 +5486,15 @@ void MainFrame::OnPrintWatermark([[maybe_unused]] wxCommandEvent& event)
 //-------------------------------------------------------
 void MainFrame::OnClose(wxCloseEvent& event)
     {
+    // If project windows are still open, then the user is just dismissing this frame
+    // (e.g., the log or script workbench embedded here), not the whole app.
+    if (event.CanVeto() && wxGetApp().GetDocumentCount() > 0)
+        {
+        Hide();
+        event.Veto();
+        return;
+        }
+
     if (LuaInterpreter::IsRunning())
         {
         ActivateScriptWorkbench();
