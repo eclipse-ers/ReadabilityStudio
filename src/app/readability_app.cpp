@@ -1368,6 +1368,13 @@ void ReadabilityApp::LoadInterface()
     wxASSERT_MSG(menuBar, L"Menubar failed to load in OnInit()!");
     if (menuBar != nullptr)
         {
+    #ifdef APP_STORE_BUILD
+        if (wxMenu * checkForUpdatesMenu{ nullptr };
+            menuBar->FindItem(XRCID("ID_CHECK_FOR_UPDATES"), &checkForUpdatesMenu) != nullptr)
+            {
+            checkForUpdatesMenu->Destroy(XRCID("ID_CHECK_FOR_UPDATES"));
+            }
+    #endif
         GetMainFrame()->SetMenuBar(menuBar);
         }
     else
@@ -2869,8 +2876,10 @@ void ReadabilityApp::LoadRibbonHelpPage(wxRibbonBar* ribbon)
 
     auto* supportPanel = new wxRibbonPanel(helpPage, wxID_ANY, _(L"Support"), wxNullBitmap);
     auto* supportButtonBar = new wxRibbonButtonBar(supportPanel);
+#ifndef APP_STORE_BUILD
     supportButtonBar->AddButton(XRCID("ID_CHECK_FOR_UPDATES"), _(L"Updates"),
                                 ReadSvgIcon(L"ribbon/updates.svg"), _(L"Check for updates."));
+#endif
     supportButtonBar->AddButton(XRCID("ID_SUPPORT"), _(L"Support"),
                                 ReadSvgIcon(L"ribbon/support.svg"), _(L"Contact support."));
     supportButtonBar->AddButton(wxID_ABOUT, _(L"About"), ReadSvgIcon(L"ribbon/app-logo.svg"),
@@ -3629,6 +3638,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
         },
         m_logAutoRefreshTimer.GetId());
 
+#ifndef APP_STORE_BUILD
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnHelpCheckForUpdates, this,
          XRCID("ID_CHECK_FOR_UPDATES"));
     Bind(
@@ -3639,6 +3649,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
             OnHelpCheckForUpdates(event);
         },
         XRCID("ID_CHECK_FOR_UPDATES"));
+#endif
 
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnHelpSupport, this, XRCID("ID_SUPPORT"));
     Bind(
@@ -5598,6 +5609,7 @@ void MainFrame::OnHelpSupport([[maybe_unused]] wxRibbonButtonBarEvent& event)
     }
 
 //-------------------------------------------------------
+#ifndef APP_STORE_BUILD
 void MainFrame::OnHelpCheckForUpdates([[maybe_unused]] wxRibbonButtonBarEvent& event)
     {
     wxString updateFileContent, contentType, statusText;
@@ -5636,6 +5648,7 @@ void MainFrame::OnHelpCheckForUpdates([[maybe_unused]] wxRibbonButtonBarEvent& e
                      wxOK | wxICON_INFORMATION);
         }
     }
+#endif
 
 //-------------------------------------------------------
 void MainFrame::RefreshOpenProjectsIfThemeChanged(const wxString& previousReportTheme)

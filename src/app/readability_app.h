@@ -137,7 +137,9 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnFindDuplicateFiles([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnHelpContents([[maybe_unused]] wxCommandEvent& event) final;
     void OnHelpManual([[maybe_unused]] wxRibbonButtonBarEvent& event);
+#ifndef APP_STORE_BUILD
     void OnHelpCheckForUpdates([[maybe_unused]] wxRibbonButtonBarEvent& event);
+#endif
     void OnHelpSupport([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnOpenExample(const wxCommandEvent& event);
     // pane events

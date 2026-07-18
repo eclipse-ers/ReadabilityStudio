@@ -1838,6 +1838,16 @@ bool ProjectView::OnCreate(wxDocument* doc, long flags)
     // just load the menubar right now, we will set it in Present after the document has
     // successfully loaded
     m_menuBar = wxXmlResource::Get()->LoadMenuBar(L"ID_DOCMENUBAR");
+    #ifdef APP_STORE_BUILD
+    if (m_menuBar != nullptr)
+        {
+        if (wxMenu * checkForUpdatesMenu{ nullptr };
+            m_menuBar->FindItem(XRCID("ID_CHECK_FOR_UPDATES"), &checkForUpdatesMenu) != nullptr)
+            {
+            checkForUpdatesMenu->Destroy(XRCID("ID_CHECK_FOR_UPDATES"));
+            }
+        }
+    #endif
 #endif
 
     // connect the test events

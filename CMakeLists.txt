@@ -41,6 +41,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 option(ALLOW_DIRTY_SUBMODULES "Allow building even if submodules have local changes" OFF)
+option(APP_STORE_BUILD "Build for distribution through an app store (disables the in-app update check; the store handles updates)" OFF)
 # Always allow dirty submodules for debug, but use user's selection for release.
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(ALLOW_DIRTY_SUBMODULES ON CACHE BOOL "Allow building even if submodules have local changes" FORCE)
@@ -537,6 +538,10 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:Debug>:
         ENABLED_SANITIZERS_STR="${ENABLED_SANITIZERS_STR}"
         SANITIZER_ENV_HINTS_STR="${SANITIZER_ENV_HINTS_STR}">)
+
+if(APP_STORE_BUILD)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC APP_STORE_BUILD)
+endif()
 
 # Platform-specific settings
 # (definitions, warnings, and optimizations)
