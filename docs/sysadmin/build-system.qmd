@@ -31,6 +31,7 @@ Two build types are supported: **Debug** and **Release**.
 The following options are available:
 
 - `ENABLE_SANITIZERS`: enables *AddressSanitizer* and *UndefinedBehaviorSanitizer* (ignored in release builds)
+- `APP_STORE_BUILD`: builds for distribution through an app store (disables the in-app update check; the store handles updates)
 - `ALLOW_DIRTY_SUBMODULES`: allows building even if Git submodules have local changes.
   This is always `ON` for debug builds and defaults to `OFF` for release builds.
 

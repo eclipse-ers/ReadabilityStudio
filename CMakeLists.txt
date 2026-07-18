@@ -19,6 +19,7 @@
 
 # Options:
 # ENABLE_SANITIZERS to use ASAN & UBSAN (ignored in release build)
+# APP_STORE_BUILD to build for distribution through an app store (disables the in-app update check; the store handles updates)
 # ALLOW_DIRTY_SUBMODULES to allow building even if submodules have local changes (OFF in debug build, ON in release)
 
 # Requirements
