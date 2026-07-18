@@ -525,6 +525,8 @@ if(WIN32)
 elseif(APPLE)
     # Add an icon for the apple .app file
     list(APPEND APP_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/app-logo.icns)
+    # Required-reason API / data-collection declaration for App Store submission
+    list(APPEND APP_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/PrivacyInfo.xcprivacy)
 endif()
 add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${APP_SRC_FILES})
 
@@ -799,7 +801,7 @@ if(APPLE)
     endif()
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        RESOURCE app-logo.icns
+        RESOURCE "app-logo.icns;PrivacyInfo.xcprivacy"
         OUTPUT_NAME "${MACOS_APP_NAME}"
         XCODE_ATTRIBUTE_EXECUTABLE_NAME "${MACOS_APP_NAME}"
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
