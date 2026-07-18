@@ -28,8 +28,15 @@ jobs:
              cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
              cmake --build ./build --target all -j4 --config Release
 
+      # tar the bundle first: upload-artifact does not preserve permissions and
+      # dereferences symlinks, which would corrupt the .app and break code signing
+      - name: Package App Bundle
+        run: |
+             cd "${{ github.workspace }}/installers/macos/release"
+             tar czf "${{ github.workspace }}/readstudio-macos.tar.gz" *.app
+
       - name: Archive App Bundle
         uses: actions/upload-artifact@v7
         with:
           name: macOS App Bundle
-          path: ${{ github.workspace }}/installers/macos/release/*.app
+          path: ${{ github.workspace }}/readstudio-macos.tar.gz
