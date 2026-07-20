@@ -1,3 +1,226 @@
+a efectos de	para	0		
+a fin de que	para que	0		
+a nivel de	en, entre	0		
+a parte de	aparte de	3		
+a pesar del hecho de que	aunque	0		
+a pesar que	a pesar de que	3		
+accidente fortuito	accidente	1		
+adentro de	dentro de	3		
+aiga	haya	3		
+al lado mío	a mi lado	3		
+al lado tuyo	a tu lado	3		
+almóndiga	albóndiga	3		
+alrededor mío	alrededor de mí	3		
+alrededor suyo	alrededor de él, alrededor de ella	3		
+alrededor tuyo	alrededor de ti	3		
+andé	anduve	3		
+andó	anduvo	3		
+ansí	así	3		
+asín	así	3		
+atravez	a través	3		
+através	a través	3		
+aver	a ver	3		
+ay que	hay que	3		
+baja abajo	baja	1		
+cafeses	cafés	3		
+cerca mío	cerca de mí	3		
+cerca suyo	cerca de él, cerca de ella	3		
+cerca tuyo	cerca de ti	3		
+comistes	comiste	3		
 communidad	comunidad	3		
 communidad's	comunidad's	3		
 communidads	comunidads	3		
+con anterioridad a	antes de	0		
+con el fin de	para	0		
+con el objeto de	para	0		
+con la finalidad de	para	0		
+con motivo de	por	0		
+con posterioridad a	después de	0		
+con respecto a	sobre, acerca de	0		
+considero de que	considero que	3		
+constelación de estrellas	constelación	1		
+creo de que	creo que	3		
+dado que	ya que, porque	0		
+dar aviso	avisar	0		
+dar comienzo a	comenzar, empezar	0		
+de acuerdo a	de acuerdo con	3		
+de cara a	para, ante	0		
+de conformidad con	según	0		
+de echo	de hecho	3		
+de forma clara	claramente	0		
+de forma inmediata	inmediatamente	0		
+de manera clara	claramente	0		
+de manera inmediata	inmediatamente	0		
+debajo mío	debajo de mí	3		
+debajo suyo	debajo de él, debajo de ella	3		
+debajo tuyo	debajo de ti	3		
+debido al hecho de que	porque	0		
+delante mío	delante de mí	3		
+delante suyo	delante de él, delante de ella	3		
+delante tuyo	delante de ti	3		
+dentro mío	dentro de mí	3		
+dentro suyo	dentro de él, dentro de ella	3		
+dentro tuyo	dentro de ti	3		
+detrás mío	detrás de mí	3		
+detrás suyo	detrás de él, detrás de ella	3		
+detrás tuyo	detrás de ti	3		
+dije de que	dije que	3		
+dijistes	dijiste	3		
+dijo de que	dijo que	3		
+divisa extranjera	divisa	1		
+efectuar una revisión	revisar	0		
+el caballo de batalla	el asunto central	2		
+el canto del cisne	la última actuación	2		
+el chivo expiatorio	el culpable elegido	2		
+el círculo vicioso	el problema que se retroalimenta	2		
+el elefante en la habitación	el problema evidente que nadie menciona	2		
+el eslabón más débil	el punto más vulnerable	2		
+el hecho que	el hecho de que	3		
+el nudo gordiano	el problema aparentemente irresoluble	2		
+el pan de cada día	algo cotidiano	2		
+el pilar fundamental	la base	2		
+el santo grial	el objetivo ideal	2		
+el talón de Aquiles	el punto débil	2		
+en aras de	para, por	0		
+en base a	con base en, según, a partir de	3		
+en caso que	en caso de que	3		
+en el caso de que	si	0		
+en el día de hoy	hoy	0		
+en el marco de	en, durante	0		
+en el momento actual	ahora	0		
+en el punto de mira	bajo vigilancia, señalado	2		
+en el supuesto de que	si	0		
+en el transcurso de	durante	0		
+en el ámbito de	en	0		
+en la actualidad	ahora, hoy	0		
+en la mayoría de los casos	generalmente, casi siempre	0		
+en lo que respecta a	sobre, en cuanto a	0		
+en lo referente a	sobre	0		
+en materia de	sobre, de	0		
+en numerosas ocasiones	a menudo, muchas veces	0		
+en razón de	por, debido a	0		
+en reiteradas ocasiones	repetidamente	0		
+en relación a	en relación con, con relación a	3		
+en su totalidad	todo, completamente	0		
+en tanto que	mientras, ya que	0		
+en un futuro próximo	pronto	0		
+en virtud de	por, según	0		
+encima mío	encima de mí	3		
+encima suyo	encima de él, encima de ella	3		
+encima tuyo	encima de ti	3		
+enfrente mío	enfrente de mí	3		
+enfrente suyo	enfrente de él, enfrente de ella	3		
+enfrente tuyo	enfrente de ti	3		
+entra adentro	entra	1		
+erario público	erario	1		
+es susceptible de	puede	0		
+estar en condiciones de	poder	0		
+estoy segura que	estoy segura de que	3		
+estoy seguro que	estoy seguro de que	3		
+estuvistes	estuviste	3		
+fuistes	fuiste	3		
+habemos	hemos, somos	3		
+haber si	a ver si	3		
+hablastes	hablaste	3		
+habrán habido	habrá habido	3		
+habían muchas	había muchas	3		
+habían muchos	había muchos	3		
+habían personas	había personas	3		
+habían problemas	había problemas	3		
+hacer efectivo	cobrar, cumplir	0		
+hacer mención de	mencionar	0		
+hacer uso de	usar, utilizar	0		
+haiga	haya	3		
+haigan	hayan	3		
+han habido	ha habido	3		
+hiba	iba	3		
+hicistes	hiciste	3		
+hubieron muchas	hubo muchas	3		
+hubieron muchos	hubo muchos	3		
+hubieron personas	hubo personas	3		
+hubieron problemas	hubo problemas	3		
+la caja de Pandora	el origen de muchos males	2		
+la cereza del pastel	el toque final	2		
+la espada de Damocles	la amenaza constante	2		
+la gota que colma el vaso	el último agravio	2		
+la guinda del pastel	el toque final	2		
+la letra pequeña	las condiciones ocultas	2		
+la mayor parte de	la mayoría de	0		
+la niña de sus ojos	su preferido	2		
+la otra cara de la moneda	el aspecto contrario	2		
+la oveja negra	el marginado	2		
+la piedra angular	la base, el fundamento	2		
+la punta de lanza	el elemento más avanzado	2		
+la punta del iceberg	solo una parte del problema	2		
+la tormenta perfecta	la suma de circunstancias adversas	2		
+lapso de tiempo	lapso	1		
+llegastes	llegaste	3		
+llendo	yendo	3		
+llevar a cabo	hacer, realizar	0		
+me di cuenta que	me di cuenta de que	3		
+murciégalo	murciélago	3		
+más mayor	mayor	1		
+más mejor	mejor	1		
+más peor	peor	1		
+nadien	nadie	3		
+naiden	nadie	3		
+nexo de unión	nexo	1		
+no cabe duda que	no cabe duda de que	3		
+no es imposible	es posible	0		
+no es infrecuente	es frecuente	0		
+opino de que	opino que	3		
+osea	o sea	3		
+parece de que	parece que	3		
+persona humana	persona	1		
+pienso de que	pienso que	3		
+pieses	pies	3		
+planes futuros	planes	0		
+poner de manifiesto	mostrar, revelar	0		
+por el hecho de que	porque	0		
+por medio de	mediante, con	0		
+por parte de	de, por	0		
+prestar atención a	atender	0		
+preveer	prever	3		
+prever de antemano	prever	0		
+preveyó	previó	3		
+protagonista principal	protagonista	1		
+pusistes	pusiste	3		
+puño cerrado	puño	1		
+quisistes	quisiste	3		
+realizar un análisis	analizar	0		
+regalo gratis	regalo	1		
+resulta de que	resulta que	3		
+resumir brevemente	resumir	1		
+sal afuera	sal	1		
+salir afuera	salir	1		
+salistes	saliste	3		
+satisfació	satisfizo	3		
+se dio cuenta que	se dio cuenta de que	3		
+sobretodo	sobre todo	3		
+sostiene de que	sostiene que	3		
+sube arriba	sube	1		
+supistes	supiste	3		
+supongo de que	supongo que	3		
+talvez	tal vez	3		
+tener la capacidad de	poder	0		
+toballa	toalla	3		
+tomar la decisión de	decidir	0		
+trajistes	trajiste	3		
+tuvistes	tuviste	3		
+un antes y un después	un cambio decisivo	2		
+un arma de doble filo	algo con riesgos y ventajas	2		
+un cheque en blanco	libertad total	2		
+un elevado porcentaje de	muchos	0		
+un gran número de	muchos	0		
+un lobo con piel de cordero	un enemigo disimulado	2		
+un mal necesario	un inconveniente inevitable	2		
+una aguja en un pajar	casi imposible de encontrar	2		
+una gran cantidad de	muchos, mucho	0		
+una tormenta en un vaso de agua	mucho alboroto por nada	2		
+utopía irrealizable	utopía	1		
+veniste	viniste	3		
+veredicto final	veredicto	1		
+vinistes	viniste	3		
+vistes	viste	3		
+volar por el aire	volar	1		
+volver a repetir	repetir	1		

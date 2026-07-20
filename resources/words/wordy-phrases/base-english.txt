@@ -642,6 +642,7 @@ afair	affair	3
 afecting	affecting	3		
 afer	after	3		
 affable	pleasant	0		
+affect on	effect on	3	flat;the	
 affectionate	loving	0		
 affectionately	lovingly	0		
 afficianados	aficionados	3		
@@ -897,6 +898,7 @@ along the lines of	like	0
 along the same vein	along the same line	3		
 along with the fact that	and that	0		
 alongside of	alongside (unless proceeding a pronoun)	0		
+alot	a lot	3		
 alotted	allotted	3		
 alow	allow	3		
 alowance	allowance	3		
@@ -1285,10 +1287,12 @@ anyother	any other	3
 anyting	anything	3		
 anytyhing	anything	3		
 anytying	anything	3		
+anyways	anyway	3		
 aointer	a pointer	3		
 aparent	apparent	3		
 aparment	apartment	3		
 aparrent	apparent	3		
+apart of	a part of	3		
 apathetic	indifferent	0		
 aperture	gap, hole	0		
 apertures	gaps, holes	0		
@@ -2462,6 +2466,7 @@ beteen	between	3
 beteween	between	3		
 betrothed	engaged	0		
 bets the farm	bets everything	2		
+better then	better than (or a comma is needed)	3		
 betting the farm	betting everything	2		
 bettween	between	3		
 betweed	between	3		
@@ -2470,6 +2475,7 @@ between a rock and a hard place	between two very difficult options, in a difficu
 between the devil and the deep blue sea	between two very difficult options, in a difficult position	2		
 between the two of them	between them	0		
 between the two of use	between us	0		
+between you and I	between you and me	3		
 betwen	between	3		
 beween	between	3		
 bewilder	confuse	0		
@@ -2532,6 +2538,7 @@ bites off more than she can chew	take on a job that is too much for her to handl
 bites the bullet	prepares for a difficult situation	2		
 bites the dust	die, be defeated	2		
 bites the hand that feeds you	betrays one that helps you, be ungrateful	2		
+biting my time	biding my time	3		
 biting the bullet	preparing for a difficult situation	2		
 biting the dust	die, be defeated	2		
 biting the hand that feeds you	betraying one that helps you, be ungrateful	2		
@@ -3801,6 +3808,7 @@ compressing	sqeezing	0
 comprimise	compromise	3		
 comprise	form, include, make up	0		
 comprised	formed, included	0		
+comprised of	composed of, consisting of	3		
 comprises	forms, includes	0		
 comprising	forming, including	0		
 comptible	compatible	3		
@@ -6813,6 +6821,7 @@ expresses sorrow	laments, mourns, regrets	0
 expressing concern	worrying, fretting, brooding	0		
 expressing skepticism	doubting, mistrusting, questioning	0		
 expressing sorrow	lamenting, mourning, regretting	0		
+expresso	espresso	3		
 expresssion	expression	3		
 expresssion's	expression's	3		
 expresssions	expressions	3		
@@ -7224,6 +7233,7 @@ foor	floor, for	3
 foor's	floor's	3		
 foors	floors	3		
 for a period of	for	0		
+for all intensive purposes	for all intents and purposes	3		
 for all intents and purposes	in effect, in essence, practically	0		
 for all practical purposes	in effect, in essence, practically	0		
 for along time	for a long time	3		
@@ -7241,6 +7251,7 @@ for the reason that	because, since, for, given	0
 for the sake of	for	0		
 for the time being	for now	0		
 for this reason	therefore, thus	0		
+for you and I	for you and me	3		
 forbad	forbade	3		
 forbearance	patience	0		
 forbidden fruit	forbidden item, restricted	2		
@@ -7838,6 +7849,7 @@ had no bearing on	did not affect, did not influence	0
 had the ability to	could	0		
 had the capability to	could	0		
 had to do with	dealt with	0		
+had went	had gone	3		
 hadware	hardware	3		
 hadware's	hardware's	3		
 hadwares	hardwares	3		
@@ -7910,6 +7922,7 @@ has the capability to	can	0
 has the capacity for	can	0		
 has the opportunity to	can	0		
 has to do with	deals with	0		
+has went	has gone	3		
 hasn't not	hasn't	3		
 hasnt	hasn't	3		
 hastable	hashtable	3		
@@ -7930,17 +7943,27 @@ have an effect on	affect, influence	0
 have an impact on	affect, influence	0		
 have an influence on	affect, influence	0		
 have and have-nots	haves and have-nots	3		
+have came	have come	3		
+have chose	have chosen	3		
 have confidence in	trust	0		
+have drank	have drunk	3		
+have gave	have given	3		
 have heart that	have heard that	3		
 have much confidence in	trust	0		
 have no	lacks	0		
 have no bearing on	do not affect, do not influence	0		
+have ran	have run	3		
+have saw	have seen	3		
+have spoke	have spoken	3		
 have the ability to	can	0		
 have the capability	can	0		
 have the capability to	can	0		
 have the capacity for	can	0		
 have the opportunity to	can	0		
 have to do with	deals with	0		
+have took	have taken	3		
+have went	have gone	3		
+have wrote	have written	3		
 have your cake and eat it too	have it both ways	2		
 havent	haven't	3		
 having a bearing on	affecting, influencing	0		
@@ -7960,10 +7983,12 @@ he am	he is	3
 he are	he is	3	or	
 he be	he is, (word such as 'that' should be in front of 'he')	3	can;could;couldn't;might;mightn't;or;should;shouldn't;that;will;would;wouldn't	
 he do	he does	3	can;could;couldn't;does;might;mightn't;or;should;shouldn't;that;will;would;wouldn't	
+he don't	he doesn't	3		
 he herd	he heard	3		
 he is a man who	he	0		
 he new	he knew	3		
 he recommendation	he recommends	3		
+he seen	he saw, he has seen	3		
 he would appreciate it if	please	0		
 he'd heart that	he'd heard that	3		
 head and shoulders above	far exceeding	2		
@@ -8129,6 +8154,7 @@ hipocrits	hypocrites	3
 hipopotamus	hippopotamus	3		
 his from	his form	3		
 hismelf	himself	3		
+hisself	himself	3		
 historicians	historians	3		
 hit and miss	random	2		
 hit below the belt	act unfairly	2		
@@ -8272,6 +8298,7 @@ I is	I am	3	integer;variable;War
 I new	I knew	3		
 I personally	I	0		
 I recommendation	I recommend	3		
+I seen	I saw, I have seen	3		
 I thing	I think	3		
 I would appreciate it if	please	0		
 I'm curious why	why	0		
@@ -9617,6 +9644,7 @@ isnt	isn't	3
 issueing	issuing	3		
 istead	instead	3		
 it could happen that	may, might, can, could	0		
+it don't	it doesn't	3		
 it has been called to her attention	she has learned	0		
 it has been called to his attention	he has learned	0		
 it has been called to my attention	I have learned	0		
@@ -10435,6 +10463,7 @@ maximumn	maximum	3
 maximun	maximum	3		
 maxium	maximum	3		
 may effect	may affect	3		
+may of	may have	3		course
 may or may not	may, may not	0		
 may possibly	may	1		
 maynot	may not	3		
@@ -10776,6 +10805,7 @@ monthy	monthly	3
 monts	months	3		
 mor	more	3		
 mordant	biting, sarcastic	0		
+more better	better	3		
 more broad audience	broader audience	3		
 more power to you	good luck, I fully encourage you	2		
 more than exceeded	exceeded	0		
@@ -10791,6 +10821,7 @@ mosiac's	mosaic's	3
 mosiacs	mosaics	3		
 mosquitos	mosquitoes	3		
 most be	must be, most are	3	at	
+most easiest	easiest	3		
 most of the time	usually	0		
 most of there	most of their	3		
 most predominate	most predominant	3		
@@ -10867,6 +10898,7 @@ musicials	musicals	3
 musn't	mustn't	3		
 must decided	must have decided	3		
 must likely	most likely	3		
+must of	must have	3		course
 mustn't not	mustn't	3		
 musuem	museum	3		
 musuem's	museum's	3		
@@ -11422,6 +11454,7 @@ on a tight leash	tightly controlled	2
 on a weekly basis	weekly	0		
 on a yearly basis	yearly	0		
 on aboard	aboard	3		
+on accident	by accident	3		
 on account of	because	0		
 on account of the face	because	0		
 on an annual basis	yearly	0		
@@ -11688,6 +11721,7 @@ ouputs	outputs	3
 ouputted	outputted	3		
 ouputting	outputting	3		
 our from	our form	3		
+ourself	ourselves	3		
 oustanding	outstanding	3		
 out loud	aloud	0		
 out of curiosity	(consider removing this)	0		
@@ -14766,10 +14800,12 @@ she am	she is	3
 she are	she is	3	or	
 she be	she is, (word such as 'that' should be in front of 'she')	3	can;could;couldn't;might;mightn't;or;should;shouldn't;that;will;would;wouldn't	
 she do	she does	3	can;could;couldn't;does;might;mightn't;or;should;shouldn't;that;will;would;wouldn't	
+she don't	she doesn't	3		
 she herd	she heard	3		
 she is a woman who	she	0		
 she new	she knew	3		
 she recommendation	we recommends	3		
+she seen	she saw, she has seen	3		
 she would appreciate it if	please	0		
 she'd heart that	she'd heard that	3		
 sheild	shield	3		
@@ -15210,6 +15246,10 @@ stationary supplies	stationery supplies	3
 statment	statement	3		
 statment's	statement's	3		
 statments	statements	3		
+statue of limitations	statute of limitations	3		
+statue's of limitations	statute's of limitations	3		
+statues of limitations	statutes of limitations	3		
+statues' of limitations	statutes' of limitations	3		
 steal her thunder	take effect away from her accomplishments	2		
 steal his thunder	take effect away from his accomplishments	2		
 steal my thunder	take effect away from my accomplishments	2		
@@ -15602,6 +15642,7 @@ suppoed	supposed	3
 suppoorted	supported	3		
 suppored	supported	3		
 supportin	supporting	3		
+supposably	supposedly	3		
 suppose to	supposed to	3		
 supposingly	supposedly	3		
 suppoted	supported	3		
@@ -16047,6 +16088,7 @@ the question of	(consider removing this)	0
 the reality of	(consider removing this)	0		
 the realm of	(consider removing this)	0		
 the reason for	because, since, why	0		
+the reason is because	the reason is that	3		
 the reason why is that	because	0		
 the responds	the response	3		
 the role of	(consider removing this)	0		
@@ -16094,6 +16136,7 @@ theif	thief	3
 their are	there are	3		
 their from	their form	3		
 their is	there is	3		
+theirselves	themselves	3		
 theives	thieves	3		
 thelist	the list	3		
 themby	them by	3		
@@ -16107,6 +16150,7 @@ ther	there, their	3
 therafter	thereafter	3		
 therby	thereby	3		
 there exits	there exists (should be reviewed)	3		
+there house	their house	3		
 there is a chance of	may, might, can, could	0		
 there is a chance that	may, might, can, could	0		
 there is a need for	must, should	0		
@@ -16124,6 +16168,7 @@ theres	there's	3
 therewith	with	0		
 therfore	therefore	3		
 theri	their	3		
+these kind of	these kinds of, this kind of	3		
 these neck of the woods	this region, here	2		
 these ones	these	3		
 thespecific	the specific	3		
@@ -16136,6 +16181,7 @@ they here	they hear	3
 they is	they are	3		
 they new	they knew	3		
 they recommendation	they recommend	3		
+they seen	they saw, they have seen	3		
 they themselves	they	1		
 they thing	they think	3		
 they was	they were	3		
@@ -16191,6 +16237,7 @@ thoroughfare	road	0
 thoroughfare's	road's	0		
 thoroughfares	roads	0		
 thorugh	through	3		
+those kind of	those kinds of, that kind of	3		
 those ones	those	3		
 thoughout	throughout	3		
 thoughput	throughput	3		
@@ -17442,6 +17489,7 @@ we is	we are	3
 we new	we knew	3		
 we ourselves	we	1		
 we recommendation	we recommend	3		
+we seen	we saw, we have seen	3		
 we thing	we think	3		
 we was	we were	3		
 we would appreciate it if	please	0		
@@ -17524,6 +17572,7 @@ wheras	whereas	3
 where as	whereas	3	moment;moments;time;times	
 where by	whereby, comma needed after 'where'	3		
 where calculated	were calculated	3		
+where its at	where it is	3		
 where taken	were taken	3		
 whereas	because, since	0		
 wherease	whereas	3		
@@ -17606,6 +17655,7 @@ with the exclusion that	except for, aside from	0
 with the intent of	intending to	0		
 with the object of	for	0		
 with the purpose of	intending to	0		
+with you and I	with you and me	3		
 witheld	withheld	3		
 withh	with	3		
 within recent past	recently	0		
@@ -17667,6 +17717,7 @@ wouldn't recommended	wouldn't recommend	3
 wouldnt	wouldn't	3		
 wouln't	wouldn't	3		
 woulnd't	wouldn't	3		
+wreck havoc	wreak havoc	3		
 wreckless driver	reckless driver	3		
 wreckless drivers	reckless drivers	3		
 wreckless driving	reckless driving	3		
@@ -17739,8 +17790,11 @@ young lads	lads	1
 young lass	lass	1		
 young lasses	lasses	1		
 your can	you can (should be reviewed)	3		of
+your right	you're right	3		arm;ear;eye;foot;hand;knee;leg;shoulder;side;to
+your welcome	you're welcome	3		
 your're	you're	3		
 your's	yours	3		
+youre	you're	3		
 youseff	yourself	3		
 youself	yourself	3		
 ypu	you	3		

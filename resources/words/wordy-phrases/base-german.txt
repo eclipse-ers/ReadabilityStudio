@@ -1,0 +1,270 @@
+Addresse	Adresse	3		
+Agression	Aggression	3		
+agressiv	aggressiv	3		
+als wie	als	3		
+alter Greis	Greis	1		
+am Ende des Tages	letztlich, schließlich	2		
+anders wie	anders als	3		
+angesichts der Tatsache dass	weil, da	0		
+Anwendung finden	angewendet werden	0		
+Aspeckt	Aspekt	3		
+Athmosphäre	Atmosphäre	3		
+auf dem Prüfstand	wird überprüft	2		
+auf Grund der Tatsache dass	weil, da	0		
+aufeinmal	auf einmal	3		
+aufgrund der Tatsache dass	weil, da	0		
+aufjedenfall	auf jeden Fall	3		
+aus dem Grund dass	weil	0		
+aus diesem Grund	deshalb, darum	0		
+aus diesem Grunde	deshalb, darum	0		
+Bahnhoff	Bahnhof	3		
+Beachtung finden	beachtet werden	0		
+Beachtung schenken	beachten	0		
+bereits schon	bereits	1		
+besser wie	besser als	3		
+billiger wie	billiger als	3		
+das A und O	das Wichtigste, die Grundlage	2		
+das Damoklesschwert	die ständige Bedrohung	2		
+das Ei des Kolumbus	die verblüffend einfache Lösung	2		
+das Licht am Ende des Tunnels	Hoffnung, Besserung in Sicht	2		
+das Salz in der Suppe	das Besondere, der Reiz	2		
+das schwarze Schaf	der Außenseiter	2		
+das Tüpfelchen auf dem i	die letzte Feinheit	2		
+das Zünglein an der Waage	ausschlaggebend, entscheidend	2		
+Dekkan	Dekan	3		
+der Anfang vom Ende	der Niedergang	2		
+der Elefant im Raum	das offensichtliche, aber verschwiegene Problem	2		
+der gordische Knoten	das scheinbar unlösbare Problem	2		
+der rote Faden	der Zusammenhang, die Leitidee	2		
+der Silberstreif am Horizont	Hoffnung, erste Besserung	2		
+der springende Punkt	das Entscheidende, der Kern	2		
+der Stein des Anstoßes	der Auslöser, der Streitpunkt	2		
+der Wolf im Schafspelz	ein verkappter Gegner	2		
+der Zahn der Zeit	das Altern, der Verschleiß	2		
+des Öfteren	oft	0		
+desweiteren	des Weiteren	3		
+die Achillesferse	die Schwachstelle	2		
+die andere Seite der Medaille	die Kehrseite, der Nachteil	2		
+die eierlegende Wollmilchsau	die Ideallösung für alles	2		
+die graue Eminenz	der Strippenzieher, der heimliche Entscheider	2		
+die Nadel im Heuhaufen	fast unauffindbar	2		
+die Quadratur des Kreises	unmöglich, unlösbar	2		
+die Spitze des Eisbergs	nur ein kleiner Teil des Problems	2		
+diesen Jahres	dieses Jahres	3		
+diesen Jahrhunderts	dieses Jahrhunderts	3		
+diesen Monats	dieses Monats	3		
+Diskusion	Diskussion	3		
+ein Buch mit sieben Siegeln	unverständlich, rätselhaft	2		
+ein Schritt in die richtige Richtung	ein Fortschritt, eine Verbesserung	2		
+ein Sturm im Wasserglas	viel Aufregung um nichts	2		
+ein Tropfen auf dem heißen Stein	zu wenig, kaum wirksam	2		
+ein Tropfen auf den heißen Stein	zu wenig, kaum wirksam	2		
+eine Aussage treffen	sagen, aussagen	0		
+eine Entscheidung getroffen	entschieden	0		
+eine Entscheidung treffen	entscheiden	0		
+eine gewisse Anzahl von	einige	0		
+eine große Anzahl von	viele	0		
+eine Prüfung durchführen	prüfen	0		
+eine Reihe von	einige, mehrere	0		
+eine Untersuchung durchführen	untersuchen	0		
+eine Vielzahl von	viele	0		
+einen Beitrag leisten	beitragen	0		
+einwenig	ein wenig	3		
+einzelnes Individuum	Individuum	1		
+einzigste	einzige	3		
+einzigsten	einzigen	3		
+einzigster	einziger	3		
+einzigstes	einziges	3		
+Exellenz	Exzellenz	3		
+findet Anwendung	wird angewendet	0		
+findet Verwendung	wird verwendet	0		
+für den Fall dass	falls, wenn	0		
+Gallerie	Galerie	3		
+garkein	gar kein	3		
+garkeine	gar keine	3		
+garnicht	gar nicht	3		
+garnichts	gar nichts	3		
+Gramatik	Grammatik	3		
+größer wie	größer als	3		
+habe geblieben	bin geblieben	3		
+habe gefallen	bin gefallen	3		
+habe gegangen	bin gegangen	3		
+habe gekommen	bin gekommen	3		
+habe gereist	bin gereist	3		
+habe gewesen	bin gewesen	3		
+habe geworden	bin geworden	3		
+haben geblieben	sind geblieben	3		
+haben gefallen	sind gefallen	3		
+haben gegangen	sind gegangen	3		
+haben gekommen	sind gekommen	3		
+haben gereist	sind gereist	3		
+haben gewesen	sind gewesen	3		
+haben geworden	sind geworden	3		
+habt geblieben	seid geblieben	3		
+habt gefallen	seid gefallen	3		
+habt gegangen	seid gegangen	3		
+habt gekommen	seid gekommen	3		
+habt gereist	seid gereist	3		
+habt gewesen	seid gewesen	3		
+habt geworden	seid geworden	3		
+hast geblieben	bist geblieben	3		
+hast gefallen	bist gefallen	3		
+hast gegangen	bist gegangen	3		
+hast gekommen	bist gekommen	3		
+hast gereist	bist gereist	3		
+hast gewesen	bist gewesen	3		
+hast geworden	bist geworden	3		
+hat geblieben	ist geblieben	3		
+hat gefallen	ist gefallen	3		
+hat gegangen	ist gegangen	3		
+hat gekommen	ist gekommen	3		
+hat gereist	ist gereist	3		
+hat gewesen	ist gewesen	3		
+hat geworden	ist geworden	3		
+Hilfe leisten	helfen	0		
+höher wie	höher als	3		
+idealste	ideale	3		
+idealsten	idealen	3		
+im Bezug auf	in Bezug auf	3		
+im Falle dass	falls, wenn	0		
+im Hinblick auf	für, zu	0		
+im Rahmen von	bei, in	0		
+im Vorraus	im Voraus	3		
+im Zuge der	bei, während	0		
+im Zuge des	bei, während	0		
+in absehbarer Zeit	bald	0		
+in Anbetracht der Tatsache dass	weil, da	0		
+in Angriff genommen	angefangen, begonnen	0		
+in Angriff nehmen	anfangen, beginnen	0		
+in der heutigen Zeit	heute	0		
+in der Lage ist	kann	0		
+in der Lage sein	können	0		
+in der Lage sind	können	0		
+in der Nähe von	nahe, bei	0		
+in der Regel	meist, meistens	0		
+in Erfahrung bringen	erfahren, herausfinden	0		
+in Erfahrung gebracht	erfahren, herausgefunden	0		
+in Kenntnis gesetzt	informiert, benachrichtigt	0		
+in Kenntnis setzen	informieren, benachrichtigen	0		
+in Rechnung stellen	berechnen	0		
+in regelmäßigen Abständen	regelmäßig	0		
+in trockenen Tüchern	erledigt, abgeschlossen	2		
+in wie weit	inwieweit	3		
+interressant	interessant	3		
+intressant	interessant	3		
+jünger wie	jünger als	3		
+kleiner wie	kleiner als	3		
+Kommitee	Komitee	3		
+kommt zum Einsatz	wird eingesetzt	0		
+kommt zur Anwendung	wird angewendet	0		
+kostenlos gratis	gratis	1		
+Kritik üben	kritisieren	0		
+leistet einen Beitrag	trägt bei	0		
+leistet Hilfe	hilft	0		
+letzten Endes	letztlich	0		
+Litaratur	Literatur	3		
+länger wie	länger als	3		
+maximalste	maximale	3		
+mehr wie	mehr als	3		
+minimalste	minimale	3		
+mit Ausnahme von	außer	0		
+nicht in der Lage	kann nicht, können nicht	0		
+nicht selten	oft	0		
+nicht unerheblich	erheblich	0		
+nicht unwahrscheinlich	wahrscheinlich	0		
+nicht unwichtig	wichtig	0		
+nichts desto trotz	nichtsdestotrotz	3		
+nähmlich	nämlich	3		
+offiziel	offiziell	3		
+optimalste	optimale	3		
+optimalsten	optimalen	3		
+paralell	parallel	3		
+Proffessor	Professor	3		
+Reperatur	Reparatur	3		
+Resource	Ressource	3		
+Resourcen	Ressourcen	3		
+Restorant	Restaurant	3		
+Rezention	Rezension	3		
+runde Kugel	Kugel	1		
+Rythmus	Rhythmus	3		
+Rückantwort	Antwort	1		
+Rückerstattung	Erstattung	1		
+schlechter wie	schlechter als	3		
+Schnee von gestern	überholt, längst vorbei	2		
+schneller wie	schneller als	3		
+schon bereits	bereits	1		
+schöner wie	schöner als	3		
+seid einiger Zeit	seit einiger Zeit	3		
+seid gestern	seit gestern	3		
+seid heute	seit heute	3		
+seid Jahren	seit Jahren	3		
+seid langem	seit langem	3		
+seid Monaten	seit Monaten	3		
+seid Stunden	seit Stunden	3		
+seid Tagen	seit Tagen	3		
+seid wann	seit wann	3		
+seid Wochen	seit Wochen	3		
+seitens der	von, durch	0		
+seitens des	von, durch	0		
+seperat	separat	3		
+Standart	Standard	3		
+statt dem	statt des, statt der	3		
+stellen zur Verfügung	stellen bereit, geben	0		
+stellt zur Verfügung	stellt bereit, gibt	0		
+Symphatie	Sympathie	3		
+Terasse	Terrasse	3		
+tollerant	tolerant	3		
+tote Leiche	Leiche	1		
+trotz dem	trotz des, trotz der	3		
+trotz der Tatsache dass	obwohl	0		
+ungeachtet der Tatsache dass	obwohl	0		
+unter Berücksichtigung	angesichts, wegen	0		
+unter Beweis gestellt	bewiesen	0		
+unter Beweis stellen	beweisen	0		
+unter dem Strich	insgesamt, letztlich	2		
+unter der Voraussetzung dass	wenn, falls	0		
+Verwendung finden	verwendet werden	0		
+villeicht	vielleicht	3		
+Vorraussetzung	Voraussetzung	3		
+Vorraussetzungen	Voraussetzungen	3		
+wegen dem	wegen des, wegen der	3		
+wegen den	wegen der	3		
+wegen dir	deinetwegen	3		
+wegen ihm	seinetwegen	3		
+wegen ihr	ihretwegen	3		
+wegen mir	meinetwegen	3		
+wegen uns	unsertwegen	3		
+weißer Schimmel	Schimmel	1		
+weniger wie	weniger als	3		
+wiederrufen	widerrufen	3		
+wiederspiegeln	widerspiegeln	3		
+wiederspiegelt	widerspiegelt	3		
+wiedersprechen	widersprechen	3		
+wiederspricht	widerspricht	3		
+Wiederspruch	Widerspruch	3		
+wiederstehen	widerstehen	3		
+während dem	während des, während der	3		
+zu dem Zweck dass	damit	0		
+zu diesem Zeitpunkt	jetzt, dann	0		
+zu einem späteren Zeitpunkt	später	0		
+zu jeder Zeit	jederzeit, immer	0		
+zum Abschluss bringen	abschließen, beenden	0		
+zum Abschluss gebracht	abgeschlossen, beendet	0		
+zum Ausdruck bringen	ausdrücken	0		
+zum Ausdruck gebracht	ausgedrückt	0		
+zum damaligen Zeitpunkt	damals	0		
+zum Einsatz bringen	einsetzen	0		
+zum Einsatz kommen	eingesetzt werden	0		
+zum gegenwärtigen Zeitpunkt	jetzt, derzeit	0		
+zum jetzigen Zeitpunkt	jetzt, derzeit	0		
+zum Zwecke der	für	0		
+zum Zwecke des	für	0		
+zumindestens	zumindest, mindestens	3		
+zur Anwendung bringen	anwenden	0		
+zur Anwendung kommen	angewendet werden	0		
+zur Durchführung bringen	durchführen	0		
+zur Verfügung gestellt	bereitgestellt, gegeben	0		
+zur Verfügung stellen	bereitstellen, geben	0		
+zur Verfügung zu stellen	bereitzustellen	0		
+älter wie	älter als	3		
+übt Kritik	kritisiert	0		
