@@ -60,6 +60,15 @@ if(APPLE)
     # Note that this will need to be set via codesign later because we are not
     # codesigning via CMake. This here is more for bookkeeping.
     set(CMAKE_XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
+
+    if(APP_STORE_BUILD)
+        # App Store submissions must run inside the App Sandbox; direct/notarized
+        # distribution outside the store should NOT use this, as sandboxing
+        # restricts filesystem access beyond what a normal desktop build needs.
+        # As with hardened runtime above, this is bookkeeping only -- apply it at
+        # signing time, e.g. codesign --entitlements AppStore.entitlements ...
+        set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${CMAKE_CURRENT_SOURCE_DIR}/AppStore.entitlements")
+    endif()
 endif()
 
 # Always run these, even if not APPLE, as we use ${CMAKE_OSX_DEPLOYMENT_TARGET} for the docs.

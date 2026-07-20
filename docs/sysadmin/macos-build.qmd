@@ -99,6 +99,64 @@ codesign --verify --verbose=2 ./"Readability Studio.app"
 
 {{< pagebreak >}}
 
+## Mac App Store build {-}
+
+::: {.tipsection data-latex=""}
+This is a separate pipeline from direct distribution above.
+It uses a different signing identity, an entitlements file, no notarization, and a different packaging and upload step.
+Only follow this section if submitting to the Mac App Store.
+For direct distribution, skip to *Build the DMG image* below.
+:::
+
+Configure and build with `APP_STORE_BUILD` enabled.
+This disables the in-app "Check for Updates" feature (the App Store handles update checks itself):
+
+```{.bash}
+cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DAPP_STORE_BUILD=ON
+cmake --build ./build --target all -j4 --config Release
+```
+
+Sign the app with the `AppStore.entitlements` file at the repo root.
+This is what puts the app inside the App Sandbox that the Mac App Store requires.
+`ORG_ID` here must be an **Apple Distribution** identity.
+This is a different certificate than the Developer ID identity used for direct distribution above.
+It must be generated separately in your Apple Developer account.
+
+```{.bash}
+ORG_ID=
+
+cd installers/macos/release
+
+codesign --force --verbose=2 --options runtime --timestamp \
+         --entitlements ../../AppStore.entitlements \
+         --sign ${ORG_ID} ./"Readability Studio.app"
+
+codesign --verify --verbose=2 ./"Readability Studio.app"
+```
+
+App Store builds are not notarized.
+(Skip the notarization steps below.)
+Instead, package the signed app as an installer component with `productbuild`.
+Sign it with a **Mac Installer Distribution** identity.
+This is a third, separate certificate from the two above, also generated in your Apple Developer account.
+
+```{.bash}
+INSTALLER_ORG_ID=
+
+productbuild --component "Readability Studio.app" /Applications \
+             --sign ${INSTALLER_ORG_ID} \
+             ReadabilityStudio.pkg
+```
+
+Upload `ReadabilityStudio.pkg` to App Store Connect with *Transporter*, a standalone app from the Mac App Store (not part of Xcode).
+Drag the file in, run *Verify* from its menu, then click *Deliver*.
+
+::: {.notesection data-latex=""}
+For a fully scripted/CI upload instead of the Transporter app, use the [App Store Connect API](https://developer.apple.com/documentation/appstoreconnectapi) with a JSON Web Token.
+:::
+
+{{< pagebreak >}}
+
 ## Build the DMG image {-}
 
 ::: {.notesection data-latex=""}
