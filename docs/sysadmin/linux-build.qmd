@@ -75,6 +75,7 @@ mv Readability_Studio*.AppImage ./installers/unix
 Once built, the AppImage will be available in `r menu(c('installers', 'unix'))`.
 Apply a GPG signature to it before distributing.
 
+::: {.minipage data-latex="{\textwidth}"}
 ## Build the DEB package {-}
 
 After building *{{< var PROGRAM_NAME >}}* in Release mode, the DEB staging directory will be populated at `r menu(c('installers', 'unix', 'deb-stage'))`.
@@ -87,6 +88,8 @@ dpkg-deb --build installers/unix/deb-stage \
 
 Once built, the DEB package will be available in `r menu(c('installers', 'unix'))`.
 Apply a GPG signature to it before distributing.
+
+:::
 
 ## Build the RPM package {-}
 

@@ -51,8 +51,6 @@ When prompted, set the keychain profile to a meaningful name and enter your 10-d
 Then enter your app-specific password.
 (You can get that from Apple's developer website.)
 
-{{< pagebreak >}}
-
 ## Download *wxWidgets* {-}
 
 ```{.bash}
@@ -61,6 +59,7 @@ git clone https://github.com/wxWidgets/wxWidgets.git --recurse-submodules
 
 This should be cloned into a folder next to *{{< var PROGRAM_NAME >}}*.
 
+::: {.minipage data-latex="{\textwidth}"}
 ## Build *{{< var PROGRAM_NAME >}}* {-}
 
 ```{.bash include="build-commands.txt" start-line=11 end-line=20}
@@ -73,13 +72,15 @@ You can also pass `-DENABLE_SANITIZERS=TRUE` to enable AddressSanitizer support 
 If you need to build with local modifications in Git submodules, add `-DALLOW_DIRTY_SUBMODULES=ON` to bypass the clean-check validation.
 :::
 
-{{< pagebreak >}}
+:::
+
+::: {.minipage data-latex="{\textwidth}"}
 
 ## Code sign {-}
 
-::: {.tipsection data-latex=""}
+:::: {.tipsection data-latex=""}
 The following steps are only required if you are distributing builds outside CI, your local machine, or Eclipse's infrastructure.
-:::
+::::
 
 If code signing locally, do the following:
 
@@ -97,16 +98,17 @@ codesign --force --verbose=2 --options runtime \
 codesign --verify --verbose=2 ./"Readability Studio.app"
 ```
 
-{{< pagebreak >}}
+:::
 
-## Mac App Store build {-}
+::: {.minipage data-latex="{\textwidth}"}
+## Build for the Mac App Store {-}
 
-::: {.tipsection data-latex=""}
+:::: {.tipsection data-latex=""}
 This is a separate pipeline from direct distribution above.
 It uses a different signing identity, an entitlements file, no notarization, and a different packaging and upload step.
 Only follow this section if submitting to the Mac App Store.
 For direct distribution, skip to *Build the DMG image* below.
-:::
+::::
 
 Configure and build with `APP_STORE_BUILD` enabled.
 This disables the in-app "Check for Updates" feature (the App Store handles update checks itself):
@@ -151,11 +153,11 @@ productbuild --component "Readability Studio.app" /Applications \
 Upload `ReadabilityStudio.pkg` to App Store Connect with *Transporter*, a standalone app from the Mac App Store (not part of Xcode).
 Drag the file in, run *Verify* from its menu, then click *Deliver*.
 
-::: {.notesection data-latex=""}
+:::: {.notesection data-latex=""}
 For a fully scripted/CI upload instead of the Transporter app, use the [App Store Connect API](https://developer.apple.com/documentation/appstoreconnectapi) with a JSON Web Token.
-:::
+::::
 
-{{< pagebreak >}}
+:::
 
 ## Build the DMG image {-}
 
@@ -170,16 +172,16 @@ so the DMG is written one level above it):
 ```{.bash}
 test -f ReadabilityStudio.dmg && rm ReadabilityStudio.dmg
 create-dmg \
-  --volname "Readability Studio Installer" \
-  --volicon "../../app-logo.icns"          \
-  --background "../../app-logo.png"        \
-  --window-pos 200 120                     \
-  --window-size 800 400                    \
-  --icon-size 100                          \
-  --icon "Readability Studio.app" 200 190          \
-  --hide-extension "Readability Studio.app"        \
-  --app-drop-link 600 185                  \
-  "ReadabilityStudio.dmg"                  \
+  --volname "Readability Studio Installer"   \
+  --volicon "../../app-logo.icns"            \
+  --background "../../app-logo.png"          \
+  --window-size 800 400                      \
+  --icon-size 100                            \
+  --icon "Readability Studio.app" 200 190    \
+  --hide-extension "Readability Studio.app"  \
+  --no-internet-enable                       \
+  --app-drop-link 600 185                    \
+  "ReadabilityStudio.dmg"                    \
   "release/"
 ```
 

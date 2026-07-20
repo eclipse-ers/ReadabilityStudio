@@ -5,7 +5,7 @@ if (nchar(system.file(package="pacman")) == 0)
 library(pacman)
 pacman::p_load(glue, readr, stringr, fs, lubridate, tidyverse, kableExtra,
                Hmisc, cowplot, beeswarm, tinytex, stringi, this.path, janitor, quarto,
-               magick, pdftools, magrittr)
+               magick, pdftools, magrittr, fastmap)
  
 if (nchar(tinytex::tinytex_root()) == 0)
   {
