@@ -2243,6 +2243,7 @@ void ProjectView::OnTextWindowFontChange([[maybe_unused]] wxRibbonButtonBarEvent
 
     wxFontData data;
     data.SetInitialFont(doc->GetTextViewFont());
+    data.EnableEffects(false);
 
     wxFontDialog dialog(GetDocFrame(), data);
     if (dialog.ShowModal() == wxID_OK)
