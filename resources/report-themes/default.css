@@ -117,6 +117,12 @@ body
   flex: 1;
   padding: 20px 24px;
   background-color: color-mix(in srgb, var(--banner-color) 8%, Canvas);
+  transition: background-color 0.4s ease;
+  }
+
+.report-banner:hover .report-banner-content
+  {
+  background-color: color-mix(in srgb, var(--banner-color) 16%, Canvas);
   }
 
 .report-banner-content h1
@@ -402,4 +408,10 @@ img
   {
   .no-print, .no-print *
     { display: none !important; }
+  /* Force background colors (banner/card fills, highlight swatches) to render.
+     Some printing backends remove background colors by default, so this will
+     ensure that our card backgroungs are preserved.
+  */
+  body
+    { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
