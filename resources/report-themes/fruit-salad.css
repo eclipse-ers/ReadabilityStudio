@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Readability Studio — fruit salad theme
+   ========================================================================== */
+
+:root
+  {
+  --header-accent: #FF8C00;    /* orange slice */
+  --banner-color: #F5D130;     /* banana */
+  --banner-text-color: #8B6F00; /* banana peel, for contrast on yellow */
+  --note-color: #D6304C;       /* watermelon flesh */
+  --warning-color: #F5A25D;    /* cantaloupe */
+  --data-row-color: #9ACD32;   /* honeydew */
+}
