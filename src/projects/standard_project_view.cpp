@@ -1110,6 +1110,8 @@ void ProjectView::OnLaunchSourceFile([[maybe_unused]] wxRibbonButtonBarEvent& ev
 //-------------------------------------------------------
 void ProjectView::UpdateSideBarIcons()
     {
+    wxGetApp().ApplyThemeToSideBar(GetSideBar());
+
     GetSideBar()->SaveState();
     GetSideBar()->DeleteAllFolders();
 

@@ -472,24 +472,8 @@ void ExplanationListCtrl::UpdateExplanationDisplay()
 //------------------------------------------------------
 wxColour ExplanationListCtrl::GetStatRowBackgroundColour(const wxColour& background)
     {
-    const wxString css = ProjectReportFormat::GetThemeCss(
-        _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme());
-
-    // fallback: default theme's header accent
-    wxColour accentColour{ L"#00CC66" };
-    const auto tagPos = css.rfind(_DT(L"--header-accent:"));
-    if (tagPos != wxString::npos)
-        {
-        const auto hashPos = css.find(L'#', tagPos);
-        if (hashPos != wxString::npos && hashPos + 7 <= css.length())
-            {
-            const wxColour parsedColour{ css.substr(hashPos, 7) };
-            if (parsedColour.IsOk())
-                {
-                accentColour = parsedColour;
-                }
-            }
-        }
+    const wxColour accentColour =
+        ProjectReportFormat::GetThemeAccentColour(wxGetApp().GetAppOptions()->GetReportTheme());
 
     const auto blendChannel = [](const unsigned char accent, const unsigned char canvas)
     {

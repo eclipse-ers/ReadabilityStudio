@@ -252,6 +252,7 @@ void WordListDlg::CreateControls()
         }
 
     m_sideBar = new Wisteria::UI::SideBarBook(this, wxID_ANY);
+    wxGetApp().ApplyThemeToSideBar(m_sideBar->GetSideBar());
 
     m_sideBar->SetIconSize(wxSize{ 32, 32 });
     m_sideBar->GetImageList().push_back(

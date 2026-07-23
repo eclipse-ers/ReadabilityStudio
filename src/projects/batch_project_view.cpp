@@ -678,6 +678,8 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
 //-------------------------------------------------------
 void BatchProjectView::UpdateSideBarIcons()
     {
+    wxGetApp().ApplyThemeToSideBar(GetSideBar());
+
     GetSideBar()->SaveState();
     GetSideBar()->DeleteAllFolders();
 

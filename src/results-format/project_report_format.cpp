@@ -835,6 +835,30 @@ wxString ProjectReportFormat::GetThemeCss(const wxString& fileName /*= _DT(L"def
     }
 
 //------------------------------------------------
+wxColour
+ProjectReportFormat::GetThemeAccentColour(const wxString& overrideFileName /*= wxEmptyString*/)
+    {
+    const wxString css = GetThemeCss(_DT(L"default.css"), overrideFileName);
+
+    // fallback: default theme's header accent
+    wxColour accentColour{ L"#00CC66" };
+    const auto tagPos = css.rfind(_DT(L"--header-accent:"));
+    if (tagPos != wxString::npos)
+        {
+        const auto hashPos = css.find(L'#', tagPos);
+        if (hashPos != wxString::npos && hashPos + 7 <= css.length())
+            {
+            const wxColour parsedColour{ css.substr(hashPos, 7) };
+            if (parsedColour.IsOk())
+                {
+                accentColour = parsedColour;
+                }
+            }
+        }
+    return accentColour;
+    }
+
+//------------------------------------------------
 wxString
 ProjectReportFormat::FormatHtmlReportStart(const wxString& title /*= wxString{}*/,
                                            const wxString& overrideCssFile /*= wxEmptyString*/)

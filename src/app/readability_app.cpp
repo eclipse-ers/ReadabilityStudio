@@ -49,6 +49,7 @@
 
 #include "readability_app.h"
 #include "../Wisteria-Dataviz/src/CRCpp/inc/CRC.h"
+#include "../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../Wisteria-Dataviz/src/data/pdfreader.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
 #include "../Wisteria-Dataviz/src/graphs/inflesz.h"
@@ -66,6 +67,7 @@
 #include "../projects/batch_project_view.h"
 #include "../projects/standard_project_doc.h"
 #include "../projects/standard_project_view.h"
+#include "../results-format/project_report_format.h"
 #include "../ui/controls/script_workbench_panel.h"
 #include "../ui/dialogs/custom_test_dlg.h"
 #include "../ui/dialogs/edit_word_list_dlg.h"
@@ -1839,10 +1841,33 @@ void ReadabilityApp::FillPrintMenu(wxMenu& printMenu, const RibbonType rtype)
     }
 
 //-----------------------------------
+void ReadabilityApp::ApplyThemeToSideBar(Wisteria::UI::SideBar* sideBar)
+    {
+    if (sideBar == nullptr)
+        {
+        return;
+        }
+
+    const wxColour accentColour =
+        ProjectReportFormat::GetThemeAccentColour(GetAppOptions()->GetReportTheme());
+    const wxColour highlightColour = accentColour.ChangeLightness(135);
+
+    sideBar->SetSelectedColour(accentColour);
+    sideBar->SetSelectedFontColour(
+        Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(accentColour));
+    sideBar->SetHighlightColour(highlightColour);
+    sideBar->SetHighlightFontColour(
+        Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(highlightColour));
+
+    sideBar->Refresh();
+    }
+
+//-----------------------------------
 Wisteria::UI::SideBar* ReadabilityApp::CreateSideBar(wxWindow* frame, const wxWindowID id)
     {
     auto* sideBar = new Wisteria::UI::SideBar(frame, id);
     sideBar->SetImageList(dynamic_cast<MainFrame*>(GetMainFrame())->GetProjectSideBarImageList());
+    ApplyThemeToSideBar(sideBar);
 
     return sideBar;
     }
@@ -5666,6 +5691,11 @@ void MainFrame::RefreshOpenProjectsIfThemeChanged(const wxString& previousReport
             doc->RefreshRequired(ProjectRefresh::Minimal);
             doc->RefreshProject();
             }
+        }
+
+    if (wxGetApp().GetMainFrameEx()->GetScriptWorkbench() != nullptr)
+        {
+        wxGetApp().GetMainFrameEx()->GetScriptWorkbench()->UpdateTheme();
         }
     }
 

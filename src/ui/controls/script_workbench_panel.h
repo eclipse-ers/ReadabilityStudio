@@ -108,6 +108,10 @@ class ScriptWorkbenchPanel final : public wxPanel
     /// @brief Toggles the debug window visibility.
     void ToggleDebugWindow();
 
+    /// @brief Reapplies the currently active report theme's accent color to the
+    ///     workbench's sidebars (the script list and the function browser's category list).
+    void UpdateTheme();
+
   private:
     struct ScriptEntry
         {

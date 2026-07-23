@@ -727,6 +727,7 @@ void CustomTestDlg::CreateControls()
     auto* mainSizer = new wxBoxSizer(wxVERTICAL);
 
     m_sideBarBook = new Wisteria::UI::SideBarBook(this, wxID_ANY);
+    wxGetApp().ApplyThemeToSideBar(m_sideBarBook->GetSideBar());
 
     mainSizer->Add(m_sideBarBook, wxSizerFlags{ 1 }.Expand().Border());
 

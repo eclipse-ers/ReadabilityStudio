@@ -67,6 +67,11 @@ class ProjectReportFormat
     [[nodiscard]]
     static wxString GetThemeCss(const wxString& fileName = _DT(L"default.css"),
                                 const wxString& overrideFileName = wxEmptyString);
+    /// @returns The theme's main accent color.
+    /// @param overrideFileName The user-selected theme CSS file overlaid on "default.css"
+    ///     (as would be passed as @c overrideFileName to GetThemeCss()).
+    [[nodiscard]]
+    static wxColour GetThemeAccentColour(const wxString& overrideFileName = wxEmptyString);
     /// @returns The html/head/body start sections for a report.
     /// @param title The page's title.
     /// @param overrideCssFile An optional CSS file to load after the base theme.

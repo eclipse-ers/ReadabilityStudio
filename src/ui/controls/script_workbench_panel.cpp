@@ -131,6 +131,7 @@ void ScriptWorkbenchPanel::CreateControls()
         wxSystemSettings::GetAppearance().IsDark() ? L"ribbon/lua-dark-mode.svg" :
                                                      L"ribbon/lua.svg") });
     m_scriptSidebar->InsertItem(0, _(L"Scripts"), m_scriptsFolderId, std::nullopt);
+    wxGetApp().ApplyThemeToSideBar(m_scriptSidebar);
 
     // func browser splitter (right of sidebar): left = editor book, right = func browser
     m_funcBrowserSplitter = new wxSplitterWindow(m_sidebarSplitter, wxID_ANY, wxDefaultPosition,
@@ -158,6 +159,7 @@ void ScriptWorkbenchPanel::CreateControls()
         m_functionBrowser->AddCategory(theLib.first, theLib.second, 1002);
         }
     m_functionBrowser->FinalizeCategories();
+    wxGetApp().ApplyThemeToSideBar(m_functionBrowser->GetSidebar());
     m_functionBrowser->Hide();
 
     // func browser starts hidden; the editor book occupies the entire right side
@@ -697,6 +699,13 @@ void ScriptWorkbenchPanel::ToggleDebugWindow()
         m_debugNotebook->Show();
         m_outerSplitter->SplitHorizontally(m_sidebarSplitter, m_debugNotebook, -FromDIP(225));
         }
+    }
+
+//-------------------------------------------------------
+void ScriptWorkbenchPanel::UpdateTheme()
+    {
+    wxGetApp().ApplyThemeToSideBar(m_scriptSidebar);
+    wxGetApp().ApplyThemeToSideBar(m_functionBrowser->GetSidebar());
     }
 
 //-------------------------------------------------------

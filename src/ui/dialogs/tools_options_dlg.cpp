@@ -5275,6 +5275,7 @@ void ToolsOptionsDlg::CreateControls()
     const int optionIndentSize = wxSizerFlags::GetDefaultBorder() * 3;
 
     m_sideBar = new Wisteria::UI::SideBarBook(this, wxID_ANY);
+    wxGetApp().ApplyThemeToSideBar(m_sideBar->GetSideBar());
     mainSizer->Add(m_sideBar, wxSizerFlags{ 1 }.Expand().Border());
 
     if (GetSectionsBeingShown() == AllSections)

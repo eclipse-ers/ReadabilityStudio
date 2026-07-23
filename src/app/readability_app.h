@@ -448,6 +448,11 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void InitStartPage();
     void InitProjectSidebar();
 
+    /// @brief Applies the currently active report theme's accent color to a sidebar's
+    ///     selection and hover-highlight colors.
+    /// @param sideBar The sidebar to update.
+    void ApplyThemeToSideBar(Wisteria::UI::SideBar* sideBar);
+
     // ribbon creation
     Wisteria::UI::SideBar* CreateSideBar(wxWindow* frame, const wxWindowID id);
     wxRibbonBar* CreateRibbon(wxWindow* frame, const wxDocument* doc);
