@@ -1056,7 +1056,9 @@ EXCLUDE                = doxygen-awesome-css \
                          ../../src/projects/base_project_view.cpp \
                          ../../src/ui/dialogs/project_wizard_dlg.cpp \
                          ../../src/ui/controls/explanation_listctrl.cpp \
-                         ../../src/lua/README.md
+                         ../../wxWidgets_lib \
+                         ../../src/lua/README.md \
+                         ../../AGENTS.md
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

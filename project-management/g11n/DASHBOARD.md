@@ -151,7 +151,7 @@ _Making the product world-ready (Unicode, plural rules, RTL, locale-sensitive fo
 | 🎨 Art | `████████░░` **75%** | 🟡 |
 | 📜 License | `░░░░░░░░░░` **0%** | 🔴 |
 
-#### Application UI
+### Application UI
 
 #### Baseline Requirements
 - [x] UI strings externalized
@@ -180,7 +180,7 @@ _Making the product world-ready (Unicode, plural rules, RTL, locale-sensitive fo
 - [ ] Language switch reloads resources or prompts restart
 - [x] CI checks: missing/unused keys, bad % placeholders
 
-#### Documentation
+### Documentation
 
 #### Baseline Requirements
 - [x] Source and output files use UTF-8 throughout
@@ -209,7 +209,7 @@ _Making the product world-ready (Unicode, plural rules, RTL, locale-sensitive fo
 - [ ] Fallback text for missing translations rendered clearly in output (e.g., “⚠ Untranslated”)
 - [ ] Localization of diagrams or embedded SVG text layers
 
-#### Windows Installer
+### Windows Installer
 
 #### Baseline Requirements
 - [x] All .isl and .iss files encoded in UTF-8
@@ -236,11 +236,11 @@ _Making the product world-ready (Unicode, plural rules, RTL, locale-sensitive fo
 - [x] Ensure fallback to English if target locale unavailable
 - [x] Localized installer icon and bitmap resources where appropriate
 
-#### Licenses
+### Licenses
 - [ ] Include translated versions of Eclipse License in program
 - [ ] Include translated versions of Eclipse License in Windows installer
 
-#### Art Assets
+### Art Assets
 - [x] All text rendered at runtime
 - [x] Fonts with full Unicode ranges in use
 
