@@ -35,6 +35,7 @@ SET(APP_SRC_FILES
     src/projects/base_project_view.cpp
     src/projects/batch_project_doc.cpp
     src/projects/batch_project_view.cpp
+    src/projects/highlighted_text_buffers.cpp
     src/projects/project_frame.cpp
     src/projects/standard_project_doc.cpp
     src/projects/standard_project_view.cpp
