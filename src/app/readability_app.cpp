@@ -5689,6 +5689,8 @@ void MainFrame::RefreshOpenProjectsIfThemeChanged(const wxString& previousReport
         if (doc != nullptr)
             {
             doc->RefreshRequired(ProjectRefresh::Minimal);
+            // the theme is baked into the highlighted-text HTML, so reformat it too
+            doc->RefreshRequired(ProjectRefresh::TextSection);
             doc->RefreshProject();
             }
         }

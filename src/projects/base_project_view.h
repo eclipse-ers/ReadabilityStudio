@@ -50,7 +50,6 @@
 #ifndef BASE_PROJECT_VIEW_H
 #define BASE_PROJECT_VIEW_H
 
-#include "../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
 #include "../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
 #include "../Wisteria-Dataviz/src/ui/controls/searchpanel.h"
 #include "../Wisteria-Dataviz/src/ui/controls/sidebar.h"

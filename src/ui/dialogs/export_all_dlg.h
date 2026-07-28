@@ -97,6 +97,13 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
         return m_textViewExt;
         }
 
+    /// @returns The selected file extension for exported summary reports.
+    [[nodiscard]]
+    const wxString& GetExportSummaryReportExt() const noexcept
+        {
+        return m_summaryReportExt;
+        }
+
     /// @returns The selected file extension for exported list windows.
     [[nodiscard]]
     const wxString& GetExportListExt() const noexcept
@@ -204,6 +211,10 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
     constexpr static int ID_TEXT_TYPE_COMBO = wxID_HIGHEST + 5;
     constexpr static int ID_LIST_TYPE_LABEL = wxID_HIGHEST + 6;
     constexpr static int ID_LIST_TYPE_COMBO = wxID_HIGHEST + 7;
+    constexpr static int ID_INCLUDE_TEST_RESULTS_CHECKBOX = wxID_HIGHEST + 8;
+    constexpr static int ID_INCLUDE_STATISTICS_CHECKBOX = wxID_HIGHEST + 9;
+    constexpr static int ID_SUMMARY_REPORT_TYPE_LABEL = wxID_HIGHEST + 10;
+    constexpr static int ID_SUMMARY_REPORT_TYPE_COMBO = wxID_HIGHEST + 11;
 
     /// Creation
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -225,7 +236,7 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
     void OnOK([[maybe_unused]] wxCommandEvent& event);
     void OnFolderBrowseButtonClick([[maybe_unused]] wxCommandEvent& event);
     void OnImageOptionsButtonClick([[maybe_unused]] wxCommandEvent& event);
-    void OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEvent& event);
+    void OnIncludeListsReportWindowsCheck([[maybe_unused]] wxCommandEvent& event);
 
     [[nodiscard]]
     bool IsStandardProject() const;
@@ -235,11 +246,13 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
     BaseProjectDoc* m_readabilityProjectDoc{ nullptr };
     wxBitmapButton* m_folderBrowseButton{ nullptr };
     wxComboBox* m_textViewCombo{ nullptr };
+    wxComboBox* m_summaryReportCombo{ nullptr };
     wxComboBox* m_listCombo{ nullptr };
     wxComboBox* m_graphCombo{ nullptr };
     wxString m_folderPath;
     wxString m_filePath;
     wxString m_textViewExt;
+    wxString m_summaryReportExt;
     wxString m_listExt;
     wxString m_graphExt;
 

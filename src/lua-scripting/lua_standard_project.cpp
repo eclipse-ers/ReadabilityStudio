@@ -3785,6 +3785,7 @@ namespace LuaScripting
             {
             view->ExportAll(outputPath, BaseProjectDoc::GetExportListExt(),
                             BaseProjectDoc::GetExportTextViewExt(),
+                            BaseProjectDoc::GetExportSummaryReportExt(),
                             BaseProjectDoc::GetExportGraphExt(), true, true, true, true, true, true,
                             true, true, Wisteria::UI::ImageExportOptions());
             }
@@ -3946,30 +3947,57 @@ namespace LuaScripting
                 {
                 windowId = windowMappedId->second;
                 }
-            auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                view->GetWordsBreakdownView().FindWindowById(
-                    windowId, CLASSINFO(Wisteria::UI::FormattedTextCtrl)));
+            auto* textWindow = dynamic_cast<wxWebView*>(
+                view->GetWordsBreakdownView().FindWindowById(windowId, CLASSINFO(wxWebView)));
             // look in grammar section if not in the highlighted words section
             if (textWindow == nullptr)
                 {
-                textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                    view->GetGrammarView().FindWindowById(windowId));
+                textWindow =
+                    dynamic_cast<wxWebView*>(view->GetGrammarView().FindWindowById(windowId));
                 }
             // look in Dolch section if not in the grammar section
             if (textWindow == nullptr)
                 {
-                textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
+                textWindow = dynamic_cast<wxWebView*>(
                     view->GetDolchSightWordsView().FindWindowById(windowId));
                 }
             if (textWindow != nullptr)
                 {
-                const ProjectDoc* doc = dynamic_cast<ProjectDoc*>(view->GetDocument());
-                const wxString originalLabel = textWindow->GetName();
-                textWindow->SetTitleName(
-                    originalLabel +
-                    wxString::Format(L" [%s]", wxFileName::StripExtension(doc->GetTitle())));
-                lua_pushboolean(
-                    L, textWindow->Save(wxString{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 }));
+                const auto* doc = dynamic_cast<const ProjectDoc*>(view->GetDocument());
+                const auto* buffers =
+                    (doc != nullptr) ? doc->GetHighlightedTextBuffers().Find(textWindow->GetId()) :
+                                       nullptr;
+                const wxFileName filePath{ wxString{ luaL_checklstring(L, 3, nullptr),
+                                                     wxConvUTF8 } };
+                // create the folder for the filepath, if necessary
+                wxFileName::Mkdir(filePath.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+                // The paper-white RTF is served from the registry; HTML and PDF come
+                // from the live webview. The file extension picks the format.
+                bool saved = false;
+                if (buffers != nullptr && filePath.GetExt().CmpNoCase(L"rtf") == 0)
+                    {
+                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+                    wxFile file(filePath.GetFullPath(), wxFile::write);
+                    saved = file.IsOpened() && file.Write(buffers->m_rtf);
+                    }
+                else if (filePath.GetExt().CmpNoCase(L"pdf") == 0)
+                    {
+                    textWindow->PrintToPDF(filePath.GetFullPath());
+                    saved = true;
+                    }
+                else
+                    {
+                    std::wstring htmlText = textWindow->GetPageSource().ToStdWstring();
+                    lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                    if (!htmlText.starts_with(L"<!DOCTYPE"))
+                        {
+                        htmlText.insert(0, L"<!DOCTYPE html>\n");
+                        }
+                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
+                    wxFile file(filePath.GetFullPath(), wxFile::write);
+                    saved = file.IsOpened() && file.Write(htmlText);
+                    }
+                lua_pushboolean(L, saved);
                 wxGetApp().Yield();
                 return 1;
                 }
@@ -4019,9 +4047,12 @@ namespace LuaScripting
                     const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
                     std::wstring htmlText = window->GetPageSource().ToStdWstring();
                     lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                    // create the folder for the filepath, if necessary
+                    wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,
+                                      wxPATH_MKDIR_FULL);
                     wxFileName(filePath).SetPermissions(wxS_DEFAULT);
                     wxFile file(filePath, wxFile::write);
-                    lua_pushboolean(L, file.Write(htmlText));
+                    lua_pushboolean(L, file.IsOpened() && file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;
                     }
@@ -4035,9 +4066,12 @@ namespace LuaScripting
                     const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
                     std::wstring htmlText = window->GetPageSource().ToStdWstring();
                     lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+                    // create the folder for the filepath, if necessary
+                    wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,
+                                      wxPATH_MKDIR_FULL);
                     wxFileName(filePath).SetPermissions(wxS_DEFAULT);
                     wxFile file(filePath, wxFile::write);
-                    lua_pushboolean(L, file.Write(htmlText));
+                    lua_pushboolean(L, file.IsOpened() && file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;
                     }

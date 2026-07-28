@@ -8,6 +8,7 @@ Catch2|OleanderStemmingLibrary/tests|tinyexpr-plusplus/tests|utfcpp/tests|\
 utfcpp/samples|utfcpp/extern|cxxopts|xmltest[.]cpp|html5-printer[.]cpp|htmltablepanel[.]cpp|\
 textclassifier[.]cpp|candlestickplot[.]cpp|ganttchart[.]cpp|lrroadmap[.]cpp|proconroadmap[.]cpp|\
 roadmap[.]cpp|sankeydiagram[.]cpp|table[.]cpp|wcurveplot[.]cpp|variableselectdlg[.]cpp|reportbuilder[.]cpp|\
+formattedtextctrl[.]cpp|gtktextview[-]helper[.]cpp|\
 report_builder_formulas[.]cpp|reporttableloader[.]cpp|datasetimportdlg[.]cpp|\
 win_loss_sparkline[.]cpp|multi_series_lineplot[.]cpp|likertchart[.]cpp|waffle_chart[.]cpp|\
 pivot[.]cpp|subset[.]cpp|join[.]cpp|clone[.]cpp|xrc_menu_strings[.]cpp)")

@@ -53,8 +53,6 @@ class HighlightedTextBufferMap
     /// @returns The buffers for @p windowId, or @c nullptr if none are stored.
     [[nodiscard]]
     const HighlightedTextBuffers* Find(const wxWindowID windowId) const;
-    /// @brief Removes the buffers (and cached page) for @p windowId.
-    void Remove(const wxWindowID windowId);
     /// @brief Removes every window's buffers and cached pages.
     void Clear();
 

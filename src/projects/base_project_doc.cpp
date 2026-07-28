@@ -58,6 +58,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(BaseProjectDoc, wxDocument)
     wxDECLARE_APP(ReadabilityApp);
 
 wxString BaseProjectDoc::m_exportTextViewExt = L"htm";
+wxString BaseProjectDoc::m_exportSummaryReportExt = L"htm";
 wxString BaseProjectDoc::m_exportListExt = L"htm";
 wxString BaseProjectDoc::m_exportGraphExt = L"png";
 bool BaseProjectDoc::m_exportHardWordLists = true;
@@ -445,19 +446,6 @@ wxColour BaseProjectDoc::GetTextReportBackgroundColor() const
     }
 
 //------------------------------------------------
-void BaseProjectDoc::UpdateTextWindowOptions(Wisteria::UI::FormattedTextCtrl* textW) const
-    {
-    if (textW == nullptr)
-        {
-        return;
-        }
-
-    textW->SetBackgroundColour(GetTextReportBackgroundColor());
-
-    UpdatePrinterSettings(textW);
-    }
-
-//------------------------------------------------
 void BaseProjectDoc::UpdateExplanationListOptions(ExplanationListCtrl* eList) const
     {
     if (eList == nullptr)
@@ -490,23 +478,6 @@ void BaseProjectDoc::UpdatePrinterSettings(Wisteria::Canvas* window) const
 
 //------------------------------------------------
 void BaseProjectDoc::UpdatePrinterSettings(ExplanationListCtrl* window) const
-    {
-    if (window == nullptr)
-        {
-        return;
-        }
-    window->SetPrinterSettings(GetPrintData());
-    window->SetLeftPrinterHeader(wxGetApp().GetAppOptions()->GetLeftPrinterHeader());
-    window->SetCenterPrinterHeader(wxGetApp().GetAppOptions()->GetCenterPrinterHeader());
-    window->SetRightPrinterHeader(wxGetApp().GetAppOptions()->GetRightPrinterHeader());
-    window->SetLeftPrinterFooter(wxGetApp().GetAppOptions()->GetLeftPrinterFooter());
-    window->SetCenterPrinterFooter(wxGetApp().GetAppOptions()->GetCenterPrinterFooter());
-    window->SetRightPrinterFooter(wxGetApp().GetAppOptions()->GetRightPrinterFooter());
-    window->SetWatermark(GetWatermark());
-    }
-
-//------------------------------------------------
-void BaseProjectDoc::UpdatePrinterSettings(Wisteria::UI::FormattedTextCtrl* window) const
     {
     if (window == nullptr)
         {

@@ -3088,6 +3088,8 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_EXPORT{ _DT("export-settings") };
     inline constexpr static std::string_view XML_EXPORT_LIST_EXT{ _DT("export-list-extension") };
     inline constexpr static std::string_view XML_EXPORT_TEXT_EXT{ _DT("export-text-extension") };
+    inline constexpr static std::string_view XML_EXPORT_SUMMARY_REPORT_EXT{ _DT(
+        "export-summary-report-extension") };
     inline constexpr static std::string_view XML_EXPORT_GRAPH_EXT{ _DT("export-graph-extension") };
     inline constexpr static std::string_view XML_EXPORT_LISTS{ _DT("export-lists") };
     inline constexpr static std::string_view XML_EXPORT_SENTENCES_BREAKDOWN{ _DT(

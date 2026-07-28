@@ -50,7 +50,6 @@
 #ifndef BASE_PROJECT_DOC_H
 #define BASE_PROJECT_DOC_H
 
-#include "../Wisteria-Dataviz/src/ui/controls/formattedtextctrl.h"
 #include "../graphs/raygorgraph.h"
 #include "../ui/controls/explanation_listctrl.h"
 #include "base_project.h"
@@ -998,6 +997,17 @@ class BaseProjectDoc : public BaseProject, public wxDocument
         return m_exportTextViewExt;
         }
 
+    static void SetExportSummaryReportExt(const wxString& extension)
+        {
+        m_exportSummaryReportExt = extension;
+        }
+
+    [[nodiscard]]
+    static wxString GetExportSummaryReportExt()
+        {
+        return m_exportSummaryReportExt;
+        }
+
     static void SetExportListExt(const wxString& extension) { m_exportListExt = extension; }
 
     [[nodiscard]]
@@ -1118,7 +1128,6 @@ class BaseProjectDoc : public BaseProject, public wxDocument
 
     void UpdateGraphOptions(Wisteria::Canvas* canvas) const;
     void UpdateListOptions(Wisteria::UI::ListCtrlEx* list) const;
-    void UpdateTextWindowOptions(Wisteria::UI::FormattedTextCtrl* textW) const;
     void UpdateExplanationListOptions(ExplanationListCtrl* eList) const;
     /// @brief Updates printer settings for a canvas.
     /// @param window The Canvas to update.
@@ -1126,9 +1135,6 @@ class BaseProjectDoc : public BaseProject, public wxDocument
     /// @brief Updates printer settings for a list control.
     /// @param window The list control to update.
     void UpdatePrinterSettings(Wisteria::UI::ListCtrlEx* window) const;
-    /// @brief Updates printer settings for a text window.
-    /// @param window The text window to update.
-    void UpdatePrinterSettings(Wisteria::UI::FormattedTextCtrl* window) const;
     /// @brief Updates printer settings for an explanation list control.
     /// @param window The explanation list control to update.
     void UpdatePrinterSettings(ExplanationListCtrl* window) const;
@@ -1373,6 +1379,7 @@ class BaseProjectDoc : public BaseProject, public wxDocument
     // these should be shared for everyone
     static wxString m_exportListExt;
     static wxString m_exportTextViewExt;
+    static wxString m_exportSummaryReportExt;
     static wxString m_exportGraphExt;
     static bool m_exportHardWordLists;
     static bool m_exportSentencesBreakdown;

@@ -52,7 +52,9 @@
 
 #include "../app/readability_app.h"
 #include "base_project_doc.h"
+#include "highlighted_text_buffers.h"
 #include <wx/timer.h>
+#include <wx/webview.h>
 
 /// @brief Standard project document.
 class ProjectDoc final : public BaseProjectDoc
@@ -68,6 +70,20 @@ class ProjectDoc final : public BaseProjectDoc
 
     /// @private
     ~ProjectDoc() override { DeleteExcludedPhrases(); }
+
+    /// @returns The registry of HTML/RTF buffers for the highlighted-text windows.
+    [[nodiscard]]
+    HighlightedTextBufferMap& GetHighlightedTextBuffers() noexcept
+        {
+        return m_highlightedTextBuffers;
+        }
+
+    /// @private
+    [[nodiscard]]
+    const HighlightedTextBufferMap& GetHighlightedTextBuffers() const noexcept
+        {
+        return m_highlightedTextBuffers;
+        }
 
     /// @private
     bool OnOpenDocument(const wxString& filename) final;
@@ -176,21 +192,23 @@ class ProjectDoc final : public BaseProjectDoc
     //-------------------------------
 
     /// @brief The markup flavor to build highlighted-text content for.
-    /// @details Windows and macOS both consume RTF, but their RTF readers interpret
-    ///     background-highlight control words differently, hence the two separate
-    ///     RTF variants.
+    /// @details The highlighted-text windows render @c Html.\n
+    ///     RTF is built only as a paper-white export format.
+    ///     Windows and macOS both support RTF, but their RTF readers interpret
+    ///     background-highlight control words differently;
+    ///     hence the two separate RTF variants.
     enum class MarkupFormat
         {
         RtfWindows,
         RtfMacOS,
-        Pango
+        Html
         };
 
-    /// @returns @c true if @c format is one of the RTF variants (as opposed to Pango).
+    /// @returns @c true if @c format is one of the RTF variants (as opposed to HTML).
     [[nodiscard]]
     static constexpr bool IsRtf(const MarkupFormat format) noexcept
         {
-        return format != MarkupFormat::Pango;
+        return format == MarkupFormat::RtfWindows || format == MarkupFormat::RtfMacOS;
         }
 
     struct HighlighterColors
@@ -287,61 +305,74 @@ class ProjectDoc final : public BaseProjectDoc
     [[nodiscard]]
     HighlighterColors BuildReportColors(const wxColour& highlightColor,
                                         const wxColour& backgroundColor) const;
-    /// @brief Builds the tags used to highlight words in RTF or Pango.
+    /// @brief Builds the tags used to highlight words in RTF or HTML.
     /// @param format The markup flavor to build the tags for.
     /// @param highlightColor The default highlight color.\n
-    ///     This is only used for RTF, not Pango.
-    /// @param highlighterColors Highlight colors used for the tags when
-    ///     building for Pango (not used for RTF, since that uses indices into a color table).
-    /// @returns The tags used to build RTF or Pango content.
+    ///     This is only used for RTF, not HTML.
+    /// @returns The tags used to build RTF or HTML content.
     [[nodiscard]]
-    HighlighterTags BuildHighlighterTags(const MarkupFormat format, const wxColour& highlightColor,
-                                         const HighlighterColors& highlighterColors) const;
+    HighlighterTags BuildHighlighterTags(const MarkupFormat format,
+                                         const wxColour& highlightColor) const;
     /// @brief Formats the main font for an RTF's header.
-    std::pair<wxString, wxString> FormatRtfHeaderFont(const wxFont& textViewFont,
-                                                      const size_t mainFontColorIndex);
-    /// @brief Encodes a legend label for embedding into RTF or Pango content.
+    static std::pair<wxString, wxString> FormatRtfHeaderFont(const wxFont& textViewFont,
+                                                             const size_t mainFontColorIndex);
+    /// @brief Builds the highlight @c <style> block for an HTML highlighted-text window.
+    /// @details Defines the `.hl-*` highlight classes from the user's own highlight
+    ///     colors. Each class colors either the text (foreground highlighting) or its background,
+    ///     and the CSS applies light/dark-mode handling to those colors per highlight mode so they
+    ///     stay legible in either theme. The only thing used from the report theme is the legend
+    ///     card's translucent background and side accent bar.
+    /// @details Emitted as a self-contained block so the combined-report export can lift the
+    ///     highlight rules straight out of the window's page source; it deliberately excludes the
+    ///     body font and theme CSS, which live in a separate block.
+    /// @returns The `<style>`...`</style>` block.
+    [[nodiscard]]
+    wxString BuildStyleSheet() const;
+    /// @brief Encodes a legend label for embedding into RTF or HTML content.
     [[nodiscard]]
     static wxString EncodeLegendLabel(const wxString& label, const MarkupFormat format);
     [[nodiscard]]
-    std::pair<TextLegendLines, size_t>
-    BuildLegendLines(const HighlighterTags& highlighterTags) const;
+    TextLegendLines BuildLegendLines(const HighlighterTags& highlighterTags) const;
     [[nodiscard]]
-    wxString BuildLegendLine(const HighlighterTags& highlighterTags, const wxString& legendStr);
+    static wxString BuildLegendLine(const HighlighterTags& highlighterTags,
+                                    const wxString& legendStr);
+    /// @brief Collapses the redundant line breaks left behind by concatenating legend lines.
+    /// @details Each legend line is wrapped in a @c <br /> at both ends, so joining them
+    ///     leaves a leading break, a trailing break, and a doubled break between every entry.
+    ///     Removing those keeps the HTML legend card from being padded out with blank lines.
+    ///     Entry spacing then comes from the line height and the card's own padding.
+    [[nodiscard]]
+    static wxString TidyHtmlLegendBreaks(wxString content);
     /// @brief Builds the RTF color table (used by Windows and macOS).
     /// @returns RTF-formatted header sections (used by Windows and macOS).
-    std::tuple<wxString, wxString, wxString>
+    static std::tuple<wxString, wxString, wxString>
     BuildColorTable(const wxFont& textViewFont, const HighlighterColors& highlighterColors,
                     const wxColour& backgroundColor);
     [[nodiscard]]
-    TextLegends BuildLegends(const MarkupFormat format, const TextLegendLines& legendLines,
-                             const wxFont& textViewFont);
+    static TextLegends BuildLegends(const MarkupFormat format, const TextLegendLines& legendLines,
+                                    const wxFont& textViewFont);
     [[nodiscard]]
-    wxString BuildLegend(const MarkupFormat format, const wxString& legendLine,
-                         const TextLegendLines& legendLines, const wxFont& textViewFont);
+    static wxString BuildLegend(const MarkupFormat format, const wxString& legendLine,
+                                const TextLegendLines& legendLines, const wxFont& textViewFont);
     [[nodiscard]]
     TextHeader BuildHeader(const MarkupFormat format, const wxColour& backgroundColor,
                            const HighlighterColors& highlighterColors, const wxFont& textViewFont);
 
-    static void
-    SetFormattedTextAndRestoreInsertionPoint(Wisteria::UI::FormattedTextCtrl* textWindow,
-                                             const wchar_t* formattedText)
-        {
-        const auto cursorPos = textWindow->GetInsertionPoint();
-        textWindow->SetFormattedText(formattedText);
-        textWindow->SetInsertionPoint(cursorPos);
-        textWindow->ShowPosition(cursorPos);
-        }
+    /// @brief Creates a read-only @c wxWebView for a highlighted-text window.
+    /// @param parent The parent window.
+    /// @param ID The window's ID.
+    /// @param label The window's name/caption.
+    /// @returns The created window, or @c nullptr if no webview backend is available.
+    [[nodiscard]]
+    wxWebView* CreateHighlightedTextWindow(wxWindow* parent, const int ID, const wxString& label);
 
-    void LoadDCTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer);
-    void LoadHJTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer);
-    void LoadSpacheTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer);
-    void LoadSixCharsTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer);
-    void LoadThreeSyllTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer);
-    Wisteria::UI::FormattedTextCtrl* LoadTextWindow(Wisteria::UI::FormattedTextCtrl* textWindow,
-                                                    const int ID, const wxString& label,
-                                                    const std::wstring& mainBuffer,
-                                                    const std::wstring& paperBuffer);
+    void LoadDCTextWindow(const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
+    void LoadHJTextWindow(const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
+    void LoadSpacheTextWindow(const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
+    void LoadSixCharsTextWindow(const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
+    void LoadThreeSyllTextWindow(const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
+    wxWebView* LoadTextWindow(wxWebView* textWindow, const int ID, const wxString& label,
+                              const std::wstring& htmlBuffer, const std::wstring& rtfBuffer);
 
     bool OnCreate(const wxString& path, long flags) final;
 
@@ -386,9 +417,13 @@ class ProjectDoc final : public BaseProjectDoc
         m_sentenceStartingWithLowercaseData{
             std::make_shared<Wisteria::UI::ListCtrlExNumericDataProvider>()
         };
-    Wisteria::UI::FormattedTextCtrl* m_dcTextWindow{ nullptr };
-    Wisteria::UI::FormattedTextCtrl* m_spacheTextWindow{ nullptr };
-    Wisteria::UI::FormattedTextCtrl* m_hjTextWindow{ nullptr };
+    wxWebView* m_dcTextWindow{ nullptr };
+    wxWebView* m_spacheTextWindow{ nullptr };
+    wxWebView* m_hjTextWindow{ nullptr };
+
+    // HTML (display/export) and paper-white RTF (export) buffers for the
+    // highlighted-text windows, keyed by window ID
+    HighlightedTextBufferMap m_highlightedTextBuffers;
 
     wxDateTime m_sourceFileLastModified;
     constexpr static int REALTIME_UPDATE_INTERVAL{ 5000 }; // in milliseconds

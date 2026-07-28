@@ -57,7 +57,8 @@
 #include "../ui/dialogs/edit_text_dlg.h"
 #include "base_project_view.h"
 
-class wxWebViewEvent;
+class WXDLLIMPEXP_FWD_WEBVIEW wxWebView;
+class WXDLLIMPEXP_FWD_WEBVIEW wxWebViewEvent;
 
 /// @brief The results window interface for a standard project.
 class ProjectView final : public BaseProjectView
@@ -94,6 +95,8 @@ class ProjectView final : public BaseProjectView
         @param folder The folder to save the results to.
         @param listExt The file extension to save the lists as (HTML or TXT).
         @param textExt The file extension to save the text windows as (RTF or TXT).
+        @param summaryReportExt The file extension to save summary reports
+            (e.g., test scores, statistics) as (HTML or PDF).
         @param graphExt The file extension to save graphs as (e.g., PNG).
         @param includeWordsBreakdown @c true to save the words breakdown section.
         @param includeSentencesBreakdown @c true to save the sentences breakdown section.
@@ -105,10 +108,11 @@ class ProjectView final : public BaseProjectView
         @param includeTextReports @c true to save text reports
             (not recommended for large source documents).
         @param graphOptions Additional options for how to export the graphs.*/
-    bool ExportAll(const wxString& folder, wxString listExt, wxString textExt, wxString graphExt,
-                   const bool includeWordsBreakdown, const bool includeSentencesBreakdown,
-                   const bool includeTestScores, const bool includeStatistics,
-                   const bool includeGrammar, const bool includeSightWords, const bool includeLists,
+    bool ExportAll(const wxString& folder, wxString listExt, wxString textExt,
+                   wxString summaryReportExt, wxString graphExt, const bool includeWordsBreakdown,
+                   const bool includeSentencesBreakdown, const bool includeTestScores,
+                   const bool includeStatistics, const bool includeGrammar,
+                   const bool includeSightWords, const bool includeLists,
                    const bool includeTextReports,
                    const Wisteria::UI::ImageExportOptions& graphOptions);
 
@@ -209,6 +213,28 @@ class ProjectView final : public BaseProjectView
     void OnAddTest(wxCommandEvent& event);
 
   private:
+    /// @brief Determines whether @p window is a highlighted-text window.
+    /// @details A highlighted-text window is a plain @c wxWebView identified by a hit
+    ///     in the document's buffer registry (as opposed to the statistics/report
+    ///     webviews). That registry hit is what distinguishes it and enables saving
+    ///     and copying its paper-white RTF.
+    /// @param window The window to test.
+    /// @returns @c true if @p window is a highlighted-text window.
+    [[nodiscard]]
+    bool IsHighlightedTextWindow(const wxWindow* window) const;
+
+    /// @brief Saves a report webview's content to @p savePathNoExt, appending the
+    ///     extension for @p textExt (HTM, RTF, or PDF).
+    /// @details RTF comes from the paper-white buffer that only highlighted-text windows have,
+    ///     and only the sections made up of those windows are ever asked for it. Requesting it
+    ///     for anything else means the configured extension is out of range (e.g., a hand-edited
+    ///     options file); that is logged and saved as HTML rather than refused.
+    /// @param webview The webview to save.
+    /// @param savePathNoExt The full save path, without an extension.
+    /// @param textExt The requested extension (e.g., L".htm", L".rtf", L".pdf").
+    void SaveWebViewReport(wxWebView* webview, const wxString& savePathNoExt,
+                           const wxString& textExt) const;
+
     // menu and ribbon commands
     void OnTextWindowColorsChange([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnTextWindowFontChange([[maybe_unused]] wxRibbonButtonBarEvent& event);

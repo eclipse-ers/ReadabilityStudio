@@ -70,6 +70,7 @@
 #include "standard_project_view.h"
 #include <wx/richmsgdlg.h>
 #include <wx/webview.h>
+#include <wx/webviewfshandler.h>
 #include <wx/wfstream.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -4734,7 +4735,7 @@ void ProjectDoc::SetReadabilityTestResult(const wxString& testId, const wxString
                                           indexScore, clozeScore, setFocus);
 
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    wxASSERT_MSG(view, "Invalid view when adding test!");
+    wxASSERT_MSG(view, L"Invalid view when adding test!");
     if (view == nullptr)
         {
         return;
@@ -5001,9 +5002,68 @@ ProjectDoc::BuildColorTable(const wxFont& textViewFont, const HighlighterColors&
     }
 
 //-------------------------------------------------------
-ProjectDoc::HighlighterTags
-ProjectDoc::BuildHighlighterTags(const MarkupFormat format, const wxColour& highlightColor,
-                                 const HighlighterColors& highlighterColors) const
+wxString ProjectDoc::BuildStyleSheet() const
+    {
+    const bool isBackgroundMode = (GetTextHighlightMethod() == TextHighlight::HighlightBackground);
+
+    // emits the swatch and word-highlight rules for one category: background mode uses the
+    // fixed user color, foreground mode a light-dark() shade/tint so text stays legible
+    const auto buildClass = [isBackgroundMode](const wxString& suffix, const wxColour& color,
+                                               const bool boldForeground,
+                                               const bool strikethrough) -> wxString
+    {
+        if (isBackgroundMode)
+            {
+            const wxString hex = color.GetAsString(wxC2S_HTML_SYNTAX);
+            return wxString::Format(
+                L"\n.hl-swatch-%s { background-color: %s; }"
+                L"\n.hl-%s { background-color: %s; color: %s;%s }",
+                suffix, hex, suffix, hex,
+                Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
+                    wxC2S_HTML_SYNTAX),
+                strikethrough ? L" text-decoration: line-through;" : L"");
+            }
+        const wxString themedColor = wxString::Format(
+            L"light-dark(%s, %s)",
+            Wisteria::Colors::ColorContrast::Shade(color, 0.4).GetAsString(wxC2S_HTML_SYNTAX),
+            Wisteria::Colors::ColorContrast::Tint(color, 0.6).GetAsString(wxC2S_HTML_SYNTAX));
+        return wxString::Format(L"\n.hl-swatch-%s { background-color: %s; }"
+                                L"\n.hl-%s { color: %s;%s%s }",
+                                suffix, themedColor, suffix, themedColor,
+                                boldForeground ? L" font-weight: bold;" : L"",
+                                strikethrough ? L" text-decoration: line-through;" : L"");
+    };
+
+    wxString css = LR"(<style>
+.hl-swatch { display: inline-block; width: 1.4em; height: 0.9em; margin-right: 0.3em;
+    border: 1px solid var(--border-color); border-radius: 3px; vertical-align: middle; }
+.legend-card { font-size: 0.9em; width: fit-content; max-width: 100%;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease; }
+.legend-card:hover { border-color: color-mix(in srgb, var(--banner-color) 50%, CanvasText);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.legend-card .report-banner-content { line-height: 1.5; }
+)";
+
+    css += buildClass(_DT(L"default"), GetTextHighlightColor(), true, false);
+    css += buildClass(_DT(L"error"), GetDuplicateWordHighlightColor(), false, false);
+    css += buildClass(_DT(L"phrase"), GetWordyPhraseHighlightColor(), false, false);
+    css += buildClass(_DT(L"excluded"), GetExcludedTextHighlightColor(), false, true);
+    css += buildClass(_DT(L"dolch-conjunction"), GetDolchConjunctionsColor(), true, false);
+    css += buildClass(_DT(L"dolch-preposition"), GetDolchPrepositionsColor(), true, false);
+    css += buildClass(_DT(L"dolch-pronoun"), GetDolchPronounsColor(), true, false);
+    css += buildClass(_DT(L"dolch-adverb"), GetDolchAdverbsColor(), true, false);
+    css += buildClass(_DT(L"dolch-adjective"), GetDolchAdjectivesColor(), true, false);
+    css += buildClass(_DT(L"dolch-verb"), GetDolchVerbsColor(), true, false);
+    css += buildClass(_DT(L"dolch-noun"), GetDolchNounColor(), true, false);
+
+    css += L"\n</style>\n";
+    return css;
+    }
+
+//-------------------------------------------------------
+ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat format,
+                                                             const wxColour& highlightColor) const
     {
     HighlighterTags highlighterTags;
     highlighterTags.format = format;
@@ -5036,399 +5096,187 @@ ProjectDoc::BuildHighlighterTags(const MarkupFormat format, const wxColour& high
         const int dolchNounTextColorIndexBGMode =
             (GetDolchNounColor().GetLuminance() < .5f) ? 13 : 1;
 
-        if (format == MarkupFormat::RtfWindows)
-            {
-            highlighterTags.HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight2\\cf%d ", highlightedTextColorIndexBGMode) :
-                    wxString{ L"{\\cf2 " };
-            highlighterTags.ERROR_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight3\\cf%d ", errorTextColorIndexBGMode) :
-                    wxString{ L"{\\cf3 " };
-            highlighterTags.PHRASE_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight4\\cf%d ", styleTextColorIndexBGMode) :
-                    wxString{ L"{\\cf4 " };
-            highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight5\\cf%d ", excludedTextColorIndexBGMode) :
-                    wxString{ L"{\\cf5 " };
-            // Dolch highlighting
-            highlighterTags.DOLCH_CONJUNCTION_BEGIN =
-                IsHighlightingDolchConjunctions() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight6\\cf%d ",
-                                     dolchConjunctionsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf6 " } :
-                    wxString{};
-            highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
-                IsHighlightingDolchPrepositions() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight7\\cf%d ",
-                                     dolchPrepositionsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf7 " } :
-                    wxString{};
-            highlighterTags.DOLCH_PRONOUN_BEGIN =
-                IsHighlightingDolchPronouns() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight8\\cf%d ", dolchPronounsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf8 " } :
-                    wxString{};
-            highlighterTags.DOLCH_ADVERB_BEGIN =
-                IsHighlightingDolchAdverbs() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight9\\cf%d ", dolchAdverbsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf9 " } :
-                    wxString{};
-            highlighterTags.DOLCH_ADJECTIVE_BEGIN =
-                IsHighlightingDolchAdjectives() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight10\\cf%d ",
-                                     dolchAdjectivesTextColorIndexBGMode) :
-                    wxString{ L"{\\cf10 " } :
-                    wxString{};
-            highlighterTags.DOLCH_VERB_BEGIN =
-                IsHighlightingDolchVerbs() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight11\\cf%d ", dolchVerbsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf11 " } :
-                    wxString{};
-            highlighterTags.DOLCH_NOUN_BEGIN =
-                IsHighlightingDolchNouns() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\highlight12\\cf%d ", dolchNounTextColorIndexBGMode) :
-                    wxString{ L"{\\cf12 " } :
-                    wxString{};
-            // terminator
-            highlighterTags.HIGHLIGHT_END = L"}";
+        // The only RTF-dialect difference between Windows and macOS is the
+        // background-highlight control word. Windows uses \highlightN, macOS uses
+        // \cbN. The foreground color (\cfN), terminators, and legend structure are
+        // identical, so parameterize just that word
+        const wxString bgHl = (format == MarkupFormat::RtfMacOS) ? L"cb" : L"highlight";
+        const bool isBackgroundMode =
+            (GetTextHighlightMethod() == TextHighlight::HighlightBackground);
 
-            // these are used for the legend lines because they are always set
-            // to use background highlighting
-            highlighterTags.HIGHLIGHT_BEGIN_LEGEND = L"{\\highlight2 ";
-            highlighterTags.HIGHLIGHT_END_LEGEND = L"}";
-            highlighterTags.DUPLICATE_HIGHLIGHT_BEGIN_LEGEND = L"{\\highlight3 ";
-            highlighterTags.PHRASE_HIGHLIGHT_BEGIN_LEGEND = L"{\\highlight4 ";
-            highlighterTags.IGNORE_HIGHLIGHT_BEGIN_LEGEND = L"{\\highlight5 ";
-            // dolch highlighting
-            highlighterTags.DOLCH_CONJUNCTION_BEGIN_LEGEND =
-                IsHighlightingDolchConjunctions() ? L"{\\highlight6 " : L"{";
-            highlighterTags.DOLCH_PREPOSITIONS_BEGIN_LEGEND =
-                IsHighlightingDolchPrepositions() ? L"{\\highlight7 " : L"{";
-            highlighterTags.DOLCH_PRONOUN_BEGIN_LEGEND =
-                IsHighlightingDolchPronouns() ? L"{\\highlight8 " : L"{";
-            highlighterTags.DOLCH_ADVERB_BEGIN_LEGEND =
-                IsHighlightingDolchAdverbs() ? L"{\\highlight9 " : L"{";
-            highlighterTags.DOLCH_ADJECTIVE_BEGIN_LEGEND =
-                IsHighlightingDolchAdjectives() ? L"{\\highlight10 " : L"{";
-            highlighterTags.DOLCH_VERB_BEGIN_LEGEND =
-                IsHighlightingDolchVerbs() ? L"{\\highlight11 " : L"{";
-            highlighterTags.DOLCH_NOUN_BEGIN_LEGEND =
-                IsHighlightingDolchNouns() ? L"{\\highlight12 " : L"{";
-            }
-        else // RtfMacOS
-            {
-            highlighterTags.HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb2\\cf%d ", highlightedTextColorIndexBGMode) :
-                    wxString{ L"{\\cf2 " };
-            highlighterTags.ERROR_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb3\\cf%d ", errorTextColorIndexBGMode) :
-                    wxString{ L"{\\cf3 " };
-            highlighterTags.PHRASE_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb4\\cf%d ", styleTextColorIndexBGMode) :
-                    wxString{ L"{\\cf4 " };
-            highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb5\\cf%d ", excludedTextColorIndexBGMode) :
-                    wxString{ L"{\\cf5 " };
-            // dolch highlighting
-            highlighterTags.DOLCH_CONJUNCTION_BEGIN =
-                IsHighlightingDolchConjunctions() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb6\\cf%d ", dolchConjunctionsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf6 " } :
-                    wxString{};
-            highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
-                IsHighlightingDolchPrepositions() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb7\\cf%d ", dolchPrepositionsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf7 " } :
-                    wxString{};
-            highlighterTags.DOLCH_PRONOUN_BEGIN =
-                IsHighlightingDolchPronouns() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb8\\cf%d ", dolchPronounsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf8 " } :
-                    wxString{};
-            highlighterTags.DOLCH_ADVERB_BEGIN =
-                IsHighlightingDolchAdverbs() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb9\\cf%d ", dolchAdverbsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf9 " } :
-                    wxString{};
-            highlighterTags.DOLCH_ADJECTIVE_BEGIN =
-                IsHighlightingDolchAdjectives() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb10\\cf%d ", dolchAdjectivesTextColorIndexBGMode) :
-                    wxString{ L"{\\cf10 " } :
-                    wxString{};
-            highlighterTags.DOLCH_VERB_BEGIN =
-                IsHighlightingDolchVerbs() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb11\\cf%d ", dolchVerbsTextColorIndexBGMode) :
-                    wxString{ L"{\\cf11 " } :
-                    wxString{};
-            highlighterTags.DOLCH_NOUN_BEGIN =
-                IsHighlightingDolchNouns() ?
-                    (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                    wxString::Format(L"{\\cb12\\cf%d ", dolchNounTextColorIndexBGMode) :
-                    wxString{ L"{\\cf12 " } :
-                    wxString{};
-            // terminator
-            highlighterTags.HIGHLIGHT_END = L"}";
+        highlighterTags.HIGHLIGHT_BEGIN =
+            isBackgroundMode ?
+                wxString::Format(L"{\\%s2\\cf%d ", bgHl, highlightedTextColorIndexBGMode) :
+                wxString{ L"{\\cf2 " };
+        highlighterTags.ERROR_HIGHLIGHT_BEGIN =
+            isBackgroundMode ? wxString::Format(L"{\\%s3\\cf%d ", bgHl, errorTextColorIndexBGMode) :
+                               wxString{ L"{\\cf3 " };
+        highlighterTags.PHRASE_HIGHLIGHT_BEGIN =
+            isBackgroundMode ? wxString::Format(L"{\\%s4\\cf%d ", bgHl, styleTextColorIndexBGMode) :
+                               wxString{ L"{\\cf4 " };
+        highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
+            isBackgroundMode ?
+                wxString::Format(L"{\\%s5\\cf%d ", bgHl, excludedTextColorIndexBGMode) :
+                wxString{ L"{\\cf5 " };
+        // Dolch highlighting
+        highlighterTags.DOLCH_CONJUNCTION_BEGIN =
+            IsHighlightingDolchConjunctions() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s6\\cf%d ", bgHl, dolchConjunctionsTextColorIndexBGMode) :
+                wxString{ L"{\\cf6 " } :
+                wxString{};
+        highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
+            IsHighlightingDolchPrepositions() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s7\\cf%d ", bgHl, dolchPrepositionsTextColorIndexBGMode) :
+                wxString{ L"{\\cf7 " } :
+                wxString{};
+        highlighterTags.DOLCH_PRONOUN_BEGIN =
+            IsHighlightingDolchPronouns() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s8\\cf%d ", bgHl, dolchPronounsTextColorIndexBGMode) :
+                wxString{ L"{\\cf8 " } :
+                wxString{};
+        highlighterTags.DOLCH_ADVERB_BEGIN =
+            IsHighlightingDolchAdverbs() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s9\\cf%d ", bgHl, dolchAdverbsTextColorIndexBGMode) :
+                wxString{ L"{\\cf9 " } :
+                wxString{};
+        highlighterTags.DOLCH_ADJECTIVE_BEGIN =
+            IsHighlightingDolchAdjectives() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s10\\cf%d ", bgHl, dolchAdjectivesTextColorIndexBGMode) :
+                wxString{ L"{\\cf10 " } :
+                wxString{};
+        highlighterTags.DOLCH_VERB_BEGIN =
+            IsHighlightingDolchVerbs() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s11\\cf%d ", bgHl, dolchVerbsTextColorIndexBGMode) :
+                wxString{ L"{\\cf11 " } :
+                wxString{};
+        highlighterTags.DOLCH_NOUN_BEGIN =
+            IsHighlightingDolchNouns() ?
+                isBackgroundMode ?
+                wxString::Format(L"{\\%s12\\cf%d ", bgHl, dolchNounTextColorIndexBGMode) :
+                wxString{ L"{\\cf12 " } :
+                wxString{};
+        // terminator
+        highlighterTags.HIGHLIGHT_END = L"}";
 
-            // these are used for the legend lines because they are always
-            // set to use background highlighting
-            highlighterTags.HIGHLIGHT_BEGIN_LEGEND = L"{\\cb2 ";
-            highlighterTags.HIGHLIGHT_END_LEGEND = L"}";
-            highlighterTags.DUPLICATE_HIGHLIGHT_BEGIN_LEGEND = L"{\\cb3 ";
-            highlighterTags.PHRASE_HIGHLIGHT_BEGIN_LEGEND = L"{\\cb4 ";
-            highlighterTags.IGNORE_HIGHLIGHT_BEGIN_LEGEND = L"{\\cb5 ";
-            // dolch highlighting
-            highlighterTags.DOLCH_CONJUNCTION_BEGIN_LEGEND =
-                IsHighlightingDolchConjunctions() ? L"{\\cb6 " : L"{";
-            highlighterTags.DOLCH_PREPOSITIONS_BEGIN_LEGEND =
-                IsHighlightingDolchPrepositions() ? L"{\\cb7 " : L"{";
-            highlighterTags.DOLCH_PRONOUN_BEGIN_LEGEND =
-                IsHighlightingDolchPronouns() ? L"{\\cb8 " : L"{";
-            highlighterTags.DOLCH_ADVERB_BEGIN_LEGEND =
-                IsHighlightingDolchAdverbs() ? L"{\\cb9 " : L"{";
-            highlighterTags.DOLCH_ADJECTIVE_BEGIN_LEGEND =
-                IsHighlightingDolchAdjectives() ? L"{\\cb10 " : L"{";
-            highlighterTags.DOLCH_VERB_BEGIN_LEGEND =
-                IsHighlightingDolchVerbs() ? L"{\\cb11 " : L"{";
-            highlighterTags.DOLCH_NOUN_BEGIN_LEGEND =
-                IsHighlightingDolchNouns() ? L"{\\cb12 " : L"{";
-            }
+        // these are used for the legend lines because they are always set
+        // to use background highlighting
+        highlighterTags.HIGHLIGHT_BEGIN_LEGEND = wxString::Format(L"{\\%s2 ", bgHl);
+        highlighterTags.HIGHLIGHT_END_LEGEND = L"}";
+        highlighterTags.DUPLICATE_HIGHLIGHT_BEGIN_LEGEND = wxString::Format(L"{\\%s3 ", bgHl);
+        highlighterTags.PHRASE_HIGHLIGHT_BEGIN_LEGEND = wxString::Format(L"{\\%s4 ", bgHl);
+        highlighterTags.IGNORE_HIGHLIGHT_BEGIN_LEGEND = wxString::Format(L"{\\%s5 ", bgHl);
+        // dolch highlighting
+        highlighterTags.DOLCH_CONJUNCTION_BEGIN_LEGEND = IsHighlightingDolchConjunctions() ?
+                                                             wxString::Format(L"{\\%s6 ", bgHl) :
+                                                             wxString{ L"{" };
+        highlighterTags.DOLCH_PREPOSITIONS_BEGIN_LEGEND = IsHighlightingDolchPrepositions() ?
+                                                              wxString::Format(L"{\\%s7 ", bgHl) :
+                                                              wxString{ L"{" };
+        highlighterTags.DOLCH_PRONOUN_BEGIN_LEGEND =
+            IsHighlightingDolchPronouns() ? wxString::Format(L"{\\%s8 ", bgHl) : wxString{ L"{" };
+        highlighterTags.DOLCH_ADVERB_BEGIN_LEGEND =
+            IsHighlightingDolchAdverbs() ? wxString::Format(L"{\\%s9 ", bgHl) : wxString{ L"{" };
+        highlighterTags.DOLCH_ADJECTIVE_BEGIN_LEGEND = IsHighlightingDolchAdjectives() ?
+                                                           wxString::Format(L"{\\%s10 ", bgHl) :
+                                                           wxString{ L"{" };
+        highlighterTags.DOLCH_VERB_BEGIN_LEGEND =
+            IsHighlightingDolchVerbs() ? wxString::Format(L"{\\%s11 ", bgHl) : wxString{ L"{" };
+        highlighterTags.DOLCH_NOUN_BEGIN_LEGEND =
+            IsHighlightingDolchNouns() ? wxString::Format(L"{\\%s12 ", bgHl) : wxString{ L"{" };
 
         highlighterTags.BOLD_BEGIN = L"{\\b";
         highlighterTags.BOLD_END = L"}";
         highlighterTags.TAB_SYMBOL = L"    ";
         highlighterTags.CRLF = L"\\par\n";
         }
-    else // Pango
+    else // Html
         {
-        const wxColour highlightedTextColor =
-            (highlightColor.GetLuminance() < .5f) ? wxColour{ 255, 255, 255 } : wxColour{ 0, 0, 0 };
-        const wxColour errorTextColor = (GetDuplicateWordHighlightColor().GetLuminance() < .5f) ?
-                                            wxColour{ 255, 255, 255 } :
-                                            wxColour{ 0, 0, 0 };
-        const wxColour styleTextColor = (GetWordyPhraseHighlightColor().GetLuminance() < .5f) ?
-                                            wxColour{ 255, 255, 255 } :
-                                            wxColour{ 0, 0, 0 };
-        const wxColour excludedTextColor = (GetExcludedTextHighlightColor().GetLuminance() < .5f) ?
-                                               wxColour{ 255, 255, 255 } :
-                                               wxColour{ 0, 0, 0 };
-        const wxColour dolchConjunctionsTextColor =
-            (GetDolchConjunctionsColor().GetLuminance() < .5f) ? wxColour{ 255, 255, 255 } :
-                                                                 wxColour{ 0, 0, 0 };
-        const wxColour dolchPrepositionsTextColor =
-            (GetDolchPrepositionsColor().GetLuminance() < .5f) ? wxColour{ 255, 255, 255 } :
-                                                                 wxColour{ 0, 0, 0 };
-        const wxColour dolchPronounsTextColor = (GetDolchPronounsColor().GetLuminance() < .5f) ?
-                                                    wxColour{ 255, 255, 255 } :
-                                                    wxColour{ 0, 0, 0 };
-        const wxColour dolchAdverbsTextColor = (GetDolchAdverbsColor().GetLuminance() < .5f) ?
-                                                   wxColour{ 255, 255, 255 } :
-                                                   wxColour{ 0, 0, 0 };
-        const wxColour dolchAdjectivesTextColor = (GetDolchAdjectivesColor().GetLuminance() < .5f) ?
-                                                      wxColour{ 255, 255, 255 } :
-                                                      wxColour{ 0, 0, 0 };
-        const wxColour dolchVerbsTextColor = (GetDolchVerbsColor().GetLuminance() < .5f) ?
-                                                 wxColour{ 255, 255, 255 } :
-                                                 wxColour{ 0, 0, 0 };
-        const wxColour dolchNounTextColor = (GetDolchNounColor().GetLuminance() < .5f) ?
-                                                wxColour{ 255, 255, 255 } :
-                                                wxColour{ 0, 0, 0 };
-
+        // The .hl-* classes carry the color, the foreground/background choice, and
+        // the light/dark-mode handling (see BuildStyleSheet). The tags themselves are
+        // just stable class hooks. Unused Dolch categories emit no span, matching the
+        // "highlighting disabled" case.
         highlighterTags.HIGHLIGHT_END = L"</span>";
+        highlighterTags.HIGHLIGHT_END_LEGEND = L"</span>";
         highlighterTags.BOLD_BEGIN = L"<b>";
         highlighterTags.BOLD_END = L"</b>";
-        highlighterTags.TAB_SYMBOL = L"    ";
-        highlighterTags.CRLF = L"\r\n";
-        highlighterTags.HIGHLIGHT_END_LEGEND = L"</span>";
-        highlighterTags.HIGHLIGHT_BEGIN =
-            (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(L"<span background=\"%s\" foreground=\"%s\">",
-                                 highlighterColors.highlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                                 highlightedTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.highlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-        highlighterTags.ERROR_HIGHLIGHT_BEGIN =
-            (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\" foreground=\"%s\">",
-                    highlighterColors.errorHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    errorTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(
-                    L"<span foreground=\"%s\">",
-                    highlighterColors.errorHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-        highlighterTags.PHRASE_HIGHLIGHT_BEGIN =
-            (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\" foreground=\"%s\">",
-                    highlighterColors.styleHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    styleTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(
-                    L"<span foreground=\"%s\">",
-                    highlighterColors.styleHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-        highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
-            (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\"  foreground=\"%s\" strikethrough=\"true\">",
-                    highlighterColors.excludedTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    excludedTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(
-                    L"<span foreground=\"%s\" strikethrough=\"true\">",
-                    highlighterColors.excludedTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
+        // HTML collapses runs of whitespace, so emit an explicit break for each
+        // newline and non-breaking spaces for the paragraph indent
+        highlighterTags.TAB_SYMBOL = L"&nbsp;&nbsp;&nbsp;&nbsp;";
+        highlighterTags.CRLF = L"<br />\n";
+
+        // word highlighters
+        highlighterTags.HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-default">)" };
+        highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-error">)" };
+        highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-phrase">)" };
+        highlighterTags.IGNORE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-excluded">)" };
         highlighterTags.DOLCH_CONJUNCTION_BEGIN =
             IsHighlightingDolchConjunctions() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(L"<span background=\"%s\" foreground=\"%s\">",
-                                 highlighterColors.dolchConjunctionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX),
-                                 dolchConjunctionsTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.dolchConjunctionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-dolch-conjunction">)" } :
                 wxString{};
         highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
             IsHighlightingDolchPrepositions() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(L"<span background=\"%s\" foreground=\"%s\">",
-                                 highlighterColors.dolchPrepositionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX),
-                                 dolchPrepositionsTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.dolchPrepositionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-dolch-preposition">)" } :
                 wxString{};
         highlighterTags.DOLCH_PRONOUN_BEGIN =
-            IsHighlightingDolchPronouns() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(L"<span background=\"%s\" foreground=\"%s\">",
-                                 highlighterColors.dolchPronounsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX),
-                                 dolchPronounsTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.dolchPronounsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
-                wxString{};
-        highlighterTags.DOLCH_ADVERB_BEGIN =
-            IsHighlightingDolchAdverbs() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\" foreground=\"%s\">",
-                    highlighterColors.dolchAdverbsTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    dolchAdverbsTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.dolchAdverbsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
-                wxString{};
+            IsHighlightingDolchPronouns() ? wxString{ LR"(<span class="hl-dolch-pronoun">)" } :
+                                            wxString{};
+        highlighterTags.DOLCH_ADVERB_BEGIN = IsHighlightingDolchAdverbs() ?
+                                                 wxString{ LR"(<span class="hl-dolch-adverb">)" } :
+                                                 wxString{};
         highlighterTags.DOLCH_ADJECTIVE_BEGIN =
-            IsHighlightingDolchAdjectives() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(L"<span background=\"%s\" foreground=\"%s\">",
-                                 highlighterColors.dolchAdjectivesTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX),
-                                 dolchAdjectivesTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(L"<span foreground=\"%s\" weight=\"heavy\">",
-                                 highlighterColors.dolchAdjectivesTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
-                wxString{};
-        highlighterTags.DOLCH_VERB_BEGIN =
-            IsHighlightingDolchVerbs() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\" foreground=\"%s\">",
-                    highlighterColors.dolchVerbsTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    dolchVerbsTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(
-                    L"<span foreground=\"%s\" weight=\"heavy\">",
-                    highlighterColors.dolchVerbsTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString{};
-        highlighterTags.DOLCH_NOUN_BEGIN =
-            IsHighlightingDolchNouns() ?
-                (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ?
-                wxString::Format(
-                    L"<span background=\"%s\" foreground=\"%s\">",
-                    highlighterColors.dolchNounTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX),
-                    dolchNounTextColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString::Format(
-                    L"<span foreground=\"%s\" weight=\"heavy\">",
-                    highlighterColors.dolchNounTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX)) :
-                wxString{};
+            IsHighlightingDolchAdjectives() ? wxString{ LR"(<span class="hl-dolch-adjective">)" } :
+                                              wxString{};
+        highlighterTags.DOLCH_VERB_BEGIN = IsHighlightingDolchVerbs() ?
+                                               wxString{ LR"(<span class="hl-dolch-verb">)" } :
+                                               wxString{};
+        highlighterTags.DOLCH_NOUN_BEGIN = IsHighlightingDolchNouns() ?
+                                               wxString{ LR"(<span class="hl-dolch-noun">)" } :
+                                               wxString{};
 
-        // these are used for the legend lines because they are always
-        // set to use background highlighting
+        // Legend swatches show the color as a background chip.
+        // The actual color (and its light/dark handling) comes from the .hl-swatch-* rules in
+        // BuildStyleSheet
         highlighterTags.HIGHLIGHT_BEGIN_LEGEND =
-            wxString::Format(L"<span background=\"%s\">",
-                             highlighterColors.highlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-
+            wxString{ LR"(<span class="hl-swatch hl-swatch-default">)" };
         highlighterTags.DUPLICATE_HIGHLIGHT_BEGIN_LEGEND =
-            wxString::Format(L"<span background=\"%s\">",
-                             highlighterColors.errorHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
+            wxString{ LR"(<span class="hl-swatch hl-swatch-error">)" };
         highlighterTags.PHRASE_HIGHLIGHT_BEGIN_LEGEND =
-            wxString::Format(L"<span background=\"%s\">",
-                             highlighterColors.styleHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-        highlighterTags.IGNORE_HIGHLIGHT_BEGIN_LEGEND = wxString::Format(
-            L"<span background=\"%s\" strikethrough=\"true\">",
-            highlighterColors.excludedTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX));
-        // dolch highlighting
+            wxString{ LR"(<span class="hl-swatch hl-swatch-phrase">)" };
+        highlighterTags.IGNORE_HIGHLIGHT_BEGIN_LEGEND =
+            wxString{ LR"(<span class="hl-swatch hl-swatch-excluded">)" };
         highlighterTags.DOLCH_CONJUNCTION_BEGIN_LEGEND =
             IsHighlightingDolchConjunctions() ?
-                wxString::Format(L"<span background=\"%s\">",
-                                 highlighterColors.dolchConjunctionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-conjunction">)" } :
                 wxString{};
         highlighterTags.DOLCH_PREPOSITIONS_BEGIN_LEGEND =
             IsHighlightingDolchPrepositions() ?
-                wxString::Format(L"<span background=\"%s\">",
-                                 highlighterColors.dolchPrepositionsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-preposition">)" } :
                 wxString{};
         highlighterTags.DOLCH_PRONOUN_BEGIN_LEGEND =
             IsHighlightingDolchPronouns() ?
-                wxString::Format(L"<span background=\"%s\">",
-                                 highlighterColors.dolchPronounsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-pronoun">)" } :
                 wxString{};
         highlighterTags.DOLCH_ADVERB_BEGIN_LEGEND =
             IsHighlightingDolchAdverbs() ?
-                wxString::Format(L"<span background=\"%s\">",
-                                 highlighterColors.dolchAdverbsTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-adverb">)" } :
                 wxString{};
         highlighterTags.DOLCH_ADJECTIVE_BEGIN_LEGEND =
             IsHighlightingDolchAdjectives() ?
-                wxString::Format(L"<span background=\"%s\">",
-                                 highlighterColors.dolchAdjectivesTextHighlightColor.GetAsString(
-                                     wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-adjective">)" } :
                 wxString{};
         highlighterTags.DOLCH_VERB_BEGIN_LEGEND =
             IsHighlightingDolchVerbs() ?
-                wxString::Format(
-                    L"<span background=\"%s\">",
-                    highlighterColors.dolchVerbsTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-verb">)" } :
                 wxString{};
         highlighterTags.DOLCH_NOUN_BEGIN_LEGEND =
             IsHighlightingDolchNouns() ?
-                wxString::Format(
-                    L"<span background=\"%s\">",
-                    highlighterColors.dolchNounTextHighlightColor.GetAsString(wxC2S_HTML_SYNTAX)) :
+                wxString{ LR"(<span class="hl-swatch hl-swatch-dolch-noun">)" } :
                 wxString{};
         }
 
@@ -5441,18 +5289,17 @@ wxString ProjectDoc::EncodeLegendLabel(const wxString& label, const MarkupFormat
     if (IsRtf(format))
         {
         constexpr lily_of_the_valley::rtf_encode_text RTF_ENCODE;
-        return RTF_ENCODE({ label.wc_str(), label.length() }).c_str();
+        return RTF_ENCODE({ label.wc_str(), label.length() });
         }
     else
         {
         return lily_of_the_valley::html_encode_text::simple_encode(
-                   { label.wc_str(), label.length() })
-            .c_str();
+            { label.wc_str(), label.length() });
         }
     }
 
 //-------------------------------------------------------
-std::pair<ProjectDoc::TextLegendLines, size_t>
+ProjectDoc::TextLegendLines
 ProjectDoc::BuildLegendLines(const HighlighterTags& highlighterTags) const
     {
     TextLegendLines legendLines;
@@ -5575,21 +5422,7 @@ ProjectDoc::BuildLegendLines(const HighlighterTags& highlighterTags) const
         highlighterTags.CRLF.c_str());
     // clang-format on
 
-    return std::make_pair(
-        legendLines,
-        (legendLines.ignoredSentencesLegendLine.length() +
-         legendLines.hardWordsLegendLine.length() + legendLines.longWordsLegendLine.length() +
-         legendLines.unfamiliarDCWordsLegendLine.length() +
-         legendLines.unfamiliarHarrisJacobsonWordsLegendLine.length() +
-         legendLines.unfamiliarSpacheWordsLegendLine.length() +
-         legendLines.longSentencesLegendLine.length() +
-         legendLines.grammarIssuesLegendLine.length() +
-         legendLines.writingStyleLegendLine.length() + legendLines.dolch1WordsLegendLine.length() +
-         legendLines.dolch2WordsLegendLine.length() + legendLines.dolch3WordsLegendLine.length() +
-         legendLines.dolch4WordsLegendLine.length() + legendLines.dolch5WordsLegendLine.length() +
-         legendLines.dolchVerbsLegendLine.length() + legendLines.dolchNounsLegendLine.length() +
-         legendLines.nonDolchWordsLegendLine.length() +
-         1000 /*little extra padding for anything added around the legend lines*/));
+    return legendLines;
     }
 
 //-------------------------------------------------------
@@ -5603,6 +5436,24 @@ wxString ProjectDoc::BuildLegendLine(const HighlighterTags& highlighterTags,
     }
 
 //-------------------------------------------------------
+wxString ProjectDoc::TidyHtmlLegendBreaks(wxString content)
+    {
+    const wxString singleBreak{ L"<br />\n" };
+    while (content.Replace(singleBreak + singleBreak, singleBreak) > 0)
+        {
+        }
+    if (content.StartsWith(singleBreak))
+        {
+        content.erase(0, singleBreak.length());
+        }
+    if (content.EndsWith(singleBreak))
+        {
+        content.erase(content.length() - singleBreak.length());
+        }
+    return content;
+    }
+
+//-------------------------------------------------------
 wxString ProjectDoc::BuildLegend(const MarkupFormat format, const wxString& legendLine,
                                  const ProjectDoc::TextLegendLines& legendLines,
                                  const wxFont& textViewFont)
@@ -5613,11 +5464,13 @@ wxString ProjectDoc::BuildLegend(const MarkupFormat format, const wxString& lege
             L" \\pard\\fs%u%s%s \\fs%u\\par\n", (textViewFont.GetPointSize() - 2) * 2,
             legendLines.ignoredSentencesLegendLine, legendLine, textViewFont.GetPointSize() * 2);
         }
-    else
+    else // Html
         {
-        return wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-                                (textViewFont.GetPointSize() - 2) * 2,
-                                legendLines.ignoredSentencesLegendLine, legendLine);
+        return wxString::Format(
+            L"\n<div class=\"report-banner legend-card\">"
+            "\n<div class=\"report-banner-accent\"></div>"
+            "\n<div class=\"report-banner-content\">%s</div>\n</div>\n",
+            TidyHtmlLegendBreaks(legendLines.ignoredSentencesLegendLine + legendLine));
         }
     }
 
@@ -5683,51 +5536,51 @@ ProjectDoc::TextLegends ProjectDoc::BuildLegends(const MarkupFormat format,
         legendLines.writingStyleLegendLine,
         textViewFont.GetPointSize() * 2);
         }
-    else // Pango
+    else // Html
         {
-        // note that font "size" in Pango is 1024th of a point
-    textLegends.plaintTextWindowLegend = wxString::Format(L"<span size=\"%u\">%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
+        // Wrap the legend lines in the report theme's banner card (accent gutter +
+        // translucent content panel). the .hl-swatch chips carry the colors.
+        const auto card = [](const wxString& lines)
+        {
+            return wxString::Format(
+                L"\n<div class=\"report-banner legend-card\">"
+                "\n<div class=\"report-banner-accent\"></div>"
+                "\n<div class=\"report-banner-content\">%s</div>\n</div>\n",
+                TidyHtmlLegendBreaks(lines));
+        };
+    textLegends.plaintTextWindowLegend = card(
         legendLines.ignoredSentencesLegendLine);
-    textLegends.hardWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.hardWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.hardWordsLegendLine);
-    textLegends.longWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.longWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.longWordsLegendLine);
-    textLegends.unfamiliarDCWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.unfamiliarDCWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.unfamiliarDCWordsLegendLine);
-    textLegends.unfamiliarSpacheWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.unfamiliarSpacheWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.unfamiliarSpacheWordsLegendLine);
-    textLegends.unfamiliarHarrisJacobsonWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.unfamiliarHarrisJacobsonWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.unfamiliarHarrisJacobsonWordsLegendLine);
-    textLegends.dolchWindowLegend = wxString::Format(L"<span size=\"%u\">%s%s%s%s%s%s%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
-        legendLines.dolch1WordsLegendLine,
-        legendLines.dolch2WordsLegendLine,
-        legendLines.dolch3WordsLegendLine,
-        legendLines.dolch4WordsLegendLine,
-        legendLines.dolch5WordsLegendLine,
-        legendLines.dolchVerbsLegendLine,
+    textLegends.dolchWindowLegend = card(
+        legendLines.ignoredSentencesLegendLine +
+        legendLines.dolch1WordsLegendLine +
+        legendLines.dolch2WordsLegendLine +
+        legendLines.dolch3WordsLegendLine +
+        legendLines.dolch4WordsLegendLine +
+        legendLines.dolch5WordsLegendLine +
+        legendLines.dolchVerbsLegendLine +
         legendLines.dolchNounsLegendLine);
-    textLegends.nonDolchWordsLegend = wxString::Format(L"<span size=\"%u\">%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
+    textLegends.nonDolchWordsLegend = card(
+        legendLines.ignoredSentencesLegendLine +
         legendLines.nonDolchWordsLegendLine);
-    textLegends.wordinessWindowLegend = wxString::Format(L"<span size=\"%u\">%s%s%s%s</span>\n",
-        ((textViewFont.GetPointSize() - 2) * 1024),
-        legendLines.ignoredSentencesLegendLine,
-        legendLines.longSentencesLegendLine,
-        legendLines.grammarIssuesLegendLine,
+    textLegends.wordinessWindowLegend = card(
+        legendLines.ignoredSentencesLegendLine +
+        legendLines.longSentencesLegendLine +
+        legendLines.grammarIssuesLegendLine +
         legendLines.writingStyleLegendLine);
         }
     return textLegends;
@@ -5783,21 +5636,39 @@ ProjectDoc::TextHeader ProjectDoc::BuildHeader(const MarkupFormat format,
         textHeaders.mainFontHeader = mainFontHeaderThemed;
         textHeaders.header = headerSection + colorTableThemed + mainFontHeaderThemed;
         }
-    else // Pango
+    else // Html
         {
-        textHeaders.endSection = L"</span>";
-
-        textHeaders.header = wxString::Format(
-            L"<span background=\"%s\" foreground=\"%s\" face=\"%s\" "
-            "size=\"%u\" style=\"%s\" weight=\"%s\" underline=\"%s\">\n",
-            backgroundColor.GetAsString(wxC2S_HTML_SYNTAX),
-            ((backgroundColor.GetLuminance() < .5f) ? _DT(L"white") : _DT(L"black")),
-            textViewFont.GetFaceName(),
-            // "size" in Pango is 1024th of a point
-            textViewFont.GetPointSize() * 1024,
-            (textViewFont.GetStyle() == wxFONTSTYLE_ITALIC) ? _DT(L"italic") : _DT(L"normal"),
-            (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? _DT(L"bold") : _DT(L"normal"),
-            textViewFont.GetUnderlined() ? _DT(L"single") : _DT(L"none"));
+        // Full self-contained document, in two stylesheets:
+        //   1. the highlight classes, emitted first and self-contained so the combined-report
+        //      export can lift them straight out with get_style_section() (that export embeds
+        //      the theme CSS itself, so only these rules need to travel with it);
+        //   2. the report theme CSS (for the legend card banner) and the body font.
+        // Page background/text follow the browser via Canvas/CanvasText; the highlight rules
+        // only reference theme custom properties, which resolve regardless of block order.
+        // Printing is forced back to a light color scheme by the theme CSS, so the output is
+        // always on white paper.
+        const wxString bodyFontRule = wxString::Format(
+            L"\nbody { font-family: \"%s\"; font-size: %dpt; font-style: %s; font-weight: %s;%s }",
+            textViewFont.GetFaceName(), textViewFont.GetPointSize(),
+            (textViewFont.GetStyle() == wxFONTSTYLE_ITALIC) ? L"italic" : L"normal",
+            (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? L"bold" : L"normal",
+            textViewFont.GetUnderlined() ? L" text-decoration: underline;" : L"");
+        textHeaders.header =
+            wxString::Format(L"<!DOCTYPE html>"
+                             "\n<html>"
+                             "\n<head>"
+                             "\n<meta http-equiv=\"content-type\" content=\"text/html; "
+                             "charset=UTF-8\" />"
+                             "\n<meta name=\"color-scheme\" content=\"light dark\" />"
+                             "\n<meta name=\"generator\" content=\"%s\" />"
+                             "\n%s"
+                             "\n<style>\n%s%s"
+                             "\n</style>\n</head>\n<body>\n",
+                             wxGetApp().GetAppName(), BuildStyleSheet(),
+                             ProjectReportFormat::GetThemeCss(
+                                 _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme()),
+                             bodyFontRule);
+        textHeaders.endSection = L"\n</body>\n</html>";
         }
     return textHeaders;
     }
@@ -5814,41 +5685,45 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         {
         auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
-#if defined(__WXMSW__)
-        constexpr MarkupFormat markupFormat = MarkupFormat::RtfWindows;
-#elif defined(__WXOSX__)
-        constexpr MarkupFormat markupFormat = MarkupFormat::RtfMacOS;
+        // this rebuilds every highlighted window, so drop the previous buffers and
+        // their cached 'memory:' pages; each window is repopulated via SetContent below
+        GetHighlightedTextBuffers().Clear();
+
+        // the display windows render HTML (theme-adaptive); the paper-white
+        // export buffer is RTF. macOS and Windows read background-highlight
+        // control words differently, so pick the RTF flavor for the host platform.
+        constexpr MarkupFormat displayFormat = MarkupFormat::Html;
+#ifdef __WXOSX__
+        constexpr MarkupFormat exportFormat = MarkupFormat::RtfMacOS;
 #else
-        constexpr MarkupFormat markupFormat = MarkupFormat::Pango;
+        constexpr MarkupFormat exportFormat = MarkupFormat::RtfWindows;
 #endif
 
         // build the general highlighters
         const HighlighterColors highlighterColorsThemed =
             BuildReportColors(highlightColor, GetTextReportBackgroundColor());
         const HighlighterTags highlighterTagsThemed =
-            BuildHighlighterTags(markupFormat, highlightColor, highlighterColorsThemed);
+            BuildHighlighterTags(displayFormat, highlightColor);
 
         const HighlighterColors highlighterColorsPaperWhite =
             BuildReportColors(highlightColor, wxColour{ 255, 255, 255 });
         const HighlighterTags highlighterTagsPaperWhite =
-            BuildHighlighterTags(markupFormat, highlightColor, highlighterColorsPaperWhite);
+            BuildHighlighterTags(exportFormat, highlightColor);
 
         // build the legends
-        const auto [legendLinesThemed, maxLegendSizeThemed] =
-            BuildLegendLines(highlighterTagsThemed);
+        const TextLegendLines legendLinesThemed = BuildLegendLines(highlighterTagsThemed);
         const TextLegends textLegendsThemed =
-            BuildLegends(markupFormat, legendLinesThemed, textViewFont);
+            BuildLegends(displayFormat, legendLinesThemed, textViewFont);
 
-        const auto [legendLinesPaperWhite, maxLegendSizePaperWhite] =
-            BuildLegendLines(highlighterTagsPaperWhite);
+        const TextLegendLines legendLinesPaperWhite = BuildLegendLines(highlighterTagsPaperWhite);
         const TextLegends textLegendsPaperWhite =
-            BuildLegends(markupFormat, legendLinesPaperWhite, textViewFont);
+            BuildLegends(exportFormat, legendLinesPaperWhite, textViewFont);
 
         // build the headers
         const TextHeader textHeaderThemed = BuildHeader(
-            markupFormat, GetTextReportBackgroundColor(), highlighterColorsThemed, textViewFont);
+            displayFormat, GetTextReportBackgroundColor(), highlighterColorsThemed, textViewFont);
         const TextHeader textHeaderPaperWhite = BuildHeader(
-            markupFormat, wxColour{ 255, 255, 255 }, highlighterColorsPaperWhite, textViewFont);
+            exportFormat, wxColour{ 255, 255, 255 }, highlighterColorsPaperWhite, textViewFont);
 
         // specialized highlighters
         SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
@@ -5889,11 +5764,11 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             &m_dolch_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
             highlighterTagsThemed.HIGHLIGHT_END);
 
-        const SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
+        SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
             is3PlusSyllablesPaperWhite(
                 3, (GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable),
                 highlighterTagsPaperWhite.HIGHLIGHT_BEGIN, highlighterTagsPaperWhite.HIGHLIGHT_END);
-        const WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem>
+        WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem>
             is6PlusCharsPaperWhite(6, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                                    highlighterTagsPaperWhite.HIGHLIGHT_END);
         const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
@@ -5904,8 +5779,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                                   highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                                   highlighterTagsPaperWhite.HIGHLIGHT_END,
                                   GetDaleChallProperNounCountingMethod());
-        const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
-                                                stemming::no_op_stem<word_case_insensitive_no_stem>>
+        IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
+                                          stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotSpacheWordPaperWhite(
                 &m_spache_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
                 highlighterTagsPaperWhite.HIGHLIGHT_END,
@@ -5919,7 +5794,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN,
                 highlighterTagsPaperWhite.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
-        const IsDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isDolchWordPaperWhite(
+        IsDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isDolchWordPaperWhite(
             &m_dolch_word_list, highlighterTagsPaperWhite.DOLCH_CONJUNCTION_BEGIN,
             highlighterTagsPaperWhite.DOLCH_PREPOSITIONS_BEGIN,
             highlighterTagsPaperWhite.DOLCH_PRONOUN_BEGIN,
@@ -5927,11 +5802,13 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             highlighterTagsPaperWhite.DOLCH_ADJECTIVE_BEGIN,
             highlighterTagsPaperWhite.DOLCH_VERB_BEGIN, highlighterTagsPaperWhite.DOLCH_NOUN_BEGIN,
             highlighterTagsPaperWhite.HIGHLIGHT_END);
-        const IsNotDolchWordWithLevelHighlighting<word_case_insensitive_no_stem>
-            isNotDolchWordPaperWhite(&m_dolch_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
-                                     highlighterTagsPaperWhite.HIGHLIGHT_END);
+        IsNotDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isNotDolchWordPaperWhite(
+            &m_dolch_word_list, highlighterTagsPaperWhite.HIGHLIGHT_BEGIN,
+            highlighterTagsPaperWhite.HIGHLIGHT_END);
 
-        constexpr bool USE_RTF_ENCODING = IsRtf(markupFormat);
+        // the display buffer is HTML-encoded, the paper-white export buffer is RTF-encoded
+        constexpr bool DISPLAY_USE_RTF_ENCODING = IsRtf(displayFormat);
+        constexpr bool EXPORT_USE_RTF_ENCODING = IsRtf(exportFormat);
 
         // initial buffers should be a bit bigger than the
         // original text since we are adding encoding to it
@@ -5941,10 +5818,10 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             (GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
              GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings);
 
-        // loads text buffers for text window
+        // loads the HTML display buffer for a text window
         const auto loadTextBuffer =
-            [this, textBeingExcluded, &textHeaderThemed, &highlighterTagsThemed,
-             USE_RTF_ENCODING](auto& highlighter, const wxString& legend, std::wstring& mainBuffer)
+            [this, textBeingExcluded, &textHeaderThemed, &highlighterTagsThemed](
+                auto& highlighter, const wxString& legend, std::wstring& mainBuffer)
         {
             highlighter.Reset();
 
@@ -5955,12 +5832,13 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsThemed.HIGHLIGHT_END.wc_string(), highlighterTagsThemed.TAB_SYMBOL,
                 highlighterTagsThemed.CRLF, textBeingExcluded,
                 GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                textBeingExcluded, USE_RTF_ENCODING);
+                textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
         };
 
+        // loads the paper-white RTF export buffer for a text window
         const auto loadPaperTextBuffer =
-            [this, textBeingExcluded, &textHeaderPaperWhite, &highlighterTagsPaperWhite,
-             USE_RTF_ENCODING](auto& highlighter, const wxString& legend, std::wstring& paperBuffer)
+            [this, textBeingExcluded, &textHeaderPaperWhite, &highlighterTagsPaperWhite](
+                auto& highlighter, const wxString& legend, std::wstring& paperBuffer)
         {
             highlighter.Reset();
 
@@ -5972,11 +5850,13 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                 textBeingExcluded,
                 GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                textBeingExcluded, USE_RTF_ENCODING);
+                textBeingExcluded, EXPORT_USE_RTF_ENCODING);
         };
 
         std::wstring formattedBuffer;
         formattedBuffer.reserve(textBufferLength);
+        std::wstring formattedPaperBuffer;
+        formattedPaperBuffer.reserve(textBufferLength);
 
         std::wstring dcBuffer;
         std::wstring dcPaperBuffer;
@@ -5998,6 +5878,15 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 
         std::wstring nonDolchBuffer;
         std::wstring nonDolchPaperBuffer;
+
+        // frees a buffer pair once its content has been handed to a window
+        const auto releaseBuffers = [](std::wstring& mainBuffer, std::wstring& paperBuffer)
+        {
+            mainBuffer.clear();
+            mainBuffer.shrink_to_fit();
+            paperBuffer.clear();
+            paperBuffer.shrink_to_fit();
+        };
 
         // load the formatted text into buffers
         // ------------------------------------
@@ -6021,7 +5910,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                     // forcibly exclude lists but include headers,
                     // invalid words will also be valid
-                    true, true, false, USE_RTF_ENCODING);
+                    true, true, false, DISPLAY_USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6033,7 +5922,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, USE_RTF_ENCODING);
+                    textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
                 }
 
             // paper (printable) buffer
@@ -6050,7 +5939,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     // forcibly exclude lists but include headers,
                     // invalid words will also be valid
-                    true, true, false, USE_RTF_ENCODING);
+                    true, true, false, EXPORT_USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6064,7 +5953,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, USE_RTF_ENCODING);
+                    textBeingExcluded, EXPORT_USE_RTF_ENCODING);
                 }
             }
 
@@ -6087,7 +5976,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                     // HJ explicitly states what to exclude, so always show what it is
                     // excluding in this window
-                    true, true, false, USE_RTF_ENCODING);
+                    true, true, false, DISPLAY_USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6099,7 +5988,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
                     highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, USE_RTF_ENCODING);
+                    textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
                 }
 
             // paper
@@ -6116,7 +6005,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     // HJ explicitly states what to exclude, so always show what it
                     // is excluding in this window
-                    true, true, false, USE_RTF_ENCODING);
+                    true, true, false, EXPORT_USE_RTF_ENCODING);
                 }
             else
                 {
@@ -6130,7 +6019,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                     textBeingExcluded,
                     GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                    textBeingExcluded, USE_RTF_ENCODING);
+                    textBeingExcluded, EXPORT_USE_RTF_ENCODING);
                 }
             }
 
@@ -6143,8 +6032,9 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             spachePaperBuffer.reserve(textBufferLength);
             loadTextBuffer(isNotSpacheWordThemed, textLegendsThemed.unfamiliarSpacheWordsLegend,
                            spacheBuffer);
-            loadPaperTextBuffer(isNotSpacheWordThemed,
-                                textLegendsThemed.unfamiliarSpacheWordsLegend, spachePaperBuffer);
+            loadPaperTextBuffer(isNotSpacheWordPaperWhite,
+                                textLegendsPaperWhite.unfamiliarSpacheWordsLegend,
+                                spachePaperBuffer);
             }
 
         // 3+ syllable words
@@ -6155,7 +6045,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             threeSyllPaperBuffer.reserve(textBufferLength);
             loadTextBuffer(is3PlusSyllablesThemed, textLegendsThemed.hardWordsLegend,
                            threeSyllBuffer);
-            loadPaperTextBuffer(is3PlusSyllablesThemed, textLegendsThemed.hardWordsLegend,
+            loadPaperTextBuffer(is3PlusSyllablesPaperWhite, textLegendsPaperWhite.hardWordsLegend,
                                 threeSyllPaperBuffer);
             }
 
@@ -6166,7 +6056,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             sixCharsBuffer.reserve(textBufferLength);
             sixCharsPaperBuffer.reserve(textBufferLength);
             loadTextBuffer(is6PlusCharsThemed, textLegendsThemed.longWordsLegend, sixCharsBuffer);
-            loadPaperTextBuffer(is6PlusCharsThemed, textLegendsThemed.longWordsLegend,
+            loadPaperTextBuffer(is6PlusCharsPaperWhite, textLegendsPaperWhite.longWordsLegend,
                                 sixCharsPaperBuffer);
             }
 
@@ -6176,7 +6066,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             dolchBuffer.reserve(textBufferLength);
             dolchPaperBuffer.reserve(textBufferLength);
             loadTextBuffer(isDolchWordThemed, textLegendsThemed.dolchWindowLegend, dolchBuffer);
-            loadPaperTextBuffer(isDolchWordThemed, textLegendsThemed.dolchWindowLegend,
+            loadPaperTextBuffer(isDolchWordPaperWhite, textLegendsPaperWhite.dolchWindowLegend,
                                 dolchPaperBuffer);
 
             // Non-Dolch
@@ -6184,38 +6074,38 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             nonDolchPaperBuffer.reserve(textBufferLength);
             loadTextBuffer(isNotDolchWordThemed, textLegendsThemed.nonDolchWordsLegend,
                            nonDolchBuffer);
-            loadPaperTextBuffer(isNotDolchWordThemed, textLegendsThemed.nonDolchWordsLegend,
+            loadPaperTextBuffer(isNotDolchWordPaperWhite, textLegendsPaperWhite.nonDolchWordsLegend,
                                 nonDolchPaperBuffer);
             }
 
         // Load the buffers into the windows (or hide windows is not relevant anymore)
         // ---------------------------------------------------------------------------
         LoadDCTextWindow(dcBuffer, dcPaperBuffer);
+        releaseBuffers(dcBuffer, dcPaperBuffer);
         LoadHJTextWindow(hjBuffer, hjPaperBuffer);
+        releaseBuffers(hjBuffer, hjPaperBuffer);
         LoadSpacheTextWindow(spacheBuffer, spachePaperBuffer);
+        releaseBuffers(spacheBuffer, spachePaperBuffer);
         LoadThreeSyllTextWindow(threeSyllBuffer, threeSyllPaperBuffer);
+        releaseBuffers(threeSyllBuffer, threeSyllPaperBuffer);
         LoadSixCharsTextWindow(sixCharsBuffer, sixCharsPaperBuffer);
+        releaseBuffers(sixCharsBuffer, sixCharsPaperBuffer);
 
         // go through the custom readability tests
         for (auto pos = GetCustTestsInUse().begin(); pos != GetCustTestsInUse().end(); ++pos)
             {
             const wxString windowLabel(wxString::Format(_(L"%s (Unfamiliar) Report"),
                                                         pos->GetIterator()->get_name().c_str()));
-            auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                view->GetWordsBreakdownView().FindWindowById(
-                    pos->GetIterator()->get_interface_id(),
-                    CLASSINFO(Wisteria::UI::FormattedTextCtrl)));
+            auto* textWindow =
+                dynamic_cast<wxWebView*>(view->GetWordsBreakdownView().FindWindowById(
+                    pos->GetIterator()->get_interface_id(), CLASSINFO(wxWebView)));
 
             if (pos->GetIterator()->is_using_familiar_words())
                 {
                 if (textWindow == nullptr)
                     {
-                    textWindow = new Wisteria::UI::FormattedTextCtrl(
-                        view->GetSplitter(), pos->GetIterator()->get_interface_id(),
-                        wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-                    textWindow->Hide();
-                    textWindow->SetMargins(10, 10);
-                    textWindow->SetName(windowLabel);
+                    textWindow = CreateHighlightedTextWindow(
+                        view->GetSplitter(), pos->GetIterator()->get_interface_id(), windowLabel);
                     // find respective list and add it beneath that
                     auto buddyWindowPosition = view->GetWordsBreakdownView().FindWindowPositionById(
                         pos->GetIterator()->get_interface_id(),
@@ -6224,14 +6114,14 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                         (buddyWindowPosition != wxNOT_FOUND) ? buddyWindowPosition + 1 : 0,
                         textWindow);
                     }
-                UpdateTextWindowOptions(textWindow);
 
                 const wxString unfamiliarWordsLegendLineThemed =
                     BuildLegendLine(highlighterTagsThemed,
                                     wxString::Format(_(L"Unfamiliar %s words"),
                                                      pos->GetIterator()->get_name().c_str()));
-                const wxString unfamiliarWordsLegendThemed = BuildLegend(
-                    markupFormat, unfamiliarWordsLegendLineThemed, legendLinesThemed, textViewFont);
+                const wxString unfamiliarWordsLegendThemed =
+                    BuildLegend(displayFormat, unfamiliarWordsLegendLineThemed, legendLinesThemed,
+                                textViewFont);
 
                 IsNotCustomFamiliarWordWithHighlighting<
                     std::vector<CustomReadabilityTestInterface>::iterator>
@@ -6280,7 +6170,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, USE_RTF_ENCODING);
+                            true, true, false, DISPLAY_USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6294,7 +6184,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, USE_RTF_ENCODING);
+                            true, true, false, DISPLAY_USE_RTF_ENCODING);
                         }
                     }
                 else
@@ -6311,7 +6201,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, USE_RTF_ENCODING);
+                            textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
                         }
                     else
                         {
@@ -6325,13 +6215,9 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, USE_RTF_ENCODING);
+                            textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
                         }
                     }
-#ifndef __WXGTK__
-                textWindow->SetMaxLength(static_cast<unsigned long>(formattedBuffer.length()));
-#endif
-                SetFormattedTextAndRestoreInsertionPoint(textWindow, formattedBuffer.c_str());
 
                 notCustomWordThemed.Reset();
                 notCustomWordExcludeNumeralsThemed.Reset();
@@ -6344,7 +6230,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                                     wxString::Format(_(L"Unfamiliar %s words"),
                                                      pos->GetIterator()->get_name().c_str()));
                 const wxString unfamiliarWordsLegendPaperWhite =
-                    BuildLegend(markupFormat, unfamiliarWordsLegendLinePaperWhite,
+                    BuildLegend(exportFormat, unfamiliarWordsLegendLinePaperWhite,
                                 legendLinesPaperWhite, textViewFont);
 
                 if ((pos->IsHarrisJacobsonFormula() &&
@@ -6357,8 +6243,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     if (pos->IsHarrisJacobsonFormula())
                         {
                         FormatWordCollectionHighlightedWords(
-                            GetWords(), notCustomWordExcludeNumeralsPaperWhite, formattedBuffer,
-                            textHeaderPaperWhite.header.wc_string(),
+                            GetWords(), notCustomWordExcludeNumeralsPaperWhite,
+                            formattedPaperBuffer, textHeaderPaperWhite.header.wc_string(),
                             textHeaderPaperWhite.endSection.wc_string(),
                             unfamiliarWordsLegendPaperWhite.wc_string(),
                             highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
@@ -6366,12 +6252,12 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, USE_RTF_ENCODING);
+                            true, true, false, EXPORT_USE_RTF_ENCODING);
                         }
                     else
                         {
                         FormatWordCollectionHighlightedWords(
-                            GetWords(), notCustomWordPaperWhite, formattedBuffer,
+                            GetWords(), notCustomWordPaperWhite, formattedPaperBuffer,
                             textHeaderPaperWhite.header.wc_string(),
                             textHeaderPaperWhite.endSection.wc_string(),
                             unfamiliarWordsLegendPaperWhite.wc_string(),
@@ -6380,7 +6266,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             // forcibly exclude lists but include headers,
                             // invalid words will also be valid
-                            true, true, false, USE_RTF_ENCODING);
+                            true, true, false, EXPORT_USE_RTF_ENCODING);
                         }
                     }
                 else
@@ -6388,8 +6274,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     if (pos->IsHarrisJacobsonFormula())
                         {
                         FormatWordCollectionHighlightedWords(
-                            GetWords(), notCustomWordExcludeNumeralsPaperWhite, formattedBuffer,
-                            textHeaderPaperWhite.header.wc_string(),
+                            GetWords(), notCustomWordExcludeNumeralsPaperWhite,
+                            formattedPaperBuffer, textHeaderPaperWhite.header.wc_string(),
                             textHeaderPaperWhite.endSection.wc_string(),
                             unfamiliarWordsLegendPaperWhite.wc_string(),
                             highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
@@ -6397,12 +6283,12 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, USE_RTF_ENCODING);
+                            textBeingExcluded, EXPORT_USE_RTF_ENCODING);
                         }
                     else
                         {
                         FormatWordCollectionHighlightedWords(
-                            GetWords(), notCustomWordPaperWhite, formattedBuffer,
+                            GetWords(), notCustomWordPaperWhite, formattedPaperBuffer,
                             textHeaderPaperWhite.header.wc_string(),
                             textHeaderPaperWhite.endSection.wc_string(),
                             unfamiliarWordsLegendPaperWhite.wc_string(),
@@ -6411,10 +6297,11 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                             highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
                             textBeingExcluded,
                             GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
-                            textBeingExcluded, USE_RTF_ENCODING);
+                            textBeingExcluded, EXPORT_USE_RTF_ENCODING);
                         }
                     }
-                textWindow->SetUnthemedFormattedText(formattedBuffer.c_str());
+                GetHighlightedTextBuffers().SetContent(textWindow, formattedBuffer,
+                                                       formattedPaperBuffer);
                 }
             else
                 {
@@ -6427,20 +6314,15 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         if (GetGrammarInfo().IsHighlightedReportEnabled() && GetTotalWords() > 0)
             {
             // display this in the Grammar section
-            auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                view->GetGrammarView().FindWindowById(
-                    BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID));
+            auto* textWindow = dynamic_cast<wxWebView*>(view->GetGrammarView().FindWindowById(
+                BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID));
             if (textWindow == nullptr)
                 {
-                textWindow = new Wisteria::UI::FormattedTextCtrl(
+                textWindow = CreateHighlightedTextWindow(
                     view->GetSplitter(), BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID,
-                    wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-                textWindow->Hide();
-                textWindow->SetMargins(10, 10);
-                textWindow->SetName(_(L"Highlighted Report"));
+                    _(L"Highlighted Report"));
                 view->GetGrammarView().InsertWindow(0, textWindow);
                 }
-            UpdateTextWindowOptions(textWindow);
             FormatWordCollectionHighlightedGrammarIssues(
                 GetWords(), GetDifficultSentenceLength(), formattedBuffer,
                 textHeaderThemed.header.wc_string(), textHeaderThemed.endSection.wc_string(),
@@ -6457,24 +6339,10 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
                                                                   highlighterTagsThemed.BOLD_END,
                 highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
-                textBeingExcluded, USE_RTF_ENCODING);
-#ifndef __WXGTK__
-            textWindow->SetMaxLength(static_cast<unsigned long>(formattedBuffer.length()));
-#endif
-            SetFormattedTextAndRestoreInsertionPoint(textWindow, formattedBuffer.c_str());
-
-#ifdef DEBUG_EXPERIMENTAL_CODE
-            const auto tempFilePath = wxFileName::CreateTempFileName(L"Highlighted Report");
-            wxFile textWindowDump(tempFilePath, wxFile::OpenMode::write);
-            if (textWindowDump.IsOpened())
-                {
-                textWindowDump.Write(formattedBuffer);
-                wxLogDebug(L"Text view written to: %s", tempFilePath);
-                }
-#endif
+                textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
 
             FormatWordCollectionHighlightedGrammarIssues(
-                GetWords(), GetDifficultSentenceLength(), formattedBuffer,
+                GetWords(), GetDifficultSentenceLength(), formattedPaperBuffer,
                 textHeaderPaperWhite.header.wc_string(),
                 textHeaderPaperWhite.endSection.wc_string(),
                 textLegendsPaperWhite.wordinessWindowLegend.wc_string(),
@@ -6485,13 +6353,17 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
                 // if default style is bold, then don't use bold tags internally because
                 // that will mess up the RTF
-                (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
-                                                                  highlighterTagsThemed.BOLD_BEGIN,
-                (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
-                                                                  highlighterTagsThemed.BOLD_END,
+                (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ?
+                    std::wstring{} :
+                    highlighterTagsPaperWhite.BOLD_BEGIN,
+                (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ?
+                    std::wstring{} :
+                    highlighterTagsPaperWhite.BOLD_END,
                 highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
-                textBeingExcluded, textBeingExcluded, USE_RTF_ENCODING);
-            textWindow->SetUnthemedFormattedText(formattedBuffer.c_str());
+                textBeingExcluded, textBeingExcluded, EXPORT_USE_RTF_ENCODING);
+            GetHighlightedTextBuffers().SetContent(textWindow, formattedBuffer,
+                                                   formattedPaperBuffer);
+            releaseBuffers(formattedBuffer, formattedPaperBuffer);
             }
         else
             {
@@ -6503,21 +6375,23 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         if (IsIncludingDolchSightWords())
             {
                 {
-                auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                    view->GetDolchSightWordsView().FindWindowById(
+                auto* textWindow =
+                    dynamic_cast<wxWebView*>(view->GetDolchSightWordsView().FindWindowById(
                         BaseProjectView::DOLCH_WORDS_TEXT_PAGE_ID));
                 textWindow =
                     LoadTextWindow(textWindow, BaseProjectView::DOLCH_WORDS_TEXT_PAGE_ID,
                                    _(L"Highlighted Dolch Words"), dolchBuffer, dolchPaperBuffer);
+                releaseBuffers(dolchBuffer, dolchPaperBuffer);
                 view->GetDolchSightWordsView().AddWindow(textWindow);
                 }
                 {
-                auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-                    view->GetDolchSightWordsView().FindWindowById(
+                auto* textWindow =
+                    dynamic_cast<wxWebView*>(view->GetDolchSightWordsView().FindWindowById(
                         BaseProjectView::NON_DOLCH_WORDS_TEXT_PAGE_ID));
                 textWindow = LoadTextWindow(
                     textWindow, BaseProjectView::NON_DOLCH_WORDS_TEXT_PAGE_ID,
                     _(L"Highlighted Non-Dolch Words"), nonDolchBuffer, nonDolchPaperBuffer);
+                releaseBuffers(nonDolchBuffer, nonDolchPaperBuffer);
                 view->GetDolchSightWordsView().AddWindow(textWindow);
                 }
             }
@@ -6538,49 +6412,45 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
     }
 
 //-------------------------------------------------------
-Wisteria::UI::FormattedTextCtrl*
-ProjectDoc::LoadTextWindow(Wisteria::UI::FormattedTextCtrl* textWindow, const int ID,
-                           const wxString& label, const std::wstring& mainBuffer,
-                           const std::wstring& paperBuffer)
+wxWebView* ProjectDoc::CreateHighlightedTextWindow(wxWindow* parent, const int ID,
+                                                   const wxString& label)
+    {
+    // two-step creation: register the memory: handler before Create()
+    auto* textWindow = wxWebView::New();
+    if (textWindow == nullptr)
+        {
+        wxLogError(_(L"Failed to create wxWebView. No backend available."));
+        return nullptr;
+        }
+    textWindow->RegisterHandler(
+        wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler(_DT(L"memory"))));
+    textWindow->Create(parent, ID);
+    textWindow->SetName(label);
+    textWindow->Hide();
+    // Read-only report, so hide the browser's context menu. Don't block navigation;
+    // there are no links to follow, and some backends rewrite the 'memory:' url
+    // internally, which a scheme-based veto would wrongly cancel.
+    textWindow->EnableContextMenu(false);
+    return textWindow;
+    }
+
+//-------------------------------------------------------
+wxWebView* ProjectDoc::LoadTextWindow(wxWebView* textWindow, const int ID, const wxString& label,
+                                      const std::wstring& htmlBuffer, const std::wstring& rtfBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading highlighted text window!");
+    if (view == nullptr)
+        {
+        return nullptr;
+        }
 
     if (textWindow == nullptr)
         {
-        textWindow = new Wisteria::UI::FormattedTextCtrl(view->GetSplitter(), ID, wxDefaultPosition,
-                                                         wxDefaultSize, wxTE_READONLY);
-        textWindow->Hide();
-        textWindow->SetMargins(10, 10);
-        textWindow->SetName(label);
+        textWindow = CreateHighlightedTextWindow(view->GetSplitter(), ID, label);
         }
-    UpdateTextWindowOptions(textWindow);
-#ifndef __WXGTK__
-    // not necessary on Linux and causes an assert
-    textWindow->SetMaxLength(static_cast<unsigned long>(mainBuffer.length()));
-#endif
-    SetFormattedTextAndRestoreInsertionPoint(textWindow, mainBuffer.c_str());
 
-#ifdef DEBUG_EXPERIMENTAL_CODE
-    const auto tempFilePath = wxFileName::CreateTempFileName(label);
-    wxFile textWindowDump(tempFilePath, wxFile::OpenMode::write);
-    if (textWindowDump.IsOpened())
-        {
-        textWindowDump.Write(mainBuffer);
-        wxLogDebug(L"Text view written to: %s", tempFilePath);
-        }
-#endif
-
-    textWindow->SetUnthemedFormattedText(paperBuffer.c_str());
-
-#ifdef DEBUG_EXPERIMENTAL_CODE
-    const auto tempFilePathPaper = wxFileName::CreateTempFileName(label + L" Paper White");
-    wxFile textWindowDumpPaper(tempFilePathPaper, wxFile::OpenMode::write);
-    if (textWindowDumpPaper.IsOpened())
-        {
-        textWindowDumpPaper.Write(paperBuffer);
-        wxLogDebug(L"Text view written to: %s", tempFilePathPaper);
-        }
-#endif
+    GetHighlightedTextBuffers().SetContent(textWindow, htmlBuffer, rtfBuffer);
 
     return textWindow;
     }
@@ -6590,10 +6460,15 @@ void ProjectDoc::LoadThreeSyllTextWindow(const std::wstring& mainBuffer,
                                          const std::wstring& paperBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading 3+ syllable text window!");
+    if (view == nullptr)
+        {
+        return;
+        }
 
     if (GetWordsBreakdownInfo().Is3PlusSyllablesEnabled() && GetTotalUnique3PlusSyllableWords() > 0)
         {
-        auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
+        auto* textWindow = dynamic_cast<wxWebView*>(
             view->GetWordsBreakdownView().FindWindowById(BaseProjectView::HARD_WORDS_TEXT_PAGE_ID));
         // always included for any language
         textWindow = LoadTextWindow(textWindow, BaseProjectView::HARD_WORDS_TEXT_PAGE_ID,
@@ -6615,10 +6490,15 @@ void ProjectDoc::LoadSixCharsTextWindow(const std::wstring& mainBuffer,
                                         const std::wstring& paperBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading 6+ character text window!");
+    if (view == nullptr)
+        {
+        return;
+        }
 
     if (GetWordsBreakdownInfo().Is6PlusCharacterEnabled() && GetTotalUnique6CharsPlusWords() > 0)
         {
-        auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
+        auto* textWindow = dynamic_cast<wxWebView*>(
             view->GetWordsBreakdownView().FindWindowById(BaseProjectView::LONG_WORDS_TEXT_PAGE_ID));
         // always included for any language
         textWindow =
@@ -6640,14 +6520,18 @@ void ProjectDoc::LoadSpacheTextWindow(const std::wstring& mainBuffer,
                                       const std::wstring& paperBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading Spache text window!");
+    if (view == nullptr)
+        {
+        return;
+        }
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsSpacheUnfamiliarEnabled() &&
         GetReadabilityTests().is_test_included(ReadabilityMessages::SPACHE()))
         {
-        m_spacheTextWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-            view->GetWordsBreakdownView().FindWindowById(
-                BaseProjectView::SPACHE_WORDS_TEXT_PAGE_ID));
+        m_spacheTextWindow = dynamic_cast<wxWebView*>(view->GetWordsBreakdownView().FindWindowById(
+            BaseProjectView::SPACHE_WORDS_TEXT_PAGE_ID));
         m_spacheTextWindow =
             LoadTextWindow(m_spacheTextWindow, BaseProjectView::SPACHE_WORDS_TEXT_PAGE_ID,
                            _(L"Spache (Unfamiliar) Report"), mainBuffer, paperBuffer);
@@ -6666,31 +6550,26 @@ void ProjectDoc::LoadSpacheTextWindow(const std::wstring& mainBuffer,
 void ProjectDoc::LoadHJTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading Harris-Jacobson text window!");
+    if (view == nullptr)
+        {
+        return;
+        }
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsHarrisJacobsonUnfamiliarEnabled() &&
         GetReadabilityTests().is_test_included(ReadabilityMessages::HARRIS_JACOBSON()))
         {
-        m_hjTextWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
-            view->GetWordsBreakdownView().FindWindowById(
-                BaseProjectView::HARRIS_JACOBSON_WORDS_TEXT_PAGE_ID));
+        m_hjTextWindow = dynamic_cast<wxWebView*>(view->GetWordsBreakdownView().FindWindowById(
+            BaseProjectView::HARRIS_JACOBSON_WORDS_TEXT_PAGE_ID));
         if (m_hjTextWindow == nullptr)
             {
-            m_hjTextWindow = new Wisteria::UI::FormattedTextCtrl(
+            m_hjTextWindow = CreateHighlightedTextWindow(
                 view->GetSplitter(), BaseProjectView::HARRIS_JACOBSON_WORDS_TEXT_PAGE_ID,
-                wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-            m_hjTextWindow->Hide();
-            m_hjTextWindow->SetMargins(10, 10);
-            m_hjTextWindow->SetName(_(L"Harris-Jacobson (Unfamiliar) Report"));
+                _(L"Harris-Jacobson (Unfamiliar) Report"));
             }
-        UpdateTextWindowOptions(m_hjTextWindow);
 
-#ifndef __WXGTK__
-        m_hjTextWindow->SetMaxLength(static_cast<unsigned long>(mainBuffer.length()));
-#endif
-        SetFormattedTextAndRestoreInsertionPoint(m_hjTextWindow, mainBuffer.c_str());
-
-        m_hjTextWindow->SetUnthemedFormattedText(paperBuffer.c_str());
+        GetHighlightedTextBuffers().SetContent(m_hjTextWindow, mainBuffer, paperBuffer);
         const auto buddyWindowPosition = view->GetWordsBreakdownView().FindWindowPositionById(
             BaseProjectView::HARRIS_JACOBSON_WORDS_LIST_PAGE_ID);
         view->GetWordsBreakdownView().InsertWindow(
@@ -6707,30 +6586,26 @@ void ProjectDoc::LoadHJTextWindow(const std::wstring& mainBuffer, const std::wst
 void ProjectDoc::LoadDCTextWindow(const std::wstring& mainBuffer, const std::wstring& paperBuffer)
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Error getting view when loading Dale-Chall text window!");
+    if (view == nullptr)
+        {
+        return;
+        }
 
     if (GetProjectLanguage() == readability::test_language::english_test &&
         GetWordsBreakdownInfo().IsDCUnfamiliarEnabled() && IsDaleChallLikeTestIncluded())
         {
-        m_dcTextWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(
+        m_dcTextWindow = dynamic_cast<wxWebView*>(
             view->GetWordsBreakdownView().FindWindowById(BaseProjectView::DC_WORDS_TEXT_PAGE_ID));
-        // construct (if needed) and set options
+        // construct (if needed)
         if (m_dcTextWindow == nullptr)
             {
-            m_dcTextWindow = new Wisteria::UI::FormattedTextCtrl(
-                view->GetSplitter(), BaseProjectView::DC_WORDS_TEXT_PAGE_ID, wxDefaultPosition,
-                wxDefaultSize, wxTE_READONLY);
-            m_dcTextWindow->Hide();
-            m_dcTextWindow->SetMargins(10, 10);
-            m_dcTextWindow->SetName(_(L"Dale-Chall (Unfamiliar) Report"));
+            m_dcTextWindow = CreateHighlightedTextWindow(view->GetSplitter(),
+                                                         BaseProjectView::DC_WORDS_TEXT_PAGE_ID,
+                                                         _(L"Dale-Chall (Unfamiliar) Report"));
             }
-        UpdateTextWindowOptions(m_dcTextWindow);
 
-#ifndef __WXGTK__
-        m_dcTextWindow->SetMaxLength(static_cast<unsigned long>(mainBuffer.length()));
-#endif
-        SetFormattedTextAndRestoreInsertionPoint(m_dcTextWindow, mainBuffer.c_str());
-
-        m_dcTextWindow->SetUnthemedFormattedText(paperBuffer.c_str());
+        GetHighlightedTextBuffers().SetContent(m_dcTextWindow, mainBuffer, paperBuffer);
 
         const auto buddyWindowPosition = view->GetWordsBreakdownView().FindWindowPositionById(
             BaseProjectView::DC_WORDS_LIST_PAGE_ID);
@@ -7775,7 +7650,7 @@ void ProjectDoc::DisplayGrammar()
 void ProjectDoc::DisplaySightWords()
     {
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
-    wxASSERT_MSG(view, "Error getting view when displaying sight words!");
+    wxASSERT_MSG(view, L"Error getting view when displaying sight words!");
     if (view == nullptr)
         {
         return;

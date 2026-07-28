@@ -142,8 +142,6 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/import/xlsx_extract_text.cpp
     src/Wisteria-Dataviz/src/ui/app.cpp
     src/Wisteria-Dataviz/src/ui/controls/codeeditor.cpp
-    src/Wisteria-Dataviz/src/ui/controls/formattedtextctrl.cpp
-    src/Wisteria-Dataviz/src/ui/controls/gtk/gtktextview-helper.cpp
     src/Wisteria-Dataviz/src/ui/controls/htmltablewin.cpp
     src/Wisteria-Dataviz/src/ui/controls/htmltablewinprintout.cpp
     src/Wisteria-Dataviz/src/ui/controls/listctrlex.cpp

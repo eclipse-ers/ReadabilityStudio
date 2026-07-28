@@ -18,7 +18,7 @@ To export any window, go to the **Home** tab and click the `r keys("Save")` butt
 
 Numerous formats are available for each type of window:
 
-- [Highlighted text](#sec-text-window-export): HTML, RTF, and Pango (Pango is only available on Linux.)
+- [Highlighted text](#sec-text-window-export): HTML, RTF, and PDF
 - Statistical summaries: HTML and PDF
 - [Test results](#sec-scores-export): HTML
 - Word, phrase, and sentence [lists](#sec-export-list): HTML, Text, {{< latex >}}, and PDF
@@ -49,8 +49,7 @@ When exporting\index{exporting!text reports} a text report\index{text reports!ex
 
 **RTF**: A format that can be displayed in most word-processing programs.
 
-**Pango**: A format that can be rendered within libraries such as Cairo or FreeType.
-(This option is only available on Linux.)
+**PDF**: A vector-based document format that preserves text and graphics at any scale.
 :::
 
 ::: {.tipsection data-latex=""}
@@ -208,6 +207,9 @@ This option only applies to batch projects.
 This option only applies when exporting as separate files.
 
 **Export text reports as**: Select the file type that you want to save text reports as from this list.
+This option only applies to standard projects, and when exporting as separate files.
+
+**Export summary reports as**: Select the file type that you want to save summary reports (e.g., test scores, statistics) as from this list.
 This option only applies to standard projects, and when exporting as separate files.
 
 **Export graphs as**: Select the image type that you want to save graphs as from this list.

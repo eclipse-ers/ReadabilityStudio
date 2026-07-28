@@ -333,6 +333,7 @@ void ReadabilityAppOptions::ResetSettings()
 
     // default exporting info
     BaseProjectDoc::SetExportTextViewExt(L"htm");
+    BaseProjectDoc::SetExportSummaryReportExt(L"htm");
     BaseProjectDoc::SetExportListExt(L"htm");
     BaseProjectDoc::SetExportGraphExt(L"png");
     BaseProjectDoc::ExportHardWordLists(true);
@@ -612,6 +613,16 @@ void ReadabilityAppOptions::LoadExportNode(tinyxml2::XMLElement* configRootNode)
             if (extString != nullptr)
                 {
                 BaseProjectDoc::SetExportTextViewExt(
+                    Wisteria::TextStream::CharStreamToUnicode(extString, std::strlen(extString)));
+                }
+            }
+        exportExtNode = exportSettingsNode->FirstChildElement(XML_EXPORT_SUMMARY_REPORT_EXT.data());
+        if (exportExtNode != nullptr)
+            {
+            const char* extString = exportExtNode->ToElement()->Attribute(XML_VALUE.data());
+            if (extString != nullptr)
+                {
+                BaseProjectDoc::SetExportSummaryReportExt(
                     Wisteria::TextStream::CharStreamToUnicode(extString, std::strlen(extString)));
                 }
             }
@@ -2919,6 +2930,10 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     auto* textExt = doc.NewElement(XML_EXPORT_TEXT_EXT.data());
     textExt->SetAttribute(XML_VALUE.data(), BaseProjectDoc::GetExportTextViewExt().utf8_str());
     exportSection->InsertEndChild(textExt);
+    auto* summaryReportExt = doc.NewElement(XML_EXPORT_SUMMARY_REPORT_EXT.data());
+    summaryReportExt->SetAttribute(XML_VALUE.data(),
+                                   BaseProjectDoc::GetExportSummaryReportExt().utf8_str());
+    exportSection->InsertEndChild(summaryReportExt);
     auto* graphExt = doc.NewElement(XML_EXPORT_GRAPH_EXT.data());
     graphExt->SetAttribute(XML_VALUE.data(), BaseProjectDoc::GetExportGraphExt().utf8_str());
     exportSection->InsertEndChild(graphExt);

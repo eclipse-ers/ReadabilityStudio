@@ -422,4 +422,10 @@ img
   */
   body
     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* Always print on white paper, even when the report is being viewed in dark mode.
+     Browsers generally do this on their own, but state it so that Canvas/CanvasText
+     can't resolve dark and then get forced onto the page by print-color-adjust above.
+  */
+  :root
+    { color-scheme: light; }
   }

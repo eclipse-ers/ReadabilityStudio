@@ -47,13 +47,6 @@ const HighlightedTextBuffers* HighlightedTextBufferMap::Find(const wxWindowID wi
     }
 
 //-------------------------------------------------------
-void HighlightedTextBufferMap::Remove(const wxWindowID windowId)
-    {
-    RemoveMemoryFile(windowId);
-    m_buffers.erase(windowId);
-    }
-
-//-------------------------------------------------------
 void HighlightedTextBufferMap::Clear()
     {
     for (const auto& buffer : m_buffers)

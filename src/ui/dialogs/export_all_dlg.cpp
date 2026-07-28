@@ -97,6 +97,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
 
     m_listExt = BaseProjectDoc::GetExportListExt();
     m_textViewExt = BaseProjectDoc::GetExportTextViewExt();
+    m_summaryReportExt = BaseProjectDoc::GetExportSummaryReportExt();
     m_graphExt = BaseProjectDoc::GetExportGraphExt();
     m_exportHardWordLists = BaseProjectDoc::IsExportingHardWordLists();
     m_exportSentencesBreakdown = BaseProjectDoc::IsExportingSentencesBreakdown();
@@ -114,10 +115,14 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     Bind(wxEVT_BUTTON, &ExportAllDlg::OnFolderBrowseButtonClick, this, ID_FOLDER_BROWSE_BUTTON);
     Bind(wxEVT_BUTTON, &ExportAllDlg::OnImageOptionsButtonClick, this, ID_IMAGE_OPTIONS_BUTTON);
     Bind(wxEVT_BUTTON, &ExportAllDlg::OnOK, this, wxID_OK);
-    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsTextWindowsCheck, this,
+    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsReportWindowsCheck, this,
          ID_INCLUDE_LIST_CHECKBOX);
-    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsTextWindowsCheck, this,
+    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsReportWindowsCheck, this,
          ID_INCLUDE_TEXT_CHECKBOX);
+    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsReportWindowsCheck, this,
+         ID_INCLUDE_TEST_RESULTS_CHECKBOX);
+    Bind(wxEVT_CHECKBOX, &ExportAllDlg::OnIncludeListsReportWindowsCheck, this,
+         ID_INCLUDE_STATISTICS_CHECKBOX);
     }
 
 //---------------------------------------------
@@ -145,19 +150,6 @@ void ExportAllDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
                      wxOK | wxICON_EXCLAMATION);
         return;
         }
-    if (m_textViewCombo != nullptr)
-        {
-        m_textViewExt = m_textViewCombo->GetValue();
-        }
-    if (m_listCombo != nullptr)
-        {
-        m_listExt = m_listCombo->GetValue();
-        }
-    if (m_graphCombo != nullptr)
-        {
-        m_graphExt = m_graphCombo->GetValue();
-        }
-
     if (IsModal())
         {
         EndModal(wxID_OK);
@@ -169,7 +161,7 @@ void ExportAllDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
     }
 
 //-------------------------------------------------------------
-void ExportAllDlg::OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEvent& event)
+void ExportAllDlg::OnIncludeListsReportWindowsCheck([[maybe_unused]] wxCommandEvent& event)
     {
     TransferDataFromWindow();
 
@@ -177,6 +169,7 @@ void ExportAllDlg::OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEven
     if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingLists);
+        exportControl->Refresh();
         }
     exportControl = FindWindow(ID_LIST_TYPE_COMBO);
     if (exportControl != nullptr)
@@ -187,11 +180,25 @@ void ExportAllDlg::OnIncludeListsTextWindowsCheck([[maybe_unused]] wxCommandEven
     if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingTextReports);
+        exportControl->Refresh();
         }
     exportControl = FindWindow(ID_TEXT_TYPE_COMBO);
     if (exportControl != nullptr)
         {
         exportControl->Enable(m_exportingTextReports);
+        }
+    // the summary reports are the test scores and statistics windows
+    const bool exportingSummaryReports = (m_exportTestResults || m_exportStatistics);
+    exportControl = FindWindow(ID_SUMMARY_REPORT_TYPE_LABEL);
+    if (exportControl != nullptr)
+        {
+        exportControl->Enable(exportingSummaryReports);
+        exportControl->Refresh();
+        }
+    exportControl = FindWindow(ID_SUMMARY_REPORT_TYPE_COMBO);
+    if (exportControl != nullptr)
+        {
+        exportControl->Enable(exportingSummaryReports);
         }
 
     TransferDataToWindow();
@@ -280,14 +287,16 @@ void ExportAllDlg::CreateControls()
         const auto* view =
             dynamic_cast<const ProjectView*>(m_readabilityProjectDoc->GetFirstView());
 
-        auto* testResultsCheck = new wxCheckBox(inclusionSectionBoxSizer->GetStaticBox(), wxID_ANY,
-                                                _(L"Test scores"), wxDefaultPosition, wxDefaultSize,
-                                                0, wxGenericValidator(&m_exportTestResults));
+        auto* testResultsCheck =
+            new wxCheckBox(inclusionSectionBoxSizer->GetStaticBox(),
+                           ID_INCLUDE_TEST_RESULTS_CHECKBOX, _(L"Test scores"), wxDefaultPosition,
+                           wxDefaultSize, 0, wxGenericValidator(&m_exportTestResults));
         inclusionSectionBoxSizer->Add(testResultsCheck, wxSizerFlags{}.Expand().Border());
 
-        auto* statisticsCheck = new wxCheckBox(
-            inclusionSectionBoxSizer->GetStaticBox(), wxID_ANY, _(L"Summary statistics"),
-            wxDefaultPosition, wxDefaultSize, 0, wxGenericValidator(&m_exportStatistics));
+        auto* statisticsCheck =
+            new wxCheckBox(inclusionSectionBoxSizer->GetStaticBox(), ID_INCLUDE_STATISTICS_CHECKBOX,
+                           _(L"Summary statistics"), wxDefaultPosition, wxDefaultSize, 0,
+                           wxGenericValidator(&m_exportStatistics));
         inclusionSectionBoxSizer->Add(statisticsCheck, wxSizerFlags{}.Expand().Border());
 
         if (view->GetWordsBreakdownView().GetWindowCount() > 0)
@@ -399,15 +408,16 @@ void ExportAllDlg::CreateControls()
             new wxStaticText(exportTypeStaticBoxSizer->GetStaticBox(), ID_LIST_TYPE_LABEL,
                              _(L"Export lists as:"), wxDefaultPosition, wxDefaultSize, 0);
         listLabel->Enable(m_exportingLists);
+        listLabel->Refresh();
         exportTypeBoxSizer->Add(listLabel, wxSizerFlags{}.Border().CenterVertical());
 
         m_listCombo = new wxComboBox(exportTypeStaticBoxSizer->GetStaticBox(), ID_LIST_TYPE_COMBO,
                                      wxString{}, wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                                     wxCB_DROPDOWN | wxCB_READONLY);
+                                     wxCB_DROPDOWN | wxCB_READONLY, wxGenericValidator(&m_listExt));
         m_listCombo->Append(L"htm");
         m_listCombo->Append(L"txt");
         m_listCombo->Append(L"tex");
-        m_listCombo->SetStringSelection(m_listExt);
+        m_listCombo->Append(L"pdf");
         m_listCombo->Enable(m_exportingLists);
         exportTypeBoxSizer->Add(m_listCombo, wxSizerFlags{}.Border().Left());
         exportTypeBoxSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
@@ -419,16 +429,39 @@ void ExportAllDlg::CreateControls()
                 exportTypeStaticBoxSizer->GetStaticBox(), ID_TEXT_TYPE_LABEL,
                 _(L"Export text reports as:"), wxDefaultPosition, wxDefaultSize, 0);
             textViewLabel->Enable(m_exportingTextReports);
+            textViewLabel->Refresh();
             exportTypeBoxSizer->Add(textViewLabel, wxSizerFlags{}.Border().CenterVertical());
 
-            m_textViewCombo = new wxComboBox(
-                exportTypeStaticBoxSizer->GetStaticBox(), ID_TEXT_TYPE_COMBO, wxString{},
-                wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+            m_textViewCombo =
+                new wxComboBox(exportTypeStaticBoxSizer->GetStaticBox(), ID_TEXT_TYPE_COMBO,
+                               wxString{}, wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                               wxCB_DROPDOWN | wxCB_READONLY, wxGenericValidator(&m_textViewExt));
             m_textViewCombo->Append(L"htm");
             m_textViewCombo->Append(L"rtf");
-            m_textViewCombo->SetStringSelection(m_textViewExt);
+            m_textViewCombo->Append(L"pdf");
             m_textViewCombo->Enable(m_exportingTextReports);
             exportTypeBoxSizer->Add(m_textViewCombo, wxSizerFlags{}.Border().Left());
+            exportTypeBoxSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+            // the summary reports are the test scores and statistics windows, so this
+            // only applies while at least one of those is being exported
+            const bool exportingSummaryReports = (m_exportTestResults || m_exportStatistics);
+
+            auto* summaryReportLabel = new wxStaticText(
+                exportTypeStaticBoxSizer->GetStaticBox(), ID_SUMMARY_REPORT_TYPE_LABEL,
+                _(L"Export summary reports as:"), wxDefaultPosition, wxDefaultSize, 0);
+            summaryReportLabel->Enable(exportingSummaryReports);
+            summaryReportLabel->Refresh();
+            exportTypeBoxSizer->Add(summaryReportLabel, wxSizerFlags{}.Border().CenterVertical());
+
+            m_summaryReportCombo = new wxComboBox(
+                exportTypeStaticBoxSizer->GetStaticBox(), ID_SUMMARY_REPORT_TYPE_COMBO, wxString{},
+                wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY,
+                wxGenericValidator(&m_summaryReportExt));
+            m_summaryReportCombo->Append(L"htm");
+            m_summaryReportCombo->Append(L"pdf");
+            m_summaryReportCombo->Enable(exportingSummaryReports);
+            exportTypeBoxSizer->Add(m_summaryReportCombo, wxSizerFlags{}.Border().Left());
             exportTypeBoxSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
             }
         }
@@ -439,9 +472,9 @@ void ExportAllDlg::CreateControls()
                          _(L"Export graphs as:"), wxDefaultPosition, wxDefaultSize, 0);
     exportTypeBoxSizer->Add(graphLabel, wxSizerFlags{}.Border().CenterVertical());
 
-    m_graphCombo =
-        new wxComboBox(exportTypeStaticBoxSizer->GetStaticBox(), wxID_ANY, wxString{},
-                       wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+    m_graphCombo = new wxComboBox(exportTypeStaticBoxSizer->GetStaticBox(), wxID_ANY, wxString{},
+                                  wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                                  wxCB_DROPDOWN | wxCB_READONLY, wxGenericValidator(&m_graphExt));
     m_graphCombo->Append(L"png");
     m_graphCombo->Append(L"jpg");
     m_graphCombo->Append(L"bmp");
@@ -449,7 +482,7 @@ void ExportAllDlg::CreateControls()
     m_graphCombo->Append(L"tga");
     m_graphCombo->Append(L"gif");
     m_graphCombo->Append(L"svg");
-    m_graphCombo->SetStringSelection(m_graphExt);
+    m_graphCombo->Append(L"webp");
     exportTypeBoxSizer->Add(m_graphCombo, wxSizerFlags{}.Border().CenterVertical());
 
     auto* imageButton = new wxButton(exportTypeStaticBoxSizer->GetStaticBox(),

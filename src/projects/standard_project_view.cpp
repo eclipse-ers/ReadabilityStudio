@@ -57,6 +57,7 @@
 #include "../Wisteria-Dataviz/src/import/html_encode.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/gridexportdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.h"
+#include "../Wisteria-Dataviz/src/util/clipboard_rtf.h"
 #include "../app/readability_app.h"
 #include "../graphs/schwartzgraph.h"
 #include "../results-format/project_report_format.h"
@@ -67,6 +68,7 @@
 #include "project_navigation_links.h"
 #include "standard_project_doc.h"
 #include "wx/richmsgdlg.h"
+#include <wx/clipbrd.h>
 #include <wx/webview.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -437,16 +439,17 @@ void ProjectView::OnExportAll([[maybe_unused]] wxCommandEvent& event)
     else
         {
         ExportAll(dlg.GetFolderPath(), dlg.GetExportListExt(), dlg.GetExportTextViewExt(),
-                  dlg.GetExportGraphExt(), dlg.IsExportingHardWordLists(),
-                  dlg.IsExportingSentencesBreakdown(), dlg.IsExportingTestResults(),
-                  dlg.IsExportingStatistics(), dlg.IsExportingGrammar(),
-                  dlg.IsExportingSightWords(), dlg.IsExportingLists(), dlg.IsExportingTextReports(),
-                  dlg.GetImageExportOptions());
+                  dlg.GetExportSummaryReportExt(), dlg.GetExportGraphExt(),
+                  dlg.IsExportingHardWordLists(), dlg.IsExportingSentencesBreakdown(),
+                  dlg.IsExportingTestResults(), dlg.IsExportingStatistics(),
+                  dlg.IsExportingGrammar(), dlg.IsExportingSightWords(), dlg.IsExportingLists(),
+                  dlg.IsExportingTextReports(), dlg.GetImageExportOptions());
         }
     doc->SetExportFile(dlg.GetFilePath());
     doc->SetExportFolder(dlg.GetFolderPath());
     ProjectDoc::SetExportListExt(dlg.GetExportListExt());
     ProjectDoc::SetExportTextViewExt(dlg.GetExportTextViewExt());
+    ProjectDoc::SetExportSummaryReportExt(dlg.GetExportSummaryReportExt());
     ProjectDoc::SetExportGraphExt(dlg.GetExportGraphExt());
     ProjectDoc::ExportHardWordLists(dlg.IsExportingHardWordLists());
     ProjectDoc::ExportSentencesBreakdown(dlg.IsExportingSentencesBreakdown());
@@ -978,23 +981,19 @@ void ProjectView::OnListDblClick(wxListEvent& event)
         // Find the first occurrence of the selected word.
         // First, look in the word breakdown section for the respective test window,
         // then the grammar section and finally the Dolch section.
-        wxWindow* theWindow = GetWordsBreakdownView().FindWindowById(
-            textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
+        wxWindow* theWindow = GetWordsBreakdownView().FindWindowById(textId, CLASSINFO(wxWebView));
         if (theWindow == nullptr)
             {
-            theWindow =
-                GetGrammarView().FindWindowById(textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
+            theWindow = GetGrammarView().FindWindowById(textId, CLASSINFO(wxWebView));
             }
         if (theWindow == nullptr)
             {
-            theWindow = GetDolchSightWordsView().FindWindowById(
-                textId, CLASSINFO(Wisteria::UI::FormattedTextCtrl));
+            theWindow = GetDolchSightWordsView().FindWindowById(textId, CLASSINFO(wxWebView));
             }
-        if ((theWindow != nullptr) &&
-            theWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
+        if ((theWindow != nullptr) && theWindow->IsKindOf(wxCLASSINFO(wxWebView)))
             {
-            auto* textWindow = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(theWindow);
-            textWindow->SetSelection(0, 0);
+            auto* textWindow = dynamic_cast<wxWebView*>(theWindow);
+            textWindow->ClearSelection();
             // If looking for an entire sentence, then don't use whole-word search.
             // Whole-word search behaves differently between platforms and won't work for
             // sentences under GTK+ as expected (because of the terminal period).
@@ -1003,11 +1002,11 @@ void ProjectView::OnListDblClick(wxListEvent& event)
                 event.GetId() == SENTENCES_CONJUNCTION_START_LIST_PAGE_ID ||
                 event.GetId() == OVERUSED_WORDS_BY_SENTENCE_LIST_PAGE_ID)
                 {
-                textWindow->FindText(searchText, true, false, false);
+                textWindow->Find(searchText, wxWEBVIEW_FIND_WRAP);
                 }
             else
                 {
-                textWindow->FindText(searchText, true, true, false);
+                textWindow->Find(searchText, wxWEBVIEW_FIND_WRAP | wxWEBVIEW_FIND_ENTIRE_WORD);
                 }
             // Search by label for custom word-list tests (the list and report have the same ID);
             // otherwise, search by ID.
@@ -1106,6 +1105,60 @@ void ProjectView::OnLaunchSourceFile([[maybe_unused]] wxRibbonButtonBarEvent& ev
         }
     }
 
+//-------------------------------------------------------
+bool ProjectView::IsHighlightedTextWindow(const wxWindow* window) const
+    {
+    const auto* doc = dynamic_cast<const ProjectDoc*>(GetDocument());
+    return (doc != nullptr && window != nullptr &&
+            doc->GetHighlightedTextBuffers().Find(window->GetId()) != nullptr);
+    }
+
+//-------------------------------------------------------
+void ProjectView::SaveWebViewReport(wxWebView* webview, const wxString& savePathNoExt,
+                                    const wxString& textExt) const
+    {
+    const auto* doc = dynamic_cast<const ProjectDoc*>(GetDocument());
+    // only highlighted-text windows have a paper-white RTF buffer registered
+    const auto* highlightedBuffers =
+        (doc != nullptr) ? doc->GetHighlightedTextBuffers().Find(webview->GetId()) : nullptr;
+    // don't silently save a different format than what was asked for
+    if (textExt.CmpNoCase(L".rtf") == 0 && highlightedBuffers == nullptr)
+        {
+        wxLogWarning(L"'%s' cannot be saved as RTF; saving as HTML instead.", webview->GetName());
+        }
+
+    if (textExt.CmpNoCase(L".pdf") == 0)
+        {
+        webview->PrintToPDF(savePathNoExt + L".pdf");
+        }
+    else if (textExt.CmpNoCase(L".rtf") == 0 && highlightedBuffers != nullptr)
+        {
+        const wxString savePath = savePathNoExt + L".rtf";
+        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+        wxFile file{ savePath, wxFile::write };
+        if (!file.Write(highlightedBuffers->m_rtf))
+            {
+            wxLogError(L"Failed to save report: (%s).", savePath);
+            }
+        }
+    else
+        {
+        const wxString savePath = savePathNoExt + L".htm";
+        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+        if (!htmlText.starts_with(L"<!DOCTYPE"))
+            {
+            htmlText.insert(0, L"<!DOCTYPE html>\n");
+            }
+        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
+        wxFile file{ savePath, wxFile::write };
+        if (!file.Write(htmlText))
+            {
+            wxLogError(L"Failed to save report: (%s).", savePath);
+            }
+        }
+    }
+
 // add/remove the icon to the list view on the side panel
 //-------------------------------------------------------
 void ProjectView::UpdateSideBarIcons()
@@ -1188,9 +1241,8 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_WORDS_BREAKDOWN_SECTION_ID, window->GetName(), window->GetId(),
-                (window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
-                 window->IsKindOf(wxCLASSINFO(wxWebView))) ?
-                    0 :
+                IsHighlightedTextWindow(window)                                               ? 0 :
+                window->IsKindOf(wxCLASSINFO(wxWebView))                                      ? 17 :
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                       ? 15 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::Histogram))) ? 6 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart)))  ? 16 :
@@ -1228,9 +1280,8 @@ void ProjectView::UpdateSideBarIcons()
             {
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_GRAMMAR_SECTION_ID, window->GetName(), window->GetId(),
-                (window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
-                 window->IsKindOf(wxCLASSINFO(wxWebView))) ?
-                    0 :
+                IsHighlightedTextWindow(window)                         ? 0 :
+                window->IsKindOf(wxCLASSINFO(wxWebView))                ? 17 :
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) ? 15 :
                                                                           9);
             }
@@ -1247,7 +1298,7 @@ void ProjectView::UpdateSideBarIcons()
 
             GetSideBar()->InsertSubItemById(
                 SIDEBAR_DOLCH_SECTION_ID, window->GetName(), window->GetId(),
-                window->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl))               ? 0 :
+                IsHighlightedTextWindow(window)                                              ? 0 :
                 window->IsKindOf(wxCLASSINFO(wxWebView))                                     ? 17 :
                 (isGraph && checkGraphType(window, wxCLASSINFO(Wisteria::Graphs::BarChart))) ? 16 :
                 window->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx))                      ? 15 :
@@ -1630,28 +1681,55 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
         auto* webview = dynamic_cast<wxWebView*>(GetActiveProjectWindow());
         webview->SetLabel(wxString::Format(L"%s [%s]", webview->GetName(),
                                            wxFileName::StripExtension(doc->GetTitle())));
+        // a registry hit (see IsHighlightedTextWindow) both marks this as a highlighted-text
+        // window and yields the buffers whose paper-white RTF backs saving and copying
+        const auto* highlightedBuffers = doc->GetHighlightedTextBuffers().Find(webview->GetId());
         if (event.GetId() == wxID_SAVE)
             {
+            // the file dialog's filter is the "RTF or HTML?" prompt; a registry hit
+            // adds the RTF option (filter order HTML, RTF, PDF); otherwise HTML, PDF
+            const wxString wildcard =
+                (highlightedBuffers != nullptr) ?
+                    _DT(L"HTML (*.htm;*.html)|*.htm;*.html|RTF (*.rtf)|*.rtf|PDF (*.pdf)|*.pdf") :
+                    _DT(L"HTML (*.htm;*.html)|*.htm;*.html|PDF (*.pdf)|*.pdf");
             wxFileDialog dialog(GetFrame(), _(L"Save As"), wxString{}, webview->GetLabel(),
-                                _DT(L"HTML (*.htm;*.html)|*.htm;*.html|PDF (*.pdf)|*.pdf"),
-                                wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+                                wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
             if (dialog.ShowModal() != wxID_OK)
                 {
                 return;
                 }
             wxFileName filePath = dialog.GetPath();
-            // PDF filter
-            if (dialog.GetFilterIndex() == 1)
+            const int filterIndex = dialog.GetFilterIndex();
+            const bool isRtf = (highlightedBuffers != nullptr && filterIndex == 1);
+            const bool isPdf =
+                (highlightedBuffers != nullptr) ? (filterIndex == 2) : (filterIndex == 1);
+            if (isPdf)
                 {
-                if (filePath.GetExt().empty())
+                // GTK/macOS don't rewrite the filename's extension when the filter
+                // changes, so force it to match the chosen format
+                if (filePath.GetExt().CmpNoCase(L"pdf") != 0)
                     {
                     filePath.SetExt(L"pdf");
                     }
                 webview->PrintToPDF(filePath.GetFullPath());
                 }
+            else if (isRtf)
+                {
+                if (filePath.GetExt().CmpNoCase(L"rtf") != 0)
+                    {
+                    filePath.SetExt(L"rtf");
+                    }
+                wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                wxFile file{ filePath.GetFullPath(), wxFile::write };
+                if (file.IsOpened())
+                    {
+                    file.Write(highlightedBuffers->m_rtf);
+                    }
+                }
             else
                 {
-                if (filePath.GetExt().empty())
+                if (filePath.GetExt().CmpNoCase(L"htm") != 0 &&
+                    filePath.GetExt().CmpNoCase(L"html") != 0)
                     {
                     filePath.SetExt(L"htm");
                     }
@@ -1661,14 +1739,37 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
                     {
                     htmlText.insert(0, L"<!DOCTYPE html>\n");
                     }
-                wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-                wxFile file(filePath.GetFullPath(), wxFile::write);
-                file.Write(htmlText);
+                wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                wxFile file{ filePath.GetFullPath(), wxFile::write };
+                if (file.IsOpened())
+                    {
+                    file.Write(htmlText);
+                    }
                 }
             }
         else if (event.GetId() == wxID_COPY)
             {
-            webview->Copy();
+            // copy the entire window to preserve formatting
+            if (wxTheClipboard->Open())
+                {
+                const wxString html = webview->GetPageSource();
+                lily_of_the_valley::html_extract_text htmlExtract;
+                const wchar_t* extracted = htmlExtract(html.wc_str(), html.length(), true, true);
+                const wxString plainText{ (extracted != nullptr) ? extracted : L"" };
+
+                auto* clipboardData = new wxDataObjectComposite();
+                // For a highlighted-text window the paper-white RTF is the preferred
+                // paste target. HTML and plain text back it up (some platforms won't
+                // paste RTF).
+                if (highlightedBuffers != nullptr && !highlightedBuffers->m_rtf.empty())
+                    {
+                    clipboardData->Add(new wxRtfDataObject(highlightedBuffers->m_rtf), true);
+                    }
+                clipboardData->Add(new wxHTMLDataObject(html));
+                clipboardData->Add(new wxTextDataObject(plainText));
+                wxTheClipboard->SetData(clipboardData);
+                wxTheClipboard->Close();
+                }
             }
         else if (event.GetId() == wxID_SELECTALL)
             {
@@ -1678,16 +1779,6 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             {
             webview->Print();
             }
-        }
-    else if ((GetActiveProjectWindow() != nullptr) &&
-             GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
-        {
-        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(GetActiveProjectWindow());
-        doc->UpdateTextWindowOptions(text);
-        text->SetTitleName(wxString::Format(L"%s [%s]", text->GetName(),
-                                            wxFileName::StripExtension(doc->GetTitle())));
-        const ParentEventBlocker blocker(text);
-        text->ProcessWindowEvent(event);
         }
     else if ((GetActiveProjectWindow() != nullptr) &&
              GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(ExplanationListCtrl)))
@@ -2753,9 +2844,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                         editSimpleListWithSummationAndExcludeButtonBarWindow->Show();
                         }
                     }
-                else if (GetActiveProjectWindow()->IsKindOf(
-                             wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
-                         GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
+                else if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2776,9 +2865,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
 
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(
-                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) ||
-                    GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
+                if (GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2819,8 +2906,7 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                 }
             if (GetRibbon() != nullptr)
                 {
-                if (GetActiveProjectWindow()->IsKindOf(
-                        wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)))
+                if (IsHighlightedTextWindow(GetActiveProjectWindow()))
                     {
                     editReportButtonBarWindow->Show();
                     }
@@ -2880,11 +2966,11 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
 
 //-------------------------------------------------------
 bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString textExt,
-                            wxString graphExt, const bool includeWordsBreakdown,
-                            const bool includeSentencesBreakdown, const bool includeTestScores,
-                            const bool includeStatistics, const bool includeGrammar,
-                            const bool includeSightWords, const bool includeLists,
-                            const bool includeTextReports,
+                            wxString summaryReportExt, wxString graphExt,
+                            const bool includeWordsBreakdown, const bool includeSentencesBreakdown,
+                            const bool includeTestScores, const bool includeStatistics,
+                            const bool includeGrammar, const bool includeSightWords,
+                            const bool includeLists, const bool includeTextReports,
                             const Wisteria::UI::ImageExportOptions& graphOptions)
     {
     const auto* doc = dynamic_cast<const ProjectDoc*>(GetDocument());
@@ -2913,6 +2999,15 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
     else if (textExt[0] != L'.')
         {
         textExt.insert(0, L".");
+        }
+
+    if (summaryReportExt.empty())
+        {
+        summaryReportExt = L".htm";
+        }
+    else if (summaryReportExt[0] != L'.')
+        {
+        summaryReportExt.insert(0, L".");
         }
 
     if (graphExt.empty())
@@ -2985,21 +3080,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         webview->SetLabel(
                             wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        const wxString savePath =
+                        const wxString savePathNoExt =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Readability Scores") +
-                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
-                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        if (!htmlText.starts_with(L"<!DOCTYPE"))
-                            {
-                            htmlText.insert(0, L"<!DOCTYPE html>\n");
-                            }
-                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
-                        wxFile file{ savePath, wxFile::write };
-                        if (!file.Write(htmlText))
-                            {
-                            wxLogError(L"Failed to save report: (%s).", savePath);
-                            }
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, summaryReportExt);
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)))
                         {
@@ -3042,21 +3126,10 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                         webview->SetLabel(
                             wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        const wxString savePath =
+                        const wxString savePathNoExt =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Summary Statistics") +
-                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
-                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        if (!htmlText.starts_with(L"<!DOCTYPE"))
-                            {
-                            htmlText.insert(0, L"<!DOCTYPE html>\n");
-                            }
-                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
-                        wxFile file{ savePath, wxFile::write };
-                        if (!file.Write(htmlText))
-                            {
-                            wxLogError(L"Failed to save report: (%s).", savePath);
-                            }
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, summaryReportExt);
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::ListCtrlEx)) &&
                              includeLists)
@@ -3181,38 +3254,16 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                 wxFileName::GetPathSeparator() + graphWindow->GetLabel() + graphExt,
                             graphOptions);
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                             includeTextReports)
-                        {
-                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
-                        text->SetTitleName(
-                            wxString::Format(L"%s [%s]", text->GetName(),
-                                             wxFileName::StripExtension(doc->GetTitle())));
-                        text->Save(folder + wxFileName::GetPathSeparator() +
-                                   _DT(L"Words Breakdown") + wxFileName::GetPathSeparator() +
-                                   text->GetTitleName() + textExt);
-                        }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
                         {
                         auto* webview = dynamic_cast<wxWebView*>(activeWindow);
                         webview->SetLabel(
                             wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        const wxString savePath =
+                        const wxString savePathNoExt =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Words Breakdown") +
-                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
-                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        if (!htmlText.starts_with(L"<!DOCTYPE"))
-                            {
-                            htmlText.insert(0, L"<!DOCTYPE html>\n");
-                            }
-                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
-                        wxFile file{ savePath, wxFile::write };
-                        if (!file.Write(htmlText))
-                            {
-                            wxLogError(L"Failed to save report: (%s).", savePath);
-                            }
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, textExt);
                         }
                     }
                 }
@@ -3245,37 +3296,16 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
                                    Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                             includeTextReports)
-                        {
-                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
-                        text->SetTitleName(
-                            wxString::Format(L"%s [%s]", text->GetName(),
-                                             wxFileName::StripExtension(doc->GetTitle())));
-                        text->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
-                                   wxFileName::GetPathSeparator() + text->GetTitleName() + textExt);
-                        }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
                         {
                         auto* webview = dynamic_cast<wxWebView*>(activeWindow);
                         webview->SetLabel(
                             wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        const wxString savePath = folder + wxFileName::GetPathSeparator() +
-                                                  _DT(L"Grammar") + wxFileName::GetPathSeparator() +
-                                                  webview->GetLabel() + L".htm";
-                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        if (!htmlText.starts_with(L"<!DOCTYPE"))
-                            {
-                            htmlText.insert(0, L"<!DOCTYPE html>\n");
-                            }
-                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
-                        wxFile file{ savePath, wxFile::write };
-                        if (!file.Write(htmlText))
-                            {
-                            wxLogError(L"Failed to save report: (%s).", savePath);
-                            }
+                        const wxString savePathNoExt =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Grammar") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, textExt);
                         }
                     }
                 }
@@ -3309,37 +3339,30 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                                        wxFileName::GetPathSeparator() + list->GetLabel() + listExt,
                                    Wisteria::UI::GridExportOptions());
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
+                    // this section mixes highlighted-text windows with the Dolch summary
+                    // report, and they follow different export formats
+                    else if (IsHighlightedTextWindow(activeWindow) && includeTextReports)
                         {
                         auto* webview = dynamic_cast<wxWebView*>(activeWindow);
                         webview->SetLabel(
                             wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        const wxString savePath =
+                        const wxString savePathNoExt =
                             folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
-                            wxFileName::GetPathSeparator() + webview->GetLabel() + L".htm";
-                        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
-                        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
-                        if (!htmlText.starts_with(L"<!DOCTYPE"))
-                            {
-                            htmlText.insert(0, L"<!DOCTYPE html>\n");
-                            }
-                        wxFileName{ savePath }.SetPermissions(wxS_DEFAULT);
-                        wxFile file{ savePath, wxFile::write };
-                        if (!file.Write(htmlText))
-                            {
-                            wxLogError(L"Failed to save report: (%s).", savePath);
-                            }
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, textExt);
                         }
-                    else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                             includeTextReports)
+                    else if (!IsHighlightedTextWindow(activeWindow) &&
+                             activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                         {
-                        auto* text = dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow);
-                        text->SetTitleName(
-                            wxString::Format(L"%s [%s]", text->GetName(),
+                        auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                        webview->SetLabel(
+                            wxString::Format(L"%s [%s]", webview->GetName(),
                                              wxFileName::StripExtension(doc->GetTitle())));
-                        text->Save(folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
-                                   wxFileName::GetPathSeparator() + text->GetTitleName() + textExt);
+                        const wxString savePathNoExt =
+                            folder + wxFileName::GetPathSeparator() + _DT(L"Sight Words") +
+                            wxFileName::GetPathSeparator() + webview->GetLabel();
+                        SaveWebViewReport(webview, savePathNoExt, summaryReportExt);
                         }
                     else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
                         {
@@ -3403,17 +3426,17 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
 
     lily_of_the_valley::html_encode_text htmlEncode;
     wxString outputText, textWindowStyleSection;
+    // the stylesheet is embedded (see below) rather than linked, so the report is a single
+    // self-contained file; the closing </head> is added once the style block is in place
     const wxString headSection =
         L"<head>" +
         wxString::Format(
             L"\n    <meta name='generator' content='%s %s' />"
             "\n    <title>%s</title>"
             "\n    <meta http-equiv='content-type' content='text/html; charset=utf-8' />"
-            "\n    <link rel='stylesheet' href='style.css'>"
-            "\n</head>",
+            "\n    <meta name='color-scheme' content='light dark' />",
             wxGetApp().GetAppDisplayName(), wxGetApp().GetAppVersion(), doc->GetTitle());
 
-    wchar_t textWindowStyleCounter = L'a';
     size_t sectionCounter = 0;
     size_t figureCounter = 0;
     size_t tableCounter = 0;
@@ -3465,29 +3488,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                       lily_of_the_valley::html_extract_text::get_body(htmlText);
     };
 
-    const auto formatTextWindow =
-        [&outputText, &htmlEncode, &textWindowStyleCounter, &textWindowStyleSection,
-         pageBreak](Wisteria::UI::FormattedTextCtrl* textWindow, const bool includeLeadingPageBreak)
-    {
-        if (textWindow == nullptr)
-            {
-            return;
-            }
-        std::wstring htmlText =
-            textWindow->GetUnthemedFormattedTextHtml(wxString(textWindowStyleCounter++))
-                .wc_string();
-        textWindowStyleSection +=
-            L"\n" + wxString(lily_of_the_valley::html_extract_text::get_style_section(htmlText));
-        htmlText = lily_of_the_valley::html_extract_text::get_body(htmlText);
-
-        outputText += wxString::Format(
-            L"\n%s<div class='caption'>%s</div>\n<div class='text-report-body'>%s</div>\n",
-            (includeLeadingPageBreak ? pageBreak : wxString{}),
-            htmlEncode({ textWindow->GetLabel().wc_str() }, true).c_str(), htmlText);
-    };
-
-    const auto formatWebViewReport = [&outputText, &htmlEncode, pageBreak](
-                                         wxWebView* webview, const bool includeLeadingPageBreak)
+    bool highlightStylesCaptured{ false };
+    const auto formatWebViewReport =
+        [this, &outputText, &htmlEncode, &textWindowStyleSection, &highlightStylesCaptured,
+         pageBreak](wxWebView* webview, const bool includeLeadingPageBreak)
     {
         if (webview == nullptr)
             {
@@ -3495,6 +3499,18 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             }
         std::wstring htmlText = webview->GetPageSource().ToStdWstring();
         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+        // a highlighted-text window emits its .hl-* styles as the first <style> block (ahead
+        // of the theme CSS); collect them once into the shared stylesheet so the combined
+        // report renders the highlighting. every such window in a project shares the same
+        // project-wide colors and full category set, so one capture covers them all. the
+        // other report webviews rely on the theme CSS in default.css
+        if (!highlightStylesCaptured && IsHighlightedTextWindow(webview))
+            {
+            textWindowStyleSection +=
+                L"\n" +
+                wxString{ lily_of_the_valley::html_extract_text::get_style_section(htmlText) };
+            highlightStylesCaptured = true;
+            }
         htmlText = lily_of_the_valley::html_extract_text::get_body(htmlText);
         outputText +=
             wxString::Format(L"\n%s<div class='caption'>%s</div>\n%s\n",
@@ -3616,13 +3632,6 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                       includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                         includeTextReports)
-                    {
-                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
-                                     includeLeadingPageBreak);
-                    includeLeadingPageBreak = true;
-                    }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
                     {
                     formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
@@ -3686,13 +3695,6 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                         includeTextReports)
-                    {
-                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
-                                     includeLeadingPageBreak);
-                    includeLeadingPageBreak = true;
-                    }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) && includeTextReports)
                     {
                     formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
@@ -3727,13 +3729,6 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     {
                     formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
                                         includeLeadingPageBreak);
-                    includeLeadingPageBreak = true;
-                    }
-                else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::UI::FormattedTextCtrl)) &&
-                         includeTextReports)
-                    {
-                    formatTextWindow(dynamic_cast<Wisteria::UI::FormattedTextCtrl*>(activeWindow),
-                                     includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3790,33 +3785,17 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         {
         toc += L"<a href='#dolch'>" + GetDolchLabel() + L"</a><br />\n";
         }
-    outputText.insert(0, L"<!DOCTYPE html>\n<html>\n" + headSection + L"\n<body>\n" + infoTable +
-                             L"\n<div class='toc-section no-print'>" + toc + L"</div>");
+    // embed the stylesheet: the report theme CSS (default.css plus the user's selected theme
+    // override) followed by the captured highlight rules, so the combined report is
+    // self-contained and matches what the windows render on screen
+    const wxString styleSection =
+        L"\n    <style>\n" +
+        ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
+                                         wxGetApp().GetAppOptions()->GetReportTheme()) +
+        textWindowStyleSection + L"\n    </style>\n</head>";
+    outputText.insert(0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection + L"\n<body>\n" +
+                             infoTable + L"\n<div class='toc-section no-print'>" + toc + L"</div>");
     outputText += L"\n</body>\n</html>";
-
-    // copy over the CSS file
-    const wxString cssTemplatePath = wxGetApp().FindResourceDirectory(_DT(L"report-themes")) +
-                                     wxFileName::GetPathSeparator() + L"default.css";
-    const wxString cssPath = filePath.GetPathWithSep() + L"style.css";
-    if (wxFileName::FileExists(cssTemplatePath))
-        {
-        if (!wxCopyFile(cssTemplatePath, cssPath, true))
-            {
-            wxLogWarning(L"Failed to copy CSS file '%s' to '%s'.", cssTemplatePath, cssPath);
-            }
-        else
-            {
-            // add text window styling to it
-            wxFile cssFile(cssPath, wxFile::OpenMode::write_append);
-            if (cssFile.IsOpened())
-                {
-                if (!cssFile.Write(textWindowStyleSection))
-                    {
-                    wxLogError(L"Failed to save CSS file: (%s).", cssPath);
-                    }
-                }
-            }
-        }
 
     wxFileName(filePath.GetFullPath()).SetPermissions(wxS_DEFAULT);
     wxFile file(filePath.GetFullPath(), wxFile::write);
