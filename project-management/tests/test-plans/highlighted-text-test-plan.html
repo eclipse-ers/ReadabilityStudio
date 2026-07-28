@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Highlighted-Text Window Test Plan &mdash; Readability Studio</title>
+<style>
+/* ==========================================================================
+   Palette drawn from the Readability Studio icon: a sunburst over an open
+   book. Orange rays, ember, bookmark coral, page cream, spine brown.
+   ========================================================================== */
+:root {
+  --sun:        #E87C0A;
+  --amber:      #F2A81D;
+  --ember:      #B8500F;
+  --coral:      #D9614F;
+  --cream:      #E9E1D0;
+  --spine:      #5A3A22;
+
+  --ground:     #FBF8F3;
+  --surface:    #FFFFFF;
+  --page:       #F4EDDF;
+  --ink:        #191410;
+  --ink-soft:   #574B40;
+  --ink-faint:  #8A7A6C;
+  --rule:       #DFD4C2;
+  --rule-soft:  #EBE2D3;
+
+  --accent:     var(--ember);
+  --accent-2:   var(--sun);
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, "Liberation Mono", monospace;
+
+  --measure: 70ch;
+  --step: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:    #14100C;
+    --surface:   #1D1813;
+    --page:      #26201A;
+    --ink:       #F0E7DA;
+    --ink-soft:  #C0B2A2;
+    --ink-faint: #8D7F70;
+    --rule:      #3A3128;
+    --rule-soft: #2C251E;
+    --cream:     #2E271F;
+    --accent:    var(--amber);
+    --accent-2:  var(--sun);
+    --coral:     #E5806F;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:    #14100C;
+  --surface:   #1D1813;
+  --page:      #26201A;
+  --ink:       #F0E7DA;
+  --ink-soft:  #C0B2A2;
+  --ink-faint: #8D7F70;
+  --rule:      #3A3128;
+  --rule-soft: #2C251E;
+  --cream:     #2E271F;
+  --accent:    var(--amber);
+  --accent-2:  var(--sun);
+  --coral:     #E5806F;
+}
+:root[data-theme="light"] {
+  --ground:    #FBF8F3;
+  --surface:   #FFFFFF;
+  --page:      #F4EDDF;
+  --ink:       #191410;
+  --ink-soft:  #574B40;
+  --ink-faint: #8A7A6C;
+  --rule:      #DFD4C2;
+  --rule-soft: #EBE2D3;
+  --cream:     #E9E1D0;
+  --accent:    var(--ember);
+  --accent-2:  var(--sun);
+  --coral:     #D9614F;
+}
+
+/* ---------- Base ---------------------------------------------------- */
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); }
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+strong { font-weight: 650; color: var(--ink); }
+code, kbd {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--cream);
+  padding: 0.08em 0.34em;
+  border-radius: 3px;
+}
+
+/* ---------- Masthead ------------------------------------------------ */
+
+.masthead {
+  position: relative;
+  overflow: hidden;
+  background: #191410;
+  color: #F5EDE0;
+  border-bottom: 3px solid var(--sun);
+}
+/* the icon's ray fan, thrown from the top-right corner */
+.masthead::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% -60% -10%;
+  background: repeating-conic-gradient(from 172deg at 96% -8%,
+      rgba(232,124,10,0)   0deg   2.1deg,
+      var(--amber)         2.1deg 3.4deg,
+      rgba(232,124,10,0)   3.4deg 4.6deg,
+      var(--ember)         4.6deg 5.6deg,
+      rgba(232,124,10,0)   5.6deg 7.4deg,
+      var(--sun)           7.4deg 8.8deg,
+      rgba(232,124,10,0)   8.8deg 11deg);
+  -webkit-mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.masthead::after {
+  content: "";
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  right: -6vw;
+  top: -17vw;
+  border-radius: 50%;
+  background: var(--ember);
+  pointer-events: none;
+}
+.masthead-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.6rem 1.5rem 2.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+.mark {
+  width: 78px;
+  height: 78px;
+  flex: none;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.45));
+}
+.masthead-text { flex: 1 1 22rem; min-width: 0; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0 0 0.5rem;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 1.4rem + 2.1vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0 0 0.7rem;
+  color: #FFF8EC;
+}
+.lede {
+  margin: 0;
+  max-width: 56ch;
+  color: #D9CDBC;
+  font-size: 1rem;
+}
+.lede em { color: #F7E3C6; font-style: normal; font-weight: 600; }
+
+/* ---------- Shell --------------------------------------------------- */
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1080px) {
+  .wrap {
+    grid-template-columns: 12.5rem minmax(0, var(--measure));
+    justify-content: center;
+    align-items: start;
+    gap: 4rem;
+  }
+}
+
+/* ---------- Section index ------------------------------------------- */
+
+.index {
+  display: none;
+  position: sticky;
+  top: 2rem;
+  padding-top: 3.4rem;
+  font-size: 0.83rem;
+}
+@media (min-width: 1080px) { .index { display: block; } }
+.index h2 {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.9rem;
+  font-weight: 600;
+}
+.index ol { list-style: none; margin: 0; padding: 0; }
+.index li { margin-bottom: 0.42rem; }
+.index a {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: 0.2rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  padding-left: 0.55rem;
+}
+.index a:hover { color: var(--accent); border-left-color: var(--accent-2); }
+.index .n {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  padding-top: 0.1em;
+}
+
+/* ---------- Main flow ----------------------------------------------- */
+
+.plan { min-width: 0; }
+.plan > * + * { margin-top: 1.15rem; }
+
+.plan h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 3.4rem 0 0.2rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  scroll-margin-top: 1.5rem;
+}
+.plan h2 .n {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--accent);
+  padding: 0.16em 0.5em;
+  border-radius: 3px;
+  flex: none;
+  letter-spacing: 0.02em;
+}
+.plan h3 {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 2.2rem 0 0.1rem;
+}
+.plan p { margin: 0; max-width: var(--measure); }
+
+/* setup note that opens a section */
+.setup {
+  margin: 1rem 0 0.4rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.setup p + p { margin-top: 0.5rem; }
+
+/* ---------- Checklists ---------------------------------------------- */
+
+.checks { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.checks li {
+  display: grid;
+  grid-template-columns: 1.15rem 3.1rem 1fr;
+  gap: 0 0.62rem;
+  padding: 0.62rem 0;
+  border-top: 1px solid var(--rule-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.checks li:first-child { border-top: 0; }
+
+.box {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.17rem;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 3px;
+  background: var(--surface);
+}
+.id {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding-top: 0.24em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.what { min-width: 0; }
+.what > p { margin: 0; }
+
+/* bookmark-ribbon tags, after the icon's red page marker */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+  margin-left: 0.45rem;
+  padding: 0.14em 0.42em 0.14em 0.5em;
+  color: var(--surface);
+  background: var(--coral);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  padding-bottom: 0.4em;
+}
+@media (prefers-color-scheme: dark) { .tag { color: #201812; } }
+:root[data-theme="dark"] .tag { color: #201812; }
+:root[data-theme="light"] .tag { color: var(--surface); }
+
+/* ---------- Platform strip ------------------------------------------ */
+
+.platforms {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.platforms li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 1.1rem 0.6rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.95rem;
+  break-inside: avoid;
+}
+.platforms .box { margin-top: 0; }
+
+/* ---------- Table ---------------------------------------------------- */
+
+.scroller {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88rem;
+  min-width: 38rem;
+}
+thead th {
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1.5px solid var(--rule);
+  background: var(--page);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 0.58rem 0.85rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+  width: 2.2rem;
+}
+td.win { font-weight: 650; }
+
+/* ---------- Fixtures ------------------------------------------------- */
+
+.fixtures {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.fixtures li {
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.fixtures .doc {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) { .fixtures .doc { color: var(--amber); } }
+:root[data-theme="dark"] .fixtures .doc { color: var(--amber); }
+:root[data-theme="light"] .fixtures .doc { color: var(--ember); }
+.fixtures .name { font-weight: 650; color: var(--ink); }
+
+/* ---------- Watch-for list ------------------------------------------- */
+
+.watch { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.watch li {
+  position: relative;
+  padding: 0.36rem 0 0.36rem 1.5rem;
+  max-width: var(--measure);
+}
+.watch li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 0.7rem;
+  height: 2px;
+  background: var(--accent-2);
+}
+
+/* ---------- Sign-off -------------------------------------------------- */
+
+.signoff {
+  margin-top: 3.5rem;
+  padding: 1.6rem 1.5rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  background: var(--surface);
+  break-inside: avoid;
+}
+.signoff h2 {
+  margin: 0 0 0.9rem;
+  border: 0;
+  padding: 0;
+  font-size: 1.3rem;
+}
+.signoff .platforms { margin-top: 0; }
+.sigline {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.sigline .field {
+  flex: 1 1 11rem;
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: 0.3rem;
+}
+
+/* ---------- Print ------------------------------------------------------ */
+
+@page { margin: 16mm 14mm; }
+
+@media print {
+  :root {
+    --ground: #FFFFFF;
+    --surface: #FFFFFF;
+    --page: #FFFFFF;
+    --cream: #FFFFFF;
+    --ink: #000000;
+    --ink-soft: #2B2B2B;
+    --ink-faint: #666666;
+    --rule: #999999;
+    --rule-soft: #CCCCCC;
+    --accent: #000000;
+  }
+  body { font-size: 9.6pt; line-height: 1.42; background: #FFF; }
+  .index { display: none; }
+  .wrap { display: block; max-width: none; padding: 0; }
+  .plan { max-width: none; }
+  .masthead {
+    background: #FFF;
+    color: #000;
+    border-bottom: 2px solid #000;
+  }
+  .masthead::before, .masthead::after { display: none; }
+  .masthead-inner { padding: 0 0 0.7rem; gap: 1rem; }
+  .masthead h1 { color: #000; font-size: 20pt; }
+  .lede { color: #2B2B2B; }
+  .lede em { color: #000; }
+  .eyebrow { color: #666; }
+  .mark { width: 52px; height: 52px; filter: none; }
+  /* keep units whole across the page break, LaTeX minipage style */
+  p { orphans: 3; widows: 3; }
+  .plan h2 {
+    margin-top: 1.6rem;
+    font-size: 13pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .plan h3 { break-after: avoid; page-break-after: avoid; }
+  .setup { break-after: avoid; page-break-after: avoid; }
+  .scroller, .watch li, .fixtures li, .platforms li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  .plan h2 .n {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    padding: 0 0.35em;
+  }
+  .id { color: #000; }
+  .tag {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    clip-path: none;
+    padding: 0 0.35em;
+  }
+  .setup { border-left: 3px solid #000; }
+  .box { border-color: #000; border-width: 1pt; }
+  .signoff { border-color: #000; }
+  /* drop the labels on paper and leave bare ruled lines to write on */
+  .sigline { margin-top: 2.6rem; gap: 1.2rem 2.5rem; }
+  .sigline .lbl { display: none; }
+  .sigline .field { min-height: 2.6rem; border-bottom: 1pt solid #000; }
+  a { color: #000; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <img class="mark" alt="" src="data:image/png;base64,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">
+    <div class="masthead-text">
+      <p class="eyebrow">Readability Studio &middot; Manual QA</p>
+      <h1>Highlighted-Text Window Test Plan</h1>
+      <p class="lede">The standard-project highlighted-text windows were rebuilt to render as
+        <em>adaptive HTML</em> instead of the previous rich-text&thinsp;/&thinsp;Pango control.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="index" aria-label="Sections">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span><span>Rendering &amp; correctness</span></a></li>
+      <li><a href="#s2"><span class="n">02</span><span>Highlight colors &amp; modes</span></a></li>
+      <li><a href="#s3"><span class="n">03</span><span>Theme &amp; accent color</span></a></li>
+      <li><a href="#s4"><span class="n">04</span><span>Print &amp; PDF</span></a></li>
+      <li><a href="#s5"><span class="n">05</span><span>Save (HTML&thinsp;/&thinsp;RTF)</span></a></li>
+      <li><a href="#s6"><span class="n">06</span><span>Copy&thinsp;/&thinsp;clipboard</span></a></li>
+      <li><a href="#s7"><span class="n">07</span><span>Combined report</span></a></li>
+      <li><a href="#s8"><span class="n">08</span><span>Refresh scenarios</span></a></li>
+      <li><a href="#s9"><span class="n">09</span><span>Large documents</span></a></li>
+      <li><a href="#s10"><span class="n">10</span><span>Guards &amp; lifecycle</span></a></li>
+      <li><a href="#s11"><span class="n">11</span><span>Regression paths</span></a></li>
+      <li><a href="#signoff"><span class="n">&mdash;</span><span>Sign-off</span></a></li>
+    </ol>
+  </nav>
+
+  <main class="plan">
+
+    <h3>What to watch for</h3>
+    <ul class="watch">
+      <li>The windows now <strong>follow the app&rsquo;s dark&thinsp;/&thinsp;light theme</strong> on screen.</li>
+      <li>They <strong>honor the selected report theme</strong>, including the colored accent bar on the legend.</li>
+      <li><strong>Saving to RTF and copying to the clipboard</strong> still work, and always come out
+        <strong>paper-white</strong> &mdash; a format meant for pasting into a word processor or printing,
+        regardless of the on-screen theme.</li>
+      <li><strong>Printing and Save-as-PDF</strong> always come out on white paper.</li>
+      <li>Very large documents display reliably.</li>
+      <li>Highlight colors and the two highlight modes (background vs.&nbsp;foreground) still apply.</li>
+    </ul>
+
+    <h3>Platforms</h3>
+    <p>Exercise every section on all three desktop platforms. Each renders these windows with a
+      different underlying engine, so theme, print, save, large-document, and Unicode behavior can
+      differ.</p>
+    <ul class="platforms">
+      <li><span class="box"></span>Windows</li>
+      <li><span class="box"></span>macOS</li>
+      <li><span class="box"></span>Linux</li>
+    </ul>
+
+    <h3>Windows under test</h3>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th class="num">#</th><th>Window label</th><th>Sidebar section</th><th>Trigger</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">1</td><td class="win">3-Syllable Report</td><td>Words Breakdown</td><td>3+ syllable words enabled, count &gt; 0</td></tr>
+          <tr><td class="num">2</td><td class="win">6-Character Report</td><td>Words Breakdown</td><td>6+ character words enabled, count &gt; 0</td></tr>
+          <tr><td class="num">3</td><td class="win">Dale-Chall (Unfamiliar) Report</td><td>Words Breakdown</td><td>English + DC-like test included</td></tr>
+          <tr><td class="num">4</td><td class="win">Spache (Unfamiliar) Report</td><td>Words Breakdown</td><td>English + Spache included</td></tr>
+          <tr><td class="num">5</td><td class="win">Harris-Jacobson (Unfamiliar) Report</td><td>Words Breakdown</td><td>English + H-J included</td></tr>
+          <tr><td class="num">6</td><td class="win">Highlighted Report <span style="font-weight:400">(custom test)</span></td><td>Words Breakdown</td><td>one per custom word test</td></tr>
+          <tr><td class="num">7</td><td class="win">Highlighted Report <span style="font-weight:400">(grammar&thinsp;/&thinsp;wordiness)</span></td><td>Grammar</td><td>grammar highlighted report enabled</td></tr>
+          <tr><td class="num">8</td><td class="win">Highlighted Dolch Words</td><td>Dolch Sight Words</td><td>Dolch words included</td></tr>
+          <tr><td class="num">9</td><td class="win">Highlighted Non-Dolch Words</td><td>Dolch Sight Words</td><td>Dolch words included</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Suggested test fixtures</h3>
+    <ul class="fixtures">
+      <li><span class="doc">Doc A</span><span class="name">Small English sample.</span> A few
+        paragraphs with known hard words, a passive-voice sentence, a wordy phrase, a misspelling,
+        and some Dolch words. Fast to eyeball for correctness.</li>
+      <li><span class="doc">Doc B</span><span class="name">Book-length English document.</span> Tens
+        of thousands of words, for the large-document and performance cases.</li>
+      <li><span class="doc">Doc C</span><span class="name">Leading indentation and blank lines.</span>
+        Verifies whitespace and line breaks are preserved.</li>
+      <li><span class="doc">Doc D</span><span class="name">Shrinks after re-analysis.</span> A short
+        document that becomes much shorter (e.g.&nbsp;exclude most text), for the shrink-refresh case.</li>
+      <li><span class="doc">Doc E</span><span class="name">Non-English&thinsp;/&thinsp;Unicode.</span>
+        Spanish or German with accented letters, plus a non-Latin script such as Greek, Cyrillic, or
+        CJK, to exercise Unicode content.</li>
+    </ul>
+
+    <!-- ============================================================== -->
+
+    <h2 id="s1"><span class="n">01</span>Rendering &amp; correctness</h2>
+    <div class="setup">
+      <p>Open <strong>Doc A</strong>. Enable every relevant test&thinsp;/&thinsp;section (DC, Spache,
+        H-J, 3-syllable, 6-char, a custom word test, grammar highlighted report, Dolch). Visit each
+        window in the sidebar.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">1.1</span><div class="what"><p>Each of the 9 windows renders with visible highlighted words (no blank page, no raw markup shown as text).</p></div></li>
+      <li><span class="box"></span><span class="id">1.2</span><div class="what"><p>The correct words are highlighted per window (e.g.&nbsp;3-syllable window highlights only 3+ syllable words; Dolch window highlights Dolch words; grammar window highlights long sentences, errors, and wordy phrases).</p></div></li>
+      <li><span class="box"></span><span class="id">1.3</span><div class="what"><p>The <strong>legend appears as a banner card with a colored accent bar down the side</strong>, matching the look of the app&rsquo;s other reports.</p></div></li>
+      <li><span class="box"></span><span class="id">1.4</span><div class="what"><p>Legend swatches match the highlight colors actually used in the body, and their labels are correct (e.g.&nbsp;difficult words, error&thinsp;/&thinsp;wordiness categories, the 7 Dolch categories).</p></div></li>
+      <li><span class="box"></span><span class="id">1.5</span><div class="what"><p><strong>Whitespace &amp; line breaks preserved</strong> (open <strong>Doc C</strong>): paragraph indentation and line breaks appear; text is <em>not</em> collapsed to a single run. Blank lines create vertical spacing.</p></div></li>
+      <li><span class="box"></span><span class="id">1.6</span><div class="what"><p>Body font family, size, and weight reflect the text-view font (see <a href="#s8">8.3</a>), not a default font.</p></div></li>
+      <li><span class="box"></span><span class="id">1.7</span><div class="what"><p>No white flash when a window is first shown; it appears already painted.</p></div></li>
+      <li><span class="box"></span><span class="id">1.8</span><div class="what"><p>A window whose section is toggled <strong>off</strong> (e.g.&nbsp;disable the 6-char report) is removed from the sidebar; toggling it back on re-creates it.</p></div></li>
+    </ul>
+
+    <h2 id="s2"><span class="n">02</span>Highlight colors &amp; modes</h2>
+    <div class="setup">
+      <p><strong>Tools &rsaquo; Options &rsaquo; highlighting settings.</strong> There are two modes,
+        <strong>background highlight</strong> and <strong>foreground highlight</strong>, plus
+        individual color pickers for default&thinsp;/&thinsp;error&thinsp;/&thinsp;style&thinsp;/&thinsp;excluded
+        and the 7 Dolch categories.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">2.1</span><div class="what"><p><strong>Background mode</strong>, change the <em>default</em> highlight color (e.g.&nbsp;to yellow). Re-open the windows: highlighted words show the chosen background color with legible text on the swatch.</p></div></li>
+      <li><span class="box"></span><span class="id">2.2</span><div class="what"><p><strong>Foreground mode</strong>, change the default color: the highlighted <strong>text</strong> itself is recolored (no background fill).</p></div></li>
+      <li><span class="box"></span><span class="id">2.3</span><div class="what"><p>Change <strong>each</strong> category color (error, style&thinsp;/&thinsp;wordiness, excluded, and each of the 7 Dolch categories) and confirm the corresponding words and legend swatches update.</p></div></li>
+      <li><span class="box"></span><span class="id">2.4</span><div class="what"><p>Switch between <strong>background and foreground</strong> mode and confirm the rendering style flips for all windows without needing a re-analysis.</p></div></li>
+      <li><span class="box"></span><span class="id">2.5</span><div class="what"><p>Choose an <strong>excluded-text</strong> color; confirm excluded&thinsp;/&thinsp;ignored regions render with it (grammar and unfamiliar-word windows).</p></div></li>
+    </ul>
+
+    <h2 id="s3"><span class="n">03</span>Theme, dark&thinsp;/&thinsp;light, and the accent color</h2>
+    <div class="setup">
+      <p>Two independent scenarios: the <strong>OS light&thinsp;/&thinsp;dark</strong> setting, and the
+        app&rsquo;s <strong>report theme</strong> (Tools &rsaquo; Options &rsaquo; report theme).</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">3.1</span><div class="what"><p>Switch the OS to <strong>dark</strong>, then <strong>light</strong>, with a window open. Page background and text follow the theme; no re-analysis required.</p></div></li>
+      <li><span class="box"></span><span class="id">3.2</span><div class="what"><p><strong>Background mode across themes:</strong> swatches keep their fixed color and stay legible in <em>both</em> light and dark.</p></div></li>
+      <li><span class="box"></span><span class="id">3.3</span><div class="what"><p><strong>Foreground mode across themes:</strong> pick a <strong>light</strong> highlight color, then confirm the highlighted <strong>text</strong> stays readable in <em>both</em> light and dark.<span class="tag">highest risk</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.4</span><div class="what"><p><strong>Legend accent color:</strong> with a window open, change the <strong>report theme</strong> (e.g.&nbsp;default to fruit salad). The <strong>legend accent bar recolors to the new theme&rsquo;s accent color</strong> without re-analyzing the document.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.5</span><div class="what"><p>Change the theme with <strong>multiple projects open</strong>; confirm every open project&rsquo;s windows update, not just the active one.</p></div></li>
+      <li><span class="box"></span><span class="id">3.6</span><div class="what"><p>After a theme change, confirm body text and highlight colors are also consistent with the new theme, not just the legend.</p></div></li>
+    </ul>
+
+    <h2 id="s4"><span class="n">04</span>Print &amp; PDF</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">4.1</span><div class="what"><p><strong>Print preview</strong> a window (e.g.&nbsp;grammar). Output is on <strong>white paper</strong>, highlights legible.</p></div></li>
+      <li><span class="box"></span><span class="id">4.2</span><div class="what"><p><strong>Print</strong> to a physical or virtual printer &mdash; same white-paper result.</p></div></li>
+      <li><span class="box"></span><span class="id">4.3</span><div class="what"><p><strong>Save as PDF</strong> &mdash; resulting PDF is white-paper and readable.</p></div></li>
+      <li><span class="box"></span><span class="id">4.4</span><div class="what"><p>Print a window while the app is in <strong>dark mode</strong> &mdash; still prints light, not a dark page.</p></div></li>
+      <li><span class="box"></span><span class="id">4.5</span><div class="what"><p>Accept the loss: no custom header, footer, or watermark on these windows (expected).</p></div></li>
+    </ul>
+
+    <h2 id="s5"><span class="n">05</span>Save (HTML&thinsp;/&thinsp;RTF)</h2>
+    <div class="setup">
+      <p>Save from a window&rsquo;s toolbar or menu. The file type in the save dialog is the format
+        choice (HTML&thinsp;/&thinsp;RTF&thinsp;/&thinsp;PDF).</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">5.1</span><div class="what"><p>Save as <code>.htm</code>; open the file standalone in a browser &mdash; it renders correctly, adapts to light&thinsp;/&thinsp;dark, with the right highlights.</p></div></li>
+      <li><span class="box"></span><span class="id">5.2</span><div class="what"><p>Save as <code>.rtf</code>; open in <strong>Word</strong> and <strong>LibreOffice Writer</strong> &mdash; opens on <strong>white paper</strong>, highlight colors legible in both.</p></div></li>
+      <li><span class="box"></span><span class="id">5.3</span><div class="what"><p><strong>Foreground-mode light color in RTF:</strong> with foreground mode and a light color, saved RTF shows the color <strong>darkened</strong> so it reads on white (not washed out).</p></div></li>
+      <li><span class="box"></span><span class="id">5.4</span><div class="what"><p>Save as <code>.pdf</code> from the save dialog &mdash; white paper, readable.</p></div></li>
+      <li><span class="box"></span><span class="id">5.5</span><div class="what"><p>Save the <strong>grammar</strong> and a <strong>Dolch</strong> window as RTF and confirm multi-category coloring survives the round trip.</p></div></li>
+      <li><span class="box"></span><span class="id">5.6</span><div class="what"><p>Save <strong>Doc E</strong> as <code>.htm</code> and <code>.rtf</code>; confirm accented and non-Latin characters render correctly in both (no garbled text).</p></div></li>
+      <li><span class="box"></span><span class="id">5.7</span><div class="what"><p><strong>Filter list depends on the window:</strong> a highlighted-text window&rsquo;s save dialog offers <strong>HTML, RTF, PDF</strong>; a <strong>summary report</strong> window (test scores, statistics) offers only <strong>HTML, PDF</strong> &mdash; no RTF entry.</p></div></li>
+      <li><span class="box"></span><span class="id">5.8</span><div class="what"><p><strong>Filter drives the extension:</strong> type a filename with the <em>wrong</em> extension (or none) and pick a different filter &mdash; the saved file gets the filter&rsquo;s extension, and the content matches that format. Check each filter on each platform (macOS&thinsp;/&thinsp;GTK don&rsquo;t rewrite the name themselves).</p></div></li>
+      <li><span class="box"></span><span class="id">5.9</span><div class="what"><p>Save to a path in a <strong>folder that doesn&rsquo;t exist yet</strong> &mdash; reported as a failure rather than silently doing nothing (the manual Save does not create folders; the Lua save does &mdash; see <a href="#s11">11.1</a>).</p></div></li>
+    </ul>
+
+    <h2 id="s6"><span class="n">06</span>Copy&thinsp;/&thinsp;clipboard</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">6.1</span><div class="what"><p><strong>Copy</strong> from a window, paste into <strong>Word</strong> and <strong>LibreOffice Writer</strong> &mdash; rich formatting arrives with <strong>paper-white</strong> highlight colors in both.</p></div></li>
+      <li><span class="box"></span><span class="id">6.2</span><div class="what"><p><strong>Copy always copies the whole window</strong>, by design: select a <strong>partial</strong> range and Copy, then paste into Word and LibreOffice Writer &mdash; the <em>entire</em> report arrives, not the selection. Confirm this on all three platforms, and that nothing crashes.</p></div></li>
+      <li><span class="box"></span><span class="id">6.3</span><div class="what"><p>Paste into a plain-text editor &mdash; sensible plain text, no markup leakage (no CSS from the page&rsquo;s <code>&lt;style&gt;</code> blocks, no tags).</p></div></li>
+      <li><span class="box"></span><span class="id">6.4</span><div class="what"><p>Copy from <strong>Doc E</strong> and paste; confirm Unicode characters survive to the clipboard.</p></div></li>
+      <li><span class="box"></span><span class="id">6.5</span><div class="what"><p>Copy from a <strong>summary report</strong> window (test scores, statistics) &mdash; still pastes as HTML&thinsp;/&thinsp;plain text (no RTF buffer exists for those); no crash.</p></div></li>
+    </ul>
+
+    <h2 id="s7"><span class="n">07</span>Combined report&thinsp;/&thinsp;Export all</h2>
+    <div class="setup">
+      <p>The export dialog&rsquo;s format combos changed: <strong>text reports</strong> now offer
+        HTML&thinsp;/&thinsp;RTF&thinsp;/&thinsp;<strong>PDF</strong>, there is a new
+        <strong>&ldquo;Export summary reports as&rdquo;</strong> (HTML&thinsp;/&thinsp;PDF) for the
+        scores and statistics windows, <strong>lists</strong> gained PDF, and <strong>graphs</strong>
+        gained WebP. The combos are now driven by validators rather than read manually on OK.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">7.1</span><div class="what"><p><strong>Save all</strong>&thinsp;/&thinsp;<strong>Export combined HTML report</strong>; confirm the highlighted-text windows appear in the aggregated report with their correct captions.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2</span><div class="what"><p>Export-all to a <strong>folder</strong>; the per-window text files are written (HTML&thinsp;/&thinsp;RTF&thinsp;/&thinsp;PDF per the chosen text extension) and open correctly.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2a</span><div class="what"><p><strong>Every combo round-trips:</strong> set each of text reports (htm&thinsp;/&thinsp;rtf&thinsp;/&thinsp;pdf), summary reports (htm&thinsp;/&thinsp;pdf), lists (htm&thinsp;/&thinsp;txt&thinsp;/&thinsp;tex&thinsp;/&thinsp;pdf), and graphs (png&thinsp;/&thinsp;jpg&thinsp;/&thinsp;bmp&thinsp;/&thinsp;tif&thinsp;/&thinsp;tga&thinsp;/&thinsp;gif&thinsp;/&thinsp;svg&thinsp;/&thinsp;<strong>webp</strong>), export, and confirm the files are written in that format and actually open.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2b</span><div class="what"><p><strong>Choices persist:</strong> the combos come up on the selected values next time the dialog is opened, <strong>and after restarting the app</strong> (they are written to the options file). A value saved by an older build that is no longer in a list must not leave the combo blank or break the export.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2c</span><div class="what"><p><strong>Summary reports vs.&nbsp;text reports are independent:</strong> choosing PDF for summary reports leaves the highlighted-text files in the text-report format, and vice versa.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2d</span><div class="what"><p><strong>RTF where it belongs:</strong> with text reports set to <strong>rtf</strong>, every highlighted-text window in Words Breakdown, Grammar, and Sight Words is written as <code>.rtf</code> &mdash; none silently fall back to <code>.htm</code>. Confirm no zero-byte or mislabeled files.</p></div></li>
+      <li><span class="box"></span><span class="id">7.3</span><div class="what"><p><strong>Highlighting survives export:</strong> the highlighted-text sections of the combined report show their <strong>highlight colors and legend swatches</strong> &mdash; not just the plain words. Confirm the colors match the on-screen windows and the selected <strong>report theme</strong> (banner&thinsp;/&thinsp;accent), including a <strong>non-default theme</strong> (e.g.&nbsp;fruit salad or autumn).<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">7.4</span><div class="what"><p><strong>Self-contained + adapts to light&thinsp;/&thinsp;dark:</strong> open the exported combined report <strong>standalone</strong> in a browser (no sibling <code>style.css</code> needed &mdash; the CSS is embedded) and toggle the browser or OS between <strong>light and dark</strong>. The page background and text follow the theme, <strong>foreground-mode</strong> highlighted text stays legible in both, and <strong>background-mode</strong> swatches stay legible in both. This holds <strong>whether the app was in light or dark mode when the report was exported</strong> (export in each mode and confirm the file adapts either way).<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">7.5</span><div class="what"><p><strong>Print&thinsp;/&thinsp;PDF of the exported report stays white paper</strong>, even when the report is being viewed in dark mode.</p></div></li>
+      <li><span class="box"></span><span class="id">7.6</span><div class="what"><p><strong>Graph figures inside a dark-viewed report:</strong> the figures are raster images baked at export time, so they do <em>not</em> follow the reader&rsquo;s theme. Export with the app in <strong>light</strong> and in <strong>dark</strong> mode, view each report in both, and confirm the figures stay legible (no dark-on-dark, no transparent background swallowing axis labels).</p></div></li>
+      <li><span class="box"></span><span class="id">7.7</span><div class="what"><p><strong>Body font:</strong> the highlighted-text sections of the combined report use the <em>report theme&rsquo;s</em> font, not the text-view font (unlike the on-screen windows &mdash; see <a href="#s1">1.6</a>). Confirm this is the intended look and that nothing renders at a broken size.</p></div></li>
+      <li><span class="box"></span><span class="id">7.8</span><div class="what"><p>Export-all with <strong>text reports unchecked</strong> &mdash; the combined report still renders, with no leftover empty highlight styling or dangling captions.</p></div></li>
+    </ul>
+
+    <h2 id="s8"><span class="n">08</span>Refresh scenarios</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">8.1</span><div class="what"><p><strong>Re-analyze</strong> (reload source, or change an analysis option that reindexes): all windows rebuild with correct content; no stale page, no leftover from the prior analysis.</p></div></li>
+      <li><span class="box"></span><span class="id">8.2</span><div class="what"><p><strong>Change a highlight color or mode</strong> (<a href="#s2">section 2</a>): windows update without a re-analysis.</p></div></li>
+      <li><span class="box"></span><span class="id">8.3</span><div class="what"><p><strong>Change the text-view font</strong> (family&thinsp;/&thinsp;size&thinsp;/&thinsp;weight): windows re-render with the new font; a <strong>bold</strong> text-view font does not double-bold or corrupt the grammar highlighting.</p></div></li>
+      <li><span class="box"></span><span class="id">8.4</span><div class="what"><p><strong>Theme change</strong> (<a href="#s3">3.4</a>): windows update to the new theme.</p></div></li>
+      <li><span class="box"></span><span class="id">8.5</span><div class="what"><p>Trigger several refreshes in a row on the same window &mdash; the page always shows the current content, never a progressively stale one.</p></div></li>
+      <li><span class="box"></span><span class="id">8.6</span><div class="what"><p>Refresh <strong>Doc D</strong> (document becomes much shorter): no crash; window shows the reduced content.</p></div></li>
+      <li><span class="box"></span><span class="id">8.7</span><div class="what"><p><strong>Cross-project isolation:</strong> open <strong>three different projects concurrently</strong> (e.g.&nbsp;Doc A, Doc B, and Doc E), each with highlighted-text windows. Refresh or re-analyze each one in turn, then revisit every window in all three projects. Confirm each window shows <strong>its own project&rsquo;s</strong> content &mdash; no window ever displays the highlighted text from another open project. (These windows are keyed off process-wide state and reused window IDs, so a mismatch would surface here.)<span class="tag">key case</span></p></div></li>
+    </ul>
+
+    <h2 id="s9"><span class="n">09</span>Large documents &amp; performance</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">9.1</span><div class="what"><p>Open <strong>Doc B</strong> (book-length) with <strong>all</strong> windows enabled. All windows load and render their full text (no truncation).</p></div></li>
+      <li><span class="box"></span><span class="id">9.2</span><div class="what"><p>Loading Doc B does not spike memory to an unreasonable level while the windows build.</p></div></li>
+      <li><span class="box"></span><span class="id">9.3</span><div class="what"><p>Note the load time on Doc B; it should be tolerable, not multi-minute.</p></div></li>
+      <li><span class="box"></span><span class="id">9.4</span><div class="what"><p>Re-analyze Doc B a few times; confirm memory returns to baseline afterward (no runaway growth across refreshes).</p></div></li>
+      <li><span class="box"></span><span class="id">9.5</span><div class="what"><p>Open and close several projects with these windows; confirm memory is released with the closed projects.</p></div></li>
+      <li><span class="box"></span><span class="id">9.6</span><div class="what"><p><strong>Cached page cleanup:</strong> refresh <strong>Doc B</strong> many times in a row, then close the project. Each refresh replaces the windows&rsquo; cached pages rather than accumulating them, and closing the project drops the rest &mdash; memory should return to baseline, not creep upward per refresh.</p></div></li>
+    </ul>
+
+    <h2 id="s10"><span class="n">10</span>Read-only guards &amp; lifecycle</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">10.1</span><div class="what"><p><strong>Right-click</strong> a window &mdash; no browser-style context menu (reload, save, view source, developer tools) appears.</p></div></li>
+      <li><span class="box"></span><span class="id">10.2</span><div class="what"><p>These are read-only reports &mdash; nothing in the page navigates away or blanks the window when interacted with.</p></div></li>
+      <li><span class="box"></span><span class="id">10.3</span><div class="what"><p><strong>Find</strong> within a window works (find text, wrap-around); note any whole-word behavior differences from the old control.</p></div></li>
+      <li><span class="box"></span><span class="id">10.4</span><div class="what"><p>Sidebar <strong>icon</strong>, <strong>ribbon</strong> buttons (colors, font, save, copy, print), and window <strong>selection and sizing</strong> all behave as before for these windows.</p></div></li>
+    </ul>
+
+    <h2 id="s11"><span class="n">11</span>Regression&thinsp;/&thinsp;untouched paths</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">11.1</span><div class="what"><p><strong>Scripted (Lua) save</strong> of a highlighted window honors <code>.rtf</code>&thinsp;/&thinsp;<code>.htm</code>&thinsp;/&thinsp;<code>.pdf</code> and produces the same output as the manual Save. Unlike the manual Save, it <strong>creates missing folders</strong> in the target path &mdash; verify that, and that the returned success&thinsp;/&thinsp;failure value is accurate (including a path that cannot be written).</p></div></li>
+      <li><span class="box"></span><span class="id">11.5</span><div class="what"><p><strong>Scripted export-all</strong> uses the saved summary-report extension alongside the list, text, and graph extensions; confirm the summary reports come out in the configured format.</p></div></li>
+      <li><span class="box"></span><span class="id">11.2</span><div class="what"><p>The <strong>other report windows</strong> (score&thinsp;/&thinsp;summary report, explanations, batch reports) are unaffected; they still render and theme correctly.</p></div></li>
+      <li><span class="box"></span><span class="id">11.3</span><div class="what"><p><strong>Non-English&thinsp;/&thinsp;non-Dolch project:</strong> DC, Spache, H-J, and Dolch windows are correctly absent; the language-agnostic windows (3-syllable, 6-char, grammar) still work.</p></div></li>
+      <li><span class="box"></span><span class="id">11.4</span><div class="what"><p><strong>Unicode content (Doc E):</strong> all windows render accented and non-Latin characters correctly in the highlighted body and the legend labels (no garbled text, no missing glyphs).</p></div></li>
+    </ul>
+
+    <section class="signoff" id="signoff">
+      <h2>Sign-off</h2>
+      <ul class="platforms">
+        <li><span class="box"></span>All sections pass on Windows</li>
+        <li><span class="box"></span>All sections pass on macOS</li>
+        <li><span class="box"></span>All sections pass on Linux</li>
+      </ul>
+      <div class="sigline">
+        <span class="field"><span class="lbl">Tester</span></span>
+        <span class="field"><span class="lbl">Build</span></span>
+        <span class="field"><span class="lbl">Date</span></span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
