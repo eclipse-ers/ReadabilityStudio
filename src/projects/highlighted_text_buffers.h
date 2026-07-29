@@ -15,6 +15,7 @@
 #define HIGHLIGHTED_TEXT_BUFFERS_H
 
 #include <map>
+#include <vector>
 #include <wx/string.h>
 #include <wx/webview.h>
 
@@ -53,6 +54,9 @@ class HighlightedTextBufferMap
     /// @returns The buffers for @p windowId, or @c nullptr if none are stored.
     [[nodiscard]]
     const HighlightedTextBuffers* Find(const wxWindowID windowId) const;
+    /// @returns The window IDs of every currently cached highlighted-text window.
+    [[nodiscard]]
+    std::vector<wxWindowID> GetWindowIds() const;
     /// @brief Removes every window's buffers and cached pages.
     void Clear();
 

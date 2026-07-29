@@ -47,6 +47,18 @@ const HighlightedTextBuffers* HighlightedTextBufferMap::Find(const wxWindowID wi
     }
 
 //-------------------------------------------------------
+std::vector<wxWindowID> HighlightedTextBufferMap::GetWindowIds() const
+    {
+    std::vector<wxWindowID> ids;
+    ids.reserve(m_buffers.size());
+    for (const auto& [id, buffer] : m_buffers)
+        {
+        ids.push_back(id);
+        }
+    return ids;
+    }
+
+//-------------------------------------------------------
 void HighlightedTextBufferMap::Clear()
     {
     for (const auto& buffer : m_buffers)

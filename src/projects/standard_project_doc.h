@@ -378,6 +378,8 @@ class ProjectDoc final : public BaseProjectDoc
 
     void UpdateSourceFileModifiedTime();
     void OnRealTimeTimer([[maybe_unused]] wxTimerEvent& event);
+    // restores a highlighted-text window's scroll offset once its refreshed page loads
+    void OnHighlightedTextLoaded(wxWebViewEvent& event);
 
     std::shared_ptr<Wisteria::UI::ListCtrlExNumericDataProvider> m_dupWordData{
         std::make_shared<Wisteria::UI::ListCtrlExNumericDataProvider>()
@@ -424,6 +426,8 @@ class ProjectDoc final : public BaseProjectDoc
     // HTML (display/export) and paper-white RTF (export) buffers for the
     // highlighted-text windows, keyed by window ID
     HighlightedTextBufferMap m_highlightedTextBuffers;
+    // pending scroll offsets to restore after a highlighted-text refresh, keyed by window ID
+    std::map<wxWindowID, int> m_highlightedScrollOffsets;
 
     wxDateTime m_sourceFileLastModified;
     constexpr static int REALTIME_UPDATE_INTERVAL{ 5000 }; // in milliseconds

@@ -5685,6 +5685,25 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         {
         auto* view = dynamic_cast<ProjectView*>(GetFirstView());
 
+        // capture each still-live window's scroll position before its page is replaced;
+        // OnHighlightedTextLoaded restores it once the refreshed page loads
+        m_highlightedScrollOffsets.clear();
+        if (view != nullptr)
+            {
+            for (const auto id : GetHighlightedTextBuffers().GetWindowIds())
+                {
+                auto* window =
+                    dynamic_cast<wxWebView*>(wxWindow::FindWindowById(id, view->GetSplitter()));
+                wxString out;
+                long y{ 0 };
+                if (window != nullptr && window->RunScript(L"window.scrollY.toString();", &out) &&
+                    out.ToLong(&y))
+                    {
+                    m_highlightedScrollOffsets[id] = static_cast<int>(y);
+                    }
+                }
+            }
+
         // this rebuilds every highlighted window, so drop the previous buffers and
         // their cached 'memory:' pages; each window is repopulated via SetContent below
         GetHighlightedTextBuffers().Clear();
@@ -6426,12 +6445,32 @@ wxWebView* ProjectDoc::CreateHighlightedTextWindow(wxWindow* parent, const int I
         wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler(_DT(L"memory"))));
     textWindow->Create(parent, ID);
     textWindow->SetName(label);
+    textWindow->Bind(wxEVT_WEBVIEW_LOADED, &ProjectDoc::OnHighlightedTextLoaded, this);
     textWindow->Hide();
     // Read-only report, so hide the browser's context menu. Don't block navigation;
     // there are no links to follow, and some backends rewrite the 'memory:' url
     // internally, which a scheme-based veto would wrongly cancel.
     textWindow->EnableContextMenu(false);
     return textWindow;
+    }
+
+//-------------------------------------------------------
+void ProjectDoc::OnHighlightedTextLoaded(wxWebViewEvent& event)
+    {
+    auto* window = dynamic_cast<wxWebView*>(event.GetEventObject());
+    if (window != nullptr)
+        {
+        const auto pos = m_highlightedScrollOffsets.find(window->GetId());
+        if (pos != m_highlightedScrollOffsets.cend())
+            {
+            const auto& [windowId, scrollY] = *pos;
+            window->RunScriptAsync(wxString::Format(L"window.scrollTo(0, %d);", scrollY));
+            // erase on use: WEBVIEW_LOADED also fires again later (next refresh,
+            // in-page navigation), and this offset shouldn't apply then
+            m_highlightedScrollOffsets.erase(pos);
+            }
+        }
+    event.Skip();
     }
 
 //-------------------------------------------------------
