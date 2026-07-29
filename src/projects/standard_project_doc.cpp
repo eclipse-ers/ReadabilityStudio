@@ -5024,7 +5024,7 @@ wxString ProjectDoc::BuildStyleSheet() const
                 strikethrough ? L" text-decoration: line-through;" : L"");
             }
         const wxString themedColor = wxString::Format(
-            L"light-dark(%s, %s)",
+            _DT(L"light-dark(%s, %s)"),
             Wisteria::Colors::ColorContrast::Shade(color, 0.4).GetAsString(wxC2S_HTML_SYNTAX),
             Wisteria::Colors::ColorContrast::Tint(color, 0.6).GetAsString(wxC2S_HTML_SYNTAX));
         return wxString::Format(L"\n.hl-swatch-%s { background-color: %s; }"
@@ -5357,7 +5357,7 @@ ProjectDoc::BuildLegendLines(const HighlighterTags& highlighterTags) const
             EncodeLegendLabel(currentLegendLabel, highlighterTags.format),
         highlighterTags.CRLF.c_str());
     currentLegendLabel =
-        _(L"Style (Wordy items, redundant phrases, passive voice, and clich\u00E9s)");
+        _(L"Style (Wordy items, redundant phrases, passive voice, and clichés)");
     legendLines.writingStyleLegendLine =
         (GetProjectLanguage() == readability::test_language::english_test) ?
         wxString::Format(L"%s    %s   %s  %s%s", highlighterTags.CRLF.c_str(),

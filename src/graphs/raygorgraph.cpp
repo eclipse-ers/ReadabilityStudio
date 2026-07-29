@@ -94,7 +94,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
         GetBottomXAxis().GetTitle().SetTextAlignment(TextAlignment::Centered);
 
         GetTitle().SetText(_(L"THE RAYGOR READABILITY ESTIMATE\nALTON L. RAYGOR"
-                             "\U00002014UNIVERSITY OF MINNESOTA"));
+                             "—UNIVERSITY OF MINNESOTA"));
         GetTitle()
             .GetGraphItemInfo()
             .Scaling(GetScaling())

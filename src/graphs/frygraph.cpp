@@ -72,7 +72,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FryGraph, Wisteria::Graphs::PolygonR
         GetTitle() = GraphItems::Label(
             GraphItems::GraphItemInfo(
                 _(L"GRAPH FOR ESTIMATING READABILITY"
-                  "\U00002014EXTENDED\nby Edward Fry, Rutgers University Reading Center, "
+                  "—EXTENDED\nby Edward Fry, Rutgers University Reading Center, "
                   "New Brunswick, NJ 08904"))
                 .Scaling(GetScaling())
                 .Pen(wxNullPen)

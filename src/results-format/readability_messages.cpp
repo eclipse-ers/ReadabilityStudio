@@ -885,37 +885,37 @@ wxString ReadabilityMessages::GetQuebecScaleLabel(size_t value)
         return _DT(L"Maternelle");
         break;
     case 1:
-        return _(L"Grade 1 (\U000000C9cole Primaire)");
+        return _(L"Grade 1 (École Primaire)");
         break;
     case 2:
-        return _(L"Grade 2 (\U000000C9cole Primaire)");
+        return _(L"Grade 2 (École Primaire)");
         break;
     case 3:
-        return _(L"Grade 3 (\U000000C9cole Primaire)");
+        return _(L"Grade 3 (École Primaire)");
         break;
     case 4:
-        return _(L"Grade 4 (\U000000C9cole Primaire)");
+        return _(L"Grade 4 (École Primaire)");
         break;
     case 5:
-        return _(L"Grade 5 (\U000000C9cole Primaire)");
+        return _(L"Grade 5 (École Primaire)");
         break;
     case 6:
-        return _(L"Grade 6 (\U000000C9cole Primaire)");
+        return _(L"Grade 6 (École Primaire)");
         break;
     case 7:
-        return _DT(L"1 Secondaire (\U000000C9cole Secondaire)");
+        return _DT(L"1 Secondaire (École Secondaire)");
         break;
     case 8:
-        return _DT(L"2 Secondaire (\U000000C9cole Secondaire)");
+        return _DT(L"2 Secondaire (École Secondaire)");
         break;
     case 9:
-        return _DT(L"3 Secondaire (\U000000C9cole Secondaire)");
+        return _DT(L"3 Secondaire (École Secondaire)");
         break;
     case 10:
-        return _DT(L"4 Secondaire (\U000000C9cole Secondaire)");
+        return _DT(L"4 Secondaire (École Secondaire)");
         break;
     case 11:
-        return _DT(L"5 Secondaire (\U000000C9cole Secondaire)");
+        return _DT(L"5 Secondaire (École Secondaire)");
         break;
     case 12:
         return _(L"CEGEP, year 1");

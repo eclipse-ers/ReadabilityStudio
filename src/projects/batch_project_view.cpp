@@ -330,8 +330,8 @@ void BatchProjectView::OnSummation([[maybe_unused]] wxRibbonButtonBarEvent& even
         }
     else if (GetActiveProjectWindow()->GetId() == CLICHES_LIST_PAGE_ID)
         {
-        viewDlg.AddValue(_(L"Total Clich\u00E9s"), std::to_wstring(static_cast<size_t>(
-                                                       doc->GetClicheData()->GetColumnSum(2))));
+        viewDlg.AddValue(_(L"Total Clichés"), std::to_wstring(static_cast<size_t>(
+                                                  doc->GetClicheData()->GetColumnSum(2))));
         }
     else if (GetActiveProjectWindow()->GetId() == LONG_SENTENCES_LIST_PAGE_ID)
         {

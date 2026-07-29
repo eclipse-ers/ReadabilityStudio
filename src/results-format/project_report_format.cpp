@@ -2337,7 +2337,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
                                           wxNumberFormatter::Style::Style_NoTrailingZeroes |
                                               wxNumberFormatter::Style::Style_WithThousandsSep));
 
-                PopulateListRow(_(L"Number of clich\u00E9s"),
+                PopulateListRow(_(L"Number of clichés"),
                                 wxNumberFormatter::ToString(
                                     project->GetClicheCount(), 0,
                                     wxNumberFormatter::Style::Style_NoTrailingZeroes |

@@ -1327,7 +1327,7 @@ void BatchProjectDoc::LoadSummaryStatsSection()
         m_summaryStatsColumnNames.push_back(_(L"Number of redundant phrases"));
         m_summaryStatsColumnNames.push_back(_(L"Number of overused words (x sentence)"));
         m_summaryStatsColumnNames.push_back(_(L"Number of wordy items"));
-        m_summaryStatsColumnNames.push_back(_(L"Number of clich\u00E9s"));
+        m_summaryStatsColumnNames.push_back(_(L"Number of clichés"));
         m_summaryStatsColumnNames.push_back(_(L"Number of passive voices"));
         m_summaryStatsColumnNames.push_back(_(L"Number of sentences that begin with conjunctions"));
         m_summaryStatsColumnNames.push_back(

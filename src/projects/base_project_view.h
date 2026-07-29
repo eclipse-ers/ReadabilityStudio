@@ -300,7 +300,7 @@ class BaseProjectView : public wxView
     [[nodiscard]]
     static wxString GetClichesTabLabel()
         {
-        return _(L"Clich\u00E9s");
+        return _(L"Clichés");
         }
 
     [[nodiscard]]
@@ -426,7 +426,7 @@ class BaseProjectView : public wxView
     static wxString GetFailedLabel()
         {
         // TRANSLATORS: This is an adjective
-        return L"\u26A0 " + _(L"Failed");
+        return L"⚠ " + _(L"Failed");
         } // includes warning emoji
 
     // tab labels
@@ -615,19 +615,19 @@ class BaseProjectView : public wxView
     [[nodiscard]]
     static wxString GetCheckmarkEmoji()
         {
-        return L"\u2714";
+        return L"✔";
         }
 
     [[nodiscard]]
     static wxString GetWarningEmoji()
         {
-        return L"\u26A0";
+        return L"⚠";
         }
 
     [[nodiscard]]
     static wxString GetNoteEmoji()
         {
-        return L"\U0001F4DD";
+        return L"📝";
         }
 
     [[nodiscard]]

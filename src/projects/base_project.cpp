@@ -1630,9 +1630,8 @@ void BaseProject::InitializeStandardEnglishRegressionReadabilityTests()
         // lix
         {
         readability::readability_test test(
-            ReadabilityMessages::LIX(), XRCID("ID_LIX"), _DT(L"Lix"),
-            _DT(L"L\U000000E4sbarhetsindex (Lix)"),
-            _(L"The L\U000000E4sbarhetsindex (Lix) formula can be used on "
+            ReadabilityMessages::LIX(), XRCID("ID_LIX"), _DT(L"Lix"), _DT(L"Läsbarhetsindex (Lix)"),
+            _(L"The Läsbarhetsindex (Lix) formula can be used on "
               "documents of any Western European language. "
               "A <a href=\"#lix-gauge\">chart</a> is also available to visualize the score."),
             readability::readability_test_type::index_value_and_grade_level, true, L"");
@@ -5221,7 +5220,7 @@ bool BaseProject::LoadDocumentAsSubProject(const wxString& path, const std::wstr
                   "\"Include incomplete sentences containing more than...\" "
                   "option under \"Project Properties\"%s\"Document Indexing\"."),
                 sentencesMissingEndingPunctuationsConsideredCompleteBecauseOfLength,
-                GetIncludeIncompleteSentencesIfLongerThanValue(), L" \u00BB "));
+                GetIncludeIncompleteSentencesIfLongerThanValue(), L" » "));
             LogMessage(warningMsg);
             }
         }
@@ -6664,7 +6663,7 @@ bool BaseProject::AddStandardReadabilityTest(const wxString& id, const bool setF
                   "This behavior can be changed from the \"Readability Scores\"%s"
                   "\"Test Options\" page of the "
                   "Options and Project Properties dialogs."),
-                GetReadabilityTests().get_test_long_name(id).c_str(), L" \u00BB "));
+                GetReadabilityTests().get_test_long_name(id).c_str(), L" » "));
             LogMessage(warningMsg, true);
             }
         }
@@ -6681,7 +6680,7 @@ bool BaseProject::AddStandardReadabilityTest(const wxString& id, const bool setF
                   "This behavior can be changed from the \"Readability Scores\"%s"
                   "\"Test Options\" page of the "
                   "Options and Project Properties dialogs."),
-                GetReadabilityTests().get_test_long_name(id).c_str(), L" \u00BB "));
+                GetReadabilityTests().get_test_long_name(id).c_str(), L" » "));
             LogMessage(warningMsg, true);
             }
         }

@@ -418,7 +418,7 @@ img
     { display: none !important; }
   /* Force background colors (banner/card fills, highlight swatches) to render.
      Some printing backends remove background colors by default, so this will
-     ensure that our card backgroungs are preserved.
+     ensure that our card backgrounds are preserved.
   */
   body
     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
