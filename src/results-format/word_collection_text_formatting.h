@@ -563,7 +563,7 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
             wordCountStr.clear();
             wordCountStr.append(L" ")
                 .append(boldBegin)
-                .append(L" (")
+                .append(L"(")
                 .append(std::to_wstring(currentSentenceLength))
                 .append(L")")
                 .append(boldEnd);

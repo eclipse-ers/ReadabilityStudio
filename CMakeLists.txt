@@ -546,6 +546,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/thirdparty/woff2/brotli/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Wisteria-Dataviz/src/wxpdfdoc/src/crypto)
 
+if(WIN32 AND wxUSE_WEBVIEW_EDGE)
+    # screenshot API calls ICoreWebView2::CapturePreview() directly, so it needs the
+    # WebView2 SDK headers from wxwebview
+    target_include_directories(${PROJECT_NAME} PRIVATE
+        ${WEBVIEW2_PACKAGE_DIR}/build/native/include)
+endif()
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:Debug>:
         ENABLED_SANITIZERS_STR="${ENABLED_SANITIZERS_STR}"

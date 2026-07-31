@@ -50,6 +50,7 @@
 #include "lua_standard_project.h"
 #include "../Wisteria-Dataviz/src/base/label.h"
 #include "../Wisteria-Dataviz/src/base/reportbuilder.h"
+#include "../Wisteria-Dataviz/src/import/html_encode.h"
 #include "../app/readability_app.h"
 #include "../projects/batch_project_doc.h"
 #include "../projects/batch_project_view.h"
@@ -4224,6 +4225,37 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
+    bool StandardProject::FindAndSelectTextInWebView(wxWebView* webView, const wxString& searchText)
+        {
+        if (webView == nullptr || searchText.empty())
+            {
+            return false;
+            }
+
+        // escape for embedding in a single-quoted JS string literal
+        wxString escapedSearchText{ searchText };
+        escapedSearchText.Replace(L"\\", L"\\\\", true);
+        escapedSearchText.Replace(L"'", L"\\'", true);
+        escapedSearchText.Replace(L"\n", L"\\n", true);
+        escapedSearchText.Replace(L"\r", L"\\r", true);
+
+        // window.find() is a non-standard (but Chromium-supported) API that searches,
+        // selects, and scrolls the match into view all in one call
+        const wxString script = wxString::Format(LR"JS(
+            (function() {
+                window.getSelection().removeAllRanges();
+                window.scrollTo(0, 0);
+                return window.find('%s', false, false, true, false, true, false) ?
+                    'true' : 'false';
+                })();
+            )JS",
+                                                 escapedSearchText);
+
+        wxString scriptOutput;
+        return webView->RunScript(script, &scriptOutput) && scriptOutput == L"true";
+        }
+
+    //-------------------------------------------------------------
     int StandardProject::SelectHighlightedWordReport(lua_State* L)
         {
         if (!VerifyProjectIsOpen(__func__))
@@ -4250,26 +4282,27 @@ namespace LuaScripting
             view->GetSideBar()->CollapseAll();
 
             wxWindow* selWindow =
-                view->GetWordsBreakdownView().FindWindowById(windowId, wxCLASSINFO(wxTextCtrl));
-            if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxTextCtrl)))
+                view->GetWordsBreakdownView().FindWindowById(windowId, wxCLASSINFO(wxWebView));
+            if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                 {
                 // Custom word-list tests have the same integral IDs for their highlighted-text
                 // reports and list controls, so search by label instead.
                 view->GetSideBar()->SelectSubItem(
                     view->GetSideBar()->FindSubItem(selWindow->GetName()));
+                // selecting the report hides its webview and asynchronously reloads
+                // its content, only re-showing it once the backend fires its loaded
+                // event; wait for that before searching it
+                for (int waitAttempts = 0; !selWindow->IsShown() && waitAttempts < 8;
+                     ++waitAttempts)
+                    {
+                    wxMilliSleep(500);
+                    wxGetApp().Yield();
+                    }
                 if (lua_gettop(L) >= 3)
                     {
                     const wxString contentToFind{ luaL_checkstring(L, 3), wxConvUTF8 };
-                    auto* textCtrl{ dynamic_cast<wxTextCtrl*>(selWindow) };
-                    const auto searchResult = textCtrl->SearchText(wxTextSearch{ contentToFind });
-                    if (searchResult)
-                        {
-                        textCtrl->ShowPosition(0);
-                        ::wxSleep(2);
-                        textCtrl->ShowPosition(searchResult.m_end);
-                        textCtrl->SetSelection(searchResult.m_start, searchResult.m_end);
-                        }
-                    else
+                    if (!FindAndSelectTextInWebView(dynamic_cast<wxWebView*>(selWindow),
+                                                    contentToFind))
                         {
                         lua_Debug ar{};
                         wxString lineInfo;
@@ -4285,9 +4318,12 @@ namespace LuaScripting
                             // should stay wrapped around "Warning"
                             _(L"⚠️%sWarning%s: unable to find \"%s\" in text window.") + lineInfo,
                             L"<span class='warning' style='font-weight:bold;'>", L"</span>",
-                            wxString{ contentToFind }.Truncate(10).append(
-                                contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
-                                                              wxString{})));
+                            wxString{ lily_of_the_valley::html_encode_text::simple_encode(
+                                wxString{ contentToFind }
+                                    .Truncate(10)
+                                    .append(contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
+                                                                          wxString{})
+                                    .ToStdWstring()) }));
                         DebugPrint(wxString{});
                         }
                     }
@@ -4382,6 +4418,16 @@ namespace LuaScripting
             view->GetActiveProjectWindow()->SetFocus();
             view->GetActiveProjectWindow()->Refresh();
             view->GetDocFrame()->Refresh();
+            if (auto* activeWebView = dynamic_cast<wxWebView*>(view->GetActiveProjectWindow());
+                activeWebView != nullptr)
+                {
+                for (int waitAttempts = 0; !activeWebView->IsShown() && waitAttempts < 8;
+                     ++waitAttempts)
+                    {
+                    wxMilliSleep(500);
+                    wxGetApp().Yield();
+                    }
+                }
             }
         // yield so that the view can be fully refreshed before proceeding
         wxGetApp().Yield();
@@ -4408,6 +4454,16 @@ namespace LuaScripting
                 view->GetSideBar()->SelectFolder(index.value());
                 view->GetReadabilityScoresList()->GetResultsListCtrl()->Select(
                     luaL_checkinteger(L, 2) - 1 /* make it zero-indexed*/);
+                }
+            // selecting a row hides the explanation webview and asynchronously reloads
+            // its content, only re-showing it once the backend fires its loaded event
+            const auto* explanationView = view->GetReadabilityScoresList()->GetExplanationView();
+            for (int waitAttempts = 0;
+                 explanationView != nullptr && !explanationView->IsShown() && waitAttempts < 8;
+                 ++waitAttempts)
+                {
+                wxMilliSleep(500);
+                wxGetApp().Yield();
                 }
             }
         wxGetApp().Yield();
@@ -4627,7 +4683,7 @@ namespace LuaScripting
                     {
                     selWindow = view->GetGrammarView().FindWindowById(windowId);
                     }
-                if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxTextCtrl)))
+                if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                     {
                     // Custom word-list tests have the same integral IDs for their highlighted-text
                     // reports and list controls, so search by label instead.
@@ -4635,15 +4691,10 @@ namespace LuaScripting
                         view->GetSideBar()->FindSubItem(selWindow->GetName()));
 
                     const wxString contentToFind{ luaL_checkstring(L, 3), wxConvUTF8 };
-                    auto* textCtrl{ dynamic_cast<wxTextCtrl*>(selWindow) };
-                    const auto searchResult = textCtrl->SearchText(wxTextSearch{ contentToFind });
-                    if (searchResult)
-                        {
-                        textCtrl->ShowPosition(0);
-                        ::wxSleep(2);
-                        textCtrl->ShowPosition(searchResult.m_end);
-                        }
-                    else
+                    // let the page finish rendering before searching it
+                    ::wxSleep(2);
+                    if (!FindAndSelectTextInWebView(dynamic_cast<wxWebView*>(selWindow),
+                                                    contentToFind))
                         {
                         lua_Debug ar{};
                         wxString lineInfo;
@@ -4658,9 +4709,12 @@ namespace LuaScripting
                                                      // should stay wrapped around "Warning"
                             _(L"⚠️%sWarning%s: unable to find \"%s\" in text window.") + lineInfo,
                             L"<span class='warning' style='font-weight:bold;'>", L"</span>",
-                            wxString{ contentToFind }.Truncate(10).append(
-                                contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
-                                                              wxString{})));
+                            wxString{ lily_of_the_valley::html_encode_text::simple_encode(
+                                wxString{ contentToFind }
+                                    .Truncate(10)
+                                    .append(contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
+                                                                          wxString{})
+                                    .ToStdWstring()) }));
                         DebugPrint(wxString{});
                         }
                     }
@@ -4692,22 +4746,13 @@ namespace LuaScripting
                     {
                     wxWindow* selWindow = view->GetGrammarView().FindWindowById(
                         BaseProjectView::LONG_SENTENCES_AND_WORDINESS_TEXT_PAGE_ID);
-                    if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxTextCtrl)))
+                    if (selWindow != nullptr && selWindow->IsKindOf(wxCLASSINFO(wxWebView)))
                         {
                         const wxString contentToFind{ luaL_checkstring(L, 2), wxConvUTF8 };
-                        auto* textCtrl{ dynamic_cast<wxTextCtrl*>(selWindow) };
-                        const auto searchResult =
-                            textCtrl->SearchText(wxTextSearch{ contentToFind });
-                        if (searchResult)
-                            {
-                            // Move to the start of the window and then ensure that the end
-                            // content is shown. This best ensures that all the content is shown.
-                            textCtrl->ShowPosition(0);
-                            ::wxSleep(2);
-                            textCtrl->ShowPosition(searchResult.m_end);
-                            textCtrl->SetSelection(searchResult.m_start, searchResult.m_end);
-                            }
-                        else
+                        // let the page finish rendering before searching it
+                        ::wxSleep(2);
+                        if (!FindAndSelectTextInWebView(dynamic_cast<wxWebView*>(selWindow),
+                                                        contentToFind))
                             {
                             lua_Debug ar{};
                             wxString lineInfo;
@@ -4724,9 +4769,13 @@ namespace LuaScripting
                                 _(L"⚠️%sWarning%s: unable to find \"%s\" in text window.") +
                                     lineInfo,
                                 L"<span class='warning' style='font-weight:bold;'>", L"</span>",
-                                wxString{ contentToFind }.Truncate(10).append(
-                                    contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
-                                                                  wxString{})));
+                                wxString{ lily_of_the_valley::html_encode_text::simple_encode(
+                                    wxString{ contentToFind }
+                                        .Truncate(10)
+                                        .append(contentToFind.length() > 10 ?
+                                                    wxString{ _DT(L"...") } :
+                                                    wxString{})
+                                        .ToStdWstring()) }));
                             DebugPrint(wxString{});
                             }
                         selWindow->SetFocus();

@@ -53,6 +53,7 @@
 #include "../Wisteria-Dataviz/src/ui/dialogs/gridexportdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/listctrlitemviewdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/listctrlsortdlg.h"
+#include "../Wisteria-Dataviz/src/import/html_encode.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.h"
 #include "../Wisteria-Dataviz/src/util/screenshot.h"
 #include "../app/readability_app.h"
@@ -69,6 +70,7 @@
 #include "../ui/dialogs/web_harvester_dlg.h"
 #include "lua_debug.h"
 #include <wx/msgdlg.h>
+#include <wx/webview.h>
 
 wxDECLARE_APP(ReadabilityApp);
 
@@ -333,7 +335,6 @@ namespace LuaScripting
     //-------------------------------------------------------------
     int SnapScreenshotOfTextWindow(lua_State* L)
         {
-        ::wxSleep(2);
         if (!VerifyParameterCount(L, 2, __func__))
             {
             return 0;
@@ -357,10 +358,10 @@ namespace LuaScripting
             return 1;
             }
         if (windowToCapture->GetId() != windowId ||
-            !windowToCapture->IsKindOf(CLASSINFO(wxTextCtrl)))
+            !windowToCapture->IsKindOf(CLASSINFO(wxWebView)))
             {
             wxWindow* foundWindow = windowToCapture->FindWindow(windowId);
-            if (foundWindow != nullptr && foundWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
+            if (foundWindow != nullptr && foundWindow->IsKindOf(CLASSINFO(wxWebView)))
                 {
                 windowToCapture = foundWindow;
                 }
@@ -371,29 +372,43 @@ namespace LuaScripting
                 }
             }
 
-        auto* textCtrl = dynamic_cast<wxTextCtrl*>(windowToCapture);
-        wxASSERT(textCtrl);
-        if (textCtrl == nullptr)
+        auto* webView = dynamic_cast<wxWebView*>(windowToCapture);
+        wxASSERT(webView);
+        if (webView == nullptr)
             {
             lua_pushboolean(L, 0);
             return 1;
             }
 
+        // the window's content is loaded into the webview asynchronously and stays
+        // hidden until that finishes; wait for it so the screenshot doesn't race and
+        // catch it still blank
+        for (int waitAttempts = 0; !webView->IsShown() && waitAttempts < 8; ++waitAttempts)
+            {
+            wxMilliSleep(500);
+            wxGetApp().Yield();
+            }
+
         std::vector<std::pair<long, long>> highlightPoints;
         if (lua_gettop(L) > 3)
             {
-            // search for the strings to highlight and store their positions in the text
-            // (it is assumed that the strings are in the order that they appear in the text)
-            wxTextSearchResult previousFind;
+            // Search for the strings to highlight and store their positions in the page's
+            // text. Normally searched for in the order that they appear in the text, but
+            // falls back to searching from the start of the page if a string turns out to
+            // be positioned earlier than the previous one (e.g., duplicate/reused text
+            // elsewhere on the page).
+            long previousEnd{ 0 };
             for (long i = 4; i <= lua_gettop(L); ++i)
                 {
                 const wxString contentToFind{ luaL_checkstring(L, i), wxConvUTF8 };
-                const auto searchResult = textCtrl->SearchText(
-                    wxTextSearch{ contentToFind }.Start(previousFind ? previousFind.m_end : 0));
-                if (searchResult)
+                long foundStart{ -1 }, foundEnd{ -1 };
+                if (Screenshot::FindWebViewTextRange(webView, contentToFind, previousEnd,
+                                                     foundStart, foundEnd) ||
+                    (previousEnd > 0 && Screenshot::FindWebViewTextRange(webView, contentToFind, 0,
+                                                                         foundStart, foundEnd)))
                     {
-                    highlightPoints.emplace_back(searchResult.m_start, searchResult.m_end);
-                    previousFind = searchResult;
+                    highlightPoints.emplace_back(foundStart, foundEnd);
+                    previousEnd = std::max(previousEnd, foundEnd);
                     }
                 else
                     {
@@ -409,16 +424,23 @@ namespace LuaScripting
                     DebugPrint(wxString::Format(
                         // TRANSLATORS: %s are formatting tags and
                         // should stay wrapped around "Warning"
-                        _(L"⚠️%sWarning%s: unable to find \"%s\" in text window.") + lineInfo,
+                        _(L"⚠️%sWarning%s: unable to find \"%s\" in web view.") + lineInfo,
                         L"<span class='warning' style='font-weight:bold;'>", L"</span>",
-                        wxString{ contentToFind }.Truncate(10).append(
-                            contentToFind.length() > 10 ? wxString{ _DT(L"...") } : wxString{})));
+                        // the excerpt is from the document being searched and may itself
+                        // contain '<'/'>'/'&', which would otherwise get parsed as markup
+                        // and swallow the rest of this HTML-rendered debug message
+                        wxString{ lily_of_the_valley::html_encode_text::simple_encode(
+                            wxString{ contentToFind }
+                                .Truncate(10)
+                                .append(contentToFind.length() > 10 ? wxString{ _DT(L"...") } :
+                                                                      wxString{})
+                                .ToStdWstring()) }));
                     DebugPrint(wxString{});
                     }
                 }
             }
 
-        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshotOfTextWindow(
+        lua_pushboolean(L, static_cast<int>(Screenshot::SaveScreenshotOfWebView(
                                wxString{ luaL_checkstring(L, 1), wxConvUTF8 }, windowId,
                                int_to_bool(lua_toboolean(L, 3)), highlightPoints)));
         return 1;

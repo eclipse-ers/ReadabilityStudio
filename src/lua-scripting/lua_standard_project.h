@@ -57,6 +57,7 @@
 class ProjectDoc;
 class BatchProjectDoc;
 class ToolsOptionsDlg;
+class wxWebView;
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)
@@ -110,6 +111,12 @@ namespace LuaScripting
 
             return true;
             }
+
+        /// @brief Searches for @p searchText in a highlighted-report web view and, if found,
+        ///     scrolls it into view and selects it.
+        /// @returns @c true if found.
+        [[nodiscard]]
+        static bool FindAndSelectTextInWebView(wxWebView* webView, const wxString& searchText);
 
         bool ReloadIfNotDelayed();
         bool ReloadIfNotDelayedSimple();
