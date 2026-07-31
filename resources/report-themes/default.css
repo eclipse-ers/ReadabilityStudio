@@ -457,7 +457,14 @@ img
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   box-shadow: inset 0 -0.15em 0.12em rgba(0, 0, 0, 0.08);
+  transition: filter 0.15s ease;
   }
+
+/* signals that hovering will reveal a tooltip */
+.hl-default:hover, .hl-error:hover, .hl-phrase:hover, .hl-excluded:hover,
+.hl-dolch-conjunction:hover, .hl-dolch-preposition:hover, .hl-dolch-pronoun:hover,
+.hl-dolch-adverb:hover, .hl-dolch-adjective:hover, .hl-dolch-verb:hover, .hl-dolch-noun:hover
+  { filter: brightness(1.15); }
 
 /* ---------- Tooltips ------------------------------------------ */
 /* Generic hover tooltip for any element carrying a data-tooltip     */
