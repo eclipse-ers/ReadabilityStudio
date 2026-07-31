@@ -5210,34 +5210,61 @@ ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat 
         highlighterTags.TAB_SYMBOL = L"&nbsp;&nbsp;&nbsp;&nbsp;";
         highlighterTags.CRLF = L"<br />\n";
 
+        // encodes tooltip text for embedding as an HTML attribute value
+        const auto tooltipAttr = [](const wxString& text) -> wxString
+        {
+            wxString encoded{ lily_of_the_valley::html_encode_text::simple_encode(
+                { text.wc_str(), text.length() }) };
+            encoded.Replace(L"\"", L"&quot;", true);
+            return encoded;
+        };
+
         // word highlighters
+        // (HIGHLIGHT_BEGIN's meaning varies by window, so its tooltip is added
+        // per call site in DisplayHighlightedText() rather than baked in here)
         highlighterTags.HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-default">)" };
-        highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-error">)" };
-        highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-phrase">)" };
-        highlighterTags.IGNORE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-excluded">)" };
+        highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString::Format(
+            LR"(<span class="hl-error" data-tooltip="%s">)", tooltipAttr(_(L"Grammar error")));
+        highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString::Format(
+            LR"(<span class="hl-phrase" data-tooltip="%s">)", tooltipAttr(_(L"Style issue")));
+        highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
+            wxString::Format(LR"(<span class="hl-excluded" data-tooltip="%s">)",
+                             tooltipAttr(_(L"Excluded from analysis")));
         highlighterTags.DOLCH_CONJUNCTION_BEGIN =
             IsHighlightingDolchConjunctions() ?
-                wxString{ LR"(<span class="hl-dolch-conjunction">)" } :
+                wxString::Format(LR"(<span class="hl-dolch-conjunction" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: conjunction"))) :
                 wxString{};
         highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
             IsHighlightingDolchPrepositions() ?
-                wxString{ LR"(<span class="hl-dolch-preposition">)" } :
+                wxString::Format(LR"(<span class="hl-dolch-preposition" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: preposition"))) :
                 wxString{};
         highlighterTags.DOLCH_PRONOUN_BEGIN =
-            IsHighlightingDolchPronouns() ? wxString{ LR"(<span class="hl-dolch-pronoun">)" } :
-                                            wxString{};
-        highlighterTags.DOLCH_ADVERB_BEGIN = IsHighlightingDolchAdverbs() ?
-                                                 wxString{ LR"(<span class="hl-dolch-adverb">)" } :
-                                                 wxString{};
+            IsHighlightingDolchPronouns() ?
+                wxString::Format(LR"(<span class="hl-dolch-pronoun" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: pronoun"))) :
+                wxString{};
+        highlighterTags.DOLCH_ADVERB_BEGIN =
+            IsHighlightingDolchAdverbs() ?
+                wxString::Format(LR"(<span class="hl-dolch-adverb" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: adverb"))) :
+                wxString{};
         highlighterTags.DOLCH_ADJECTIVE_BEGIN =
-            IsHighlightingDolchAdjectives() ? wxString{ LR"(<span class="hl-dolch-adjective">)" } :
-                                              wxString{};
-        highlighterTags.DOLCH_VERB_BEGIN = IsHighlightingDolchVerbs() ?
-                                               wxString{ LR"(<span class="hl-dolch-verb">)" } :
-                                               wxString{};
-        highlighterTags.DOLCH_NOUN_BEGIN = IsHighlightingDolchNouns() ?
-                                               wxString{ LR"(<span class="hl-dolch-noun">)" } :
-                                               wxString{};
+            IsHighlightingDolchAdjectives() ?
+                wxString::Format(LR"(<span class="hl-dolch-adjective" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: adjective"))) :
+                wxString{};
+        highlighterTags.DOLCH_VERB_BEGIN =
+            IsHighlightingDolchVerbs() ?
+                wxString::Format(LR"(<span class="hl-dolch-verb" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: verb"))) :
+                wxString{};
+        highlighterTags.DOLCH_NOUN_BEGIN =
+            IsHighlightingDolchNouns() ?
+                wxString::Format(LR"(<span class="hl-dolch-noun" data-tooltip="%s">)",
+                                 tooltipAttr(_(L"Dolch sight word: noun"))) :
+                wxString{};
 
         // Legend swatches show the color as a background chip.
         // The actual color (and its light/dark handling) comes from the .hl-swatch-* rules in
@@ -5729,6 +5756,20 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         const HighlighterTags highlighterTagsPaperWhite =
             BuildHighlighterTags(exportFormat, highlightColor);
 
+        // HIGHLIGHT_BEGIN's meaning changes per window (3+ syllables, 6+ characters,
+        // unfamiliar word, overly-long sentence, etc.), so tag it with a tooltip explaining
+        // what it means in that specific window rather than baking one meaning into
+        // BuildHighlighterTags(). Only ever applied to the HTML ("Themed") tags.
+        const auto withTooltip = [](const wxString& openingTag, const wxString& tooltip) -> wxString
+        {
+            wxString encodedTooltip{ lily_of_the_valley::html_encode_text::simple_encode(
+                { tooltip.wc_str(), tooltip.length() }) };
+            encodedTooltip.Replace(L"\"", L"&quot;", true);
+            wxString tagged{ openingTag };
+            tagged.Replace(L">", wxString::Format(L" data-tooltip=\"%s\">", encodedTooltip), false);
+            return tagged;
+        };
+
         // build the legends
         const TextLegendLines legendLinesThemed = BuildLegendLines(highlighterTagsThemed);
         const TextLegends textLegendsThemed =
@@ -5748,28 +5789,35 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
             is3PlusSyllablesThemed(
                 3, (GetNumeralSyllabicationMethod() == NumeralSyllabize::WholeWordIsOneSyllable),
-                highlighterTagsThemed.HIGHLIGHT_BEGIN, highlighterTagsThemed.HIGHLIGHT_END);
+                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"3 or more syllables")),
+                highlighterTagsThemed.HIGHLIGHT_END);
         WordLengthGreaterEqualsWithHighlighting<word_case_insensitive_no_stem> is6PlusCharsThemed(
-            6, highlighterTagsThemed.HIGHLIGHT_BEGIN, highlighterTagsThemed.HIGHLIGHT_END);
+            6, withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"6 or more characters")),
+            highlighterTagsThemed.HIGHLIGHT_END);
         const IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
                                                 stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotDCWordThemed(IsIncludingStockerCatholicSupplement() ?
                                   &BaseProject::m_dale_chall_plus_stocker_catholic_word_list :
                                   &BaseProject::m_dale_chall_word_list,
-                              highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                              withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                                          _(L"Not on the familiar Dale-Chall word list")),
                               highlighterTagsThemed.HIGHLIGHT_END,
                               GetDaleChallProperNounCountingMethod());
         IsNotFamiliarWordWithHighlighting<word_case_insensitive_no_stem, const word_list,
                                           stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotSpacheWordThemed(
-                &m_spache_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                &m_spache_word_list,
+                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                            _(L"Not on the familiar Spache word list")),
                 highlighterTagsThemed.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
         const IsNotFamiliarWordExcludeNumeralsWithHighlighting<
             word_case_insensitive_no_stem, const word_list,
             stemming::no_op_stem<word_case_insensitive_no_stem>>
             isNotHJWordThemed(
-                &m_harris_jacobson_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                &m_harris_jacobson_word_list,
+                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                            _(L"Not on the familiar Harris-Jacobson word list")),
                 highlighterTagsThemed.HIGHLIGHT_END, highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN,
                 highlighterTagsThemed.HIGHLIGHT_END,
                 readability::proper_noun_counting_method::all_proper_nouns_are_familiar);
@@ -5780,7 +5828,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             highlighterTagsThemed.DOLCH_ADJECTIVE_BEGIN, highlighterTagsThemed.DOLCH_VERB_BEGIN,
             highlighterTagsThemed.DOLCH_NOUN_BEGIN, highlighterTagsThemed.HIGHLIGHT_END);
         IsNotDolchWordWithLevelHighlighting<word_case_insensitive_no_stem> isNotDolchWordThemed(
-            &m_dolch_word_list, highlighterTagsThemed.HIGHLIGHT_BEGIN,
+            &m_dolch_word_list,
+            withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"Not a Dolch sight word")),
             highlighterTagsThemed.HIGHLIGHT_END);
 
         SyllableCountGreaterEqualWithHighlighting<word_case_insensitive_no_stem>
@@ -6144,14 +6193,19 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 
                 IsNotCustomFamiliarWordWithHighlighting<
                     std::vector<CustomReadabilityTestInterface>::iterator>
-                    notCustomWordThemed(pos, highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                    notCustomWordThemed(pos,
+                                        withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                                                    _(L"Not on the familiar word list")),
                                         highlighterTagsThemed.HIGHLIGHT_END);
                 IsNotCustomFamiliarWordExcludeNumeralsWithHighlighting<
                     std::vector<CustomReadabilityTestInterface>::iterator>
-                    notCustomWordExcludeNumeralsThemed(pos, highlighterTagsThemed.HIGHLIGHT_BEGIN,
-                                                       highlighterTagsThemed.HIGHLIGHT_END,
-                                                       highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN,
-                                                       highlighterTagsThemed.HIGHLIGHT_END);
+                    notCustomWordExcludeNumeralsThemed(
+                        pos,
+                        withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN,
+                                    _(L"Not on the familiar word list")),
+                        highlighterTagsThemed.HIGHLIGHT_END,
+                        highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN,
+                        highlighterTagsThemed.HIGHLIGHT_END);
 
                 IsNotCustomFamiliarWordWithHighlighting<
                     std::vector<CustomReadabilityTestInterface>::iterator>
@@ -6346,7 +6400,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 GetWords(), GetDifficultSentenceLength(), formattedBuffer,
                 textHeaderThemed.header.wc_string(), textHeaderThemed.endSection.wc_string(),
                 textLegendsThemed.wordinessWindowLegend.wc_string(),
-                highlighterTagsThemed.HIGHLIGHT_BEGIN.wc_string(),
+                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"Overly-long sentence"))
+                    .wc_string(),
                 highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
                 highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN.wc_string(),
