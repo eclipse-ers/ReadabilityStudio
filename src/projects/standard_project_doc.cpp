@@ -1147,7 +1147,7 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
             wxString text = view->GetReadabilityScoresList()->GetExplanationsText();
             if (text.empty())
                 {
-                text = L"<div style='margin:20px 10px;'><span class='pill'>" +
+                text = L"<div class='pill-message'><span class='pill'>" +
                        _(L"No tests are currently in the project.") + L"</span></div>";
                 }
             auto* scoresReport =
@@ -5034,31 +5034,21 @@ wxString ProjectDoc::BuildStyleSheet() const
                                 strikethrough ? L" text-decoration: line-through;" : L"");
     };
 
-    wxString css = LR"(<style>
-.hl-swatch { display: inline-block; width: 1.4em; height: 0.9em; margin-right: 0.3em;
-    border: 1px solid var(--border-color); border-radius: 3px; vertical-align: middle; }
-.legend-card { font-size: 0.9em; width: fit-content; max-width: 100%;
-    border: 1px solid var(--border-color);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease; }
-.legend-card:hover { border-color: color-mix(in srgb, var(--banner-color) 50%, CanvasText);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-.legend-card .report-banner-content { line-height: 1.5; }
-)";
-
-    css += buildClass(_DT(L"default"), GetTextHighlightColor(), true, false);
-    css += buildClass(_DT(L"error"), GetDuplicateWordHighlightColor(), false, false);
-    css += buildClass(_DT(L"phrase"), GetWordyPhraseHighlightColor(), false, false);
-    css += buildClass(_DT(L"excluded"), GetExcludedTextHighlightColor(), false, true);
-    css += buildClass(_DT(L"dolch-conjunction"), GetDolchConjunctionsColor(), true, false);
-    css += buildClass(_DT(L"dolch-preposition"), GetDolchPrepositionsColor(), true, false);
-    css += buildClass(_DT(L"dolch-pronoun"), GetDolchPronounsColor(), true, false);
-    css += buildClass(_DT(L"dolch-adverb"), GetDolchAdverbsColor(), true, false);
-    css += buildClass(_DT(L"dolch-adjective"), GetDolchAdjectivesColor(), true, false);
-    css += buildClass(_DT(L"dolch-verb"), GetDolchVerbsColor(), true, false);
-    css += buildClass(_DT(L"dolch-noun"), GetDolchNounColor(), true, false);
-
-    css += L"\n</style>\n";
-    return css;
+    // .hl-swatch/.legend-card live in default.css since they don't depend on user colors;
+    // only the per-category rules below need to be generated here
+    return wxString{ L"<style>" }
+        .append(buildClass(_DT(L"default"), GetTextHighlightColor(), true, false))
+        .append(buildClass(_DT(L"error"), GetDuplicateWordHighlightColor(), false, false))
+        .append(buildClass(_DT(L"phrase"), GetWordyPhraseHighlightColor(), false, false))
+        .append(buildClass(_DT(L"excluded"), GetExcludedTextHighlightColor(), false, true))
+        .append(buildClass(_DT(L"dolch-conjunction"), GetDolchConjunctionsColor(), true, false))
+        .append(buildClass(_DT(L"dolch-preposition"), GetDolchPrepositionsColor(), true, false))
+        .append(buildClass(_DT(L"dolch-pronoun"), GetDolchPronounsColor(), true, false))
+        .append(buildClass(_DT(L"dolch-adverb"), GetDolchAdverbsColor(), true, false))
+        .append(buildClass(_DT(L"dolch-adjective"), GetDolchAdjectivesColor(), true, false))
+        .append(buildClass(_DT(L"dolch-verb"), GetDolchVerbsColor(), true, false))
+        .append(buildClass(_DT(L"dolch-noun"), GetDolchNounColor(), true, false))
+        .append(L"\n</style>\n");
     }
 
 //-------------------------------------------------------

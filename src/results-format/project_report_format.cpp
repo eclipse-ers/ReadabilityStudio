@@ -366,7 +366,7 @@ wxString ProjectReportFormat::FormatDolchStatisticsInfo(
     if (!statsInfo.HasDolchStatisticsEnabled())
         {
         htmlText +=
-            L"<div style='margin:20px 10px;'><span class='pill'>" +
+            L"<div class='pill-message'><span class='pill'>" +
             _(L"No Dolch statistics <a href=\"#select-statistics\">currently selected</a>.") +
             L"</span></div>";
         }
@@ -941,7 +941,7 @@ wxString ProjectReportFormat::FormatStatisticsInfo(
 
     if (!statsInfo.HasStatisticsEnabled())
         {
-        htmlText += L"<div style='margin:20px 10px;'><span class='pill'>" +
+        htmlText += L"<div class='pill-message'><span class='pill'>" +
                     _(L"No statistics <a href=\"#select-statistics\">currently selected</a>.") +
                     L"</span></div>";
         }
