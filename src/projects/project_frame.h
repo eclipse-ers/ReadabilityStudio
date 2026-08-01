@@ -165,6 +165,8 @@ class ProjectDocChildFrame : public wxDocChildFrame
 
     void OnSaveDropdown(wxRibbonButtonBarEvent& evt);
 
+    void OnExportDropdown(wxRibbonButtonBarEvent& evt) { evt.PopupMenu(&m_exportMenu); }
+
     void OnLongSentencesDropdown(wxRibbonButtonBarEvent& event)
         {
         event.PopupMenu(&m_longSentencesMenu);
@@ -332,6 +334,7 @@ class ProjectDocChildFrame : public wxDocChildFrame
     wxMenu* m_testsBundleRegularMenu{ nullptr };
     wxMenu* m_customTestsRegularMenu{ nullptr };
     wxMenu m_fileOpenMenu;
+    wxMenu m_saveMenu;
     wxMenu m_exportMenu;
     wxMenu m_longSentencesMenu;
     wxMenu m_histoBarLabelsMenu;

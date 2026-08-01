@@ -62,7 +62,7 @@ If you are an educator assigning this book to your students, you can export the 
 You can hand this report out to your students and ask them to define these terms before reading the book.
 This will help prepare them for the book and make it easier and more enjoyable to read.
 
-To do this, click the `r keys("Save")` button on the **Home** tab and use the **Save As...** dialog to save this list to either an HTML or text file.
+To do this, click the `r keys("Export")` button on the **Home** tab and use the **Save As...** dialog to save this list to either an HTML or text file.
 You can also do this with any of the other difficult word lists, such as the Spache unfamiliar words list.
 Refer to @sec-vocab-builder-example for an example.
 
@@ -82,7 +82,7 @@ Your word list will look like this:
 
 ![](images/difficultwords2.png)
 
-Now that you have selected the words that you want to save, click the `r keys("Save")` button on the **Home** tab.
+Now that you have selected the words that you want to save, click the `r keys("Export")` button on the **Home** tab.
 From the menu that appears, select **Export 3+ Syllables List\.\.\.**.
 
 First, you will be prompted to save as either HTML or text (refer to @sec-export-list for a discussion of these formats).

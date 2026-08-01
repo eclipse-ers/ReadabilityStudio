@@ -1736,78 +1736,76 @@ void ReadabilityApp::FillSaveMenu(wxMenu& saveMenu, const RibbonType rtype)
     {
     wxASSERT_MSG(rtype != RibbonType::MainFrameRibbon, L"Mainframe should not have a save menu!");
 
-    const auto filterIcon = GetResourceManager().GetSVG(L"ribbon/filter.svg");
     const auto saveIcon = GetResourceManager().GetSVG(L"ribbon/file-save.svg");
+
+    // Don't use stock wxID_SAVE and wxID_SAVEAS because of event handling issues
+    // under GTK+ and also because we use can't use wxID_SAVE on a hybrid ribbon
+    // button; otherwise, it becomes disabled when the document isn't dirty, and
+    // then you can't access the other export options from the menu.
+    auto* item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT"), _(L"Save") + L"\tCtrl+S");
+    item->SetBitmap(saveIcon);
+    saveMenu.Append(item);
+
+    item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT_AS"), _(L"Save As..."));
+    item->SetBitmap(saveIcon);
+    saveMenu.Append(item);
+    }
+
+//-----------------------------------
+void ReadabilityApp::FillExportMenu(wxMenu& exportMenu, const RibbonType rtype)
+    {
+    wxASSERT_MSG(rtype != RibbonType::MainFrameRibbon,
+                 L"Mainframe should not have an export menu!");
+
+    const auto filterIcon = GetResourceManager().GetSVG(L"ribbon/filter.svg");
     const auto exportAllIcon = GetResourceManager().GetSVG(L"ribbon/export-all.svg");
     const auto reportIcon = GetResourceManager().GetSVG(L"ribbon/report.svg");
 
     if (rtype == RibbonType::StandardProjectRibbon)
         {
-        // Don't use stock wxID_SAVE and wxID_SAVEAS because of event handling issues
-        // under GTK+ and also because we use can't use wxID_SAVE on a hybrid ribbon
-        // button; otherwise, it becomes disabled when the document isn't dirty, and
-        // then you can't access the other export options from the menu.
-        auto* item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT"), _(L"Save") + L"\tCtrl+S");
-        item->SetBitmap(saveIcon);
-        saveMenu.Append(item);
+        auto* item = new wxMenuItem(&exportMenu, XRCID("ID_SAVE_ITEM"), _(L"Export..."));
+        exportMenu.Append(item);
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT_AS"), _(L"Save As..."));
-        item->SetBitmap(saveIcon);
-        saveMenu.Append(item);
-        saveMenu.AppendSeparator();
-
-        item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_ITEM"), _(L"Export..."));
-        saveMenu.Append(item);
-
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_ALL"), _(L"Export All..."));
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_ALL"), _(L"Export All..."));
         item->SetBitmap(exportAllIcon);
-        saveMenu.Append(item);
-        saveMenu.AppendSeparator();
+        exportMenu.Append(item);
+        exportMenu.AppendSeparator();
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_FILTERED_DOCUMENT"),
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_FILTERED_DOCUMENT"),
                               _(L"Export Filtered Document..."));
         item->SetBitmap(filterIcon);
-        saveMenu.Append(item);
+        exportMenu.Append(item);
         }
     else if (rtype == RibbonType::BatchProjectRibbon)
         {
-        auto* item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT"), _(L"Save") + L"\tCtrl+S");
-        item->SetBitmap(saveIcon);
-        saveMenu.Append(item);
+        auto* item = new wxMenuItem(&exportMenu, XRCID("ID_SAVE_ITEM"), _(L"Export..."));
+        exportMenu.Append(item);
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT_AS"), _(L"Save As..."));
-        item->SetBitmap(saveIcon);
-        saveMenu.Append(item);
-        saveMenu.AppendSeparator();
-
-        item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_ITEM"), _(L"Export..."));
-        saveMenu.Append(item);
-
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_ALL"), _(L"Export All..."));
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_ALL"), _(L"Export All..."));
         item->SetBitmap(exportAllIcon);
-        saveMenu.Append(item);
-        saveMenu.AppendSeparator();
+        exportMenu.Append(item);
+        exportMenu.AppendSeparator();
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_SCORES_AND_STATISTICS"),
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_SCORES_AND_STATISTICS"),
                               _(L"Export Scores && Statistics..."));
         item->SetBitmap(reportIcon);
-        saveMenu.Append(item);
+        exportMenu.Append(item);
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_STATISTICS"),
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_STATISTICS"),
                               _(L"Export Statistics Report..."));
         item->SetBitmap(reportIcon);
-        saveMenu.Append(item);
-        saveMenu.AppendSeparator();
+        exportMenu.Append(item);
+        exportMenu.AppendSeparator();
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_EXPORT_FILTERED_DOCUMENT"),
+        item = new wxMenuItem(&exportMenu, XRCID("ID_EXPORT_FILTERED_DOCUMENT"),
                               _(L"Export Filtered Document..."));
         item->SetBitmap(filterIcon);
-        saveMenu.Append(item);
+        exportMenu.Append(item);
 
-        item = new wxMenuItem(&saveMenu, XRCID("ID_BATCH_EXPORT_FILTERED_DOCUMENTS"),
+        item = new wxMenuItem(&exportMenu, XRCID("ID_BATCH_EXPORT_FILTERED_DOCUMENTS"),
                               _(L"Batch Export Filtered Document..."));
         item->SetBitmap(filterIcon);
-        saveMenu.Append(item);
+        exportMenu.Append(item);
         }
     }
 
@@ -2594,6 +2592,9 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         projectButtonBar->AddHybridButton(XRCID("ID_SAVE_PROJECT"), _(L"Save"),
                                           ReadSvgIcon(L"ribbon/file-save.svg"),
                                           _(L"Save the project."));
+        projectButtonBar->AddHybridButton(XRCID("ID_SAVE_ITEM"), _(L"Export"),
+                                          ReadSvgIcon(L"ribbon/export.svg"),
+                                          _(L"Export the selected window."));
         projectButtonBar->AddHybridButton(wxID_PRINT, _(L"Print"), ReadSvgIcon(L"ribbon/print.svg"),
                                           _(L"Print the selected window."));
         projectButtonBar->AddButton(wxID_PROPERTIES, _(L"Properties"),

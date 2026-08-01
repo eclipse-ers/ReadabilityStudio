@@ -473,6 +473,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     // menu creation
     void FillPrintMenu(wxMenu& printMenu, const RibbonType rtype);
     void FillSaveMenu(wxMenu& saveMenu, const RibbonType rtype);
+    void FillExportMenu(wxMenu& exportMenu, const RibbonType rtype);
     static void FillGradeScalesMenu(wxMenu& menu);
     static void FillWordListsMenu(wxMenu& wordListMenu);
     static void FillBlankGraphsMenu(wxMenu& blankGraphsMenu);

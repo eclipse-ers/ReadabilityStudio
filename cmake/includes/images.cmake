@@ -65,6 +65,7 @@ ribbon/exclude-selected.svg
 ribbon/exclusion-list.svg
 ribbon/exclusion-tags.svg
 ribbon/export-all.svg
+ribbon/export.svg
 ribbon/file-open.svg
 ribbon/file-save.svg
 ribbon/filter.svg

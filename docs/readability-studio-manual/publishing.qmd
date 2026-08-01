@@ -14,7 +14,7 @@ This is useful for reviewing the results outside the program, as well as publish
 
 ## Exporting {#sec-exporting}
 
-To export any window, go to the **Home** tab and click the `r keys("Save")` button, or right-click on the window and select **Save**.
+To export any window, go to the **Home** tab and click the `r keys("Export")` button, or right-click on the window and select **Save**.
 
 Numerous formats are available for each type of window:
 
@@ -24,7 +24,7 @@ Numerous formats are available for each type of window:
 - Word, phrase, and sentence [lists](#sec-export-list): HTML, Text, {{< latex >}}, and PDF
 - [Graphs](#sec-image-export): PNG, BMP, TIFF, JPEG, GIF, TARGA, SVG, WebP, and PDF
 
-All windows can also be exported at once by clicking the arrow beneath `r keys("Save")` and selecting [**Export All...**](#sec-export-all-options).
+All windows can also be exported at once by clicking the arrow beneath `r keys("Export")` and selecting [**Export All...**](#sec-export-all-options).
 
 ## Scores Export Options {#sec-scores-export}
 
@@ -173,7 +173,7 @@ The options here specify the range of columns and rows to export.
 
 ## Export All Options {#sec-export-all-options}
 
-Select **Export All**\index{exporting!projects} from the `r keys("Save")` button's menu to display the **Export All Options** dialog.
+Select **Export All**\index{exporting!projects} from the `r keys("Export")` button's menu to display the **Export All Options** dialog.
 
 This dialog provides options for [exporting](#sec-exporting) an entire project into a single report or folder of separate files.
 
@@ -262,9 +262,9 @@ For example, you might need to process your document through another program whi
 In this situation, you can export a copy of your document with these aforementioned items removed.
 Then you can analyze your document with other software without needing to manually filter it.
 
-To do this, click on the **Home** tab of the ribbon, click on the arrow below the `r keys("Save")` button, and select **Export Filtered Document**.
+To do this, click on the **Home** tab of the ribbon, click on the arrow below the `r keys("Export")` button, and select **Export Filtered Document**.
 
-`r menu(c('Home','Save','Export Filtered Document'))`
+`r menu(c('Home','Export','Export Filtered Document'))`
 
 After excluding incomplete sentences from your document, you will be presented with additional options (see below).
 Once you have specified your filtering options, the **Preview Filtered Document** dialog (shown on the right) will be displayed.

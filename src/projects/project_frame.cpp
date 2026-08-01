@@ -86,6 +86,8 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          wxID_OPEN);
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnSaveDropdown, this,
          XRCID("ID_SAVE_PROJECT"));
+    Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnExportDropdown, this,
+         XRCID("ID_SAVE_ITEM"));
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnZoomButtonDropdown, this,
          wxID_ZOOM_IN);
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED,
@@ -2557,7 +2559,7 @@ void ProjectDocChildFrame::OnCustomTestBundle(wxCommandEvent& event)
 //-------------------------------------------------------
 void ProjectDocChildFrame::OnSaveDropdown(wxRibbonButtonBarEvent& evt)
     {
-    evt.PopupMenu(&m_exportMenu);
+    evt.PopupMenu(&m_saveMenu);
     }
 
 //-------------------------------------------------------

@@ -402,5 +402,5 @@ At this point, we will ask the author to revise this document until the score is
 Because we are using a familiar-word test's logic in reverse for this test, we are actually interested in lowering the number of familiar (not unfamiliar) words from the document.
 To show which familiar (i.e., buzzwords) are being used, select the **Highlighted Reports** icon on the sidebar and select **Buzz Index (unfamiliar)** beneath that.
 The words that are *not* highlighted are the buzzwords that the author will need to limit.
-To export this window, click the **Home** tab of the ribbon, click the `r keys("Save")` button, and select **Export Highlighted Buzz Index (unfamiliar)**.
+To export this window, click the **Home** tab of the ribbon, click the `r keys("Export")` button, and select **Export Highlighted Buzz Index (unfamiliar)**.
 The author can then use this output to see which sections need revising in this press release.
