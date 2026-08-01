@@ -2718,7 +2718,7 @@ void BatchProjectView::OnExportStatisticsReport([[maybe_unused]] wxCommandEvent&
                                      wxPD_APP_MODAL);
     int counter{ 1 };
 
-    const wxString strippedFileHeader =
+    wxString strippedFileHeader =
         ProjectReportFormat::FormatHtmlReportStart(_(L"Summary Statistics")) +
         ProjectReportFormat::FormatReportBanner(_(L"Summary Statistics"), doc->GetTitle()) +
         L"\n<h2>" + _(L"Files:") + L"</h2>\n";
