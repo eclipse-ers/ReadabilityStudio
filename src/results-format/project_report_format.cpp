@@ -900,6 +900,27 @@ wxString ProjectReportFormat::FormatHtmlReportEnd()
     }
 
 //------------------------------------------------
+void ProjectReportFormat::StripBackToTopButton(wxString& html)
+    {
+    // find the elevator button at the tail end of the content
+    const auto classPos = html.rfind(L"back-to-top");
+    if (classPos == wxString::npos)
+        {
+        return;
+        }
+    const auto startPos = html.rfind(L"<a", classPos);
+    if (startPos == wxString::npos)
+        {
+        return;
+        }
+    const auto endPos = html.find(L"</a>", classPos);
+    if (endPos != wxString::npos)
+        {
+        html.erase(startPos, (endPos + 4) - startPos);
+        }
+    }
+
+//------------------------------------------------
 wxString ProjectReportFormat::FormatReportBanner(const wxString& title,
                                                  const wxString& subtitle /*= wxString{}*/)
     {

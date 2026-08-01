@@ -88,6 +88,15 @@ class ProjectReportFormat
     /// @returns The html/head/body start sections for a report.
     [[nodiscard]]
     static wxString FormatHtmlReportEnd();
+    /// @brief Removes the "back to top" button (added by FormatHtmlReportEnd()) from a
+    ///     report's HTML.
+    /// @details The button only makes sense in a live, interactively-scrolled report window.\n
+    ///     Call this when a report's HTML is instead harvested and re-embedded elsewhere
+    ///     (e.g., the combined "Export All" report) or has its hyperlinks stripped for a
+    ///     degraded/no-links copy; otherwise, the button is left behind as an orphaned
+    ///     arrow glyph.
+    /// @param html The HTML to remove the button from.
+    static void StripBackToTopButton(wxString& html);
     /** @brief Formats a report banner with a title and subtitle.
         @param title The main title.
         @param subtitle An optional subtitle (e.g., project name).

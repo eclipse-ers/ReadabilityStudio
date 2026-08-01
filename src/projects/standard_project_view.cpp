@@ -1146,7 +1146,9 @@ void ProjectView::SaveWebViewReport(wxWebView* webview, const wxString& savePath
     else
         {
         const wxString savePath = savePathNoExt + L".htm";
-        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+        wxString pageSource = webview->GetPageSource();
+        ProjectReportFormat::StripBackToTopButton(pageSource);
+        std::wstring htmlText = pageSource.ToStdWstring();
         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
         if (!htmlText.starts_with(L"<!DOCTYPE"))
             {
@@ -1735,7 +1737,9 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
                     {
                     filePath.SetExt(L"htm");
                     }
-                std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+                wxString pageSource = webview->GetPageSource();
+                ProjectReportFormat::StripBackToTopButton(pageSource);
+                std::wstring htmlText = pageSource.ToStdWstring();
                 lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
                 if (!htmlText.starts_with(L"<!DOCTYPE"))
                     {
@@ -1754,7 +1758,8 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
             // copy the entire window to preserve formatting
             if (wxTheClipboard->Open())
                 {
-                const wxString html = webview->GetPageSource();
+                wxString html = webview->GetPageSource();
+                ProjectReportFormat::StripBackToTopButton(html);
                 lily_of_the_valley::html_extract_text htmlExtract;
                 const wchar_t* extracted = htmlExtract(html.wc_str(), html.length(), true, true);
                 const wxString plainText{ (extracted != nullptr) ? extracted : L"" };
@@ -3499,7 +3504,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             {
             return;
             }
-        std::wstring htmlText = webview->GetPageSource().ToStdWstring();
+        wxString pageSource = webview->GetPageSource();
+        ProjectReportFormat::StripBackToTopButton(pageSource);
+        std::wstring htmlText = pageSource.ToStdWstring();
         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
         // a highlighted-text window emits its .hl-* styles as the first <style> block (ahead
         // of the theme CSS); collect them once into the shared stylesheet so the combined

@@ -4120,6 +4120,7 @@ void ProjectDoc::DisplayStatistics()
             // then remove the links to the various windows that won't be shown
             if (!LoadingOriginalTextSucceeded())
                 {
+                ProjectReportFormat::StripBackToTopButton(formattedStats);
                 std::wstring strippedStatsText{ formattedStats };
                 lily_of_the_valley::html_format::strip_hyperlinks(strippedStatsText);
                 formattedStats = strippedStatsText;
