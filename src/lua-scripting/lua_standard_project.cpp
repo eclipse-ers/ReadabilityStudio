@@ -4241,14 +4241,14 @@ namespace LuaScripting
 
         // window.find() is a non-standard (but Chromium-supported) API that searches,
         // selects, and scrolls the match into view all in one call
-        const wxString script = wxString::Format(LR"JS(
+        const wxString script = wxString::Format(_DT(LR"JS(
             (function() {
                 window.getSelection().removeAllRanges();
                 window.scrollTo(0, 0);
                 return window.find('%s', false, false, true, false, true, false) ?
                     'true' : 'false';
                 })();
-            )JS",
+            )JS"),
                                                  escapedSearchText);
 
         wxString scriptOutput;

@@ -5756,7 +5756,8 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 { tooltip.wc_str(), tooltip.length() }) };
             encodedTooltip.Replace(L"\"", L"&quot;", true);
             wxString tagged{ openingTag };
-            tagged.Replace(L">", wxString::Format(L" data-tooltip=\"%s\">", encodedTooltip), false);
+            tagged.Replace(L">", wxString::Format(_DT(L" data-tooltip=\"%s\">"), encodedTooltip),
+                           false);
             return tagged;
         };
 

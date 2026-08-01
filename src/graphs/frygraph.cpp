@@ -69,14 +69,14 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FryGraph, Wisteria::Graphs::PolygonR
         // TRANSLATORS: "Fry" is a test name, don't translate it.
         GetCanvas()->SetLabel(_(L"Fry Graph"));
         GetCanvas()->SetName(_(L"Fry Graph"));
-        GetTitle() = GraphItems::Label(
-            GraphItems::GraphItemInfo(
-                _(L"GRAPH FOR ESTIMATING READABILITY"
-                  "—EXTENDED\nby Edward Fry, Rutgers University Reading Center, "
-                  "New Brunswick, NJ 08904"))
-                .Scaling(GetScaling())
-                .Pen(wxNullPen)
-                .LabelAlignment(TextAlignment::Centered));
+        GetTitle() =
+            GraphItems::Label(GraphItems::GraphItemInfo(
+                                  _(L"GRAPH FOR ESTIMATING READABILITY"
+                                    "—EXTENDED\nby Edward Fry, Rutgers University Reading Center, "
+                                    "New Brunswick, NJ 08904"))
+                                  .Scaling(GetScaling())
+                                  .Pen(wxNullPen)
+                                  .LabelAlignment(TextAlignment::Centered));
         GetTitle().GetFont().MakeSmaller();
         GetLeftYAxis().GetTitle().SetText(_(L"Average number of sentences per 100 words"));
         GetLeftYAxis().GetTitle().GetFont().MakeSmaller();
