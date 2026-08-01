@@ -1146,9 +1146,8 @@ void ProjectView::SaveWebViewReport(wxWebView* webview, const wxString& savePath
     else
         {
         const wxString savePath = savePathNoExt + L".htm";
-        wxString pageSource = webview->GetPageSource();
-        ProjectReportFormat::StripBackToTopButton(pageSource);
-        std::wstring htmlText = pageSource.ToStdWstring();
+        wxString htmlText = webview->GetPageSource();
+        ProjectReportFormat::StripBackToTopButton(htmlText);
         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
         if (!htmlText.starts_with(L"<!DOCTYPE"))
             {
@@ -1737,9 +1736,8 @@ void ProjectView::OnMenuCommand(wxCommandEvent& event)
                     {
                     filePath.SetExt(L"htm");
                     }
-                wxString pageSource = webview->GetPageSource();
-                ProjectReportFormat::StripBackToTopButton(pageSource);
-                std::wstring htmlText = pageSource.ToStdWstring();
+                wxString htmlText = webview->GetPageSource();
+                ProjectReportFormat::StripBackToTopButton(htmlText);
                 lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
                 if (!htmlText.starts_with(L"<!DOCTYPE"))
                     {
@@ -3488,11 +3486,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             true, false,
             wxString::Format(_(L"Table %zu.%zu: %s"), sectionCounter, tableCounter++,
                              htmlEncode({ list->GetLabel().wc_str() }, true).c_str()));
-        std::wstring htmlText{ buffer.wc_string() };
-        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+        lily_of_the_valley::html_format::strip_hyperlinks(buffer);
 
         outputText += (includeLeadingPageBreak ? pageBreak : wxString{}) +
-                      lily_of_the_valley::html_extract_text::get_body(htmlText);
+                      lily_of_the_valley::html_extract_text::get_body(buffer.ToStdWstring());
     };
 
     bool highlightStylesCaptured{ false };

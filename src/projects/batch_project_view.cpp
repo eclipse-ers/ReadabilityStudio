@@ -1762,7 +1762,7 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
             }
         }
 
-    std::wstring scoreTextStrippedLinks{ scoreText };
+    wxString scoreTextStrippedLinks{ scoreText };
     lily_of_the_valley::html_format::strip_hyperlinks(scoreTextStrippedLinks, false);
     if (m_testExplanations != nullptr)
         {
@@ -1785,12 +1785,11 @@ void BatchProjectView::UpdateStatAndTestPanes(const long scoreListItem)
             {
             const wxString docTable = L"<br /><span class='emphasis'>" +
                                       list->GetItemTextFormatted(scoreListItem, 0) + L"</span><hr>";
-            const wxString text = docTable + ProjectReportFormat::FormatStatisticsInfo(
-                                                 doc->GetDocuments()[i],
-                                                 // use the batches settings, which may have just
-                                                 // been updated, not the subproject's
-                                                 doc->GetStatisticsReportInfo(), nullptr);
-            std::wstring textStripped{ text };
+            wxString textStripped = docTable + ProjectReportFormat::FormatStatisticsInfo(
+                                                   doc->GetDocuments()[i],
+                                                   // use the batches settings, which may have just
+                                                   // been updated, not the subproject's
+                                                   doc->GetStatisticsReportInfo(), nullptr);
             lily_of_the_valley::html_format::strip_hyperlinks(textStripped, false);
             m_statsReport->SetPage(
                 ProjectReportFormat::FormatHtmlReportStart(
@@ -2329,11 +2328,10 @@ bool BatchProjectView::ExportAllToHtml(
             wxString::Format(
                 _(L"Table %zu.%zu: %s"), sectionCounter, tableCounter++,
                 htmlEncode({ list->GetName().wc_str(), list->GetName().length() }, true).c_str()));
-        std::wstring htmlText{ buffer.wc_string() };
-        lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
+        lily_of_the_valley::html_format::strip_hyperlinks(buffer);
 
         outputText += (includeLeadingPageBreak ? pageBreak : wxString{}) +
-                      lily_of_the_valley::html_extract_text::get_body(htmlText);
+                      lily_of_the_valley::html_extract_text::get_body(buffer.ToStdWstring());
     };
 
     bool hasSections{ false };
@@ -2693,11 +2691,10 @@ void BatchProjectView::OnExportScoresAndStatistics([[maybe_unused]] wxCommandEve
         htmlText += L"\n</div></div>";
         }
     htmlText += ProjectReportFormat::FormatHtmlReportEnd();
-    std::wstring strippedHTML{ htmlText };
-    lily_of_the_valley::html_format::set_encoding(strippedHTML);
+    lily_of_the_valley::html_format::set_encoding(htmlText);
     wxFileName{ fileDialog.GetPath() }.SetPermissions(wxS_DEFAULT);
     wxFile outFile{ fileDialog.GetPath(), wxFile::write };
-    outFile.Write(strippedHTML);
+    outFile.Write(htmlText);
     }
 
 //---------------------------------------------------
@@ -2721,11 +2718,10 @@ void BatchProjectView::OnExportStatisticsReport([[maybe_unused]] wxCommandEvent&
                                      wxPD_APP_MODAL);
     int counter{ 1 };
 
-    const wxString fileHeader =
+    const wxString strippedFileHeader =
         ProjectReportFormat::FormatHtmlReportStart(_(L"Summary Statistics")) +
         ProjectReportFormat::FormatReportBanner(_(L"Summary Statistics"), doc->GetTitle()) +
         L"\n<h2>" + _(L"Files:") + L"</h2>\n";
-    std::wstring strippedFileHeader{ fileHeader };
     lily_of_the_valley::html_format::strip_body_attributes(strippedFileHeader);
 
     wxTempFile outputFile(fdialog.GetPath());

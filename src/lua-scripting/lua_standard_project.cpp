@@ -3988,7 +3988,7 @@ namespace LuaScripting
                     }
                 else
                     {
-                    std::wstring htmlText = textWindow->GetPageSource().ToStdWstring();
+                    wxString htmlText = textWindow->GetPageSource();
                     lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
                     if (!htmlText.starts_with(L"<!DOCTYPE"))
                         {
@@ -4046,7 +4046,7 @@ namespace LuaScripting
                 if (window != nullptr)
                     {
                     const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
-                    std::wstring htmlText = window->GetPageSource().ToStdWstring();
+                    wxString htmlText = window->GetPageSource();
                     lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
                     // create the folder for the filepath, if necessary
                     wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,
@@ -4065,7 +4065,7 @@ namespace LuaScripting
                 if (window != nullptr)
                     {
                     const wxString filePath{ luaL_checklstring(L, 3, nullptr), wxConvUTF8 };
-                    std::wstring htmlText = window->GetPageSource().ToStdWstring();
+                    wxString htmlText = window->GetPageSource();
                     lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
                     // create the folder for the filepath, if necessary
                     wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,

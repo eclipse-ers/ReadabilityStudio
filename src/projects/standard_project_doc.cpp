@@ -4121,9 +4121,7 @@ void ProjectDoc::DisplayStatistics()
             if (!LoadingOriginalTextSucceeded())
                 {
                 ProjectReportFormat::StripBackToTopButton(formattedStats);
-                std::wstring strippedStatsText{ formattedStats };
-                lily_of_the_valley::html_format::strip_hyperlinks(strippedStatsText);
-                formattedStats = strippedStatsText;
+                lily_of_the_valley::html_format::strip_hyperlinks(formattedStats);
                 }
             summaryReportWindow->SetPage(NavLink::AnchorsToExplanationScheme(formattedStats),
                                          wxString{});
