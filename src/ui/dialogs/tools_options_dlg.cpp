@@ -5388,12 +5388,17 @@ void ToolsOptionsDlg::CreateControls()
                             wxSizerFlags{}.CenterVertical());
 
             wxArrayString themeFiles;
+            // recurses into subfolders, so "export-themes" (CSSes for the "Export All"
+            // single-file report, not a user-selectable in-app report theme) is filtered out below
             wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"report-themes")), &themeFiles,
                                _DT(L"*.css"), wxDIR_FILES);
             wxArrayString themeChoices;
             for (const auto& themeFile : themeFiles)
                 {
-                if (wxFileName(themeFile).GetName().CmpNoCase(_DT(L"default")) != 0)
+                const wxFileName themeFileName{ themeFile };
+                if (themeFileName.GetName().CmpNoCase(_DT(L"default")) != 0 &&
+                    (themeFileName.GetDirs().empty() ||
+                     themeFileName.GetDirs().Last().CmpNoCase(_DT(L"export-themes")) != 0))
                     {
                     themeChoices.Add(ThemeFileNameToLabel(themeFile));
                     }

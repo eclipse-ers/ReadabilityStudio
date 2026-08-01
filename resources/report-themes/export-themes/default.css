@@ -1,0 +1,298 @@
+/* ==========================================================================
+   Readability Studio — "Export All" single-file report shell
+
+   Layered on top of ../default.css (and beneath the user's selected report
+   theme) for the single-file "Export All" report only. Restyles the shell
+   around the report (masthead banner, sidebar table of contents, and
+   section numbering) without touching the component styles that
+   default.css already provides (explanation cards, callouts, highlighted
+   text, tables, etc.), which are reused here unchanged.
+   ========================================================================== */
+
+:root
+  {
+  --export-sun:        #E87C0A;
+  --export-amber:      #F2A81D;
+  --export-ember:      #B8500F;
+  --export-ink-faint:  light-dark(#8A7A6C, #8D7F70);
+  --export-rule:       light-dark(#DFD4C2, #3A3128);
+  --export-font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia,
+    "Times New Roman", serif;
+  --export-font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, "Liberation Mono",
+    monospace;
+  }
+
+/* ---------- Masthead ---------------------------------------------------- */
+/* a fixed dark banner (independent of the report's light/dark theme),
+   echoing the sunburst-over-book app icon */
+
+.export-masthead
+  {
+  position: relative;
+  overflow: hidden;
+  background: #191410;
+  color: #F5EDE0;
+  border-bottom: 3px solid var(--export-amber);
+  margin: 0 0 28px;
+  }
+
+.export-masthead::before
+  {
+  content: "";
+  position: absolute;
+  inset: -40% -10% -60% -10%;
+  background: repeating-conic-gradient(from 172deg at 96% -8%,
+      rgba(232, 124, 10, 0) 0deg 2.1deg,
+      var(--export-amber) 2.1deg 3.4deg,
+      rgba(232, 124, 10, 0) 3.4deg 4.6deg,
+      var(--export-ember) 4.6deg 5.6deg,
+      rgba(232, 124, 10, 0) 5.6deg 7.4deg,
+      var(--export-sun) 7.4deg 8.8deg,
+      rgba(232, 124, 10, 0) 8.8deg 11deg);
+  -webkit-mask-image:
+    radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0, 0, 0, 0.55) 46%, transparent 78%);
+  mask-image:
+    radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0, 0, 0, 0.55) 46%, transparent 78%);
+  opacity: 0.85;
+  pointer-events: none;
+  }
+
+.export-masthead::after
+  {
+  content: "";
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  right: -6vw;
+  top: -17vw;
+  border-radius: 50%;
+  background: var(--export-ember);
+  pointer-events: none;
+  }
+
+.export-masthead-inner
+  {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1.8rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  }
+
+.export-mark
+  {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.45));
+  }
+
+.export-masthead-text { flex: 1 1 22rem; min-width: 0; }
+
+.export-eyebrow
+  {
+  font-family: var(--export-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  /* fixed brand color, like the app icon -- not tied to the user's report theme */
+  color: var(--export-amber);
+  margin: 0 0 0.4rem;
+  }
+
+.export-masthead h1
+  {
+  font-family: var(--export-font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.8rem;
+  color: #FFF8EC;
+  }
+
+.export-meta
+  {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.9rem 1.6rem;
+  margin: 0;
+  }
+
+.export-meta div { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.export-meta dt
+  {
+  font-family: var(--export-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #C9BBA9;
+  margin: 0;
+  line-height: 1;
+  }
+
+.export-meta dd
+  {
+  margin: 0;
+  color: #F5EDE0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  }
+
+/* ---------- Shell: sidebar + content ------------------------------------- */
+
+.export-wrap
+  {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
+  }
+
+@media (min-width: 1080px)
+  {
+  .export-wrap
+    {
+    grid-template-columns: 12.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 3rem;
+    }
+  }
+
+.export-plan { min-width: 0; }
+
+/* ---------- Sidebar table of contents ------------------------------------ */
+
+.export-index
+  {
+  display: none;
+  position: sticky;
+  top: 1.5rem;
+  font-size: 0.83rem;
+  }
+
+@media (min-width: 1080px) { .export-index { display: block; } }
+
+.export-index h2
+  {
+  font-family: var(--export-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--export-ink-faint);
+  margin: 0 0 0.9rem;
+  font-weight: 600;
+  }
+
+.export-index ol { list-style: none; margin: 0; padding: 0; }
+.export-index li { margin-bottom: 0.42rem; }
+
+.export-index a
+  {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: 0.2rem;
+  color: CanvasText;
+  text-decoration: none;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  padding-left: 0.55rem;
+  opacity: 0.85;
+  }
+
+.export-index a:hover,
+.export-index a:focus-visible
+  {
+  opacity: 1;
+  /* the user's selected report theme's primary accent, same as the eyebrow line */
+  color: var(--header-accent);
+  border-left-color: var(--header-accent);
+  }
+
+.export-index .n
+  {
+  font-family: var(--export-font-mono);
+  font-size: 0.72rem;
+  color: var(--export-ink-faint);
+  padding-top: 0.1em;
+  }
+
+/* ---------- Section headings --------------------------------------------- */
+/* .report-section is a <details> element, collapsible via its <summary>.
+   The numbered accent badge matches the sidebar table of contents numbering, and
+   the disclosure chevron sits at the end of the heading line. */
+
+.report-section
+  {
+  border-bottom: 1px solid var(--export-rule);
+  padding: 0 0 0.55rem;
+  margin: 0 0 5px;
+  }
+
+.report-section > summary
+  {
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  cursor: pointer;
+  list-style: none;
+  }
+
+.report-section > summary::-webkit-details-marker { display: none; }
+
+.report-section > summary::after
+  {
+  content: "";
+  flex: none;
+  align-self: center;
+  margin-left: auto;
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 0.15em solid var(--export-ink-faint);
+  border-bottom: 0.15em solid var(--export-ink-faint);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  }
+
+.report-section:not([open]) > summary::after { transform: rotate(-45deg); }
+
+.report-section .n
+  {
+  font-family: var(--export-font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  /* the theme's accent as a tinted chip rather than a solid fill behind fixed-color text;
+     a solid var(--header-accent) background can be too pale for white text to read on some
+     themes (e.g., paper.css), so the accent is kept as the foreground against a light tint of
+     itself instead, the same contrast assumption the rest of default.css already relies on */
+  color: var(--header-accent);
+  background: color-mix(in srgb, var(--header-accent) 14%, Canvas);
+  border: 1.5px solid color-mix(in srgb, var(--header-accent) 55%, Canvas);
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  flex: none;
+  letter-spacing: 0.02em;
+  }
+
+/* ---------- Print --------------------------------------------------------- */
+
+@media print
+  {
+  .export-masthead::before, .export-masthead::after { display: none; }
+  .export-masthead, .export-masthead *
+    { color: #000 !important; background: #FFF !important; border-color: #000 !important; }
+  /* the sidebar itself is already hidden via .no-print, but its grid column
+     still reserves space unless the shell collapses to a single column */
+  .export-wrap { grid-template-columns: minmax(0, 1fr) !important; }
+  }

@@ -68,7 +68,9 @@
 #include "project_navigation_links.h"
 #include "standard_project_doc.h"
 #include "wx/richmsgdlg.h"
+#include <wx/base64.h>
 #include <wx/clipbrd.h>
+#include <wx/mstream.h>
 #include <wx/webview.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -3480,7 +3482,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             buffer, true, Wisteria::UI::ListCtrlEx::ExportRowSelection::ExportAll, 0, -1, 0, -1,
             true, false,
             wxString::Format(_(L"Table %zu.%zu: %s"), sectionCounter, tableCounter++,
-                             htmlEncode({ list->GetName().wc_str() }, true).c_str()));
+                             htmlEncode({ list->GetLabel().wc_str() }, true).c_str()));
         std::wstring htmlText{ buffer.wc_string() };
         lily_of_the_valley::html_format::strip_hyperlinks(htmlText);
 
@@ -3531,8 +3533,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         // update/reset counters for sections, tables, and figures
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText += L"\n\n<div class='report-section'><a name='scores'></a>" +
-                      htmlEncode({ GetReadabilityScoresLabel().wc_str() }, true) + L"</div>\n";
+        outputText += wxString::Format(
+            L"\n\n<details class='report-section' open><summary><a name='scores'></a><span "
+            L"class='n'>%02zu</span>%s</summary>\n",
+            sectionCounter, htmlEncode({ GetReadabilityScoresLabel().wc_str() }, true).c_str());
         for (size_t i = 0; i < GetReadabilityResultsView().GetWindowCount(); ++i)
             {
             wxWindow* activeWindow = GetReadabilityResultsView().GetWindow(i);
@@ -3540,9 +3544,10 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                 {
                 if (activeWindow->IsKindOf(wxCLASSINFO(ExplanationListCtrl)))
                     {
-                    formatList(
-                        dynamic_cast<ExplanationListCtrl*>(activeWindow)->GetResultsListCtrl(),
-                        includeLeadingPageBreak);
+                    auto* resultsList =
+                        dynamic_cast<ExplanationListCtrl*>(activeWindow)->GetResultsListCtrl();
+                    resultsList->SetLabel(GetReadabilityScoresLabel());
+                    formatList(resultsList, includeLeadingPageBreak);
                     includeLeadingPageBreak = true;
                     }
                 else if (activeWindow->IsKindOf(wxCLASSINFO(Wisteria::Canvas)))
@@ -3565,6 +3570,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
     // the statistics
     if (includeStatistics && (GetSummaryView().GetWindowCount() != 0U))
@@ -3572,10 +3578,11 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText +=
-            wxString::Format(L"\n\n%s<div class='report-section'><a name='stats'></a>%s</div>\n",
-                             (hasSections ? pageBreak : wxString{}),
-                             htmlEncode({ GetSummaryStatisticsLabel().wc_str() }, true).c_str());
+        outputText += wxString::Format(
+            L"\n\n%s<details class='report-section' open><summary><a name='stats'></a><span "
+            L"class='n'>%02zu</span>%s</summary>\n",
+            (hasSections ? pageBreak : wxString{}), sectionCounter,
+            htmlEncode({ GetSummaryStatisticsLabel().wc_str() }, true).c_str());
         hasSections = true;
         for (size_t i = 0; i < GetSummaryView().GetWindowCount(); ++i)
             {
@@ -3603,6 +3610,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
     // words breakdown section
     if (includeWordsBreakdown && (GetWordsBreakdownView().GetWindowCount() != 0U))
@@ -3610,10 +3618,12 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText += wxString::Format(
-            L"\n\n%s<div class='report-section'><a name='wordsbreakdown'></a>%s</div>\n",
-            (hasSections ? pageBreak : wxString{}),
-            htmlEncode({ GetWordsBreakdownLabel().wc_str() }, true).c_str());
+        outputText +=
+            wxString::Format(L"\n\n%s<details class='report-section' open>"
+                             "<summary><a name='wordsbreakdown'></a>"
+                             "<span class='n'>%02zu</span>%s</summary>\n",
+                             (hasSections ? pageBreak : wxString{}), sectionCounter,
+                             htmlEncode({ GetWordsBreakdownLabel().wc_str() }, true).c_str());
         hasSections = true;
         for (size_t i = 0; i < GetWordsBreakdownView().GetWindowCount(); ++i)
             {
@@ -3640,6 +3650,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
     // sentence section
     if (includeSentencesBreakdown && (GetSentencesBreakdownView().GetWindowCount() != 0U))
@@ -3647,10 +3658,12 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText += wxString::Format(
-            L"\n\n%s<div class='report-section'><a name='sentencesbreakdown'></a>%s</div>\n",
-            (hasSections ? pageBreak : wxString{}),
-            htmlEncode({ GetSentencesBreakdownLabel().wc_str() }, true).c_str());
+        outputText +=
+            wxString::Format(L"\n\n%s<details class='report-section' open>"
+                             "<summary><a name='sentencesbreakdown'></a>"
+                             "<span class='n'>%02zu</span>%s</summary>\n",
+                             (hasSections ? pageBreak : wxString{}), sectionCounter,
+                             htmlEncode({ GetSentencesBreakdownLabel().wc_str() }, true).c_str());
         hasSections = true;
         for (size_t i = 0; i < GetSentencesBreakdownView().GetWindowCount(); ++i)
             {
@@ -3671,6 +3684,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
     // grammar section
     if (includeGrammar && (includeLists || includeTextReports) &&
@@ -3679,10 +3693,11 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText +=
-            wxString::Format(L"\n\n%s<div class='report-section'><a name='grammar'></a>%s</div>\n",
-                             (hasSections ? pageBreak : wxString{}),
-                             htmlEncode({ GetGrammarLabel().wc_str() }, true).c_str());
+        outputText += wxString::Format(L"\n\n%s<details class='report-section' open>"
+                                       "<summary><a name='grammar'></a>"
+                                       "<span class='n'>%02zu</span>%s</summary>\n",
+                                       (hasSections ? pageBreak : wxString{}), sectionCounter,
+                                       htmlEncode({ GetGrammarLabel().wc_str() }, true).c_str());
         hasSections = true;
         for (size_t i = 0; i < GetGrammarView().GetWindowCount(); ++i)
             {
@@ -3703,6 +3718,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
     // Sight Words
     if (includeSightWords && (GetDolchSightWordsView().GetWindowCount() != 0U))
@@ -3710,10 +3726,11 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText +=
-            wxString::Format(L"\n\n%s<div class='report-section'><a name='dolch'></a>%s</div>\n",
-                             (hasSections ? pageBreak : wxString{}),
-                             htmlEncode({ GetDolchLabel().wc_str() }, true).c_str());
+        outputText += wxString::Format(L"\n\n%s<details class='report-section' open>"
+                                       "<summary><a name='dolch'></a>"
+                                       "<span class='n'>%02zu</span>%s</summary>\n",
+                                       (hasSections ? pageBreak : wxString{}), sectionCounter,
+                                       htmlEncode({ GetDolchLabel().wc_str() }, true).c_str());
         for (size_t i = 0; i < GetDolchSightWordsView().GetWindowCount(); ++i)
             {
             wxWindow* activeWindow = GetDolchSightWordsView().GetWindow(i);
@@ -3739,63 +3756,124 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                     }
                 }
             }
+        outputText += L"\n</details>\n";
         }
 
     wxString toc, infoTable;
-    infoTable = wxString::Format(
-        L"<div class='report-info-table'>\n"
-        "<div class='report-header'>\n"
-        "<div class='report-header-inner-cell report-header-first-column'>%s</div>\n"
-        "<div class='report-header-inner-cell'>%s</div>\n"
-        "<div class='report-header-inner-cell report-header-first-column'>%s</div>\n"
-        "<div class='report-header-inner-cell'>%s</div>\n"
-        "<div class='report-header-inner-cell report-header-first-column'>%s</div>\n"
-        "<div class='report-header-inner-cell'>%s</div>\n"
-        "<div class='report-header-first-column'>%s</div>\n"
-        "<div>%s</div>\n"
-        "</div>\n"
-        "</div>",
-        _(L"Project Title"), doc->GetTitle(), _(L"Status"), doc->GetStatus(), _(L"Reviewer"),
-        doc->GetReviewer(), _(L"Date"), wxDateTime::Now().FormatDate());
-
+    size_t tocIndex{ 0 };
     if (includeTestScores && (GetReadabilityResultsView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#scores'>" + GetReadabilityScoresLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#scores'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetReadabilityScoresLabel().wc_str() }, true).c_str());
         }
     if (includeStatistics && (GetSummaryView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#stats'>" + GetSummaryStatisticsLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#stats'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetSummaryStatisticsLabel().wc_str() }, true).c_str());
         }
     if (includeWordsBreakdown && (GetWordsBreakdownView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#wordsbreakdown'>" + GetWordsBreakdownLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#wordsbreakdown'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetWordsBreakdownLabel().wc_str() }, true).c_str());
         }
     if (includeSentencesBreakdown && (GetSentencesBreakdownView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#sentencesbreakdown'>" + GetSentencesBreakdownLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#sentencesbreakdown'><span "
+            L"class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetSentencesBreakdownLabel().wc_str() }, true).c_str());
         }
     // grammar section only has text and list windows, so don't include that if
     // not including those types of windows
     if (includeGrammar && (includeLists || includeTextReports) &&
         (GetGrammarView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#grammar'>" + GetGrammarLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#grammar'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetGrammarLabel().wc_str() }, true).c_str());
         }
     if (includeSightWords && (GetDolchSightWordsView().GetWindowCount() != 0U))
         {
-        toc += L"<a href='#dolch'>" + GetDolchLabel() + L"</a><br />\n";
+        toc += wxString::Format(
+            L"<li><a href='#dolch'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
+            ++tocIndex, htmlEncode({ GetDolchLabel().wc_str() }, true).c_str());
         }
-    // embed the stylesheet: the report theme CSS (default.css plus the user's selected theme
-    // override) followed by the captured highlight rules, so the combined report is
-    // self-contained and matches what the windows render on screen
+
+    // embed the app icon as a small self-contained image for the masthead
+    wxString logoDataUri;
+        {
+        const wxBitmap logoBmp = wxGetApp()
+                                     .GetResourceManager()
+                                     .GetSVG(L"ribbon/app-logo.svg")
+                                     .GetBitmap(wxSize{ 64, 64 });
+        wxMemoryOutputStream logoStream;
+        if (logoBmp.IsOk() && logoBmp.ConvertToImage().SaveFile(logoStream, wxBITMAP_TYPE_PNG))
+            {
+            logoDataUri = wxString::Format(
+                L"data:image/png;base64,%s",
+                wxBase64Encode(logoStream.GetOutputStreamBuffer()->GetBufferStart(),
+                               logoStream.GetOutputStreamBuffer()->GetBufferSize()));
+            }
+        }
+
+    // skip meta fields the project hasn't set, so the masthead doesn't show orphaned labels with no
+    // value next to them
+    wxString metaFields;
+    const auto addMetaField =
+        [&metaFields, &htmlEncode](const wxString& label, const wxString& value)
+    {
+        if (!value.empty())
+            {
+            metaFields += wxString::Format(L"<div><dt>%s</dt><dd>%s</dd></div>\n", label,
+                                           htmlEncode({ value.wc_str() }, true).c_str());
+            }
+    };
+    addMetaField(_(L"Status"), doc->GetStatus());
+    addMetaField(_(L"Reviewer"), doc->GetReviewer());
+    addMetaField(_(L"Date"), wxDateTime::Now().FormatDate());
+
+    infoTable = wxString::Format(
+        L"<header class='export-masthead'>\n"
+        "<div class='export-masthead-inner'>\n"
+        "%s"
+        "<div class='export-masthead-text'>\n"
+        "<p class='export-eyebrow'>%s</p>\n"
+        "<h1>%s</h1>\n"
+        "<dl class='export-meta'>\n"
+        "%s"
+        "</dl>\n"
+        "</div>\n"
+        "</div>\n"
+        "</header>",
+        (logoDataUri.empty() ?
+             wxString{} :
+             wxString::Format(L"<img class='export-mark' alt='' src='%s' />\n", logoDataUri)),
+        htmlEncode({ wxGetApp().GetAppDisplayName().wc_str() }, true).c_str(),
+        htmlEncode({ doc->GetTitle().wc_str() }, true).c_str(), metaFields);
+
+    // embed the stylesheet: the report theme CSS (default.css), the export-all shell theme
+    // (masthead and sidebar table of contents), the user's selected report theme override, and
+    // finally the captured highlight rules, so the combined report is self-contained and
+    // matches what the windows render on screen
+    wxString reportCss = ProjectReportFormat::GetThemeCss(_DT(L"default.css")) + L"\n" +
+                         ProjectReportFormat::GetThemeCss(_DT(L"export-themes/default.css"));
+    if (const wxString userTheme = wxGetApp().GetAppOptions()->GetReportTheme(); !userTheme.empty())
+        {
+        reportCss += L"\n" + ProjectReportFormat::GetThemeCss(userTheme);
+        }
     const wxString styleSection =
-        L"\n    <style>\n" +
-        ProjectReportFormat::GetThemeCss(_DT(L"default.css"),
-                                         wxGetApp().GetAppOptions()->GetReportTheme()) +
-        textWindowStyleSection + L"\n    </style>\n</head>";
-    outputText.insert(0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection + L"\n<body>\n" +
-                             infoTable + L"\n<div class='toc-section no-print'>" + toc + L"</div>");
-    outputText += L"\n</body>\n</html>";
+        L"\n    <style>\n" + reportCss + textWindowStyleSection + L"\n    </style>\n</head>";
+    outputText.insert(
+        0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection + L"\n<body>\n" + infoTable +
+               L"\n<div class='export-wrap'>"
+               "\n<nav class='export-index no-print' aria-label='" +
+               _(L"Sections") + L"'>\n<h2>" + _(L"Sections") + L"</h2>\n<ol>\n" + toc +
+               L"</ol>\n</nav>"
+               "\n<main class='export-plan'>");
+    outputText += L"\n</main>\n</div>\n</body>\n</html>";
 
     wxFileName(filePath.GetFullPath()).SetPermissions(wxS_DEFAULT);
     wxFile file(filePath.GetFullPath(), wxFile::write);
