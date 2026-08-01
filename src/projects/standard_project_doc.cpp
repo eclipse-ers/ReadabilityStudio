@@ -5680,12 +5680,13 @@ ProjectDoc::TextHeader ProjectDoc::BuildHeader(const MarkupFormat format,
                              "\n<meta name=\"generator\" content=\"%s\" />"
                              "\n%s"
                              "\n<style>\n%s%s"
-                             "\n</style>\n</head>\n<body>\n",
+                             "\n</style>\n</head>\n<body id=\"top\">\n",
                              wxGetApp().GetAppName(), BuildStyleSheet(),
                              ProjectReportFormat::GetThemeCss(
                                  _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme()),
                              bodyFontRule);
-        textHeaders.endSection = L"\n</body>\n</html>";
+        textHeaders.endSection = L"\n<a href='#top' class='back-to-top no-print' aria-label='" +
+                                 _(L"Back to top") + L"'>&#8593;</a>\n</body>\n</html>";
         }
     return textHeaders;
     }

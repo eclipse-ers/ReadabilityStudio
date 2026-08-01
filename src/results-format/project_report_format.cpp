@@ -875,12 +875,16 @@ ProjectReportFormat::FormatHtmlReportStart(const wxString& title /*= wxString{}*
         "\n    %s"
         "\n    </style>"
         "\n</head>"
-        "\n<body>",
+        "\n<body id='top'>",
         wxGetApp().GetAppName(), title, GetThemeCss(_DT(L"default.css"), overrideCssFile));
     }
 
 //------------------------------------------------
-wxString ProjectReportFormat::FormatHtmlReportEnd() { return { L"\n</body>\n</html>" }; }
+wxString ProjectReportFormat::FormatHtmlReportEnd()
+    {
+    return { L"\n<a href='#top' class='back-to-top no-print' aria-label='" + _(L"Back to top") +
+             L"'>&#8593;</a>\n</body>\n</html>" };
+    }
 
 //------------------------------------------------
 wxString ProjectReportFormat::FormatReportBanner(const wxString& title,

@@ -3866,14 +3866,16 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         }
     const wxString styleSection =
         L"\n    <style>\n" + reportCss + textWindowStyleSection + L"\n    </style>\n</head>";
-    outputText.insert(
-        0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection + L"\n<body>\n" + infoTable +
-               L"\n<div class='export-wrap'>"
-               "\n<nav class='export-index no-print' aria-label='" +
-               _(L"Sections") + L"'>\n<h2>" + _(L"Sections") + L"</h2>\n<ol>\n" + toc +
-               L"</ol>\n</nav>"
-               "\n<main class='export-plan'>");
-    outputText += L"\n</main>\n</div>\n</body>\n</html>";
+    outputText.insert(0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection +
+                             L"\n<body id='top'>\n" + infoTable +
+                             L"\n<div class='export-wrap'>"
+                             "\n<nav class='export-index no-print' aria-label='" +
+                             _(L"Sections") + L"'>\n<h2>" + _(L"Sections") + L"</h2>\n<ol>\n" +
+                             toc +
+                             L"</ol>\n</nav>"
+                             "\n<main class='export-plan'>");
+    outputText += L"\n</main>\n</div>\n<a href='#top' class='back-to-top no-print' aria-label='" +
+                  _(L"Back to top") + L"'>&#8593;</a>\n</body>\n</html>";
 
     wxFileName(filePath.GetFullPath()).SetPermissions(wxS_DEFAULT);
     wxFile file(filePath.GetFullPath(), wxFile::write);
