@@ -835,14 +835,11 @@ wxString ProjectReportFormat::GetThemeCss(const wxString& fileName /*= _DT(L"def
     }
 
 //------------------------------------------------
-wxColour
-ProjectReportFormat::GetThemeAccentColour(const wxString& overrideFileName /*= wxEmptyString*/)
+wxColour ProjectReportFormat::ParseThemeColour(const wxString& css, const wxString& propertyName,
+                                               const wxColour& fallbackColour)
     {
-    const wxString css = GetThemeCss(_DT(L"default.css"), overrideFileName);
-
-    // fallback: default theme's header accent
-    wxColour accentColour{ L"#00CC66" };
-    const auto tagPos = css.rfind(_DT(L"--header-accent:"));
+    wxColour colour{ fallbackColour };
+    const auto tagPos = css.rfind(propertyName);
     if (tagPos != wxString::npos)
         {
         const auto hashPos = css.find(L'#', tagPos);
@@ -851,11 +848,27 @@ ProjectReportFormat::GetThemeAccentColour(const wxString& overrideFileName /*= w
             const wxColour parsedColour{ css.substr(hashPos, 7) };
             if (parsedColour.IsOk())
                 {
-                accentColour = parsedColour;
+                colour = parsedColour;
                 }
             }
         }
-    return accentColour;
+    return colour;
+    }
+
+//------------------------------------------------
+wxColour
+ProjectReportFormat::GetThemeAccentColour(const wxString& overrideFileName /*= wxEmptyString*/)
+    {
+    return ParseThemeColour(GetThemeCss(_DT(L"default.css"), overrideFileName),
+                            _DT(L"--header-accent:"), wxColour{ L"#00CC66" });
+    }
+
+//------------------------------------------------
+wxColour
+ProjectReportFormat::GetThemeBannerColour(const wxString& overrideFileName /*= wxEmptyString*/)
+    {
+    return ParseThemeColour(GetThemeCss(_DT(L"default.css"), overrideFileName),
+                            _DT(L"--banner-color:"), wxColour{ L"#2E86AB" });
     }
 
 //------------------------------------------------

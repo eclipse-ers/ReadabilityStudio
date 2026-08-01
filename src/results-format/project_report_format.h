@@ -72,6 +72,12 @@ class ProjectReportFormat
     ///     (as would be passed as @c overrideFileName to GetThemeCss()).
     [[nodiscard]]
     static wxColour GetThemeAccentColour(const wxString& overrideFileName = wxEmptyString);
+    /// @returns The theme's secondary (banner) accent color, used for the summary report's
+    ///     banner heading.
+    /// @param overrideFileName The user-selected theme CSS file overlaid on "default.css"
+    ///     (as would be passed as @c overrideFileName to GetThemeCss()).
+    [[nodiscard]]
+    static wxColour GetThemeBannerColour(const wxString& overrideFileName = wxEmptyString);
     /// @returns The html/head/body start sections for a report.
     /// @param title The page's title.
     /// @param overrideCssFile An optional CSS file to load after the base theme.
@@ -166,6 +172,17 @@ class ProjectReportFormat
     constexpr static int MAX_DOLCH_NOUNS = 96;
 
   private:
+    /** @returns A theme color parsed from a cascaded theme stylesheet, falling back to
+            the default theme's value if not found (or overridden with something other
+            than a hex color, e.g. a light-dark() expression).
+        @param css The cascaded theme CSS to parse.
+        @param propertyName The custom property to search for
+            (e.g., "--header-accent:").
+        @param fallbackColour The color to fall back to if @p propertyName isn't found.*/
+    [[nodiscard]]
+    static wxColour ParseThemeColour(const wxString& css, const wxString& propertyName,
+                                     const wxColour& fallbackColour);
+
     [[nodiscard]]
     static wxString FormatDolchHeader(const wxString& label)
         {

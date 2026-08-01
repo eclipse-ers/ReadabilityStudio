@@ -739,6 +739,11 @@ bool ReadabilityApp::OnInit()
     // load the full set of user settings
     GetAppOptions()->LoadOptionsFile(appSettingFolderPath + L"Settings.xml", false);
 
+    // theme the exported header row of list controls to match the report theme's
+    // banner color (the secondary accent, as used for the summary report's banner heading)
+    Wisteria::UI::ListCtrlEx::SetExportHeaderBackgroundColour(
+        ProjectReportFormat::GetThemeBannerColour(GetAppOptions()->GetReportTheme()));
+
     // this must be done before any report web views are created
     if (GetAppOptions()->IsGpuAccelerationDisabled())
         {
@@ -5683,6 +5688,10 @@ void MainFrame::RefreshOpenProjectsIfThemeChanged(const wxString& previousReport
         {
         return;
         }
+
+    Wisteria::UI::ListCtrlEx::SetExportHeaderBackgroundColour(
+        ProjectReportFormat::GetThemeBannerColour(wxGetApp().GetAppOptions()->GetReportTheme()));
+
     auto& docs = wxGetApp().GetDocManager()->GetDocuments();
     for (size_t i = 0; i < docs.GetCount(); ++i)
         {
