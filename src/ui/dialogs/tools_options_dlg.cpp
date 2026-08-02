@@ -5381,36 +5381,6 @@ void ToolsOptionsDlg::CreateControls()
             docPanelSizer->Add(optionsSizer,
                                wxSizerFlags{}.Expand().Border(wxLEFT, optionIndentSize));
 
-            auto* themeSizer = new wxBoxSizer(wxHORIZONTAL);
-            optionsSizer->Add(themeSizer, wxSizerFlags{}.Expand().Border(wxBOTTOM));
-
-            themeSizer->Add(new wxStaticText(generalSettingsPage, wxID_STATIC, _(L"Theme:")),
-                            wxSizerFlags{}.CenterVertical());
-
-            wxArrayString themeFiles;
-            // recurses into subfolders, so "export-themes" (CSSes for the "Export All"
-            // single-file report, not a user-selectable in-app report theme) is filtered out below
-            wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"report-themes")), &themeFiles,
-                               _DT(L"*.css"), wxDIR_FILES);
-            wxArrayString themeChoices;
-            for (const auto& themeFile : themeFiles)
-                {
-                const wxFileName themeFileName{ themeFile };
-                if (themeFileName.GetName().CmpNoCase(_DT(L"default")) != 0 &&
-                    (themeFileName.GetDirs().empty() ||
-                     themeFileName.GetDirs().Last().CmpNoCase(_DT(L"export-themes")) != 0))
-                    {
-                    themeChoices.Add(ThemeFileNameToLabel(themeFile));
-                    }
-                }
-            themeChoices.Sort();
-
-            auto* themeCombo =
-                new wxComboBox(generalSettingsPage, wxID_ANY, wxString{}, wxDefaultPosition,
-                               wxDefaultSize, themeChoices, wxCB_DROPDOWN | wxCB_READONLY);
-            themeCombo->SetValidator(wxGenericValidator(&m_reportTheme.get_value()));
-            themeSizer->Add(themeCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
-
             optionsSizer->Add(
                 new wxCheckBox(generalSettingsPage, wxID_ANY,
                                _(L"Disable GPU acceleration for reports (requires restart)"),
@@ -5465,6 +5435,8 @@ void ToolsOptionsDlg::CreateControls()
                                wxDefaultPosition, wxDefaultSize, 0,
                                wxGenericValidator(&m_luaUnsafeMode.get_value())),
                 wxSizerFlags{}.Expand().Border(wxTOP));
+
+            CreateThemesSection();
             }
         }
 
@@ -5585,6 +5557,49 @@ void ToolsOptionsDlg::CreateControls()
         {
         m_boxPlotsPropertyGrid->FitColumns();
         }
+    }
+
+//-------------------------------------------------------------
+void ToolsOptionsDlg::CreateThemesSection()
+    {
+    auto* themesPage =
+        new wxPanel(m_sideBar, THEMES_PAGE, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+    auto* panelSizer = new wxBoxSizer(wxVERTICAL);
+    themesPage->SetSizer(panelSizer);
+    m_sideBar->AddPage(themesPage, GetThemesLabel(), THEMES_PAGE, false);
+
+    auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
+    panelSizer->Add(optionsSizer, wxSizerFlags{}.Expand().Border(wxLEFT | wxTOP,
+                                                                 wxSizerFlags::GetDefaultBorder()));
+
+    auto* themeSizer = new wxBoxSizer(wxHORIZONTAL);
+    optionsSizer->Add(themeSizer, wxSizerFlags{}.Expand().Border(wxBOTTOM));
+
+    themeSizer->Add(new wxStaticText(themesPage, wxID_STATIC, _(L"Theme:")),
+                    wxSizerFlags{}.CenterVertical());
+
+    wxArrayString themeFiles;
+    // recurses into subfolders, so "export-themes" (CSSes for the "Export All"
+    // single-file report, not a user-selectable in-app report theme) is filtered out below
+    wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"report-themes")), &themeFiles,
+                       _DT(L"*.css"), wxDIR_FILES);
+    wxArrayString themeChoices;
+    for (const auto& themeFile : themeFiles)
+        {
+        const wxFileName themeFileName{ themeFile };
+        if (themeFileName.GetName().CmpNoCase(_DT(L"default")) != 0 &&
+            (themeFileName.GetDirs().empty() ||
+             themeFileName.GetDirs().Last().CmpNoCase(_DT(L"export-themes")) != 0))
+            {
+            themeChoices.Add(ThemeFileNameToLabel(themeFile));
+            }
+        }
+    themeChoices.Sort();
+
+    auto* themeCombo = new wxComboBox(themesPage, wxID_ANY, wxString{}, wxDefaultPosition,
+                                      wxDefaultSize, themeChoices, wxCB_DROPDOWN | wxCB_READONLY);
+    themeCombo->SetValidator(wxGenericValidator(&m_reportTheme.get_value()));
+    themeSizer->Add(themeCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
     }
 
 //-------------------------------------------------------------

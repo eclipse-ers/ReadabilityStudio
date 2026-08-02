@@ -549,6 +549,7 @@ bool ReadabilityApp::OnInit()
         { 30008, MainFrame::ID_DOCUMENT_RIBBON_BUTTON_BAR },
         { 30009, MainFrame::ID_PROJECT_RIBBON_BUTTON_BAR },
         { 1000, ToolsOptionsDlg::GENERAL_SETTINGS_PAGE },
+        { 1001, ToolsOptionsDlg::THEMES_PAGE },
         { 2000, ToolsOptionsDlg::PROJECT_SETTINGS_PAGE },
         { 3000, ToolsOptionsDlg::DOCUMENT_DISPLAY_GENERAL_PAGE },
         { 3002, ToolsOptionsDlg::DOCUMENT_DISPLAY_DOLCH_PAGE },

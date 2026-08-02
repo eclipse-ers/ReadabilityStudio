@@ -482,6 +482,7 @@ RibbonButtonBar =
 OptionsPageType =
   {
   GeneralSettings = 1000,
+  Themes = 1001,
   ProjectSettings = 2000,
   DocumentDisplayGeneral = 3000,
   DocumentDisplayDolch = 3002,

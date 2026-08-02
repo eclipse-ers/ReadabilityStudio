@@ -111,6 +111,7 @@ class ToolsOptionsDlg final : public wxDialog
     // should be public so that clients can specify which page to select
     constexpr static int GENERAL_SETTINGS_PAGE = wxID_HIGHEST;
     constexpr static int PROJECT_SETTINGS_PAGE = wxID_HIGHEST + 1;
+    constexpr static int THEMES_PAGE = wxID_HIGHEST + 87;
 
     constexpr static int DOCUMENT_DISPLAY_GENERAL_PAGE = wxID_HIGHEST + 2;
     constexpr static int DOCUMENT_DISPLAY_DOLCH_PAGE = wxID_HIGHEST + 3;
@@ -278,6 +279,7 @@ class ToolsOptionsDlg final : public wxDialog
 
     /// Creates the controls and sizers
     void CreateControls();
+    void CreateThemesSection();
     void CreateProjectSection();
     void CreateDocumentIndexingSection();
     void CreateReadabilitySection();
@@ -826,6 +828,12 @@ class ToolsOptionsDlg final : public wxDialog
     static wxString GetGeneralSettingsLabel()
         {
         return _(L"General Settings");
+        }
+
+    [[nodiscard]]
+    static wxString GetThemesLabel()
+        {
+        return _(L"Themes");
         }
 
     [[nodiscard]]
