@@ -5036,6 +5036,55 @@ bool BaseProject::LoadExternalDocument()
             return false;
             }
         }
+    // or a cell in an ODS file
+    else if (resolvePath.IsOdsCell())
+        {
+        const size_t odsTag = GetOriginalDocumentFilePath().Lower().find(_DT(L".ods#"));
+        wxFileName poundFn(GetOriginalDocumentFilePath().substr(0, odsTag + 4));
+        if (!wxFile::Exists(poundFn.GetFullPath()))
+            {
+            // first try to find the document from the project file's folder structure
+            wxString fileBySameNameInProjectDirectory;
+            if (FindMissingFile(poundFn.GetFullPath(), fileBySameNameInProjectDirectory))
+                {
+                poundFn.Assign(fileBySameNameInProjectDirectory);
+                }
+            else
+                {
+                LogMessage(
+                    wxString::Format(_(L"%s:\n\nUnable to open file."), poundFn.GetFullPath()),
+                    _(L"Error"), wxOK | wxICON_EXCLAMATION);
+                return false;
+                }
+            }
+        wxString worksheetName = GetOriginalDocumentFilePath().substr(odsTag + 5);
+        const size_t slash = worksheetName.find_last_of(L'#');
+        if (slash != wxString::npos)
+            {
+            const wxString cellName = worksheetName.substr(slash + 1);
+            worksheetName.Truncate(slash);
+            lily_of_the_valley::ods_extract_text filterOds{ false };
+            const Wisteria::ZipCatalog zc(poundFn.GetFullPath());
+            const std::wstring contentXml = zc.ReadTextFile(L"content.xml");
+            filterOds.read_worksheet_names(contentXml.c_str(), contentXml.length());
+
+            lily_of_the_valley::ods_extract_text::worksheet wkData;
+            filterOds(contentXml.c_str(), contentXml.length(), wkData,
+                      worksheetName.ToStdWstring());
+            if (!wkData.empty())
+                {
+                SetDocumentText(lily_of_the_valley::spreadsheet_extract_text::get_cell_text(
+                    cellName.wc_str(), wkData));
+                LoadDocument();
+                return true;
+                }
+
+            LogMessage(wxString::Format(_(L"Unable to find the worksheet \"%s\" in \"%s\"."),
+                                        worksheetName, poundFn.GetFullPath()),
+                       _(L"Error"), wxOK | wxICON_EXCLAMATION);
+            return false;
+            }
+        }
 
     return true;
     }

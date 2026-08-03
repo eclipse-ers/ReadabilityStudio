@@ -1099,6 +1099,12 @@ void ProjectView::OnLaunchSourceFile([[maybe_unused]] wxRibbonButtonBarEvent& ev
                 const wxFileName fn(resolvePath.GetResolvedPath().substr(0, excelTag + 5));
                 wxLaunchDefaultApplication(fn.GetFullPath());
                 }
+            else if (resolvePath.IsOdsCell())
+                {
+                const size_t odsTag = resolvePath.GetResolvedPath().MakeLower().find(_DT(L".ods#"));
+                const wxFileName fn(resolvePath.GetResolvedPath().substr(0, odsTag + 4));
+                wxLaunchDefaultApplication(fn.GetFullPath());
+                }
             else
                 {
                 wxLaunchDefaultApplication(resolvePath.GetResolvedPath());

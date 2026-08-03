@@ -123,7 +123,7 @@ This will also affect which tests, word lists, and grammar features will be avai
 For example, if we select **Spanish**, then only Spanish tests will be included, and features related to English word lists (e.g., New Dale-Chall) will not be available.
 For this example, select **English**.
 
-Now you can add files from a folder, archive file, *Excel*^®^ 2007 file, or website to the project.
+Now you can add files from a folder, archive file, *Excel*^®^ 2007 or *OpenDocument* spreadsheet file, or website to the project.
 
 To add files from a folder, click the `r keys("Add folder")` button.
 You will be presented with the [**Select Directory**](#sec-batch-project-import-features) dialog.
@@ -136,8 +136,8 @@ You will be presented with the [**Select Archive File**](#sec-batch-project-impo
 Like the **Select Directory** dialog, you can specify which documents to search for within the archive.
 (Note that the entire archive will be searched recursively for documents.)
 
-To add documents from an *Excel* (\*.xlsx) file, click the `r keys("Add spreadsheet")` button.
-After selecting an *Excel* file, you will be prompted for which cells to import.
+To add documents from an *Excel* (\*.xlsx) or *OpenDocument* spreadsheet (\*.ods) file, click the `r keys("Add spreadsheet")` button.
+After selecting a spreadsheet file, you will be prompted for which cells to import.
 After specifying these, the cells will be imported one of two ways.
 The first way is if a cell's content is a file path.
 In this case, the document referenced by this file path will be loaded into the project.

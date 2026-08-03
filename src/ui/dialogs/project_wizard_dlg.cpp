@@ -1196,19 +1196,20 @@ readability::test_language ProjectWizardDlg::GetLanguage() const
     }
 
 //-------------------------------------------------------------
-void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
+void ProjectWizardDlg::LoadSpreadsheet(wxString filePath /*= wxString{}*/)
     {
-    if (excelPath.empty())
+    if (filePath.empty())
         {
         wxFileDialog dlg(this, _(L"Select Spreadsheet to Analyze"), wxString{}, wxString{},
-                         _(L"Excel Files (*.xlsx)|*.xlsx"),
+                         _(L"Spreadsheet Files (*.xlsx;*.ods)|*.xlsx;*.ods|Excel Files "
+                           "(*.xlsx)|*.xlsx|OpenDocument Spreadsheet Files (*.ods)|*.ods"),
                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
 
         if (dlg.ShowModal() != wxID_OK)
             {
             return;
             }
-        excelPath = dlg.GetPath();
+        filePath = dlg.GetPath();
         }
 
     // only a provided group label makes sense here since cells don't have document
@@ -1221,126 +1222,237 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         groupLabel = dlg.GetValue();
         }
 
-    const Wisteria::ZipCatalog archive(excelPath);
-    if (archive.Find(L"xl/workbook.xml") == nullptr)
-        {
-        wxMessageBox(
-            _(L"Unable to open Excel document, file is either password-protected or corrupt."),
-            wxGetApp().GetAppDisplayName(), wxICON_EXCLAMATION | wxOK);
-        return;
-        }
-    lily_of_the_valley::xlsx_extract_text excelExtract{ false };
-        {
-        const wxWindowDisabler disableAll;
-        const wxBusyInfo wait(_(L"Loading Excel file..."), this);
-#ifdef __WXGTK__
-        wxMilliSleep(100);
-        wxGetApp().Yield();
-#endif
-        const std::wstring workbookFileText = archive.ReadTextFile(L"xl/workbook.xml");
-        excelExtract.read_worksheet_names(workbookFileText.c_str(), workbookFileText.length());
-        // read workbook relationships
-        const std::wstring workbookRels = archive.ReadTextFile(L"xl/_rels/workbook.xml.rels");
-        excelExtract.read_relative_paths(workbookRels.c_str(), workbookRels.length());
-        // resolve worksheet names to XML paths
-        excelExtract.map_workbook_paths();
-        // read the string table
-        const std::wstring sharedStrings = archive.ReadTextFile(L"xl/sharedStrings.xml");
-        if (!sharedStrings.empty())
-            {
-            excelExtract.read_shared_strings(sharedStrings.c_str(), sharedStrings.length());
-            }
-        }
     // name of worksheets and list of cells with text in them
     std::vector<std::pair<std::wstring, std::vector<std::wstring>>> workSheets;
-    wxArrayString worksheets;
-    wxArrayInt workSheetSelections;
 
-    const auto& worksheetPaths = excelExtract.get_worksheet_paths();
-    for (size_t i = 0; i < worksheetPaths.size(); ++i)
-        {
-        worksheets.push_back(worksheetPaths[i].first.c_str());
-        workSheetSelections.push_back(i);
-        }
+    const bool isOds{ wxFileName(filePath).GetExt().CmpNoCase(L"ods") == 0 };
 
-    // only ask for which worksheets to select if there is more than one in the workbook
-    if (worksheets.size() > 1)
+    if (isOds)
         {
-        wxMultiChoiceDialog chooseWorksheetsDlg(this, _(L"Select the worksheets to import:"),
-                                                _(L"Excel Import"), worksheets);
-        chooseWorksheetsDlg.SetSelections(workSheetSelections);
-        if (chooseWorksheetsDlg.ShowModal() != wxID_OK)
+        const Wisteria::ZipCatalog archive(filePath);
+        if (archive.Find(L"content.xml") == nullptr)
             {
+            wxMessageBox(
+                _(L"Unable to open ODS document, file is either password-protected or corrupt."),
+                wxGetApp().GetAppDisplayName(), wxICON_EXCLAMATION | wxOK);
             return;
             }
-        workSheetSelections = chooseWorksheetsDlg.GetSelections();
-        }
-
-    for (size_t i = 0; i < workSheetSelections.size(); ++i)
-        {
-        lily_of_the_valley::xlsx_extract_text::worksheet wrk;
+        lily_of_the_valley::ods_extract_text odsExtract{ false };
+        std::wstring contentXml;
             {
             const wxWindowDisabler disableAll;
-            const wxBusyInfo wait(_(L"Loading worksheet..."), this);
+            const wxBusyInfo wait(_(L"Loading ODS file..."), this);
 #ifdef __WXGTK__
             wxMilliSleep(100);
             wxGetApp().Yield();
 #endif
-            const std::wstring sheetFile =
-                archive.ReadTextFile(worksheetPaths[workSheetSelections.Item(i)].second);
+            contentXml = archive.ReadTextFile(L"content.xml");
+            odsExtract.read_worksheet_names(contentXml.c_str(), contentXml.length());
+            }
 
-            if (!sheetFile.empty())
-                {
-                excelExtract(sheetFile.c_str(), sheetFile.length(), wrk);
-                }
-            else
+        wxArrayString worksheets;
+        wxArrayInt workSheetSelections;
+
+        const auto worksheetNames = odsExtract.get_worksheet_names();
+        for (size_t i = 0; i < worksheetNames.size(); ++i)
+            {
+            worksheets.push_back(worksheetNames[i].c_str());
+            workSheetSelections.push_back(i);
+            }
+
+        // only ask for which worksheets to select if there is more than one in the workbook
+        if (worksheets.size() > 1)
+            {
+            wxMultiChoiceDialog chooseWorksheetsDlg(this, _(L"Select the worksheets to import:"),
+                                                    _(L"ODS Import"), worksheets);
+            chooseWorksheetsDlg.SetSelections(workSheetSelections);
+            if (chooseWorksheetsDlg.ShowModal() != wxID_OK)
                 {
                 return;
                 }
+            workSheetSelections = chooseWorksheetsDlg.GetSelections();
             }
 
-        Wisteria::UI::ExcelPreviewDlg excelPreview(
-            this, &wrk, &excelExtract, wxID_ANY,
-            wxString::Format(_(L"\"%s\" Preview"),
-                             worksheetPaths[workSheetSelections.Item(i)].first.c_str()));
-
-        excelPreview.SetHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(),
-                                  L"online/additional-features.html");
-        if (excelPreview.ShowModal() == wxID_OK)
+        for (size_t i = 0; i < workSheetSelections.size(); ++i)
             {
-            // filter just the rows that were requested by setting unselected cells to empty
-            if (excelPreview.IsImportingOnlySelectedCells())
+            lily_of_the_valley::ods_extract_text::worksheet wrk;
                 {
-                for (size_t rowPos = 0; rowPos < wrk.size(); ++rowPos)
+                const wxWindowDisabler disableAll;
+                const wxBusyInfo wait(_(L"Loading worksheet..."), this);
+#ifdef __WXGTK__
+                wxMilliSleep(100);
+                wxGetApp().Yield();
+#endif
+                odsExtract(contentXml.c_str(), contentXml.length(), wrk,
+                           worksheetNames[workSheetSelections.Item(i)]);
+                }
+
+            Wisteria::UI::OdsPreviewDlg odsPreview(
+                this, &wrk, &odsExtract, wxID_ANY,
+                wxString::Format(_(L"\"%s\" Preview"),
+                                 worksheetNames[workSheetSelections.Item(i)].c_str()));
+
+            odsPreview.SetHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(),
+                                    L"online/additional-features.html");
+            if (odsPreview.ShowModal() == wxID_OK)
+                {
+                // filter just the rows that were requested by setting unselected cells to empty
+                if (odsPreview.IsImportingOnlySelectedCells())
                     {
-                    for (size_t colPos = 0; colPos < wrk[rowPos].size(); ++colPos)
+                    for (size_t rowPos = 0; rowPos < wrk.size(); ++rowPos)
                         {
-                        if (!excelPreview.IsCellSelected(wxGridCellCoords(rowPos, colPos)))
+                        for (size_t colPos = 0; colPos < wrk[rowPos].size(); ++colPos)
                             {
-                            wrk[rowPos].operator[](colPos).set_value(std::wstring());
+                            if (!odsPreview.IsCellSelected(wxGridCellCoords(rowPos, colPos)))
+                                {
+                                wrk[rowPos].operator[](colPos).set_value(std::wstring());
+                                }
                             }
                         }
                     }
-                }
 #ifndef NDEBUG
-            if (!lily_of_the_valley::xlsx_extract_text::verify_sheet(wrk).first)
-                {
-                wxFAIL_MSG(
-                    wxString(L"Excel worksheet cell's out of order. First incorrect cell: ") +
-                    lily_of_the_valley::xlsx_extract_text::verify_sheet(wrk).second.c_str());
-                }
-            // verify that the filtering looks OK when debugging
-            Wisteria::UI::ExcelPreviewDlg excelPreviewFilterDEBUG(
-                this, &wrk, &excelExtract, wxID_ANY,
-                wxString(_DT(L"DEBUG CHECK ")) +
-                    worksheetPaths[workSheetSelections.Item(i)].first.c_str());
-            excelPreviewFilterDEBUG.ShowModal();
+                if (!lily_of_the_valley::ods_extract_text::verify_sheet(wrk).first)
+                    {
+                    wxFAIL_MSG(
+                        wxString(L"ODS worksheet cell's out of order. First incorrect cell: ") +
+                        lily_of_the_valley::ods_extract_text::verify_sheet(wrk).second.c_str());
+                    }
+                // verify that the filtering looks OK when debugging
+                Wisteria::UI::OdsPreviewDlg odsPreviewFilterDEBUG(
+                    this, &wrk, &odsExtract, wxID_ANY,
+                    wxString(_DT(L"DEBUG CHECK ")) +
+                        worksheetNames[workSheetSelections.Item(i)].c_str());
+                odsPreviewFilterDEBUG.ShowModal();
 #endif
-            workSheets.emplace_back(worksheetPaths[workSheetSelections.Item(i)].first,
-                                    std::vector<std::wstring>());
+                workSheets.emplace_back(worksheetNames[workSheetSelections.Item(i)],
+                                        std::vector<std::wstring>());
 
-            lily_of_the_valley::xlsx_extract_text::get_text_cell_names(wrk,
-                                                                       workSheets.back().second);
+                lily_of_the_valley::ods_extract_text::get_text_cell_names(wrk,
+                                                                          workSheets.back().second);
+                }
+            }
+        }
+    else
+        {
+        const Wisteria::ZipCatalog archive(filePath);
+        if (archive.Find(L"xl/workbook.xml") == nullptr)
+            {
+            wxMessageBox(
+                _(L"Unable to open Excel document, file is either password-protected or corrupt."),
+                wxGetApp().GetAppDisplayName(), wxICON_EXCLAMATION | wxOK);
+            return;
+            }
+        lily_of_the_valley::xlsx_extract_text excelExtract{ false };
+            {
+            const wxWindowDisabler disableAll;
+            const wxBusyInfo wait(_(L"Loading Excel file..."), this);
+#ifdef __WXGTK__
+            wxMilliSleep(100);
+            wxGetApp().Yield();
+#endif
+            const std::wstring workbookFileText = archive.ReadTextFile(L"xl/workbook.xml");
+            excelExtract.read_worksheet_names(workbookFileText.c_str(), workbookFileText.length());
+            // read workbook relationships
+            const std::wstring workbookRels = archive.ReadTextFile(L"xl/_rels/workbook.xml.rels");
+            excelExtract.read_relative_paths(workbookRels.c_str(), workbookRels.length());
+            // resolve worksheet names to XML paths
+            excelExtract.map_workbook_paths();
+            // read the string table
+            const std::wstring sharedStrings = archive.ReadTextFile(L"xl/sharedStrings.xml");
+            if (!sharedStrings.empty())
+                {
+                excelExtract.read_shared_strings(sharedStrings.c_str(), sharedStrings.length());
+                }
+            }
+        wxArrayString worksheets;
+        wxArrayInt workSheetSelections;
+
+        const auto& worksheetPaths = excelExtract.get_worksheet_paths();
+        for (size_t i = 0; i < worksheetPaths.size(); ++i)
+            {
+            worksheets.push_back(worksheetPaths[i].first.c_str());
+            workSheetSelections.push_back(i);
+            }
+
+        // only ask for which worksheets to select if there is more than one in the workbook
+        if (worksheets.size() > 1)
+            {
+            wxMultiChoiceDialog chooseWorksheetsDlg(this, _(L"Select the worksheets to import:"),
+                                                    _(L"Excel Import"), worksheets);
+            chooseWorksheetsDlg.SetSelections(workSheetSelections);
+            if (chooseWorksheetsDlg.ShowModal() != wxID_OK)
+                {
+                return;
+                }
+            workSheetSelections = chooseWorksheetsDlg.GetSelections();
+            }
+
+        for (size_t i = 0; i < workSheetSelections.size(); ++i)
+            {
+            lily_of_the_valley::xlsx_extract_text::worksheet wrk;
+                {
+                const wxWindowDisabler disableAll;
+                const wxBusyInfo wait(_(L"Loading worksheet..."), this);
+#ifdef __WXGTK__
+                wxMilliSleep(100);
+                wxGetApp().Yield();
+#endif
+                const std::wstring sheetFile =
+                    archive.ReadTextFile(worksheetPaths[workSheetSelections.Item(i)].second);
+
+                if (!sheetFile.empty())
+                    {
+                    excelExtract(sheetFile.c_str(), sheetFile.length(), wrk);
+                    }
+                else
+                    {
+                    return;
+                    }
+                }
+
+            Wisteria::UI::ExcelPreviewDlg excelPreview(
+                this, &wrk, &excelExtract, wxID_ANY,
+                wxString::Format(_(L"\"%s\" Preview"),
+                                 worksheetPaths[workSheetSelections.Item(i)].first.c_str()));
+
+            excelPreview.SetHelpTopic(wxGetApp().GetMainFrame()->GetHelpDirectory(),
+                                      L"online/additional-features.html");
+            if (excelPreview.ShowModal() == wxID_OK)
+                {
+                // filter just the rows that were requested by setting unselected cells to empty
+                if (excelPreview.IsImportingOnlySelectedCells())
+                    {
+                    for (size_t rowPos = 0; rowPos < wrk.size(); ++rowPos)
+                        {
+                        for (size_t colPos = 0; colPos < wrk[rowPos].size(); ++colPos)
+                            {
+                            if (!excelPreview.IsCellSelected(wxGridCellCoords(rowPos, colPos)))
+                                {
+                                wrk[rowPos].operator[](colPos).set_value(std::wstring());
+                                }
+                            }
+                        }
+                    }
+#ifndef NDEBUG
+                if (!lily_of_the_valley::xlsx_extract_text::verify_sheet(wrk).first)
+                    {
+                    wxFAIL_MSG(
+                        wxString(L"Excel worksheet cell's out of order. First incorrect cell: ") +
+                        lily_of_the_valley::xlsx_extract_text::verify_sheet(wrk).second.c_str());
+                    }
+                // verify that the filtering looks OK when debugging
+                Wisteria::UI::ExcelPreviewDlg excelPreviewFilterDEBUG(
+                    this, &wrk, &excelExtract, wxID_ANY,
+                    wxString(_DT(L"DEBUG CHECK ")) +
+                        worksheetPaths[workSheetSelections.Item(i)].first.c_str());
+                excelPreviewFilterDEBUG.ShowModal();
+#endif
+                workSheets.emplace_back(worksheetPaths[workSheetSelections.Item(i)].first,
+                                        std::vector<std::wstring>());
+
+                lily_of_the_valley::xlsx_extract_text::get_text_cell_names(
+                    wrk, workSheets.back().second);
+                }
             }
         }
 
@@ -1364,7 +1476,7 @@ void ProjectWizardDlg::LoadSpreadsheet(wxString excelPath /*= wxString{}*/)
         size_t cellCounter = 0; // NOLINT(misc-const-correctness)
         for (auto& workSheet : workSheets)
             {
-            const wxString fullPath = excelPath + L"#" + workSheet.first.c_str() + L"#";
+            const wxString fullPath = filePath + L"#" + workSheet.first.c_str() + L"#";
             for (auto cellPos = workSheet.second.begin(); cellPos != workSheet.second.end();
                  ++cellPos, ++cellCounter)
                 {

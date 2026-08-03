@@ -52,6 +52,7 @@
 
 #include "../Wisteria-Dataviz/src/data/dataset.h"
 #include "../Wisteria-Dataviz/src/import/doc_extract_text.h"
+#include "../Wisteria-Dataviz/src/import/ods_extract_text.h"
 #include "../Wisteria-Dataviz/src/import/rtf_extract_text.h"
 #include "../Wisteria-Dataviz/src/import/xlsx_extract_text.h"
 #include "../Wisteria-Dataviz/src/math/mathematics.h"
@@ -110,6 +111,17 @@ struct ExcelFile
 
     lily_of_the_valley::xlsx_extract_text m_xlsx_extract{ false };
     using Workbook = std::map<wxString, lily_of_the_valley::xlsx_extract_text::worksheet>;
+    Workbook m_worksheets;
+    Wisteria::ZipCatalog m_zip;
+    };
+
+/// @brief Helper structure for handling an ODS (OpenDocument Spreadsheet) file.
+struct OdsFile
+    {
+    explicit OdsFile(const wxString& filePath) : m_zip(filePath) {}
+
+    lily_of_the_valley::ods_extract_text m_ods_extract{ false };
+    using Workbook = std::map<wxString, lily_of_the_valley::ods_extract_text::worksheet>;
     Workbook m_worksheets;
     Wisteria::ZipCatalog m_zip;
     };

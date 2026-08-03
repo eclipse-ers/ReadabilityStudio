@@ -181,6 +181,7 @@ This also enables educators to determine which materials are appropriate for Dol
 - *Microsoft^®^ Excel* 2007 (cells can be batch analyzed as documents or filepaths to other documents)
 - *OpenDocument* Text (\*.odt)
 - *OpenDocument* Presentation (\*.odp)
+- *OpenDocument* Spreadsheet (cells can be batch analyzed as documents or filepaths to other documents)
 - HTML (\*.htm)
 - Markdown (\*.md, \*.Rmd, \*.qmd)
 - Rich text (\*.rtf)

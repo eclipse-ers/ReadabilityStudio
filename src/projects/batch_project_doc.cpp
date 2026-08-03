@@ -415,7 +415,8 @@ bool BatchProjectDoc::OnNewDocument()
                 SetFilename(dirs.back(), true);
                 }
             }
-        else if (resolvePath.IsExcelCell() || resolvePath.IsArchivedFile())
+        else if (resolvePath.IsExcelCell() || resolvePath.IsOdsCell() ||
+                 resolvePath.IsArchivedFile())
             {
             const size_t subDocStart = resolvePath.GetResolvedPath().rfind(L"#");
             if (subDocStart != wxString::npos)
@@ -1947,6 +1948,7 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
 
     std::map<wxString, Wisteria::ZipCatalog*> archiveFiles;
     std::map<wxString, ExcelFile*> excelFiles;
+    std::map<wxString, OdsFile*> odsFiles;
     for (auto& doc : m_docs)
         {
         // clear the document's text just in case the user switched from embedding to linking.
@@ -2063,6 +2065,106 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
                                 }
                             }
 
+                        const wxString cellText =
+                            lily_of_the_valley::spreadsheet_extract_text::get_cell_text(
+                                cellName.wc_str(), internalSheetPos->second);
+
+                        fileResolver.ResolvePath(cellText, false);
+                        if (!fileResolver.IsInvalidFile())
+                            {
+                            // this will change the spreadsheet cell path to the real file path
+                            doc->LoadDocumentAsSubProject(fileResolver.GetResolvedPath(),
+                                                          std::wstring{},
+                                                          GetMinDocWordCountForBatch());
+                            }
+                        else
+                            {
+                            doc->SetDocumentText(cellText.wc_string());
+                            doc->LoadDocumentAsSubProject(doc->GetOriginalDocumentFilePath(),
+                                                          doc->GetDocumentText(),
+                                                          GetMinDocWordCountForBatch());
+                            }
+                        }
+                    else
+                        {
+                        doc->SetLoadingOriginalTextSucceeded(false);
+                        }
+                    }
+                else
+                    {
+                    doc->SetLoadingOriginalTextSucceeded(false);
+                    }
+                }
+            else
+                {
+                doc->SetLoadingOriginalTextSucceeded(false);
+                }
+            }
+        else if (fileResolve.IsOdsCell())
+            {
+            FilePathResolver fileResolver;
+            size_t odsTag = doc->GetOriginalDocumentFilePath().Lower().find(_DT(L".ods#"));
+            wxASSERT_MSG(odsTag != std::wstring::npos,
+                         L"ODS file tag not found in path in LoadDocuments()!");
+            if (odsTag != std::wstring::npos)
+                {
+                wxFileName fn(doc->GetOriginalDocumentFilePath().substr(0, odsTag + 4));
+                if (!wxFile::Exists(fn.GetFullPath()))
+                    {
+                    wxString fileBySameNameInProjectDirectory;
+                    if (FindMissingFile(fn.GetFullPath(), fileBySameNameInProjectDirectory))
+                        {
+                        doc->SetOriginalDocumentFilePath(
+                            fileBySameNameInProjectDirectory +
+                            doc->GetOriginalDocumentFilePath().substr(odsTag + 4));
+                        odsTag = doc->GetOriginalDocumentFilePath().Lower().find(_DT(L".ods#"));
+                        fn.Assign(fileBySameNameInProjectDirectory);
+                        SetModifiedFlag();
+                        }
+                    }
+                wxString worksheetName = doc->GetOriginalDocumentFilePath().substr(odsTag + 5);
+                const size_t slash = worksheetName.find_last_of(L'#');
+                if (slash != wxString::npos)
+                    {
+                    const wxString cellName = worksheetName.substr(slash + 1);
+                    worksheetName.Truncate(slash);
+                    const wxString workSheetPath = fn.GetFullPath() + L"#" + worksheetName;
+                    auto odsFilePos = odsFiles.find(workSheetPath);
+                    if (odsFilePos == odsFiles.end())
+                        {
+                        odsFilePos = odsFiles
+                                         .insert(std::pair<wxString, OdsFile*>(
+                                             workSheetPath, new OdsFile(fn.GetFullPath())))
+                                         .first;
+                        }
+
+                    // see if this worksheet is already loaded
+                    auto internalSheetPos = odsFilePos->second->m_worksheets.find(worksheetName);
+
+                    // wasn't loaded before, so load it now
+                    if (internalSheetPos == odsFilePos->second->m_worksheets.end())
+                        {
+                        const std::pair<OdsFile::Workbook::iterator, bool> insertPos =
+                            odsFilePos->second->m_worksheets.insert(
+                                std::pair<wxString,
+                                          lily_of_the_valley::ods_extract_text::worksheet>(
+                                    worksheetName,
+                                    lily_of_the_valley::ods_extract_text::worksheet()));
+                        internalSheetPos = insertPos.first;
+
+                        const std::wstring contentXml =
+                            odsFilePos->second->m_zip.ReadTextFile(L"content.xml");
+
+                        if (!contentXml.empty())
+                            {
+                            odsFilePos->second->m_ods_extract(
+                                contentXml.c_str(), contentXml.length(), internalSheetPos->second,
+                                worksheetName.ToStdWstring());
+                            }
+                        }
+
+                    if (!internalSheetPos->second.empty())
+                        {
                         const wxString cellText =
                             lily_of_the_valley::spreadsheet_extract_text::get_cell_text(
                                 cellName.wc_str(), internalSheetPos->second);
@@ -3104,6 +3206,10 @@ bool BatchProjectDoc::LoadDocuments(wxProgressDialog& progressDlg)
     for (auto& excelFile : excelFiles)
         {
         wxDELETE(excelFile.second);
+        }
+    for (auto& odsFile : odsFiles)
+        {
+        wxDELETE(odsFile.second);
         }
 
     return true;

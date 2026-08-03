@@ -1766,6 +1766,10 @@ void ReadabilityApp::FillExportMenu(wxMenu& exportMenu, const RibbonType rtype)
     {
     wxASSERT_MSG(rtype != RibbonType::MainFrameRibbon,
                  L"Mainframe should not have an export menu!");
+    if (rtype == RibbonType::MainFrameRibbon)
+        {
+        return;
+        }
 
     const auto filterIcon = GetResourceManager().GetSVG(L"ribbon/filter.svg");
     const auto exportAllIcon = GetResourceManager().GetSVG(L"ribbon/export-all.svg");

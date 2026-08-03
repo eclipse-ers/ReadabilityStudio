@@ -54,6 +54,7 @@
 #include "../../Wisteria-Dataviz/src/ui/controls/sidebarbook.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/archivedlg.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/excelpreviewdlg.h"
+#include "../../Wisteria-Dataviz/src/ui/dialogs/odspreviewdlg.h"
 #include "../../app/readability_app.h"
 #include "../../projects/standard_project_doc.h"
 #include "../../webharvester/webharvester.h"
@@ -388,7 +389,7 @@ class ProjectWizardDlg final : public wxDialog
         return m_projectType;
         }
 
-    void LoadSpreadsheet(wxString excelPath = wxString{});
+    void LoadSpreadsheet(wxString filePath = wxString{});
     void LoadArchive(const wxString& archivePath = wxString{});
     void UpdateTestSelectionMethodUI();
     void UpdateTestsUI();

@@ -22,6 +22,10 @@ source('../R/appdown.r')
   - Added tooltips to highlighted words and phrases, explaining why each one was highlighted.
   - Added "back-to-top" elevator buttons.
 
+### Importing/Exporting Enhancements {-}
+
+- Batch projects can now analyze cells inside of *OpenDocument* Spreadsheet (\*.ods) files, the same way as *Excel* (\*.xlsx) files.
+
 ## {{< var PROGRAM_NAME >}} 2026 {-}
 ***
 

@@ -1625,7 +1625,7 @@ void ProjectDoc::UpdateSourceFileModifiedTime()
     FilePathResolver resolvePath;
     resolvePath.ResolvePath(GetOriginalDocumentFilePath(), false);
     if ((resolvePath.IsLocalOrNetworkFile() || resolvePath.IsArchivedFile() ||
-         resolvePath.IsExcelCell()) &&
+         resolvePath.IsExcelCell() || resolvePath.IsOdsCell()) &&
         wxFileName::FileExists(resolvePath.GetResolvedPath()))
         {
         m_sourceFileLastModified = wxFileName(resolvePath.GetResolvedPath()).GetModificationTime();
