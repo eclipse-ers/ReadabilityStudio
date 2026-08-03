@@ -54,7 +54,9 @@
 #include "../Wisteria-Dataviz/src/graphs/groupgraph2d.h"
 #include "../results-format/readability_messages.h"
 #include "scorepoint.h"
+#include <algorithm>
 #include <array>
+#include <functional>
 #include <span>
 
 namespace Wisteria::Graphs
@@ -198,6 +200,23 @@ namespace Wisteria::Graphs
         /// @brief Can be derived for custom score position calculations when laying out the plot.
         /// @param dc The measuring DC.
         virtual void CalculateScorePositions([[maybe_unused]] wxDC& dc) {}
+
+        /** @brief Formats a score as a reading level, using the message catalog's grade scale.
+            @param score The score to format.
+            @returns The score's grade level, or range of grade levels if the score
+                covers more than one grade.*/
+        [[nodiscard]]
+        wxString FormatScoreAsGradeLevel(const Wisteria::ScorePoint& score) const;
+
+        /** @brief Builds a description of a graph's scores, meant for an accessibility label.
+            @param scores The scores from the graph's last layout.
+            @param scoreFormatter Function to convert a score into a display label
+                (e.g., a grade level).
+            @returns The description, which will be empty if there are no scores.*/
+        [[nodiscard]]
+        static wxString FormatScoresForAccessibility(
+            const std::vector<Wisteria::ScorePoint>& scores,
+            const std::function<wxString(const Wisteria::ScorePoint&)>& scoreFormatter);
 
         /** @brief This is a more liberal than calling `geometry::is_inside_polygon` because it
                 will see if the point next to or below the point are also in the polygon.

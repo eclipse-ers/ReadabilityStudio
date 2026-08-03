@@ -842,4 +842,37 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::SchwartzGraph,
                     .AnchorPoint(textCoordinate)));
             }
         }
+
+    //----------------------------------------------------------------
+    void SchwartzGraph::SetAutoAccessibilityAttributes()
+        {
+        if (GetDataset() == nullptr || GetScores().empty())
+            {
+            return;
+            }
+
+        wxString label = _(L"A Schwartz graph");
+        AddAccessibilityAttribute(label, GetTitle().GetText(), L": ");
+        AddAccessibilityAttribute(label, GetSubtitle().GetText(), L", ");
+
+        // a score of exactly the last grade is the region above that grade
+        const auto formatScore = [this](const ScorePoint& score) -> wxString
+        {
+            const auto [startGrade, endGrade] = score.GetScoreRange();
+            return (startGrade == 8 && endGrade == 8) ? FormatScoreAsGradeLevel(score) + _DT(L"+") :
+                                                        FormatScoreAsGradeLevel(score);
+        };
+
+        AddAccessibilityAttribute(label, FormatScoresForAccessibility(GetScores(), formatScore),
+                                  L". ");
+
+        AddAccessibilityAttribute(label, GetCaption().GetText(), L". ");
+
+        if (!label.EndsWith(L"."))
+            {
+            label += L".";
+            }
+
+        GetAutoAccessibilityAttributes() = wxSVGAttributes{}.Role(_DT(L"img")).AriaLabel(label);
+        }
     } // namespace Wisteria::Graphs

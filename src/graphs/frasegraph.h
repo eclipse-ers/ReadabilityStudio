@@ -122,6 +122,7 @@ namespace Wisteria::Graphs
       private:
         void RecalcSizes(wxDC& dc) final;
         void CalculateScorePositions(wxDC& dc) final;
+        void SetAutoAccessibilityAttributes() final;
         void BuildBackscreen();
 
         std::array<wxPoint, 11> m_levelLinePoints;

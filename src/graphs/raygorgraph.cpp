@@ -841,4 +841,43 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::RaygorGraph, Wisteria::Graphs::Polyg
                     .AnchorPoint(textCoordinate)));
             }
         }
+
+    //----------------------------------------------------------------
+    void RaygorGraph::SetAutoAccessibilityAttributes()
+        {
+        if (GetDataset() == nullptr || GetScores().empty())
+            {
+            return;
+            }
+
+        wxString label = _(L"A Raygor estimate graph");
+        AddAccessibilityAttribute(label, GetTitle().GetText(), L": ");
+        AddAccessibilityAttribute(label, GetSubtitle().GetText(), L", ");
+
+        // the last two regions each cover a range of grades, rather than a single one
+        const auto formatScore = [this](const ScorePoint& score) -> wxString
+        {
+            if (score.GetScoreRange().first == 13)
+                {
+                return _(L"College");
+                }
+            if (score.GetScoreRange().first == 17)
+                {
+                return _(L"Post College (e.g., Professor)");
+                }
+            return FormatScoreAsGradeLevel(score);
+        };
+
+        AddAccessibilityAttribute(label, FormatScoresForAccessibility(GetScores(), formatScore),
+                                  L". ");
+
+        AddAccessibilityAttribute(label, GetCaption().GetText(), L". ");
+
+        if (!label.EndsWith(L"."))
+            {
+            label += L".";
+            }
+
+        GetAutoAccessibilityAttributes() = wxSVGAttributes{}.Role(_DT(L"img")).AriaLabel(label);
+        }
     } // namespace Wisteria::Graphs

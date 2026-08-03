@@ -134,6 +134,7 @@ namespace Wisteria::Graphs
       protected:
         void RecalcSizes(wxDC& dc) final;
         void CalculateScorePositions(wxDC& dc) final;
+        void SetAutoAccessibilityAttributes() final;
         /// @brief Adds grade level labels to the graph regions.
         void AddLevelLabels();
         /// @brief Adds bracket decorations around the graph title.

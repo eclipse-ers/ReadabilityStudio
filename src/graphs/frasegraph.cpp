@@ -457,4 +457,47 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FraseGraph, Wisteria::Graphs::Polygo
                     .AnchorPoint(textCoordinate)));
             }
         }
+
+    //----------------------------------------------------------------
+    void FraseGraph::SetAutoAccessibilityAttributes()
+        {
+        if (GetDataset() == nullptr || GetScores().empty())
+            {
+            return;
+            }
+
+        wxString label = _(L"A FRASE graph");
+        AddAccessibilityAttribute(label, GetTitle().GetText(), L": ");
+        AddAccessibilityAttribute(label, GetSubtitle().GetText(), L", ");
+
+        // the scores are levels here, matching the labels on the graph's regions
+        const auto formatScore = [](const ScorePoint& score) -> wxString
+        {
+            switch (score.GetScoreRange().first)
+                {
+            case 1:
+                return _(L"Beginner Level");
+            case 2:
+                return _(L"Intermediate Level");
+            case 3:
+                return _(L"Advanced Intermediate Level");
+            case 4:
+                return _(L"Advanced Level");
+            default:
+                return wxString{};
+                }
+        };
+
+        AddAccessibilityAttribute(label, FormatScoresForAccessibility(GetScores(), formatScore),
+                                  L". ");
+
+        AddAccessibilityAttribute(label, GetCaption().GetText(), L". ");
+
+        if (!label.EndsWith(L"."))
+            {
+            label += L".";
+            }
+
+        GetAutoAccessibilityAttributes() = wxSVGAttributes{}.Role(_DT(L"img")).AriaLabel(label);
+        }
     } // namespace Wisteria::Graphs

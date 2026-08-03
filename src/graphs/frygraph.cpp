@@ -876,6 +876,41 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::FryGraph, Wisteria::Graphs::PolygonR
         }
 
     //----------------------------------------------------------------
+    void FryGraph::SetAutoAccessibilityAttributes()
+        {
+        if (GetDataset() == nullptr || GetScores().empty())
+            {
+            return;
+            }
+
+        wxString label = (m_fryGraphType == FryGraphType::GPM) ?
+                             _(L"A Gilliam-Peña-Mountain graph") :
+                             // TRANSLATORS: "Fry" is a test name, don't translate it.
+                             _(L"A Fry graph");
+        AddAccessibilityAttribute(label, GetTitle().GetText(), L": ");
+        AddAccessibilityAttribute(label, GetSubtitle().GetText(), L", ");
+
+        // the highest region covers everything beyond the last grade
+        const auto formatScore = [this](const ScorePoint& score) -> wxString
+        {
+            return (score.GetScoreRange().first == 17) ? _(L"Post-graduate+") :
+                                                         FormatScoreAsGradeLevel(score);
+        };
+
+        AddAccessibilityAttribute(label, FormatScoresForAccessibility(GetScores(), formatScore),
+                                  L". ");
+
+        AddAccessibilityAttribute(label, GetCaption().GetText(), L". ");
+
+        if (!label.EndsWith(L"."))
+            {
+            label += L".";
+            }
+
+        GetAutoAccessibilityAttributes() = wxSVGAttributes{}.Role(_DT(L"img")).AriaLabel(label);
+        }
+
+    //----------------------------------------------------------------
     void FryGraph::SetAsGilliamPenaMountainGraph()
         {
         m_syllableAxisOffset = 67;
