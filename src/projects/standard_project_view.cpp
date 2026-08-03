@@ -3538,8 +3538,8 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         ++sectionCounter;
         figureCounter = tableCounter = 1;
         outputText += wxString::Format(
-            L"\n\n<details class='report-section' open><summary><a name='scores'></a><span "
-            L"class='n'>%02zu</span>%s</summary>\n",
+            _DT(L"\n\n<details class='report-section' open><summary><a name='scores'></a><span "
+                L"class='n'>%02zu</span>%s</summary>\n"),
             sectionCounter, htmlEncode({ GetReadabilityScoresLabel().wc_str() }, true).c_str());
         for (size_t i = 0; i < GetReadabilityResultsView().GetWindowCount(); ++i)
             {
@@ -3583,8 +3583,8 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         ++sectionCounter;
         figureCounter = tableCounter = 1;
         outputText += wxString::Format(
-            L"\n\n%s<details class='report-section' open><summary><a name='stats'></a><span "
-            L"class='n'>%02zu</span>%s</summary>\n",
+            _DT(L"\n\n%s<details class='report-section' open><summary><a name='stats'></a><span "
+                L"class='n'>%02zu</span>%s</summary>\n"),
             (hasSections ? pageBreak : wxString{}), sectionCounter,
             htmlEncode({ GetSummaryStatisticsLabel().wc_str() }, true).c_str());
         hasSections = true;
@@ -3623,9 +3623,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         ++sectionCounter;
         figureCounter = tableCounter = 1;
         outputText +=
-            wxString::Format(L"\n\n%s<details class='report-section' open>"
-                             "<summary><a name='wordsbreakdown'></a>"
-                             "<span class='n'>%02zu</span>%s</summary>\n",
+            wxString::Format(_DT(L"\n\n%s<details class='report-section' open>"
+                                 "<summary><a name='wordsbreakdown'></a>"
+                                 "<span class='n'>%02zu</span>%s</summary>\n"),
                              (hasSections ? pageBreak : wxString{}), sectionCounter,
                              htmlEncode({ GetWordsBreakdownLabel().wc_str() }, true).c_str());
         hasSections = true;
@@ -3663,9 +3663,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         ++sectionCounter;
         figureCounter = tableCounter = 1;
         outputText +=
-            wxString::Format(L"\n\n%s<details class='report-section' open>"
-                             "<summary><a name='sentencesbreakdown'></a>"
-                             "<span class='n'>%02zu</span>%s</summary>\n",
+            wxString::Format(_DT(L"\n\n%s<details class='report-section' open>"
+                                 "<summary><a name='sentencesbreakdown'></a>"
+                                 "<span class='n'>%02zu</span>%s</summary>\n"),
                              (hasSections ? pageBreak : wxString{}), sectionCounter,
                              htmlEncode({ GetSentencesBreakdownLabel().wc_str() }, true).c_str());
         hasSections = true;
@@ -3697,9 +3697,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText += wxString::Format(L"\n\n%s<details class='report-section' open>"
-                                       "<summary><a name='grammar'></a>"
-                                       "<span class='n'>%02zu</span>%s</summary>\n",
+        outputText += wxString::Format(_DT(L"\n\n%s<details class='report-section' open>"
+                                           "<summary><a name='grammar'></a>"
+                                           "<span class='n'>%02zu</span>%s</summary>\n"),
                                        (hasSections ? pageBreak : wxString{}), sectionCounter,
                                        htmlEncode({ GetGrammarLabel().wc_str() }, true).c_str());
         hasSections = true;
@@ -3730,9 +3730,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         bool includeLeadingPageBreak{ false };
         ++sectionCounter;
         figureCounter = tableCounter = 1;
-        outputText += wxString::Format(L"\n\n%s<details class='report-section' open>"
-                                       "<summary><a name='dolch'></a>"
-                                       "<span class='n'>%02zu</span>%s</summary>\n",
+        outputText += wxString::Format(_DT(L"\n\n%s<details class='report-section' open>"
+                                           "<summary><a name='dolch'></a>"
+                                           "<span class='n'>%02zu</span>%s</summary>\n"),
                                        (hasSections ? pageBreak : wxString{}), sectionCounter,
                                        htmlEncode({ GetDolchLabel().wc_str() }, true).c_str());
         for (size_t i = 0; i < GetDolchSightWordsView().GetWindowCount(); ++i)
@@ -3817,7 +3817,7 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         if (logoBmp.IsOk() && logoBmp.ConvertToImage().SaveFile(logoStream, wxBITMAP_TYPE_PNG))
             {
             logoDataUri = wxString::Format(
-                L"data:image/png;base64,%s",
+                _DT(L"data:image/png;base64,%s"),
                 wxBase64Encode(logoStream.GetOutputStreamBuffer()->GetBufferStart(),
                                logoStream.GetOutputStreamBuffer()->GetBufferSize()));
             }
@@ -3872,14 +3872,15 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         L"\n    <style>\n" + reportCss + textWindowStyleSection + L"\n    </style>\n</head>";
     outputText.insert(0, L"<!DOCTYPE html>\n<html>\n" + headSection + styleSection +
                              L"\n<body id='top'>\n" + infoTable +
-                             L"\n<div class='export-wrap'>"
-                             "\n<nav class='export-index no-print' aria-label='" +
+                             _DT(L"\n<div class='export-wrap'>"
+                                 "\n<nav class='export-index no-print' aria-label='") +
                              _(L"Sections") + L"'>\n<h2>" + _(L"Sections") + L"</h2>\n<ol>\n" +
                              toc +
                              L"</ol>\n</nav>"
                              "\n<main class='export-plan'>");
-    outputText += L"\n</main>\n</div>\n<a href='#top' class='back-to-top no-print' aria-label='" +
-                  _(L"Back to top") + L"'>&#8593;</a>\n</body>\n</html>";
+    outputText +=
+        _DT(L"\n</main>\n</div>\n<a href='#top' class='back-to-top no-print' aria-label='") +
+        _(L"Back to top") + _DT(L"'>&#8593;</a>\n</body>\n</html>");
 
     wxFileName(filePath.GetFullPath()).SetPermissions(wxS_DEFAULT);
     wxFile file(filePath.GetFullPath(), wxFile::write);

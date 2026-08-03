@@ -896,7 +896,7 @@ ProjectReportFormat::FormatHtmlReportStart(const wxString& title /*= wxString{}*
 wxString ProjectReportFormat::FormatHtmlReportEnd()
     {
     return { L"\n<a href='#top' class='back-to-top no-print' aria-label='" + _(L"Back to top") +
-             L"'>&#8593;</a>\n</body>\n</html>" };
+             _DT(L"'>&#8593;</a>\n</body>\n</html>") };
     }
 
 //------------------------------------------------

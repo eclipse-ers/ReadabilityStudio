@@ -1741,13 +1741,17 @@ void ReadabilityApp::FillGradeScalesMenu(wxMenu& menu)
 void ReadabilityApp::FillSaveMenu(wxMenu& saveMenu, const RibbonType rtype)
     {
     wxASSERT_MSG(rtype != RibbonType::MainFrameRibbon, L"Mainframe should not have a save menu!");
+    if (rtype == RibbonType::MainFrameRibbon)
+        {
+        return;
+        }
 
     const auto saveIcon = GetResourceManager().GetSVG(L"ribbon/file-save.svg");
 
     // Don't use stock wxID_SAVE and wxID_SAVEAS because of event handling issues
     // under GTK+ and also because we use can't use wxID_SAVE on a hybrid ribbon
     // button; otherwise, it becomes disabled when the document isn't dirty, and
-    // then you can't access the other export options from the menu.
+    // then you can't access the other save options from the menu.
     auto* item = new wxMenuItem(&saveMenu, XRCID("ID_SAVE_PROJECT"), _(L"Save") + L"\tCtrl+S");
     item->SetBitmap(saveIcon);
     saveMenu.Append(item);

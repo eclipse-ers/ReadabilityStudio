@@ -60,7 +60,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(Wisteria::Graphs::PolygonReadabilityGraph, Wisteria::G
         const auto [startGrade, endGrade] = score.GetScoreRange();
         if (GetMessageCatalog() == nullptr)
             {
-            return (startGrade == endGrade) ? wxString::Format(L"%zu", startGrade) :
+            return (startGrade == endGrade) ? wxString{ std::to_wstring(startGrade) } :
                                               wxString::Format(L"%zu-%zu", startGrade, endGrade);
             }
         return (startGrade == endGrade) ?

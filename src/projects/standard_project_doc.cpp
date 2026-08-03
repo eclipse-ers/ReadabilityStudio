@@ -5685,7 +5685,7 @@ ProjectDoc::TextHeader ProjectDoc::BuildHeader(const MarkupFormat format,
                                  _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme()),
                              bodyFontRule);
         textHeaders.endSection = L"\n<a href='#top' class='back-to-top no-print' aria-label='" +
-                                 _(L"Back to top") + L"'>&#8593;</a>\n</body>\n</html>";
+                                 _(L"Back to top") + _DT(L"'>&#8593;</a>\n</body>\n</html>");
         }
     return textHeaders;
     }
