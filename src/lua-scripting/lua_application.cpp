@@ -656,6 +656,37 @@ namespace LuaScripting
         }
 
     //-------------------------------------------------------------
+    int CropImageBorders(lua_State* L)
+        {
+        if (!VerifyParameterCount(L, 2, __func__))
+            {
+            return 0;
+            }
+        const wxString inPath(luaL_checkstring(L, 1), wxConvUTF8);
+        if (!wxFile::Exists(inPath))
+            {
+            wxMessageBox(wxString::Format(_(L"%s: invalid image file path."), inPath),
+                         _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        // create the folder to the filepath, if necessary
+        const wxString path(luaL_checkstring(L, 2), wxConvUTF8);
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+        const uint8_t colorTolerance{ (lua_gettop(L) >= 3) ?
+                                          static_cast<uint8_t>(luaL_checkinteger(L, 3)) :
+                                          10 };
+
+        const wxImage img = Wisteria::GraphItems::Image::CropImageBorder(
+            Wisteria::GraphItems::Image::LoadFile(inPath), colorTolerance);
+
+        lua_pushboolean(L, img.SaveFile(path));
+        return 1;
+        }
+
+    //-------------------------------------------------------------
     int GetImageInfo(lua_State* L)
         {
         if (!VerifyParameterCount(L, 1, __func__))

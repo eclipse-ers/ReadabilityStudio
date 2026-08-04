@@ -363,6 +363,7 @@ namespace LuaScripting
     int /*table*/ GetImageInfo(lua_State* /*string imagePath*/); // Returns width and height for an image.
     int /*boolean*/ ApplyImageEffect(lua_State* /*string inputImagePath, string outputImagePath, ImageEffect effect*/); // Applies an effect to an image and saves the result to another image file. Returns true if image was successfully saved.
     int /*boolean*/ MergeImages(lua_State* /*string inputImage1, ..., string outputImagePath, Orientation direction*/); // Combines a list of images vertically or horizontally. Returns true if image was successfully saved.
+    int /*boolean*/ CropImageBorders(lua_State* /*string inputImagePath, string outputImagePath, number colorTolerance*/); // Removes the solid border surrounding a scanned image and saves the result to another image file. Returns true if image was successfully saved.
 
     // Gets the active projects
     int /*StandardProject*/ GetActiveStandardProject(lua_State* L); // Returns the active standard project.
@@ -657,6 +658,7 @@ namespace LuaScripting
         { "GetImageInfo", GetImageInfo },
         { "ApplyImageEffect", ApplyImageEffect },
         { "MergeImages", MergeImages },
+        { "CropImageBorders", CropImageBorders },
         { nullptr, nullptr }
     };
     } // namespace LuaScripting
