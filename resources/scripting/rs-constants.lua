@@ -241,7 +241,10 @@ ImageEffect =
   BlurVertical = 3,   -- A vertical blur across the image.
   Sepia = 4,          -- A sepia (i.e., faded photograph) effect.
   FrostedGlass = 5,   -- A frosted glass window effect.
-  OilPainting = 6     -- An oil painting effect.
+  OilPainting = 6,    -- An oil painting effect.
+  ColorBalance = 7,   -- Automatically balances the colors and contrast of an image. Useful for touching up faded or yellowed scans.
+  Despeckle = 8,      -- Reduces speckle noise (e.g., dust or scanner artifacts) by replacing each pixel with the median of its surrounding neighborhood.
+  Sharpen = 9         -- Sharpens an image using an unsharp mask. Useful for restoring detail softened by scanning or print halftoning.
   }
 
 -- How to fit an image into of a rectangle.

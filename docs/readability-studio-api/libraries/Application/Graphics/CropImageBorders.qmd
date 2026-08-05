@@ -1,0 +1,28 @@
+::: {.minipage data-latex="{\textwidth}"}
+### `CropImageBorders` {-}
+
+Removes the solid border surrounding a scanned image and saves the result to another image file. Returns true if image was successfully saved.
+
+#### Syntax {-}
+
+``` {.lua}
+boolean CropImageBorders(string inputImagePath,
+                         string outputImagePath,
+                         number colorTolerance)
+```
+
+
+#### Return value {-}
+
+Type: `boolean`
+
+#### Parameters {-}
+
+**Parameter** | **Description**
+| :-- | :-- |
+| `string` inputImagePath |  | 
+| `string` outputImagePath |  | 
+| `number` colorTolerance |  |
+
+
+:::

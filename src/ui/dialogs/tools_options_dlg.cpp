@@ -5778,6 +5778,9 @@ void ToolsOptionsDlg::CreateGraphGeneralSection()
     imgEffects.Add(_(L"Sepia"));
     imgEffects.Add(_(L"Frosted glass"));
     imgEffects.Add(_(L"Oil painting"));
+    imgEffects.Add(_(L"Color balance"));
+    imgEffects.Add(_(L"Despeckle"));
+    imgEffects.Add(_(L"Sharpen"));
     auto* imgEffectProp = backgroundImage->AppendChild(new wxEnumProperty(
         GetEffectLabel(), wxPG_LABEL, imgEffects,
         ((m_readabilityProjectDoc != nullptr) ?

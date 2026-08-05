@@ -982,6 +982,14 @@ The following options can be applied to the background image:
 In other words, the image as it may appear when viewed through frosted glass.
 
 **Oil painting**: Applies an oil painting effect.
+
+**Color balance**: Automatically balances the colors and contrast of the image.
+This is useful for touching up faded or yellowed scans.
+
+**Despeckle**: Reduces speckle noise (e.g., dust or scanner artifacts) by replacing each pixel with the median of its surrounding neighborhood.
+
+**Sharpen**: Sharpens the image using an unsharp mask.
+This is useful for restoring detail softened by scanning or print halftoning.
 ::::
 
 **Opacity**: Sets the transparency of the background image.

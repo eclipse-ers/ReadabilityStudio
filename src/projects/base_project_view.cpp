@@ -176,6 +176,15 @@ ProjectDocChildFrame* BaseProjectView::CreateChildFrame(wxDocument* doc, wxView*
     graphBackgroundImageEffectSubMenu->Append(new wxMenuItem(
         graphBackgroundImageEffectSubMenu, XRCID("ID_PLOT_BKIMAGE_EFFECT_OIL_PAINTING"),
         _(L"Oil Painting"), wxString{}, wxITEM_CHECK));
+    graphBackgroundImageEffectSubMenu->Append(new wxMenuItem(
+        graphBackgroundImageEffectSubMenu, XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"),
+        _(L"Color Balance"), wxString{}, wxITEM_CHECK));
+    graphBackgroundImageEffectSubMenu->Append(
+        new wxMenuItem(graphBackgroundImageEffectSubMenu, XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"),
+                       _(L"Despeckle"), wxString{}, wxITEM_CHECK));
+    graphBackgroundImageEffectSubMenu->Append(
+        new wxMenuItem(graphBackgroundImageEffectSubMenu, XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"),
+                       _(L"Sharpen"), wxString{}, wxITEM_CHECK));
 
     graphBackgroundImageSubMenu->AppendSubMenu(graphBackgroundImageEffectSubMenu, _(L"Effects"));
 
@@ -818,6 +827,26 @@ void BaseProjectView::Present()
         {
         tempMenuItem->Check(doc->GetPlotBackGroundImageEffect() ==
                             Wisteria::ImageEffect::OilPainting);
+        }
+    if (auto* tempMenuItem = GetDocFrame()->m_graphBackgroundMenu.FindItem(
+            XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(doc->GetPlotBackGroundImageEffect() ==
+                            Wisteria::ImageEffect::ColorBalance);
+        }
+    if (auto* tempMenuItem = GetDocFrame()->m_graphBackgroundMenu.FindItem(
+            XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(doc->GetPlotBackGroundImageEffect() ==
+                            Wisteria::ImageEffect::Despeckle);
+        }
+    if (auto* tempMenuItem =
+            GetDocFrame()->m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(doc->GetPlotBackGroundImageEffect() == Wisteria::ImageEffect::Sharpen);
         }
 
     if (auto* tempMenuItem = GetDocFrame()->m_graphBackgroundMenu.FindItem(

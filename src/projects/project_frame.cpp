@@ -407,6 +407,12 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          XRCID("ID_PLOT_BKIMAGE_EFFECT_FROSTED_GLASS"));
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnEditPlotBackgroundImageEffect, this,
          XRCID("ID_PLOT_BKIMAGE_EFFECT_OIL_PAINTING"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnEditPlotBackgroundImageEffect, this,
+         XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnEditPlotBackgroundImageEffect, this,
+         XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"));
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnEditPlotBackgroundImageEffect, this,
+         XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"));
 
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnEditPlotBackgroundImageFit, this,
          XRCID("ID_PLOT_BKIMAGE_FIT_CROP_AND_CENTER"));
@@ -1871,6 +1877,24 @@ void ProjectDocChildFrame::OnEditPlotBackgroundImageEffect(wxCommandEvent& event
         {
         tempMenuItem->Check(false);
         }
+    if (auto* tempMenuItem =
+            m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(false);
+        }
+    if (auto* tempMenuItem =
+            m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(false);
+        }
+    if (auto* tempMenuItem =
+            m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"));
+        tempMenuItem != nullptr)
+        {
+        tempMenuItem->Check(false);
+        }
     wxMenuItem* menuItem{ nullptr };
     if (event.GetId() == XRCID("ID_PLOT_BKIMAGE_EFFECT_NO_EFFECT"))
         {
@@ -1907,6 +1931,21 @@ void ProjectDocChildFrame::OnEditPlotBackgroundImageEffect(wxCommandEvent& event
         {
         doc->SetPlotBackGroundImageEffect(Wisteria::ImageEffect::OilPainting);
         menuItem = m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_OIL_PAINTING"));
+        }
+    else if (event.GetId() == XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"))
+        {
+        doc->SetPlotBackGroundImageEffect(Wisteria::ImageEffect::ColorBalance);
+        menuItem = m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_COLOR_BALANCE"));
+        }
+    else if (event.GetId() == XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"))
+        {
+        doc->SetPlotBackGroundImageEffect(Wisteria::ImageEffect::Despeckle);
+        menuItem = m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_DESPECKLE"));
+        }
+    else if (event.GetId() == XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"))
+        {
+        doc->SetPlotBackGroundImageEffect(Wisteria::ImageEffect::Sharpen);
+        menuItem = m_graphBackgroundMenu.FindItem(XRCID("ID_PLOT_BKIMAGE_EFFECT_SHARPEN"));
         }
 
     if (menuItem != nullptr)
