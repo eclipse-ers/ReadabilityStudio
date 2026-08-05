@@ -22,6 +22,10 @@ source('../R/appdown.r')
   - Added tooltips to highlighted words and phrases, explaining why each one was highlighted.
   - Added "back-to-top" elevator buttons.
 
+### Analysis/Test Enhancements {-}
+
+- Improved document indexing: [Aggressively exclude](#sec-options-text-exclusion) will now also exclude sentences that are really just table or figure captions (e.g., *Table 1.*, *Figure 5A.*).
+
 ### Importing/Exporting Enhancements {-}
 
 - Batch projects can now analyze cells inside of *OpenDocument* Spreadsheet (\*.ods) files, the same way as *Excel* (\*.xlsx) files.

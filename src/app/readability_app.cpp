@@ -977,6 +977,9 @@ bool ReadabilityApp::LoadWordLists(const wxString& AppSettingFolderPath)
         cat.ReadTextFile(L"copyright-notices/notices.txt");
     // citation headers
     const std::wstring citationPhraseFileText = cat.ReadTextFile(L"citation-headers/citations.txt");
+    // caption labels
+    const std::wstring captionLabelPhraseFileText =
+        cat.ReadTextFile(L"caption-labels/captions.txt");
     // known proper nouns
     const std::wstring properNounsFileText = cat.ReadTextFile(L"proper-nouns/all.txt");
     const std::wstring personalNounsFileText = cat.ReadTextFile(L"proper-nouns/personal.txt");
@@ -1095,6 +1098,8 @@ bool ReadabilityApp::LoadWordLists(const wxString& AppSettingFolderPath)
         copyRightNoticePhraseFileText.c_str(), false, false);
     BaseProject::m_citationPhrases.load_phrases(
         citationPhraseFileText.c_str(), false, false);
+    BaseProject::m_captionLabelPhrases.load_phrases(
+        captionLabelPhraseFileText.c_str(), false, false);
     grammar::is_non_proper_word::get_word_list().load_words(
         properNounStopList.c_str(), true, false);
     grammar::is_abbreviation::get_abbreviations().load_words(
@@ -1127,6 +1132,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(L"English dictionary is sorted properly.");
         }
+    if (BaseProject::known_english_spellings.get_words().empty())
+        {
+        wxLogError(L"English dictionary is empty.");
+        retVal = false;
+        }
     if (!BaseProject::known_programming_spellings.is_sorted())
         {
         wxLogError(L"Programming dictionary is not sorted.");
@@ -1136,6 +1146,12 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(L"Programming dictionary is sorted properly.");
         }
+    if (BaseProject::known_programming_spellings.get_words().empty())
+        {
+        wxLogError(L"Programming dictionary is empty.");
+        retVal = false;
+        }
+    // note: custom dictionaries are legitimately empty until the user adds words to them
     if (!BaseProject::known_custom_english_spellings.is_sorted())
         {
         wxLogError(L"Custom English dictionary is not sorted.");
@@ -1196,6 +1212,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"Proper nouns are sorted properly."));
         }
+    if (BaseProject::m_knownProperNouns.get_words().empty())
+        {
+        wxLogError(_DT(L"Proper nouns list is empty."));
+        retVal = false;
+        }
     if (!BaseProject::m_knownPersonalNouns.is_sorted())
         {
         wxLogError(_DT(L"Personal nouns are not sorted."));
@@ -1204,6 +1225,11 @@ bool ReadabilityApp::VerifyWordLists()
     else
         {
         wxLogMessage(_DT(L"Personal nouns are sorted properly."));
+        }
+    if (BaseProject::m_knownPersonalNouns.get_words().empty())
+        {
+        wxLogError(_DT(L"Personal nouns list is empty."));
+        retVal = false;
         }
 
     // word lists
@@ -1216,6 +1242,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"DC words are sorted properly."));
         }
+    if (BaseProject::m_dale_chall_word_list.get_words().empty())
+        {
+        wxLogError(_DT(L"DC word list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_dale_chall_plus_stocker_catholic_word_list.is_sorted() ||
         !BaseProject::m_stocker_catholic_word_list.is_sorted())
@@ -1227,6 +1258,12 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"Stocker words are sorted properly."));
         }
+    if (BaseProject::m_dale_chall_plus_stocker_catholic_word_list.get_words().empty() ||
+        BaseProject::m_stocker_catholic_word_list.get_words().empty())
+        {
+        wxLogError(_DT(L"Stocker word list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_spache_word_list.is_sorted())
         {
@@ -1237,6 +1274,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"Spache words are sorted properly."));
         }
+    if (BaseProject::m_spache_word_list.get_words().empty())
+        {
+        wxLogError(_DT(L"Spache word list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_harris_jacobson_word_list.is_sorted())
         {
@@ -1246,6 +1288,11 @@ bool ReadabilityApp::VerifyWordLists()
     else
         {
         wxLogMessage(_DT(L"HJ words are sorted properly."));
+        }
+    if (BaseProject::m_harris_jacobson_word_list.get_words().empty())
+        {
+        wxLogError(_DT(L"HJ word list is empty."));
+        retVal = false;
         }
 
     // the phrases
@@ -1258,6 +1305,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"English phrases are sorted properly."));
         }
+    if (BaseProject::m_englishWordyPhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"English phrases list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_spanishWordyPhrases.is_sorted())
         {
@@ -1267,6 +1319,11 @@ bool ReadabilityApp::VerifyWordLists()
     else
         {
         wxLogMessage(_DT(L"Spanish phrases are sorted properly."));
+        }
+    if (BaseProject::m_spanishWordyPhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"Spanish phrases list is empty."));
+        retVal = false;
         }
 
     if (!BaseProject::m_germanWordyPhrases.is_sorted())
@@ -1278,6 +1335,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"German phrases are sorted properly."));
         }
+    if (BaseProject::m_germanWordyPhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"German phrases list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_copyrightNoticePhrases.is_sorted())
         {
@@ -1288,6 +1350,11 @@ bool ReadabilityApp::VerifyWordLists()
         {
         wxLogMessage(_DT(L"Copyright notices are sorted properly."));
         }
+    if (BaseProject::m_copyrightNoticePhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"Copyright notices list is empty."));
+        retVal = false;
+        }
 
     if (!BaseProject::m_citationPhrases.is_sorted())
         {
@@ -1297,6 +1364,26 @@ bool ReadabilityApp::VerifyWordLists()
     else
         {
         wxLogMessage(_DT(L"Citations are sorted properly."));
+        }
+    if (BaseProject::m_citationPhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"Citations list is empty."));
+        retVal = false;
+        }
+
+    if (!BaseProject::m_captionLabelPhrases.is_sorted())
+        {
+        wxLogError(_DT(L"Caption labels are not sorted."));
+        retVal = false;
+        }
+    else
+        {
+        wxLogMessage(_DT(L"Caption labels are sorted properly."));
+        }
+    if (BaseProject::m_captionLabelPhrases.get_phrases().empty())
+        {
+        wxLogError(_DT(L"Caption labels list is empty."));
+        retVal = false;
         }
 
     return retVal;

@@ -73,6 +73,7 @@ grammar::phrase_collection BaseProject::m_spanishWordyPhrases;
 grammar::phrase_collection BaseProject::m_germanWordyPhrases;
 grammar::phrase_collection BaseProject::m_copyrightNoticePhrases;
 grammar::phrase_collection BaseProject::m_citationPhrases;
+grammar::phrase_collection BaseProject::m_captionLabelPhrases;
 word_list BaseProject::m_knownProperNouns;
 word_list BaseProject::m_knownPersonalNouns;
 word_list BaseProject::known_english_spellings;
@@ -171,6 +172,7 @@ void BaseProject::UpdateDocumentSettings()
     GetWords()->sentence_start_must_be_uppercased(GetSentenceStartMustBeUppercased());
     GetWords()->set_copyright_phrase_function(&m_copyrightNoticePhrases);
     GetWords()->set_citation_phrase_function(&m_citationPhrases);
+    GetWords()->set_caption_label_phrase_function(&m_captionLabelPhrases);
     GetWords()->set_known_proper_nouns(&m_knownProperNouns);
     GetWords()->set_known_personal_nouns(&m_knownPersonalNouns);
     GetWords()->get_spell_checker().set_programmer_word_list(&known_programming_spellings);

@@ -1424,6 +1424,107 @@ TEST_CASE("Document citations 2", "[document]")
         }
     }
 
+TEST_CASE("Document caption labels", "[document]")
+    {
+    grammar::english_syllabize ENsyllabizer;
+    stemming::english_stem<std::wstring> ENStemmer;
+    grammar::is_english_coordinating_conjunction is_conjunction;
+    grammar::is_incorrect_english_article is_english_mismatched_article;
+    grammar::phrase_collection pmap;
+    grammar::phrase_collection copyrightPMap;
+    grammar::phrase_collection citationPMap;
+    grammar::phrase_collection captionPMap;
+    word_list Known_proper_nouns;
+    word_list Known_personal_nouns;
+    word_list Known_spellings;
+    word_list Secondary_known_spellings;
+    word_list Programming_known_spellings;
+
+    SECTION("Caption Label Not Excluded When Not Aggressive")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        captionPMap.load_phrases(L"Table\nFigure\nCaption", true, false);
+        doc.set_caption_label_phrase_function(&captionPMap);
+        const wchar_t text[] = L"Intro text here.\n\nTable 1.\n\nThe data shows interesting results.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        // aggressive exclusion is off, so this stays a normal, valid sentence
+        CHECK(doc.get_sentences()[1].get_type() == sentence_paragraph_type::complete);
+        CHECK(doc.get_sentences()[1].is_valid());
+        }
+    SECTION("Caption Label Excluded When Aggressive")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        captionPMap.load_phrases(L"Table\nFigure\nCaption", true, false);
+        doc.set_caption_label_phrase_function(&captionPMap);
+        doc.set_aggressive_exclusion(true);
+        const wchar_t text[] = L"Intro text here.\n\nTable 1.\n\nThe data shows interesting results.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_sentences()[0].is_valid());
+        CHECK(doc.get_sentences()[1].get_type() == sentence_paragraph_type::incomplete);
+        CHECK_FALSE(doc.get_sentences()[1].is_valid());
+        CHECK(doc.get_sentences()[2].is_valid());
+        // "Table" and "1" both excluded; surrounding words untouched
+        CHECK(doc.get_words()[2].is_valid());       // "here" (end of sentence 0)
+        CHECK_FALSE(doc.get_words()[3].is_valid()); // "Table"
+        CHECK_FALSE(doc.get_words()[4].is_valid()); // "1"
+        CHECK(doc.get_words()[5].is_valid());       // "The" (start of sentence 2)
+        }
+    SECTION("Caption Label Multilingual")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        captionPMap.load_phrases(L"Table\nFigure\nTabla\nAbbildung\nTableau", true, false);
+        doc.set_caption_label_phrase_function(&captionPMap);
+        doc.set_aggressive_exclusion(true);
+        const wchar_t text[] = L"Tabla 1.\n\nAbbildung 3.\n\nTableau 2.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK_FALSE(doc.get_sentences()[0].is_valid());
+        CHECK_FALSE(doc.get_sentences()[1].is_valid());
+        CHECK_FALSE(doc.get_sentences()[2].is_valid());
+        CHECK(doc.get_valid_word_count() == 0);
+        }
+    SECTION("Caption Label Not A False Positive")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        captionPMap.load_phrases(L"Table\nFigure\nCaption", true, false);
+        doc.set_caption_label_phrase_function(&captionPMap);
+        doc.set_aggressive_exclusion(true);
+        const wchar_t text[] = L"Table manners are important to teach children.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        // second word isn't numeric, and there are more than 2 words, so this is real prose
+        CHECK(doc.get_sentences()[0].is_valid());
+        CHECK(doc.get_valid_word_count() == 7);
+        }
+    SECTION("Caption Label Sub Numbered")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        captionPMap.load_phrases(L"Table\nFigure", true, false);
+        doc.set_caption_label_phrase_function(&captionPMap);
+        doc.set_aggressive_exclusion(true);
+        // "1a" (letter-suffixed), "3.1" (sub-numbered), "3-4" (range) are each
+        // tokenized as a single numeric-ish word.
+        const wchar_t text[] = L"Table 1a.\n\nFigure 3.1.\n\nTable 3-4.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK_FALSE(doc.get_sentences()[0].is_valid());
+        CHECK_FALSE(doc.get_sentences()[1].is_valid());
+        CHECK_FALSE(doc.get_sentences()[2].is_valid());
+        }
+    }
+
 TEST_CASE("Document tagged exclude", "[document]")
     {
     grammar::english_syllabize ENsyllabizer;

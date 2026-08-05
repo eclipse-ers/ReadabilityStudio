@@ -96,14 +96,15 @@ class document
              const grammar::phrase_collection* citation_phrases,
              const word_list* known_proper_nouns, const word_list* known_personal_nouns,
              const word_list* known_spellings, const word_list* secondary_known_spellings,
-             const word_list* programming_known_spellings, const word_list* stop_list)
+             const word_list* programming_known_spellings, const word_list* stop_list,
+             const grammar::phrase_collection* caption_label_phrases = nullptr)
         : m_name(name), syllabize(syllabizer), stem_word(stemmer), is_conjunction(isConjunction),
           is_known_phrase(known_phrases), is_known_proper_nouns(known_proper_nouns),
           is_known_personal_nouns(known_personal_nouns), is_copyright_phrase(copyright_phrases),
-          is_citation_phrase(citation_phrases), m_stop_list(stop_list),
-          is_correctly_spelled(known_spellings, secondary_known_spellings,
-                               programming_known_spellings, false, true, true, true, false, true,
-                               true)
+          is_citation_phrase(citation_phrases), is_caption_label_phrase(caption_label_phrases),
+          m_stop_list(stop_list), is_correctly_spelled(known_spellings, secondary_known_spellings,
+                                                       programming_known_spellings, false, true,
+                                                       true, true, false, true, true)
         {
         if (stem_word != nullptr)
             {
@@ -594,6 +595,30 @@ class document
                                  m_sentences[sentenceCounter].get_first_word_index();
                              wordCounter <= m_sentences[sentenceCounter].get_last_word_index();
                              ++wordCounter)
+                            {
+                            m_words[wordCounter].set_valid(false);
+                            }
+                        }
+                    }
+                }
+            }
+
+        // mark sentences that are nothing but a caption label and a number (e.g., "Table 1.",
+        // "Figure 5.") as invalid
+        if (is_exclusion_aggressive())
+            {
+            for (auto& theParagraph : m_paragraphs)
+                {
+                for (size_t sentenceCounter = theParagraph.get_first_sentence_index();
+                     sentenceCounter <= theParagraph.get_last_sentence_index(); ++sentenceCounter)
+                    {
+                    auto& theSentence = m_sentences[sentenceCounter];
+                    if (theSentence.is_valid() && is_caption_label_sentence(theSentence))
+                        {
+                        theSentence.set_valid(false);
+                        theSentence.set_type(grammar::sentence_paragraph_type::incomplete);
+                        for (size_t wordCounter = theSentence.get_first_word_index();
+                             wordCounter <= theSentence.get_last_word_index(); ++wordCounter)
                             {
                             m_words[wordCounter].set_valid(false);
                             }
@@ -1218,6 +1243,11 @@ class document
     void set_citation_phrase_function(const grammar::phrase_collection* citation_phrase)
         {
         is_citation_phrase = citation_phrase;
+        }
+
+    void set_caption_label_phrase_function(const grammar::phrase_collection* caption_label_phrase)
+        {
+        is_caption_label_phrase = caption_label_phrase;
         }
 
     void set_excluded_phrase_function(
@@ -2668,6 +2698,27 @@ class document
         theParagraph.set_valid(false);
         }
 
+    /** @returns @c true if a (currently valid) sentence is nothing but a caption label
+            followed by a single number, e.g. "Table 1.", "Figure 5.".
+        @param theSentence The sentence to review.*/
+    [[nodiscard]]
+    bool is_caption_label_sentence(const grammar::sentence_info& theSentence) const
+        {
+        if (is_caption_label_phrase == nullptr || theSentence.get_word_count() != 2)
+            {
+            return false;
+            }
+        const grammar::phrase_collection& isCaptionLabel = *is_caption_label_phrase;
+        // first word must be the caption label...
+        if (isCaptionLabel(m_words.begin() + theSentence.get_first_word_index(), 0, 1, true) ==
+            grammar::phrase_collection::npos)
+            {
+            return false;
+            }
+        // ...and the second (last) word must be the figure/table number
+        return m_words[theSentence.get_last_word_index()].is_numeric();
+        }
+
     /** @returns @c true if a paragraph appears to be a citation.
         @param theParagraph The paragraph to review.
 
@@ -2953,6 +3004,9 @@ class document
         nullptr
     }; // this should be shared from a parent
     const grammar::phrase_collection* is_citation_phrase{
+        nullptr
+    }; // this should be shared from a parent
+    const grammar::phrase_collection* is_caption_label_phrase{
         nullptr
     }; // this should be shared from a parent
     std::shared_ptr<const grammar::phrase_collection> is_excluded_phrase{

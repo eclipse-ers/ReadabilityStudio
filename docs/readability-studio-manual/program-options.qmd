@@ -376,6 +376,18 @@ Finally, checking this will also affect sentences that end with colons or semico
 Ones that end with semicolons will be excluded.
 Ones that end with colons that only contain one word will be excluded.
 
+Checking this will also exclude sentences that are just a table or figure caption label followed by a number, such as:
+
+::: {.fancyquotes data-latex=''}
+Table 1.
+:::
+
+::: {.fancyquotes data-latex=''}
+Figure 5A.
+:::
+
+This applies to caption labels in several languages, including *Table*, *Figura*, *Abbildung*, and *Tableau*.
+
 If **Also exclude trailing citations** is enabled, then checking this option will also cause citation deduction to be more aggressive.
 By default, only citation blocks in the lower half of the document are excluded.
 Enabling this option will tell the program to search for citations in the lower three-fourths of the document.

@@ -2,6 +2,7 @@ abbreviations/abbreviations.txt
 abbreviations/non-abbreviations.txt
 articles/a-exceptions.txt
 articles/an-exceptions.txt
+caption-labels/captions.txt
 citation-headers/citations.txt
 copyright-notices/notices.txt
 dictionaries/english.txt

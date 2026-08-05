@@ -50,6 +50,7 @@ Although not traditionally mentioned in readability articles, other items may al
 
 - copyright notices
 - trailing citations
+- table and figure caption labels (e.g., *Table 1.*, *Figure 5.1.*)
 - internet and file addresses
 - specific words or phrases
 :::

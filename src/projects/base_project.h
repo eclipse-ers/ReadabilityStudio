@@ -2292,6 +2292,7 @@ class BaseProject : public ProjectRefresh
     static grammar::phrase_collection m_germanWordyPhrases;
     static grammar::phrase_collection m_copyrightNoticePhrases;
     static grammar::phrase_collection m_citationPhrases;
+    static grammar::phrase_collection m_captionLabelPhrases;
     static word_list m_knownProperNouns;
     static word_list m_knownPersonalNouns;
     static word_list known_english_spellings;
