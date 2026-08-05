@@ -59,6 +59,8 @@
 #include "../Wisteria-Dataviz/src/ui/dialogs/filelistdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/graphdlg.h"
+#include "../Wisteria-Dataviz/src/ui/dialogs/imageeffectdlg.h"
+#include "../Wisteria-Dataviz/src/ui/dialogs/imagemergedlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/listdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/radioboxdlg.h"
 #include "../document-helpers/chapter_split.h"
@@ -2767,6 +2769,18 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
                                  ReadSvgIcon(L"ribbon/duplicate-files.svg"),
                                  _(L"Search for (and remove) duplicate files."));
 #endif
+
+        // image section
+        auto* imagePanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
+                                             _(L"Image"), wxNullBitmap, wxDefaultPosition,
+                                             wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* imageButtonBar = new wxRibbonButtonBar(imagePanel);
+        imageButtonBar->AddButton(XRCID("ID_TOOLS_MERGE_IMAGES"), _(L"Merge Images"),
+                                  ReadSvgIcon(L"ribbon/photos-merge.svg"),
+                                  _(L"Combine images into a single image."));
+        imageButtonBar->AddButton(XRCID("ID_TOOLS_IMAGE_EFFECT"), _(L"Apply Effect"),
+                                  ReadSvgIcon(L"ribbon/paint.svg"),
+                                  _(L"Apply an effect to an image and save the result."));
         }
     }
 
@@ -2965,6 +2979,18 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
             toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Developer Tools"),
                                      ReadSvgIcon(L"ribbon/dev-tools.svg"));
             }
+
+        // image section
+        auto* imagePanel =
+            new wxRibbonPanel(toolsPage, wxID_ANY, _(L"Image"), wxNullBitmap, wxDefaultPosition,
+                              wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        auto* imageButtonBar = new wxRibbonButtonBar(imagePanel);
+        imageButtonBar->AddButton(XRCID("ID_TOOLS_MERGE_IMAGES"), _(L"Merge Images"),
+                                  ReadSvgIcon(L"ribbon/photos-merge.svg"),
+                                  _(L"Combine images into a single image."));
+        imageButtonBar->AddButton(XRCID("ID_TOOLS_IMAGE_EFFECT"), _(L"Apply Effect"),
+                                  ReadSvgIcon(L"ribbon/paint.svg"),
+                                  _(L"Apply an effect to an image and save the result."));
         }
     }
 
@@ -3649,6 +3675,28 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
             OnToolsChapterSplit(event);
         },
         XRCID("ID_CHAPTER_SPLIT"));
+
+    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnToolsMergeImages, this,
+         XRCID("ID_TOOLS_MERGE_IMAGES"));
+    Bind(
+        wxEVT_MENU,
+        [this]([[maybe_unused]] wxCommandEvent&)
+        {
+            wxRibbonButtonBarEvent event;
+            OnToolsMergeImages(event);
+        },
+        XRCID("ID_TOOLS_MERGE_IMAGES"));
+
+    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnToolsImageEffect, this,
+         XRCID("ID_TOOLS_IMAGE_EFFECT"));
+    Bind(
+        wxEVT_MENU,
+        [this]([[maybe_unused]] wxCommandEvent&)
+        {
+            wxRibbonButtonBarEvent event;
+            OnToolsImageEffect(event);
+        },
+        XRCID("ID_TOOLS_IMAGE_EFFECT"));
 
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &MainFrame::OnToolsOptions, this, wxID_PREFERENCES);
     Bind(
@@ -6082,4 +6130,52 @@ void MainFrame::OnToolsWebHarvest([[maybe_unused]] wxRibbonButtonBarEvent& event
     wxGetApp().GetAppOptions()->SetDownloadsPath(webHarvestDlg.GetDownloadFolder());
 
     wxMessageBox(_(L"Web crawl complete."), _(L"Web Harvester"), wxOK | wxICON_INFORMATION);
+    }
+
+//-------------------------------------------------------
+void MainFrame::OnToolsMergeImages([[maybe_unused]] wxRibbonButtonBarEvent& event)
+    {
+    wxFileDialog fd(wxGetApp().GetParentingWindow(), _(L"Select Images"),
+                    wxGetApp().GetAppOptions()->GetImagePath(), wxString{},
+                    Wisteria::GraphItems::Image::GetImageFileFilter(),
+                    wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_PREVIEW);
+    if (fd.ShowModal() != wxID_OK)
+        {
+        return;
+        }
+    wxArrayString imgPaths;
+    fd.GetPaths(imgPaths);
+    if (imgPaths.empty())
+        {
+        return;
+        }
+
+    Wisteria::UI::ImageMergeDlg imgDlg(wxGetApp().GetParentingWindow(), imgPaths, wxHORIZONTAL);
+    if (imgDlg.ShowModal() != wxID_OK)
+        {
+        return;
+        }
+
+    wxGetApp().GetAppOptions()->SetImagePath(imgDlg.GetMergedFilePath());
+    }
+
+//-------------------------------------------------------
+void MainFrame::OnToolsImageEffect([[maybe_unused]] wxRibbonButtonBarEvent& event)
+    {
+    wxFileDialog fd(wxGetApp().GetParentingWindow(), _(L"Select Image"),
+                    wxGetApp().GetAppOptions()->GetImagePath(), wxString{},
+                    Wisteria::GraphItems::Image::GetImageFileFilter(),
+                    wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
+    if (fd.ShowModal() != wxID_OK)
+        {
+        return;
+        }
+
+    Wisteria::UI::ImageEffectDlg imgDlg(wxGetApp().GetParentingWindow(), fd.GetPath());
+    if (imgDlg.ShowModal() != wxID_OK)
+        {
+        return;
+        }
+
+    wxGetApp().GetAppOptions()->SetImagePath(imgDlg.GetEffectFilePath());
     }

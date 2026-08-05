@@ -114,6 +114,20 @@ Downloading all files into the same folder will risk having conflicting file nam
 **Replace existing files**: Select this option to overwrite existing files as they are downloaded.
 Deselecting this option will rename files as they are downloaded (if necessary) to avoid overwriting existing files.
 
+## Image Tools {#sec-image-tools}
+
+These tools are available from the **Image** section on the **Tools** tab of the ribbon.
+
+### Merge Images {-}
+
+Click the `r keys('Merge Images')` button to select two or more images and combine them (horizontally or vertically) into a single image.
+Click any thumbnail in the dialog to select a different image, then click **OK** to save the combined image to a new file.
+
+### Apply Effect {-}
+
+Click the `r keys('Apply Effect')` button to select an image and apply an effect to it (e.g., grayscale, sepia, oil painting).
+Select an effect to preview it, then click **OK** to save the edited image to a new file.
+
 ## Command Line Options {#sec-command-line-options}
 
 The following command line options are available (`r os_logo('windows')`, `r os_logo('linux')`):

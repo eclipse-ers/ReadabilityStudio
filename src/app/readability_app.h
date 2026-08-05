@@ -135,6 +135,8 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnToolsWebHarvest([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnToolsChapterSplit([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnFindDuplicateFiles([[maybe_unused]] wxRibbonButtonBarEvent& event);
+    void OnToolsMergeImages([[maybe_unused]] wxRibbonButtonBarEvent& event);
+    void OnToolsImageEffect([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnHelpContents([[maybe_unused]] wxCommandEvent& event) final;
     void OnHelpManual([[maybe_unused]] wxRibbonButtonBarEvent& event);
 #ifndef APP_STORE_BUILD
