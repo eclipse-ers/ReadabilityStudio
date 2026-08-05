@@ -645,7 +645,7 @@ namespace LuaScripting
 
         // create the folder to the filepath, if necessary
         const wxString path(luaL_checkstring(L, 2), wxConvUTF8);
-        wxFileName::Mkdir(wxFileName(path).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
         const wxImage img = Wisteria::GraphItems::Image::ApplyEffect(
             static_cast<Wisteria::ImageEffect>(luaL_checkinteger(L, 3)),
@@ -677,7 +677,7 @@ namespace LuaScripting
 
         const uint8_t colorTolerance{ (lua_gettop(L) >= 3) ?
                                           static_cast<uint8_t>(luaL_checkinteger(L, 3)) :
-                                          10 };
+                                          static_cast<uint8_t>(10) };
 
         const wxImage img = Wisteria::GraphItems::Image::CropImageBorder(
             Wisteria::GraphItems::Image::LoadFile(inPath), colorTolerance);
@@ -758,10 +758,10 @@ namespace LuaScripting
         const wxString path(luaL_checkstring(L, 1), wxConvUTF8);
 
         // create the folder to the filepath, if necessary
-        wxFileName::Mkdir(wxFileName(path).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-        wxFileName(path).SetPermissions(wxS_DEFAULT);
-        wxFile outputFile(path, wxFile::write);
+        wxFileName{ path }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ path, wxFile::write };
         lua_pushboolean(L, outputFile.Write(wxGetApp().GetLogFile()->Read(), wxConvUTF8));
 
         wxGetApp().Yield();
@@ -787,7 +787,7 @@ namespace LuaScripting
             {
             return 0;
             }
-        wxASSERT(wxGetApp().GetSplashscreenPaths().GetCount());
+        wxASSERT(wxGetApp().GetSplashscreenPaths().GetCount() > 0);
         const auto index = std::clamp<size_t>(luaL_checkinteger(L, 1) - 1 /*make it zero-indexed*/,
                                               0, wxGetApp().GetSplashscreenPaths().GetCount() - 1);
         wxBitmap bitmap = wxGetApp().GetScaledImage(wxGetApp().GetSplashscreenPaths()[index],
@@ -1014,10 +1014,10 @@ namespace LuaScripting
         const wxString outputStr(luaL_checkstring(L, 2), wxConvUTF8);
 
         // create the folder to the filepath, if necessary
-        wxFileName::Mkdir(wxFileName(path).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-        wxFileName(path).SetPermissions(wxS_DEFAULT);
-        wxFile outputFile(path, wxFile::write);
+        wxFileName{ path }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ path, wxFile::write };
         lua_pushboolean(L, outputFile.Write(outputStr, wxConvUTF8));
         return 1;
         }
@@ -1110,10 +1110,10 @@ namespace LuaScripting
 
         // create the folder to the filepath, if necessary
         const wxString outputPath(luaL_checkstring(L, 3), wxConvUTF8);
-        wxFileName::Mkdir(wxFileName(outputPath).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+        wxFileName::Mkdir(wxFileName{ outputPath }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-        wxFileName(outputPath).SetPermissions(wxS_DEFAULT);
-        wxFile outputFile(outputPath, wxFile::write);
+        wxFileName{ outputPath }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ outputPath, wxFile::write };
         lua_pushboolean(L, outputFile.Write(outputStr, wxConvUTF8));
 
         wxGetApp().Yield();
@@ -1159,8 +1159,8 @@ namespace LuaScripting
         const wxString outputPath(luaL_checkstring(L, 2), wxConvUTF8);
         wxFileName::Mkdir(wxFileName(outputPath).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-        wxFileName(outputPath).SetPermissions(wxS_DEFAULT);
-        wxFile outputFile(outputPath, wxFile::write);
+        wxFileName{ outputPath }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ outputPath, wxFile::write };
         lua_pushboolean(L, outputFile.Write(outputStr, wxConvUTF8));
 
         wxGetApp().Yield();
@@ -1247,8 +1247,8 @@ namespace LuaScripting
         const wxString outputPath(luaL_checkstring(L, 2), wxConvUTF8);
         wxFileName::Mkdir(wxFileName(outputPath).GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
-        wxFileName(outputPath).SetPermissions(wxS_DEFAULT);
-        wxFile outputFile(outputPath, wxFile::write);
+        wxFileName{ outputPath }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ outputPath, wxFile::write };
         lua_pushboolean(L, outputFile.Write(outputStr, wxConvUTF8));
 
         wxGetApp().Yield();

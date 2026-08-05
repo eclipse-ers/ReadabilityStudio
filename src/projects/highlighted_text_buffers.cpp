@@ -12,29 +12,80 @@
  ********************************************************************************/
 
 #include "highlighted_text_buffers.h"
-#include <wx/fs_mem.h>
 
 //-------------------------------------------------------
-void HighlightedTextBufferMap::SetContent(wxWebView* window, wxString html, wxString rtf)
+void HighlightedTextPageHandler::SetPage(const wxString& key, std::string html)
+    {
+    m_pages[key] = std::make_shared<const std::string>(std::move(html));
+    }
+
+//-------------------------------------------------------
+void HighlightedTextPageHandler::RemovePage(const wxString& key) { m_pages.erase(key); }
+
+//-------------------------------------------------------
+void HighlightedTextPageHandler::RemoveAllPages() { m_pages.clear(); }
+
+//-------------------------------------------------------
+wxFSFile* HighlightedTextPageHandler::GetFile(const wxString& uri)
+    {
+    // the backends hand this back as "<scheme>:<key>", even the ones that rewrite
+    // the url into an internal one to fetch it
+    wxString key;
+    if (!uri.StartsWith(GetScheme() + L":", &key))
+        {
+        return nullptr;
+        }
+
+    const auto pos = m_pages.find(key);
+    if (pos == m_pages.cend())
+        {
+        return nullptr;
+        }
+
+    // the stream takes its own reference to the page, so removing it here can't
+    // pull the bytes out from under a backend that is still reading them
+    return new wxFSFile(new HighlightedTextPageStream(pos->second), uri,
+                        _DT(L"text/html; charset=UTF-8"), wxString{}, wxDateTime::Now());
+    }
+
+//-------------------------------------------------------
+HighlightedTextPageHandler& HighlightedTextBufferMap::GetPageHandler()
+    {
+    return *static_cast<HighlightedTextPageHandler*>(m_handler.get());
+    }
+
+//-------------------------------------------------------
+void HighlightedTextBufferMap::RegisterHandler(wxWebView* window)
+    {
+    if (window != nullptr)
+        {
+        window->RegisterHandler(m_handler);
+        }
+    }
+
+//-------------------------------------------------------
+void HighlightedTextBufferMap::SetContent(wxWebView* window, const wxString& html, wxString rtf)
     {
     if (window == nullptr)
         {
         return;
         }
     const wxWindowID windowId = window->GetId();
-    // drop any page previously cached for this window before replacing it
-    RemoveMemoryFile(windowId);
+
+    if (const auto pos = m_buffers.find(windowId); pos != m_buffers.cend())
+        {
+        GetPageHandler().RemovePage(pos->second.m_pageKey);
+        }
 
     HighlightedTextBuffers buffers;
     buffers.m_rtf = std::move(rtf);
-    // the key must be unique across every window and every reload; otherwise, the
-    // process-global memory file system would collide with a still-cached page
-    buffers.m_memoryKey =
-        wxString::Format(L"highlighted-%d-%zu.html", windowId, ++m_refreshCounter);
-    // the memory file system takes its own copy of the HTML, so don't keep one here
-    wxMemoryFSHandler::AddFileWithMimeType(buffers.m_memoryKey, html, L"text/html");
+    // a fresh key every time, so that the window refetches instead of being served
+    // its previous page from the backend's cache
+    buffers.m_pageKey = wxString::Format(L"highlighted-%d-%zu.html", windowId, ++m_refreshCounter);
+    // the html declares itself as UTF-8, so serve it as that
+    GetPageHandler().SetPage(buffers.m_pageKey, html.utf8_string());
 
-    window->LoadURL(L"memory:" + buffers.m_memoryKey);
+    window->LoadURL(HighlightedTextPageHandler::GetScheme() + L":" + buffers.m_pageKey);
 
     m_buffers[windowId] = std::move(buffers);
     }
@@ -61,30 +112,6 @@ std::vector<wxWindowID> HighlightedTextBufferMap::GetWindowIds() const
 //-------------------------------------------------------
 void HighlightedTextBufferMap::Clear()
     {
-    for (const auto& buffer : m_buffers)
-        {
-        if (!buffer.second.m_memoryKey.empty())
-            {
-            wxMemoryFSHandler::RemoveFile(buffer.second.m_memoryKey);
-            }
-        }
+    GetPageHandler().RemoveAllPages();
     m_buffers.clear();
-    }
-
-//-------------------------------------------------------
-void HighlightedTextBufferMap::RemoveMemoryFile(const wxWindowID windowId)
-    {
-    // The ID only indexes this document's own map. What gets removed from the
-    // process-global memory file system is the unique key stored in that entry,
-    // so this can't reach another project's page. for example, two open projects
-    // can each have a window with the ID 1234, but the ID resolves through
-    // separate maps to separate keys:
-    //     project A: 1234 -> its map -> "highlighted-1234-7.html"
-    //     project B: 1234 -> its map -> "highlighted-1234-12.html"
-    // and each map only removes the string that it stored
-    const auto pos = m_buffers.find(windowId);
-    if (pos != m_buffers.cend() && !pos->second.m_memoryKey.empty())
-        {
-        wxMemoryFSHandler::RemoveFile(pos->second.m_memoryKey);
-        }
     }

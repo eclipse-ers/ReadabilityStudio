@@ -91,9 +91,9 @@ namespace LuaScripting
                         docTemplate->CreateDocument(folderPath, wxDOC_NEW));
                     if (m_project != nullptr)
                         {
-                        // if a blank project (that will presumably have a document connected later)
-                        // then we need to temporarily set the project to use (empty) manually
-                        // entered text to suppress errors from analyzing an invalid file.
+                        // if a blank project (that will presumably have a document connected
+                        // later), then we need to temporarily set the project to use (empty)
+                        // manually entered text to suppress errors from analyzing an invalid file.
                         if (folderPath == L"EMPTY_PROJECT")
                             {
                             m_project->SetTextSource(TextSource::EnteredText);
@@ -3977,8 +3977,8 @@ namespace LuaScripting
                 bool saved = false;
                 if (buffers != nullptr && filePath.GetExt().CmpNoCase(L"rtf") == 0)
                     {
-                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-                    wxFile file(filePath.GetFullPath(), wxFile::write);
+                    wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                    wxFile file{ filePath.GetFullPath(), wxFile::write };
                     saved = file.IsOpened() && file.Write(buffers->m_rtf);
                     }
                 else if (filePath.GetExt().CmpNoCase(L"pdf") == 0)
@@ -3994,8 +3994,8 @@ namespace LuaScripting
                         {
                         htmlText.insert(0, L"<!DOCTYPE html>\n");
                         }
-                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-                    wxFile file(filePath.GetFullPath(), wxFile::write);
+                    wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                    wxFile file{ filePath.GetFullPath(), wxFile::write };
                     saved = file.IsOpened() && file.Write(htmlText);
                     }
                 lua_pushboolean(L, saved);
@@ -4051,8 +4051,8 @@ namespace LuaScripting
                     // create the folder for the filepath, if necessary
                     wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,
                                       wxPATH_MKDIR_FULL);
-                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-                    wxFile file(filePath, wxFile::write);
+                    wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                    wxFile file{ filePath, wxFile::write };
                     lua_pushboolean(L, file.IsOpened() && file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;
@@ -4070,8 +4070,8 @@ namespace LuaScripting
                     // create the folder for the filepath, if necessary
                     wxFileName::Mkdir(wxFileName{ filePath }.GetPath(), wxS_DIR_DEFAULT,
                                       wxPATH_MKDIR_FULL);
-                    wxFileName(filePath).SetPermissions(wxS_DEFAULT);
-                    wxFile file(filePath, wxFile::write);
+                    wxFileName{ filePath }.SetPermissions(wxS_DEFAULT);
+                    wxFile file{ filePath, wxFile::write };
                     lua_pushboolean(L, file.IsOpened() && file.Write(htmlText));
                     wxGetApp().Yield();
                     return 1;

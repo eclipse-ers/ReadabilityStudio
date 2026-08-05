@@ -70,7 +70,6 @@
 #include "standard_project_view.h"
 #include <wx/richmsgdlg.h>
 #include <wx/webview.h>
-#include <wx/webviewfshandler.h>
 #include <wx/wfstream.h>
 
 wxDECLARE_APP(ReadabilityApp);
@@ -5722,7 +5721,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
             }
 
         // this rebuilds every highlighted window, so drop the previous buffers and
-        // their cached 'memory:' pages; each window is repopulated via SetContent below
+        // pages; each window is repopulated via SetContent below
         GetHighlightedTextBuffers().Clear();
 
         // the display windows render HTML (theme-adaptive); the paper-white
@@ -6480,21 +6479,20 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 wxWebView* ProjectDoc::CreateHighlightedTextWindow(wxWindow* parent, const int ID,
                                                    const wxString& label)
     {
-    // two-step creation: register the memory: handler before Create()
+    // two-step creation: register the page handler before Create()
     auto* textWindow = wxWebView::New();
     if (textWindow == nullptr)
         {
         wxLogError(_(L"Failed to create wxWebView. No backend available."));
         return nullptr;
         }
-    textWindow->RegisterHandler(
-        wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler(_DT(L"memory"))));
+    GetHighlightedTextBuffers().RegisterHandler(textWindow);
     textWindow->Create(parent, ID);
     textWindow->SetName(label);
     textWindow->Bind(wxEVT_WEBVIEW_LOADED, &ProjectDoc::OnHighlightedTextLoaded, this);
     textWindow->Hide();
     // Read-only report, so hide the browser's context menu. Don't block navigation;
-    // there are no links to follow, and some backends rewrite the 'memory:' url
+    // there are no links to follow, and some backends rewrite the page's url
     // internally, which a scheme-based veto would wrongly cancel.
     textWindow->EnableContextMenu(false);
     return textWindow;
