@@ -142,7 +142,7 @@ RSArtProvider::RSArtProvider()
                     { L"ID_REALTIME_UPDATE", L"ribbon/realtime.svg" },
                     { L"ID_WHATS_NEW", L"ribbon/outreach.svg" },
                     { L"ID_LINK", L"ribbon/link.svg" },
-                    { L"ID_COLOR_PICKER", L"color-picker.svg" } };
+                    { L"ID_COLOR_PICKER", L"ribbon/color-picker.svg" } };
     }
 
 //-------------------------------------------

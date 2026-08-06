@@ -8,12 +8,12 @@ Catch2|OleanderStemmingLibrary/tests|tinyexpr-plusplus/tests|utfcpp/tests|\
 utfcpp/samples|utfcpp/extern|cxxopts|xmltest[.]cpp|html5-printer[.]cpp|htmltablepanel[.]cpp|\
 textclassifier[.]cpp|candlestickplot[.]cpp|ganttchart[.]cpp|lrroadmap[.]cpp|proconroadmap[.]cpp|\
 roadmap[.]cpp|sankeydiagram[.]cpp|table[.]cpp|wcurveplot[.]cpp|variableselectdlg[.]cpp|reportbuilder[.]cpp|\
-formattedtextctrl[.]cpp|gtktextview[-]helper[.]cpp|\
+formattedtextctrl[.]cpp|gtktextview[-]helper[.]cpp|benchmark[.]cpp|\
 report_builder_formulas[.]cpp|reporttableloader[.]cpp|datasetimportdlg[.]cpp|\
 win_loss_sparkline[.]cpp|multi_series_lineplot[.]cpp|likertchart[.]cpp|waffle_chart[.]cpp|\
 pivot[.]cpp|subset[.]cpp|join[.]cpp|clone[.]cpp|xrc_menu_strings[.]cpp)")
 
-# these files get compiled into larger ones that are included with the distribution
+# these files get compiled into larger ones that are included with the distribution instead
 set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-english-dictionary[.]txt|base-non-personal[.]txt|base-personal[.]txt|base-english[.]txt|\
 base-german[.]txt|base-spanish[.]txt|common-errors[.]txt|sql[.]txt|visual-basic[.]txt|programming/r[.]txt|python[.]txt|java[.]txt|\
 html[.]txt|csharp[.]txt|cpp[.]txt|assembly[.]txt)")

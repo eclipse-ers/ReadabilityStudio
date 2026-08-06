@@ -74,6 +74,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/base/graphitems.cpp
     src/Wisteria-Dataviz/src/base/icons.cpp
     src/Wisteria-Dataviz/src/base/image.cpp
+    src/Wisteria-Dataviz/src/base/image_effects.cpp
     src/Wisteria-Dataviz/src/base/label.cpp
     src/Wisteria-Dataviz/src/base/lines.cpp
     src/Wisteria-Dataviz/src/base/pdfreportprintout.cpp
