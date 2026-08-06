@@ -37,6 +37,7 @@ ribbon/checklist.svg
 ribbon/citation.svg
 ribbon/clear.svg
 ribbon/clock.svg
+ribbon/color-picker.svg
 ribbon/color-wheel.svg
 ribbon/comment.svg
 ribbon/configure.svg
