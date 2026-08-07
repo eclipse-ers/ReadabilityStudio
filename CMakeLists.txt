@@ -30,7 +30,7 @@ set(MIN_GCC_REQUIRED "12.2.1")
 set(MIN_APPLECLANG_REQUIRED "15.3")
 set(MIN_MSVC_TOOLSET_REQUIRED "19.30") # VS 2022 (1930 is the build number, which is what _MSC_VER will be set to)
 set(MIN_MSVC_REQUIRED "2022") # Just used in the help
-Set(MIN_WXWIDGETS_REQUIRED "3.3.3")
+Set(MIN_WXWIDGETS_REQUIRED "3.3.4")
 
 # https://blog.kitware.com/cmake-and-the-default-build-type/
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -85,8 +85,8 @@ message(STATUS "macOS deployment target: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
 # Only used for the docs
 set(WIN32_DEPLOYMENT_TARGET 10)
 set(UNIX_ARCHITECTURE "x86_64")
-set(MIN_RAM "2 GB")
-set(RAM_RECOMMENDED "4 GB")
+set(MIN_RAM "4 GB")
+set(RAM_RECOMMENDED "8 GB")
 # Approximate installed size in kilobytes
 set(INSTALLED_SIZE 131072)
 math(EXPR INSTALLED_SIZE_MB "${INSTALLED_SIZE} / 1024")
