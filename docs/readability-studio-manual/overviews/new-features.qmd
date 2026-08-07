@@ -19,6 +19,7 @@ source('../R/appdown.r')
 - Export options are now located under a dedicated `r keys("Export")` button (on the ribbon), separate from the `r keys("Save")` button.
 - Added color balance, despeckle, and sharpen effects for plot background images.
 - Added **Merge Images** and **Apply Effect** tools to the **Image** section on the **Tools** tab of the ribbon.
+  - Includes new features for postprocessing documents scanned as images.
 - Highlighted-text windows (e.g., **3+ syllable**) have been rebuilt to render as adaptive HTML.
   - Now supports the program's light/dark theme, as well as the selected program theme.
   - Added tooltips to highlighted words and phrases, explaining why each one was highlighted.

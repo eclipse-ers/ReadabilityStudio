@@ -1,0 +1,31 @@
+::: {.minipage data-latex="{\textwidth}"}
+### `RemoveImageGutterShadow` {-}
+
+Lightens the dark shadow that appears near the gutter (i.e., spine) of a scanned book page and saves the result to another image file.
+Returns true if image was successfully saved.
+
+#### Syntax {-}
+
+``` {.lua}
+boolean RemoveImageGutterShadow(string inputImagePath,
+                                string outputImagePath,
+                                GutterSide side,
+                                number gutterWidthProportion)
+```
+
+
+#### Return value {-}
+
+Type: `boolean`
+
+#### Parameters {-}
+
+**Parameter** | **Description**
+| :-- | :-- |
+| `string` inputImagePath |  |
+| `string` outputImagePath |  |
+| [`GutterSide`](#gutterside) side | Which side of the image the gutter is on. |
+| `number` gutterWidthProportion | (Optional) The proportion (from `0.0` to `1.0`) of the image's width over which the correction tapers off. Default is `0.15`. |
+
+
+:::

@@ -254,6 +254,14 @@ ImageFit =
   Shrink = 1         -- Shrink the image to the rect.
   }
 
+-- Which side of a scanned page a gutter (i.e., spine) shadow appears on.
+GutterSide =
+  {
+  Left = 0,     -- The gutter is along the left edge of the image.
+  Right = 1,    -- The gutter is along the right edge of the image.
+  Centered = 2  -- The gutter runs down the middle of the image (e.g., a two-page spread scanned as a single image).
+  }
+
 -- The following types of orientation are available.
 Orientation =
   {
@@ -507,6 +515,7 @@ Orientation = protect_enum(Orientation)
 BoxEffect = protect_enum(BoxEffect)
 ImageEffect = protect_enum(ImageEffect)
 ImageFit = protect_enum(ImageFit)
+GutterSide = protect_enum(GutterSide)
 SortOrder = protect_enum(SortOrder)
 Rounding = protect_enum(Rounding)
 Binning = protect_enum(Binning)

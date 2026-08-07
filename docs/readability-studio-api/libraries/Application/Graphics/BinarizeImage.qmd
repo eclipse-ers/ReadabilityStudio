@@ -1,0 +1,29 @@
+::: {.minipage data-latex="{\textwidth}"}
+### `BinarizeImage` {-}
+
+Converts an image to pure black-and-white, using Otsu's method to automatically select the threshold between the two, and saves the result to another image file.
+Returns true if image was successfully saved.
+
+#### Syntax {-}
+
+``` {.lua}
+boolean BinarizeImage(string inputImagePath,
+                      string outputImagePath,
+                      number thresholdAdjustment)
+```
+
+
+#### Return value {-}
+
+Type: `boolean`
+
+#### Parameters {-}
+
+**Parameter** | **Description**
+| :-- | :-- |
+| `string` inputImagePath |  |
+| `string` outputImagePath |  |
+| `number` thresholdAdjustment | (Optional) An offset added to the threshold that Otsu's method selects, clamped to a valid luminance value (`0`-`255`). Raising this preserves lighter grays as black; lowering it turns more of them white. Default is `0`. |
+
+
+:::

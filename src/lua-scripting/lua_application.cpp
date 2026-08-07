@@ -679,8 +679,102 @@ namespace LuaScripting
                                           static_cast<uint8_t>(luaL_checkinteger(L, 3)) :
                                           static_cast<uint8_t>(10) };
 
+        const wxColour baseColor{ (lua_gettop(L) >= 4) ?
+                                      LoadColor(wxString{ luaL_checkstring(L, 4), wxConvUTF8 }) :
+                                      *wxWHITE };
+
         const wxImage img = Wisteria::GraphItems::Image::CropImageBorder(
-            Wisteria::GraphItems::Image::LoadFile(inPath), colorTolerance);
+            Wisteria::GraphItems::Image::LoadFile(inPath), colorTolerance, baseColor);
+
+        lua_pushboolean(L, img.SaveFile(path));
+        return 1;
+        }
+
+    //-------------------------------------------------------------
+    int RemoveImageGutterShadow(lua_State* L)
+        {
+        if (!VerifyParameterCount(L, 3, __func__))
+            {
+            return 0;
+            }
+        const wxString inPath(luaL_checkstring(L, 1), wxConvUTF8);
+        if (!wxFile::Exists(inPath))
+            {
+            wxMessageBox(wxString::Format(_(L"%s: invalid image file path."), inPath),
+                         _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        const wxString path{ luaL_checkstring(L, 2), wxConvUTF8 };
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+        const auto side{ static_cast<Wisteria::GutterSide>(luaL_checkinteger(L, 3)) };
+
+        const double gutterWidthProportion{ (lua_gettop(L) >= 4) ? luaL_checknumber(L, 4) : 0.15 };
+
+        const wxImage img = Wisteria::GraphItems::Image::RemoveGutterShadow(
+            Wisteria::GraphItems::Image::LoadFile(inPath), side, gutterWidthProportion);
+
+        lua_pushboolean(L, img.SaveFile(path));
+        return 1;
+        }
+
+    //-------------------------------------------------------------
+    int ReduceImageBleedThrough(lua_State* L)
+        {
+        if (!VerifyParameterCount(L, 2, __func__))
+            {
+            return 0;
+            }
+        const wxString inPath(luaL_checkstring(L, 1), wxConvUTF8);
+        if (!wxFile::Exists(inPath))
+            {
+            wxMessageBox(wxString::Format(_(L"%s: invalid image file path."), inPath),
+                         _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        const wxString path{ luaL_checkstring(L, 2), wxConvUTF8 };
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+        const uint8_t whitePoint{ (lua_gettop(L) >= 3) ?
+                                      static_cast<uint8_t>(luaL_checkinteger(L, 3)) :
+                                      static_cast<uint8_t>(200) };
+
+        const wxImage img = Wisteria::GraphItems::Image::ReduceBleedThrough(
+            Wisteria::GraphItems::Image::LoadFile(inPath), whitePoint);
+
+        lua_pushboolean(L, img.SaveFile(path));
+        return 1;
+        }
+
+    //-------------------------------------------------------------
+    int BinarizeImage(lua_State* L)
+        {
+        if (!VerifyParameterCount(L, 2, __func__))
+            {
+            return 0;
+            }
+        const wxString inPath(luaL_checkstring(L, 1), wxConvUTF8);
+        if (!wxFile::Exists(inPath))
+            {
+            wxMessageBox(wxString::Format(_(L"%s: invalid image file path."), inPath),
+                         _(L"Script Error"), wxOK | wxICON_EXCLAMATION);
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        const wxString path{ luaL_checkstring(L, 2), wxConvUTF8 };
+        wxFileName::Mkdir(wxFileName{ path }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+        const int thresholdAdjustment{ (lua_gettop(L) >= 3) ?
+                                           static_cast<int>(luaL_checkinteger(L, 3)) :
+                                           0 };
+
+        const wxImage img = Wisteria::GraphItems::Image::BinarizeOtsu(
+            Wisteria::GraphItems::Image::LoadFile(inPath), thresholdAdjustment);
 
         lua_pushboolean(L, img.SaveFile(path));
         return 1;

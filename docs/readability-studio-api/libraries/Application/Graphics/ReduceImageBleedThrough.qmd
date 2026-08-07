@@ -1,0 +1,29 @@
+::: {.minipage data-latex="{\textwidth}"}
+### `ReduceImageBleedThrough` {-}
+
+Lightens faint bleed-through (i.e., text or images showing through from the reverse side of a scanned page) and saves the result to another image file.
+Returns true if image was successfully saved.
+
+#### Syntax {-}
+
+``` {.lua}
+boolean ReduceImageBleedThrough(string inputImagePath,
+                                string outputImagePath,
+                                number whitePoint)
+```
+
+
+#### Return value {-}
+
+Type: `boolean`
+
+#### Parameters {-}
+
+**Parameter** | **Description**
+| :-- | :-- |
+| `string` inputImagePath |  |
+| `string` outputImagePath |  |
+| `number` whitePoint | (Optional) The channel value (from `0` to `255`) at or above which a pixel is treated as background and pushed to white. Lower values are more aggressive at suppressing faint bleed-through. Default is `200`. |
+
+
+:::

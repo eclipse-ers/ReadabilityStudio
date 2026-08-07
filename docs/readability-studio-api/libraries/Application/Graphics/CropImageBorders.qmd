@@ -1,14 +1,16 @@
 ::: {.minipage data-latex="{\textwidth}"}
 ### `CropImageBorders` {-}
 
-Removes the solid border surrounding a scanned image and saves the result to another image file. Returns true if image was successfully saved.
+Removes the solid border surrounding a scanned image and saves the result to another image file.
+Returns true if image was successfully saved.
 
 #### Syntax {-}
 
 ``` {.lua}
 boolean CropImageBorders(string inputImagePath,
                          string outputImagePath,
-                         number colorTolerance)
+                         number colorTolerance,
+                         string baseColor)
 ```
 
 
@@ -20,9 +22,10 @@ Type: `boolean`
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` inputImagePath |  | 
-| `string` outputImagePath |  | 
-| `number` colorTolerance |  |
+| `string` inputImagePath |  |
+| `string` outputImagePath |  |
+| `number` colorTolerance | (Optional) How far a pixel's color channels may deviate from `baseColor` and still be considered part of the border. Default is `10`. |
+| `string` baseColor | (Optional) The color of the border area to crop away (e.g., the color of the wall or scanner bed surrounding the actual content). Default is `"white"`. |
 
 
 :::
