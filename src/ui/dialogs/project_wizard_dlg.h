@@ -69,6 +69,49 @@ enum class ProjectType
     BatchProject
     };
 
+/// @brief No-op word highlighter for the wizard's preview page.
+class NoWordHighlighting
+    {
+  public:
+    /// @private
+    [[nodiscard]]
+    bool operator()(const word_case_insensitive_no_stem&) const noexcept
+        {
+        return false;
+        }
+
+    /// @private
+    [[nodiscard]]
+    const wxString& GetHighlightBegin() const noexcept
+        {
+        return m_empty;
+        }
+
+    /// @private
+    [[nodiscard]]
+    const wxString& GetHighlightEnd() const noexcept
+        {
+        return m_empty;
+        }
+
+    /// @private
+    void Reset() {}
+
+  private:
+    wxString m_empty;
+    };
+
+/// @brief Exposes @c BaseProject::ExtractRawTextWithEncoding() for the wizard's preview page.
+/// @details That method is protected (it's only meant to be called by @c BaseProject's own
+///     @c LoadExternalDocument()). The preview page needs it too for its own quiet,
+///     dialog-free webpage fetch, so this subclass exists solely to make that one
+///     static member callable from outside @c BaseProject.
+class PreviewExtractionProject final : public BaseProject
+    {
+  public:
+    using BaseProject::ExtractRawTextWithEncoding;
+    };
+
 /// @brief Wizard for creating standard and batch projects.
 class ProjectWizardDlg final : public wxDialog
     {
@@ -96,6 +139,8 @@ class ProjectWizardDlg final : public wxDialog
     ProjectWizardDlg(const ProjectWizardDlg&) = delete;
     /// @private
     ProjectWizardDlg& operator=(const ProjectWizardDlg&) = delete;
+    /// @private
+    ~ProjectWizardDlg() final = default;
 
     [[nodiscard]]
     readability::test_language GetLanguage() const;
@@ -433,6 +478,7 @@ class ProjectWizardDlg final : public wxDialog
     constexpr static int ID_INDUSTRY_RADIO_BOX = wxID_HIGHEST + 32;
     constexpr static int ID_COMPOSITION_BOX = wxID_HIGHEST + 33;
     constexpr static int ID_LAYOUT_BOX = wxID_HIGHEST + 34;
+    constexpr static int ID_CENTERED_TEXT_CHECKBOX = wxID_HIGHEST + 35;
 
     void OnHelp([[maybe_unused]] wxCommandEvent& event);
     void OnContextHelp([[maybe_unused]] wxHelpEvent& event);
@@ -454,6 +500,28 @@ class ProjectWizardDlg final : public wxDialog
     void OnAddToListClick([[maybe_unused]] wxCommandEvent& event);
     void OnGroupClick([[maybe_unused]] wxCommandEvent& event);
     void OnDeleteFromListClick([[maybe_unused]] wxCommandEvent& event);
+
+    // preview page
+    void OnPreviewSourceMayHaveChanged([[maybe_unused]] wxCommandEvent& event);
+    void OnPreviewStructureMayHaveChanged([[maybe_unused]] wxCommandEvent& event);
+    void ReloadPreviewSource();
+    /// @returns The document that the Preview page should currently be showing.
+    ///     For a standard project, whatever the Document page's file field holds.
+    ///     For a batch project, whichever file is currently first in the file list.
+    ///     Empty if there isn't one (e.g., manually-entered text, or an empty batch file list).
+    [[nodiscard]]
+    wxString GetPreviewSourceFilePath() const;
+    bool ExtractPreviewSourceText(std::wstring& fullText);
+    /// @returns The paragraph parsing method implied by the current Document Structure
+    ///     selections, using the same mapping applied when actually creating the project.
+    [[nodiscard]]
+    ParagraphParse GetPreviewParagraphParsingMethod() const;
+    [[nodiscard]]
+    std::wstring DerivePreviewSample(const std::wstring& fullText) const;
+    void RefreshPreviewFormatting();
+    [[nodiscard]]
+    wxString BuildPreviewHtml(const wxString& sampleHtmlBody) const;
+    void ShowPreviewMessage(const wxString& message);
 
     // batch document entry
     Wisteria::UI::ListCtrlEx* m_fileList{ nullptr };
@@ -517,6 +585,23 @@ class ProjectWizardDlg final : public wxDialog
     Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode m_fileListTruncationMode{
         Wisteria::UI::ListCtrlEx::ColumnInfo::ColumnFilePathTruncationMode::NoTruncation
     };
+
+    // preview page
+    wxWebView* m_previewWebView{ nullptr };
+    // scratch project used only to extract text and index the sample; never shown to the user
+    std::unique_ptr<BaseProject> m_previewProject;
+    // cached raw excerpt (a verbatim slice of the source, not reconstructed from tokens)
+    std::wstring m_previewSampleText;
+    bool m_previewHaveSample{ false };
+    // true if m_previewSampleText was cut short of the full source text
+    bool m_previewIsExcerpt{ false };
+    // file/text (or which of the two is active) changed; needs a re-read before reformatting
+    bool m_previewSourceDirty{ true };
+    // structure settings changed; cached sample just needs reformatting
+    bool m_previewFormattingDirty{ true };
+    // for a batch project, whichever file was first in the list as of the last time the
+    // Preview page was refreshed; used to tell whether the list has actually changed
+    wxString m_previewLastBatchFilePath;
     };
 
 #endif // PROJECTWIZARD_H

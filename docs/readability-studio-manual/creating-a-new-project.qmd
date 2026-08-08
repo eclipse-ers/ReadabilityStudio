@@ -98,6 +98,9 @@ Along with adding tests to a project, test bundles can also include [goals](#sec
 Note that you can always add or remove tests from your project at any time.
 If you select either the document type or industry options, you are not bound to the tests that *{{< var PROGRAM_NAME >}}* recommends.
 
+After selecting your tests, click the `r keys("Forward >")` button to continue to the **Preview** page.
+This page shows an excerpt of your document, formatted using the options you selected on the **Document Structure** page.
+
 Finally, click the `r keys("Finish")` button and the project will be created and will appear like this:
 
 ![](images/scores.png)

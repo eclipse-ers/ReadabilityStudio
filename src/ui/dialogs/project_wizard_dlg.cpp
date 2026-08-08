@@ -48,7 +48,11 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "project_wizard_dlg.h"
+#include "../../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
+#include "../../indexing/diacritics.h"
+#include "../../results-format/project_report_format.h"
+#include "../../results-format/word_collection_text_formatting.h"
 #include <utility>
 #include <wx/dir.h>
 #include <wx/valgen.h>
@@ -214,6 +218,24 @@ ProjectWizardDlg::ProjectWizardDlg(wxWindow* parent, const ProjectType projectTy
     Bind(wxEVT_RADIOBOX, &ProjectWizardDlg::OnTestSelectionMethodChanged, this,
          TEST_SELECT_METHOD_BUTTON);
 
+    // Preview page: these just flag that a refresh is needed.
+    // The actual work only happens once the user navigates to the Preview page.
+    if (GetProjectType() == ProjectType::StandardProject)
+        {
+        m_filePathEdit->Bind(wxEVT_TEXT, &ProjectWizardDlg::OnPreviewSourceMayHaveChanged, this);
+        m_textEntryEdit->Bind(wxEVT_TEXT, &ProjectWizardDlg::OnPreviewSourceMayHaveChanged, this);
+        }
+    Bind(wxEVT_RADIOBUTTON, &ProjectWizardDlg::OnPreviewStructureMayHaveChanged, this,
+         ID_NARRATIVE_RADIO_BUTTON);
+    Bind(wxEVT_RADIOBUTTON, &ProjectWizardDlg::OnPreviewStructureMayHaveChanged, this,
+         ID_NONNARRATIVE_RADIO_BUTTON);
+    Bind(wxEVT_CHECKBOX, &ProjectWizardDlg::OnPreviewStructureMayHaveChanged, this,
+         ID_SENTENCES_SPLIT_RADIO_BUTTON);
+    Bind(wxEVT_CHECKBOX, &ProjectWizardDlg::OnPreviewStructureMayHaveChanged, this,
+         ID_CENTERED_TEXT_CHECKBOX);
+    Bind(wxEVT_CHECKBOX, &ProjectWizardDlg::OnPreviewStructureMayHaveChanged, this,
+         ID_HARD_RETURN_CHECKBOX);
+
     Bind(Wisteria::UI::wxEVT_SIDEBARBOOK_PAGE_CHANGED, &ProjectWizardDlg::OnPageChange, this);
 
     Bind(wxEVT_HELP, &ProjectWizardDlg::OnContextHelp, this);
@@ -260,6 +282,8 @@ void ProjectWizardDlg::CreateControls()
         wxGetApp().GetResourceManager().GetSVG(L"ribbon/document-structure.svg"));
     m_sideBarBook->GetImageList().push_back(
         wxGetApp().GetResourceManager().GetSVG(L"tests/flesch-test.svg"));
+    m_sideBarBook->GetImageList().push_back(
+        wxGetApp().GetResourceManager().GetSVG(L"ribbon/preview.svg"));
 
     // document page
     if (GetProjectType() == ProjectType::StandardProject)
@@ -735,7 +759,7 @@ void ProjectWizardDlg::CreateControls()
             auto* centeredSizer = new wxBoxSizer(wxHORIZONTAL);
             auto* centeredLabelsSizer = new wxBoxSizer(wxVERTICAL);
             auto* centeredButton =
-                new wxCheckBox(docLayoutSizer->GetStaticBox(), wxID_ANY,
+                new wxCheckBox(docLayoutSizer->GetStaticBox(), ID_CENTERED_TEXT_CHECKBOX,
                                _(L"Centered/left-aligned text"), wxDefaultPosition, wxDefaultSize,
                                wxCHK_2STATE, wxGenericValidator(&m_centeredText));
             centeredLabelsSizer->Add(centeredButton);
@@ -977,6 +1001,22 @@ void ProjectWizardDlg::CreateControls()
 
         pageSizer->Add(optionsSizer, wxSizerFlags{ 1 }.Expand().Border());
         }
+        // preview (for a batch project, this just shows the first file currently in the list)
+        {
+        auto* page =
+            new wxPanel(m_sideBarBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+        auto* pageSizer = new wxBoxSizer(wxVERTICAL);
+        page->SetSizer(pageSizer);
+        m_sideBarBook->AddPage(page, _(L"Preview"), wxID_ANY, false, 3);
+
+        auto* banner = new Banner(page, wxID_ANY,
+                                  wxGetApp().GetResourceManager().GetSVG(L"ribbon/preview.svg"),
+                                  _(L"Preview"));
+        pageSizer->Add(banner, wxSizerFlags{}.Expand().Border(wxBOTTOM));
+
+        m_previewWebView = wxWebView::New(page, wxID_ANY);
+        pageSizer->Add(m_previewWebView, wxSizerFlags{ 1 }.Expand().Border());
+        }
     auto* buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonsSizer->AddStretchSpacer();
     auto* backButton = new wxButton(this, wxID_BACKWARD, _(L"< Back"));
@@ -998,6 +1038,439 @@ void ProjectWizardDlg::CreateControls()
         {
         m_fileList->SetColumnWidth(0, m_fileList->GetClientSize().GetWidth() * .75);
         m_fileList->SetColumnWidth(1, m_fileList->GetClientSize().GetWidth() * .25);
+        }
+    }
+
+//-------------------------------------------------------------
+void ProjectWizardDlg::OnPreviewSourceMayHaveChanged([[maybe_unused]] wxCommandEvent& event)
+    {
+    m_previewSourceDirty = true;
+    }
+
+//-------------------------------------------------------------
+void ProjectWizardDlg::OnPreviewStructureMayHaveChanged([[maybe_unused]] wxCommandEvent& event)
+    {
+    m_previewFormattingDirty = true;
+    }
+
+//-------------------------------------------------------------
+void ProjectWizardDlg::ReloadPreviewSource()
+    {
+    m_previewSourceDirty = false;
+    m_previewHaveSample = false;
+
+    if (m_previewProject == nullptr)
+        {
+        m_previewProject = std::make_unique<BaseProject>();
+        }
+    m_previewProject->SetProjectLanguage(GetLanguage());
+
+    const wxBusyCursor busy;
+
+    std::wstring fullText;
+    if (!ExtractPreviewSourceText(fullText) || fullText.empty())
+        {
+        ShowPreviewMessage(_(L"Preview not available."));
+        return;
+        }
+
+    m_previewSampleText = DerivePreviewSample(fullText);
+    m_previewIsExcerpt = (m_previewSampleText.length() < fullText.length());
+    m_previewHaveSample = true;
+
+    RefreshPreviewFormatting();
+    }
+
+//-------------------------------------------------------------
+wxString ProjectWizardDlg::GetPreviewSourceFilePath() const
+    {
+    if (GetProjectType() == ProjectType::BatchProject)
+        {
+        // preview whichever document is currently first in the file list,
+        // re-picked fresh every time this is called since the list can be added to,
+        // reordered, or emptied out
+        return (m_fileData->GetItemCount() > 0) ? m_fileData->GetItemText(0, 0) : wxString{};
+        }
+    return IsTextFromFileSelected() ? GetFilePath() : wxString{};
+    }
+
+//-------------------------------------------------------------
+bool ProjectWizardDlg::ExtractPreviewSourceText(std::wstring& fullText)
+    {
+    fullText.clear();
+
+    if (GetProjectType() != ProjectType::BatchProject && IsManualTextEntrySelected())
+        {
+        std::wstring enteredText{ GetEnteredText().wc_string() };
+        grammar::convert_ligatures_and_diacritics convertDiacritics;
+        if (convertDiacritics(enteredText))
+            {
+            enteredText = convertDiacritics.get_conversion();
+            }
+        fullText = std::move(enteredText);
+        return !fullText.empty();
+        }
+
+    const wxString filePath = GetPreviewSourceFilePath();
+    if (filePath.empty())
+        {
+        return false;
+        }
+
+    const FilePathResolver resolvePath(filePath, true);
+
+    // webpage is fetched quietly, once
+    if (resolvePath.IsHTTPFile() || resolvePath.IsHTTPSFile())
+        {
+        wxString urlPath{ resolvePath.GetResolvedPath() };
+        wxString content, contentType, statusText, title;
+        int responseCode{ 404 };
+        std::pair<bool, std::wstring> extractResult;
+
+        if (WebHarvester::IsOneDriveDocument(urlPath))
+            {
+            if (!wxGetApp().GetWebHarvester().ReadWebDocument(urlPath, statusText, responseCode))
+                {
+                return false;
+                }
+            extractResult = m_previewProject->ExtractRawText(
+                std::string_view{
+                    wxGetApp().GetWebHarvester().GetDownloader().GetLastRead().data(),
+                    wxGetApp().GetWebHarvester().GetDownloader().GetLastRead().size() },
+                wxFileName{ wxGetApp().GetWebHarvester().GetDownloader().GetLastOneDriveFileName() }
+                    .GetExt());
+            }
+        else
+            {
+            if (!wxGetApp().GetWebHarvester().ReadWebPage(urlPath, content, contentType, statusText,
+                                                          responseCode, false))
+                {
+                return false;
+                }
+            extractResult = PreviewExtractionProject::ExtractRawTextWithEncoding(
+                content.wc_string(), WebHarvester::GetFileTypeFromContentType(contentType), urlPath,
+                title);
+            }
+
+        if (!extractResult.first)
+            {
+            return false;
+            }
+        fullText = std::move(extractResult.second);
+        return true;
+        }
+
+    // archive subfile (e.g., "notes.zip#folder/readme.txt")
+    if (resolvePath.IsArchivedFile())
+        {
+        const size_t poundInFile = filePath.Lower().find(_DT(L".zip#"));
+        const wxFileName archiveFn(filePath.substr(0, poundInFile + 4));
+        if (!wxFile::Exists(archiveFn.GetFullPath()))
+            {
+            return false;
+            }
+        const Wisteria::ZipCatalog zc(archiveFn.GetFullPath());
+        wxMemoryOutputStream memstream;
+        if (!zc.ReadFile(filePath.substr(poundInFile + 5), memstream))
+            {
+            return false;
+            }
+        std::pair<bool, std::wstring> extractResult = m_previewProject->ExtractRawText(
+            { static_cast<const char*>(memstream.GetOutputStreamBuffer()->GetBufferStart()),
+              static_cast<size_t>(memstream.GetLength()) },
+            wxFileName(filePath).GetExt());
+        if (!extractResult.first)
+            {
+            return false;
+            }
+        fullText = std::move(extractResult.second);
+        return true;
+        }
+
+    // Excel cell (e.g., "data.xlsx#Sheet1#A1"); same reasoning as the archive branch above
+    if (resolvePath.IsExcelCell())
+        {
+        const size_t excelTag = filePath.Lower().find(_DT(L".xlsx#"));
+        const wxFileName workbookFn(filePath.substr(0, excelTag + 5));
+        wxString worksheetName = filePath.substr(excelTag + 6);
+        const size_t slash = worksheetName.find_last_of(L'#');
+        if (!wxFile::Exists(workbookFn.GetFullPath()) || slash == wxString::npos)
+            {
+            return false;
+            }
+        const wxString cellName = worksheetName.substr(slash + 1);
+        worksheetName.Truncate(slash);
+
+        lily_of_the_valley::xlsx_extract_text filterXlsx{ false };
+        const Wisteria::ZipCatalog zc(workbookFn.GetFullPath());
+        const std::wstring workBookFileText = zc.ReadTextFile(L"xl/workbook.xml");
+        filterXlsx.read_worksheet_names(workBookFileText.c_str(), workBookFileText.length());
+        const std::wstring workbookRels = zc.ReadTextFile(L"xl/_rels/workbook.xml.rels");
+        filterXlsx.read_relative_paths(workbookRels.c_str(), workbookRels.length());
+        filterXlsx.map_workbook_paths();
+        const std::wstring sharedStrings = zc.ReadTextFile(L"xl/sharedStrings.xml");
+        if (sharedStrings.empty())
+            {
+            return false;
+            }
+
+        const auto& worksheetPaths = filterXlsx.get_worksheet_paths();
+        const auto sheetPos =
+            std::ranges::find_if(worksheetPaths, [&](const auto& wsPath)
+                                 { return wsPath.first == worksheetName.wc_string(); });
+        if (sheetPos == worksheetPaths.end())
+            {
+            return false;
+            }
+        const std::wstring sheetFile = zc.ReadTextFile(sheetPos->second);
+        fullText =
+            filterXlsx.get_cell_text(cellName.wc_str(), sharedStrings.c_str(),
+                                     sharedStrings.length(), sheetFile.c_str(), sheetFile.length());
+        return true;
+        }
+
+    // ODS cell (e.g., "data.ods#Sheet1#A1")
+    if (resolvePath.IsOdsCell())
+        {
+        const size_t odsTag = filePath.Lower().find(_DT(L".ods#"));
+        const wxFileName workbookFn(filePath.substr(0, odsTag + 4));
+        wxString worksheetName = filePath.substr(odsTag + 5);
+        const size_t slash = worksheetName.find_last_of(L'#');
+        if (!wxFile::Exists(workbookFn.GetFullPath()) || slash == wxString::npos)
+            {
+            return false;
+            }
+        const wxString cellName = worksheetName.substr(slash + 1);
+        worksheetName.Truncate(slash);
+
+        lily_of_the_valley::ods_extract_text filterOds{ false };
+        const Wisteria::ZipCatalog zc(workbookFn.GetFullPath());
+        const std::wstring contentXml = zc.ReadTextFile(L"content.xml");
+        filterOds.read_worksheet_names(contentXml.c_str(), contentXml.length());
+
+        lily_of_the_valley::ods_extract_text::worksheet wkData;
+        filterOds(contentXml.c_str(), contentXml.length(), wkData, worksheetName.ToStdWstring());
+        if (wkData.empty())
+            {
+            return false;
+            }
+        fullText =
+            lily_of_the_valley::spreadsheet_extract_text::get_cell_text(cellName.wc_str(), wkData);
+        return true;
+        }
+
+    if (!resolvePath.IsLocalOrNetworkFile() || !wxFile::Exists(resolvePath.GetResolvedPath()))
+        {
+        return false;
+        }
+
+    try
+        {
+        const MemoryMappedFile sourceFile(resolvePath.GetResolvedPath(), true, true);
+        std::pair<bool, std::wstring> extractResult = m_previewProject->ExtractRawText(
+            { static_cast<const char*>(sourceFile.GetStream()), sourceFile.GetMapSize() },
+            wxFileName(resolvePath.GetResolvedPath()).GetExt());
+        if (!extractResult.first)
+            {
+            return false;
+            }
+        fullText = std::move(extractResult.second);
+        return true;
+        }
+    catch (...)
+        {
+        return false;
+        }
+    }
+
+//-------------------------------------------------------------
+ParagraphParse ProjectWizardDlg::GetPreviewParagraphParsingMethod() const
+    {
+    // mirrors the mapping ProjectDoc::RunProjectWizard() applies when actually
+    // creating the project (see standard_project_doc.cpp)
+    if ((IsSplitLinesSelected() || IsCenteredTextSelected()) &&
+        !IsNewLinesAlwaysNewParagraphsSelected())
+        {
+        return ParagraphParse::OnlySentenceTerminatedNewLinesAreParagraphs;
+        }
+    if (IsNewLinesAlwaysNewParagraphsSelected())
+        {
+        return ParagraphParse::EachNewLineIsAParagraph;
+        }
+    if (wxFileName{ GetPreviewSourceFilePath() }.GetExt().CmpNoCase(_DT(L"doc")) == 0)
+        {
+        return ParagraphParse::EachNewLineIsAParagraph;
+        }
+    return (m_previewProject != nullptr) ? m_previewProject->GetParagraphsParsingMethod() :
+                                           ParagraphParse::EachNewLineIsAParagraph;
+    }
+
+//-------------------------------------------------------------
+std::wstring ProjectWizardDlg::DerivePreviewSample(const std::wstring& fullText) const
+    {
+    constexpr size_t previewWordGoal{ 300 };
+
+    if (fullText.empty())
+        {
+        return fullText;
+        }
+
+    // scans the raw text with the same low-level tokenizer the indexing engine uses
+    // (rather than indexing the whole document through BaseProject) so this stays
+    // cheap for large documents
+    tokenize::document_tokenize<> tokenizer(
+        fullText.c_str(), fullText.length(),
+        GetPreviewParagraphParsingMethod() == ParagraphParse::EachNewLineIsAParagraph,
+        IsSplitLinesSelected(), IsCenteredTextSelected(),
+        (m_previewProject != nullptr) && m_previewProject->GetSentenceStartMustBeUppercased());
+
+    size_t wordCount{ 0 };
+    size_t targetSentenceIndex{ static_cast<size_t>(-1) };
+    const wchar_t* cutPosition{ nullptr };
+    const wchar_t* currentWord{ nullptr };
+
+    while ((currentWord = tokenizer()) != nullptr)
+        {
+        ++wordCount;
+        if (wordCount == previewWordGoal)
+            {
+            targetSentenceIndex = tokenizer.get_current_sentence_index();
+            }
+        else if (wordCount > previewWordGoal &&
+                 tokenizer.get_current_sentence_index() != targetSentenceIndex)
+            {
+            cutPosition = currentWord;
+            break;
+            }
+        }
+
+    // word #300 was in the document's last sentence (or the document is shorter
+    // than that to begin with), use it as-is
+    if (cutPosition == nullptr)
+        {
+        return fullText;
+        }
+
+    size_t cutLength = static_cast<size_t>(cutPosition - fullText.c_str());
+    while (cutLength > 0 && characters::is_character::is_space(fullText[cutLength - 1]))
+        {
+        --cutLength;
+        }
+
+    return fullText.substr(0, cutLength);
+    }
+
+//-------------------------------------------------------------
+void ProjectWizardDlg::RefreshPreviewFormatting()
+    {
+    m_previewFormattingDirty = false;
+
+    if (!m_previewHaveSample || m_previewProject == nullptr)
+        {
+        ShowPreviewMessage(_(L"Preview not available for this source."));
+        return;
+        }
+
+    m_previewProject->IgnoreBlankLinesForParagraphsParser(IsSplitLinesSelected());
+    m_previewProject->IgnoreIndentingForParagraphsParser(IsCenteredTextSelected());
+    m_previewProject->SetParagraphsParsingMethod(GetPreviewParagraphParsingMethod());
+    if (IsNarrativeSelected())
+        {
+        m_previewProject->SetInvalidSentenceMethod(InvalidSentence::ExcludeFromAnalysis);
+        }
+    else if (IsFragmentedTextSelected())
+        {
+        m_previewProject->SetInvalidSentenceMethod(InvalidSentence::IncludeAsFullSentences);
+        }
+
+    m_previewProject->SetDocumentText(m_previewSampleText);
+    try
+        {
+        m_previewProject->LoadDocument();
+        }
+    catch (...)
+        {
+        ShowPreviewMessage(_(L"Preview not available for this source."));
+        return;
+        }
+
+    const bool textBeingExcluded =
+        (m_previewProject->GetInvalidSentenceMethod() == InvalidSentence::ExcludeFromAnalysis ||
+         m_previewProject->GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings);
+
+    const NoWordHighlighting noHighlighting;
+    std::wstring formattedBody;
+    FormatWordCollectionHighlightedWords(
+        m_previewProject->GetWords(), noHighlighting, formattedBody, std::wstring{}, std::wstring{},
+        std::wstring{}, std::wstring{ L"<span class=\"hl-excluded\">" }, std::wstring{ L"</span>" },
+        std::wstring{ L"&nbsp;&nbsp;&nbsp;&nbsp;" }, std::wstring{ L"<br />\n" }, textBeingExcluded,
+        m_previewProject->GetInvalidSentenceMethod() == InvalidSentence::ExcludeExceptForHeadings,
+        textBeingExcluded, false);
+
+    wxString pageHtml =
+        wxString::Format(L"<div class=\"report-banner legend-card\">"
+                         "<div class=\"report-banner-accent\"></div>"
+                         "<div class=\"report-banner-content\">"
+                         "<span class=\"hl-swatch hl-swatch-excluded\"></span>&nbsp;&nbsp;%s"
+                         "</div></div>\n",
+                         _(L"Excluded text"));
+    pageHtml += formattedBody;
+    if (m_previewIsExcerpt)
+        {
+        pageHtml += L"<br />\n…";
+        }
+
+    m_previewWebView->SetPage(BuildPreviewHtml(pageHtml), wxString{});
+    }
+
+//-------------------------------------------------------------
+wxString ProjectWizardDlg::BuildPreviewHtml(const wxString& sampleHtmlBody) const
+    {
+    const bool isBackgroundMode = (wxGetApp().GetAppOptions()->GetTextHighlightMethod() ==
+                                   TextHighlight::HighlightBackground);
+    const wxColour excludedColor = wxGetApp().GetAppOptions()->GetExcludedTextHighlightColor();
+
+    const wxString excludedRule =
+        isBackgroundMode ?
+            wxString::Format(L".hl-swatch-excluded { background-color: %s; }"
+                             "\n.hl-excluded { background-color: %s; color: %s; text-decoration: "
+                             "line-through; }",
+                             excludedColor.GetAsString(wxC2S_HTML_SYNTAX),
+                             excludedColor.GetAsString(wxC2S_HTML_SYNTAX),
+                             Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(excludedColor)
+                                 .GetAsString(wxC2S_HTML_SYNTAX)) :
+            wxString::Format(
+                L".hl-swatch-excluded { background-color: light-dark(%s, %s); }"
+                "\n.hl-excluded { color: light-dark(%s, %s); text-decoration: line-through; }",
+                Wisteria::Colors::ColorContrast::Shade(excludedColor, 0.4)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Tint(excludedColor, 0.6)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Shade(excludedColor, 0.4)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Tint(excludedColor, 0.6)
+                    .GetAsString(wxC2S_HTML_SYNTAX));
+
+    // the same report theme (default.css, overlaid with the user's chosen report theme)
+    // used by the app's other report webviews, so the legend card/swatch match exactly
+    const wxString themeCss = ProjectReportFormat::GetThemeCss(
+        _DT(L"default.css"), wxGetApp().GetAppOptions()->GetReportTheme());
+
+    return wxString::Format(
+        L"<!DOCTYPE html>\n<html>\n<head>\n"
+        "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n"
+        "<meta name=\"color-scheme\" content=\"light dark\" />\n"
+        "<style>\n%s\n%s\n</style>\n"
+        "</head>\n<body>\n%s\n</body>\n</html>",
+        themeCss, excludedRule, sampleHtmlBody);
+    }
+
+//-------------------------------------------------------------
+void ProjectWizardDlg::ShowPreviewMessage(const wxString& message)
+    {
+    if (m_previewWebView != nullptr)
+        {
+        m_previewWebView->SetPage(BuildPreviewHtml(message), wxString{});
         }
     }
 
@@ -1563,6 +2036,28 @@ void ProjectWizardDlg::OnPageChange(wxBookCtrlEvent& event)
             {
             wxWindow::FindWindow(wxID_BACKWARD)->Enable(true);
             }
+        if (m_previewWebView != nullptr)
+            {
+            TransferDataFromWindow();
+            // a batch project's source is whichever file is currently first in the list
+            if (GetProjectType() == ProjectType::BatchProject)
+                {
+                const wxString currentFirstFile = GetPreviewSourceFilePath();
+                if (currentFirstFile != m_previewLastBatchFilePath)
+                    {
+                    m_previewLastBatchFilePath = currentFirstFile;
+                    m_previewSourceDirty = true;
+                    }
+                }
+            if (m_previewSourceDirty || !m_previewHaveSample)
+                {
+                ReloadPreviewSource();
+                }
+            else if (m_previewFormattingDirty)
+                {
+                RefreshPreviewFormatting();
+                }
+            }
         }
     else
         {
@@ -1779,6 +2274,7 @@ void ProjectWizardDlg::OnSourceRadioChange(wxCommandEvent& event)
     m_textEntryEdit->Enable((event.GetId() == ID_MANUALLY_ENTERED_TEXT_BUTTON));
     m_filePathEdit->Enable((event.GetId() == ID_FROM_FILE_BUTTON));
     m_fileBrowseButton->Enable((event.GetId() == ID_FROM_FILE_BUTTON));
+    m_previewSourceDirty = true;
     }
 
 //-------------------------------------------------------------
@@ -1796,6 +2292,7 @@ void ProjectWizardDlg::OnFileBrowseButtonClick([[maybe_unused]] wxCommandEvent& 
 
     m_filePath = dialog.GetPath();
     TransferDataToWindow();
+    m_previewSourceDirty = true;
     SetFocus();
     }
 
