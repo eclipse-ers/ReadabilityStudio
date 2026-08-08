@@ -5208,13 +5208,12 @@ ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat 
         };
 
         // word highlighters
-        // (HIGHLIGHT_BEGIN's meaning varies by window, so its tooltip is added
-        // per call site in DisplayHighlightedText() rather than baked in here)
+        // (HIGHLIGHT_BEGIN's, ERROR_HIGHLIGHT_BEGIN's, and PHRASE_HIGHLIGHT_BEGIN's meanings vary
+        // by window (and, for the grammar window, by which specific issue was found), so their
+        // tooltips are added per call site in DisplayHighlightedText() rather than baked in here)
         highlighterTags.HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-default">)" };
-        highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString::Format(
-            LR"(<span class="hl-error" data-tooltip="%s">)", tooltipAttr(_(L"Grammar error")));
-        highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString::Format(
-            LR"(<span class="hl-phrase" data-tooltip="%s">)", tooltipAttr(_(L"Style issue")));
+        highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-error">)" };
+        highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-phrase">)" };
         highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
             wxString::Format(LR"(<span class="hl-excluded" data-tooltip="%s">)",
                              tooltipAttr(_(L"Excluded from analysis")));
@@ -6386,6 +6385,38 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     _(L"Highlighted Report"));
                 view->GetGrammarView().InsertWindow(0, textWindow);
                 }
+            // combines a raw opening tag with a tooltip (category, plus a suggested fix when
+            // one is available) for the HTML report; a no-op for the RTF report below
+            const auto tagWithTooltip = [](const std::wstring& openingTag,
+                                           const std::wstring& label,
+                                           const std::wstring& suggestion) -> std::wstring
+            {
+                const wxString tooltip =
+                    suggestion.empty() ?
+                        wxString{ label } :
+                        wxString::Format(
+                            // TRANSLATORS: first %s is the issue category (e.g., "Wordiness");
+                            // second %s is one or more suggested replacements for the flagged text
+                            _(L"%s. Suggestions: %s"), wxString{ label }, wxString{ suggestion });
+
+                std::wstring encodedTooltip{ lily_of_the_valley::html_encode_text::simple_encode(
+                    { tooltip.wc_str(), tooltip.length() }) };
+                // escape embedded quotes so they don't break out of the attribute
+                for (size_t quotePos = encodedTooltip.find(L'"'); quotePos != std::wstring::npos;
+                     quotePos = encodedTooltip.find(L'"', quotePos + 6))
+                    {
+                    encodedTooltip.replace(quotePos, 1, L"&quot;");
+                    }
+
+                std::wstring tagged{ openingTag };
+                const auto closeBracket = tagged.find(L'>');
+                if (closeBracket != std::wstring::npos)
+                    {
+                    tagged.insert(closeBracket, L" data-tooltip=\"" + encodedTooltip + L"\"");
+                    }
+                return tagged;
+            };
+
             FormatWordCollectionHighlightedGrammarIssues(
                 GetWords(), GetDifficultSentenceLength(), formattedBuffer,
                 textHeaderThemed.header.wc_string(), textHeaderThemed.endSection.wc_string(),
@@ -6393,8 +6424,19 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"Overly-long sentence"))
                     .wc_string(),
                 highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Possible misspelling"))
+                    .wc_string(),
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Repeated word"))
+                    .wc_string(),
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Mismatched article"))
+                    .wc_string(),
                 highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN.wc_string(),
+                _(L"Wordiness").wc_string(), _(L"Redundant phrase").wc_string(),
+                _(L"Cliché").wc_string(),
+                _(L"Wording error or known misspelling").wc_string(),
+                withTooltip(highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN, _(L"Passive voice"))
+                    .wc_string(),
                 highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
                 // if default style is bold, then don't use bold tags internally
                 // because that will mess up the RTF
@@ -6403,7 +6445,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? std::wstring{} :
                                                                   highlighterTagsThemed.BOLD_END,
                 highlighterTagsThemed.TAB_SYMBOL, highlighterTagsThemed.CRLF, textBeingExcluded,
-                textBeingExcluded, DISPLAY_USE_RTF_ENCODING);
+                textBeingExcluded, DISPLAY_USE_RTF_ENCODING, tagWithTooltip);
 
             FormatWordCollectionHighlightedGrammarIssues(
                 GetWords(), GetDifficultSentenceLength(), formattedPaperBuffer,
@@ -6412,7 +6454,14 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 textLegendsPaperWhite.wordinessWindowLegend.wc_string(),
                 highlighterTagsPaperWhite.HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsPaperWhite.HIGHLIGHT_END.wc_string(),
+                // RTF has no concept of tooltips, so every sub-type of error/style issue
+                // just reuses the same generic error/phrase tag here
                 highlighterTagsPaperWhite.ERROR_HIGHLIGHT_BEGIN.wc_string(),
+                highlighterTagsPaperWhite.ERROR_HIGHLIGHT_BEGIN.wc_string(),
+                highlighterTagsPaperWhite.ERROR_HIGHLIGHT_BEGIN.wc_string(),
+                highlighterTagsPaperWhite.ERROR_HIGHLIGHT_BEGIN.wc_string(),
+                highlighterTagsPaperWhite.PHRASE_HIGHLIGHT_BEGIN.wc_string(), std::wstring{},
+                std::wstring{}, std::wstring{}, std::wstring{},
                 highlighterTagsPaperWhite.PHRASE_HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsPaperWhite.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
                 // if default style is bold, then don't use bold tags internally because
@@ -6424,7 +6473,9 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     std::wstring{} :
                     highlighterTagsPaperWhite.BOLD_END,
                 highlighterTagsPaperWhite.TAB_SYMBOL, highlighterTagsPaperWhite.CRLF,
-                textBeingExcluded, textBeingExcluded, EXPORT_USE_RTF_ENCODING);
+                textBeingExcluded, textBeingExcluded, EXPORT_USE_RTF_ENCODING,
+                [](const std::wstring& openingTag, const std::wstring&, const std::wstring&)
+                { return openingTag; });
             GetHighlightedTextBuffers().SetContent(textWindow, formattedBuffer,
                                                    formattedPaperBuffer);
             releaseBuffers(formattedBuffer, formattedPaperBuffer);

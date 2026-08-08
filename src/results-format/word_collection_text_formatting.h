@@ -282,16 +282,23 @@ size_t FormatWordCollectionHighlightedWords(
     }
 
 //-----------------------------------------------------------
-template<typename documentT>
+template<typename documentT, typename tagBuilderT>
 size_t FormatWordCollectionHighlightedGrammarIssues(
     const std::shared_ptr<documentT>& theDocument, const size_t longSentenceValue,
     std::wstring& text, const std::wstring& headerSection, const std::wstring& endSection,
     const std::wstring& legend, const std::wstring& highlightBegin,
-    const std::wstring& highlightEnd, const std::wstring& errorHighlightBegin,
-    const std::wstring& phraseHighlightBegin, const std::wstring& ignoreHighlightBegin,
+    const std::wstring& highlightEnd, const std::wstring& misspelledHighlightBegin,
+    const std::wstring& duplicateWordHighlightBegin,
+    const std::wstring& mismatchedArticleHighlightBegin,
+    // raw (tooltip-less) opening tags for the phrase-based issues; a specific tooltip
+    // (category + suggested fix, when available) is built for each occurrence via tagBuilder
+    const std::wstring& errorHighlightBegin, const std::wstring& phraseHighlightBegin,
+    const std::wstring& wordyPhraseLabel, const std::wstring& redundantPhraseLabel,
+    const std::wstring& clicheLabel, const std::wstring& phraseErrorLabel,
+    const std::wstring& passiveVoiceHighlightBegin, const std::wstring& ignoreHighlightBegin,
     const std::wstring& boldBegin, const std::wstring& boldEnd, const std::wstring& tabSymbol,
     const std::wstring& newLine, const bool highlightIncompleteSentences,
-    const bool highlightInvalidWords, const bool useRtfEncoding)
+    const bool highlightInvalidWords, const bool useRtfEncoding, const tagBuilderT& tagBuilder)
     {
     text.clear();
     text.append(headerSection).append(legend);
@@ -392,14 +399,25 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
                     if (wordyIndicesIter != theDocument->get_known_phrase_indices().end() &&
                         wordyIndicesIter->first == i)
                         {
-                        if (wordyPhrases[wordyIndicesIter->second].first.get_type() ==
-                            grammar::phrase_type::phrase_error)
+                        const std::wstring suggestion{
+                            wordyPhrases[wordyIndicesIter->second].second.c_str()
+                        };
+                        switch (wordyPhrases[wordyIndicesIter->second].first.get_type())
                             {
-                            text += errorHighlightBegin;
-                            }
-                        else
-                            {
-                            text += phraseHighlightBegin;
+                        case grammar::phrase_type::phrase_error:
+                            text += tagBuilder(errorHighlightBegin, phraseErrorLabel, suggestion);
+                            break;
+                        case grammar::phrase_type::phrase_redundant:
+                            text +=
+                                tagBuilder(phraseHighlightBegin, redundantPhraseLabel, suggestion);
+                            break;
+                        case grammar::phrase_type::phrase_cliche:
+                            text += tagBuilder(phraseHighlightBegin, clicheLabel, suggestion);
+                            break;
+                        case grammar::phrase_type::phrase_wordy:
+                        default:
+                            text += tagBuilder(phraseHighlightBegin, wordyPhraseLabel, suggestion);
+                            break;
                             }
                         currentPhraseMode.first = true;
                         currentPhraseMode.second = static_cast<int>(
@@ -417,26 +435,34 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
                     if (passiveVoicesIter != theDocument->get_passive_voice_indices().end() &&
                         passiveVoicesIter->first == i)
                         {
-                        text += phraseHighlightBegin;
+                        text += passiveVoiceHighlightBegin;
                         currentPhraseMode.first = true;
                         currentPhraseMode.second = static_cast<int>(passiveVoicesIter->second);
                         }
                     }
                 // highlight grammar issues
-                const bool isErrorWord =
-                    (std::binary_search(dupWordIndices.cbegin(), dupWordIndices.cend(), i)) ||
-                    (std::binary_search(mismatchedArticleIndices.cbegin(),
-                                        mismatchedArticleIndices.cend(), i)) ||
-                    (std::binary_search(misspelledWordIndices.cbegin(),
-                                        misspelledWordIndices.cend(), i));
+                bool isErrorWord = false;
                 // valid sentence, but word is invalid
                 if (currentSentence.is_valid() && wordIsInvalid)
                     {
                     text += ignoreHighlightBegin;
                     }
-                else if (isErrorWord)
+                else if (std::binary_search(dupWordIndices.cbegin(), dupWordIndices.cend(), i))
                     {
-                    text += errorHighlightBegin;
+                    text += duplicateWordHighlightBegin;
+                    isErrorWord = true;
+                    }
+                else if (std::binary_search(mismatchedArticleIndices.cbegin(),
+                                            mismatchedArticleIndices.cend(), i))
+                    {
+                    text += mismatchedArticleHighlightBegin;
+                    isErrorWord = true;
+                    }
+                else if (std::binary_search(misspelledWordIndices.cbegin(),
+                                            misspelledWordIndices.cend(), i))
+                    {
+                    text += misspelledHighlightBegin;
+                    isErrorWord = true;
                     }
                 // copy over the word
                 if (useRtfEncoding && rtfEncode.needs_to_be_encoded(currentWord))
