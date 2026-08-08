@@ -21,9 +21,9 @@ Type: `boolean`
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` inputImagePath |  |
-| `string` outputImagePath |  |
-| `number` thresholdAdjustment | (Optional) An offset added to the threshold that Otsu's method selects, clamped to a valid luminance value (`0`-`255`). Raising this preserves lighter grays as black; lowering it turns more of them white. Default is `0`. |
+| `string` inputImagePath | The input image. |
+| `string` outputImagePath | Where to save the image. |
+| `number` thresholdAdjustment | (Optional) An offset added to the threshold that Otsu's method selects, clamped to a valid luminance value (`0`-`255`).<br>\linebreak Raising this preserves lighter grays as black; lowering it turns more of them white.<br>\linebreak Default is `0`. |
 
 
 :::

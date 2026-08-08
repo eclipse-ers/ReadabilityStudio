@@ -22,10 +22,10 @@ Type: `boolean`
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` inputImagePath |  |
-| `string` outputImagePath |  |
+| `string` inputImagePath | The input image. |
+| `string` outputImagePath | Where to save the image. |
 | `number` colorTolerance | (Optional) How far a pixel's color channels may deviate from `baseColor` and still be considered part of the border. Default is `10`. |
-| `string` baseColor | (Optional) The color of the border area to crop away (e.g., the color of the wall or scanner bed surrounding the actual content). Default is `"white"`. |
+| `string` baseColor | (Optional) The color of the border area to crop away (e.g., the color of the wall or scanner bed surrounding the actual content).<br>\linebreak Default is `"white"`. |
 
 
 :::

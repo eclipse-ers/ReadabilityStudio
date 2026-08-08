@@ -22,10 +22,10 @@ Type: `boolean`
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` inputImagePath |  |
-| `string` outputImagePath |  |
+| `string` inputImagePath | The input image. |
+| `string` outputImagePath | Where to save the image. |
 | [`GutterSide`](#gutterside) side | Which side of the image the gutter is on. |
-| `number` gutterWidthProportion | (Optional) The proportion (from `0.0` to `1.0`) of the image's width over which the correction tapers off. Default is `0.15`. |
+| `number` gutterWidthProportion | (Optional) The proportion (from `0.0` to `1.0`) of the image's width over which the correction tapers off.<br>\linebreak Default is `0.15`. |
 
 
 :::

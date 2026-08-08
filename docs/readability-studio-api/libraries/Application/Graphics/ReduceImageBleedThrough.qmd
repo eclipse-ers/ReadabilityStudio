@@ -21,9 +21,9 @@ Type: `boolean`
 
 **Parameter** | **Description**
 | :-- | :-- |
-| `string` inputImagePath |  |
-| `string` outputImagePath |  |
-| `number` whitePoint | (Optional) The channel value (from `0` to `255`) at or above which a pixel is treated as background and pushed to white. Lower values are more aggressive at suppressing faint bleed-through. Default is `200`. |
+| `string` inputImagePath | The input image. |
+| `string` outputImagePath | Where to save the image. |
+| `number` whitePoint | (Optional) The channel value (from `0` to `255`) at or above which a pixel is treated as background and pushed to white.<br>\linebreak Lower values are more aggressive at suppressing faint bleed-through.<br>\linebreak Default is `200`. |
 
 
 :::
