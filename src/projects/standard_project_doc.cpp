@@ -5010,16 +5010,26 @@ wxString ProjectDoc::BuildStyleSheet() const
                                                const bool boldForeground,
                                                const bool strikethrough) -> wxString
     {
+        // tints the tooltip's left edge with the same color as its highlight, so the popup
+        // is identifiable as belonging to its category at a glance
+        const auto tooltipAccent = [&suffix](const wxString& accentColor) -> wxString
+        {
+            return wxString::Format(
+                L"\n.hl-%s[data-tooltip]::after { border-left: 9px solid %s; padding-left: 8px; }",
+                suffix, accentColor);
+        };
+
         if (isBackgroundMode)
             {
             const wxString hex = color.GetAsString(wxC2S_HTML_SYNTAX);
             return wxString::Format(
-                L"\n.hl-swatch-%s { background-color: %s; }"
-                L"\n.hl-%s { background-color: %s; color: %s;%s }",
-                suffix, hex, suffix, hex,
-                Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
-                    wxC2S_HTML_SYNTAX),
-                strikethrough ? L" text-decoration: line-through;" : L"");
+                       L"\n.hl-swatch-%s { background-color: %s; }"
+                       L"\n.hl-%s { background-color: %s; color: %s;%s }",
+                       suffix, hex, suffix, hex,
+                       Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(color).GetAsString(
+                           wxC2S_HTML_SYNTAX),
+                       strikethrough ? L" text-decoration: line-through;" : L"") +
+                   tooltipAccent(hex);
             }
         const wxString themedColor = wxString::Format(
             _DT(L"light-dark(%s, %s)"),
@@ -5029,7 +5039,8 @@ wxString ProjectDoc::BuildStyleSheet() const
                                 L"\n.hl-%s { color: %s;%s%s }",
                                 suffix, themedColor, suffix, themedColor,
                                 boldForeground ? L" font-weight: bold;" : L"",
-                                strikethrough ? L" text-decoration: line-through;" : L"");
+                                strikethrough ? L" text-decoration: line-through;" : L"") +
+               tooltipAccent(themedColor);
     };
 
     // .hl-swatch/.legend-card live in default.css since they don't depend on user colors;
@@ -6433,8 +6444,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN.wc_string(),
                 _(L"Wordiness").wc_string(), _(L"Redundant phrase").wc_string(),
-                _(L"Cliché").wc_string(),
-                _(L"Wording error or known misspelling").wc_string(),
+                _(L"Cliché").wc_string(), _(L"Wording error or known misspelling").wc_string(),
                 withTooltip(highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN, _(L"Passive voice"))
                     .wc_string(),
                 highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
