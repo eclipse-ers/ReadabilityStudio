@@ -503,6 +503,32 @@ img
   transform: translateY(0);
   }
 
+/* small caret connecting the tooltip to the word it describes */
+[data-tooltip]::before
+  {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 100%;
+  left: 10px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid color-mix(in srgb, CanvasText 92%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 21;
+  }
+
+[data-tooltip]:hover::before
+  {
+  opacity: 1;
+  transform: translateY(0);
+  }
+
 /* ---------- Back to top ---------------------------------------- */
 
 html { scroll-behavior: smooth; }
@@ -554,7 +580,7 @@ html { scroll-behavior: smooth; }
   :root
     { color-scheme: light; }
   /* tooltips are a hover-only affordance, meaningless on paper */
-  [data-tooltip]::after
+  [data-tooltip]::after, [data-tooltip]::before
     { display: none !important; }
   /* keep paragraphs and list items together */
   p, li, ul
