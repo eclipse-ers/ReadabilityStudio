@@ -304,7 +304,8 @@ class ProjectDoc final : public BaseProjectDoc
     /// @brief Builds the colors and RTF color table (used by Windows and macOS).
     [[nodiscard]]
     HighlighterColors BuildReportColors(const wxColour& highlightColor,
-                                        const wxColour& backgroundColor) const;
+                                        const wxColour& backgroundColor,
+                                        const MarkupFormat format) const;
     /// @brief Builds the tags used to highlight words in RTF or HTML.
     /// @param format The markup flavor to build the tags for.
     /// @param highlightColor The default highlight color.\n

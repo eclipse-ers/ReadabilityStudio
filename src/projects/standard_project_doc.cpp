@@ -4888,56 +4888,47 @@ std::pair<wxString, wxString> ProjectDoc::FormatRtfHeaderFont(const wxFont& text
 
 //-------------------------------------------------------
 ProjectDoc::HighlighterColors ProjectDoc::BuildReportColors(const wxColour& highlightColor,
-                                                            const wxColour& backgroundColor) const
+                                                            const wxColour& backgroundColor,
+                                                            const MarkupFormat format) const
     {
     HighlighterColors highlighterColors;
 
     const Wisteria::Colors::ColorContrast colorContrast(backgroundColor);
+    // foreground mode draws this color as text, and (HTML only) underline mode draws it as an
+    // underline, so both need it contrasted; background mode uses the raw color. RTF readers
+    // render colored underlines (\ulc) unreliably (often just black), so underline mode falls
+    // back to a background box there too, same as background mode.
+    const bool useRawColor =
+        (GetTextHighlightMethod() == TextHighlight::HighlightBackground) ||
+        (IsRtf(format) && GetTextHighlightMethod() == TextHighlight::HighlightUnderline);
     highlighterColors.highlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(highlightColor) :
-            highlightColor;
+        useRawColor ? highlightColor : colorContrast.Contrast(highlightColor);
 
     highlighterColors.errorHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDuplicateWordHighlightColor()) :
-            GetDuplicateWordHighlightColor();
+        useRawColor ? GetDuplicateWordHighlightColor() :
+                      colorContrast.Contrast(GetDuplicateWordHighlightColor());
     highlighterColors.styleHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetWordyPhraseHighlightColor()) :
-            GetWordyPhraseHighlightColor();
+        useRawColor ? GetWordyPhraseHighlightColor() :
+                      colorContrast.Contrast(GetWordyPhraseHighlightColor());
     highlighterColors.excludedTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetExcludedTextHighlightColor()) :
-            GetExcludedTextHighlightColor();
+        useRawColor ? GetExcludedTextHighlightColor() :
+                      colorContrast.Contrast(GetExcludedTextHighlightColor());
     highlighterColors.dolchConjunctionsTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchConjunctionsColor()) :
-            GetDolchConjunctionsColor();
+        useRawColor ? GetDolchConjunctionsColor() :
+                      colorContrast.Contrast(GetDolchConjunctionsColor());
     highlighterColors.dolchPrepositionsTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchPrepositionsColor()) :
-            GetDolchPrepositionsColor();
+        useRawColor ? GetDolchPrepositionsColor() :
+                      colorContrast.Contrast(GetDolchPrepositionsColor());
     highlighterColors.dolchPronounsTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchPronounsColor()) :
-            GetDolchPronounsColor();
+        useRawColor ? GetDolchPronounsColor() : colorContrast.Contrast(GetDolchPronounsColor());
     highlighterColors.dolchAdverbsTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchAdverbsColor()) :
-            GetDolchAdverbsColor();
+        useRawColor ? GetDolchAdverbsColor() : colorContrast.Contrast(GetDolchAdverbsColor());
     highlighterColors.dolchAdjectivesTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchAdjectivesColor()) :
-            GetDolchAdjectivesColor();
+        useRawColor ? GetDolchAdjectivesColor() : colorContrast.Contrast(GetDolchAdjectivesColor());
     highlighterColors.dolchVerbsTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchVerbsColor()) :
-            GetDolchVerbsColor();
+        useRawColor ? GetDolchVerbsColor() : colorContrast.Contrast(GetDolchVerbsColor());
     highlighterColors.dolchNounTextHighlightColor =
-        (GetTextHighlightMethod() == TextHighlight::HighlightForeground) ?
-            colorContrast.Contrast(GetDolchNounColor()) :
-            GetDolchNounColor();
+        useRawColor ? GetDolchNounColor() : colorContrast.Contrast(GetDolchNounColor());
 
     return highlighterColors;
     }
@@ -5003,12 +4994,14 @@ ProjectDoc::BuildColorTable(const wxFont& textViewFont, const HighlighterColors&
 wxString ProjectDoc::BuildStyleSheet() const
     {
     const bool isBackgroundMode = (GetTextHighlightMethod() == TextHighlight::HighlightBackground);
+    const bool isUnderlineMode = (GetTextHighlightMethod() == TextHighlight::HighlightUnderline);
 
     // emits the swatch and word-highlight rules for one category: background mode uses the
-    // fixed user color, foreground mode a light-dark() shade/tint so text stays legible
-    const auto buildClass = [isBackgroundMode](const wxString& suffix, const wxColour& color,
-                                               const bool boldForeground,
-                                               const bool strikethrough) -> wxString
+    // fixed user color, foreground and underline modes a light-dark() shade/tint so the text
+    // (or underline) stays legible
+    const auto buildClass = [isBackgroundMode, isUnderlineMode](
+                                const wxString& suffix, const wxColour& color,
+                                const bool boldForeground, const bool strikethrough) -> wxString
     {
         // tints the tooltip's left edge with the same color as its highlight, so the popup
         // is identifiable as belonging to its category at a glance
@@ -5035,6 +5028,22 @@ wxString ProjectDoc::BuildStyleSheet() const
             _DT(L"light-dark(%s, %s)"),
             Wisteria::Colors::ColorContrast::Shade(color, 0.4).GetAsString(wxC2S_HTML_SYNTAX),
             Wisteria::Colors::ColorContrast::Tint(color, 0.6).GetAsString(wxC2S_HTML_SYNTAX));
+
+        if (isUnderlineMode)
+            {
+            // Excluded text keeps its strikethrough only.
+            // Layering a wavy underline on top of that would be visual clutter, so the two
+            // decorations are mutually exclusive.
+            return wxString::Format(
+                       L"\n.hl-swatch-%s { background-color: %s; }"
+                       L"\n.hl-%s { text-decoration-line: %s; text-decoration-color: %s;"
+                       L" text-decoration-style: %s; text-decoration-thickness: 2px;"
+                       L" text-underline-offset: 3px;%s }",
+                       suffix, themedColor, suffix, strikethrough ? L"line-through" : L"underline",
+                       themedColor, strikethrough ? L"solid" : L"wavy",
+                       boldForeground ? L" font-weight: bold;" : L"") +
+                   tooltipAccent(themedColor);
+            }
         return wxString::Format(L"\n.hl-swatch-%s { background-color: %s; }"
                                 L"\n.hl-%s { color: %s;%s%s }",
                                 suffix, themedColor, suffix, themedColor,
@@ -5100,8 +5109,11 @@ ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat 
         // \cbN. The foreground color (\cfN), terminators, and legend structure are
         // identical, so parameterize just that word
         const wxString bgHl = (format == MarkupFormat::RtfMacOS) ? L"cb" : L"highlight";
+        // RTF readers render colored underlines (\ulc) unreliably (often just black), so
+        // underline mode falls back to the same background box as background mode here.
         const bool isBackgroundMode =
-            (GetTextHighlightMethod() == TextHighlight::HighlightBackground);
+            (GetTextHighlightMethod() == TextHighlight::HighlightBackground ||
+             GetTextHighlightMethod() == TextHighlight::HighlightUnderline);
 
         highlighterTags.HIGHLIGHT_BEGIN =
             isBackgroundMode ?
@@ -5746,12 +5758,12 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
 
         // build the general highlighters
         const HighlighterColors highlighterColorsThemed =
-            BuildReportColors(highlightColor, GetTextReportBackgroundColor());
+            BuildReportColors(highlightColor, GetTextReportBackgroundColor(), displayFormat);
         const HighlighterTags highlighterTagsThemed =
             BuildHighlighterTags(displayFormat, highlightColor);
 
         const HighlighterColors highlighterColorsPaperWhite =
-            BuildReportColors(highlightColor, wxColour{ 255, 255, 255 });
+            BuildReportColors(highlightColor, wxColour{ 255, 255, 255 }, exportFormat);
         const HighlighterTags highlighterTagsPaperWhite =
             BuildHighlighterTags(exportFormat, highlightColor);
 

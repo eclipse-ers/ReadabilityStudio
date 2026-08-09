@@ -4833,6 +4833,7 @@ void ToolsOptionsDlg::CreateTextWindowSection()
         wxArrayString highlightOptions;
         highlightOptions.Add(_(L"Background color"));
         highlightOptions.Add(_(L"Font color"));
+        highlightOptions.Add(_(L"Underline"));
         auto* highlightCombo = new wxChoice(panel, ID_PARAGRAPH_PARSE, wxDefaultPosition,
                                             wxDefaultSize, highlightOptions, 0,
                                             wxGenericValidator(&m_textHighlightMethod.get_value()));

@@ -71,7 +71,8 @@ enum class InvalidTextFilterFormat
 enum class TextHighlight
     {
     HighlightBackground,
-    HighlightForeground
+    HighlightForeground,
+    HighlightUnderline
     };
 
 /// @brief How text was retrieved from the project wizard.

@@ -76,6 +76,11 @@ size_t FormatWordCollectionHighlightedWords(
     std::wstring currentWord;
     for (const auto& currentParagraph : theDocument->get_paragraphs())
         {
+        // wrap each paragraph in HTML mode so it can get a hover effect in the CSS
+        if (!useRtfEncoding)
+            {
+            text += L"<p class=\"text-paragraph\">";
+            }
         // add a tab at the beginning of the paragraph
         text += tabSymbol;
         // go through the current paragraph's sentences
@@ -269,6 +274,10 @@ size_t FormatWordCollectionHighlightedWords(
             {
             text.erase(text.end() - 2, text.cend());
             }
+        if (!useRtfEncoding)
+            {
+            text += L"</p>";
+            }
         // add the paragraph line feed
         for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)
             {
@@ -321,6 +330,10 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
     std::wstring wordCountStr;
     for (const auto& currentParagraph : theDocument->get_paragraphs())
         {
+        if (!useRtfEncoding)
+            {
+            text += L"<p class=\"text-paragraph\">";
+            }
         // add a tab at the beginning of the paragraph
         text += tabSymbol;
         // go through the current paragraph's sentences
@@ -615,6 +628,10 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
         if (currentParagraph.get_sentence_count() > 0)
             {
             text.erase(text.end() - 2, text.cend());
+            }
+        if (!useRtfEncoding)
+            {
+            text += L"</p>";
             }
         // add the paragraph line feed
         for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)

@@ -26,6 +26,7 @@ source('../R/appdown.r')
   - Now supports the program's light/dark theme, as well as the selected program theme.
   - Added tooltips to highlighted words and phrases, explaining why each one was highlighted.
   - Added "back-to-top" elevator buttons.
+  - Added an **Underline** option for highlighting text, in addition to the existing background and font color options.
 
 ### Analysis/Test Enhancements {-}
 

@@ -2682,7 +2682,8 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
                     static_cast<TextHighlight>(highlightMethod->ToElement()->IntAttribute(
                         XML_METHOD.data(), static_cast<int>(m_textHighlight)));
                 if (m_textHighlight != TextHighlight::HighlightBackground &&
-                    m_textHighlight != TextHighlight::HighlightForeground)
+                    m_textHighlight != TextHighlight::HighlightForeground &&
+                    m_textHighlight != TextHighlight::HighlightUnderline)
                     {
                     m_textHighlight = TextHighlight::HighlightBackground;
                     }

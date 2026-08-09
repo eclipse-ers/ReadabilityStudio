@@ -631,7 +631,9 @@ td.win { font-weight: 650; }
         regardless of the on-screen theme.</li>
       <li><strong>Printing and Save-as-PDF</strong> always come out on white paper.</li>
       <li>Very large documents display reliably.</li>
-      <li>Highlight colors and the two highlight modes (background vs.&nbsp;foreground) still apply.</li>
+      <li>Highlight colors and the three highlight modes (background, foreground, and underline)
+        still apply. In RTF, underline mode falls back to a background box (see <a href="#s5">5.3a</a>)
+        since RTF readers don&rsquo;t render colored underlines reliably.</li>
     </ul>
 
     <h3>Platforms</h3>
@@ -701,17 +703,20 @@ td.win { font-weight: 650; }
 
     <h2 id="s2"><span class="n">02</span>Highlight colors &amp; modes</h2>
     <div class="setup">
-      <p><strong>Tools &rsaquo; Options &rsaquo; highlighting settings.</strong> There are two modes,
-        <strong>background highlight</strong> and <strong>foreground highlight</strong>, plus
-        individual color pickers for default&thinsp;/&thinsp;error&thinsp;/&thinsp;style&thinsp;/&thinsp;excluded
-        and the 7 Dolch categories.</p>
+      <p><strong>Tools &rsaquo; Options &rsaquo; highlighting settings.</strong> There are three modes,
+        <strong>background highlight</strong>, <strong>foreground highlight</strong>, and
+        <strong>underline</strong>, plus individual color pickers for
+        default&thinsp;/&thinsp;error&thinsp;/&thinsp;style&thinsp;/&thinsp;excluded and the 7 Dolch
+        categories.</p>
     </div>
     <ul class="checks">
       <li><span class="box"></span><span class="id">2.1</span><div class="what"><p><strong>Background mode</strong>, change the <em>default</em> highlight color (e.g.&nbsp;to yellow). Re-open the windows: highlighted words show the chosen background color with legible text on the swatch.</p></div></li>
       <li><span class="box"></span><span class="id">2.2</span><div class="what"><p><strong>Foreground mode</strong>, change the default color: the highlighted <strong>text</strong> itself is recolored (no background fill).</p></div></li>
-      <li><span class="box"></span><span class="id">2.3</span><div class="what"><p>Change <strong>each</strong> category color (error, style&thinsp;/&thinsp;wordiness, excluded, and each of the 7 Dolch categories) and confirm the corresponding words and legend swatches update.</p></div></li>
-      <li><span class="box"></span><span class="id">2.4</span><div class="what"><p>Switch between <strong>background and foreground</strong> mode and confirm the rendering style flips for all windows without needing a re-analysis.</p></div></li>
+      <li><span class="box"></span><span class="id">2.2a</span><div class="what"><p><strong>Underline mode</strong>, change the default color: highlighted words show a <strong>colored, wavy underline</strong>, with the text itself left in its normal color (no background fill, no recolored text).</p></div></li>
+      <li><span class="box"></span><span class="id">2.3</span><div class="what"><p>Change <strong>each</strong> category color (error, style&thinsp;/&thinsp;wordiness, excluded, and each of the 7 Dolch categories) and confirm the corresponding words and legend swatches update, in all three modes.</p></div></li>
+      <li><span class="box"></span><span class="id">2.4</span><div class="what"><p>Switch between <strong>background, foreground, and underline</strong> mode and confirm the rendering style flips for all windows without needing a re-analysis.</p></div></li>
       <li><span class="box"></span><span class="id">2.5</span><div class="what"><p>Choose an <strong>excluded-text</strong> color; confirm excluded&thinsp;/&thinsp;ignored regions render with it (grammar and unfamiliar-word windows).</p></div></li>
+      <li><span class="box"></span><span class="id">2.6</span><div class="what"><p><strong>Excluded text in underline mode:</strong> excluded&thinsp;/&thinsp;ignored regions keep their colored <strong>strikethrough only</strong> &mdash; no wavy underline is layered on top of it.</p></div></li>
     </ul>
 
     <h2 id="s3"><span class="n">03</span>Theme, dark&thinsp;/&thinsp;light, and the accent color</h2>
@@ -723,6 +728,7 @@ td.win { font-weight: 650; }
       <li><span class="box"></span><span class="id">3.1</span><div class="what"><p>Switch the OS to <strong>dark</strong>, then <strong>light</strong>, with a window open. Page background and text follow the theme; no re-analysis required.</p></div></li>
       <li><span class="box"></span><span class="id">3.2</span><div class="what"><p><strong>Background mode across themes:</strong> swatches keep their fixed color and stay legible in <em>both</em> light and dark.</p></div></li>
       <li><span class="box"></span><span class="id">3.3</span><div class="what"><p><strong>Foreground mode across themes:</strong> pick a <strong>light</strong> highlight color, then confirm the highlighted <strong>text</strong> stays readable in <em>both</em> light and dark.<span class="tag">highest risk</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.3a</span><div class="what"><p><strong>Underline mode across themes:</strong> pick a <strong>light</strong> highlight color, then confirm the underline stroke stays visible in <em>both</em> light and dark (same contrast handling as foreground mode).</p></div></li>
       <li><span class="box"></span><span class="id">3.4</span><div class="what"><p><strong>Legend accent color:</strong> with a window open, change the <strong>report theme</strong> (e.g.&nbsp;default to fruit salad). The <strong>legend accent bar recolors to the new theme&rsquo;s accent color</strong> without re-analyzing the document.<span class="tag">key case</span></p></div></li>
       <li><span class="box"></span><span class="id">3.5</span><div class="what"><p>Change the theme with <strong>multiple projects open</strong>; confirm every open project&rsquo;s windows update, not just the active one.</p></div></li>
       <li><span class="box"></span><span class="id">3.6</span><div class="what"><p>After a theme change, confirm body text and highlight colors are also consistent with the new theme, not just the legend.</p></div></li>
@@ -744,8 +750,10 @@ td.win { font-weight: 650; }
     </div>
     <ul class="checks">
       <li><span class="box"></span><span class="id">5.1</span><div class="what"><p>Save as <code>.htm</code>; open the file standalone in a browser &mdash; it renders correctly, adapts to light&thinsp;/&thinsp;dark, with the right highlights.</p></div></li>
+      <li><span class="box"></span><span class="id">5.1a</span><div class="what"><p><strong>Underline mode in HTML:</strong> with underline mode selected, save as <code>.htm</code> and confirm the highlighted words show an actual <strong>wavy colored underline</strong> in the browser, with the text left in its normal color.</p></div></li>
       <li><span class="box"></span><span class="id">5.2</span><div class="what"><p>Save as <code>.rtf</code>; open in <strong>Word</strong> and <strong>LibreOffice Writer</strong> &mdash; opens on <strong>white paper</strong>, highlight colors legible in both.</p></div></li>
       <li><span class="box"></span><span class="id">5.3</span><div class="what"><p><strong>Foreground-mode light color in RTF:</strong> with foreground mode and a light color, saved RTF shows the color <strong>darkened</strong> so it reads on white (not washed out).</p></div></li>
+      <li><span class="box"></span><span class="id">5.3a</span><div class="what"><p><strong>Underline mode in RTF falls back to background:</strong> with underline mode selected, saved&thinsp;/&thinsp;exported <code>.rtf</code> shows a <strong>background-color box</strong> (identical to background mode), <em>not</em> a colored underline &mdash; RTF readers render colored underlines (<code>\ulc</code>) unreliably, often just plain black. Confirm this in both <strong>Word</strong> and <strong>LibreOffice Writer</strong>, and that the box color matches what background mode would use.<span class="tag">key case</span></p></div></li>
       <li><span class="box"></span><span class="id">5.4</span><div class="what"><p>Save as <code>.pdf</code> from the save dialog &mdash; white paper, readable.</p></div></li>
       <li><span class="box"></span><span class="id">5.5</span><div class="what"><p>Save the <strong>grammar</strong> and a <strong>Dolch</strong> window as RTF and confirm multi-category coloring survives the round trip.</p></div></li>
       <li><span class="box"></span><span class="id">5.6</span><div class="what"><p>Save <strong>Doc E</strong> as <code>.htm</code> and <code>.rtf</code>; confirm accented and non-Latin characters render correctly in both (no garbled text).</p></div></li>
@@ -757,6 +765,7 @@ td.win { font-weight: 650; }
     <h2 id="s6"><span class="n">06</span>Copy&thinsp;/&thinsp;clipboard</h2>
     <ul class="checks">
       <li><span class="box"></span><span class="id">6.1</span><div class="what"><p><strong>Copy</strong> from a window, paste into <strong>Word</strong> and <strong>LibreOffice Writer</strong> &mdash; rich formatting arrives with <strong>paper-white</strong> highlight colors in both.</p></div></li>
+      <li><span class="box"></span><span class="id">6.1a</span><div class="what"><p><strong>Underline mode via copy:</strong> with underline mode selected, copy and paste into Word&thinsp;/&thinsp;LibreOffice Writer &mdash; same RTF fallback as <a href="#s5">5.3a</a>: a background-color box, not a colored underline.</p></div></li>
       <li><span class="box"></span><span class="id">6.2</span><div class="what"><p><strong>Copy always copies the whole window</strong>, by design: select a <strong>partial</strong> range and Copy, then paste into Word and LibreOffice Writer &mdash; the <em>entire</em> report arrives, not the selection. Confirm this on all three platforms, and that nothing crashes.</p></div></li>
       <li><span class="box"></span><span class="id">6.3</span><div class="what"><p>Paste into a plain-text editor &mdash; sensible plain text, no markup leakage (no CSS from the page&rsquo;s <code>&lt;style&gt;</code> blocks, no tags).</p></div></li>
       <li><span class="box"></span><span class="id">6.4</span><div class="what"><p>Copy from <strong>Doc E</strong> and paste; confirm Unicode characters survive to the clipboard.</p></div></li>
@@ -779,6 +788,7 @@ td.win { font-weight: 650; }
       <li><span class="box"></span><span class="id">7.2c</span><div class="what"><p><strong>Summary reports vs.&nbsp;text reports are independent:</strong> choosing PDF for summary reports leaves the highlighted-text files in the text-report format, and vice versa.</p></div></li>
       <li><span class="box"></span><span class="id">7.2d</span><div class="what"><p><strong>RTF where it belongs:</strong> with text reports set to <strong>rtf</strong>, every highlighted-text window in Words Breakdown, Grammar, and Sight Words is written as <code>.rtf</code> &mdash; none silently fall back to <code>.htm</code>. Confirm no zero-byte or mislabeled files.</p></div></li>
       <li><span class="box"></span><span class="id">7.3</span><div class="what"><p><strong>Highlighting survives export:</strong> the highlighted-text sections of the combined report show their <strong>highlight colors and legend swatches</strong> &mdash; not just the plain words. Confirm the colors match the on-screen windows and the selected <strong>report theme</strong> (banner&thinsp;/&thinsp;accent), including a <strong>non-default theme</strong> (e.g.&nbsp;fruit salad or autumn).<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">7.3a</span><div class="what"><p><strong>Underline mode in the combined HTML report:</strong> renders a true <strong>wavy colored underline</strong>, matching the on-screen window &mdash; the RTF background-box fallback (<a href="#s5">5.3a</a>) is RTF-only and must <em>not</em> apply here.</p></div></li>
       <li><span class="box"></span><span class="id">7.4</span><div class="what"><p><strong>Self-contained + adapts to light&thinsp;/&thinsp;dark:</strong> open the exported combined report <strong>standalone</strong> in a browser (no sibling <code>style.css</code> needed &mdash; the CSS is embedded) and toggle the browser or OS between <strong>light and dark</strong>. The page background and text follow the theme, <strong>foreground-mode</strong> highlighted text stays legible in both, and <strong>background-mode</strong> swatches stay legible in both. This holds <strong>whether the app was in light or dark mode when the report was exported</strong> (export in each mode and confirm the file adapts either way).<span class="tag">key case</span></p></div></li>
       <li><span class="box"></span><span class="id">7.5</span><div class="what"><p><strong>Print&thinsp;/&thinsp;PDF of the exported report stays white paper</strong>, even when the report is being viewed in dark mode.</p></div></li>
       <li><span class="box"></span><span class="id">7.6</span><div class="what"><p><strong>Graph figures inside a dark-viewed report:</strong> the figures are raster images baked at export time, so they do <em>not</em> follow the reader&rsquo;s theme. Export with the app in <strong>light</strong> and in <strong>dark</strong> mode, view each report in both, and confirm the figures stay legible (no dark-on-dark, no transparent background swallowing axis labels).</p></div></li>

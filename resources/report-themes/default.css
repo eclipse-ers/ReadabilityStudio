@@ -466,6 +466,22 @@ img
 .hl-dolch-adverb:hover, .hl-dolch-adjective:hover, .hl-dolch-verb:hover, .hl-dolch-noun:hover
   { filter: brightness(1.15); }
 
+/* ---------- Highlighted-text paragraphs ------------------------ */
+/* Subtle hover affordance so it's easier to track your place while  */
+/* reading a long highlighted report. Padding/margin cancel out so   */
+/* the hit area doesn't shift surrounding layout.                    */
+
+.text-paragraph
+  {
+  margin: -0.15em -0.4em;
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+  }
+
+.text-paragraph:hover
+  { background-color: color-mix(in srgb, CanvasText 6%, transparent); }
+
 /* ---------- Tooltips ------------------------------------------ */
 /* Generic hover tooltip for any element carrying a data-tooltip     */
 /* attribute (used by the highlighted-text windows' hl-* spans).     */

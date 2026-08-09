@@ -902,6 +902,8 @@ Highlight text by changing its
 **Background color**: Select this option to highlight text by changing its background color.
 
 **Font color**: Select this option to highlight text by changing its foreground (font) color.
+
+**Underline**: Select this option to highlight text by underlining it in the category's color.
 ::::
 
 \newpage

@@ -1117,7 +1117,7 @@ bool ProjectWizardDlg::ExtractPreviewSourceText(std::wstring& fullText)
         return false;
         }
 
-    const FilePathResolver resolvePath(filePath, true);
+    const FilePathResolver resolvePath{ filePath, true };
 
     // webpage is fetched quietly, once
     if (resolvePath.IsHTTPFile() || resolvePath.IsHTTPSFile())
@@ -1426,8 +1426,8 @@ void ProjectWizardDlg::RefreshPreviewFormatting()
 //-------------------------------------------------------------
 wxString ProjectWizardDlg::BuildPreviewHtml(const wxString& sampleHtmlBody) const
     {
-    const bool isBackgroundMode = (wxGetApp().GetAppOptions()->GetTextHighlightMethod() ==
-                                   TextHighlight::HighlightBackground);
+    const TextHighlight highlightMethod = wxGetApp().GetAppOptions()->GetTextHighlightMethod();
+    const bool isBackgroundMode = (highlightMethod == TextHighlight::HighlightBackground);
     const wxColour excludedColor = wxGetApp().GetAppOptions()->GetExcludedTextHighlightColor();
 
     const wxString excludedRule =
@@ -1439,6 +1439,22 @@ wxString ProjectWizardDlg::BuildPreviewHtml(const wxString& sampleHtmlBody) cons
                              excludedColor.GetAsString(wxC2S_HTML_SYNTAX),
                              Wisteria::Colors::ColorContrast::BlackOrWhiteContrast(excludedColor)
                                  .GetAsString(wxC2S_HTML_SYNTAX)) :
+        (highlightMethod == TextHighlight::HighlightUnderline) ?
+            // matches strikethrough handling in BuildStyleSheet(): underline mode leaves the
+            // excluded text's color untouched and only tints the strikethrough line itself
+            wxString::Format(
+                L".hl-swatch-excluded { background-color: light-dark(%s, %s); }"
+                "\n.hl-excluded { text-decoration-line: line-through; text-decoration-color: "
+                "light-dark(%s, %s); text-decoration-style: solid; text-decoration-thickness: 2px; "
+                "text-underline-offset: 3px; }",
+                Wisteria::Colors::ColorContrast::Shade(excludedColor, 0.4)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Tint(excludedColor, 0.6)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Shade(excludedColor, 0.4)
+                    .GetAsString(wxC2S_HTML_SYNTAX),
+                Wisteria::Colors::ColorContrast::Tint(excludedColor, 0.6)
+                    .GetAsString(wxC2S_HTML_SYNTAX)) :
             wxString::Format(
                 L".hl-swatch-excluded { background-color: light-dark(%s, %s); }"
                 "\n.hl-excluded { color: light-dark(%s, %s); text-decoration: line-through; }",
@@ -2111,7 +2127,7 @@ void ProjectWizardDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
         {
         if (IsTextFromFileSelected())
             {
-            const FilePathResolver resolvePath(GetFilePath(), true);
+            const FilePathResolver resolvePath{ GetFilePath(), true };
             if (resolvePath.IsInvalidFile() || (resolvePath.IsLocalOrNetworkFile() &&
                                                 !wxFile::Exists(resolvePath.GetResolvedPath())))
                 {
@@ -2312,7 +2328,7 @@ void ProjectWizardDlg::OnAddWebPageButtonClick([[maybe_unused]] wxCommandEvent& 
     wxTextEntryDialog textDlg(this, _(L"Enter a web page to analyze:"), _(L"Enter Web Page"));
     if (textDlg.ShowModal() == wxID_OK && !textDlg.GetValue().empty())
         {
-        const FilePathResolver resolver(textDlg.GetValue(), false);
+        const FilePathResolver resolver{ textDlg.GetValue(), false };
         if (!resolver.IsWebFile())
             {
             wxMessageBox(
@@ -2404,7 +2420,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
 
     for (size_t urlCounter = 0; urlCounter < webHarvestDlg.GetUrls().GetCount(); ++urlCounter)
         {
-        const FilePathResolver resolver(webHarvestDlg.GetUrls().Item(urlCounter), false);
+        const FilePathResolver resolver{ webHarvestDlg.GetUrls().Item(urlCounter), false };
         wxGetApp().GetWebHarvester().SetUrl(resolver.GetResolvedPath());
 
         // if cancelled, we still will want what was harvested up to that point,
@@ -2415,7 +2431,7 @@ void ProjectWizardDlg::OnAddWebPagesButtonClick([[maybe_unused]] wxCommandEvent&
         // add the new links to the list
         const size_t currentFileCount = m_fileData->GetItemCount();
         totalFileCount += currentFileCount;
-        size_t i = 0;
+        size_t i{ 0 };
         if (webHarvestDlg.IsDownloadFilesLocally())
             {
             m_fileData->SetSize(
