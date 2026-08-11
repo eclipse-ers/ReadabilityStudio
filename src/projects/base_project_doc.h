@@ -1080,6 +1080,17 @@ class BaseProjectDoc : public BaseProject, public wxDocument
 
     static bool IsExportingWordiness() noexcept { return m_exportWordiness; }
 
+    static void ExportPlainLanguageGuide(const bool exportItem) noexcept
+        {
+        m_exportPlainLanguageGuide = exportItem;
+        }
+
+    [[nodiscard]]
+    static bool IsExportingPlainLanguageGuide() noexcept
+        {
+        return m_exportPlainLanguageGuide;
+        }
+
     static void ExportSightWords(const bool exportItem) noexcept
         {
         m_exportSightWords = exportItem;
@@ -1387,6 +1398,7 @@ class BaseProjectDoc : public BaseProject, public wxDocument
     static bool m_exportTestResults;
     static bool m_exportStatistics;
     static bool m_exportWordiness;
+    static bool m_exportPlainLanguageGuide;
     static bool m_exportSightWords;
     static bool m_exportWarnings;
     static bool m_exportingLists;

@@ -72,32 +72,8 @@ wxDECLARE_APP(ReadabilityApp);
 
 wxIMPLEMENT_CLASS(ToolsOptionsDlg, wxDialog)
 
-    namespace
-    {
-    // "oceanic.css" -> "Oceanic"
-    wxString ThemeFileNameToLabel(const wxString& fileName)
-        {
-        wxString label{ wxFileName(fileName).GetName() };
-        label.Replace(L"-", L" ");
-        if (!label.empty())
-            {
-            label[0] = wxToupper(label[0]);
-            }
-        return label;
-        }
-
-    // "Oceanic" -> "oceanic.css"
-    wxString ThemeLabelToFileName(const wxString& label)
-        {
-        wxString fileName{ label.Lower() };
-        fileName.Replace(L" ", L"-");
-        fileName += L".css";
-        return fileName;
-        }
-    } // namespace
-
-//-------------------------------------------------------------
-void ToolsOptionsDlg::OnExcludeNumeralsCheck(wxCommandEvent& event)
+    //-------------------------------------------------------------
+    void ToolsOptionsDlg::OnExcludeNumeralsCheck(wxCommandEvent& event)
     {
     if (m_syllableLabel != nullptr)
         {
@@ -969,6 +945,9 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       m_excludedPhrasesPath((project != nullptr) ?
                                 project->GetExcludedPhrasesPath() :
                                 wxGetApp().GetAppOptions()->GetExcludedPhrasesPath()),
+      m_plainLanguageGuideList(BaseProjectView::PlainLanguageGuideListNameToLabel(
+          (project != nullptr) ? project->GetPlainLanguageGuideListName() :
+                                 wxGetApp().GetAppOptions()->GetPlainLanguageGuideListName())),
       m_includeExcludedPhraseFirstOccurrence(
           (project != nullptr) ?
               project->IsIncludingExcludedPhraseFirstOccurrence() :
@@ -1317,7 +1296,8 @@ bool ToolsOptionsDlg::HaveDocumentOptionsChanged() const
            m_excludeNumerals.has_changed() || m_excludeProperNouns.has_changed() ||
            m_excludedPhrasesPath.has_changed() ||
            // simple boolean flag set if user had edited this list from this dialog
-           m_excludedPhrasesEdited || m_includeExcludedPhraseFirstOccurrence.has_changed() ||
+           m_excludedPhrasesEdited || m_plainLanguageGuideList.has_changed() ||
+           m_includeExcludedPhraseFirstOccurrence.has_changed() ||
            m_exclusionBlockTags.has_changed() || m_textExclusionMethod.has_changed() ||
            m_includeIncompleteSentencesIfLongerThan.has_changed() ||
            m_appendedDocumentFilePath.has_changed() ||
@@ -2295,6 +2275,9 @@ void ToolsOptionsDlg::SaveGlobalOptions()
         wxGetApp().GetAppOptions()->IncludeExcludedPhraseFirstOccurrence(
             m_includeExcludedPhraseFirstOccurrence.get_value());
         wxGetApp().GetAppOptions()->SetExcludedPhrasesPath(m_excludedPhrasesPath.get_value());
+        wxGetApp().GetAppOptions()->SetPlainLanguageGuideListName(
+            BaseProjectView::PlainLanguageGuideLabelToListName(
+                m_plainLanguageGuideList.get_value()));
         wxGetApp().GetAppOptions()->SetExclusionBlockTags(m_exclusionBlockTags.get_value());
         wxGetApp().GetAppOptions()->SetIncludeIncompleteSentencesIfLongerThanValue(
             m_includeIncompleteSentencesIfLongerThan.get_value());
@@ -2897,6 +2880,9 @@ void ToolsOptionsDlg::SaveProjectOptions()
         m_readabilityProjectDoc->ExcludeNumerals(m_excludeNumerals.get_value());
         m_readabilityProjectDoc->ExcludeProperNouns(m_excludeProperNouns.get_value());
         m_readabilityProjectDoc->SetExcludedPhrasesPath(m_excludedPhrasesPath.get_value());
+        m_readabilityProjectDoc->SetPlainLanguageGuideListName(
+            BaseProjectView::PlainLanguageGuideLabelToListName(
+                m_plainLanguageGuideList.get_value()));
         m_readabilityProjectDoc->IncludeExcludedPhraseFirstOccurrence(
             m_includeExcludedPhraseFirstOccurrence.get_value());
         m_readabilityProjectDoc->SetExclusionBlockTags(m_exclusionBlockTags.get_value());
@@ -3436,7 +3422,7 @@ void ToolsOptionsDlg::CreateDocumentIndexingSection()
         analysisIndexingPage->SetSizer(panelSizer);
         m_sideBar->AddPage(analysisIndexingPage, _(L"Document Indexing"), ANALYSIS_INDEXING_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == DocumentIndexing), 12);
+                           (GetSectionsBeingShown() == DocumentIndexing));
 
         // long sentence section
         CreateLabelHeader(analysisIndexingPage, panelSizer,
@@ -3756,7 +3742,7 @@ void ToolsOptionsDlg::CreateReadabilitySection()
         m_sideBar->AddPage(scoreTestOptionsPage, GetReadabilityScoresLabel(),
                            SCORES_TEST_OPTIONS_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == ScoresSection), 1);
+                           (GetSectionsBeingShown() == ScoresSection));
 
         // test options tab
         if (IsGeneralSettings() ||
@@ -3765,7 +3751,7 @@ void ToolsOptionsDlg::CreateReadabilitySection()
             auto* panelSizer = new wxBoxSizer(wxVERTICAL);
             scoreTestOptionsPage->SetSizer(panelSizer);
             m_sideBar->AddSubPage(scoreTestOptionsPage, GetTestOptionsLabel(),
-                                  SCORES_TEST_OPTIONS_PAGE, false, 9);
+                                  SCORES_TEST_OPTIONS_PAGE, false);
 
             auto* pgMan = new wxPropertyGridManager(
                 scoreTestOptionsPage, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -3943,7 +3929,7 @@ void ToolsOptionsDlg::CreateReadabilitySection()
                                       wxDefaultSize, wxTAB_TRAVERSAL);
             auto* panelSizer = new wxBoxSizer(wxVERTICAL);
             panel->SetSizer(panelSizer);
-            m_sideBar->AddSubPage(panel, GetScoreDisplayLabel(), SCORES_DISPLAY_PAGE, false, 9);
+            m_sideBar->AddSubPage(panel, GetScoreDisplayLabel(), SCORES_DISPLAY_PAGE, false);
 
             auto* pgMan = new wxPropertyGridManager(
                 panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -4078,7 +4064,7 @@ void ToolsOptionsDlg::CreateStatisticsSection()
         m_sideBar->AddPage(panel, BaseProjectView::GetSummaryStatisticsLabel(),
                            ANALYSIS_STATISTICS_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == Statistics), 2);
+                           (GetSectionsBeingShown() == Statistics));
 
         auto* pgMan = new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                 wxPG_BOLD_MODIFIED | wxPG_DESCRIPTION |
@@ -4250,7 +4236,7 @@ void ToolsOptionsDlg::CreateWordsBreakdownSection()
         panel->SetSizer(panelSizer);
         m_sideBar->AddPage(panel, BaseProjectView::GetWordsBreakdownLabel(), WORDS_BREAKDOWN_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == WordsBreakdown), 13);
+                           (GetSectionsBeingShown() == WordsBreakdown));
 
         auto* pgMan = new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                 wxPG_BOLD_MODIFIED | wxPG_DESCRIPTION |
@@ -4414,7 +4400,7 @@ void ToolsOptionsDlg::CreateSentencesBreakdownSection()
         m_sideBar->AddPage(panel, BaseProjectView::GetSentencesBreakdownLabel(),
                            SENTENCES_BREAKDOWN_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == SentencesBreakdown), 14);
+                           (GetSectionsBeingShown() == SentencesBreakdown));
 
         auto* pgMan = new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                 wxPG_BOLD_MODIFIED | wxPG_DESCRIPTION |
@@ -4501,7 +4487,7 @@ void ToolsOptionsDlg::CreateGrammarSection()
         panel->SetSizer(panelSizer);
         m_sideBar->AddPage(panel, BaseProjectView::GetGrammarLabel(), GRAMMAR_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == Grammar), 4);
+                           (GetSectionsBeingShown() == Grammar));
 
         auto* pgMan = new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                 wxPG_BOLD_MODIFIED | wxPG_DESCRIPTION |
@@ -4746,6 +4732,49 @@ void ToolsOptionsDlg::CreateGrammarSection()
     }
 
 //-------------------------------------------------------------
+void ToolsOptionsDlg::CreatePlainLanguageGuideSection()
+    {
+    if (((GetSectionsBeingShown() & PlainLanguageGuide) != 0) && !IsBatchProjectSettings())
+        {
+        auto* panel = new wxPanel(m_sideBar, PLAIN_LANGUAGE_GUIDE_PAGE, wxDefaultPosition,
+                                  wxDefaultSize, wxTAB_TRAVERSAL);
+        auto* panelSizer = new wxBoxSizer(wxVERTICAL);
+        panel->SetSizer(panelSizer);
+        m_sideBar->AddPage(panel, BaseProjectView::GetPlainLanguageGuideLabel(),
+                           PLAIN_LANGUAGE_GUIDE_PAGE,
+                           // if the only section being shown, then show this page
+                           (GetSectionsBeingShown() == PlainLanguageGuide));
+
+        auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
+        panelSizer->Add(optionsSizer, wxSizerFlags{}.Expand().Border(
+                                          wxLEFT | wxTOP, wxSizerFlags::GetDefaultBorder()));
+
+        auto* listSizer = new wxBoxSizer(wxHORIZONTAL);
+        optionsSizer->Add(listSizer, wxSizerFlags{}.Expand().Border(wxBOTTOM));
+
+        listSizer->Add(new wxStaticText(panel, wxID_STATIC, _(L"Technical phrase list:")),
+                       wxSizerFlags{}.CenterVertical());
+
+        wxArrayString listFiles;
+        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
+                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
+        wxArrayString listChoices;
+        for (const auto& listFile : listFiles)
+            {
+            listChoices.Add(BaseProjectView::PlainLanguageGuideListNameToLabel(listFile));
+            }
+        listChoices.Sort();
+        // "None" (disables the feature) always comes first
+        listChoices.Insert(_(L"None"), 0);
+
+        auto* listCombo = new wxComboBox(panel, wxID_ANY, wxString{}, wxDefaultPosition,
+                                         wxDefaultSize, listChoices, wxCB_DROPDOWN | wxCB_READONLY);
+        listCombo->SetValidator(wxGenericValidator(&m_plainLanguageGuideList.get_value()));
+        listSizer->Add(listCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
+        }
+    }
+
+//-------------------------------------------------------------
 void ToolsOptionsDlg::CreateTextWindowSection()
     {
     const auto fontImage = wxArtProvider::GetBitmapBundle(L"ID_FONT", wxART_BUTTON);
@@ -4759,11 +4788,11 @@ void ToolsOptionsDlg::CreateTextWindowSection()
         m_sideBar->AddPage(panel, BaseProjectView::GetHighlightedReportsLabel(),
                            DOCUMENT_DISPLAY_GENERAL_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == TextSection), 0);
+                           (GetSectionsBeingShown() == TextSection));
 
         auto* panelSizer = new wxBoxSizer(wxVERTICAL);
         panel->SetSizer(panelSizer);
-        m_sideBar->AddSubPage(panel, GetGeneralLabel(), DOCUMENT_DISPLAY_GENERAL_PAGE, false, 9);
+        m_sideBar->AddSubPage(panel, GetGeneralLabel(), DOCUMENT_DISPLAY_GENERAL_PAGE, false);
 
         CreateLabelHeader(panel, panelSizer, _(L"Formatting"), true);
 
@@ -4850,7 +4879,7 @@ void ToolsOptionsDlg::CreateTextWindowSection()
             panelSizer = new wxBoxSizer(wxVERTICAL);
             panel->SetSizer(panelSizer);
             m_sideBar->AddSubPage(panel, GetDolchSightWordsLabel(), DOCUMENT_DISPLAY_DOLCH_PAGE,
-                                  false, 9);
+                                  false);
 
             CreateLabelHeader(panel, panelSizer, _(L"Highlighting"), true);
             panelSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
@@ -5002,7 +5031,7 @@ void ToolsOptionsDlg::CreateProjectSection()
         auto* panelSizer = new wxBoxSizer(wxVERTICAL);
         m_sideBar->AddPage(projectSettingsPage, GetProjectSettingsLabel(), PROJECT_SETTINGS_PAGE,
                            // if the only section being shown, then show this page
-                           (GetSectionsBeingShown() == ProjectSection), 11);
+                           (GetSectionsBeingShown() == ProjectSection));
 
         // project properties
         CreateLabelHeader(projectSettingsPage, panelSizer, _(L"Project:"), true);
@@ -5289,7 +5318,7 @@ void ToolsOptionsDlg::CreateControls()
             auto* docPanelSizer = new wxBoxSizer(wxVERTICAL);
             generalSettingsPage->SetSizer(docPanelSizer);
             m_sideBar->AddPage(generalSettingsPage, GetGeneralSettingsLabel(),
-                               GENERAL_SETTINGS_PAGE, true, 10);
+                               GENERAL_SETTINGS_PAGE, true);
 
             auto* optionsSizer = new wxBoxSizer(wxHORIZONTAL);
             docPanelSizer->Add(optionsSizer, wxSizerFlags{}.Expand());
@@ -5462,6 +5491,10 @@ void ToolsOptionsDlg::CreateControls()
     // Grammar page
     CreateGrammarSection();
 
+    // Plain Language Guide page
+    // (these options only apply to general options and standard projects)
+    CreatePlainLanguageGuideSection();
+
     // Text window options page (these options only apply to general options and standard projects)
     CreateTextWindowSection();
 
@@ -5611,7 +5644,7 @@ void ToolsOptionsDlg::CreateGraphTitlesSection()
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(panel, GetTitlesLabel(), GRAPH_TITLES_PAGE, false, 9);
+    m_sideBar->AddSubPage(panel, GetTitlesLabel(), GRAPH_TITLES_PAGE, false);
 
     CreateLabelHeader(panel, panelSizer, _(L"Fonts:"), true);
     m_graphTopTitleFontButton =
@@ -5649,7 +5682,7 @@ void ToolsOptionsDlg::CreateGraphAxesSection()
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(panel, GetAxisSettingsLabel(), GRAPH_AXIS_PAGE, false, 9);
+    m_sideBar->AddSubPage(panel, GetAxisSettingsLabel(), GRAPH_AXIS_PAGE, false);
 
     CreateLabelHeader(panel, panelSizer, _(L"Fonts:"), true);
     m_xAxisFontButton = new wxButton(panel, ID_X_AXIS_FONT_BUTTON, _(L"x-axis"));
@@ -5670,11 +5703,11 @@ void ToolsOptionsDlg::CreateGraphGeneralSection()
                                          wxDefaultSize, wxTAB_TRAVERSAL);
     m_sideBar->AddPage(graphGeneralPage, GetGraphsLabel(), GRAPH_GENERAL_PAGE,
                        // if the only section being shown, then show this page
-                       (GetSectionsBeingShown() == GraphsSection), 7);
+                       (GetSectionsBeingShown() == GraphsSection));
 
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     graphGeneralPage->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(graphGeneralPage, GetGeneralLabel(), GRAPH_GENERAL_PAGE, false, 9);
+    m_sideBar->AddSubPage(graphGeneralPage, GetGeneralLabel(), GRAPH_GENERAL_PAGE, false);
 
     auto* pgMan = new wxPropertyGridManager(
         graphGeneralPage, ID_GRAPH_OPTIONS_PROPERTYGRID, wxDefaultPosition, wxDefaultSize,
@@ -5961,8 +5994,7 @@ void ToolsOptionsDlg::CreateGraphReadabilitySection()
                               wxDefaultSize, wxTAB_TRAVERSAL);
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(panel, GetReadabilityGraphLabel(), GRAPH_READABILITY_GRAPHS_PAGE, false,
-                          9);
+    m_sideBar->AddSubPage(panel, GetReadabilityGraphLabel(), GRAPH_READABILITY_GRAPHS_PAGE, false);
 
     // Fry-like graphs
     auto* pgMan =
@@ -6050,7 +6082,7 @@ void ToolsOptionsDlg::CreateGraphBarChartSection()
                                   wxTAB_TRAVERSAL);
         auto* panelSizer = new wxBoxSizer(wxVERTICAL);
         panel->SetSizer(panelSizer);
-        m_sideBar->AddSubPage(panel, GetBarChartLabel(), GRAPH_BAR_CHART_PAGE, false, 9);
+        m_sideBar->AddSubPage(panel, GetBarChartLabel(), GRAPH_BAR_CHART_PAGE, false);
 
         auto* pgMan = new wxPropertyGridManager(
             panel, ID_BARCHART_OPTIONS_PROPERTYGRID, wxDefaultPosition, wxDefaultSize,
@@ -6150,7 +6182,7 @@ void ToolsOptionsDlg::CreateGraphHistogramSection()
                               wxTAB_TRAVERSAL);
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(panel, GetHistogramsLabel(), GRAPH_HISTOGRAM_PAGE, false, 9);
+    m_sideBar->AddSubPage(panel, GetHistogramsLabel(), GRAPH_HISTOGRAM_PAGE, false);
 
     auto* pgMan =
         new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -6293,7 +6325,7 @@ void ToolsOptionsDlg::CreateGraphBoxPlotSection()
                               wxTAB_TRAVERSAL);
     auto* panelSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(panelSizer);
-    m_sideBar->AddSubPage(panel, GetBoxPlotLabel(), GRAPH_BOX_PLOT_PAGE, false, 9);
+    m_sideBar->AddSubPage(panel, GetBoxPlotLabel(), GRAPH_BOX_PLOT_PAGE, false);
 
     auto* pgMan =
         new wxPropertyGridManager(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,

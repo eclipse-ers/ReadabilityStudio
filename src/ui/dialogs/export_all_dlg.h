@@ -174,6 +174,13 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
         return m_exportWordiness;
         }
 
+    /// @returns @c true if exporting the Plain Language Guide section.
+    [[nodiscard]]
+    bool IsExportingPlainLanguageGuide() const noexcept
+        {
+        return m_exportPlainLanguageGuide;
+        }
+
     /// @returns @c true if exporting the Dolch section.
     [[nodiscard]]
     bool IsExportingSightWords() const noexcept
@@ -264,6 +271,7 @@ class ExportAllDlg final : public Wisteria::UI::DialogWithHelp
     bool m_exportTestResults{ false };
     bool m_exportStatistics{ false };
     bool m_exportWordiness{ false };
+    bool m_exportPlainLanguageGuide{ false };
     bool m_exportSightWords{ false };
     bool m_exportWarnings{ false };
     bool m_exportingLists{ false };

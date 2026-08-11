@@ -79,6 +79,7 @@ class ProjectView final : public BaseProjectView
         @param includeTestScores @c true to save the test scores section.
         @param includeStatistics @c true to save the statistics section.
         @param includeGrammar @c true to save the grammar section.
+        @param includePlainLanguageGuide @c true to save the Plain Language Guide section.
         @param includeSightWords @c true to save the Dolch Sight Words section.
         @param includeLists @c true to save lists (not recommended for large source documents).
         @param includeTextReports @c true to save text reports
@@ -87,8 +88,9 @@ class ProjectView final : public BaseProjectView
     bool ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                          const bool includeWordsBreakdown, const bool includeSentencesBreakdown,
                          const bool includeTestScores, const bool includeStatistics,
-                         const bool includeGrammar, const bool includeSightWords,
-                         const bool includeLists, const bool includeTextReports,
+                         const bool includeGrammar, const bool includePlainLanguageGuide,
+                         const bool includeSightWords, const bool includeLists,
+                         const bool includeTextReports,
                          const Wisteria::UI::ImageExportOptions& graphOptions);
 
     /** @brief Saves all the results to a set of files in a folder.
@@ -103,6 +105,7 @@ class ProjectView final : public BaseProjectView
         @param includeTestScores @c true to save the test scores section.
         @param includeStatistics @c true to save the statistics section.
         @param includeGrammar @c true to save the grammar section.
+        @param includePlainLanguageGuide @c true to save the Plain Language Guide section.
         @param includeSightWords @c true to save the Dolch Sight Words section.
         @param includeLists @c true to save lists (not recommended for large source documents).
         @param includeTextReports @c true to save text reports
@@ -112,8 +115,8 @@ class ProjectView final : public BaseProjectView
                    wxString summaryReportExt, wxString graphExt, const bool includeWordsBreakdown,
                    const bool includeSentencesBreakdown, const bool includeTestScores,
                    const bool includeStatistics, const bool includeGrammar,
-                   const bool includeSightWords, const bool includeLists,
-                   const bool includeTextReports,
+                   const bool includePlainLanguageGuide, const bool includeSightWords,
+                   const bool includeLists, const bool includeTextReports,
                    const Wisteria::UI::ImageExportOptions& graphOptions);
 
     // view classes
@@ -175,6 +178,18 @@ class ProjectView final : public BaseProjectView
     const WindowContainer& GetGrammarView() const noexcept
         {
         return m_grammarView;
+        }
+
+    [[nodiscard]]
+    WindowContainer& GetPlainLanguageGuideView() noexcept
+        {
+        return m_plainLanguageGuideView;
+        }
+
+    [[nodiscard]]
+    const WindowContainer& GetPlainLanguageGuideView() const noexcept
+        {
+        return m_plainLanguageGuideView;
         }
 
     [[nodiscard]]
@@ -280,6 +295,7 @@ class ProjectView final : public BaseProjectView
     WindowContainer m_sentencesBreakdownView;
     WindowContainer m_sightWordView;
     WindowContainer m_grammarView;
+    WindowContainer m_plainLanguageGuideView;
 
     std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider> m_statsListData{ nullptr };
 

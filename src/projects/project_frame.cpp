@@ -111,6 +111,9 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
          wxID_COPY);
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnGradeScaleDropdown, this,
          XRCID("ID_GRADE_SCALES"));
+    Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED,
+         &ProjectDocChildFrame::OnPlainLanguageGuideListDropdown, this,
+         XRCID("ID_PLAIN_LANGUAGE_GUIDE_LIST"));
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnGraphSortDropdown, this,
          XRCID("ID_GRAPH_SORT"));
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnPrintDropdown, this,
@@ -575,6 +578,9 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnCustomTestBundle, this,
          wxGetApp().GetMainFrameEx()->TEST_BUNDLE_RANGE.GetFirstId(),
          wxGetApp().GetMainFrameEx()->TEST_BUNDLE_RANGE.GetLastId());
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnPlainLanguageGuideListSelected, this,
+         wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetFirstId(),
+         wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetLastId());
     }
 
 //---------------------------------------------------
@@ -1095,6 +1101,28 @@ void ProjectDocChildFrame::OnEditStatsReportButton([[maybe_unused]] wxRibbonButt
         {
         theProject->RefreshStatisticsReports();
         }
+    }
+
+//---------------------------------------------------
+void ProjectDocChildFrame::OnPlainLanguageGuideListSelected(wxCommandEvent& event)
+    {
+    const auto pos = MainFrame::GetPlainLanguageGuideListMenuIds().find(event.GetId());
+    if (pos == MainFrame::GetPlainLanguageGuideListMenuIds().end())
+        {
+        wxMessageBox(_(L"Unable to find phrase list: "
+                       "internal error, please contact software vendor."),
+                     _(L"Error"), wxOK | wxICON_ERROR);
+        return;
+        }
+    auto* theProject = dynamic_cast<BaseProjectDoc*>(GetDocument());
+    wxASSERT(theProject);
+    if ((theProject == nullptr) || !theProject->IsSafeToUpdate())
+        {
+        return;
+        }
+    theProject->SetPlainLanguageGuideListName(pos->second);
+    theProject->RefreshRequired(ProjectRefresh::FullReindexing);
+    theProject->RefreshProject();
     }
 
 //---------------------------------------------------

@@ -253,6 +253,21 @@ You can control how numeric words are handled from the [**Document Indexing**](#
 
 \newpage
 
+## Plain Language Guide {#sec-reviewing-plain-language-guide}
+
+After opening a project, click on the **Plain Language Guide** icon on the project sidebar to view the document with its unexplained technical phrases highlighted.
+The document text appears on the left, with each unexplained technical phrase highlighted.
+An explanation card for each one appears on the right, in the order that the phrase first appears in the document.
+
+A phrase is only highlighted (and given an explanation card) if its plain-language equivalent was never found near any of its occurrences in the document.
+Once a phrase's plain-language equivalent is found nearby even once, that phrase is considered explained and is left alone everywhere else in the document.
+
+Which list of technical phrases to scan for (or whether to scan at all) is set from the [**Plain Language Guide**](#sec-options-plain-language-guide) section of the [**Project Properties**](#sec-options-overview) dialog.
+
+If none of the document's technical phrases are unexplained, this window is shown with a message indicating that nothing needs explaining.
+
+Note that if no list is selected, then this section will not be included.
+
 ## Words Breakdown {#sec-reviewing-word-breakdowns}
 
 After opening a project, click on the **Words Breakdown** icon on the project sidebar to view the lists, highlighted reports, and graphs of difficult words:

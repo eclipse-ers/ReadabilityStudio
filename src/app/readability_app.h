@@ -179,6 +179,18 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     static void FillReadabilityMenu(wxMenu* primaryMenu, wxMenu* secondaryMenu, wxMenu* adultMenu,
                                     wxMenu* secondLanguageMenu, const BaseProject* project);
 
+    /// @brief (Re)builds a menu with the bundled Plain Language Guide phrase lists
+    ///     (plus a "None" entry), checking whichever entry matches @c currentListName.
+    /// @param menu The menu to fill.
+    /// @param currentListName The project's currently selected list.
+    static void FillPlainLanguageGuideListMenu(wxMenu& menu, const wxString& currentListName);
+
+    [[nodiscard]]
+    static const std::map<int, wxString>& GetPlainLanguageGuideListMenuIds() noexcept
+        {
+        return m_plainLanguageGuideListMenuIds;
+        }
+
     [[nodiscard]]
     static const std::map<int, wxString>& GetTestBundleMenuIds() noexcept
         {
@@ -261,10 +273,12 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     constexpr static wxWindowID ID_EDIT_RIBBON_GENERAL_READABILITY_GRAPH_PANEL = wxID_HIGHEST + 33;
     constexpr static wxWindowID ID_EDIT_RIBBON_DB2_PANEL = wxID_HIGHEST + 34;
     constexpr static wxWindowID ID_EDIT_RIBBON_LIX_PANEL = wxID_HIGHEST + 35;
+    constexpr static wxWindowID ID_EDIT_RIBBON_PLAIN_LANGUAGE_GUIDE_PANEL = wxID_HIGHEST + 36;
 
     IdRangeLock CUSTOM_TEST_RANGE;
     IdRangeLock EXAMPLE_RANGE;
     IdRangeLock TEST_BUNDLE_RANGE;
+    IdRangeLock PLAIN_LANGUAGE_GUIDE_LIST_RANGE;
 
     wxMenu m_fileOpenMenu;
     wxMenu m_printMenu;
@@ -342,6 +356,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     static std::map<int, wxString> m_testBundleMenuIds;
     static std::map<int, wxString> m_customTestMenuIds;
     static std::map<int, wxString> m_examplesMenuIds;
+    static std::map<int, wxString> m_plainLanguageGuideListMenuIds;
 
     std::vector<wxBitmapBundle> m_projectSideBarImageList;
 
@@ -464,6 +479,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage);
     void LoadRibbonHomePageHtmlReportSection(wxRibbonPage* homePage);
     void LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* homePage);
+    void LoadRibbonHomePagePlainLanguageGuideSection(wxRibbonPage* homePage);
     void LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, const wxDocument* doc);
     void LoadRibbonDocumentPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);

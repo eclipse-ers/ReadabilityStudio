@@ -58,6 +58,7 @@
 #include "../../projects/standard_project_view.h"
 #include <limits>
 #include <map>
+#include <wx/filename.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/propgrid/manager.h>
 #include <wx/propgrid/propgrid.h>
@@ -84,10 +85,11 @@ class ToolsOptionsDlg final : public wxDialog
         Statistics = 0x0400,
         WordsBreakdown = 0x0800,
         SentencesBreakdown = 0x1000,
-        UNUSED1 = 0x2000,
+        PlainLanguageGuide = 0x2000,
         UNUSED2 = 0x4000,
-        AllSections = (ProjectSection | GraphsSection | ScoresSection | TextSection |
-        DocumentIndexing | Grammar | Statistics | WordsBreakdown | SentencesBreakdown)
+        AllSections =
+        (ProjectSection | GraphsSection | ScoresSection | TextSection | DocumentIndexing | Grammar |
+        Statistics | WordsBreakdown | SentencesBreakdown | PlainLanguageGuide)
         };
 
     /// Constructor.
@@ -112,6 +114,7 @@ class ToolsOptionsDlg final : public wxDialog
     constexpr static int GENERAL_SETTINGS_PAGE = wxID_HIGHEST;
     constexpr static int PROJECT_SETTINGS_PAGE = wxID_HIGHEST + 1;
     constexpr static int THEMES_PAGE = wxID_HIGHEST + 87;
+    constexpr static int PLAIN_LANGUAGE_GUIDE_PAGE = wxID_HIGHEST + 88;
 
     constexpr static int DOCUMENT_DISPLAY_GENERAL_PAGE = wxID_HIGHEST + 2;
     constexpr static int DOCUMENT_DISPLAY_DOLCH_PAGE = wxID_HIGHEST + 3;
@@ -287,6 +290,7 @@ class ToolsOptionsDlg final : public wxDialog
     void CreateWordsBreakdownSection();
     void CreateSentencesBreakdownSection();
     void CreateGrammarSection();
+    void CreatePlainLanguageGuideSection();
     void CreateTextWindowSection();
     void CreateGraphSection();
     void CreateGraphGeneralSection();
@@ -942,6 +946,27 @@ class ToolsOptionsDlg final : public wxDialog
     [[nodiscard]]
     static wxString ExpandPath(wxString path);
 
+    /// @brief Converts a report theme's filename to a display label
+    ///     (e.g., "oceanic.css" -> "Oceanic").
+    [[nodiscard]]
+    static wxString ThemeFileNameToLabel(const wxString& fileName)
+        {
+        wxString label{ wxFileName(fileName).GetName() };
+        label.Replace(L"-", L" ");
+        return label.Capitalize();
+        }
+
+    /// @brief Converts a report theme's display label back to its filename
+    ///     (e.g., "Oceanic" -> "oceanic.css").
+    [[nodiscard]]
+    static wxString ThemeLabelToFileName(const wxString& label)
+        {
+        wxString fileName{ label.Lower() };
+        fileName.Replace(L" ", L"-");
+        fileName += L".css";
+        return fileName;
+        }
+
     [[nodiscard]]
     ToolSections GetSectionsBeingShown() const noexcept
         {
@@ -1107,6 +1132,8 @@ class ToolsOptionsDlg final : public wxDialog
     BackupVariable<bool> m_excludeProperNouns;
     BackupVariable<wxString> m_excludedPhrasesPath;
     bool m_excludedPhrasesEdited{ false };
+    // label shown in the combo (e.g., "None" or "Legal Terms"), not the raw filename
+    BackupVariable<wxString> m_plainLanguageGuideList;
     BackupVariable<bool> m_includeExcludedPhraseFirstOccurrence;
     BackupVariable<std::vector<std::pair<wchar_t, wchar_t>>> m_exclusionBlockTags;
     int m_exclusionBlockTagsOption{ 0 };

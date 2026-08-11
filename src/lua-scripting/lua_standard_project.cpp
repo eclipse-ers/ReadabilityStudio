@@ -3788,7 +3788,7 @@ namespace LuaScripting
                             BaseProjectDoc::GetExportTextViewExt(),
                             BaseProjectDoc::GetExportSummaryReportExt(),
                             BaseProjectDoc::GetExportGraphExt(), true, true, true, true, true, true,
-                            true, true, Wisteria::UI::ImageExportOptions());
+                            true, true, true, Wisteria::UI::ImageExportOptions());
             }
         return 0;
         }

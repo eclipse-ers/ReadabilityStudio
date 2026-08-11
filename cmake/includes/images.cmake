@@ -125,6 +125,7 @@ ribbon/period-needed.svg
 ribbon/person.svg
 ribbon/photos-merge.svg
 ribbon/photos.svg
+ribbon/plain-language-guide.svg
 ribbon/preview.svg
 ribbon/print-header-footer.svg
 ribbon/print-setup.svg

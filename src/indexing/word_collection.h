@@ -64,6 +64,7 @@
 #include "paragraph.h"
 #include "passive_voice.h"
 #include "phrase.h"
+#include "plain_language_phrase.h"
 #include "pronoun.h"
 #include "sentence.h"
 #include "stop_lists.h"
@@ -864,6 +865,7 @@ class document
         search_for_excluded_words();
         ignore_tagged_blocks();
         analyze_grammar();
+        analyze_plain_language_guide();
 
         if (searches_for_negated_phrases() || searches_for_proper_phrases() ||
             get_n_gram_sizes_to_auto_detect().size())
@@ -987,6 +989,25 @@ class document
     const auto& get_known_phrase_indices() const noexcept
         {
         return m_known_phrase_indices;
+        }
+
+    /// @returns The word index (into the document) and the index into
+    ///     `is_plain_language_phrase`'s phrase list, for every occurrence of a technical
+    ///     phrase found by analyze_plain_language_guide() (regardless of whether that
+    ///     phrase ended up "explained").
+    [[nodiscard]]
+    const auto& get_plain_language_phrase_indices() const noexcept
+        {
+        return m_plain_language_phrase_indices;
+        }
+
+    /// @returns A vector, parallel to `is_plain_language_phrase`'s phrase list, indicating
+    ///     whether a plain-language replacement was ever found within the proximity
+    ///     window of any occurrence of that technical phrase.
+    [[nodiscard]]
+    const auto& get_plain_language_phrase_explained() const noexcept
+        {
+        return m_plain_language_phrase_explained;
         }
 
     /// @returns The indices of heuristically detected phrases in the document.
@@ -1235,6 +1256,13 @@ class document
         is_known_phrase = known_phrase;
         }
 
+    void set_plain_language_phrase_function(
+        std::shared_ptr<const grammar::plain_language_phrase_collection>
+            plain_language_phrases) noexcept
+        {
+        is_plain_language_phrase = std::move(plain_language_phrases);
+        }
+
     void set_copyright_phrase_function(const grammar::phrase_collection* copyright_phrase)
         {
         is_copyright_phrase = copyright_phrase;
@@ -1366,6 +1394,15 @@ class document
     const grammar::phrase_collection& get_known_phrases() const noexcept
         {
         return *is_known_phrase;
+        }
+
+    /// @returns The Plain Language Guide's technical phrases data within the document.
+    /// @note Only call this if get_plain_language_phrase_indices() is non-empty
+    ///     (i.e., a Plain Language Guide list was set via set_plain_language_phrase_function()).
+    [[nodiscard]]
+    const grammar::plain_language_phrase_collection& get_plain_language_phrases() const noexcept
+        {
+        return *is_plain_language_phrase;
         }
 
     [[nodiscard]]
@@ -2314,6 +2351,103 @@ class document
             }
         }
 
+    /// @brief Determines whether @c replacementPhrase occurs anywhere within 10 words
+    ///     before or after the technical phrase match at
+    ///     [@c matchStart, @c matchStart + @c matchWordCount - 1] in @c m_words.
+    /// @details The window is a flat index into the whole document (m_words), so it can
+    ///     cross sentence and paragraph boundaries.
+    [[nodiscard]]
+    bool plain_language_replacement_nearby(
+        const grammar::phrase<traits::case_insensitive_wstring_ex>& replacementPhrase,
+        const size_t matchStart, const size_t matchWordCount) const
+        {
+        if (m_words.empty())
+            {
+            return false;
+            }
+        constexpr size_t PROXIMITY_WINDOW{ 10 };
+        const size_t windowStart =
+            (matchStart >= PROXIMITY_WINDOW) ? (matchStart - PROXIMITY_WINDOW) : 0;
+        const size_t matchEnd = matchStart + matchWordCount - 1;
+        const size_t windowEnd = std::min(matchEnd + PROXIMITY_WINDOW, m_words.size() - 1);
+
+        for (size_t i = windowStart; i <= windowEnd; ++i)
+            {
+            const size_t wordsAvailable = windowEnd - i + 1;
+            if (replacementPhrase.get_word_count() > wordsAvailable)
+                {
+                continue;
+                }
+            // skip candidates whose span overlaps the technical phrase's own words
+            const size_t candidateEnd = i + replacementPhrase.get_word_count() - 1;
+            if (candidateEnd >= matchStart && i <= matchEnd)
+                {
+                continue;
+                }
+            if (replacementPhrase.equal_to_words(m_words.cbegin() + i, i, wordsAvailable).first)
+                {
+                return true;
+                }
+            }
+        return false;
+        }
+
+    /// @brief Searches for the Plain Language Guide's technical phrases and determines,
+    ///     for each one, whether its plain-language replacement was ever found within
+    ///     10 words of any occurrence of it.
+    void analyze_plain_language_guide()
+        {
+        m_plain_language_phrase_indices.clear();
+        m_plain_language_phrase_explained.clear();
+        if (is_plain_language_phrase == nullptr)
+            {
+            return;
+            }
+        const grammar::plain_language_phrase_collection& phraseCollection =
+            *is_plain_language_phrase;
+        m_plain_language_phrase_explained.assign(phraseCollection.get_phrases().size(), false);
+
+        for (const auto& currentSentence : m_sentences)
+            {
+            for (size_t wordCounter = currentSentence.get_first_word_index();
+                 wordCounter <= currentSentence.get_last_word_index(); ++wordCounter)
+                {
+                auto currentWordPos = m_words.cbegin() + wordCounter;
+                const size_t phraseResult = phraseCollection(
+                    currentWordPos, wordCounter - currentSentence.get_first_word_index(),
+                    (currentSentence.get_last_word_index() - wordCounter) + 1, true);
+                if (phraseResult == grammar::plain_language_phrase_collection::npos)
+                    {
+                    continue;
+                    }
+
+                const size_t phraseWordCount =
+                    phraseCollection.get_phrases()[phraseResult].first.get_word_count();
+                // always record the occurrence, explained or not; needed later to decide
+                // whether to highlight every occurrence of an unexplained phrase
+                m_plain_language_phrase_indices.emplace_back(wordCounter, phraseResult);
+
+                // once a phrase is explained, there's no need to keep searching for its
+                // replacement near later occurrences
+                if (!m_plain_language_phrase_explained[phraseResult])
+                    {
+                    const auto& replacementPhrase =
+                        phraseCollection.get_phrases()[phraseResult].second.replacement;
+                    if (replacementPhrase.get_word_count() > 0 &&
+                        plain_language_replacement_nearby(replacementPhrase, wordCounter,
+                                                          phraseWordCount))
+                        {
+                        m_plain_language_phrase_explained[phraseResult] = true;
+                        }
+                    }
+
+                // skip past the matched phrase's words (-1 to take the loop increment
+                // into account)
+                wordCounter += phraseWordCount - 1;
+                }
+            }
+        }
+
     /// @brief Total up the number of valid words.
     void update_valid_words_count()
         {
@@ -2970,6 +3104,8 @@ class document
         {
         m_name.clear();
         m_known_phrase_indices.clear();
+        m_plain_language_phrase_indices.clear();
+        m_plain_language_phrase_explained.clear();
         m_n_grams_indices.clear();
         m_proper_phrase_indices.clear();
         m_negating_phrase_indices.clear();
@@ -3012,6 +3148,9 @@ class document
     std::shared_ptr<const grammar::phrase_collection> is_excluded_phrase{
         nullptr
     }; // this should be shared from a parent
+    std::shared_ptr<const grammar::plain_language_phrase_collection> is_plain_language_phrase{
+        nullptr
+    }; // this should be shared from a parent
 
     inline static std::unordered_map<stemming::stemming_type, stem_cache> m_knownStems{};
 
@@ -3027,6 +3166,12 @@ class document
     // the index into the words and the index into the list of known phrases
     // (which is inside "is_known_phrase")
     std::vector<comparable_first_pair<size_t, size_t>> m_known_phrase_indices;
+    // the index into the words and the index into the list of plain-language phrases
+    // (which is inside "is_plain_language_phrase")
+    std::vector<comparable_first_pair<size_t, size_t>> m_plain_language_phrase_indices;
+    // per plain-language-phrase-collection-index: whether a replacement was ever
+    // found near any occurrence of that phrase
+    std::vector<bool> m_plain_language_phrase_explained;
     std::vector<std::pair<size_t, size_t>> m_proper_phrase_indices;
     std::vector<std::pair<size_t, size_t>> m_negating_phrase_indices;
     // the index into the words and the number of words that this phrase takes up

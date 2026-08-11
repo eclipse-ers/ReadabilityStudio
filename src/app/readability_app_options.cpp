@@ -406,6 +406,7 @@ void ReadabilityAppOptions::ResetSettings()
     m_excludeNumerals = false;
     m_excludeProperNouns = false;
     m_excludedPhrasesPath.clear();
+    m_plainLanguageGuideListName.clear();
     m_exclusionBlockTags.clear();
     m_invalidSentenceMethod = InvalidSentence::ExcludeFromAnalysis;
     m_includeIncompleteSentencesIfLongerThan = 15;
@@ -1773,6 +1774,25 @@ void ReadabilityAppOptions::LoadDocAnalysisNode(tinyxml2::XMLElement* projectSet
                 if (convertedStr != nullptr)
                     {
                     SetExcludedPhrasesPath(convertedStr);
+                    }
+                }
+            }
+        // bundled Plain Language Guide phrase list filename
+        auto* plainLanguageGuideListNode =
+            documentAnalysisNode->FirstChildElement(XML_PLAIN_LANGUAGE_GUIDE_LIST.data());
+        if (plainLanguageGuideListNode != nullptr)
+            {
+            const char* listNameChars =
+                plainLanguageGuideListNode->ToElement()->Attribute(XML_VALUE.data());
+            if (listNameChars != nullptr)
+                {
+                const auto listNameStr = Wisteria::TextStream::CharStreamToUnicode(
+                    listNameChars, std::strlen(listNameChars));
+                const wchar_t* convertedListName =
+                    filterHtml(listNameStr.c_str(), listNameStr.length(), true, false);
+                if (convertedListName != nullptr)
+                    {
+                    SetPlainLanguageGuideListName(convertedListName);
                     }
                 }
             }
@@ -3254,6 +3274,13 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
         XML_VALUE.data(),
         wxString(ENCODE({ GetExcludedPhrasesPath().wc_str() }, false)).utf8_str());
     documentAnalysisSection->InsertEndChild(excludedPhrasesFilePath);
+
+    // bundled Plain Language Guide phrase list filename
+    auto* plainLanguageGuideListNode = doc.NewElement(XML_PLAIN_LANGUAGE_GUIDE_LIST.data());
+    plainLanguageGuideListNode->SetAttribute(
+        XML_VALUE.data(),
+        wxString(ENCODE({ GetPlainLanguageGuideListName().wc_str() }, false)).utf8_str());
+    documentAnalysisSection->InsertEndChild(plainLanguageGuideListNode);
 
     // exclusion block tags
     auto* excludeTagsSection = doc.NewElement(XML_EXCLUDE_BLOCK_TAGS.data());

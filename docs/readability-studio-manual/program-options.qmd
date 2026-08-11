@@ -871,6 +871,16 @@ Checking this option will instruct the program to not consider words such as *ta
 
 \newpage
 
+## Plain Language Guide {#sec-options-plain-language-guide}
+
+The options on this page select which bundled phrase list (if any) is used to build the [**Plain Language Guide**](#sec-reviewing-plain-language-guide) report.
+
+**Technical phrase list list**: Select which list of technical phrases to scan the document against.
+Select **None** to disable this feature (the default).
+
+Each list highlights occurrences of its technical phrases that never had their plain-language equivalent mentioned nearby.
+(Explanations of each of these are also displayed alongside the document.)
+
 ## Highlighted Reports {#sec-options-highlighted-reports}
 
 ### General {-}

@@ -435,8 +435,9 @@ void ProjectView::OnExportAll([[maybe_unused]] wxCommandEvent& event)
         ExportAllToHtml(dlg.GetFilePath(), dlg.GetExportGraphExt(), dlg.IsExportingHardWordLists(),
                         dlg.IsExportingSentencesBreakdown(), dlg.IsExportingTestResults(),
                         dlg.IsExportingStatistics(), dlg.IsExportingGrammar(),
-                        dlg.IsExportingSightWords(), dlg.IsExportingLists(),
-                        dlg.IsExportingTextReports(), dlg.GetImageExportOptions());
+                        dlg.IsExportingPlainLanguageGuide(), dlg.IsExportingSightWords(),
+                        dlg.IsExportingLists(), dlg.IsExportingTextReports(),
+                        dlg.GetImageExportOptions());
         }
     else
         {
@@ -444,8 +445,9 @@ void ProjectView::OnExportAll([[maybe_unused]] wxCommandEvent& event)
                   dlg.GetExportSummaryReportExt(), dlg.GetExportGraphExt(),
                   dlg.IsExportingHardWordLists(), dlg.IsExportingSentencesBreakdown(),
                   dlg.IsExportingTestResults(), dlg.IsExportingStatistics(),
-                  dlg.IsExportingGrammar(), dlg.IsExportingSightWords(), dlg.IsExportingLists(),
-                  dlg.IsExportingTextReports(), dlg.GetImageExportOptions());
+                  dlg.IsExportingGrammar(), dlg.IsExportingPlainLanguageGuide(),
+                  dlg.IsExportingSightWords(), dlg.IsExportingLists(), dlg.IsExportingTextReports(),
+                  dlg.GetImageExportOptions());
         }
     doc->SetExportFile(dlg.GetFilePath());
     doc->SetExportFolder(dlg.GetFolderPath());
@@ -458,6 +460,7 @@ void ProjectView::OnExportAll([[maybe_unused]] wxCommandEvent& event)
     ProjectDoc::ExportTestResults(dlg.IsExportingTestResults());
     ProjectDoc::ExportStatistics(dlg.IsExportingStatistics());
     ProjectDoc::ExportWordiness(dlg.IsExportingGrammar());
+    ProjectDoc::ExportPlainLanguageGuide(dlg.IsExportingPlainLanguageGuide());
     ProjectDoc::ExportSightWords(dlg.IsExportingSightWords());
     ProjectDoc::ExportLists(dlg.IsExportingLists());
     ProjectDoc::ExportTextReports(dlg.IsExportingTextReports());
@@ -1239,6 +1242,13 @@ void ProjectView::UpdateSideBarIcons()
             }
         }
 
+    // Plain Language Guide window
+    if (GetPlainLanguageGuideView().GetWindowCount() > 0)
+        {
+        GetSideBar()->InsertItem(GetSideBar()->GetFolderCount(), GetPlainLanguageGuideLabel(),
+                                 SIDEBAR_PLAIN_LANGUAGE_GUIDE_SECTION_ID, 32);
+        }
+
     // Words breakdown
     if (GetWordsBreakdownView().GetWindowCount() > 0)
         {
@@ -1877,6 +1887,12 @@ void ProjectView::UpdateRibbonState()
                                   projDoc->GetDocumentStorageMethod() ==
                                       TextStorage::LoadFromExternalDocument);
             }
+        }
+
+    if (projDoc != nullptr)
+        {
+        MainFrame::FillPlainLanguageGuideListMenu(GetDocFrame()->m_plainLanguageGuideListMenu,
+                                                  projDoc->GetPlainLanguageGuideListName());
         }
     }
 
@@ -2530,6 +2546,8 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
         hideEditPanel(MainFrame::ID_EDIT_RIBBON_STATS_LIST_PANEL);
     wxRibbonPanel* editStatsReportButtonBarWindow =
         hideEditPanel(MainFrame::ID_EDIT_RIBBON_STATS_SUMMARY_REPORT_PANEL);
+    wxRibbonPanel* editPlainLanguageGuideButtonBarWindow =
+        hideEditPanel(MainFrame::ID_EDIT_RIBBON_PLAIN_LANGUAGE_GUIDE_PANEL);
     wxRibbonPanel* editSimpleListWithSummationButtonBarWindow =
         hideEditPanel(MainFrame::ID_EDIT_RIBBON_LIST_SIMPLE_WITH_SUM_PANEL);
     wxRibbonPanel* editSimpleListWithSummationAndExcludeButtonBarWindow =
@@ -2765,6 +2783,25 @@ void ProjectView::OnItemSelected(wxCommandEvent& event)
                 }
             }
         }
+    else if (event.GetInt() == SIDEBAR_PLAIN_LANGUAGE_GUIDE_SECTION_ID)
+        {
+        m_activeWindow = GetPlainLanguageGuideView().GetWindow(0);
+        resetActiveCanvasResizeDelay();
+        wxASSERT(m_activeWindow != nullptr);
+
+        if (GetActiveProjectWindow() != nullptr)
+            {
+            GetSplitter()->GetWindow2()->Hide();
+            GetSplitter()->ReplaceWindow(GetSplitter()->GetWindow2(), GetActiveProjectWindow());
+            GetActiveProjectWindow()->Show();
+
+            if (GetRibbon() != nullptr &&
+                GetActiveProjectWindow()->IsKindOf(wxCLASSINFO(wxWebView)))
+                {
+                editPlainLanguageGuideButtonBarWindow->Show();
+                }
+            }
+        }
     else if (event.GetExtraLong() == SIDEBAR_WORDS_BREAKDOWN_SECTION_ID)
         {
         // Note that word-list tests can have a list control and highlighted report
@@ -2980,8 +3017,9 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                             wxString summaryReportExt, wxString graphExt,
                             const bool includeWordsBreakdown, const bool includeSentencesBreakdown,
                             const bool includeTestScores, const bool includeStatistics,
-                            const bool includeGrammar, const bool includeSightWords,
-                            const bool includeLists, const bool includeTextReports,
+                            const bool includeGrammar, const bool includePlainLanguageGuide,
+                            const bool includeSightWords, const bool includeLists,
+                            const bool includeTextReports,
                             const Wisteria::UI::ImageExportOptions& graphOptions)
     {
     const auto* doc = dynamic_cast<const ProjectDoc*>(GetDocument());
@@ -3322,6 +3360,38 @@ bool ProjectView::ExportAll(const wxString& folder, wxString listExt, wxString t
                 }
             }
         }
+    // Plain Language Guide
+    if (includePlainLanguageGuide && (GetPlainLanguageGuideView().GetWindowCount() != 0U))
+        {
+        if (!wxFileName::Mkdir(folder + wxFileName::GetPathSeparator() +
+                                   BaseProjectView::GetPlainLanguageGuideLabel(),
+                               wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
+            {
+            wxMessageBox(wxString::Format(_(L"Unable to create \"%s\" folder."),
+                                          BaseProjectView::GetPlainLanguageGuideLabel()),
+                         wxGetApp().GetAppName(), wxOK | wxICON_EXCLAMATION);
+            }
+        else
+            {
+            for (size_t i = 0; i < GetPlainLanguageGuideView().GetWindowCount(); ++i)
+                {
+                wxWindow* activeWindow = GetPlainLanguageGuideView().GetWindow(i);
+                if (activeWindow != nullptr && activeWindow->IsKindOf(wxCLASSINFO(wxWebView)) &&
+                    includeTextReports)
+                    {
+                    auto* webview = dynamic_cast<wxWebView*>(activeWindow);
+                    webview->SetLabel(
+                        wxString::Format(L"%s [%s]", webview->GetName(),
+                                         wxFileName::StripExtension(doc->GetTitle())));
+                    const wxString savePathNoExt = folder + wxFileName::GetPathSeparator() +
+                                                   BaseProjectView::GetPlainLanguageGuideLabel() +
+                                                   wxFileName::GetPathSeparator() +
+                                                   webview->GetLabel();
+                    SaveWebViewReport(webview, savePathNoExt, textExt);
+                    }
+                }
+            }
+        }
     // Sight Words
     if (includeSightWords && (GetDolchSightWordsView().GetWindowCount() != 0U))
         {
@@ -3398,8 +3468,9 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
                                   const bool includeWordsBreakdown,
                                   const bool includeSentencesBreakdown,
                                   const bool includeTestScores, const bool includeStatistics,
-                                  const bool includeGrammar, const bool includeSightWords,
-                                  const bool includeLists, const bool includeTextReports,
+                                  const bool includeGrammar, const bool includePlainLanguageGuide,
+                                  const bool includeSightWords, const bool includeLists,
+                                  const bool includeTextReports,
                                   const Wisteria::UI::ImageExportOptions& graphOptions)
     {
     if (filePath.GetPath().empty())
@@ -3730,6 +3801,32 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
             }
         outputText += L"\n</details>\n";
         }
+    // Plain Language Guide section
+    if (includePlainLanguageGuide && includeTextReports &&
+        (GetPlainLanguageGuideView().GetWindowCount() != 0U))
+        {
+        bool includeLeadingPageBreak{ false };
+        ++sectionCounter;
+        figureCounter = tableCounter = 1;
+        outputText +=
+            wxString::Format(_DT(L"\n\n%s<details class='report-section' open>"
+                                 "<summary><a name='plainlanguageguide'></a>"
+                                 "<span class='n'>%02zu</span>%s</summary>\n"),
+                             (hasSections ? pageBreak : wxString{}), sectionCounter,
+                             htmlEncode({ GetPlainLanguageGuideLabel().wc_str() }, true).c_str());
+        hasSections = true;
+        for (size_t i = 0; i < GetPlainLanguageGuideView().GetWindowCount(); ++i)
+            {
+            wxWindow* activeWindow = GetPlainLanguageGuideView().GetWindow(i);
+            if (activeWindow != nullptr && activeWindow->IsKindOf(wxCLASSINFO(wxWebView)))
+                {
+                formatWebViewReport(dynamic_cast<wxWebView*>(activeWindow),
+                                    includeLeadingPageBreak);
+                includeLeadingPageBreak = true;
+                }
+            }
+        outputText += L"\n</details>\n";
+        }
     // Sight Words
     if (includeSightWords && (GetDolchSightWordsView().GetWindowCount() != 0U))
         {
@@ -3804,6 +3901,16 @@ bool ProjectView::ExportAllToHtml(const wxFileName& filePath, wxString graphExt,
         toc += wxString::Format(
             L"<li><a href='#grammar'><span class='n'>%02zu</span><span>%s</span></a></li>\n",
             ++tocIndex, htmlEncode({ GetGrammarLabel().wc_str() }, true).c_str());
+        }
+    // Plain Language Guide section only has text windows, so don't include that if
+    // not including those types of windows
+    if (includePlainLanguageGuide && includeTextReports &&
+        (GetPlainLanguageGuideView().GetWindowCount() != 0U))
+        {
+        toc += wxString::Format(
+            L"<li><a href='#plainlanguageguide'><span class='n'>%02zu</span><span>%s</span></a>"
+            L"</li>\n",
+            ++tocIndex, htmlEncode({ GetPlainLanguageGuideLabel().wc_str() }, true).c_str());
         }
     if (includeSightWords && (GetDolchSightWordsView().GetWindowCount() != 0U))
         {

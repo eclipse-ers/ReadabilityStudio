@@ -234,12 +234,15 @@ void ProjectDoc::RefreshProject()
 
     // reload the excluded phrases
     LoadExcludePhrases();
+    // reload the Plain Language Guide phrase list
+    LoadPlainLanguageGuideList();
 
     // load appended template file (if there is one)
     LoadAppendedDocument();
 
     auto* view = dynamic_cast<ProjectView*>(GetFirstView());
     const auto selectedItem = view->GetSideBar()->GetSelectedSubItemId();
+    const auto selectedFolderId = view->GetSideBar()->GetSelectedFolderId();
 
     // If the original text is gone (there won't be anything to analyze),
     // or if just cosmetic changes (e.g., graph options), then don't re-index,
@@ -253,6 +256,7 @@ void ProjectDoc::RefreshProject()
         DisplayReadabilityGraphs();
         DisplayWordsBreakdown();
         DisplaySentencesBreakdown();
+        DisplayPlainLanguageGuide();
         if (IsTextSectionRefreshRequired())
             {
             DisplayHighlightedText(GetTextHighlightColor(), GetTextViewFont());
@@ -269,7 +273,8 @@ void ProjectDoc::RefreshProject()
 
         if (!view->GetSideBar()->SelectSubItemById(selectedItem, true, true))
             {
-            view->GetSideBar()->SelectFolder(0, true, true);
+            const auto selectedFolderIndex = view->GetSideBar()->FindFolder(selectedFolderId);
+            view->GetSideBar()->SelectFolder(selectedFolderIndex.value_or(0), true, true);
             }
 
         GetDocumentWindow()->Refresh();
@@ -364,6 +369,7 @@ void ProjectDoc::RefreshProject()
         DisplayHighlightedText(GetTextHighlightColor(), GetTextViewFont());
         DisplaySentencesBreakdown();
         DisplayGrammar();
+        DisplayPlainLanguageGuide();
         DisplaySightWords();
 
         DeleteUniqueWordMap();
@@ -377,10 +383,11 @@ void ProjectDoc::RefreshProject()
         }
 
     // See if the view that was originally selected is gone.
-    // If so then select the scores section.
+    // If so then select its folder (or the scores section if that's gone too).
     if (!view->GetSideBar()->SelectSubItemById(selectedItem, true, true))
         {
-        view->GetSideBar()->SelectFolder(0, true, true);
+        const auto selectedFolderIndex = view->GetSideBar()->FindFolder(selectedFolderId);
+        view->GetSideBar()->SelectFolder(selectedFolderIndex.value_or(0), true, true);
         }
     view->ShowSideBar(view->IsSideBarShown());
 
@@ -401,6 +408,9 @@ bool ProjectDoc::LoadProjectFile(const char* projectFileText, const size_t textL
     if (!settingsFile.empty())
         {
         LoadSettingsFile(settingsFile.c_str());
+        // LoadSettingsFile() only sets the Plain Language Guide list's name;
+        // actually load its content here.
+        LoadPlainLanguageGuideList();
         }
     else
         {
@@ -671,6 +681,7 @@ bool ProjectDoc::OnOpenDocument(const wxString& filename)
         DisplayHighlightedText(GetTextHighlightColor(), GetTextViewFont());
         DisplaySentencesBreakdown();
         DisplayGrammar();
+        DisplayPlainLanguageGuide();
         DisplaySightWords();
 
         DeleteUniqueWordMap();
@@ -1356,6 +1367,8 @@ bool ProjectDoc::OnNewDocument()
     wxASSERT_MSG(view->GetFrame(), L"Invalid frame for newly created document!");
 
     LoadExcludePhrases();
+    // load the Plain Language Guide phrase list
+    LoadPlainLanguageGuideList();
 
     // load appended template file (if there is one)
     LoadAppendedDocument();
@@ -1485,6 +1498,7 @@ bool ProjectDoc::OnNewDocument()
         DisplayHighlightedText(GetTextHighlightColor(), GetTextViewFont());
         DisplaySentencesBreakdown();
         DisplayGrammar();
+        DisplayPlainLanguageGuide();
         DisplaySightWords();
 
         DeleteUniqueWordMap();
@@ -4208,6 +4222,104 @@ void ProjectDoc::DisplayStatistics()
     else
         {
         view->GetDolchSightWordsView().RemoveWindowById(BaseProjectView::DOLCH_STATS_PAGE_ID);
+        }
+    }
+
+//-------------------------------------------------------
+void ProjectDoc::DisplayPlainLanguageGuide()
+    {
+    auto* view = dynamic_cast<ProjectView*>(GetFirstView());
+    wxASSERT_MSG(view, L"Project view is null in DisplayPlainLanguageGuide()!");
+
+    if (GetPlainLanguageGuideListName().empty() || GetWords() == nullptr)
+        {
+        view->GetPlainLanguageGuideView().RemoveWindowById(
+            BaseProjectView::PLAIN_LANGUAGE_GUIDE_PAGE_ID);
+        if (!m_plainLanguageGuidePageKey.empty())
+            {
+            static_cast<HighlightedTextPageHandler*>(m_plainLanguageGuidePageHandler.get())
+                ->RemovePage(m_plainLanguageGuidePageKey);
+            m_plainLanguageGuidePageKey.clear();
+            }
+        return;
+        }
+
+    const auto guideOutput = FormatWordCollectionPlainLanguageGuide(
+        GetWords(), std::wstring{ L"pl-guide-highlight" },
+        std::wstring{ L"&nbsp;&nbsp;&nbsp;&nbsp;" }, std::wstring{ L"<br />\n" });
+
+    // Nothing to highlight/explain (e.g., every technical phrase was already
+    // explained nearby, or none appeared in the document at all). Still show the
+    // report (with the document as-is) so the writer can see that nothing needs
+    // clarifying.
+    const wxString noteCardsHtml =
+        (guideOutput.noteCardsHtml.empty()) ?
+            L"<p class=\"pl-guide-no-notes\">" +
+                _(L"No unexplained technical phrases were found in this document.") + L"</p>" :
+            wxString(guideOutput.noteCardsHtml);
+
+    auto* guideWindow = dynamic_cast<wxWebView*>(view->GetPlainLanguageGuideView().FindWindowById(
+        BaseProjectView::PLAIN_LANGUAGE_GUIDE_PAGE_ID));
+    if (guideWindow == nullptr)
+        {
+        guideWindow =
+            wxWebView::New(view->GetSplitter(), BaseProjectView::PLAIN_LANGUAGE_GUIDE_PAGE_ID);
+        if (guideWindow != nullptr)
+            {
+            guideWindow->Hide();
+            guideWindow->SetLabel(BaseProjectView::GetPlainLanguageGuideLabel());
+            guideWindow->SetName(BaseProjectView::GetPlainLanguageGuideLabel());
+            guideWindow->EnableContextMenu(false);
+            guideWindow->Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating,
+                              view);
+            guideWindow->RegisterHandler(m_plainLanguageGuidePageHandler);
+            }
+        }
+
+    if (guideWindow != nullptr)
+        {
+        const wxString listLabel =
+            BaseProjectView::PlainLanguageGuideListNameToLabel(GetPlainLanguageGuideListName());
+        wxString formattedGuide =
+            ProjectReportFormat::FormatHtmlReportStart(
+                wxString::Format( // TRANSLATORS: %s is the project name
+                    _(L"Plain Language Guide [%s]"), GetTitle()),
+                wxGetApp().GetAppOptions()->GetReportTheme()) +
+            ProjectReportFormat::FormatReportBanner(
+                BaseProjectView::GetPlainLanguageGuideLabel(),
+                wxString::Format( // TRANSLATORS: first %s is the project name,
+                                  // second %s is the selected phrase list's name
+                    _(L"%s (%s Phrase List)"), GetTitle(), listLabel)) +
+            L"<div class=\"pl-guide-layout\"><div class=\"pl-guide-document-pane\">"
+            L"<div class=\"pl-guide-document\"><span id=\"pl-guide-top\"></span>" +
+            wxString(guideOutput.documentHtml) +
+            L"</div><a href=\"#pl-guide-top\" class=\"back-to-top pl-guide-back-to-top no-print\" "
+            L"aria-label=\"" +
+            _(L"Back to top") +
+            L"\">&#8593;</a>"
+            L"</div><div class=\"pl-guide-notes\">" +
+            noteCardsHtml + L"</div></div>" + ProjectReportFormat::FormatHtmlReportEnd();
+        // the page-wide back-to-top button is meaningless here (the document and notes
+        // panes scroll independently of the page), so drop it in favor of the one scoped
+        // to the document pane above
+        ProjectReportFormat::StripBackToTopButton(formattedGuide);
+
+        auto* pageHandler =
+            static_cast<HighlightedTextPageHandler*>(m_plainLanguageGuidePageHandler.get());
+        if (!m_plainLanguageGuidePageKey.empty())
+            {
+            pageHandler->RemovePage(m_plainLanguageGuidePageKey);
+            }
+        // fresh key each time so the backend refetches instead of serving a cached page
+        static size_t refreshCounter{ 0 };
+        m_plainLanguageGuidePageKey = wxString::Format(L"plain-language-guide-%d-%zu.html",
+                                                       guideWindow->GetId(), ++refreshCounter);
+        pageHandler->SetPage(m_plainLanguageGuidePageKey,
+                             NavLink::AnchorsToExplanationScheme(formattedGuide).utf8_string());
+        guideWindow->LoadURL(HighlightedTextPageHandler::GetScheme() + L":" +
+                             m_plainLanguageGuidePageKey);
+
+        view->GetPlainLanguageGuideView().InsertWindow(0, guideWindow);
         }
     }
 

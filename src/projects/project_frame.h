@@ -233,6 +233,11 @@ class ProjectDocChildFrame : public wxDocChildFrame
 
     void OnGradeScaleDropdown(wxRibbonButtonBarEvent& evt) { evt.PopupMenu(&m_gradeScaleMenu); }
 
+    void OnPlainLanguageGuideListDropdown(wxRibbonButtonBarEvent& evt)
+        {
+        evt.PopupMenu(&m_plainLanguageGuideListMenu);
+        }
+
     void OnBarLabelsButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
     void OnDropShadow([[maybe_unused]] wxRibbonButtonBarEvent& event);
@@ -272,6 +277,8 @@ class ProjectDocChildFrame : public wxDocChildFrame
     void OnAggressivelyExclude([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
     void OnEditStatsReportButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
+
+    void OnPlainLanguageGuideListSelected(wxCommandEvent& event);
 
     void OnBoxPlotShowAllPointsButton([[maybe_unused]] wxRibbonButtonBarEvent& event);
 
@@ -363,6 +370,7 @@ class ProjectDocChildFrame : public wxDocChildFrame
     wxMenu m_adultTestsMenu;
     wxMenu m_secondLanguageTestsMenu;
     wxMenu m_raygorStyleMenu;
+    wxMenu m_plainLanguageGuideListMenu;
     };
 
 #endif // PROJECT_FRAME_H

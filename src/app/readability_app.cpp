@@ -2608,6 +2608,21 @@ void ReadabilityApp::LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* hom
     }
 
 //-----------------------------------
+void ReadabilityApp::LoadRibbonHomePagePlainLanguageGuideSection(wxRibbonPage* homePage)
+    {
+    auto* editPanel = new wxRibbonPanel(
+        homePage, MainFrame::ID_EDIT_RIBBON_PLAIN_LANGUAGE_GUIDE_PANEL, _(L"Edit"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+
+    auto* editButtonBar = new wxRibbonButtonBar(editPanel, MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
+
+    editButtonBar->AddDropdownButton(XRCID("ID_PLAIN_LANGUAGE_GUIDE_LIST"), _(L"Plain Language"),
+                                     ReadSvgIcon(L"ribbon/plain-language-guide.svg"),
+                                     _(L"Change the Plain Language Guide's phrase list."));
+    editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"), _(L"Copy"));
+    }
+
+//-----------------------------------
 void ReadabilityApp::LoadRibbonHomePageExplanationListSection(wxRibbonPage* homePage)
     {
     auto* editPanel = new wxRibbonPanel(homePage, MainFrame::ID_EDIT_RIBBON_EXPLANATION_LIST_PANEL,
@@ -2716,6 +2731,7 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         LoadRibbonHomePageExplanationListSection(GetMainFrameEx()->m_homeRibbonPage);
         LoadRibbonHomePageTextWindowSection(GetMainFrameEx()->m_homeRibbonPage);
         LoadRibbonHomePageStatisticsReportSection(GetMainFrameEx()->m_homeRibbonPage);
+        LoadRibbonHomePagePlainLanguageGuideSection(GetMainFrameEx()->m_homeRibbonPage);
         LoadRibbonHomePageGraphSection(GetMainFrameEx()->m_homeRibbonPage, doc);
         }
     else // rtype == RibbonType::MainFrameRibbon
@@ -3238,6 +3254,7 @@ wxIMPLEMENT_CLASS(MainFrame, Wisteria::UI::BaseMainFrame);
 std::map<int, wxString> MainFrame::m_testBundleMenuIds;
 std::map<int, wxString> MainFrame::m_customTestMenuIds;
 std::map<int, wxString> MainFrame::m_examplesMenuIds;
+std::map<int, wxString> MainFrame::m_plainLanguageGuideListMenuIds;
 
 //-------------------------------------------------------
 void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
@@ -3623,7 +3640,8 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
                      const wxArrayString& defaultFileExtensions, const wxString& title,
                      const wxPoint& pos, const wxSize& size, long type)
     : Wisteria::UI::BaseMainFrame(manager, frame, defaultFileExtensions, title, pos, size, type),
-      CUSTOM_TEST_RANGE(1000), EXAMPLE_RANGE(300), TEST_BUNDLE_RANGE(300)
+      CUSTOM_TEST_RANGE(1000), EXAMPLE_RANGE(300), TEST_BUNDLE_RANGE(300),
+      PLAIN_LANGUAGE_GUIDE_LIST_RANGE(100)
     {
     Bind(wxEVT_MENU, &MainFrame::OnOpenExample, this, EXAMPLE_RANGE.GetFirstId(),
          EXAMPLE_RANGE.GetLastId());
@@ -4337,6 +4355,7 @@ void ReadabilityApp::InitProjectSidebar()
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/word-cloud.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"ribbon/donut-subgrouped.svg"));
     imgList.push_back(GetResourceManager().GetSVG(L"tests/inflesz-test.svg"));
+    imgList.push_back(GetResourceManager().GetSVG(L"ribbon/plain-language-guide.svg"));
     }
 
 //---------------------------------------------------
@@ -5011,6 +5030,50 @@ void MainFrame::AddExamplesToMenu(wxMenu* exampleMenu)
                 exampleMenu->Append(menuId, fName.GetName(), files[i]);
                 }
             }
+        }
+    }
+
+//-------------------------------------------------------
+void MainFrame::FillPlainLanguageGuideListMenu(wxMenu& menu, const wxString& currentListName)
+    {
+    while (menu.GetMenuItemCount() != 0U)
+        {
+        menu.Destroy(menu.FindItemByPosition(0));
+        }
+
+    // the bundled lists are fixed for the life of the program, so only allocate
+    // menu IDs for them once and reuse the same IDs on every rebuild
+    if (m_plainLanguageGuideListMenuIds.empty())
+        {
+        const int noneId = wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetNextId();
+        m_plainLanguageGuideListMenuIds.insert(std::make_pair(noneId, wxString{}));
+
+        wxArrayString listFiles;
+        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
+                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
+        listFiles.Sort();
+        for (const auto& listFile : listFiles)
+            {
+            const int menuId =
+                wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetNextId();
+            if (menuId == wxNOT_FOUND)
+                {
+                break;
+                }
+            // GetPlainLanguageGuideListName() stores a bare filename (resolved against
+            // the bundled directory at load time), not a full path
+            m_plainLanguageGuideListMenuIds.insert(
+                std::make_pair(menuId, wxFileName{ listFile }.GetFullName()));
+            }
+        }
+
+    for (const auto& [id, listFile] : m_plainLanguageGuideListMenuIds)
+        {
+        auto* item =
+            new wxMenuItem(&menu, id, BaseProjectView::PlainLanguageGuideListNameToLabel(listFile),
+                           wxString{}, wxITEM_CHECK);
+        menu.Append(item);
+        item->Check(listFile == currentListName);
         }
     }
 

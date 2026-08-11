@@ -54,6 +54,8 @@
 #include "../Wisteria-Dataviz/src/import/rtf_encode.h"
 #include "../app/optionenums.h"
 #include "../indexing/word_collection.h"
+#include <map>
+#include <unordered_map>
 
 template<typename documentT, typename highlightDeterminantT>
 size_t FormatWordCollectionHighlightedWords(
@@ -643,6 +645,255 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
     text += endSection;
 
     return text.length();
+    }
+
+//-----------------------------------------------------------
+/// @brief The rendered output of a plain language guide.
+///     This contains the document text (left pane, with unexplained technical phrases highlighted)
+///     and the note cards (right pane, one per unexplained phrase, in the order
+///     that they first appear in the document).
+struct PlainLanguageGuideOutput
+    {
+    std::wstring documentHtml;
+    std::wstring noteCardsHtml;
+    };
+
+/// @brief Converts backtick-delimited code spans (e.g., `` `std::vector` ``) in
+///     already HTML-encoded text into `<tt>`/`</tt>` tags.
+/// @param text HTML-encoded text (backticks aren't touched by HTML encoding,
+///     so this is safe to run afterward).
+/// @returns The text with backtick pairs replaced by `<tt>`/`</tt>`.
+[[nodiscard]]
+inline std::wstring ConvertBackticksToTypeWriter(std::wstring text)
+    {
+    bool openTag{ false };
+    for (size_t pos = text.find(L'`'); pos != std::wstring::npos; pos = text.find(L'`', pos))
+        {
+        const std::wstring_view tag{ openTag ? L"</tt>" : L"<tt>" };
+        text.replace(pos, 1, tag);
+        pos += tag.length();
+        openTag = !openTag;
+        }
+    return text;
+    }
+
+/// @brief Builds the Plain Language Guide report. Highlights every occurrence of an
+///     "unexplained" technical phrase (one whose plain-language replacement was never
+///     found nearby, see document::analyze_plain_language_guide()). Adds a note card
+///     for each such phrase (phrase and detailed explanation), in first-occurrence order.
+/// @details Phrases whose replacement WAS found nearby at least once are never
+///     highlighted and get no note (get_plain_language_phrase_explained()).
+template<typename documentT>
+PlainLanguageGuideOutput
+FormatWordCollectionPlainLanguageGuide(const std::shared_ptr<documentT>& theDocument,
+                                       const std::wstring& highlightClass,
+                                       const std::wstring& tabSymbol, const std::wstring& newLine)
+    {
+    PlainLanguageGuideOutput output;
+
+    const auto& occurrences = theDocument->get_plain_language_phrase_indices();
+    const auto& explainedFlags = theDocument->get_plain_language_phrase_explained();
+    const auto& phrases = theDocument->get_plain_language_phrases().get_phrases();
+
+    // assign each unexplained phrase a stable note ID (in first-occurrence order), and
+    // map every occurrence (word index) of it to that ID for the highlighting pass below
+
+    // phrase-collection index -> note ID
+    std::map<size_t, size_t> phraseIndexToNoteId;
+    // word index -> note ID
+    std::unordered_map<size_t, size_t> occurrenceToNoteId;
+    for (const auto& occurrence : occurrences)
+        {
+        const size_t phraseIdx = occurrence.second;
+        if (phraseIdx >= explainedFlags.size() || explainedFlags[phraseIdx])
+            {
+            continue; // explained -- never highlighted, no note
+            }
+        const auto [iter, inserted] =
+            phraseIndexToNoteId.try_emplace(phraseIdx, phraseIndexToNoteId.size() + 1);
+        occurrenceToNoteId[occurrence.first] = iter->second;
+        }
+
+    // note cards, in first-occurrence (i.e., note ID) order
+    std::vector<size_t> phraseIdxByNoteId(phraseIndexToNoteId.size());
+    for (const auto& indexAndNoteId : phraseIndexToNoteId)
+        {
+        phraseIdxByNoteId[indexAndNoteId.second - 1] = indexAndNoteId.first;
+        }
+    for (size_t noteId = 1; noteId <= phraseIdxByNoteId.size(); ++noteId)
+        {
+        const auto& entry = phrases[phraseIdxByNoteId[noteId - 1]];
+        std::wstring phraseText{ entry.first.to_string().c_str() };
+        std::wstring explanation{ entry.second.explanation.c_str() };
+        if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(phraseText))
+            {
+            phraseText = lily_of_the_valley::html_encode_text::simple_encode(phraseText);
+            }
+        if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(explanation))
+            {
+            explanation = lily_of_the_valley::html_encode_text::simple_encode(explanation);
+            }
+        phraseText = ConvertBackticksToTypeWriter(std::move(phraseText));
+        explanation = ConvertBackticksToTypeWriter(std::move(explanation));
+        output.noteCardsHtml.append(L"<div class=\"pl-guide-note-card\" id=\"pl-note-")
+            .append(std::to_wstring(noteId))
+            .append(L"\">\n<p class=\"pl-guide-note-phrase\">")
+            .append(phraseText)
+            .append(L"</p>\n<p>")
+            .append(explanation)
+            .append(L"</p>\n</div>\n");
+        }
+
+    // the document text, with unexplained phrases highlighted
+    auto punctPos = theDocument->get_punctuation().cbegin();
+    auto punctEnd = theDocument->get_punctuation().cend();
+    // (phrase highlight "countdown": how many more words are left in the phrase
+    //  currently being highlighted; 0 means not currently highlighting)
+    size_t phraseHighlightWordsRemaining{ 0 };
+    std::wstring currentWord;
+    for (const auto& currentParagraph : theDocument->get_paragraphs())
+        {
+        output.documentHtml += L"<p class=\"pl-guide-paragraph\">";
+        output.documentHtml += tabSymbol;
+        for (size_t j = currentParagraph.get_first_sentence_index();
+             j <= currentParagraph.get_last_sentence_index(); ++j)
+            {
+            if (j >= theDocument->get_sentences().size())
+                {
+                // sanity trap, shouldn't happen
+                continue;
+                }
+            const grammar::sentence_info currentSentence = theDocument->get_sentences().at(j);
+            bool atFirstWordInSentence = true;
+            bool sentenceTerminatorAppendedAlready = false;
+            currentWord.clear();
+            for (size_t i = currentSentence.get_first_word_index();
+                 i <= currentSentence.get_last_word_index(); ++i)
+                {
+                if (i >= theDocument->get_word_count())
+                    {
+                    continue;
+                    }
+                currentWord = theDocument->get_word(i).c_str();
+                if (!atFirstWordInSentence)
+                    {
+                    output.documentHtml += L' ';
+                    }
+                atFirstWordInSentence = false;
+                // punctuation in front of this word
+                while (punctPos != punctEnd && punctPos->get_word_position() == i)
+                    {
+                    std::wstring punct(1, punctPos->get_punctuation_mark());
+                    if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(punct))
+                        {
+                        punct = lily_of_the_valley::html_encode_text::simple_encode(punct);
+                        }
+                    output.documentHtml += punct;
+                    ++punctPos;
+                    }
+
+                // start highlighting an unexplained phrase's occurrence here?
+                if (phraseHighlightWordsRemaining == 0)
+                    {
+                    const auto noteIdPos = occurrenceToNoteId.find(i);
+                    if (noteIdPos != occurrenceToNoteId.cend())
+                        {
+                        const size_t phraseIdx = phraseIdxByNoteId[noteIdPos->second - 1];
+                        output.documentHtml.append(L"<a class=\"")
+                            .append(highlightClass)
+                            .append(L"\" href=\"#pl-note-")
+                            .append(std::to_wstring(noteIdPos->second))
+                            .append(L"\" data-plain-language-id=\"")
+                            .append(std::to_wstring(noteIdPos->second))
+                            .append(L"\">");
+                        phraseHighlightWordsRemaining = phrases[phraseIdx].first.get_word_count();
+                        }
+                    }
+
+                if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(currentWord))
+                    {
+                    currentWord = lily_of_the_valley::html_encode_text::simple_encode(currentWord);
+                    }
+                output.documentHtml += currentWord;
+
+                if (phraseHighlightWordsRemaining > 0)
+                    {
+                    --phraseHighlightWordsRemaining;
+                    if (phraseHighlightWordsRemaining == 0)
+                        {
+                        output.documentHtml += L"</a>";
+                        }
+                    }
+
+                // punctuation connected after this word
+                while (punctPos != punctEnd && punctPos->get_word_position() == i + 1 &&
+                       punctPos->is_connected_to_previous_word())
+                    {
+                    auto nextPunctPos = (punctPos + 1);
+                    // only pair with the terminator if this is truly the last connected
+                    // mark, or breaking out here drops the rest (e.g. half a surrogate pair)
+                    if (i == currentSentence.get_last_word_index() &&
+                        (nextPunctPos == punctEnd || nextPunctPos->get_word_position() != i + 1 ||
+                         !nextPunctPos->is_connected_to_previous_word()))
+                        {
+                        std::wstring endingPunctuation(1, currentSentence.get_ending_punctuation());
+                        std::wstring punct(1, punctPos->get_punctuation_mark());
+                        endingPunctuation =
+                            lily_of_the_valley::html_encode_text::simple_encode(endingPunctuation);
+                        punct = lily_of_the_valley::html_encode_text::simple_encode(punct);
+                        if (characters::is_character::is_quote(punctPos->get_punctuation_mark()))
+                            {
+                            output.documentHtml.append(endingPunctuation).append(punct);
+                            }
+                        else
+                            {
+                            output.documentHtml.append(punct).append(endingPunctuation);
+                            }
+                        sentenceTerminatorAppendedAlready = true;
+                        ++punctPos;
+                        break;
+                        }
+                    std::wstring punct(1, punctPos->get_punctuation_mark());
+                    if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(punct))
+                        {
+                        punct = lily_of_the_valley::html_encode_text::simple_encode(punct);
+                        }
+                    output.documentHtml += punct;
+                    ++punctPos;
+                    }
+                }
+
+            if (!sentenceTerminatorAppendedAlready)
+                {
+                if (!currentWord.empty() && currentWord.back() == L'.')
+                    { /*noop*/
+                    }
+                else
+                    {
+                    std::wstring endingPunctuation(1, currentSentence.get_ending_punctuation());
+                    if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(
+                            endingPunctuation))
+                        {
+                        endingPunctuation =
+                            lily_of_the_valley::html_encode_text::simple_encode(endingPunctuation);
+                        }
+                    output.documentHtml += endingPunctuation;
+                    }
+                }
+            output.documentHtml += L"  ";
+            }
+        if (currentParagraph.get_sentence_count() > 0)
+            {
+            output.documentHtml.erase(output.documentHtml.end() - 2, output.documentHtml.cend());
+            }
+        output.documentHtml += L"</p>";
+        for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)
+            {
+            output.documentHtml += newLine;
+            }
+        }
+
+    return output;
     }
 
 //------------------------------------------------

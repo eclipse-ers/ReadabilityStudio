@@ -67,6 +67,7 @@
 #include "../graphs/frasegraph.h"
 #include "../indexing/german_syllabize.h"
 #include "../indexing/phrase.h"
+#include "../indexing/plain_language_phrase.h"
 #include "../indexing/spanish_syllabize.h"
 #include "../indexing/word_collection.h"
 #include "../readability/custom_readability_test.h"
@@ -2180,6 +2181,31 @@ class BaseProject : public ProjectRefresh
         m_excluded_phrases = that.m_excluded_phrases;
         }
 
+    /** @returns The filename (e.g., @c "legal-terms.txt") of the bundled Plain Language
+            Guide phrase list currently selected for this project, or an empty string if
+            the feature is disabled ("None," the default).
+        @note This is always resolved against the fixed, bundled `resources/words/plain-language`
+            directory.*/
+    [[nodiscard]]
+    wxString GetPlainLanguageGuideListName() const
+        {
+        return m_plainLanguageGuideListName;
+        }
+
+    /** @brief Sets the bundled Plain Language Guide list to use (by filename), or an
+            empty string to disable the feature.
+        @param name The bundled list's filename.
+        @note This only sets the name; call LoadPlainLanguageGuideList() explicitly
+            afterward to reload it.*/
+    void SetPlainLanguageGuideListName(const wxString& name)
+        {
+        m_plainLanguageGuideListName = name;
+        }
+
+    /// @brief Reloads the Plain Language Guide phrase list from the bundled resource
+    ///     folder.
+    void LoadPlainLanguageGuideList();
+
     // Tags for excluding blocks of text
     [[nodiscard]]
     const std::vector<std::pair<wchar_t, wchar_t>>& GetExclusionBlockTags() const noexcept
@@ -2688,6 +2714,7 @@ class BaseProject : public ProjectRefresh
 
     // these can vary from project to project
     std::shared_ptr<grammar::phrase_collection> m_excluded_phrases{ nullptr };
+    std::shared_ptr<grammar::plain_language_phrase_collection> m_plain_language_phrases{ nullptr };
 
     StatisticsInfo m_statsInfo;
     StatisticsReportInfo m_statsReportInfo;
@@ -2707,6 +2734,9 @@ class BaseProject : public ProjectRefresh
 
     // phrases and word to exclude entirely from the document
     wxString m_excludedPhrasesPath;
+    // bundled Plain Language Guide phrase list filename (standard project only);
+    // empty means the feature is disabled ("None")
+    wxString m_plainLanguageGuideListName;
     std::vector<std::pair<wchar_t, wchar_t>> m_exclusionBlockTags;
 
     wxString m_projectDirectory;

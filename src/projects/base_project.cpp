@@ -117,6 +117,32 @@ std::map<comparable_first_pair<Goal::string_type, Goal::string_type>,
     };
 
 //-------------------------------------------------------
+void BaseProject::LoadPlainLanguageGuideList()
+    {
+    m_plain_language_phrases = std::make_shared<grammar::plain_language_phrase_collection>();
+    if (!GetPlainLanguageGuideListName().empty())
+        {
+        wxString filePath = wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")) +
+                            wxFileName::GetPathSeparator() + GetPlainLanguageGuideListName();
+        wxString phrases;
+        if (Wisteria::TextStream::ReadFile(filePath, phrases))
+            {
+            m_plain_language_phrases->load_phrases(phrases, true, false);
+            }
+        else
+            {
+            LogMessage(
+                wxString::Format(_(L"Plain Language Guide phrase list not found:\n\n%s\n\nFeature "
+                                   "will not be included in this project."),
+                                 filePath),
+                _(L"Warning"), wxOK | wxICON_EXCLAMATION);
+            SetModifiedFlag();
+            SetPlainLanguageGuideListName(wxString{});
+            }
+        }
+    }
+
+//-------------------------------------------------------
 bool BaseProject::LoadAppendedDocument()
     {
     if (!GetAppendedDocumentFilePath().empty())
@@ -187,6 +213,7 @@ void BaseProject::UpdateDocumentSettings()
     GetWords()->exclude_numerals(IsExcludingNumerals());
     GetWords()->exclude_proper_nouns(IsExcludingProperNouns());
     GetWords()->set_excluded_phrase_function(m_excluded_phrases);
+    GetWords()->set_plain_language_phrase_function(m_plain_language_phrases);
     GetWords()->include_excluded_phrase_first_occurrence(
         IsIncludingExcludedPhraseFirstOccurrence());
     GetWords()->clear_exclusion_block_tags();
@@ -438,6 +465,7 @@ BaseProject::BaseProject()
       m_wordsBreakdownInfo(wxGetApp().GetAppOptions()->GetWordsBreakdownInfo()),
       m_sentencesBreakdownInfo(wxGetApp().GetAppOptions()->GetSentencesBreakdownInfo()),
       m_excludedPhrasesPath(wxGetApp().GetAppOptions()->GetExcludedPhrasesPath()),
+      m_plainLanguageGuideListName(wxGetApp().GetAppOptions()->GetPlainLanguageGuideListName()),
       m_exclusionBlockTags(wxGetApp().GetAppOptions()->GetExclusionBlockTags()),
       m_appendedDocumentFilePath(wxGetApp().GetAppOptions()->GetAppendedDocumentFilePath())
     {
@@ -8776,6 +8804,9 @@ void BaseProject::CopySettings(const BaseProject& that)
 
     // phrases to be excluded
     m_excludedPhrasesPath = that.GetExcludedPhrasesPath();
+
+    // bundled Plain Language Guide phrase list
+    m_plainLanguageGuideListName = that.GetPlainLanguageGuideListName();
 
     m_exclusionBlockTags = that.GetExclusionBlockTags();
 

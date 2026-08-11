@@ -105,6 +105,7 @@ ExportAllDlg::ExportAllDlg(wxWindow* parent, BaseProjectDoc* doc, const bool fil
     m_exportTestResults = BaseProjectDoc::IsExportingTestResults();
     m_exportStatistics = BaseProjectDoc::IsExportingStatistics();
     m_exportWordiness = BaseProjectDoc::IsExportingWordiness();
+    m_exportPlainLanguageGuide = BaseProjectDoc::IsExportingPlainLanguageGuide();
     m_exportSightWords = BaseProjectDoc::IsExportingSightWords();
     m_exportWarnings = BaseProjectDoc::IsExportingWarnings();
     m_exportingLists = BaseProjectDoc::IsExportingLists();
@@ -136,7 +137,7 @@ void ExportAllDlg::OnOK([[maybe_unused]] wxCommandEvent& event)
         }
     if (IsStandardProject() && !m_exportHardWordLists && !m_exportSentencesBreakdown &&
         !m_exportGraphs && !m_exportTestResults && !m_exportStatistics && !m_exportWordiness &&
-        !m_exportSightWords)
+        !m_exportPlainLanguageGuide && !m_exportSightWords)
         {
         wxMessageBox(_(L"You must select at least one item to be saved."), _(L"Error"),
                      wxOK | wxICON_EXCLAMATION);
@@ -322,6 +323,16 @@ void ExportAllDlg::CreateControls()
                 inclusionSectionBoxSizer->GetStaticBox(), wxID_ANY, _(L"Grammar section"),
                 wxDefaultPosition, wxDefaultSize, 0, wxGenericValidator(&m_exportWordiness));
             inclusionSectionBoxSizer->Add(wordinessCheck, wxSizerFlags{}.Expand().Border());
+            }
+
+        if (view->GetPlainLanguageGuideView().GetWindowCount() > 0)
+            {
+            auto* plainLanguageGuideCheck =
+                new wxCheckBox(inclusionSectionBoxSizer->GetStaticBox(), wxID_ANY,
+                               BaseProjectView::GetPlainLanguageGuideLabel(), wxDefaultPosition,
+                               wxDefaultSize, 0, wxGenericValidator(&m_exportPlainLanguageGuide));
+            inclusionSectionBoxSizer->Add(plainLanguageGuideCheck,
+                                          wxSizerFlags{}.Expand().Border());
             }
 
         if (view->GetDolchSightWordsView().GetWindowCount() > 0)

@@ -60,6 +60,7 @@
 #include "../results-format/readability_messages.h"
 #include "../ui/controls/explanation_listctrl.h"
 #include "project_frame.h"
+#include <wx/filename.h>
 #include <wx/infobar.h>
 
 /// @brief Base view for batch and standard projects.
@@ -234,6 +235,45 @@ class BaseProjectView : public wxView
     static wxString GetGrammarLabel()
         {
         return _(L"Grammar");
+        }
+
+    [[nodiscard]]
+    static wxString GetPlainLanguageGuideLabel()
+        {
+        return _(L"Plain Language Guide");
+        }
+
+    /// @brief Converts a bundled Plain Language Guide list's filename to a display
+    ///     label (e.g., "legal-terms.txt" -> "Legal terms"; an empty filename -> "None").
+    /// @param fileName The list's filename.
+    /// @returns The display label.
+    [[nodiscard]]
+    static wxString PlainLanguageGuideListNameToLabel(const wxString& fileName)
+        {
+        if (fileName.empty())
+            {
+            return _(L"None");
+            }
+        wxString label{ wxFileName{ fileName }.GetName() };
+        label.Replace(L"-", L" ");
+        return label.Capitalize();
+        }
+
+    /// @brief Converts a Plain Language Guide display label back to its bundled
+    ///     list's filename (e.g., "Legal Terms" -> "legal-terms.txt"; "None" -> "").
+    /// @param label The display label.
+    /// @returns The list's filename.
+    [[nodiscard]]
+    static wxString PlainLanguageGuideLabelToListName(const wxString& label)
+        {
+        if (label.CmpNoCase(_(L"None")) == 0 || label.empty())
+            {
+            return wxString{};
+            }
+        wxString fileName{ label.Lower() };
+        fileName.Replace(L" ", L"-");
+        fileName += L".txt";
+        return fileName;
         }
 
     [[nodiscard]]
@@ -659,6 +699,7 @@ class BaseProjectView : public wxView
     constexpr static int HARRIS_JACOBSON_WORDS_LIST_PAGE_ID = wxID_HIGHEST + 18;
     constexpr static int MISSPELLED_WORD_LIST_PAGE_ID = wxID_HIGHEST + 19;
     constexpr static int WORDING_ERRORS_LIST_PAGE_ID = wxID_HIGHEST + 20;
+    constexpr static int PLAIN_LANGUAGE_GUIDE_PAGE_ID = wxID_HIGHEST + 21;
     // graph IDs
     //----------
     constexpr static int WORD_BREAKDOWN_PAGE_ID = wxID_HIGHEST + 30;
@@ -728,6 +769,7 @@ class BaseProjectView : public wxView
     constexpr static int SIDEBAR_HISTOGRAMS_SECTION_ID = wxID_HIGHEST + 96;
     constexpr static int SIDEBAR_STATS_SUMMARY_SECTION_ID = wxID_HIGHEST + 97;
     constexpr static int SIDEBAR_SENTENCES_BREAKDOWN_SECTION_ID = wxID_HIGHEST + 98;
+    constexpr static int SIDEBAR_PLAIN_LANGUAGE_GUIDE_SECTION_ID = PLAIN_LANGUAGE_GUIDE_PAGE_ID;
     // ribbon
     //----------
     constexpr static int RIBBON_TOOLS_BUTTON_BAR_ID = wxID_HIGHEST + 99;

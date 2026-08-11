@@ -179,6 +179,7 @@ class ProjectDoc final : public BaseProjectDoc
     ///     respective test is added or removed.
     void UpdateHighlightedTextWindows();
     void DisplayGrammar();
+    void DisplayPlainLanguageGuide();
     void DisplayOverlyLongSentences();
     void DisplaySightWords();
     void SetReadabilityTestResult(const wxString& testId, const wxString& testName,
@@ -429,6 +430,10 @@ class ProjectDoc final : public BaseProjectDoc
     HighlightedTextBufferMap m_highlightedTextBuffers;
     // pending scroll offsets to restore after a highlighted-text refresh, keyed by window ID
     std::map<wxWindowID, int> m_highlightedScrollOffsets;
+    // serves the Plain Language Guide window's HTML by URL, same as m_highlightedTextBuffers,
+    // but kept separate since that registry also implies RTF-exportable
+    wxSharedPtr<wxWebViewHandler> m_plainLanguageGuidePageHandler{ new HighlightedTextPageHandler };
+    wxString m_plainLanguageGuidePageKey;
 
     wxDateTime m_sourceFileLastModified;
     constexpr static int REALTIME_UPDATE_INTERVAL{ 5000 }; // in milliseconds

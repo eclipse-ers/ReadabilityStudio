@@ -67,6 +67,7 @@ bool BaseProjectDoc::m_exportGraphs = true;
 bool BaseProjectDoc::m_exportTestResults = true;
 bool BaseProjectDoc::m_exportStatistics = true;
 bool BaseProjectDoc::m_exportWordiness = true;
+bool BaseProjectDoc::m_exportPlainLanguageGuide = true;
 bool BaseProjectDoc::m_exportSightWords = true;
 bool BaseProjectDoc::m_exportWarnings = true;
 bool BaseProjectDoc::m_exportingLists = true;
@@ -171,8 +172,11 @@ void BaseProjectDoc::CopyDocumentLevelSettings(const BaseProjectDoc& that, const
     // load appended template file (if there is one)
     LoadAppendedDocument();
 
-    // load the excluded phrases.
+    // load the excluded phrases
     LoadExcludePhrases();
+
+    // load the Plain Language Guide phrase list
+    LoadPlainLanguageGuideList();
 
     // not really transferred from batch to standard, but include for completeness
     m_realTimeUpdate = that.m_realTimeUpdate;
@@ -1186,6 +1190,13 @@ void BaseProjectDoc::LoadSettingsFile(const wchar_t* settingsFileText)
             XmlFormat::GetString(parsingSection, parsingSectionEnd,
                                  ReadabilityAppOptions::XML_EXCLUDED_PHRASES_PATH.data()));
         LoadExcludePhrases();
+        // Bundled Plain Language Guide phrase list filename.
+        // Note: this only sets the name here, and not used by batch projects.
+        // Standard projects are responsible for calling
+        // LoadPlainLanguageGuideList() to actually load the list's content.
+        SetPlainLanguageGuideListName(
+            XmlFormat::GetString(parsingSection, parsingSectionEnd,
+                                 ReadabilityAppOptions::XML_PLAIN_LANGUAGE_GUIDE_LIST.data()));
         const wchar_t* exclusionBlockTagSection =
             lily_of_the_valley::html_extract_text::find_element(
                 parsingSection, parsingSectionEnd, ReadabilityAppOptions::XML_EXCLUDE_BLOCK_TAGS_W,
@@ -2488,6 +2499,11 @@ wxString BaseProjectDoc::FormatProjectSettings() const
     // file path to phrases to exclude from analysis
     XmlFormat::FormatSection(sectionText, ReadabilityAppOptions::XML_EXCLUDED_PHRASES_PATH.data(),
                              GetExcludedPhrasesPath(), 2);
+    fileText += sectionText;
+    // bundled Plain Language Guide phrase list filename
+    XmlFormat::FormatSection(sectionText,
+                             ReadabilityAppOptions::XML_PLAIN_LANGUAGE_GUIDE_LIST.data(),
+                             GetPlainLanguageGuideListName(), 2);
     fileText += sectionText;
     // text block tag exclusion
     fileText.append(L"\t<")

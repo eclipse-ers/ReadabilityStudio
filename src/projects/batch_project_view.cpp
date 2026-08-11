@@ -1113,6 +1113,7 @@ void BatchProjectView::OnItemSelected(wxCommandEvent& event)
         hideEditPanel(MainFrame::ID_EDIT_RIBBON_GENERAL_READABILITY_GRAPH_PANEL);
     // hide standard project panels that we don't use here
     hideEditPanel(MainFrame::ID_EDIT_RIBBON_STATS_SUMMARY_REPORT_PANEL);
+    hideEditPanel(MainFrame::ID_EDIT_RIBBON_PLAIN_LANGUAGE_GUIDE_PANEL);
     hideEditPanel(MainFrame::ID_EDIT_RIBBON_LIST_SIMPLE_WITH_SUM_PANEL);
     hideEditPanel(MainFrame::ID_EDIT_RIBBON_LIST_SIMPLE_WITH_SUM_AND_EXCLUDE_PANEL);
     hideEditPanel(MainFrame::ID_EDIT_RIBBON_LIST_SIMPLE_PANEL);

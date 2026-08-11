@@ -11,19 +11,20 @@
  *   Blake Madden - initial implementation
  ********************************************************************************/
 
+#include "../src/indexing/abbreviation.h"
+#include "../src/indexing/conjunction.h"
+#include "../src/indexing/german_syllabize.h"
+#include "../src/indexing/negating_word.h"
+#include "../src/indexing/passive_voice.h"
+#include "../src/indexing/phrase.h"
+#include "../src/indexing/plain_language_phrase.h"
+#include "../src/indexing/pronoun.h"
+#include "../src/indexing/spanish_syllabize.h"
+#include "../src/indexing/tokenize.h"
+#include "../src/indexing/word_collection.h"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "../src/indexing/abbreviation.h"
-#include "../src/indexing/passive_voice.h"
-#include "../src/indexing/tokenize.h"
-#include "../src/indexing/conjunction.h"
-#include "../src/indexing/pronoun.h"
-#include "../src/indexing/negating_word.h"
-#include "../src/indexing/spanish_syllabize.h"
-#include "../src/indexing/german_syllabize.h"
-#include "../src/indexing/phrase.h"
-#include "../src/indexing/word_collection.h"
 
 // clang-format off
 // NOLINTBEGIN
@@ -45,6 +46,9 @@ extern grammar::phrase_collection copyrightPMap;
 extern grammar::phrase_collection citationPMap;
 std::shared_ptr<grammar::phrase_collection> excludedPMap{
     std::make_shared<grammar::phrase_collection>()
+};
+std::shared_ptr<grammar::plain_language_phrase_collection> plainLanguagePMap{
+    std::make_shared<grammar::plain_language_phrase_collection>()
 };
 extern word_list Known_proper_nouns;
 extern word_list Known_personal_nouns;
@@ -87,42 +91,42 @@ TEST_CASE("Bullets", "[bullets]")
     SECTION("Null")
         {
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(L"").first == false);
+        CHECK_FALSE(is_indented(L"").first);
         CHECK(is_indented(L"").second == 0);
         }
     SECTION("Tab")
         {
         const wchar_t text[] = L"\titem 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("One Space")
         {
         const wchar_t text[] = L" item 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Two Space")
         {
         const wchar_t text[] = L"  item 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Spaces")
         {
         const wchar_t text[] = L"   item 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("All Spaces")
         {
         const wchar_t text[] = L"     ";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Bullet")
@@ -151,13 +155,13 @@ TEST_CASE("Bullets", "[bullets]")
         grammar::is_bulleted_text is_indented;
         CHECK(is_indented(text).first);
         CHECK(is_indented(text).second == 3);
-        CHECK(is_indented(L"12:").first == false);//boundary check
+        CHECK_FALSE(is_indented(L"12:").first);//boundary check
         }
     SECTION("Number Bullet Time")
         {
         const wchar_t text[] = L"12:55 item 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Number Bullet")
@@ -178,14 +182,14 @@ TEST_CASE("Bullets", "[bullets]")
         {
         const wchar_t text[] = L"1, item 1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Number Bullet 3")
         {
         const wchar_t text[] = L"1";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Number List")
@@ -207,7 +211,7 @@ TEST_CASE("Bullets", "[bullets]")
         CHECK(is_indented(text).second == 1);
         CHECK(is_indented(text+14).first);
         CHECK(is_indented(text+14).second == 1);
-        CHECK(is_indented(text+24).first == false);//\r\n will be seen as only one line
+        CHECK_FALSE(is_indented(text+24).first);//\r\n will be seen as only one line
         CHECK(is_indented(text+24).second == 0);
         }
     SECTION("Number Number Parenthesis")
@@ -242,14 +246,14 @@ TEST_CASE("Bullets", "[bullets]")
         {
         const wchar_t text[] = L"B. Madden.";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Plain Text")
         {
         const wchar_t text[] = L"This is some text";
         grammar::is_bulleted_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Dash")
@@ -280,10 +284,10 @@ TEST_CASE("End of line", "[end-of-line]")
         CHECK(isEol(L'\n'));
         CHECK(isEol(L'\r'));
         CHECK(isEol(L'\f'));//formfeed
-        CHECK(isEol(L' ') == false);
-        CHECK(isEol(L'n') == false);
-        CHECK(isEol(L'\t') == false);
-        CHECK(isEol(L'r') == false);
+        CHECK_FALSE(isEol(L' '));
+        CHECK_FALSE(isEol(L'n'));
+        CHECK_FALSE(isEol(L'\t'));
+        CHECK_FALSE(isEol(L'r'));
         }
     SECTION("Just New Lines")
         {
@@ -407,7 +411,7 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         m_strings.clear();
         m_strings.push_back(L"am");
         m_strings.push_back(L"Holden");//proper name that looks like a verb
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
         CHECK(wordCount == 0);
 
         m_strings.clear();
@@ -429,10 +433,10 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         m_strings.clear();
         m_strings.push_back(L"am");
         m_strings.push_back(L"excited");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.push_back(L"from");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings[2] = L"by";
         CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount));
@@ -447,14 +451,14 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         CHECK(wordCount == 4);
 
         m_strings[3] = L"bye";
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
         CHECK(wordCount == 0);
 
         m_strings.clear();
         m_strings.push_back(L"am");
         m_strings.push_back(L"not");
         m_strings.push_back(L"excited");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
         CHECK(wordCount == 0);
         }
     SECTION("Simple")
@@ -711,37 +715,37 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         m_strings.clear();
         m_strings.push_back(L"sam");
         m_strings.push_back(L"given");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"waste");
         m_strings.push_back(L"given");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"art");
         m_strings.push_back(L"portrayed");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"beat");
         m_strings.push_back(L"saved");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"beats");
         m_strings.push_back(L"saved");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"ist");
         m_strings.push_back(L"paved");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"worm");
         m_strings.push_back(L"taken");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
         CHECK(wordCount == 0);
         }
     SECTION("Not Past Participles")
@@ -752,48 +756,48 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         m_strings.clear();
         m_strings.push_back(L"am");
         m_strings.push_back(L"gists");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"was");
         m_strings.push_back(L"gists");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"are");
         m_strings.push_back(L"portrayer");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"been");
         m_strings.push_back(L"saver");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"being");
         m_strings.push_back(L"saver");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"is");
         m_strings.push_back(L"pavor");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"taker");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"eighteen");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"seven");
         m_strings.push_back(L"by");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
@@ -804,33 +808,33 @@ TEST_CASE("Passive Voice", "[passive-voice]")
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"Heaven");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"alien");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"haven");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"infrared");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"sacred");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
 
         m_strings.clear();
         m_strings.push_back(L"were");
         m_strings.push_back(L"not");
         m_strings.push_back(L"eighteen");
-        CHECK(pasV(m_strings.begin(), m_strings.size(), wordCount) == false);
+        CHECK_FALSE(pasV(m_strings.begin(), m_strings.size(), wordCount));
         CHECK(wordCount == 0);
         }
     }
@@ -1011,7 +1015,7 @@ TEST_CASE("Phrases", "[phrase]")
         CHECK(phrases.get_phrases().at(2).second == L"");
         CHECK(phrases.get_phrases().at(2).first.get_type() == grammar::phrase_type::phrase_wordy);
         CHECK(phrases.get_phrases().size() == 3);
-        CHECK(phrases.is_sorted() == false);
+        CHECK_FALSE(phrases.is_sorted());
         }
     SECTION("Loading Phrases Preserve")
         {
@@ -1034,7 +1038,7 @@ TEST_CASE("Phrases", "[phrase]")
         CHECK(phrases.get_phrases().at(2).second == L"");
         CHECK(phrases.get_phrases().at(2).first.get_type() == grammar::phrase_type::phrase_wordy);
         CHECK(phrases.get_phrases().size() == 3);
-        CHECK(phrases.is_sorted() == false);
+        CHECK_FALSE(phrases.is_sorted());
         }
     SECTION("Loading Phrases One With Extra Columns")
         {
@@ -1172,17 +1176,17 @@ TEST_CASE("Phrase comparison", "[phrass]")
         cmpWords.push_back(L"Street");
         cmpWords.push_back(L"Fighter");
 
-        CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first == false);
+        CHECK_FALSE(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first);
         CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).second ==
             grammar::phrase_comparison_result::phrase_longer_than);
 
         cmpWords.push_back(L"A");
-        CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first == false);
+        CHECK_FALSE(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first);
         CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).second ==
             grammar::phrase_comparison_result::phrase_greater_than);
 
         cmpWords[2] = L"Two";
-        CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first == false);
+        CHECK_FALSE(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first);
         CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).second ==
             grammar::phrase_comparison_result::phrase_less_than);
 
@@ -1194,7 +1198,7 @@ TEST_CASE("Phrase comparison", "[phrass]")
         ph.clear_words();
         ph.set_trailing_exceptions(std::set<std::basic_string<wchar_t, traits::case_insensitive_ex>>{L"Alpha"});
         ph.add_word(L"Street"); ph.add_word(L"Fighter");
-        CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first == false);
+        CHECK_FALSE(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).first);
         CHECK(ph.equal_to_words(cmpWords.begin(), 0, cmpWords.size()).second ==
             grammar::phrase_comparison_result::phrase_rule_exception);
         }
@@ -1227,8 +1231,8 @@ TEST_CASE("Phrase comparison", "[phrass]")
         falsePositive2.push_back(L"gone");
 
         CHECK(ph.equal_to_words(positive.begin(), 0, positive.size()).first);
-        CHECK(ph.equal_to_words(falsePositive.begin(), 0, falsePositive.size()).first == false);
-        CHECK(ph.equal_to_words(falsePositive2.begin()+1, 1, falsePositive2.size()-1).first == false);
+        CHECK_FALSE(ph.equal_to_words(falsePositive.begin(), 0, falsePositive.size()).first);
+        CHECK_FALSE(ph.equal_to_words(falsePositive2.begin()+1, 1, falsePositive2.size()-1).first);
         }
     SECTION("To String")
         {
@@ -1252,35 +1256,35 @@ TEST_CASE("Phrase comparison", "[phrass]")
         // partial copy
         ph2.copy_words(ph.get_words(), 2);
         CHECK((ph2 < ph));
-        CHECK((ph < ph2) == false);
-        CHECK((ph == ph2) == false);
-        CHECK((ph2 == ph) == false);
+        CHECK_FALSE(ph < ph2);
+        CHECK_FALSE(ph == ph2);
+        CHECK_FALSE(ph2 == ph);
         // full copy (they should be the same then)
         ph2.copy_words(ph.get_words(), ph.get_word_count());
-        CHECK((ph2 < ph) == false);
-        CHECK((ph < ph2) == false);
+        CHECK_FALSE(ph2 < ph);
+        CHECK_FALSE(ph < ph2);
         CHECK((ph == ph2));
         CHECK((ph2 == ph));
         // should be case INsensitive
         ph2.get_words().at(0) = L"TIME";
-        CHECK((ph2 < ph) == false);
-        CHECK((ph < ph2) == false);
+        CHECK_FALSE(ph2 < ph);
+        CHECK_FALSE(ph < ph2);
         CHECK((ph == ph2));
         CHECK((ph2 == ph));
         // last word in phrase being bigger will make whole phrase bigger than the other
         ph2.get_words().at(3) = L"lite";
-        CHECK((ph2 < ph) == false);
+        CHECK_FALSE(ph2 < ph);
         CHECK((ph < ph2));
-        CHECK((ph == ph2) == false);
-        CHECK((ph2 == ph) == false);
+        CHECK_FALSE(ph == ph2);
+        CHECK_FALSE(ph2 == ph);
         // phrase that starts with "zoo" should be bigger,
         // even though it has less words than the other phrase
         ph2.clear_words();
         ph2.add_word(L"zoo");
-        CHECK((ph2 < ph) == false);
+        CHECK_FALSE(ph2 < ph);
         CHECK((ph < ph2));
-        CHECK((ph == ph2) == false);
-        CHECK((ph2 == ph) == false);
+        CHECK_FALSE(ph == ph2);
+        CHECK_FALSE(ph2 == ph);
         }
     SECTION("Copy Words")
         {
@@ -1359,7 +1363,7 @@ TEST_CASE("Phrase comparison", "[phrass]")
         ph.add_word(L"of");
         ph.add_word(L"your");
         ph.add_word(L"life");
-        CHECK(ph.is_empty() == false);
+        CHECK_FALSE(ph.is_empty());
         ph.clear_words();
         CHECK(ph.get_word_count() == 0);
         CHECK(ph.is_empty());
@@ -1438,8 +1442,8 @@ TEST_CASE("Double words", "[double words]")
         {
         is_double_word_exception exp;
         CHECK(exp(L"ha"));
-        CHECK(exp(L"hat") == false);
-        CHECK(exp(L"h") == false);
+        CHECK_FALSE(exp(L"hat"));
+        CHECK_FALSE(exp(L"h"));
         CHECK(exp(L"had"));
         CHECK(exp(L"that"));
         }
@@ -1447,8 +1451,8 @@ TEST_CASE("Double words", "[double words]")
         {
         is_double_word_exception exp;
         CHECK(exp(L"das"));
-        CHECK(exp(L"dast") == false);
-        CHECK(exp(L"da") == false);
+        CHECK_FALSE(exp(L"dast"));
+        CHECK_FALSE(exp(L"da"));
         CHECK(exp(L"der"));
         CHECK(exp(L"die"));
         CHECK(exp(L"sie"));
@@ -1456,7 +1460,7 @@ TEST_CASE("Double words", "[double words]")
     SECTION("Single Letter")
         {
         is_double_word_exception exp;
-        CHECK(exp(L"a") == false);
+        CHECK_FALSE(exp(L"a"));
         }
     SECTION("Single Punctuation And Number")
         {
@@ -1471,56 +1475,56 @@ TEST_CASE("Indent", "[indent]")
     SECTION("Null")
         {
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(L"").first == false);
+        CHECK_FALSE(is_indented(L"").first);
         CHECK(is_indented(L"").second == 0);
         }
     SECTION("Tab")
         {
         const wchar_t text[] = L"\titem 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == true);
+        CHECK(is_indented(text).first);
         CHECK(is_indented(text).second == 1);
         }
     SECTION("Space Tab")
         {
         const wchar_t text[] = L" \t item 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == true);
+        CHECK(is_indented(text).first);
         CHECK(is_indented(text).second == 3);
         }
     SECTION("No Space")
         {
         const wchar_t text[] = L"item 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("One Space")
         {
         const wchar_t text[] = L" item 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Two Space")
         {
         const wchar_t text[] = L"  item 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == false);
+        CHECK_FALSE(is_indented(text).first);
         CHECK(is_indented(text).second == 0);
         }
     SECTION("Spaces")
         {
         const wchar_t text[] = L"   item 1";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == true);
+        CHECK(is_indented(text).first);
         CHECK(is_indented(text).second == 3);
         }
     SECTION("All Spaces")
         {
         const wchar_t text[] = L"     ";
         grammar::is_indented_text is_indented;
-        CHECK(is_indented(text).first == true);
+        CHECK(is_indented(text).first);
         CHECK(is_indented(text).second == 5);
         }
     }
@@ -1560,28 +1564,28 @@ TEST_CASE("Personal pronouns", "[pronouns]")
     SECTION("Null")
         {
         is_personal_pronoun isPersonalPronoun;
-        CHECK(isPersonalPronoun(L"") == false);
+        CHECK_FALSE(isPersonalPronoun(L""));
         }
     SECTION("Most")
         {
         is_personal_pronoun isPersonalPronoun;
-        CHECK(isPersonalPronoun(L"hE") == true);
-        CHECK(isPersonalPronoun(L"hIM") == true);
-        CHECK(isPersonalPronoun(L"i") == true);
-        CHECK(isPersonalPronoun(L"Them") == true);
-        CHECK(isPersonalPronoun(L"WE") == true);
-        CHECK(isPersonalPronoun(L"uS") == true);
+        CHECK(isPersonalPronoun(L"hE"));
+        CHECK(isPersonalPronoun(L"hIM"));
+        CHECK(isPersonalPronoun(L"i"));
+        CHECK(isPersonalPronoun(L"Them"));
+        CHECK(isPersonalPronoun(L"WE"));
+        CHECK(isPersonalPronoun(L"uS"));
         }
     SECTION("None")
         {
         is_personal_pronoun isPersonalPronoun;
-        CHECK(isPersonalPronoun(L"An") == false);
-        CHECK(isPersonalPronoun(L"a") == false);
-        CHECK(isPersonalPronoun(L"a") == false);
-        CHECK(isPersonalPronoun(L"anderson") == false);
-        CHECK(isPersonalPronoun(L"butt") == false);
-        CHECK(isPersonalPronoun(L"ore") == false);
-        CHECK(isPersonalPronoun(L"some") == false);
+        CHECK_FALSE(isPersonalPronoun(L"An"));
+        CHECK_FALSE(isPersonalPronoun(L"a"));
+        CHECK_FALSE(isPersonalPronoun(L"a"));
+        CHECK_FALSE(isPersonalPronoun(L"anderson"));
+        CHECK_FALSE(isPersonalPronoun(L"butt"));
+        CHECK_FALSE(isPersonalPronoun(L"ore"));
+        CHECK_FALSE(isPersonalPronoun(L"some"));
         }
     }
 
@@ -1590,7 +1594,7 @@ TEST_CASE("Negating words", "[negating]")
     SECTION("Null")
         {
         is_negating isNegating;
-        CHECK(isNegating(L"") == false);
+        CHECK_FALSE(isNegating(L""));
         }
     SECTION("Most")
         {
@@ -1606,13 +1610,13 @@ TEST_CASE("Negating words", "[negating]")
     SECTION("None")
         {
         is_negating isNegating;
-        CHECK(isNegating(L"An") == false);
-        CHECK(isNegating(L"a") == false);
-        CHECK(isNegating(L"a") == false);
-        CHECK(isNegating(L"anderson") == false);
-        CHECK(isNegating(L"butt") == false);
-        CHECK(isNegating(L"ore") == false);
-        CHECK(isNegating(L"some") == false);
+        CHECK_FALSE(isNegating(L"An"));
+        CHECK_FALSE(isNegating(L"a"));
+        CHECK_FALSE(isNegating(L"a"));
+        CHECK_FALSE(isNegating(L"anderson"));
+        CHECK_FALSE(isNegating(L"butt"));
+        CHECK_FALSE(isNegating(L"ore"));
+        CHECK_FALSE(isNegating(L"some"));
         }
     }
 
@@ -1626,7 +1630,7 @@ TEST_CASE("Abbreviations", "[abbreviations]")
         const wchar_t* text = L"Hi Mr. Smith, are you and Ms. Smith going to MRU. ";
         CHECK(isAbbreviation({ text + 3, 3 }));
         CHECK(isAbbreviation({ text + 26, 3 }));
-        CHECK(isAbbreviation({ text + 45, 4 }) == false);
+        CHECK_FALSE(isAbbreviation({ text + 45, 4 }));
         }
     SECTION("Unknown Abbreviations")
         {
@@ -1636,7 +1640,7 @@ TEST_CASE("Abbreviations", "[abbreviations]")
     SECTION("Actually Acronym")
         {
         const wchar_t* text = L"Go to the RPTR. room";
-        CHECK(isAbbreviation({ text + 10, 5 }) == false);
+        CHECK_FALSE(isAbbreviation({ text + 10, 5 }));
         }
     SECTION("Hyphenated Abbreviations")
         {
@@ -1651,17 +1655,17 @@ TEST_CASE("Abbreviations", "[abbreviations]")
     SECTION("Not Abbreviation Too Short To Deduce")
         {
         const wchar_t* text = L"zt.";
-        CHECK(isAbbreviation(text) == false);
+        CHECK_FALSE(isAbbreviation(text));
         }
     SECTION("Not Abbreviation Really Acronym")
         {
         const wchar_t* text = L"k.a.o.s.";
-        CHECK(isAbbreviation(text) == false);
+        CHECK_FALSE(isAbbreviation(text));
         }
     SECTION("Not Abbreviation Really Initial")
         {
         const wchar_t* text = L"P.";
-        CHECK(isAbbreviation(text) == false);
+        CHECK_FALSE(isAbbreviation(text));
         }
     }
 
@@ -1685,10 +1689,10 @@ TEST_CASE("Spanish conjunction", "[conjunction]")
     SECTION("NonConjunctions")
         {
         is_spanish_coordinating_conjunction isConj;
-        CHECK(isConj(L"Perot") == false);
-        CHECK(isConj(L"Ye") == false);
-        CHECK(isConj(L"sin") == false);
-        CHECK(isConj(L"nin") == false);
+        CHECK_FALSE(isConj(L"Perot"));
+        CHECK_FALSE(isConj(L"Ye"));
+        CHECK_FALSE(isConj(L"sin"));
+        CHECK_FALSE(isConj(L"nin"));
         }
     }
 
@@ -1707,13 +1711,13 @@ TEST_CASE("English conjunction", "[conjunction]")
     SECTION("NonConjunctions")
         {
         is_english_coordinating_conjunction isConj;
-        CHECK(isConj(L"An") == false);
-        CHECK(isConj(L"a") == false);
-        CHECK(isConj(L"a") == false);
-        CHECK(isConj(L"anderson") == false);
-        CHECK(isConj(L"butt") == false);
-        CHECK(isConj(L"ore") == false);
-        CHECK(isConj(L"some") == false);
+        CHECK_FALSE(isConj(L"An"));
+        CHECK_FALSE(isConj(L"a"));
+        CHECK_FALSE(isConj(L"a"));
+        CHECK_FALSE(isConj(L"anderson"));
+        CHECK_FALSE(isConj(L"butt"));
+        CHECK_FALSE(isConj(L"ore"));
+        CHECK_FALSE(isConj(L"some"));
         }
     }
 
@@ -1736,10 +1740,10 @@ TEST_CASE("German conjunction", "[conjunction]")
     SECTION("NonConjunctions")
         {
         is_german_coordinating_conjunction isConj;
-        CHECK(isConj(L"undie") == false);
-        CHECK(isConj(L"ode") == false);
-        CHECK(isConj(L"abers") == false);
-        CHECK(isConj(L"sond") == false);
+        CHECK_FALSE(isConj(L"undie"));
+        CHECK_FALSE(isConj(L"ode"));
+        CHECK_FALSE(isConj(L"abers"));
+        CHECK_FALSE(isConj(L"sond"));
         }
     }
 
@@ -1754,8 +1758,8 @@ TEST_CASE("Exclude words", "[excludewords]")
         doc.load_document(text, wcslen(text), false, false, false, false);
 
         CHECK(doc.get_words()[0].is_valid());
-        CHECK(doc.get_words()[1].is_valid() == false);
-        CHECK(doc.get_words()[2].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[1].is_valid());
+        CHECK_FALSE(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
@@ -1764,8 +1768,8 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_words()[8].is_valid());
         CHECK(doc.get_words()[9].is_valid());
         CHECK(doc.get_words()[10].is_valid());
-        CHECK(doc.get_words()[11].is_valid() == false);
-        CHECK(doc.get_words()[12].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[11].is_valid());
+        CHECK_FALSE(doc.get_words()[12].is_valid());
         CHECK(doc.get_words()[13].is_valid());
         CHECK(doc.get_words()[14].is_valid());
         CHECK(doc.get_words()[15].is_valid());
@@ -1790,18 +1794,18 @@ TEST_CASE("Exclude words", "[excludewords]")
         doc.set_excluded_phrase_function(excludedPMap);
         doc.load_document(text, wcslen(text), false, false, false, false);
 
-        CHECK(doc.get_words()[0].is_valid() == false);
-        CHECK(doc.get_words()[1].is_valid() == false);
-        CHECK(doc.get_words()[2].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[0].is_valid());
+        CHECK_FALSE(doc.get_words()[1].is_valid());
+        CHECK_FALSE(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
         CHECK(doc.get_words()[6].is_valid());
-        CHECK(doc.get_words()[7].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[7].is_valid());
         CHECK(doc.get_words()[8].is_valid());
         CHECK(doc.get_words()[9].is_valid());
-        CHECK(doc.get_words()[10].is_valid() == false);
-        CHECK(doc.get_words()[11].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[10].is_valid());
+        CHECK_FALSE(doc.get_words()[11].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 6);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 3);
         CHECK(doc.get_sentences()[1].get_word_count() == 6);
@@ -1837,10 +1841,10 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_words()[14].is_valid());
         CHECK(doc.get_words()[15].is_valid());
         CHECK(doc.get_words()[16].is_valid());
-        CHECK(doc.get_words()[17].is_valid() == false);
-        CHECK(doc.get_words()[18].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[17].is_valid());
+        CHECK_FALSE(doc.get_words()[18].is_valid());
         CHECK(doc.get_words()[19].is_valid());
-        CHECK(doc.get_words()[20].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[20].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 7);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 7);
         CHECK(doc.get_sentences()[1].get_word_count() == 6);
@@ -1859,13 +1863,13 @@ TEST_CASE("Exclude words", "[excludewords]")
         doc.exclude_file_addresses(true);
         doc.load_document(text, wcslen(text), false, false, false, false);
 
-        CHECK(doc.get_words()[0].is_valid() == false);
-        CHECK(doc.get_words()[1].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[0].is_valid());
+        CHECK_FALSE(doc.get_words()[1].is_valid());
         CHECK(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
-        CHECK(doc.get_words()[6].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[6].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 2);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 0);
         CHECK(doc.get_sentences()[1].get_word_count() == 5);
@@ -1889,13 +1893,13 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
-        CHECK(doc.get_words()[6].is_valid() == false);
-        CHECK(doc.get_words()[7].is_valid() == false);
-        CHECK(doc.get_words()[8].is_valid() == false);
-        CHECK(doc.get_words()[9].is_valid() == false);
-        CHECK(doc.get_words()[10].is_valid() == false);
-        CHECK(doc.get_words()[11].is_valid() == false);
-        CHECK(doc.get_words()[12].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[6].is_valid());
+        CHECK_FALSE(doc.get_words()[7].is_valid());
+        CHECK_FALSE(doc.get_words()[8].is_valid());
+        CHECK_FALSE(doc.get_words()[9].is_valid());
+        CHECK_FALSE(doc.get_words()[10].is_valid());
+        CHECK_FALSE(doc.get_words()[11].is_valid());
+        CHECK_FALSE(doc.get_words()[12].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 2);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 2);
         CHECK(doc.get_sentences()[1].get_word_count() == 5);
@@ -1944,14 +1948,14 @@ TEST_CASE("Exclude words", "[excludewords]")
 
         CHECK(doc.get_words()[0].is_valid());
         CHECK(doc.get_words()[1].is_valid());
-        CHECK(doc.get_words()[2].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
         CHECK(doc.get_words()[6].is_valid());
-        CHECK(doc.get_words()[7].is_valid() == false);
-        CHECK(doc.get_words()[8].is_valid() == false);
-        CHECK(doc.get_words()[9].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[7].is_valid());
+        CHECK_FALSE(doc.get_words()[8].is_valid());
+        CHECK_FALSE(doc.get_words()[9].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 8);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 6);
         CHECK(doc.get_sentences()[1].get_word_count() == 2);
@@ -1968,14 +1972,14 @@ TEST_CASE("Exclude words", "[excludewords]")
 
         CHECK(doc.get_words()[0].is_valid());
         CHECK(doc.get_words()[1].is_valid());
-        CHECK(doc.get_words()[2].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
         CHECK(doc.get_words()[4].is_valid());
         CHECK(doc.get_words()[5].is_valid());
         CHECK(doc.get_words()[6].is_valid());
-        CHECK(doc.get_words()[7].is_valid() == false);
-        CHECK(doc.get_words()[8].is_valid() == false);
-        CHECK(doc.get_words()[9].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[7].is_valid());
+        CHECK_FALSE(doc.get_words()[8].is_valid());
+        CHECK_FALSE(doc.get_words()[9].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 8);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 6);
         CHECK(doc.get_sentences()[1].get_word_count() == 2);
@@ -1993,8 +1997,8 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_words()[5].is_valid());
         CHECK(doc.get_words()[6].is_valid());
         CHECK(doc.get_words()[7].is_valid());
-        CHECK(doc.get_words()[8].is_valid() == false);
-        CHECK(doc.get_words()[9].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[8].is_valid());
+        CHECK_FALSE(doc.get_words()[9].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 8);
         CHECK(doc.get_sentences()[0].get_valid_word_count() == 8);
         CHECK(doc.get_sentences()[1].get_word_count() == 2);
@@ -2013,9 +2017,9 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_words()[1].is_valid());
         CHECK(doc.get_words()[2].is_valid());
         CHECK(doc.get_words()[3].is_valid());
-        CHECK(doc.get_words()[4].is_valid() == false);
-        CHECK(doc.get_words()[5].is_valid() == false);
-        CHECK(doc.get_words()[6].is_valid() == false);
+        CHECK_FALSE(doc.get_words()[4].is_valid());
+        CHECK_FALSE(doc.get_words()[5].is_valid());
+        CHECK_FALSE(doc.get_words()[6].is_valid());
         CHECK(doc.get_words()[7].is_valid());
         CHECK(doc.get_words()[8].is_valid());
         CHECK(doc.get_sentences()[0].get_word_count() == 6);
@@ -2024,6 +2028,388 @@ TEST_CASE("Exclude words", "[excludewords]")
         CHECK(doc.get_sentences()[1].get_valid_word_count() == 2);
         CHECK(doc.get_word_count() == 9);
         CHECK(doc.get_valid_word_count() == 6);
+        }
+    }
+
+TEST_CASE("Plain language phrase collection", "[plainlanguage]")
+    {
+    SECTION("Load Basic")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow to the heart muscle.",
+            false, false);
+        CHECK(phrases.get_phrases().size() == 1);
+        CHECK(phrases.get_phrases().at(0).first.get_word_count() == 2);
+        CHECK(phrases.get_phrases().at(0).first.to_string() == L"myocardial infarction");
+        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 2);
+        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() == L"heart attack");
+        CHECK(phrases.get_phrases().at(0).second.explanation ==
+              L"A blockage of blood flow to the heart muscle.");
+        }
+    SECTION("Load Missing Optional Columns")
+        {
+        // replacement and explanation are both optional
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(L"myocardial infarction", false, false);
+        CHECK(phrases.get_phrases().size() == 1);
+        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 0);
+        CHECK(phrases.get_phrases().at(0).second.explanation.empty());
+        }
+    SECTION("Load Empty")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(L"", false, false);
+        CHECK(phrases.get_phrases().size() == 0);
+        }
+    SECTION("Load Null")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(nullptr, false, false);
+        CHECK(phrases.get_phrases().size() == 0);
+        }
+    SECTION("Matching")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(
+            L"myocardial infarction\theart attack\nhypertension\thigh blood pressure", true, false);
+
+        std::vector<std::basic_string<wchar_t, traits::case_insensitive_ex>> words{ L"myocardial",
+                                                                                     L"infarction" };
+        size_t matchIdx = phrases(words.begin(), 0, words.size(), true);
+        REQUIRE(matchIdx != grammar::plain_language_phrase_collection::npos);
+        CHECK(phrases.get_phrases().at(matchIdx).first.to_string() == L"myocardial infarction");
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement.to_string() ==
+              L"heart attack");
+
+        words = { L"hypertension" };
+        matchIdx = phrases(words.begin(), 0, words.size(), true);
+        REQUIRE(matchIdx != grammar::plain_language_phrase_collection::npos);
+        CHECK(phrases.get_phrases().at(matchIdx).first.to_string() == L"hypertension");
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement.to_string() ==
+              L"high blood pressure");
+
+        words = { L"aspirin" };
+        CHECK(phrases(words.begin(), 0, words.size(), true) ==
+              grammar::plain_language_phrase_collection::npos);
+        }
+    }
+
+TEST_CASE("Plain language guide analysis", "[plainlanguage]")
+    {
+    SECTION("Unexplained Phrase Highlighted Every Occurrence")
+        {
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient suffered a myocardial infarction. Later, another myocardial "
+            L"infarction occurred.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) suffered(2) a(3) myocardial(4) infarction(5) Later(6)
+        // another(7) myocardial(8) infarction(9) occurred(10)"
+        // every occurrence is recorded, explained or not
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 2);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        CHECK(doc.get_plain_language_phrase_indices()[0].second == 0);
+        CHECK(doc.get_plain_language_phrase_indices()[1].first == 8);
+        CHECK(doc.get_plain_language_phrase_indices()[1].second == 0);
+        CHECK(doc.get_word(4) == L"myocardial");
+        CHECK(doc.get_word(5) == L"infarction");
+        CHECK(doc.get_word(8) == L"myocardial");
+        CHECK(doc.get_word(9) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement never appears in the text, so the phrase is never explained
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Explained Phrase Never Flagged")
+        {
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient suffered a heart attack, also known as a myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) suffered(2) a(3) heart(4) attack(5) also(6) known(7) as(8)
+        // a(9) myocardial(10) infarction(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 10);
+        CHECK(doc.get_plain_language_phrase_indices()[0].second == 0);
+        CHECK(doc.get_word(10) == L"myocardial");
+        CHECK(doc.get_word(11) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Explained Near Later Occurrence Counts For All")
+        {
+        // the replacement is only near the SECOND occurrence, but once a phrase is
+        // explained anywhere, it's explained everywhere in the document
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"He had a myocardial infarction last year. This year, he had another "
+            L"myocardial infarction, which doctors call a heart attack.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "He(0) had(1) a(2) myocardial(3) infarction(4) last(5) year(6) This(7) year(8)
+        // he(9) had(10) another(11) myocardial(12) infarction(13) which(14) doctors(15)
+        // call(16) a(17) heart(18) attack(19)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 2);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        CHECK(doc.get_plain_language_phrase_indices()[1].first == 12);
+        CHECK(doc.get_word(3) == L"myocardial");
+        CHECK(doc.get_word(4) == L"infarction");
+        CHECK(doc.get_word(12) == L"myocardial");
+        CHECK(doc.get_word(13) == L"infarction");
+        CHECK(doc.get_word(18) == L"heart");
+        CHECK(doc.get_word(19) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Within Ten Words Counts")
+        {
+        // exactly 8 filler words between the technical phrase and its replacement,
+        // putting the replacement's last word exactly 10 words after the phrase's last word
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"myocardial infarction widget widget widget widget widget widget "
+                              L"widget widget heart attack.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "myocardial(0) infarction(1) widget(2..9) heart(10) attack(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
+        CHECK(doc.get_word(0) == L"myocardial");
+        CHECK(doc.get_word(1) == L"infarction");
+        CHECK(doc.get_word(10) == L"heart");
+        CHECK(doc.get_word(11) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Just Beyond Ten Words Does Not Count")
+        {
+        // one more filler word than the previous case pushes the replacement's last
+        // word one word past the proximity window
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"myocardial infarction widget widget widget widget widget widget widget "
+            L"widget widget heart attack.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "myocardial(0) infarction(1) widget(2..10) heart(11) attack(12)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
+        CHECK(doc.get_word(0) == L"myocardial");
+        CHECK(doc.get_word(1) == L"infarction");
+        CHECK(doc.get_word(11) == L"heart");
+        CHECK(doc.get_word(12) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement is one word past the proximity window, so it doesn't count
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Before Technical Phrase Within Ten Words Counts")
+        {
+        // same as "Replacement Within Ten Words Counts," but with the replacement
+        // preceding the technical phrase instead of following it
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"heart attack widget widget widget widget widget widget widget "
+                             L"widget myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "heart(0) attack(1) widget(2..9) myocardial(10) infarction(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 10);
+        CHECK(doc.get_word(0) == L"heart");
+        CHECK(doc.get_word(1) == L"attack");
+        CHECK(doc.get_word(10) == L"myocardial");
+        CHECK(doc.get_word(11) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Before Technical Phrase Just Beyond Ten Words Does Not Count")
+        {
+        // one more filler word than the previous case pushes the replacement's first
+        // word one word before the proximity window
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"heart attack widget widget widget widget widget widget widget widget "
+            L"widget myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "heart(0) attack(1) widget(2..10) myocardial(11) infarction(12)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 11);
+        CHECK(doc.get_word(0) == L"heart");
+        CHECK(doc.get_word(1) == L"attack");
+        CHECK(doc.get_word(11) == L"myocardial");
+        CHECK(doc.get_word(12) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement is one word before the proximity window, so it doesn't count
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Overlapping Technical Phrase Does Not Count")
+        {
+        // "plain language" (the replacement) immediately precedes "language guide"
+        // (the technical phrase) and shares its first word ("language"). That shared
+        // word must not let the replacement be mistaken for a real, independent nearby
+        // occurrence -- otherwise a phrase could effectively "explain itself."
+        plainLanguagePMap->load_phrases(
+            L"language guide\tplain language\tA guide written in plain language.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"Read the plain language guide for more information.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "Read(0) the(1) plain(2) language(3) guide(4) for(5) more(6) information(7)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        CHECK(doc.get_word(2) == L"plain");
+        CHECK(doc.get_word(3) == L"language");
+        CHECK(doc.get_word(4) == L"guide");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement overlaps the technical phrase's own words, so it doesn't count
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Technical Phrase At End Of Document")
+        {
+        // the technical phrase's last word is also the document's last word, so the
+        // proximity window's upper bound (matchEnd + 10) must clamp to the end of
+        // m_words instead of reading past it
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"The patient suffered a myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) suffered(2) a(3) myocardial(4) infarction(5)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        CHECK(doc.get_word(4) == L"myocardial");
+        CHECK(doc.get_word(5) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement never appears, so the phrase is unexplained (and, more importantly,
+        // the clamp must keep this from reading past the end of the document's word array)
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Technical Phrase At Start Of Document")
+        {
+        // the technical phrase's first word is also the document's first word, so the
+        // proximity window's lower bound (matchStart - 10) must clamp to 0 instead of
+        // underflowing (matchStart is unsigned)
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"Myocardial infarction is a serious condition.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "Myocardial(0) infarction(1) is(2) a(3) serious(4) condition(5)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
+        CHECK(doc.get_word(0) == L"Myocardial");
+        CHECK(doc.get_word(1) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // replacement never appears, so the phrase is unexplained (and, more importantly,
+        // the clamp must keep matchStart - 10 from underflowing a size_t)
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Multiple Phrases Tracked Independently")
+        {
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tExplanation one.\nhypertension\thigh blood "
+            L"pressure\tExplanation two.",
+            true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap,
+                             &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient has hypertension, also known as high blood pressure. He also "
+            L"suffered a myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) has(2) hypertension(3) also(4) known(5) as(6) high(7) blood(8)
+        // pressure(9) He(10) also(11) suffered(12) a(13) myocardial(14) infarction(15)"
+        const auto& loadedPhrases = doc.get_plain_language_phrases().get_phrases();
+        size_t hypertensionIdx{ loadedPhrases.size() }, infarctionIdx{ loadedPhrases.size() };
+        for (size_t i = 0; i < loadedPhrases.size(); ++i)
+            {
+            if (loadedPhrases[i].first.to_string() == L"hypertension")
+                {
+                hypertensionIdx = i;
+                }
+            else if (loadedPhrases[i].first.to_string() == L"myocardial infarction")
+                {
+                infarctionIdx = i;
+                }
+            }
+        REQUIRE(hypertensionIdx < loadedPhrases.size());
+        REQUIRE(infarctionIdx < loadedPhrases.size());
+        // each phrase's own replacement and explanation must stay paired with it,
+        // not get crossed with the other row
+        CHECK(loadedPhrases[hypertensionIdx].second.replacement.to_string() ==
+              L"high blood pressure");
+        CHECK(loadedPhrases[hypertensionIdx].second.explanation == L"Explanation two.");
+        CHECK(loadedPhrases[infarctionIdx].second.replacement.to_string() == L"heart attack");
+        CHECK(loadedPhrases[infarctionIdx].second.explanation == L"Explanation one.");
+
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 2);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        CHECK(doc.get_plain_language_phrase_indices()[0].second == hypertensionIdx);
+        CHECK(doc.get_plain_language_phrase_indices()[1].first == 14);
+        CHECK(doc.get_plain_language_phrase_indices()[1].second == infarctionIdx);
+        CHECK(doc.get_word(3) == L"hypertension");
+        CHECK(doc.get_word(14) == L"myocardial");
+        CHECK(doc.get_word(15) == L"infarction");
+
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == loadedPhrases.size());
+        CHECK(doc.get_plain_language_phrase_explained()[hypertensionIdx]);
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[infarctionIdx]);
+        }
+    SECTION("No List Set Is A No-Op")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        const wchar_t* text = L"The patient suffered a myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        CHECK(doc.get_plain_language_phrase_indices().size() == 0);
+        CHECK(doc.get_plain_language_phrase_explained().size() == 0);
         }
     }
 // NOLINTEND

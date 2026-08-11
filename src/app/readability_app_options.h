@@ -1201,6 +1201,19 @@ class ReadabilityAppOptions
 
     void SetExcludedPhrasesPath(const wxString& path) { m_excludedPhrasesPath = path; }
 
+    // bundled Plain Language Guide phrase list filename (default for new standard
+    // projects); empty means the feature is disabled ("None")
+    [[nodiscard]]
+    wxString GetPlainLanguageGuideListName() const
+        {
+        return m_plainLanguageGuideListName;
+        }
+
+    void SetPlainLanguageGuideListName(const wxString& name)
+        {
+        m_plainLanguageGuideListName = name;
+        }
+
     // Tags for excluding blocks of text
     [[nodiscard]]
     const std::vector<std::pair<wchar_t, wchar_t>>& GetExclusionBlockTags() const noexcept
@@ -2572,6 +2585,7 @@ class ReadabilityAppOptions
     bool m_excludeProperNouns{ false };
     bool m_includeExcludedPhraseFirstOccurrence{ false };
     wxString m_excludedPhrasesPath;
+    wxString m_plainLanguageGuideListName;
     std::vector<std::pair<wchar_t, wchar_t>> m_exclusionBlockTags;
     InvalidSentence m_invalidSentenceMethod{ InvalidSentence::ExcludeFromAnalysis };
     size_t m_includeIncompleteSentencesIfLongerThan{ 15 };
@@ -2819,6 +2833,8 @@ class ReadabilityAppOptions
     inline constexpr static std::string_view XML_REPORT_THEME{ _DT("report-theme") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_PATH{ _DT(
         "excluded-phrases-filepath") };
+    inline constexpr static std::string_view XML_PLAIN_LANGUAGE_GUIDE_LIST{ _DT(
+        "plain-language-guide-list") };
     inline constexpr static std::string_view XML_EXCLUDED_PHRASES_INCLUDE_FIRST_OCCURRENCE{ _DT(
         "excluded-phrases-include-first-occurrence") };
     inline constexpr static std::string_view XML_EXCLUDE_BLOCK_TAGS{ _DT("exclude-block-tags") };

@@ -545,6 +545,99 @@ img
   transform: translateY(0);
   }
 
+/* ---------- Plain Language Guide -------------------------------- */
+/* Two-column layout: document text (left, with unexplained          */
+/* technical phrases highlighted) and a stack of explanation cards   */
+/* (right, one per unexplained phrase).                              */
+
+.pl-guide-layout
+  {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  }
+
+.pl-guide-document-pane
+  {
+  position: relative;
+  }
+
+.pl-guide-document
+  {
+  max-height: 80vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  padding-right: 0.5rem;
+  }
+
+.back-to-top.pl-guide-back-to-top
+  {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  }
+
+.pl-guide-notes
+  {
+  max-height: 80vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  }
+
+.pl-guide-note-card
+  {
+  border: 1px solid var(--border-color);
+  border-left: var(--accent-width) solid var(--note-color);
+  border-radius: 6px;
+  background-color: color-mix(in srgb, var(--note-color) 6%, Canvas);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+.pl-guide-note-card:hover
+  {
+  border-color: color-mix(in srgb, var(--note-color) 50%, CanvasText);
+  background-color: color-mix(in srgb, var(--note-color) 12%, Canvas);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+.pl-guide-note-phrase
+  {
+  margin: 0 0 0.35rem 0;
+  font-weight: bold;
+  color: var(--note-color);
+  }
+
+.pl-guide-highlight
+  {
+  background-color: color-mix(in srgb, var(--header-accent) 35%, Canvas);
+  border: 1px solid color-mix(in srgb, var(--header-accent) 55%, Canvas);
+  border-radius: 3px;
+  padding: 0 2px;
+  /* looks like highlighted text, not a hyperlink, even though clicking it
+     jumps to its note card */
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  }
+
+.pl-guide-highlight:hover, .pl-guide-highlight:visited, .pl-guide-highlight:focus
+  {
+  color: inherit;
+  }
+
+.pl-guide-no-notes
+  {
+  font-style: italic;
+  color: GrayText;
+  }
+
 /* ---------- Back to top ---------------------------------------- */
 
 html { scroll-behavior: smooth; }
@@ -610,4 +703,10 @@ html { scroll-behavior: smooth; }
     page-break-after: avoid;
     break-after: avoid;
     }
+  /* stack the Plain Language Guide's columns for a printable view,
+     rather than clipping the notes pane to a fixed on-screen height */
+  .pl-guide-layout
+    { grid-template-columns: 1fr; }
+  .pl-guide-document, .pl-guide-notes
+    { max-height: none; overflow: visible; }
   }

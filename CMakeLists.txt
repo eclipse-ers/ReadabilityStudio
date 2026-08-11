@@ -722,6 +722,7 @@ copy_dir_to_staging("docs/readability-studio-api/docs" "readability-studio-manua
 copy_dir_to_staging("docs/lua-5.4/doc" "readability-studio-manual/lua-5.4/doc")
 copy_dir_to_staging("resources/scripting" "")
 copy_dir_to_staging("resources/report-themes" "report-themes")
+copy_dir_to_staging("resources/words/plain-language" "words/plain-language")
 copy_dir_to_staging("examples" "examples")
 
 # Translations

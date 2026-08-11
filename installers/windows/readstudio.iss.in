@@ -25,6 +25,7 @@ Source: resources\words.wad; DestDir: {app}; Components: ProgramFiles; Flags: re
 Source: resources\*.api; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\*.lua; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\report-themes\*; DestDir: {app}\report-themes; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
+Source: resources\words\plain-language\*; DestDir: {app}\words\plain-language; Components: ProgramFiles; Flags: replacesameversion restartreplace recursesubdirs
 Source: resources\LICENSE; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 Source: resources\citations.bib; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
 Source: resources\citations.mla; DestDir: {app}; Components: ProgramFiles; Flags: replacesameversion
