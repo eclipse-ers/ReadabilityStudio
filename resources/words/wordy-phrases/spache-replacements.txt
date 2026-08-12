@@ -575,6 +575,7 @@ imbue	fill
 imbued	filled
 imbues	fills
 imbuing	filling
+immediately	now
 imminent	near
 impact	hit
 impacted	hit

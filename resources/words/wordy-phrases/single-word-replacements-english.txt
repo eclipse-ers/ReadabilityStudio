@@ -1501,7 +1501,7 @@ imbued	filled
 imbues	fills
 imbuing	filling
 immaculate	pure, spotless
-immediately	at once
+immediately	at once, now
 immense	huge, vast
 imminent	near
 imminently	nearly
@@ -1875,8 +1875,8 @@ necessitating	causing, needing
 necessity	need
 neglectful	careless
 neglectfully	carelessly
-neighboring	next to
-neighbouring	next to
+neighboring	next to, next-door
+neighbouring	next to, next-door
 nemesis	enemy
 nemesis's	enemy's
 neutralize	offset

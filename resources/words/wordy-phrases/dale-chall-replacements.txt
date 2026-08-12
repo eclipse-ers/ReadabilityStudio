@@ -846,6 +846,7 @@ imbued	filled
 imbues	fills
 imbuing	filling
 immaculate	pure
+immediately	now
 immense	huge
 imminent	near
 immovable	fixed

@@ -8422,7 +8422,7 @@ Immaculate Heart of Marv	Immaculate Heart of Mary	3
 immeadiately	immediately	3		
 immedate	immediate	3		
 immedately	immediately	3		
-immediately	at once	0		
+immediately	at once, now	0		
 immediatley	immediately	3		
 immediatly	immediately	3		
 immeidately	immediately	3		
@@ -8953,7 +8953,11 @@ indictate	indicate	3
 indictated	indicated	3		
 indictates	indicates	3		
 indictating	indicating	3		
+indicte	indicate	3		
+indicted	indicated	3		
 indictement	indictment	3		
+indictes	indicates	3		
+indicting	indicating	3		
 indidate	indicate	3		
 indidated	indicated	3		
 indidates	indicates	3		
@@ -11015,8 +11019,8 @@ neices	nieces	3
 neigborhood	neighborhood	3		
 neigborhood's	neighborhood's	3		
 neigborhoods	neighborhoods	3		
-neighboring	next to	0		
-neighbouring	next to	0		
+neighboring	next to, next-door	0		
+neighbouring	next to, next-door	0		
 neither here nor there	irrelevant	0		
 nemesis	enemy	0		
 nemesis's	enemy's	0		
@@ -11167,6 +11171,7 @@ notfied	notified	3
 notfies	notifies	3		
 noth	north	3		
 nothern	northern	3		
+nothing more than	just	0		
 nothing to sneeze at	significant, worthwhile	2		
 nothing to write home about	nothing exciting/interesting	2		
 noticable	noticeable	3		
