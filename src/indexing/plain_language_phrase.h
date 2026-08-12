@@ -29,10 +29,22 @@ namespace grammar
             sidebar note if the phrase is never found explained nearby).*/
     struct plain_language_entry
         {
-        /// @brief The plain-language replacement for the technical phrase.
+        /// @brief The plain-language replacement for the technical phrase, used for the
+        ///     proximity check. Words that are just a single punctuation character
+        ///     (e.g., a stray "/" from a source list like "Continuous Integration / Continuous
+        ///     Delivery") are dropped from this so that they don't have to appear literally in the
+        ///     document for the phrase to be considered explained.
         phrase<traits::case_insensitive_wstring_ex> replacement;
         /// @brief A detailed explanation of the technical phrase.
         traits::case_insensitive_wstring_ex explanation;
+        /// @brief The technical phrase exactly as it appeared in the source list
+        ///     (used for display). Unlike the phrase key, punctuation-only words
+        ///     are kept here.
+        traits::case_insensitive_wstring_ex technical_phrase_display;
+        /// @brief The plain-language replacement exactly as it appeared in the source
+        ///     list (used for display). Unlike @c replacement, punctuation-only words
+        ///     are kept here).
+        traits::case_insensitive_wstring_ex replacement_display;
         };
 
     /** @brief Wrapper for a collection of "technical phrase -> plain-language
@@ -183,6 +195,7 @@ namespace grammar
                     }
 
                 // technical phrase should have at least one word
+                newPair.second.technical_phrase_display = rowStrings[0];
                 phraseRow.set_values(&newPair.first.get_words());
                 phraseRow.read(rowStrings[0].c_str());
                 if (phraseRow.get_number_of_columns_last_read() < 1)
@@ -190,17 +203,21 @@ namespace grammar
                     continue;
                     }
                 newPair.first.resize(phraseRow.get_number_of_columns_last_read());
+                clean_words_for_matching(newPair.first.get_words());
 
                 // plain-language replacement is optional (a list author may rely purely
                 // on the explanation column); an empty replacement phrase simply means
                 // the proximity check will never find it nearby.
                 newPair.second.replacement.clear_words();
+                newPair.second.replacement_display.clear();
                 if (row.get_number_of_columns_last_read() >= 2 && !rowStrings[1].empty())
                     {
+                    newPair.second.replacement_display = rowStrings[1];
                     replacementRow.set_values(&newPair.second.replacement.get_words());
                     replacementRow.read(rowStrings[1].c_str());
                     newPair.second.replacement.resize(
                         replacementRow.get_number_of_columns_last_read());
+                    clean_words_for_matching(newPair.second.replacement.get_words());
                     }
 
                 newPair.second.explanation = (row.get_number_of_columns_last_read() >= 3) ?
@@ -223,6 +240,33 @@ namespace grammar
         void clear_phrases() noexcept { m_phrases.clear(); }
 
       private:
+        /** @brief Strips trailing commas from words and removes words that are left as
+                (or started as) just a single punctuation character
+                (e.g., a stray "/" between two alternative wordings) from a word list.
+            @param words The words to filter, in place.*/
+        static void
+        clean_words_for_matching(std::vector<traits::case_insensitive_wstring_ex>& words)
+            {
+            for (auto& word : words)
+                {
+                while (!word.empty() && traits::case_insensitive_ex::eq(word.back(), L','))
+                    {
+                    word.pop_back();
+                    }
+                }
+            words.erase(std::remove_if(words.begin(), words.end(),
+                                       [](const auto& word) noexcept
+                                       {
+                                           return (
+                                               word.empty() ||
+                                               (word.length() == 1 &&
+                                                (traits::case_insensitive_ex::eq(word[0], L',') ||
+                                                 traits::case_insensitive_ex::eq(word[0], L'/') ||
+                                                 traits::case_insensitive_ex::eq(word[0], L'|'))));
+                                       }),
+                        words.end());
+            }
+
         std::vector<plain_language_pair> m_phrases;
         };
     } // namespace grammar

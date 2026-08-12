@@ -2093,6 +2093,44 @@ TEST_CASE("Plain language phrase collection", "[plainlanguage]")
         CHECK(phrases(words.begin(), 0, words.size(), true) ==
               grammar::plain_language_phrase_collection::npos);
         }
+    SECTION("Load Strips Trailing Comma From Replacement Word")
+        {
+        // "simple," should lose its trailing comma for matching purposes, but the
+        // note card should still show the replacement exactly as written
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(
+            L"KISS\tKeep it simple, stupid\tKeep it simple, stupid.", false, false);
+        CHECK(phrases.get_phrases().size() == 1);
+        CHECK(phrases.get_phrases().at(0).first.to_string() == L"KISS");
+        CHECK(phrases.get_phrases().at(0).second.technical_phrase_display == L"KISS");
+        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 4);
+        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() ==
+              L"Keep it simple stupid");
+        CHECK(phrases.get_phrases().at(0).second.replacement_display ==
+              L"Keep it simple, stupid");
+        CHECK(phrases.get_phrases().at(0).second.explanation ==
+              L"Keep it simple, stupid.");
+        }
+    SECTION("Load Strips Standalone Slash From Replacement")
+        {
+        // the lone "/" token between the two alternative wordings should be dropped
+        // for matching purposes, but the note card should still show the original
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(
+            L"CI/DC\tContinuous Integration / Continuous Delivery\t"
+            L"Commonly confused with CI/CD.",
+            false, false);
+        CHECK(phrases.get_phrases().size() == 1);
+        CHECK(phrases.get_phrases().at(0).first.to_string() == L"CI/DC");
+        CHECK(phrases.get_phrases().at(0).second.technical_phrase_display == L"CI/DC");
+        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 4);
+        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() ==
+              L"Continuous Integration Continuous Delivery");
+        CHECK(phrases.get_phrases().at(0).second.replacement_display ==
+              L"Continuous Integration / Continuous Delivery");
+        CHECK(phrases.get_phrases().at(0).second.explanation ==
+              L"Commonly confused with CI/CD.");
+        }
     }
 
 TEST_CASE("Plain language guide analysis", "[plainlanguage]")
