@@ -489,9 +489,9 @@ img
 
 :root
   {
-  --tooltip-bg: #2b2f38;
-  --tooltip-fg: #ffffff;
-  --tooltip-outline: #ffffff;
+  --tooltip-bg: light-dark(#ffffff, #2b2f38);
+  --tooltip-fg: light-dark(#000000, #ffffff);
+  --tooltip-outline: light-dark(#000000, #ffffff);
   --tooltip-outline-width: 1px;
   --tooltip-font-size: 0.8em;
   --tooltip-pad-v: 7px;
@@ -762,4 +762,10 @@ html { scroll-behavior: smooth; }
     { grid-template-columns: 1fr; }
   .pl-guide-document, .pl-guide-notes
     { max-height: none; overflow: visible; }
+  /* keep each note card whole rather than splitting across a page break */
+  .pl-guide-note-card
+    {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    }
   }
