@@ -60,6 +60,7 @@
 #include "../results-format/readability_messages.h"
 #include "../ui/controls/explanation_listctrl.h"
 #include "project_frame.h"
+#include <cwctype>
 #include <wx/filename.h>
 #include <wx/infobar.h>
 
@@ -243,8 +244,17 @@ class BaseProjectView : public wxView
         return _(L"Plain Language Guide");
         }
 
+    /// @brief Determines whether a string is two-letters (ASCII).
+    [[nodiscard]]
+    static bool IsTwoLetters(const wxString& str)
+        {
+        return (str.length() == 2 && std::iswalpha(static_cast<wint_t>(str[0])) &&
+                std::iswalpha(static_cast<wint_t>(str[1])));
+        }
+
     /// @brief Converts a bundled Plain Language Guide list's filename to a display
-    ///     label (e.g., "legal-terms.txt" -> "Legal terms"; an empty filename -> "None").
+    ///     label (e.g., "legal-terms.txt" -> "Legal terms"; "legal-terms-en.txt" ->
+    ///     "Legal terms (EN)"; an empty filename -> "None").
     /// @param fileName The list's filename.
     /// @returns The display label.
     [[nodiscard]]
@@ -254,13 +264,31 @@ class BaseProjectView : public wxView
             {
             return _(L"None");
             }
-        wxString label{ wxFileName{ fileName }.GetName() };
-        label.Replace(L"-", L" ");
-        return label.Capitalize();
+        wxString stem{ wxFileName{ fileName }.GetName() };
+        // trailing "-XX" language code suffix (e.g., "-en") is shown as "(XX)"
+        wxString langCode;
+        const auto lastDash = stem.find_last_of(L'-');
+        if (lastDash != wxString::npos)
+            {
+            wxString candidate{ stem.substr(lastDash + 1) };
+            if (IsTwoLetters(candidate))
+                {
+                langCode = std::move(candidate);
+                stem = stem.substr(0, lastDash);
+                }
+            }
+        stem.Replace(L"-", L" ");
+        wxString label{ stem.Capitalize() };
+        if (!langCode.empty())
+            {
+            label += L" (" + langCode.Upper() + L")";
+            }
+        return label;
         }
 
     /// @brief Converts a Plain Language Guide display label back to its bundled
-    ///     list's filename (e.g., "Legal Terms" -> "legal-terms.txt"; "None" -> "").
+    ///     list's filename (e.g., "Legal terms" -> "legal-terms.txt"; "Legal terms (EN)" ->
+    ///     "legal-terms-en.txt"; "None" -> "").
     /// @param label The display label.
     /// @returns The list's filename.
     [[nodiscard]]
@@ -270,8 +298,26 @@ class BaseProjectView : public wxView
             {
             return wxString{};
             }
-        wxString fileName{ label.Lower() };
+        wxString base{ label };
+        wxString langCode;
+        // trailing " (XX)" language code suffix
+        const auto openParen = base.find_last_of(L'(');
+        if (base.EndsWith(L")") && openParen != wxString::npos)
+            {
+            wxString candidate{ base.substr(openParen + 1, base.length() - openParen - 2) };
+            if (IsTwoLetters(candidate))
+                {
+                langCode = std::move(candidate);
+                base = base.substr(0, openParen);
+                base.Trim();
+                }
+            }
+        wxString fileName{ base.Lower() };
         fileName.Replace(L" ", L"-");
+        if (!langCode.empty())
+            {
+            fileName += L"-" + langCode.Lower();
+            }
         fileName += L".txt";
         return fileName;
         }
