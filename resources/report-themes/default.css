@@ -667,6 +667,13 @@ img
   color: var(--note-color);
   }
 
+.pl-guide-note-replacement
+  {
+  margin: 0 0 0.35rem 0;
+  font-style: italic;
+  color: color-mix(in srgb, var(--note-color) 70%, CanvasText);
+  }
+
 .pl-guide-highlight
   {
   background-color: color-mix(in srgb, var(--header-accent) 35%, Canvas);

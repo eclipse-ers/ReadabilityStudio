@@ -724,24 +724,41 @@ FormatWordCollectionPlainLanguageGuide(const std::shared_ptr<documentT>& theDocu
         {
         const auto& entry = phrases[phraseIdxByNoteId[noteId - 1]];
         std::wstring phraseText{ entry.first.to_string().c_str() };
+        std::wstring replacementText{ entry.second.replacement.is_empty() ?
+                                          std::wstring{} :
+                                          entry.second.replacement.to_string().c_str() };
         std::wstring explanation{ entry.second.explanation.c_str() };
         if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(phraseText))
             {
             phraseText = lily_of_the_valley::html_encode_text::simple_encode(phraseText);
+            }
+        if (!replacementText.empty() &&
+            lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(replacementText))
+            {
+            replacementText = lily_of_the_valley::html_encode_text::simple_encode(replacementText);
             }
         if (lily_of_the_valley::html_encode_text::needs_to_be_simple_encoded(explanation))
             {
             explanation = lily_of_the_valley::html_encode_text::simple_encode(explanation);
             }
         phraseText = ConvertBackticksToTypeWriter(std::move(phraseText));
+        if (!replacementText.empty())
+            {
+            replacementText = ConvertBackticksToTypeWriter(std::move(replacementText));
+            }
         explanation = ConvertBackticksToTypeWriter(std::move(explanation));
         output.noteCardsHtml.append(L"<div class=\"pl-guide-note-card\" id=\"pl-note-")
             .append(std::to_wstring(noteId))
             .append(L"\">\n<p class=\"pl-guide-note-phrase\">")
             .append(phraseText)
-            .append(L"</p>\n<p>")
-            .append(explanation)
-            .append(L"</p>\n</div>\n");
+            .append(L"</p>\n");
+        if (!replacementText.empty())
+            {
+            output.noteCardsHtml.append(L"<p class=\"pl-guide-note-replacement\">")
+                .append(replacementText)
+                .append(L"</p>\n");
+            }
+        output.noteCardsHtml.append(L"<p>").append(explanation).append(L"</p>\n</div>\n");
         }
 
     // the document text, with unexplained phrases highlighted
