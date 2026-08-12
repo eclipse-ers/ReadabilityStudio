@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word/Phrase Exclusion List Test Plan &mdash; Readability Studio</title>
+<style>
+/* ==========================================================================
+   Palette drawn from the Readability Studio icon: a sunburst over an open
+   book. Orange rays, ember, bookmark coral, page cream, spine brown.
+   ========================================================================== */
+:root {
+  --sun:        #E87C0A;
+  --amber:      #F2A81D;
+  --ember:      #B8500F;
+  --coral:      #D9614F;
+  --cream:      #E9E1D0;
+  --spine:      #5A3A22;
+
+  --ground:     #FBF8F3;
+  --surface:    #FFFFFF;
+  --page:       #F4EDDF;
+  --ink:        #191410;
+  --ink-soft:   #574B40;
+  --ink-faint:  #8A7A6C;
+  --rule:       #DFD4C2;
+  --rule-soft:  #EBE2D3;
+
+  --accent:     var(--ember);
+  --accent-2:   var(--sun);
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, "Liberation Mono", monospace;
+
+  --measure: 70ch;
+  --step: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:    #14100C;
+    --surface:   #1D1813;
+    --page:      #26201A;
+    --ink:       #F0E7DA;
+    --ink-soft:  #C0B2A2;
+    --ink-faint: #8D7F70;
+    --rule:      #3A3128;
+    --rule-soft: #2C251E;
+    --cream:     #2E271F;
+    --accent:    var(--amber);
+    --accent-2:  var(--sun);
+    --coral:     #E5806F;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:    #14100C;
+  --surface:   #1D1813;
+  --page:      #26201A;
+  --ink:       #F0E7DA;
+  --ink-soft:  #C0B2A2;
+  --ink-faint: #8D7F70;
+  --rule:      #3A3128;
+  --rule-soft: #2C251E;
+  --cream:     #2E271F;
+  --accent:    var(--amber);
+  --accent-2:  var(--sun);
+  --coral:     #E5806F;
+}
+:root[data-theme="light"] {
+  --ground:    #FBF8F3;
+  --surface:   #FFFFFF;
+  --page:      #F4EDDF;
+  --ink:       #191410;
+  --ink-soft:  #574B40;
+  --ink-faint: #8A7A6C;
+  --rule:      #DFD4C2;
+  --rule-soft: #EBE2D3;
+  --cream:     #E9E1D0;
+  --accent:    var(--ember);
+  --accent-2:  var(--sun);
+  --coral:     #D9614F;
+}
+
+/* ---------- Base ---------------------------------------------------- */
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); }
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+strong { font-weight: 650; color: var(--ink); }
+code, kbd {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--cream);
+  padding: 0.08em 0.34em;
+  border-radius: 3px;
+}
+
+/* ---------- Masthead ------------------------------------------------ */
+
+.masthead {
+  position: relative;
+  overflow: hidden;
+  background: #191410;
+  color: #F5EDE0;
+  border-bottom: 3px solid var(--sun);
+}
+/* the icon's ray fan, thrown from the top-right corner */
+.masthead::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% -60% -10%;
+  background: repeating-conic-gradient(from 172deg at 96% -8%,
+      rgba(232,124,10,0)   0deg   2.1deg,
+      var(--amber)         2.1deg 3.4deg,
+      rgba(232,124,10,0)   3.4deg 4.6deg,
+      var(--ember)         4.6deg 5.6deg,
+      rgba(232,124,10,0)   5.6deg 7.4deg,
+      var(--sun)           7.4deg 8.8deg,
+      rgba(232,124,10,0)   8.8deg 11deg);
+  -webkit-mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.masthead::after {
+  content: "";
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  right: -6vw;
+  top: -17vw;
+  border-radius: 50%;
+  background: var(--ember);
+  pointer-events: none;
+}
+.masthead-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.6rem 1.5rem 2.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+.mark {
+  width: 78px;
+  height: 78px;
+  flex: none;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.45));
+}
+.masthead-text { flex: 1 1 22rem; min-width: 0; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0 0 0.5rem;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 1.4rem + 2.1vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0 0 0.7rem;
+  color: #FFF8EC;
+}
+.lede {
+  margin: 0;
+  max-width: 56ch;
+  color: #D9CDBC;
+  font-size: 1rem;
+}
+.lede em { color: #F7E3C6; font-style: normal; font-weight: 600; }
+
+/* ---------- Shell --------------------------------------------------- */
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1080px) {
+  .wrap {
+    grid-template-columns: 12.5rem minmax(0, var(--measure));
+    justify-content: center;
+    align-items: start;
+    gap: 4rem;
+  }
+}
+
+/* ---------- Section index ------------------------------------------- */
+
+.index {
+  display: none;
+  position: sticky;
+  top: 2rem;
+  padding-top: 3.4rem;
+  font-size: 0.83rem;
+}
+@media (min-width: 1080px) { .index { display: block; } }
+.index h2 {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.9rem;
+  font-weight: 600;
+}
+.index ol { list-style: none; margin: 0; padding: 0; }
+.index li { margin-bottom: 0.42rem; }
+.index a {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: 0.2rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  padding-left: 0.55rem;
+}
+.index a:hover { color: var(--accent); border-left-color: var(--accent-2); }
+.index .n {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  padding-top: 0.1em;
+}
+
+/* ---------- Main flow ----------------------------------------------- */
+
+.plan { min-width: 0; }
+.plan > * + * { margin-top: 1.15rem; }
+
+.plan h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 3.4rem 0 0.2rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  scroll-margin-top: 1.5rem;
+}
+.plan h2 .n {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--accent);
+  padding: 0.16em 0.5em;
+  border-radius: 3px;
+  flex: none;
+  letter-spacing: 0.02em;
+}
+.plan h3 {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 2.2rem 0 0.1rem;
+}
+.plan p { margin: 0; max-width: var(--measure); }
+
+/* setup note that opens a section */
+.setup {
+  margin: 1rem 0 0.4rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.setup p + p { margin-top: 0.5rem; }
+
+/* ---------- Checklists ---------------------------------------------- */
+
+.checks { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.checks li {
+  display: grid;
+  grid-template-columns: 1.15rem 3.1rem 1fr;
+  gap: 0 0.62rem;
+  padding: 0.62rem 0;
+  border-top: 1px solid var(--rule-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.checks li:first-child { border-top: 0; }
+
+.box {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.17rem;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 3px;
+  background: var(--surface);
+}
+.id {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding-top: 0.24em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.what { min-width: 0; }
+.what > p { margin: 0; }
+
+/* bookmark-ribbon tags, after the icon's red page marker */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+  margin-left: 0.45rem;
+  padding: 0.14em 0.42em 0.14em 0.5em;
+  color: var(--surface);
+  background: var(--coral);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  padding-bottom: 0.4em;
+}
+@media (prefers-color-scheme: dark) { .tag { color: #201812; } }
+:root[data-theme="dark"] .tag { color: #201812; }
+:root[data-theme="light"] .tag { color: var(--surface); }
+
+/* ---------- Platform strip ------------------------------------------ */
+
+.platforms {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.platforms li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 1.1rem 0.6rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.95rem;
+  break-inside: avoid;
+}
+.platforms .box { margin-top: 0; }
+
+/* ---------- Table ---------------------------------------------------- */
+
+.scroller {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88rem;
+  min-width: 38rem;
+}
+thead th {
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1.5px solid var(--rule);
+  background: var(--page);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 0.58rem 0.85rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+  width: 2.2rem;
+}
+td.win { font-weight: 650; }
+
+/* ---------- Fixtures ------------------------------------------------- */
+
+.fixtures {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.fixtures li {
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.fixtures .doc {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) { .fixtures .doc { color: var(--amber); } }
+:root[data-theme="dark"] .fixtures .doc { color: var(--amber); }
+:root[data-theme="light"] .fixtures .doc { color: var(--ember); }
+.fixtures .name { font-weight: 650; color: var(--ink); }
+
+/* ---------- Watch-for list ------------------------------------------- */
+
+.watch { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.watch li {
+  position: relative;
+  padding: 0.36rem 0 0.36rem 1.5rem;
+  max-width: var(--measure);
+}
+.watch li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 0.7rem;
+  height: 2px;
+  background: var(--accent-2);
+}
+
+/* ---------- Sign-off -------------------------------------------------- */
+
+.signoff {
+  margin-top: 3.5rem;
+  padding: 1.6rem 1.5rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  background: var(--surface);
+  break-inside: avoid;
+}
+.signoff h2 {
+  margin: 0 0 0.9rem;
+  border: 0;
+  padding: 0;
+  font-size: 1.3rem;
+}
+.signoff .platforms { margin-top: 0; }
+.sigline {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.sigline .field {
+  flex: 1 1 11rem;
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: 0.3rem;
+}
+
+/* ---------- Print ------------------------------------------------------ */
+
+@page { margin: 16mm 14mm; }
+
+@media print {
+  :root {
+    --ground: #FFFFFF;
+    --surface: #FFFFFF;
+    --page: #FFFFFF;
+    --cream: #FFFFFF;
+    --ink: #000000;
+    --ink-soft: #2B2B2B;
+    --ink-faint: #666666;
+    --rule: #999999;
+    --rule-soft: #CCCCCC;
+    --accent: #000000;
+  }
+  body { font-size: 9.6pt; line-height: 1.42; background: #FFF; }
+  .index { display: none; }
+  .wrap { display: block; max-width: none; padding: 0; }
+  .plan { max-width: none; }
+  .masthead {
+    background: #FFF;
+    color: #000;
+    border-bottom: 2px solid #000;
+  }
+  .masthead::before, .masthead::after { display: none; }
+  .masthead-inner { padding: 0 0 0.7rem; gap: 1rem; }
+  .masthead h1 { color: #000; font-size: 20pt; }
+  .lede { color: #2B2B2B; }
+  .lede em { color: #000; }
+  .eyebrow { color: #666; }
+  .mark { width: 52px; height: 52px; filter: none; }
+  /* keep units whole across the page break, LaTeX minipage style */
+  p { orphans: 3; widows: 3; }
+  .plan h2 {
+    margin-top: 1.6rem;
+    font-size: 13pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .plan h3 { break-after: avoid; page-break-after: avoid; }
+  .setup { break-after: avoid; page-break-after: avoid; }
+  .scroller, .watch li, .fixtures li, .platforms li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  .plan h2 .n {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    padding: 0 0.35em;
+  }
+  .id { color: #000; }
+  .tag {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    clip-path: none;
+    padding: 0 0.35em;
+  }
+  .setup { border-left: 3px solid #000; }
+  .box { border-color: #000; border-width: 1pt; }
+  .signoff { border-color: #000; }
+  /* drop the labels on paper and leave bare ruled lines to write on */
+  .sigline { margin-top: 2.6rem; gap: 1.2rem 2.5rem; }
+  .sigline .lbl { display: none; }
+  .sigline .field { min-height: 2.6rem; border-bottom: 1pt solid #000; }
+  a { color: #000; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-text">
+      <p class="eyebrow">Readability Studio &middot; Manual QA</p>
+      <h1>Word/Phrase Exclusion List Test Plan</h1>
+      <p class="lede">Covers the <em>Words &amp; phrases to exclude</em> feature on the
+        <em>Document Indexing</em> page (Options and Project Properties), its Edit Word/Phrase
+        List dialog, and how projects handle a missing or shared exclusion list. Missing files
+        are handled by an automatic project-folder search with a Yes/No substitution prompt,
+        falling back to a plain warning.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="index" aria-label="Sections">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span><span>Setting up the list</span></a></li>
+      <li><a href="#s2"><span class="n">02</span><span>Edit Word/Phrase List dialog</span></a></li>
+      <li><a href="#s3"><span class="n">03</span><span>Exclusion during analysis</span></a></li>
+      <li><a href="#s4"><span class="n">04</span><span>Missing/invalid file handling</span></a></li>
+      <li><a href="#s5"><span class="n">05</span><span>Batch projects &amp; subprojects</span></a></li>
+      <li><a href="#s6"><span class="n">06</span><span>Persistence &amp; settings</span></a></li>
+      <li><a href="#signoff"><span class="n">&mdash;</span><span>Sign-off</span></a></li>
+    </ol>
+  </nav>
+
+  <main class="plan">
+
+    <h3>What to watch for</h3>
+    <ul class="watch">
+      <li>The exclusion-list controls (path field, edit button, <strong>Include first
+        occurrence</strong>) live on the <strong>Document Indexing</strong> page &mdash; a
+        top-level sidebar entry in both the Tools tab&rsquo;s <strong>Options</strong> dialog and a
+        project&rsquo;s own <strong>Properties</strong> dialog, not nested under a separate
+        &ldquo;Analysis&rdquo; category.</li>
+      <li>All three exclusion-list controls are disabled whenever <strong>Do not exclude any
+        text</strong> is the selected Exclusion method &mdash; they only make sense alongside
+        incomplete-sentence exclusion.</li>
+      <li>A missing file is handled automatically: the program searches the project&rsquo;s own
+        folder tree for a same-named file and, if found, asks a plain Yes/No question; if nothing
+        is found, it just warns and drops the path.</li>
+      <li><strong>Importing</strong> a settings file bypasses the file-existence check entirely
+        &mdash; a bogus exclusion path from an imported settings file is applied immediately, and
+        is only caught the next time someone clicks <strong>OK</strong> on the Options dialog.</li>
+      <li>A batch project&rsquo;s subprojects <strong>share</strong> the parent&rsquo;s exclusion
+        list object directly; they do not each reload it independently from disk.</li>
+    </ul>
+
+    <h3>Platforms</h3>
+    <p>Exercise every section on all three desktop platforms. File pickers and the project-folder
+      auto-search in section 4 depend on native filesystem behavior that can differ subtly between
+      platforms (case sensitivity, path separators).</p>
+    <ul class="platforms">
+      <li><span class="box"></span>Windows</li>
+      <li><span class="box"></span>macOS</li>
+      <li><span class="box"></span>Linux</li>
+    </ul>
+
+    <h3>Suggested test fixtures</h3>
+    <ul class="fixtures">
+      <li><span class="doc">Fixture A</span><span class="name">Small exclusion list file.</span> A
+        plain text file, one word or phrase per line, no tab characters (single-column format).</li>
+      <li><span class="doc">Fixture B</span><span class="name">Short sample document.</span> Should
+        contain the phrases <em>ex nihilo</em>, <em>quantum fluctuations</em>, and <em>particles</em>,
+        plus a second, separate occurrence of the bare word <em>fluctuations</em> &mdash; exercises
+        the phrase/overlap and first-occurrence rules directly.</li>
+      <li><span class="doc">Fixture C</span><span class="name">Exclusion list matching Fixture
+        B.</span> Three lines: <code>ex nihilo</code>, <code>quantum fluctuations</code>,
+        <code>particles</code>.</li>
+      <li><span class="doc">Fixture D</span><span class="name">Hand-edited settings.xml with a
+        bogus exclusion path.</span> Export a valid settings file, then hand-edit its
+        <code>ExcludedPhrasesPath</code> value to a nonexistent path &mdash; the in-app Export flow
+        itself validates the path, so this can&rsquo;t be produced through the UI alone (see
+        <a href="#s4">4.8</a>).</li>
+      <li><span class="doc">Fixture E</span><span class="name">Batch project using an exclusion
+        list.</span> A batch project with a valid, populated exclusion list configured.</li>
+      <li><span class="doc">Fixture F</span><span class="name">Batch project with no exclusion
+        list.</span> A batch project where the exclusion path is left empty.</li>
+    </ul>
+
+    <!-- ============================================================== -->
+
+    <h2 id="s1"><span class="n">01</span>Setting up the list</h2>
+    <div class="setup">
+      <p>Tools tab &rsaquo; <strong>Options</strong> &rsaquo; <strong>Document Indexing</strong>
+        page. Repeat against a project&rsquo;s own <strong>Properties</strong> dialog for 1.6.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">1.1</span><div class="what"><p>With Exclusion set to <strong>&ldquo;Do not exclude any text&rdquo;</strong>, the <strong>Words &amp; phrases to exclude</strong> field, its edit button, and <strong>Include first occurrence</strong> are all disabled (grayed out, not hidden).</p></div></li>
+      <li><span class="box"></span><span class="id">1.2</span><div class="what"><p>Switching Exclusion to <strong>&ldquo;Exclude all incomplete sentences&rdquo;</strong> or <strong>&ldquo;&hellip;except headings&rdquo;</strong> immediately re-enables all three controls, with no need to reopen the dialog.</p></div></li>
+      <li><span class="box"></span><span class="id">1.3</span><div class="what"><p>Typing or pasting a path directly into the field is accepted as-is; nothing is validated until <strong>OK</strong> is clicked (see <a href="#s4">4.1</a>).</p></div></li>
+      <li><span class="box"></span><span class="id">1.4</span><div class="what"><p>Clicking the edit (pencil) button opens the <strong>Edit Word/Phrase List</strong> dialog, pre-loaded with whatever path currently sits in the field.</p></div></li>
+      <li><span class="box"></span><span class="id">1.5</span><div class="what"><p><strong>Include first occurrence</strong> can be toggled even while the path field is empty &mdash; it simply has no effect until a list is actually loaded.</p></div></li>
+      <li><span class="box"></span><span class="id">1.6</span><div class="what"><p>The same page and the same enable/disable rules from 1.1&ndash;1.2 appear identically whether opened from the app-level <strong>Options</strong> dialog or from a single project&rsquo;s <strong>Properties</strong> dialog.</p></div></li>
+    </ul>
+
+    <h2 id="s2"><span class="n">02</span>Edit Word/Phrase List dialog</h2>
+    <div class="setup">
+      <p>Open via the edit button next to the exclusion path field. Use <strong>Fixture A</strong>
+        unless noted.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">2.1</span><div class="what"><p>Typing the path to <strong>Fixture A</strong> into <strong>File containing list</strong> loads each line as a row under a single column labeled <strong>Word/Phrase</strong> &mdash; no Suggestion/Type/Exception columns for a plain, tab-free list.</p></div></li>
+      <li><span class="box"></span><span class="id">2.2</span><div class="what"><p>Clicking the Browse button next to the file field opens a picker filtered to <strong>Text files (*.txt)</strong>; selecting a file behaves the same as typing its path.</p></div></li>
+      <li><span class="box"></span><span class="id">2.3</span><div class="what"><p>The <strong>Add</strong>, <strong>Edit</strong>, and <strong>Delete</strong> toolbar buttons above the grid act on the current selection: Add inserts a new row already in edit mode; Delete removes the selected row(s); double-clicking a row edits it in place.</p></div></li>
+      <li><span class="box"></span><span class="id">2.4</span><div class="what"><p>Keyboard shortcuts work independently of the toolbar buttons: <strong>Del</strong> removes the selected row(s), <strong>Ins</strong> edits the focused row, and <strong>Ctrl+Ins</strong> adds a new row.</p></div></li>
+      <li><span class="box"></span><span class="id">2.5</span><div class="what"><p>Clicking <strong>OK</strong> with unsaved edits writes the list back to its file: entries are sorted and de-duplicated, one per line.</p></div></li>
+      <li><span class="box"></span><span class="id">2.6</span><div class="what"><p>Clicking <strong>Cancel/Close</strong> with unsaved edits prompts <em>&ldquo;The list have been edited. Do you wish to save your changes?&rdquo;</em> &mdash; Yes saves, No discards, either way the dialog then closes.</p></div></li>
+      <li><span class="box"></span><span class="id">2.7</span><div class="what"><p>With no path yet entered in the file field, clicking <strong>OK</strong> triggers a <strong>Save Word List</strong> file dialog before anything is written to disk.</p></div></li>
+      <li><span class="box"></span><span class="id">2.8</span><div class="what"><p>Changing the file-path field to a different, existing file while the currently-loaded list has unsaved edits prompts to save those edits to the <em>old</em> file first, then loads the new one.</p></div></li>
+      <li><span class="box"></span><span class="id">2.9</span><div class="what"><p>Entering a path to a file that doesn&rsquo;t exist and moving on: no crash, no rows load, and the grid is left showing whatever was there before &mdash; nothing is silently created until an explicit save.</p></div></li>
+    </ul>
+
+    <h2 id="s3"><span class="n">03</span>Exclusion during analysis</h2>
+    <div class="setup">
+      <p>Create a project from <strong>Fixture B</strong> and point its exclusion list at
+        <strong>Fixture C</strong>.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">3.1</span><div class="what"><p>Every exact occurrence of a listed word or phrase is removed from word/sentence/syllable counts and highlighted reports, while the rest of the sentence containing it is still analyzed normally.</p></div></li>
+      <li><span class="box"></span><span class="id">3.2</span><div class="what"><p>Matching is case-insensitive: the lowercase list entry <code>quantum fluctuations</code> still matches the capitalized <em>Quantum Fluctuations</em> at the start of the fixture document.</p></div></li>
+      <li><span class="box"></span><span class="id">3.3</span><div class="what"><p><strong>Overlap rule:</strong> the first occurrence of <em>fluctuations</em> (inside <em>Quantum Fluctuations</em>) is excluded as part of the longer phrase, but the later, standalone occurrence of <em>fluctuations</em> is <em>not</em> excluded, since it isn&rsquo;t part of a listed phrase.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.4</span><div class="what"><p>With <strong>Include first occurrence</strong> checked, the very first matching instance of a listed phrase is left in the analysis and only subsequent occurrences of that same phrase are excluded.</p></div></li>
+      <li><span class="box"></span><span class="id">3.5</span><div class="what"><p>Highlighted Reports mark excluded phrases the same way other excluded text is marked (consistent with the excluded-text highlighting used for incomplete sentences elsewhere in the program).</p></div></li>
+      <li><span class="box"></span><span class="id">3.6</span><div class="what"><p>A list entry that never appears anywhere in the document has no visible effect: no error, no highlighting, the project analyzes normally.</p></div></li>
+    </ul>
+
+    <h2 id="s4"><span class="n">04</span>Missing or invalid file handling</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">4.1</span><div class="what"><p>In Options (or Project Properties), type a path to a nonexistent file into <strong>Words &amp; phrases to exclude</strong> and click <strong>OK</strong>: blocked with <em>&ldquo;&quot;&lt;path&gt;&quot;: excluded phrase file not found.&rdquo;</em>, and the dialog jumps back to the Document Indexing page instead of closing.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">4.2</span><div class="what"><p>From that same blocked state, click <strong>Cancel</strong> instead: the dialog closes and the bogus path is discarded, not written to settings.</p></div></li>
+      <li><span class="box"></span><span class="id">4.3</span><div class="what"><p>Create a new project while the app&rsquo;s default exclusion path is valid: the new project loads with that path already applied and no prompts.</p></div></li>
+      <li><span class="box"></span><span class="id">4.4</span><div class="what"><p>Move the referenced exclusion file so a project that points at it can no longer find it at the old path, but leave a same-named copy elsewhere under that project&rsquo;s own folder tree. Reopen the project: it reports that the file <em>&ldquo;could not be located&rdquo;</em> but a same-named file was found at the new location, and asks <em>&ldquo;Do you wish to use this file instead?&rdquo;</em> Clicking <strong>Yes</strong> uses it and marks the project modified.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">4.5</span><div class="what"><p>Repeat 4.4 and click <strong>No</strong>: the found file is not used, and the project instead falls through to the plain not-found warning in 4.6.</p></div></li>
+      <li><span class="box"></span><span class="id">4.6</span><div class="what"><p>With no same-named file anywhere under the project&rsquo;s folder tree, reopening the project instead shows an informational <em>&ldquo;Exclusion phrase list not found&hellip; List will not be included in this project.&rdquo;</em> message (OK only, no Yes/No), and the project&rsquo;s exclusion path is silently cleared.</p></div></li>
+      <li><span class="box"></span><span class="id">4.7</span><div class="what"><p>Check <strong>&ldquo;Remember my answer&rdquo;</strong> on the 4.4 prompt: opening another project with the same kind of missing-but-findable file no longer prompts, and silently applies whatever was chosen the first time. This preference is shared program-wide, not specific to exclusion lists.</p></div></li>
+      <li><span class="box"></span><span class="id">4.8</span><div class="what"><p>Use Tools &rsaquo; Options &rsaquo; General Settings &rsaquo; <strong>Import&hellip;</strong> with <strong>Fixture D</strong> (a settings file whose exclusion path doesn&rsquo;t exist): the dialog shows <em>&ldquo;Settings from the selected file will now be applied&rdquo;</em> and closes immediately &mdash; there is no file-existence check at all during import.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">4.9</span><div class="what"><p>Reopen Options after 4.8: the bogus path from the imported file now shows on the Document Indexing page. Clicking <strong>OK</strong> blocks per 4.1, but clicking <strong>Cancel</strong> leaves the bogus path in effect anyway, since Import already wrote it to the app&rsquo;s settings before the dialog was reopened.</p></div></li>
+    </ul>
+
+    <h2 id="s5"><span class="n">05</span>Batch projects &amp; subprojects</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">5.1</span><div class="what"><p>Open <strong>Fixture E</strong> and create a subproject from one of its rows: the subproject uses the exact same exclusion list as its parent batch, not a separate copy reloaded from disk.</p></div></li>
+      <li><span class="box"></span><span class="id">5.2</span><div class="what"><p>Open <strong>Fixture F</strong> (no exclusion list) and create a subproject: it likewise analyzes with no exclusion list and shows no missing-file warning.</p></div></li>
+      <li><span class="box"></span><span class="id">5.3</span><div class="what"><p>Change the exclusion list path in <strong>Fixture E</strong>&rsquo;s own Properties dialog and reanalyze: existing subprojects reflect the new list, since they share the same in-memory list object as their parent (per 5.1).</p></div></li>
+      <li><span class="box"></span><span class="id">5.4</span><div class="what"><p>Save and reopen <strong>Fixture E</strong>: the exclusion path round-trips correctly and subprojects still share it after reload.</p></div></li>
+    </ul>
+
+    <h2 id="s6"><span class="n">06</span>Persistence &amp; settings</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">6.1</span><div class="what"><p>A brand-new project (Standard or Batch) inherits its initial exclusion path and <strong>Include first occurrence</strong> setting from the app&rsquo;s current Options, not a separate fixed default.</p></div></li>
+      <li><span class="box"></span><span class="id">6.2</span><div class="what"><p>Changing the exclusion list only in a single project&rsquo;s Properties dialog (not the app-level Options) does not change the app-level default used by the <em>next</em> new project.</p></div></li>
+      <li><span class="box"></span><span class="id">6.3</span><div class="what"><p>Save a project with a custom exclusion list, close and reopen it: the path and the <strong>Include first occurrence</strong> setting are restored exactly as saved.</p></div></li>
+      <li><span class="box"></span><span class="id">6.4</span><div class="what"><p>With an invalid path currently entered in the open Options dialog, click <strong>Export&hellip;</strong>: this is blocked by the same &ldquo;file not found&rdquo; validation as clicking OK (4.1) &mdash; Export cannot produce a settings file while the open dialog itself has a flagged-bad path.<span class="tag">key case</span></p></div></li>
+    </ul>
+
+    <section class="signoff" id="signoff">
+      <h2>Sign-off</h2>
+      <ul class="platforms">
+        <li><span class="box"></span>All sections pass on Windows</li>
+        <li><span class="box"></span>All sections pass on macOS</li>
+        <li><span class="box"></span>All sections pass on Linux</li>
+      </ul>
+      <div class="sigline">
+        <span class="field"><span class="lbl">Tester</span></span>
+        <span class="field"><span class="lbl">Build</span></span>
+        <span class="field"><span class="lbl">Date</span></span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Wizard Test Plan &mdash; Readability Studio</title>
+<style>
+/* ==========================================================================
+   Palette drawn from the Readability Studio icon: a sunburst over an open
+   book. Orange rays, ember, bookmark coral, page cream, spine brown.
+   ========================================================================== */
+:root {
+  --sun:        #E87C0A;
+  --amber:      #F2A81D;
+  --ember:      #B8500F;
+  --coral:      #D9614F;
+  --cream:      #E9E1D0;
+  --spine:      #5A3A22;
+
+  --ground:     #FBF8F3;
+  --surface:    #FFFFFF;
+  --page:       #F4EDDF;
+  --ink:        #191410;
+  --ink-soft:   #574B40;
+  --ink-faint:  #8A7A6C;
+  --rule:       #DFD4C2;
+  --rule-soft:  #EBE2D3;
+
+  --accent:     var(--ember);
+  --accent-2:   var(--sun);
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, "Liberation Mono", monospace;
+
+  --measure: 70ch;
+  --step: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:    #14100C;
+    --surface:   #1D1813;
+    --page:      #26201A;
+    --ink:       #F0E7DA;
+    --ink-soft:  #C0B2A2;
+    --ink-faint: #8D7F70;
+    --rule:      #3A3128;
+    --rule-soft: #2C251E;
+    --cream:     #2E271F;
+    --accent:    var(--amber);
+    --accent-2:  var(--sun);
+    --coral:     #E5806F;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:    #14100C;
+  --surface:   #1D1813;
+  --page:      #26201A;
+  --ink:       #F0E7DA;
+  --ink-soft:  #C0B2A2;
+  --ink-faint: #8D7F70;
+  --rule:      #3A3128;
+  --rule-soft: #2C251E;
+  --cream:     #2E271F;
+  --accent:    var(--amber);
+  --accent-2:  var(--sun);
+  --coral:     #E5806F;
+}
+:root[data-theme="light"] {
+  --ground:    #FBF8F3;
+  --surface:   #FFFFFF;
+  --page:      #F4EDDF;
+  --ink:       #191410;
+  --ink-soft:  #574B40;
+  --ink-faint: #8A7A6C;
+  --rule:      #DFD4C2;
+  --rule-soft: #EBE2D3;
+  --cream:     #E9E1D0;
+  --accent:    var(--ember);
+  --accent-2:  var(--sun);
+  --coral:     #D9614F;
+}
+
+/* ---------- Base ---------------------------------------------------- */
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); }
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+strong { font-weight: 650; color: var(--ink); }
+code, kbd {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--cream);
+  padding: 0.08em 0.34em;
+  border-radius: 3px;
+}
+
+/* ---------- Masthead ------------------------------------------------ */
+
+.masthead {
+  position: relative;
+  overflow: hidden;
+  background: #191410;
+  color: #F5EDE0;
+  border-bottom: 3px solid var(--sun);
+}
+/* the icon's ray fan, thrown from the top-right corner */
+.masthead::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% -60% -10%;
+  background: repeating-conic-gradient(from 172deg at 96% -8%,
+      rgba(232,124,10,0)   0deg   2.1deg,
+      var(--amber)         2.1deg 3.4deg,
+      rgba(232,124,10,0)   3.4deg 4.6deg,
+      var(--ember)         4.6deg 5.6deg,
+      rgba(232,124,10,0)   5.6deg 7.4deg,
+      var(--sun)           7.4deg 8.8deg,
+      rgba(232,124,10,0)   8.8deg 11deg);
+  -webkit-mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  mask-image: radial-gradient(120% 105% at 96% 0%, #000 12%, rgba(0,0,0,0.55) 46%, transparent 78%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.masthead::after {
+  content: "";
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  right: -6vw;
+  top: -17vw;
+  border-radius: 50%;
+  background: var(--ember);
+  pointer-events: none;
+}
+.masthead-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.6rem 1.5rem 2.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+.mark {
+  width: 78px;
+  height: 78px;
+  flex: none;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.45));
+}
+.masthead-text { flex: 1 1 22rem; min-width: 0; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0 0 0.5rem;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 1.4rem + 2.1vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0 0 0.7rem;
+  color: #FFF8EC;
+}
+.lede {
+  margin: 0;
+  max-width: 56ch;
+  color: #D9CDBC;
+  font-size: 1rem;
+}
+.lede em { color: #F7E3C6; font-style: normal; font-weight: 600; }
+
+/* ---------- Shell --------------------------------------------------- */
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1080px) {
+  .wrap {
+    grid-template-columns: 12.5rem minmax(0, var(--measure));
+    justify-content: center;
+    align-items: start;
+    gap: 4rem;
+  }
+}
+
+/* ---------- Section index ------------------------------------------- */
+
+.index {
+  display: none;
+  position: sticky;
+  top: 2rem;
+  padding-top: 3.4rem;
+  font-size: 0.83rem;
+}
+@media (min-width: 1080px) { .index { display: block; } }
+.index h2 {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.9rem;
+  font-weight: 600;
+}
+.index ol { list-style: none; margin: 0; padding: 0; }
+.index li { margin-bottom: 0.42rem; }
+.index a {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: 0.2rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  padding-left: 0.55rem;
+}
+.index a:hover { color: var(--accent); border-left-color: var(--accent-2); }
+.index .n {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  padding-top: 0.1em;
+}
+
+/* ---------- Main flow ----------------------------------------------- */
+
+.plan { min-width: 0; }
+.plan > * + * { margin-top: 1.15rem; }
+
+.plan h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 3.4rem 0 0.2rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  scroll-margin-top: 1.5rem;
+}
+.plan h2 .n {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--accent);
+  padding: 0.16em 0.5em;
+  border-radius: 3px;
+  flex: none;
+  letter-spacing: 0.02em;
+}
+.plan h3 {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 2.2rem 0 0.1rem;
+}
+.plan p { margin: 0; max-width: var(--measure); }
+
+/* setup note that opens a section */
+.setup {
+  margin: 1rem 0 0.4rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.setup p + p { margin-top: 0.5rem; }
+
+/* ---------- Checklists ---------------------------------------------- */
+
+.checks { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.checks li {
+  display: grid;
+  grid-template-columns: 1.15rem 3.1rem 1fr;
+  gap: 0 0.62rem;
+  padding: 0.62rem 0;
+  border-top: 1px solid var(--rule-soft);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.checks li:first-child { border-top: 0; }
+
+.box {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.17rem;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 3px;
+  background: var(--surface);
+}
+.id {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding-top: 0.24em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.what { min-width: 0; }
+.what > p { margin: 0; }
+
+/* bookmark-ribbon tags, after the icon's red page marker */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+  margin-left: 0.45rem;
+  padding: 0.14em 0.42em 0.14em 0.5em;
+  color: var(--surface);
+  background: var(--coral);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  padding-bottom: 0.4em;
+}
+@media (prefers-color-scheme: dark) { .tag { color: #201812; } }
+:root[data-theme="dark"] .tag { color: #201812; }
+:root[data-theme="light"] .tag { color: var(--surface); }
+
+/* ---------- Platform strip ------------------------------------------ */
+
+.platforms {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.platforms li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 1.1rem 0.6rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.95rem;
+  break-inside: avoid;
+}
+.platforms .box { margin-top: 0; }
+
+/* ---------- Table ---------------------------------------------------- */
+
+.scroller {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--surface);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88rem;
+  min-width: 38rem;
+}
+thead th {
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1.5px solid var(--rule);
+  background: var(--page);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 0.58rem 0.85rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+  width: 2.2rem;
+}
+td.win { font-weight: 650; }
+
+/* ---------- Fixtures ------------------------------------------------- */
+
+.fixtures {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.fixtures li {
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.fixtures .doc {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) { .fixtures .doc { color: var(--amber); } }
+:root[data-theme="dark"] .fixtures .doc { color: var(--amber); }
+:root[data-theme="light"] .fixtures .doc { color: var(--ember); }
+.fixtures .name { font-weight: 650; color: var(--ink); }
+
+/* ---------- Watch-for list ------------------------------------------- */
+
+.watch { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.watch li {
+  position: relative;
+  padding: 0.36rem 0 0.36rem 1.5rem;
+  max-width: var(--measure);
+}
+.watch li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 0.7rem;
+  height: 2px;
+  background: var(--accent-2);
+}
+
+/* ---------- Sign-off -------------------------------------------------- */
+
+.signoff {
+  margin-top: 3.5rem;
+  padding: 1.6rem 1.5rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  background: var(--surface);
+  break-inside: avoid;
+}
+.signoff h2 {
+  margin: 0 0 0.9rem;
+  border: 0;
+  padding: 0;
+  font-size: 1.3rem;
+}
+.signoff .platforms { margin-top: 0; }
+.sigline {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.sigline .field {
+  flex: 1 1 11rem;
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: 0.3rem;
+}
+
+/* ---------- Print ------------------------------------------------------ */
+
+@page { margin: 16mm 14mm; }
+
+@media print {
+  :root {
+    --ground: #FFFFFF;
+    --surface: #FFFFFF;
+    --page: #FFFFFF;
+    --cream: #FFFFFF;
+    --ink: #000000;
+    --ink-soft: #2B2B2B;
+    --ink-faint: #666666;
+    --rule: #999999;
+    --rule-soft: #CCCCCC;
+    --accent: #000000;
+  }
+  body { font-size: 9.6pt; line-height: 1.42; background: #FFF; }
+  .index { display: none; }
+  .wrap { display: block; max-width: none; padding: 0; }
+  .plan { max-width: none; }
+  .masthead {
+    background: #FFF;
+    color: #000;
+    border-bottom: 2px solid #000;
+  }
+  .masthead::before, .masthead::after { display: none; }
+  .masthead-inner { padding: 0 0 0.7rem; gap: 1rem; }
+  .masthead h1 { color: #000; font-size: 20pt; }
+  .lede { color: #2B2B2B; }
+  .lede em { color: #000; }
+  .eyebrow { color: #666; }
+  .mark { width: 52px; height: 52px; filter: none; }
+  /* keep units whole across the page break, LaTeX minipage style */
+  p { orphans: 3; widows: 3; }
+  .plan h2 {
+    margin-top: 1.6rem;
+    font-size: 13pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .plan h3 { break-after: avoid; page-break-after: avoid; }
+  .setup { break-after: avoid; page-break-after: avoid; }
+  .scroller, .watch li, .fixtures li, .platforms li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  .plan h2 .n {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    padding: 0 0.35em;
+  }
+  .id { color: #000; }
+  .tag {
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    clip-path: none;
+    padding: 0 0.35em;
+  }
+  .setup { border-left: 3px solid #000; }
+  .box { border-color: #000; border-width: 1pt; }
+  .signoff { border-color: #000; }
+  /* drop the labels on paper and leave bare ruled lines to write on */
+  .sigline { margin-top: 2.6rem; gap: 1.2rem 2.5rem; }
+  .sigline .lbl { display: none; }
+  .sigline .field { min-height: 2.6rem; border-bottom: 1pt solid #000; }
+  a { color: #000; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-text">
+      <p class="eyebrow">Readability Studio &middot; Manual QA</p>
+      <h1>Project Wizard Test Plan</h1>
+      <p class="lede">Covers the <em>Standard</em> and <em>Batch</em> New Project wizards, plus
+        <em>New Project from Clipboard</em>.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="index" aria-label="Sections">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span><span>Document entry &mdash; Standard</span></a></li>
+      <li><a href="#s2"><span class="n">02</span><span>Document entry &mdash; Batch</span></a></li>
+      <li><a href="#s3"><span class="n">03</span><span>Document Structure</span></a></li>
+      <li><a href="#s4"><span class="n">04</span><span>Tests: document type &amp; industry</span></a></li>
+      <li><a href="#s5"><span class="n">05</span><span>Tests: manual, custom &amp; Dolch</span></a></li>
+      <li><a href="#s6"><span class="n">06</span><span>Tests: bundles</span></a></li>
+      <li><a href="#s7"><span class="n">07</span><span>Preview page</span></a></li>
+      <li><a href="#s8"><span class="n">08</span><span>Navigation &amp; Finish</span></a></li>
+      <li><a href="#s9"><span class="n">09</span><span>Language</span></a></li>
+      <li><a href="#s10"><span class="n">10</span><span>New Project from Clipboard</span></a></li>
+      <li><a href="#s11"><span class="n">11</span><span>Persistence edge cases</span></a></li>
+      <li><a href="#signoff"><span class="n">&mdash;</span><span>Sign-off</span></a></li>
+    </ol>
+  </nav>
+
+  <main class="plan">
+
+    <h3>What to watch for</h3>
+    <ul class="watch">
+      <li>This is a <strong>sidebar-book wizard</strong>, not a classic linear wizard: every sidebar
+        entry is directly clickable, so a tester can jump straight to <strong>Preview</strong>
+        without ever visiting Document Structure or Test Selection.</li>
+      <li><strong>Composition</strong> (narrative vs.&nbsp;non-narrative/fragmented) and
+        <strong>Layout</strong> (three independent checkboxes) are two separate groups on the
+        Document Structure page &mdash; they are not one big radio set.</li>
+      <li>All validation happens at <strong>Finish</strong>, not when moving between pages.</li>
+      <li>Document Structure choices are <strong>not saved as new defaults</strong> when the wizard
+        finishes &mdash; they only seed from whatever the app&rsquo;s own paragraph-parsing
+        preferences already were.</li>
+      <li>For Test Selection, only the <strong>method actually active at Finish</strong> (document
+        type, industry, manual, or bundle) has its settings remembered for next time.</li>
+      <li>The Preview page renders against a private scratch project; nothing done there can affect
+        the real project being created.</li>
+    </ul>
+
+    <h3>Platforms</h3>
+    <p>Exercise every section on all three desktop platforms. File/folder pickers, the recursive
+      directory scan, and the Preview page&rsquo;s embedded web view are all backed by different
+      native components per platform.</p>
+    <ul class="platforms">
+      <li><span class="box"></span>Windows</li>
+      <li><span class="box"></span>macOS</li>
+      <li><span class="box"></span>Linux</li>
+    </ul>
+
+    <h3>Wizard pages at a glance</h3>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th class="num">#</th><th>Page</th><th>Standard project</th><th>Batch project</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">1</td><td class="win">Document / Documents</td><td>Language, file-or-manual-text source</td><td>Language, six add-source buttons, file list, min word count, random sampling</td></tr>
+          <tr><td class="num">2</td><td class="win">Document Structure</td><td colspan="2">Composition (narrative / non-narrative) &amp; Layout (split lines, centered text, hard returns) &mdash; identical for both project types</td></tr>
+          <tr><td class="num">3</td><td class="win">Test Selection</td><td colspan="2">Document type, industry, manual selection, or test bundle &mdash; identical for both project types</td></tr>
+          <tr><td class="num">4</td><td class="win">Preview</td><td>Previews the configured file or entered text</td><td>Previews whichever file is currently first in the list</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Suggested test fixtures</h3>
+    <ul class="fixtures">
+      <li><span class="doc">Doc A</span><span class="name">Small English narrative file.</span> A
+        plain paragraph-and-sentence document for quick baseline runs.</li>
+      <li><span class="doc">Folder B</span><span class="name">Mixed batch folder.</span> A folder
+        (with at least one subfolder) containing several document types, for Add folder&rsquo;s
+        recursive toggle and file-type filtering.</li>
+      <li><span class="doc">Archive C</span><span class="name">Small zip of a few documents.</span>
+        For Add archive; include a password-protected archive as a negative case if one is on hand.</li>
+      <li><span class="doc">Workbook D</span><span class="name">Multi-sheet .xlsx or .ods file.</span>
+        At least two sheets, one with more rows than fit on screen, for the sheet-picker and
+        cell-range preview.</li>
+      <li><span class="doc">Legacy E</span><span class="name">Old binary .doc file.</span> For the
+        automatic hard-return override on legacy Word documents.</li>
+      <li><span class="doc">Site F</span><span class="name">Small crawlable website.</span> A handful
+        of internally-linked pages, for Add web pages.</li>
+      <li><span class="doc">Non-English G</span><span class="name">Spanish and German samples.</span>
+        For language-filtered test lists and Dolch enable/disable.</li>
+      <li><span class="doc">Long H</span><span class="name">Document over ~300 words.</span> For the
+        Preview page&rsquo;s excerpt-cutoff logic.</li>
+      <li><span class="doc">Short I</span><span class="name">Document under ~300 words.</span> Preview
+        should show it in full, with no trailing ellipsis.</li>
+    </ul>
+
+    <!-- ============================================================== -->
+
+    <h2 id="s1"><span class="n">01</span>Document entry &mdash; Standard project</h2>
+    <div class="setup">
+      <p>File &rsaquo; New &rsaquo; Standard Project (or the equivalent ribbon button). Use
+        <strong>Doc A</strong> unless noted.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">1.1</span><div class="what"><p>The language choice offers exactly <strong>English, Spanish, German</strong>, in that fixed order.</p></div></li>
+      <li><span class="box"></span><span class="id">1.2</span><div class="what"><p>Default source is <strong>&ldquo;Read text from a file or webpage&rdquo;</strong>: its file field and Browse button are enabled; &ldquo;Manually enter text&rdquo; and its field are disabled.</p></div></li>
+      <li><span class="box"></span><span class="id">1.3</span><div class="what"><p>Selecting <strong>&ldquo;Manually enter text&rdquo;</strong> enables its multi-line field and disables the file path field and Browse button; switching back re-enables the file field and disables the text field.</p></div></li>
+      <li><span class="box"></span><span class="id">1.4</span><div class="what"><p>Clicking <strong>Browse</strong> opens a file picker; choosing a file fills in the file path field.</p></div></li>
+      <li><span class="box"></span><span class="id">1.5</span><div class="what"><p>Typing a web URL directly into the file path field (no browsing) is accepted as a valid source.</p></div></li>
+      <li><span class="box"></span><span class="id">1.6</span><div class="what"><p>With &ldquo;from file&rdquo; selected and the path left empty, click <strong>Finish</strong>: the Browse dialog opens once as a last chance; canceling it jumps to the Document page and shows <em>&ldquo;Please enter a file to be analyzed before continuing.&rdquo;</em></p></div></li>
+      <li><span class="box"></span><span class="id">1.7</span><div class="what"><p>Type a path to a file that doesn&rsquo;t exist and click Finish; after canceling the last-chance Browse dialog, the message becomes <em>&ldquo;File not found. Please enter a valid file to be analyzed before continuing.&rdquo;</em></p></div></li>
+      <li><span class="box"></span><span class="id">1.8</span><div class="what"><p>Leave <strong>&ldquo;Manually enter text&rdquo;</strong> completely empty and click Finish &mdash; this is allowed; no validation blocks it (only Preview will show &ldquo;not available&rdquo;).</p></div></li>
+    </ul>
+
+    <h2 id="s2"><span class="n">02</span>Document entry &mdash; Batch project</h2>
+    <div class="setup">
+      <p>File &rsaquo; New &rsaquo; Batch Project. Use <strong>Folder B</strong>, <strong>Archive C</strong>,
+        <strong>Workbook D</strong>, and <strong>Site F</strong> across these cases.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">2.1</span><div class="what"><p>All six add-source buttons are present and open distinct dialogs: <strong>Add folder&hellip;, Add files&hellip;, Add archive&hellip;, Add spreadsheet&hellip;, Add web pages&hellip;, Add web page&hellip;</strong> (the last is the singular, single-URL variant).</p></div></li>
+      <li><span class="box"></span><span class="id">2.2</span><div class="what"><p><strong>Add folder</strong> exposes a recursive-search toggle; unchecking it excludes files inside subfolders.</p></div></li>
+      <li><span class="box"></span><span class="id">2.3</span><div class="what"><p><strong>Add folder</strong> and <strong>Add files</strong> share the same last-used-folder memory: browsing with one, then opening the other, starts in the same folder (see <a href="#s11">11.7</a> for how long this lasts).</p></div></li>
+      <li><span class="box"></span><span class="id">2.4</span><div class="what"><p>Any add flow that adds more than one row (folder, files, archive, web pages) prompts for how to label the new rows: <strong>use documents&rsquo; descriptions</strong>, <strong>a typed grouping label</strong>, or <strong>the last common folder between files</strong>. The previously-chosen option is pre-selected the next time this prompt appears, including across separate add operations.</p></div></li>
+      <li><span class="box"></span><span class="id">2.5</span><div class="what"><p>Choosing <strong>a typed grouping label</strong> applies that exact text to every row just added.</p></div></li>
+      <li><span class="box"></span><span class="id">2.6</span><div class="what"><p>Choosing <strong>last common folder between files</strong> derives each label by comparing adjacent (sorted) files and using the longest shared folder path between neighbors &mdash; verify with files at different folder depths.</p></div></li>
+      <li><span class="box"></span><span class="id">2.7</span><div class="what"><p><strong>Add spreadsheet</strong> (Workbook D): if it has 2+ sheets, prompts to pick which sheet(s); each chosen sheet then opens a preview for selecting a cell range before import. Only the typed-label grouping option is offered here (no descriptions/last-common-folder choices, since spreadsheet cells don&rsquo;t have those).</p></div></li>
+      <li><span class="box"></span><span class="id">2.8</span><div class="what"><p><strong>Add archive</strong> (Archive C): opens an archive browser, then the same grouping prompt as folder/files; extracted entries appear as archive-relative pseudo-paths in the list.</p></div></li>
+      <li><span class="box"></span><span class="id">2.8a</span><div class="what"><p>A <strong>password-protected archive</strong> is rejected with a clear error rather than silently producing an empty or partial list.</p></div></li>
+      <li><span class="box"></span><span class="id">2.9</span><div class="what"><p><strong>Add web pages</strong> (Site F): crawls the site for links, with the option to download the pages locally vs.&nbsp;keep them as remote URLs.</p></div></li>
+      <li><span class="box"></span><span class="id">2.10</span><div class="what"><p><strong>Add web page</strong> (singular): typing text that isn&rsquo;t a resolvable URL is rejected with a warning; a valid URL is appended as one row via the grouping prompt.</p></div></li>
+      <li><span class="box"></span><span class="id">2.11</span><div class="what"><p>The small <strong>Add / Delete / Group</strong> icon buttons above the file list work on the current selection (Add inserts a blank editable row; Delete removes selected rows; Group prompts for a label). <strong>Ctrl+G</strong> triggers Group from anywhere on this page.</p></div></li>
+      <li><span class="box"></span><span class="id">2.12</span><div class="what"><p><strong>Minimum document word count</strong> accepts any positive integer; set it high and confirm shorter documents are excluded from the batch at Finish.</p></div></li>
+      <li><span class="box"></span><span class="id">2.13</span><div class="what"><p>Checking <strong>&ldquo;% of documents to randomly sample&rdquo;</strong> enables its percentage spinner (1&ndash;100); leaving it unchecked leaves the spinner disabled.</p></div></li>
+      <li><span class="box"></span><span class="id">2.14</span><div class="what"><p>Click Finish with an <strong>empty file list</strong>: Add Folder opens once as a last chance; canceling shows <em>&ldquo;Please select files to be analyzed before continuing.&rdquo;</em></p></div></li>
+    </ul>
+
+    <h2 id="s3"><span class="n">03</span>Document Structure</h2>
+    <div class="setup">
+      <p>This page is identical for Standard and Batch. Two groups: <strong>Composition</strong>
+        (Narrative text / Non-narrative, fragmented text &mdash; mutually exclusive) and
+        <strong>Layout</strong> (three independent checkboxes: split sentences, centered/left-aligned
+        text, hard returns start new paragraphs).</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">3.1</span><div class="what"><p><strong>Narrative text</strong> and <strong>Non-narrative, fragmented text</strong> are mutually exclusive &mdash; selecting one deselects the other.</p></div></li>
+      <li><span class="box"></span><span class="id">3.2</span><div class="what"><p>The three <strong>Layout</strong> checkboxes are independent of each other and of Composition &mdash; any combination can be checked in the UI itself (blocking only happens at Finish, see 3.7&ndash;3.8).</p></div></li>
+      <li><span class="box"></span><span class="id">3.3</span><div class="what"><p>Each of the six options has a thumbnail image; clicking any thumbnail (whose source image is larger than the thumbnail itself) opens it enlarged in a modal window, closable by clicking anywhere on it or pressing any key. The split-sentences and hard-returns options each show <strong>two</strong> thumbnails (before/after) &mdash; confirm both render distinctly and both enlarge correctly.</p></div></li>
+      <li><span class="box"></span><span class="id">3.3a</span><div class="what"><p>The enlarged image is scaled to fit within the screen&rsquo;s dimensions &mdash; on every monitor in a multi-monitor setup, and at various display scaling percentages, confirm it never extends beyond the visible screen bounds in either direction.</p></div></li>
+      <li><span class="box"></span><span class="id">3.3b</span><div class="what"><p>Any text/labels baked into the thumbnail&rsquo;s source image (e.g., callouts in the before/after illustrations) remain fully legible at the enlarged size &mdash; not clipped, blurry, or overlapping the border or the &ldquo;Click to close&rdquo; hint in the corner.<span class="tag">regression</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.4</span><div class="what"><p>All three &ldquo;More info&hellip;&rdquo; icon buttons (fragmented text, split sentences, centered text) open the <strong>same</strong> help topic &mdash; not option-specific pages.</p></div></li>
+      <li><span class="box"></span><span class="id">3.5</span><div class="what"><p>Check both <strong>Centered/left-aligned text</strong> and <strong>Line ends mark the start of a new paragraph</strong>, then click Finish: blocked, returned to this page, with a message to unselect one.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.6</span><div class="what"><p>Check both <strong>Sentences are split&hellip;</strong> and <strong>Line ends mark the start of a new paragraph</strong>, then click Finish: the analogous blocking message appears.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.7</span><div class="what"><p>On Test Selection, choose document type <strong>&ldquo;Non-narrative form&hellip;&rdquo;</strong> while Composition is still Narrative, then Finish: Composition is auto-flipped to fragmented text, with an explanatory info message first.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.8</span><div class="what"><p>Conversely, select <strong>Non-narrative, fragmented text</strong> on this page while a different document type is chosen on Test Selection, then Finish: the document type is auto-switched to Non-narrative form, with its own explanatory message.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.9</span><div class="what"><p>Finish a project with non-default Document Structure choices (e.g., fragmented text, or centered text checked), then <strong>reopen the wizard</strong>: this page resets to its ordinary defaults, not to what was chosen last run &mdash; Document Structure selections are not saved as new wizard defaults.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">3.10</span><div class="what"><p>With the app&rsquo;s own paragraph-parsing preference set so that every new line already starts a new paragraph, and indentation is already being ignored, open the wizard and check whether <strong>Centered/left-aligned text</strong> opens checked or unchecked. Note whichever it is &mdash; the two places in the code that seed this default disagree on whether the line-per-paragraph setting should suppress it.</p></div></li>
+      <li><span class="box"></span><span class="id">3.11</span><div class="what"><p>Analyze <strong>Legacy E</strong> (an old binary .doc file) without checking any Layout box: the resulting project treats every line as a new paragraph automatically. Explicitly checking split-sentences, centered-text, or hard-returns yourself overrides this automatic behavior.</p></div></li>
+    </ul>
+
+    <h2 id="s4"><span class="n">04</span>Test Selection &mdash; document type &amp; industry</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">4.1</span><div class="what"><p><strong>&ldquo;Choose how to select tests&rdquo;</strong> offers exactly four mutually exclusive options (document type, industry, manual, bundle); switching swaps the panel below it &mdash; only one panel is visible at a time.</p></div></li>
+      <li><span class="box"></span><span class="id">4.2</span><div class="what"><p><strong>Document type</strong> offers 5 choices: General document, Technical document or form, Non-narrative form (fragmented text), Literature, Children&rsquo;s literature. Selecting each and finishing includes the tests mapped to that classification for the current language.</p></div></li>
+      <li><span class="box"></span><span class="id">4.3</span><div class="what"><p><strong>Industry</strong> offers 7 choices: Children&rsquo;s publishing, Young adult/adult publishing, Children&rsquo;s healthcare, Adult healthcare, Military and government, Second Language (ESL) Education, Broadcasting. Spot-check known mappings, e.g.&nbsp;Broadcasting (English) includes only ELF; ESL (English) includes EFLAW and Dolch; ESL (Spanish) includes only FRASE.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">4.4</span><div class="what"><p>Selecting a document type or industry with <strong>zero tests</strong> for the current language shows a non-blocking note (&ldquo;no tests associated with this &hellip; for the selected language&rdquo;) but still creates the project.</p></div></li>
+      <li><span class="box"></span><span class="id">4.5</span><div class="what"><p>Selecting <strong>Children&rsquo;s literature</strong>, <strong>Children&rsquo;s publishing</strong>, or <strong>ESL Education</strong> auto-includes Dolch Sight Words for English, even though the Dolch checkbox itself lives on the Manual Selection panel and was never visited.</p></div></li>
+      <li><span class="box"></span><span class="id">4.6</span><div class="what"><p>Finish with document type (or industry) selected, then reopen the wizard: that method and its chosen option are remembered.</p></div></li>
+    </ul>
+
+    <h2 id="s5"><span class="n">05</span>Test Selection &mdash; manual, custom tests &amp; Dolch</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">5.1</span><div class="what"><p>The manual-selection list shows only tests supporting the currently selected language; switching language while on this panel live-filters the list.</p></div></li>
+      <li><span class="box"></span><span class="id">5.2</span><div class="what"><p>Tests checked before a language switch remain checked after switching, provided they support the new language too; switching back doesn&rsquo;t lose the original selections for tests that disappeared and reappeared.</p></div></li>
+      <li><span class="box"></span><span class="id">5.3</span><div class="what"><p>The <strong>Dolch</strong> checkbox is enabled only for English; note whether it stays checked-but-disabled or gets cleared when switching away from English, and whether switching back to English restores its prior state.</p></div></li>
+      <li><span class="box"></span><span class="id">5.4</span><div class="what"><p>With <strong>zero</strong> custom tests defined in the app, the Custom Tests list and its column header are simply absent (not shown empty). Add at least one custom test and reopen the wizard to confirm the list then appears alongside the standard tests.</p></div></li>
+      <li><span class="box"></span><span class="id">5.5</span><div class="what"><p>Custom tests checked in a previous run are pre-checked again next time, but only if <strong>Manual Selection</strong> was the method actually used to Finish last time (see <a href="#s11">11.3</a>).</p></div></li>
+      <li><span class="box"></span><span class="id">5.6</span><div class="what"><p>Ctrl/Shift-click multi-selection works normally in both the standard-tests and custom-tests lists.</p></div></li>
+    </ul>
+
+    <h2 id="s6"><span class="n">06</span>Test Selection &mdash; bundles</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">6.1</span><div class="what"><p>The bundle list reflects whatever test bundles are currently defined; with none defined, the radio box still renders sensibly with an empty option set (no crash).</p></div></li>
+      <li><span class="box"></span><span class="id">6.2</span><div class="what"><p>Selecting a bundle and finishing includes exactly that bundle&rsquo;s tests, regardless of what&rsquo;s checked on the (now-hidden) Manual Selection panel.</p></div></li>
+      <li><span class="box"></span><span class="id">6.3</span><div class="what"><p>Finish with a bundle selected, then reopen the wizard: Test Bundle method and that same bundle are pre-selected again.</p></div></li>
+    </ul>
+
+    <h2 id="s7"><span class="n">07</span>Preview page</h2>
+    <div class="setup">
+      <p>Configure Document and Document Structure first, then visit Preview. Use <strong>Long H</strong>
+        and <strong>Short I</strong> for the excerpt cases.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">7.1</span><div class="what"><p>Preview initially shows only <strong>excluded-text</strong> highlighting (no readability/Dolch/grammar highlighting), with an &ldquo;Excluded text&rdquo; legend banner.</p></div></li>
+      <li><span class="box"></span><span class="id">7.2</span><div class="what"><p><strong>Long H</strong> (over ~300 words) is truncated, extended out to the end of the sentence containing word #300, with a trailing ellipsis. <strong>Short I</strong> (under ~300 words) shows in full, with no ellipsis.</p></div></li>
+      <li><span class="box"></span><span class="id">7.3</span><div class="what"><p>Editing the file path or manually-entered text and returning to Preview does a full re-extraction and re-render.</p></div></li>
+      <li><span class="box"></span><span class="id">7.4</span><div class="what"><p>Toggling a Document Structure option and returning to Preview re-renders from the cached sample without re-reading the source &mdash; should be fast, with no flash of &ldquo;not available.&rdquo;</p></div></li>
+      <li><span class="box"></span><span class="id">7.5</span><div class="what"><p>For a batch project, Preview always reflects whichever file is currently <strong>first</strong> in the list; reordering or deleting rows so a different file becomes first, then returning to Preview, picks that file up.</p></div></li>
+      <li><span class="box"></span><span class="id">7.6</span><div class="what"><p>With an empty batch file list, or a Standard project with neither a valid file nor entered text, Preview shows <em>&ldquo;Preview not available.&rdquo;</em></p></div></li>
+      <li><span class="box"></span><span class="id">7.7</span><div class="what"><p>Point &ldquo;from file&rdquo; at an unreachable URL or a source that fails extraction: Preview shows <em>&ldquo;Preview not available for this source.&rdquo;</em> rather than crashing the wizard.</p></div></li>
+      <li><span class="box"></span><span class="id">7.8</span><div class="what"><p>Preview correctly resolves the pseudo-paths produced by Add archive and Add spreadsheet (an archive-internal file; a specific worksheet cell range) &mdash; the right extracted text shows, not an error.</p></div></li>
+      <li><span class="box"></span><span class="id">7.9</span><div class="what"><p>Preview follows the app&rsquo;s light/dark mode and the currently selected report theme&rsquo;s excluded-text highlight color/method.</p></div></li>
+      <li><span class="box"></span><span class="id">7.10</span><div class="what"><p>Nothing done on the Preview page (toggling structure options, navigating away and back) alters the real project once Finish is clicked &mdash; it renders against a disconnected scratch project.<span class="tag">key case</span></p></div></li>
+    </ul>
+
+    <h2 id="s8"><span class="n">08</span>Navigation &amp; Finish</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">8.1</span><div class="what"><p><strong>Back</strong> is disabled on the first page; <strong>Forward</strong> is disabled on the last page (Preview); both are enabled on the two middle pages.</p></div></li>
+      <li><span class="box"></span><span class="id">8.2</span><div class="what"><p>Clicking a sidebar entry directly jumps straight to that page &mdash; including jumping straight to Preview from the first page &mdash; with no intermediate validation blocking it.</p></div></li>
+      <li><span class="box"></span><span class="id">8.3</span><div class="what"><p>No cross-page validation blocks Forward navigation; every check in this plan that blocks progress happens only at Finish.</p></div></li>
+      <li><span class="box"></span><span class="id">8.4</span><div class="what"><p><strong>Cancel</strong> closes the wizard without creating a project and without saving any choice made during that run.</p></div></li>
+      <li><span class="box"></span><span class="id">8.5</span><div class="what"><p><strong>Help</strong> opens the same &ldquo;Creating a New Project&rdquo; topic regardless of which wizard page is showing (not context-sensitive per page).</p></div></li>
+      <li><span class="box"></span><span class="id">8.6</span><div class="what"><p><strong>F1</strong> (or the platform&rsquo;s context-help gesture) opens the same help topic as the Help button.</p></div></li>
+      <li><span class="box"></span><span class="id">8.7</span><div class="what"><p>The Finish button is labeled <strong>&ldquo;Finish,&rdquo;</strong> not &ldquo;OK.&rdquo;</p></div></li>
+    </ul>
+
+    <h2 id="s9"><span class="n">09</span>Language</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">9.1</span><div class="what"><p><strong>English, Spanish, German</strong> are offered in that fixed order, for both Standard and Batch projects, with no restriction on which can be selected.</p></div></li>
+    </ul>
+
+    <h2 id="s10"><span class="n">10</span>New Project from Clipboard</h2>
+    <div class="setup">
+      <p>A separate menu command (Ctrl+V / &ldquo;New Project from Clipboard&rdquo;), not the wizard
+        dialog itself, but it shares the same project-creation path and can bypass the wizard
+        entirely depending on clipboard content.</p>
+    </div>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">10.1</span><div class="what"><p>Copy ordinary prose (not a file path or URL) to the clipboard, then use New Project from Clipboard: the wizard opens with <strong>&ldquo;Manually enter text&rdquo;</strong> selected and that text already filled in.</p></div></li>
+      <li><span class="box"></span><span class="id">10.2</span><div class="what"><p>Copy a <strong>valid web URL</strong> as text (e.g.&nbsp;from a browser&rsquo;s address bar) and use New Project from Clipboard: the project is created <strong>immediately</strong>, sourced directly from that URL &mdash; the wizard is suppressed.</p></div></li>
+      <li><span class="box"></span><span class="id">10.3</span><div class="what"><p>Copy a valid local or network <strong>file path</strong> as plain text and use New Project from Clipboard: same immediate-creation, no-wizard behavior as 10.2 &mdash; only the resolved validity of the string matters, not which clipboard format carried it.</p></div></li>
+      <li><span class="box"></span><span class="id">10.4</span><div class="what"><p>Copy one or more <strong>actual files</strong> (selected in a file manager) and use New Project from Clipboard: a separate new project is created per file, wizard suppressed for all of them.</p></div></li>
+      <li><span class="box"></span><span class="id">10.5</span><div class="what"><p>With nothing on the clipboard, or content that is neither recognized text nor files, New Project from Clipboard shows <em>&ldquo;No text is currently on the clipboard.&rdquo;</em></p></div></li>
+      <li><span class="box"></span><span class="id">10.6</span><div class="what"><p>Selecting an entry from the <strong>Examples</strong> menu (Documentation ribbon tab) opens the wizard with that example&rsquo;s file path already filled in on the Document page &mdash; a deliberate exception where the wizard is <em>not</em> bypassed even though a valid file path is involved.<span class="tag">key case</span></p></div></li>
+    </ul>
+
+    <h2 id="s11"><span class="n">11</span>Persistence &amp; regression edge cases</h2>
+    <ul class="checks">
+      <li><span class="box"></span><span class="id">11.1</span><div class="what"><p>Configure Document Structure with non-default choices and finish a project, then reopen the wizard: Document Structure resets to whatever the app&rsquo;s own paragraph-parsing preferences already are, not to what was picked last run (duplicate of <a href="#s3">3.9</a>, retest independently for batch).<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">11.2</span><div class="what"><p>Finish once via document type. Reopen, switch through industry and manual selection (making different choices on each) without finishing, then Cancel. Reopen again: only the original document-type selection from the earlier successful Finish is remembered &mdash; none of the cancelled run&rsquo;s in-between changes persist.</p></div></li>
+      <li><span class="box"></span><span class="id">11.3</span><div class="what"><p>In one run, configure Manual Selection with specific tests, then switch to Test Bundle and Finish with a bundle chosen. Reopen: Test Bundle method and that bundle are remembered; the manual test checkboxes chosen earlier in that <em>same</em> run are not saved &mdash; only the method active at Finish is persisted.<span class="tag">key case</span></p></div></li>
+      <li><span class="box"></span><span class="id">11.4</span><div class="what"><p>In a batch project, add the <strong>same folder or file twice</strong> and Finish: duplicate rows are silently collapsed to one entry before the batch is built &mdash; confirm the resulting project has no duplicate documents.</p></div></li>
+      <li><span class="box"></span><span class="id">11.5</span><div class="what"><p>With Random Sampling checked, confirm the sampling percentage is computed against the <strong>deduplicated</strong> count from 11.4, not the raw list count including duplicates.</p></div></li>
+      <li><span class="box"></span><span class="id">11.6</span><div class="what"><p>Leave Random Sampling explicitly <strong>unchecked</strong> and Finish; reopen the wizard and confirm it stays off &mdash; an explicit &ldquo;off&rdquo; is remembered just as reliably as an explicit &ldquo;on.&rdquo;</p></div></li>
+      <li><span class="box"></span><span class="id">11.7</span><div class="what"><p>Use Add folder to browse into some folder, finish or cancel, then start a <strong>new</strong> wizard in the <em>same app session</em> and use Add folder again: it reopens in that same folder. <strong>Restart the app</strong> entirely and repeat: it should <em>not</em> remember that folder anymore &mdash; this memory is session-only, unlike the file-type filter and grouping-method choice, which are saved to disk.<span class="tag">key case</span></p></div></li>
+    </ul>
+
+    <section class="signoff" id="signoff">
+      <h2>Sign-off</h2>
+      <ul class="platforms">
+        <li><span class="box"></span>All sections pass on Windows</li>
+        <li><span class="box"></span>All sections pass on macOS</li>
+        <li><span class="box"></span>All sections pass on Linux</li>
+      </ul>
+      <div class="sigline">
+        <span class="field"><span class="lbl">Tester</span></span>
+        <span class="field"><span class="lbl">Build</span></span>
+        <span class="field"><span class="lbl">Date</span></span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
