@@ -494,8 +494,8 @@ img
   --tooltip-outline: #ffffff;
   --tooltip-outline-width: 1px;
   --tooltip-font-size: 0.8em;
-  --tooltip-pad-v: 4px;
-  --tooltip-pad-h: 10px;
+  --tooltip-pad-v: 7px;
+  --tooltip-pad-h: 14px;
   --tooltip-tail: 6px;
   }
 
@@ -511,6 +511,7 @@ img
   display: flex;
   flex-direction: column;
   width: max-content;
+  max-width: 260px;
   border: var(--tooltip-outline-width) solid var(--tooltip-outline);
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -526,6 +527,15 @@ img
   {
   opacity: 1;
   transform: translateY(0);
+  }
+
+/* a flagged word/phrase nested inside a flagged sentence is also inside
+   the sentence's tooltip-anchor, so hovering it satisfies the sentence's
+   :hover too; keep only the inner (more specific) tooltip visible */
+.tooltip-anchor:has(.tooltip-anchor:hover) > .tooltip-box
+  {
+  opacity: 0;
+  transform: translateY(4px);
   }
 
 /* caret connecting the card to the word it describes.
@@ -565,7 +575,6 @@ img
   padding: var(--tooltip-pad-v) var(--tooltip-pad-h);
   font-style: normal;
   text-decoration: none;
-  white-space: nowrap;
   }
 
 .tooltip-title
@@ -573,6 +582,7 @@ img
   font-weight: bold;
   font-size: calc(var(--tooltip-font-size) * 1.2);
   border-radius: 6px 6px 0 0;
+  white-space: nowrap;
   }
 
 /* no suggestion: title is the only row, so it's fully rounded */
@@ -583,7 +593,9 @@ img
   {
   font-weight: normal;
   font-size: var(--tooltip-font-size);
+  padding-top: calc(var(--tooltip-pad-v) * 2);
   border-radius: 0 0 6px 6px;
+  white-space: normal;
   }
 
 /* ---------- Plain Language Guide --------------------------------

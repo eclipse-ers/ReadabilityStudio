@@ -5891,19 +5891,33 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         // unfamiliar word, overly-long sentence, etc.), so tag it with a tooltip explaining
         // what it means in that specific window rather than baking one meaning into
         // BuildHighlighterTags(). Only ever applied to the HTML ("Themed") tags.
-        const auto withTooltip = [](const wxString& openingTag, const wxString& tooltip) -> wxString
+        const auto withTooltip = [](const wxString& openingTag, const wxString& tooltip,
+                                    const wxString& suggestion = wxString{},
+                                    const wxString& example = wxString{}) -> wxString
         {
             wxString encodedTooltip{ lily_of_the_valley::html_encode_text::simple_encode(
                 { tooltip.wc_str(), tooltip.length() }) };
             wxString tagged{ openingTag };
             // marks the span as a tooltip hover anchor
             tagged.Replace(L"class=\"", L"class=\"tooltip-anchor ", false);
-            tagged.Replace(
-                L">",
-                wxString::Format(
-                    LR"(><span class="tooltip-box"><span class="tooltip-title">%s</span></span>)",
-                    encodedTooltip),
-                false);
+            wxString inner{ wxString::Format(
+                LR"(><span class="tooltip-box"><span class="tooltip-title">%s</span>)",
+                encodedTooltip) };
+            if (!suggestion.empty())
+                {
+                wxString encodedSuggestion{ lily_of_the_valley::html_encode_text::simple_encode(
+                    { suggestion.wc_str(), suggestion.length() }) };
+                wxString body{ encodedSuggestion };
+                if (!example.empty())
+                    {
+                    wxString encodedExample{ lily_of_the_valley::html_encode_text::simple_encode(
+                        { example.wc_str(), example.length() }) };
+                    body += wxString::Format(L" <em>%s</em>", encodedExample);
+                    }
+                inner += wxString::Format(LR"(<span class="tooltip-body">%s</span>)", body);
+                }
+            inner += L"</span>";
+            tagged.Replace(L">", inner, false);
             return tagged;
         };
 
@@ -6579,20 +6593,27 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 GetWords(), GetDifficultSentenceLength(), formattedBuffer,
                 textHeaderThemed.header.wc_string(), textHeaderThemed.endSection.wc_string(),
                 textLegendsThemed.wordinessWindowLegend.wc_string(),
-                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"Overly-long sentence"))
+                withTooltip(highlighterTagsThemed.HIGHLIGHT_BEGIN, _(L"Overly-long sentence"),
+                            _(L"Consider splitting this into shorter sentences."))
                     .wc_string(),
                 highlighterTagsThemed.HIGHLIGHT_END.wc_string(),
-                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Possible misspelling"))
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Possible misspelling"),
+                            _(L"Review this word; it wasn't found in our dictionary."))
                     .wc_string(),
-                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Repeated word"))
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Repeated word"),
+                            _(L"Remove one of these words."))
                     .wc_string(),
-                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Mismatched article"))
+                withTooltip(highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN, _(L"Mismatched article"),
+                            _(L"Use the article that matches the noun that follows."))
                     .wc_string(),
                 highlighterTagsThemed.ERROR_HIGHLIGHT_BEGIN.wc_string(),
                 highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN.wc_string(),
                 _(L"Wordiness").wc_string(), _(L"Redundant phrase").wc_string(),
                 _(L"Cliché").wc_string(), _(L"Wording error or known misspelling").wc_string(),
-                withTooltip(highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN, _(L"Passive voice"))
+                withTooltip(highlighterTagsThemed.PHRASE_HIGHLIGHT_BEGIN, _(L"Passive voice"),
+                            _(L"Try rewriting in active voice:"),
+                            _(L"“The presentation bored the audience” instead of "
+                              L"“The audience became bored by the presentation.”"))
                     .wc_string(),
                 highlighterTagsThemed.IGNORE_HIGHLIGHT_BEGIN.wc_string(),
                 // if default style is bold, then don't use bold tags internally

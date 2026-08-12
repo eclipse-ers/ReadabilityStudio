@@ -46,10 +46,8 @@ Options for customizing its display are made available on the **Edit** section o
 
 ![](../images/ribbon-edit-text-window.png)
 
-**Font**: Click this button to change the font.
-
 **Highlight**: Click this button to open the [**Properties**](#sec-options-highlighted-reports) dialog.
-Here, you can customize the highlight colors and whether the background or foreground of the text should be highlighted.
+Here, you can customize the highlight colors and whether the background, foreground, or underlining of the text should be highlighted.
 
 ## Column Sorting {#sec-column-sorting}
 
