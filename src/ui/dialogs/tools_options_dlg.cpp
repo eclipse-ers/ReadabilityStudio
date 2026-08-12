@@ -839,6 +839,9 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
                                       wxGetApp().GetAppOptions()->GetWordyPhraseHighlightColor()),
       m_font((project != nullptr) ? project->GetTextViewFont() :
                                     wxGetApp().GetAppOptions()->GetTextViewFont()),
+      m_useStandardReportFont((project != nullptr) ?
+                                  project->IsUsingStandardReportFont() :
+                                  wxGetApp().GetAppOptions()->IsUsingStandardReportFont()),
       m_fontColor((project != nullptr) ? project->GetTextFontColor() :
                                          wxGetApp().GetAppOptions()->GetTextFontColor()),
       // dolch
@@ -1022,6 +1025,16 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
             m_persistCookiesCheck->Enable(m_useJsCookies.get_value());
         },
         ID_JS_COOKIES_CHECKBOX);
+
+    Bind(
+        wxEVT_CHECKBOX,
+        [this]([[maybe_unused]]
+               wxCommandEvent& event)
+        {
+            TransferDataFromWindow();
+            m_FontButton->Enable(!m_useStandardReportFont.get_value());
+        },
+        ID_USE_STANDARD_REPORT_FONT_CHECKBOX);
 
     // Changing the list of files for a batch will need to disable the
     // linking & embedded options until this dialog is closed and
@@ -1519,11 +1532,11 @@ bool ToolsOptionsDlg::HaveTextViewOptionsChanged() const noexcept
            m_excludedTextHighlightColor.has_changed() ||
            m_duplicateWordHighlightColor.has_changed() ||
            m_wordyPhraseHighlightColor.has_changed() || m_font.has_changed() ||
-           m_fontColor.has_changed() || m_dolchConjunctionsColor.has_changed() ||
-           m_dolchPrepositionsColor.has_changed() || m_dolchPronounsColor.has_changed() ||
-           m_dolchAdverbsColor.has_changed() || m_dolchAdjectivesColor.has_changed() ||
-           m_dolchVerbsColor.has_changed() || m_dolchNounsColor.has_changed() ||
-           m_highlightDolchConjunctions.has_changed() ||
+           m_useStandardReportFont.has_changed() || m_fontColor.has_changed() ||
+           m_dolchConjunctionsColor.has_changed() || m_dolchPrepositionsColor.has_changed() ||
+           m_dolchPronounsColor.has_changed() || m_dolchAdverbsColor.has_changed() ||
+           m_dolchAdjectivesColor.has_changed() || m_dolchVerbsColor.has_changed() ||
+           m_dolchNounsColor.has_changed() || m_highlightDolchConjunctions.has_changed() ||
            m_highlightDolchPrepositions.has_changed() || m_highlightDolchPronouns.has_changed() ||
            m_highlightDolchAdverbs.has_changed() || m_highlightDolchAdjectives.has_changed() ||
            m_highlightDolchVerbs.has_changed() || m_highlightDolchNouns.has_changed();
@@ -1933,6 +1946,7 @@ void ToolsOptionsDlg::SaveGlobalOptions()
         wxGetApp().GetAppOptions()->SetWordyPhraseHighlightColor(
             m_wordyPhraseHighlightColor.get_value());
         wxGetApp().GetAppOptions()->SetTextViewFont(m_font.get_value());
+        wxGetApp().GetAppOptions()->UseStandardReportFont(m_useStandardReportFont.get_value());
         wxGetApp().GetAppOptions()->SetTextFontColor(m_fontColor.get_value());
         wxGetApp().GetAppOptions()->SetDolchConjunctionsColor(m_dolchConjunctionsColor.get_value());
         wxGetApp().GetAppOptions()->SetDolchPrepositionsColor(m_dolchPrepositionsColor.get_value());
@@ -3054,6 +3068,7 @@ void ToolsOptionsDlg::SaveTextWindowOptions()
         m_readabilityProjectDoc->SetWordyPhraseHighlightColor(
             m_wordyPhraseHighlightColor.get_value());
         m_readabilityProjectDoc->SetTextViewFont(m_font.get_value());
+        m_readabilityProjectDoc->UseStandardReportFont(m_useStandardReportFont.get_value());
         m_readabilityProjectDoc->SetTextFontColor(m_fontColor.get_value());
         m_readabilityProjectDoc->SetDolchConjunctionsColor(m_dolchConjunctionsColor.get_value());
         m_readabilityProjectDoc->SetDolchPrepositionsColor(m_dolchPrepositionsColor.get_value());
@@ -4801,9 +4816,18 @@ void ToolsOptionsDlg::CreateTextWindowSection()
         panelSizer->Add(optionsSizer, 0, wxLEFT, optionIndentSize);
 
         // font
+        optionsSizer->Add(
+            new wxCheckBox(panel, ID_USE_STANDARD_REPORT_FONT_CHECKBOX,
+                           _(L"Use standard report font"), wxDefaultPosition, wxDefaultSize, 0,
+                           wxGenericValidator{ &m_useStandardReportFont.get_value() }),
+            0, wxALIGN_TOP);
+
+        optionsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
         m_FontButton = new wxButton(panel, ID_FONT_BUTTON, _(L"Font"));
         m_FontButton->SetBitmap(fontImage);
         optionsSizer->Add(m_FontButton, 0, wxALIGN_TOP);
+        m_FontButton->Enable(!m_useStandardReportFont.get_value());
 
         optionsSizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
 

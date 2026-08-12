@@ -252,7 +252,6 @@ class ProjectView final : public BaseProjectView
 
     // menu and ribbon commands
     void OnTextWindowColorsChange([[maybe_unused]] wxRibbonButtonBarEvent& event);
-    void OnTextWindowFontChange([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnGradeScale(wxCommandEvent& event);
     void OnExportAll([[maybe_unused]] wxCommandEvent& event);
     void OnExportFilteredDocument([[maybe_unused]] wxCommandEvent& event);

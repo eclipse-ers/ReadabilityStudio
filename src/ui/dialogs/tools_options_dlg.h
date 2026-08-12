@@ -206,6 +206,7 @@ class ToolsOptionsDlg final : public wxDialog
     constexpr static int ID_FILE_LIST = wxID_HIGHEST + 84;
     constexpr static int ID_DOCUMENT_PATH_FIELD = wxID_HIGHEST + 85;
     constexpr static int ID_JS_COOKIES_CHECKBOX = wxID_HIGHEST + 86;
+    constexpr static int ID_USE_STANDARD_REPORT_FONT_CHECKBOX = wxID_HIGHEST + 89;
 
     // button events
     void OnExportSettings([[maybe_unused]] wxCommandEvent& event);
@@ -1093,6 +1094,7 @@ class ToolsOptionsDlg final : public wxDialog
     BackupVariable<wxColour> m_duplicateWordHighlightColor;
     BackupVariable<wxColour> m_wordyPhraseHighlightColor;
     BackupVariable<wxFont> m_font;
+    BackupVariable<bool> m_useStandardReportFont;
     BackupVariable<wxColour> m_fontColor;
 
     // dolch highlighting

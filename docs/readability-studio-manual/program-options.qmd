@@ -889,7 +889,10 @@ The options on this page customize the display of the text views.
 
 #### Formatting {-}
 
+**Use standard report font**: Check this to use the same font as the statistics reports, rather than the font selected below.
+
 **Font**: Click this button to select the font used in the document viewing area.
+This is only available when **Use standard report font** is unchecked.
 
 #### Highlighting {-}
 

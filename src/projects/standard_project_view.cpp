@@ -96,8 +96,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(ProjectView, BaseProjectView)
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectView::OnLongFormat, this, XRCID("ID_LONG_FORMAT"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectView::OnTextWindowColorsChange, this,
          XRCID("ID_TEXT_WINDOW_COLORS"));
-    Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectView::OnTextWindowFontChange, this,
-         XRCID("ID_TEXT_WINDOW_FONT"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectView::OnLaunchSourceFile, this,
          XRCID("ID_LAUNCH_SOURCE_FILE"));
     Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, &ProjectView::OnSummation, this, XRCID("ID_SUMMATION"));
@@ -2350,32 +2348,6 @@ void ProjectView::OnTextWindowColorsChange([[maybe_unused]] wxRibbonButtonBarEve
         doc->ResetRefreshRequired();
         doc->SetModifiedFlag();
         }
-    }
-
-//-------------------------------------------------------
-void ProjectView::OnTextWindowFontChange([[maybe_unused]] wxRibbonButtonBarEvent& event)
-    {
-    auto* doc = dynamic_cast<ProjectDoc*>(GetDocument());
-    if (!doc->IsSafeToUpdate())
-        {
-        return;
-        }
-
-    wxFontData data;
-    data.SetInitialFont(doc->GetTextViewFont());
-    data.EnableEffects(false);
-
-    wxFontDialog dialog(GetDocFrame(), data);
-    if (dialog.ShowModal() == wxID_OK)
-        {
-        const wxWindowUpdateLocker noUpdates(doc->GetDocumentWindow());
-        const BaseProjectProcessingLock processingLock(doc);
-        doc->SetTextViewFont(dialog.GetFontData().GetChosenFont());
-        const wxBusyCursor wait;
-        doc->DisplayHighlightedText(doc->GetTextHighlightColor(), doc->GetTextViewFont());
-        doc->SetModifiedFlag();
-        }
-    doc->GetDocumentWindow()->Refresh();
     }
 
 //-------------------------------------------------------

@@ -389,6 +389,7 @@ void ReadabilityAppOptions::ResetSettings()
     m_duplicateWordHighlightColor = wxColour(255, 128, 128);
     m_wordyPhraseHighlightColor = wxColour(0, 255, 255);
     m_fontColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    m_useStandardReportFont = true;
     m_textSource = TextSource::FromFile;
     m_batchGroupDefault = 2;
     m_longSentenceMethod = LongSentence::LongerThanSpecifiedLength;
@@ -2811,6 +2812,8 @@ bool ReadabilityAppOptions::LoadOptionsFile(wxString optionsFile,
             if (fontNode != nullptr)
                 {
                 LoadFontFromNode(fontNode, m_textViewFont, filterHtml);
+                m_useStandardReportFont = int_to_bool(fontNode->IntAttribute(
+                    XML_USE_STANDARD_REPORT_FONT.data(), bool_to_int(m_useStandardReportFont)));
                 }
             }
         }
@@ -4264,6 +4267,7 @@ bool ReadabilityAppOptions::SaveOptionsFile(const wxString& optionsFile /*= wxSt
     font->SetAttribute(
         XmlFormat::FONT_FACE_NAME_TAG.data(),
         wxString(ENCODE({ m_textViewFont.GetFaceName().wc_str() }, false)).utf8_str());
+    font->SetAttribute(XML_USE_STANDARD_REPORT_FONT.data(), bool_to_int(m_useStandardReportFont));
     textViewsSection->InsertEndChild(font);
 
     projectSettings->InsertEndChild(textViewsSection);

@@ -2652,8 +2652,6 @@ void ReadabilityApp::LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage)
 
     auto* editButtonBar = new wxRibbonButtonBar(editPanel, MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
 
-    editButtonBar->AddButton(XRCID("ID_TEXT_WINDOW_FONT"), _(L"Font"),
-                             ReadSvgIcon(L"ribbon/font.svg"), _(L"Change the font."));
     editButtonBar->AddButton(XRCID("ID_TEXT_WINDOW_COLORS"), _(L"Highlight"),
                              ReadSvgIcon(L"ribbon/highlighting.svg"),
                              _(L"Change the highlight colors."));

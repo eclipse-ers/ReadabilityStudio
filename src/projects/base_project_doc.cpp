@@ -142,6 +142,7 @@ BaseProjectDoc::BaseProjectDoc()
       m_duplicateWordHighlightColor(wxGetApp().GetAppOptions()->GetDuplicateWordHighlightColor()),
       m_textHighlight(wxGetApp().GetAppOptions()->GetTextHighlightMethod()),
       m_textViewFont(wxGetApp().GetAppOptions()->GetTextViewFont()),
+      m_useStandardReportFont(wxGetApp().GetAppOptions()->IsUsingStandardReportFont()),
       m_fontColor(wxGetApp().GetAppOptions()->GetTextFontColor()),
       // dolch colors
       m_dolchConjunctionsColor(wxGetApp().GetAppOptions()->GetDolchConjunctionsColor()),
@@ -2263,6 +2264,10 @@ void BaseProjectDoc::LoadSettingsFile(const wchar_t* settingsFileText)
         m_textViewFont = XmlFormat::GetFont(textViewsSection, textViewsSectionEnd,
                                             ReadabilityAppOptions::XML_DOCUMENT_DISPLAY_FONT.data(),
                                             wxGetApp().GetAppOptions()->GetTextViewFont());
+        m_useStandardReportFont =
+            XmlFormat::GetBoolean(textViewsSection, textViewsSectionEnd,
+                                  ReadabilityAppOptions::XML_USE_STANDARD_REPORT_FONT.data(),
+                                  wxGetApp().GetAppOptions()->IsUsingStandardReportFont());
         // dolch highlighting
         m_dolchConjunctionsColor = XmlFormat::GetColorWithInclusionTag(
             textViewsSection, textViewsSectionEnd,
@@ -3290,6 +3295,10 @@ wxString BaseProjectDoc::FormatProjectSettings() const
     fileText.append(L"\t\t<").append(ReadabilityAppOptions::XML_DOCUMENT_DISPLAY_FONT.data());
     fileText += XmlFormat::FormatFontAttributes(m_textViewFont);
     fileText.append(L"/>\n");
+    XmlFormat::FormatSection(sectionText,
+                             ReadabilityAppOptions::XML_USE_STANDARD_REPORT_FONT.data(),
+                             m_useStandardReportFont, 2);
+    fileText += sectionText;
     fileText.append(L"\t</")
         .append(ReadabilityAppOptions::XML_TEXT_VIEWS_SECTION.data())
         .append(L">\n");

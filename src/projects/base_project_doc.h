@@ -778,6 +778,16 @@ class BaseProjectDoc : public BaseProject, public wxDocument
             }
         }
 
+    // whether the highlighted-text windows use the report theme's font (from its CSS)
+    // instead of GetTextViewFont()
+    [[nodiscard]]
+    bool IsUsingStandardReportFont() const noexcept
+        {
+        return m_useStandardReportFont;
+        }
+
+    void UseStandardReportFont(const bool use = true) noexcept { m_useStandardReportFont = use; }
+
     // text color
     [[nodiscard]]
     wxColour GetTextFontColor() const noexcept
@@ -1356,6 +1366,7 @@ class BaseProjectDoc : public BaseProject, public wxDocument
 
     TextHighlight m_textHighlight{ TextHighlight::HighlightBackground };
     wxFont m_textViewFont;
+    bool m_useStandardReportFont{ true };
     wxColour m_fontColor;
 
     // text windows

@@ -865,6 +865,16 @@ class ReadabilityAppOptions
             }
         }
 
+    // whether the highlighted-text windows use the report theme's font (from its CSS)
+    // instead of GetTextViewFont()
+    [[nodiscard]]
+    bool IsUsingStandardReportFont() const noexcept
+        {
+        return m_useStandardReportFont;
+        }
+
+    void UseStandardReportFont(const bool use = true) noexcept { m_useStandardReportFont = use; }
+
     [[nodiscard]]
     wxColour GetTextFontColor() const
         {
@@ -2568,6 +2578,7 @@ class ReadabilityAppOptions
     wxColour m_duplicateWordHighlightColor{ wxColour{ 255, 128, 128 } };
     wxColour m_fontColor{ wxColour{ 0, 0, 0 } };
     wxFont m_textViewFont;
+    bool m_useStandardReportFont{ true };
     LongSentence m_longSentenceMethod{ LongSentence::LongerThanSpecifiedLength };
     int m_difficultSentenceLength{ 22 };
     NumeralSyllabize m_numeralSyllabicationMethod{ NumeralSyllabize::WholeWordIsOneSyllable };
@@ -3050,6 +3061,8 @@ class ReadabilityAppOptions
         "document-display-font-color") };
     inline constexpr static std::string_view XML_DOCUMENT_DISPLAY_FONT{ _DT(
         "document-display-font") };
+    inline constexpr static std::string_view XML_USE_STANDARD_REPORT_FONT{ _DT(
+        "use-standard-report-font") };
     inline constexpr static std::string_view XML_DOLCH_CONJUNCTIONS_HIGHLIGHTCOLOR{ _DT(
         "dolch-conjunction-font-color") };
     inline constexpr static std::string_view XML_DOLCH_PREPOSITIONS_HIGHLIGHTCOLOR{ _DT(

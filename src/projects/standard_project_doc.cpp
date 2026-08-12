@@ -5797,12 +5797,19 @@ ProjectDoc::TextHeader ProjectDoc::BuildHeader(const MarkupFormat format,
         // only reference theme custom properties, which resolve regardless of block order.
         // Printing is forced back to a light color scheme by the theme CSS, so the output is
         // always on white paper.
-        const wxString bodyFontRule = wxString::Format(
-            L"\nbody { font-family: \"%s\"; font-size: %dpt; font-style: %s; font-weight: %s;%s }",
-            textViewFont.GetFaceName(), textViewFont.GetPointSize(),
-            (textViewFont.GetStyle() == wxFONTSTYLE_ITALIC) ? L"italic" : L"normal",
-            (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? L"bold" : L"normal",
-            textViewFont.GetUnderlined() ? L" text-decoration: underline;" : L"");
+        // When using the standard report font, leave body's font-family/size alone so the
+        // theme CSS's own font stack applies (matching the statistics reports); otherwise,
+        // override it with the user's chosen text view font.
+        const wxString bodyFontRule =
+            IsUsingStandardReportFont() ?
+                wxString{} :
+                wxString::Format(
+                    L"\nbody { font-family: \"%s\"; font-size: %dpt; font-style: %s;"
+                    " font-weight: %s;%s }",
+                    textViewFont.GetFaceName(), textViewFont.GetPointSize(),
+                    (textViewFont.GetStyle() == wxFONTSTYLE_ITALIC) ? L"italic" : L"normal",
+                    (textViewFont.GetWeight() == wxFONTWEIGHT_BOLD) ? L"bold" : L"normal",
+                    textViewFont.GetUnderlined() ? L" text-decoration: underline;" : L"");
         textHeaders.header =
             wxString::Format(L"<!DOCTYPE html>"
                              "\n<html>"
