@@ -5119,9 +5119,9 @@ wxString ProjectDoc::BuildStyleSheet() const
         // is identifiable as belonging to its category at a glance
         const auto tooltipAccent = [&suffix](const wxString& accentColor) -> wxString
         {
-            return wxString::Format(
-                L"\n.hl-%s[data-tooltip]::after { border-left: 9px solid %s; padding-left: 8px; }",
-                suffix, accentColor);
+            return wxString::Format(L"\n.hl-%s .tooltip-title, .hl-%s .tooltip-body"
+                                    L" { border-left: 9px solid %s; padding-left: 8px; }",
+                                    suffix, suffix, accentColor);
         };
 
         if (isBackgroundMode)
@@ -5333,13 +5333,14 @@ ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat 
         highlighterTags.TAB_SYMBOL = L"&nbsp;&nbsp;&nbsp;&nbsp;";
         highlighterTags.CRLF = L"<br />\n";
 
-        // encodes tooltip text for embedding as an HTML attribute value
-        const auto tooltipAttr = [](const wxString& text) -> wxString
+        // wraps tooltip text in the nested tooltip-box markup, encoded for embedding as HTML
+        const auto tooltipSpan = [](const wxString& text) -> wxString
         {
             wxString encoded{ lily_of_the_valley::html_encode_text::simple_encode(
                 { text.wc_str(), text.length() }) };
-            encoded.Replace(L"\"", L"&quot;", true);
-            return encoded;
+            return wxString::Format(
+                LR"(<span class="tooltip-box"><span class="tooltip-title">%s</span></span>)",
+                encoded);
         };
 
         // word highlighters
@@ -5350,42 +5351,42 @@ ProjectDoc::HighlighterTags ProjectDoc::BuildHighlighterTags(const MarkupFormat 
         highlighterTags.ERROR_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-error">)" };
         highlighterTags.PHRASE_HIGHLIGHT_BEGIN = wxString{ LR"(<span class="hl-phrase">)" };
         highlighterTags.IGNORE_HIGHLIGHT_BEGIN =
-            wxString::Format(LR"(<span class="hl-excluded" data-tooltip="%s">)",
-                             tooltipAttr(_(L"Excluded from analysis")));
+            wxString::Format(LR"(<span class="hl-excluded tooltip-anchor">%s)",
+                             tooltipSpan(_(L"Excluded from analysis")));
         highlighterTags.DOLCH_CONJUNCTION_BEGIN =
             IsHighlightingDolchConjunctions() ?
-                wxString::Format(LR"(<span class="hl-dolch-conjunction" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: conjunction"))) :
+                wxString::Format(LR"(<span class="hl-dolch-conjunction tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: conjunction"))) :
                 wxString{};
         highlighterTags.DOLCH_PREPOSITIONS_BEGIN =
             IsHighlightingDolchPrepositions() ?
-                wxString::Format(LR"(<span class="hl-dolch-preposition" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: preposition"))) :
+                wxString::Format(LR"(<span class="hl-dolch-preposition tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: preposition"))) :
                 wxString{};
         highlighterTags.DOLCH_PRONOUN_BEGIN =
             IsHighlightingDolchPronouns() ?
-                wxString::Format(LR"(<span class="hl-dolch-pronoun" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: pronoun"))) :
+                wxString::Format(LR"(<span class="hl-dolch-pronoun tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: pronoun"))) :
                 wxString{};
         highlighterTags.DOLCH_ADVERB_BEGIN =
             IsHighlightingDolchAdverbs() ?
-                wxString::Format(LR"(<span class="hl-dolch-adverb" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: adverb"))) :
+                wxString::Format(LR"(<span class="hl-dolch-adverb tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: adverb"))) :
                 wxString{};
         highlighterTags.DOLCH_ADJECTIVE_BEGIN =
             IsHighlightingDolchAdjectives() ?
-                wxString::Format(LR"(<span class="hl-dolch-adjective" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: adjective"))) :
+                wxString::Format(LR"(<span class="hl-dolch-adjective tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: adjective"))) :
                 wxString{};
         highlighterTags.DOLCH_VERB_BEGIN =
             IsHighlightingDolchVerbs() ?
-                wxString::Format(LR"(<span class="hl-dolch-verb" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: verb"))) :
+                wxString::Format(LR"(<span class="hl-dolch-verb tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: verb"))) :
                 wxString{};
         highlighterTags.DOLCH_NOUN_BEGIN =
             IsHighlightingDolchNouns() ?
-                wxString::Format(LR"(<span class="hl-dolch-noun" data-tooltip="%s">)",
-                                 tooltipAttr(_(L"Dolch sight word: noun"))) :
+                wxString::Format(LR"(<span class="hl-dolch-noun tooltip-anchor">%s)",
+                                 tooltipSpan(_(L"Dolch sight word: noun"))) :
                 wxString{};
 
         // Legend swatches show the color as a background chip.
@@ -5887,10 +5888,15 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
         {
             wxString encodedTooltip{ lily_of_the_valley::html_encode_text::simple_encode(
                 { tooltip.wc_str(), tooltip.length() }) };
-            encodedTooltip.Replace(L"\"", L"&quot;", true);
             wxString tagged{ openingTag };
-            tagged.Replace(L">", wxString::Format(_DT(L" data-tooltip=\"%s\">"), encodedTooltip),
-                           false);
+            // marks the span as a tooltip hover anchor
+            tagged.Replace(L"class=\"", L"class=\"tooltip-anchor ", false);
+            tagged.Replace(
+                L">",
+                wxString::Format(
+                    LR"(><span class="tooltip-box"><span class="tooltip-title">%s</span></span>)",
+                    encodedTooltip),
+                false);
             return tagged;
         };
 
@@ -6520,34 +6526,44 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                     _(L"Highlighted Report"));
                 view->GetGrammarView().InsertWindow(0, textWindow);
                 }
-            // combines a raw opening tag with a tooltip (category, plus a suggested fix when
-            // one is available) for the HTML report; a no-op for the RTF report below
-            const auto tagWithTooltip = [](const std::wstring& openingTag,
-                                           const std::wstring& label,
-                                           const std::wstring& suggestion) -> std::wstring
+            // tags category and suggestion as separate nested spans so CSS can style them
+            // independently while still sharing one tooltip card's width
+            const auto encodeText = [](const std::wstring& text) -> std::wstring
             {
-                const wxString tooltip =
-                    suggestion.empty() ?
-                        wxString{ label } :
-                        wxString::Format(
-                            // TRANSLATORS: first %s is the issue category (e.g., "Wordiness");
-                            // second %s is one or more suggested replacements for the flagged text
-                            _(L"%s. Suggestions: %s"), wxString{ label }, wxString{ suggestion });
-
-                std::wstring encodedTooltip{ lily_of_the_valley::html_encode_text::simple_encode(
-                    { tooltip.wc_str(), tooltip.length() }) };
-                // escape embedded quotes so they don't break out of the attribute
-                for (size_t quotePos = encodedTooltip.find(L'"'); quotePos != std::wstring::npos;
-                     quotePos = encodedTooltip.find(L'"', quotePos + 6))
-                    {
-                    encodedTooltip.replace(quotePos, 1, L"&quot;");
-                    }
-
+                return lily_of_the_valley::html_encode_text::simple_encode(
+                    { text.c_str(), text.length() });
+            };
+            const auto tagWithTooltip =
+                [&encodeText](const std::wstring& openingTag, const std::wstring& label,
+                              const std::wstring& suggestion) -> std::wstring
+            {
                 std::wstring tagged{ openingTag };
+                // marks the span as a tooltip hover anchor
+                const auto classPos = tagged.find(L"class=\"");
+                if (classPos != std::wstring::npos)
+                    {
+                    tagged.insert(classPos + 7, L"tooltip-anchor ");
+                    }
                 const auto closeBracket = tagged.find(L'>');
                 if (closeBracket != std::wstring::npos)
                     {
-                    tagged.insert(closeBracket, L" data-tooltip=\"" + encodedTooltip + L"\"");
+                    std::wstring inner{
+                        L"<span class=\"tooltip-box\"><span class=\"tooltip-title\">" +
+                        encodeText(label) + L"</span>"
+                    };
+                    if (!suggestion.empty())
+                        {
+                        // TRANSLATORS: %s is one or more suggested replacements for the
+                        // flagged text (shown in italics), on the second line of the tooltip
+                        inner += L"<span class=\"tooltip-body\">" +
+                                 wxString::Format(
+                                     _(L"Suggestions: %s"),
+                                     wxString{ L"<em>" + encodeText(suggestion) + L"</em>" })
+                                     .ToStdWstring() +
+                                 L"</span>";
+                        }
+                    inner += L"</span>";
+                    tagged.insert(closeBracket + 1, inner);
                     }
                 return tagged;
             };

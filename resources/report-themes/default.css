@@ -482,73 +482,114 @@ img
 .text-paragraph:hover
   { background-color: color-mix(in srgb, CanvasText 6%, transparent); }
 
-/* ---------- Tooltips ------------------------------------------ */
-/* Generic hover tooltip for any element carrying a data-tooltip     */
-/* attribute (used by the highlighted-text windows' hl-* spans).     */
+/* ---------- Tooltips ------------------------------------------
+   Hover tooltip for .tooltip-anchor spans: a .tooltip-box card with
+   a bold .tooltip-title and an optional plain .tooltip-body, sized
+   as flex children so both rows share the card's width. */
 
-[data-tooltip]
+:root
+  {
+  --tooltip-bg: #2b2f38;
+  --tooltip-fg: #ffffff;
+  --tooltip-outline: #ffffff;
+  --tooltip-outline-width: 1px;
+  --tooltip-font-size: 0.8em;
+  --tooltip-pad-v: 4px;
+  --tooltip-pad-h: 10px;
+  --tooltip-tail: 6px;
+  }
+
+.tooltip-anchor
   { position: relative; }
 
-[data-tooltip]::after
+.tooltip-box
   {
-  content: attr(data-tooltip);
   position: absolute;
-  bottom: 100%;
   left: 0;
-  margin-bottom: 6px;
-  padding: 4px 10px;
+  bottom: 100%;
+  margin-bottom: var(--tooltip-tail);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  border: var(--tooltip-outline-width) solid var(--tooltip-outline);
   border-radius: 6px;
-  background-color: color-mix(in srgb, CanvasText 92%, transparent);
-  color: Canvas;
-  font-size: 0.8em;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  white-space: nowrap;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   opacity: 0;
   pointer-events: none;
+  user-select: none;
   transform: translateY(4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
   z-index: 20;
   }
 
-[data-tooltip]:hover::after
+.tooltip-anchor:hover > .tooltip-box
   {
   opacity: 1;
   transform: translateY(0);
   }
 
-/* small caret connecting the tooltip to the word it describes */
-[data-tooltip]::before
+/* caret connecting the card to the word it describes.
+    ::before is a slightly larger outline-colored triangle
+    sitting behind ::after, giving the tail the same white rim
+    as the card it hangs off of. */
+.tooltip-box::before
   {
   content: "";
-  display: block;
   position: absolute;
-  bottom: 100%;
+  top: 100%;
+  left: calc(10px - var(--tooltip-outline-width));
+  width: 0;
+  height: 0;
+  border-left: calc(var(--tooltip-tail) + var(--tooltip-outline-width)) solid transparent;
+  border-right: calc(var(--tooltip-tail) + var(--tooltip-outline-width)) solid transparent;
+  border-top: calc(var(--tooltip-tail) + var(--tooltip-outline-width)) solid var(--tooltip-outline);
+  }
+
+.tooltip-box::after
+  {
+  content: "";
+  position: absolute;
+  top: 100%;
   left: 10px;
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid color-mix(in srgb, CanvasText 92%, transparent);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: 21;
+  border-left: var(--tooltip-tail) solid transparent;
+  border-right: var(--tooltip-tail) solid transparent;
+  border-top: var(--tooltip-tail) solid var(--tooltip-bg);
   }
 
-[data-tooltip]:hover::before
+.tooltip-title, .tooltip-body
   {
-  opacity: 1;
-  transform: translateY(0);
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  padding: var(--tooltip-pad-v) var(--tooltip-pad-h);
+  font-style: normal;
+  text-decoration: none;
+  white-space: nowrap;
   }
 
-/* ---------- Plain Language Guide -------------------------------- */
-/* Two-column layout: document text (left, with unexplained          */
-/* technical phrases highlighted) and a stack of explanation cards   */
-/* (right, one per unexplained phrase).                              */
+.tooltip-title
+  {
+  font-weight: bold;
+  font-size: calc(var(--tooltip-font-size) * 1.2);
+  border-radius: 6px 6px 0 0;
+  }
+
+/* no suggestion: title is the only row, so it's fully rounded */
+.tooltip-title:only-child
+  { border-radius: 6px; }
+
+.tooltip-body
+  {
+  font-weight: normal;
+  font-size: var(--tooltip-font-size);
+  border-radius: 0 0 6px 6px;
+  }
+
+/* ---------- Plain Language Guide --------------------------------
+   Two-column layout: document text (left, with unexplained
+   technical phrases highlighted) and a stack of explanation cards
+   (right, one per unexplained phrase). */
 
 .pl-guide-layout
   {
@@ -689,7 +730,7 @@ html { scroll-behavior: smooth; }
   :root
     { color-scheme: light; }
   /* tooltips are a hover-only affordance, meaningless on paper */
-  [data-tooltip]::after, [data-tooltip]::before
+  .tooltip-box
     { display: none !important; }
   /* keep paragraphs and list items together */
   p, li, ul
