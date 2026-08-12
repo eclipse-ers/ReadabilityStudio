@@ -52,6 +52,7 @@
 
 #include "../Wisteria-Dataviz/src/import/html_encode.h"
 #include "../Wisteria-Dataviz/src/import/rtf_encode.h"
+#include "../Wisteria-Dataviz/src/util/donttranslate.h"
 #include "../app/optionenums.h"
 #include "../indexing/word_collection.h"
 #include <map>
@@ -818,9 +819,9 @@ FormatWordCollectionPlainLanguageGuide(const std::shared_ptr<documentT>& theDocu
                         const size_t phraseIdx = phraseIdxByNoteId[noteIdPos->second - 1];
                         output.documentHtml.append(L"<a class=\"")
                             .append(highlightClass)
-                            .append(L"\" href=\"#pl-note-")
+                            .append(_DT(L"\" href=\"#pl-note-"))
                             .append(std::to_wstring(noteIdPos->second))
-                            .append(L"\" data-plain-language-id=\"")
+                            .append(_DT(L"\" data-plain-language-id=\""))
                             .append(std::to_wstring(noteIdPos->second))
                             .append(L"\">");
                         phraseHighlightWordsRemaining = phrases[phraseIdx].first.get_word_count();

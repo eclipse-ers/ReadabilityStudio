@@ -4295,9 +4295,7 @@ void ProjectDoc::DisplayPlainLanguageGuide()
             wxString(guideOutput.documentHtml) +
             L"</div><a href=\"#pl-guide-top\" class=\"back-to-top pl-guide-back-to-top no-print\" "
             L"aria-label=\"" +
-            _(L"Back to top") +
-            L"\">&#8593;</a>"
-            L"</div><div class=\"pl-guide-notes\">" +
+            _(L"Back to top") + _DT(L"\">&#8593;</a></div><div class=\"pl-guide-notes\">") +
             noteCardsHtml + L"</div></div>" + ProjectReportFormat::FormatHtmlReportEnd();
         // the page-wide back-to-top button is meaningless here (the document and notes
         // panes scroll independently of the page), so drop it in favor of the one scoped
@@ -5899,7 +5897,7 @@ void ProjectDoc::DisplayHighlightedText(const wxColour& highlightColor, const wx
                 { tooltip.wc_str(), tooltip.length() }) };
             wxString tagged{ openingTag };
             // marks the span as a tooltip hover anchor
-            tagged.Replace(L"class=\"", L"class=\"tooltip-anchor ", false);
+            tagged.Replace(_DT(L"class=\""), _DT(L"class=\"tooltip-anchor "), false);
             wxString inner{ wxString::Format(
                 LR"(><span class="tooltip-box"><span class="tooltip-title">%s</span>)",
                 encodedTooltip) };

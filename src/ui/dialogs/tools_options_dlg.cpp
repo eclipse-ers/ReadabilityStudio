@@ -4779,8 +4779,8 @@ void ToolsOptionsDlg::CreatePlainLanguageGuideSection()
             listChoices.Add(BaseProjectView::PlainLanguageGuideListNameToLabel(listFile));
             }
         listChoices.Sort();
-        // "None" (disables the feature) always comes first
-        listChoices.Insert(_(L"None"), 0);
+        // "None" (disables the feature), always comes first
+        listChoices.Insert(BaseProjectView::GetNoneLabel(), 0);
 
         auto* listCombo = new wxComboBox(panel, wxID_ANY, wxString{}, wxDefaultPosition,
                                          wxDefaultSize, listChoices, wxCB_DROPDOWN | wxCB_READONLY);

@@ -244,6 +244,12 @@ class BaseProjectView : public wxView
         return _(L"Plain Language Guide");
         }
 
+    [[nodiscard]]
+    static wxString GetNoneLabel()
+        {
+        return _(L"None");
+        }
+
     /// @brief Determines whether a string is two-letters (ASCII).
     [[nodiscard]]
     static bool IsTwoLetters(const wxString& str)
@@ -262,7 +268,7 @@ class BaseProjectView : public wxView
         {
         if (fileName.empty())
             {
-            return _(L"None");
+            return GetNoneLabel();
             }
         wxString stem{ wxFileName{ fileName }.GetName() };
         // trailing "-XX" language code suffix (e.g., "-en") is shown as "(XX)"
@@ -294,9 +300,9 @@ class BaseProjectView : public wxView
     [[nodiscard]]
     static wxString PlainLanguageGuideLabelToListName(const wxString& label)
         {
-        if (label.CmpNoCase(_(L"None")) == 0 || label.empty())
+        if (label.CmpNoCase(GetNoneLabel()) == 0 || label.empty())
             {
-            return wxString{};
+            return {};
             }
         wxString base{ label };
         wxString langCode;
