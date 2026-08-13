@@ -1102,6 +1102,11 @@ bool ProjectDoc::RunProjectWizard(const wxString& path)
         wizard->IsIndustrySelected()     ? TestRecommendation::BasedOnIndustry :
         wizard->IsTestBundleSelected()   ? TestRecommendation::UseBundle :
                                            TestRecommendation::ManuallySelectTests);
+    SetPlainLanguageGuideListName(wizard->GetPlainLanguageGuideListName());
+    LoadPlainLanguageGuideList();
+    wxGetApp().GetAppOptions()->SetPlainLanguageGuideListName(
+        wizard->GetPlainLanguageGuideListName());
+
     wxGetApp().GetAppOptions()->SaveOptionsFile();
     wizard->Destroy();
     return true;

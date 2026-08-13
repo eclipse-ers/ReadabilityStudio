@@ -145,6 +145,11 @@ class ProjectWizardDlg final : public wxDialog
     [[nodiscard]]
     readability::test_language GetLanguage() const;
 
+    /// @returns The filename of the bundled Plain Language Guide list selected on the
+    ///     wizard's Plain Language Guide page, or an empty string if "None" was selected.
+    [[nodiscard]]
+    wxString GetPlainLanguageGuideListName() const;
+
     /// @returns The list control data containing files for a batch project.
     [[nodiscard]]
     const std::shared_ptr<Wisteria::UI::ListCtrlExDataProvider>& GetFileData() const
@@ -569,6 +574,9 @@ class ProjectWizardDlg final : public wxDialog
 
     wxRadioBox* m_testsBundlesRadioBox{ nullptr };
     int m_selectedBundle{ 0 };
+
+    // plain language guide
+    wxString m_plainLanguageGuideListLabel;
 
     bool m_includeDolchSightWords{ false };
     BaseProject::TestCollectionType m_readabilityTests;

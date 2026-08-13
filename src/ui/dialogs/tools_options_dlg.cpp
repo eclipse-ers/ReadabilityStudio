@@ -4761,7 +4761,7 @@ void ToolsOptionsDlg::CreatePlainLanguageGuideSection()
                            (GetSectionsBeingShown() == PlainLanguageGuide));
 
         auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
-        panelSizer->Add(optionsSizer, wxSizerFlags{}.Expand().Border(
+        panelSizer->Add(optionsSizer, wxSizerFlags{ 1 }.Expand().Border(
                                           wxLEFT | wxTOP, wxSizerFlags::GetDefaultBorder()));
 
         auto* listSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -4786,6 +4786,14 @@ void ToolsOptionsDlg::CreatePlainLanguageGuideSection()
                                          wxDefaultSize, listChoices, wxCB_DROPDOWN | wxCB_READONLY);
         listCombo->SetValidator(wxGenericValidator(&m_plainLanguageGuideList.get_value()));
         listSizer->Add(listCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
+
+        optionsSizer->AddStretchSpacer();
+
+        auto* noteLabel = new wxStaticText(
+            panel, wxID_STATIC,
+            _(L"Flags and defines technical phrases from the selected list that aren't explained "
+              "nearby in your document."));
+        optionsSizer->Add(noteLabel, wxSizerFlags{}.Border(wxTOP));
         }
     }
 
@@ -5627,8 +5635,8 @@ void ToolsOptionsDlg::CreateThemesSection()
     m_sideBar->AddPage(themesPage, GetThemesLabel(), THEMES_PAGE, false);
 
     auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
-    panelSizer->Add(optionsSizer, wxSizerFlags{}.Expand().Border(wxLEFT | wxTOP,
-                                                                 wxSizerFlags::GetDefaultBorder()));
+    panelSizer->Add(optionsSizer, wxSizerFlags{ 1 }.Expand().Border(
+                                      wxLEFT | wxTOP, wxSizerFlags::GetDefaultBorder()));
 
     auto* themeSizer = new wxBoxSizer(wxHORIZONTAL);
     optionsSizer->Add(themeSizer, wxSizerFlags{}.Expand().Border(wxBOTTOM));
@@ -5658,6 +5666,12 @@ void ToolsOptionsDlg::CreateThemesSection()
                                       wxDefaultSize, themeChoices, wxCB_DROPDOWN | wxCB_READONLY);
     themeCombo->SetValidator(wxGenericValidator(&m_reportTheme.get_value()));
     themeSizer->Add(themeCombo, wxSizerFlags{}.CenterVertical().Border(wxLEFT));
+
+    optionsSizer->AddStretchSpacer();
+
+    auto* noteLabel = new wxStaticText(themesPage, wxID_STATIC,
+                                       _(L"Controls the colors used in various reports."));
+    optionsSizer->Add(noteLabel, wxSizerFlags{}.Border(wxTOP));
     }
 
 //-------------------------------------------------------------

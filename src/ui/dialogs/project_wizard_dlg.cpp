@@ -51,6 +51,7 @@
 #include "../../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../../Wisteria-Dataviz/src/ui/dialogs/getdirdlg.h"
 #include "../../indexing/diacritics.h"
+#include "../../projects/base_project_view.h"
 #include "../../results-format/project_report_format.h"
 #include "../../results-format/word_collection_text_formatting.h"
 #include <utility>
@@ -284,6 +285,8 @@ void ProjectWizardDlg::CreateControls()
         wxGetApp().GetResourceManager().GetSVG(L"tests/flesch-test.svg"));
     m_sideBarBook->GetImageList().push_back(
         wxGetApp().GetResourceManager().GetSVG(L"ribbon/preview.svg"));
+    m_sideBarBook->GetImageList().push_back(
+        wxGetApp().GetResourceManager().GetSVG(L"ribbon/plain-language-guide.svg"));
 
     // document page
     if (GetProjectType() == ProjectType::StandardProject)
@@ -1001,6 +1004,59 @@ void ProjectWizardDlg::CreateControls()
 
         pageSizer->Add(optionsSizer, wxSizerFlags{ 1 }.Expand().Border());
         }
+    // plain language guide
+    if (GetProjectType() == ProjectType::StandardProject)
+        {
+        m_plainLanguageGuideListLabel = BaseProjectView::PlainLanguageGuideListNameToLabel(
+            wxGetApp().GetAppOptions()->GetPlainLanguageGuideListName());
+
+        auto* page =
+            new wxPanel(m_sideBarBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+        auto* pageSizer = new wxBoxSizer(wxVERTICAL);
+        page->SetSizer(pageSizer);
+        m_sideBarBook->AddPage(page, BaseProjectView::GetPlainLanguageGuideLabel(), wxID_ANY, false,
+                               4);
+
+        // the options
+        auto* optionsSizer = new wxBoxSizer(wxVERTICAL);
+
+        auto* banner =
+            new Banner(page, wxID_ANY,
+                       wxGetApp().GetResourceManager().GetSVG(L"ribbon/plain-language-guide.svg"),
+                       BaseProjectView::GetPlainLanguageGuideLabel());
+        optionsSizer->Add(banner, wxSizerFlags{}.Expand().Border(wxBOTTOM));
+
+        auto* listSizer = new wxBoxSizer(wxHORIZONTAL);
+        listSizer->Add(new wxStaticText(page, wxID_STATIC, _(L"Technical phrase list:")), 0,
+                       wxRIGHT | wxALIGN_CENTRE, wxSizerFlags::GetDefaultBorder());
+
+        wxArrayString listFiles;
+        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
+                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
+        wxArrayString listChoices;
+        for (const auto& listFile : listFiles)
+            {
+            listChoices.Add(BaseProjectView::PlainLanguageGuideListNameToLabel(listFile));
+            }
+        listChoices.Sort();
+        // "None" (disables the feature), always comes first
+        listChoices.Insert(BaseProjectView::GetNoneLabel(), 0);
+
+        listSizer->Add(new wxComboBox(page, wxID_ANY, wxString{}, wxDefaultPosition, wxDefaultSize,
+                                      listChoices, wxCB_DROPDOWN | wxCB_READONLY,
+                                      wxGenericValidator(&m_plainLanguageGuideListLabel)),
+                       0, wxALIGN_LEFT | wxALL, wxSizerFlags::GetDefaultBorder());
+        optionsSizer->Add(listSizer);
+        optionsSizer->AddStretchSpacer();
+
+        auto* noteLabel = new wxStaticText(
+            page, wxID_STATIC,
+            _(L"Flags and defines technical phrases from the selected list that aren't explained "
+              "nearby in your document."));
+        optionsSizer->Add(noteLabel, 0, wxALIGN_LEFT);
+
+        pageSizer->Add(optionsSizer, wxSizerFlags{ 1 }.Expand().Border());
+        }
         // preview (for a batch project, this just shows the first file currently in the list)
         {
         auto* page =
@@ -1682,6 +1738,12 @@ void ProjectWizardDlg::LoadArchive(const wxString& archivePath /*= wxString{}*/)
 readability::test_language ProjectWizardDlg::GetLanguage() const
     {
     return static_cast<readability::test_language>(m_selectedLang);
+    }
+
+//-------------------------------------------------------------
+wxString ProjectWizardDlg::GetPlainLanguageGuideListName() const
+    {
+    return BaseProjectView::PlainLanguageGuideLabelToListName(m_plainLanguageGuideListLabel);
     }
 
 //-------------------------------------------------------------
