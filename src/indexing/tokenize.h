@@ -1020,7 +1020,7 @@ namespace tokenize
         [[nodiscard]]
         constexpr static bool is_formatted_line_separator_char(const wchar_t ch) noexcept
             {
-            return string_util::is_one_of(string_util::full_width_to_narrow(ch), L"+@-#*");
+            return string_util::is_one_of(string_util::full_width_to_narrow(ch), L"+@-#*=~_");
             }
 
         grammar::is_end_of_line isEol;
