@@ -137,10 +137,19 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
         webDirPath.Replace(L"/", L"\\");
 #endif
         webDirPath = StripIllegalFileCharacters(webDirPath);
-        if (!webDirPath.empty() &&
-            webDirPath[webDirPath.length() - 1] != wxFileName::GetPathSeparator())
+
+        // drop "." and ".." directory components so a page's link structure can't
+        // walk the mirrored path outside of the download directory
+        const wxArrayString dirTokens =
+            wxStringTokenize(webDirPath, wxFileName::GetPathSeparator(), wxTOKEN_STRTOK);
+        webDirPath.clear();
+        for (const auto& token : dirTokens)
             {
-            webDirPath += wxFileName::GetPathSeparator();
+            if (token == L"." || token == L"..")
+                {
+                continue;
+                }
+            webDirPath += token + wxFileName::GetPathSeparator();
             }
         downloadPath += webDirPath;
         }
@@ -195,6 +204,26 @@ wxString WebHarvester::DownloadFile(wxString& url, const wxString& fileExtension
             }
         }
     // ...otherwise, the download path already has a proper extension
+
+    // double-check that the resolved path still lives inside the download directory
+    // before writing anything to disk (CreateNewFileName() below will create a file)
+    wxFileName resolvedPath{ downloadPath };
+    resolvedPath.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
+    wxFileName resolvedDownloadDir{ m_downloadDirectory, wxString{} };
+    resolvedDownloadDir.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
+    const wxString resolvedDownloadDirPath = resolvedDownloadDir.GetPathWithSep();
+#ifdef __WXMSW__
+    const bool isContained =
+        resolvedPath.GetFullPath().Upper().StartsWith(resolvedDownloadDirPath.Upper());
+#else
+    const bool isContained = resolvedPath.GetFullPath().StartsWith(resolvedDownloadDirPath);
+#endif
+    if (!isContained)
+        {
+        wxLogWarning(L"'%s': blocked attempt to write outside of the download directory.",
+                     downloadPath);
+        return {};
+        }
 
     if (!m_replaceExistingFiles && wxFileName::FileExists(downloadPath))
         {
