@@ -156,6 +156,7 @@ ribbon/sum.svg
 ribbon/support.svg
 ribbon/system-admin.svg
 ribbon/tests-overview.svg
+ribbon/themes.svg
 ribbon/toggle-sidebar.svg
 ribbon/top-titles.svg
 ribbon/uncomment.svg

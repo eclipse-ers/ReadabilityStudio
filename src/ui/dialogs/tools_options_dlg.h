@@ -947,27 +947,6 @@ class ToolsOptionsDlg final : public wxDialog
     [[nodiscard]]
     static wxString ExpandPath(wxString path);
 
-    /// @brief Converts a report theme's filename to a display label
-    ///     (e.g., "oceanic.css" -> "Oceanic").
-    [[nodiscard]]
-    static wxString ThemeFileNameToLabel(const wxString& fileName)
-        {
-        wxString label{ wxFileName(fileName).GetName() };
-        label.Replace(L"-", L" ");
-        return label.Capitalize();
-        }
-
-    /// @brief Converts a report theme's display label back to its filename
-    ///     (e.g., "Oceanic" -> "oceanic.css").
-    [[nodiscard]]
-    static wxString ThemeLabelToFileName(const wxString& label)
-        {
-        wxString fileName{ label.Lower() };
-        fileName.Replace(L" ", L"-");
-        fileName += L".css";
-        return fileName;
-        }
-
     [[nodiscard]]
     ToolSections GetSectionsBeingShown() const noexcept
         {

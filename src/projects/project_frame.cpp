@@ -114,6 +114,8 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED,
          &ProjectDocChildFrame::OnPlainLanguageGuideListDropdown, this,
          XRCID("ID_PLAIN_LANGUAGE_GUIDE_LIST"));
+    Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnReportThemeDropdown, this,
+         XRCID("ID_REPORT_THEME"));
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnGraphSortDropdown, this,
          XRCID("ID_GRAPH_SORT"));
     Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, &ProjectDocChildFrame::OnPrintDropdown, this,
@@ -581,6 +583,9 @@ ProjectDocChildFrame::ProjectDocChildFrame(wxDocument* doc, wxView* view, wxFram
     Bind(wxEVT_MENU, &ProjectDocChildFrame::OnPlainLanguageGuideListSelected, this,
          wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetFirstId(),
          wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetLastId());
+    Bind(wxEVT_MENU, &ProjectDocChildFrame::OnReportThemeSelected, this,
+         wxGetApp().GetMainFrameEx()->REPORT_THEME_RANGE.GetFirstId(),
+         wxGetApp().GetMainFrameEx()->REPORT_THEME_RANGE.GetLastId());
     }
 
 //---------------------------------------------------
@@ -1126,6 +1131,21 @@ void ProjectDocChildFrame::OnPlainLanguageGuideListSelected(wxCommandEvent& even
     }
 
 //---------------------------------------------------
+void ProjectDocChildFrame::OnReportThemeSelected(wxCommandEvent& event)
+    {
+    const auto pos = MainFrame::GetReportThemeMenuIds().find(event.GetId());
+    if (pos == MainFrame::GetReportThemeMenuIds().end())
+        {
+        return;
+        }
+
+    const wxString previousReportTheme = wxGetApp().GetAppOptions()->GetReportTheme();
+    wxGetApp().GetAppOptions()->SetReportTheme(pos->second);
+    wxGetApp().GetAppOptions()->SaveOptionsFile();
+    wxGetApp().GetMainFrameEx()->RefreshOpenProjectsIfThemeChanged(previousReportTheme);
+    }
+
+//---------------------------------------------------
 void ProjectDocChildFrame::OnBarOrientationSelected(wxCommandEvent& event)
     {
     if (event.GetId() == XRCID("ID_BAR_HORIZONTAL"))
@@ -1660,6 +1680,13 @@ void ProjectDocChildFrame::OnBoxPlotShowLabelsButton([[maybe_unused]] wxRibbonBu
             !dynamic_cast<BaseProjectDoc*>(GetDocument())->IsDisplayingBoxPlotLabels());
     dynamic_cast<BaseProjectDoc*>(GetDocument())->RefreshRequired(ProjectRefresh::Minimal);
     dynamic_cast<BaseProjectDoc*>(GetDocument())->RefreshGraphs();
+    }
+
+//---------------------------------------------------
+void ProjectDocChildFrame::OnReportThemeDropdown(wxRibbonButtonBarEvent& evt)
+    {
+    MainFrame::FillReportThemeMenu(m_reportThemeMenu, wxGetApp().GetAppOptions()->GetReportTheme());
+    evt.PopupMenu(&m_reportThemeMenu);
     }
 
 //---------------------------------------------------

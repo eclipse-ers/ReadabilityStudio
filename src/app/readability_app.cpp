@@ -2108,6 +2108,9 @@ void ReadabilityApp::LoadRibbonHomePageHtmlReportSection(wxRibbonPage* homePage)
 
     auto* editButtonBar = new wxRibbonButtonBar(editPanel, MainFrame::ID_EDIT_RIBBON_BUTTON_BAR);
 
+    editButtonBar->AddDropdownButton(XRCID("ID_REPORT_THEME"), _(L"Theme"),
+                                     ReadSvgIcon(L"ribbon/themes.svg"),
+                                     _(L"Change the report's theme."));
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
                              _(L"Copy the report."));
     }
@@ -2602,6 +2605,9 @@ void ReadabilityApp::LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* hom
         editButtonBar->AddButton(XRCID("ID_EDIT_STATS_REPORT"), _(L"Edit Report"),
                                  ReadSvgIcon(L"ribbon/edit-report.svg"),
                                  _(L"Select which statistics to include in the report."));
+        editButtonBar->AddDropdownButton(XRCID("ID_REPORT_THEME"), _(L"Theme"),
+                                         ReadSvgIcon(L"ribbon/themes.svg"),
+                                         _(L"Change the report's theme."));
         editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
                                  _(L"Copy"));
         }
@@ -2619,6 +2625,9 @@ void ReadabilityApp::LoadRibbonHomePagePlainLanguageGuideSection(wxRibbonPage* h
     editButtonBar->AddDropdownButton(XRCID("ID_PLAIN_LANGUAGE_GUIDE_LIST"), _(L"Plain Language"),
                                      ReadSvgIcon(L"ribbon/plain-language-guide.svg"),
                                      _(L"Change the Plain Language Guide's phrase list."));
+    editButtonBar->AddDropdownButton(XRCID("ID_REPORT_THEME"), _(L"Theme"),
+                                     ReadSvgIcon(L"ribbon/themes.svg"),
+                                     _(L"Change the report's theme."));
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"), _(L"Copy"));
     }
 
@@ -2655,6 +2664,9 @@ void ReadabilityApp::LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage)
     editButtonBar->AddButton(XRCID("ID_TEXT_WINDOW_COLORS"), _(L"Highlight"),
                              ReadSvgIcon(L"ribbon/highlighting.svg"),
                              _(L"Change the highlight colors."));
+    editButtonBar->AddDropdownButton(XRCID("ID_REPORT_THEME"), _(L"Theme"),
+                                     ReadSvgIcon(L"ribbon/themes.svg"),
+                                     _(L"Change the report's theme."));
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"), _(L"Copy"));
     editButtonBar->AddButton(wxID_SELECTALL, _(L"Select All"),
                              ReadSvgIcon(L"ribbon/select-all.svg"), _(L"Select All"));
@@ -3253,6 +3265,7 @@ std::map<int, wxString> MainFrame::m_testBundleMenuIds;
 std::map<int, wxString> MainFrame::m_customTestMenuIds;
 std::map<int, wxString> MainFrame::m_examplesMenuIds;
 std::map<int, wxString> MainFrame::m_plainLanguageGuideListMenuIds;
+std::map<int, wxString> MainFrame::m_reportThemeMenuIds;
 
 //-------------------------------------------------------
 void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
@@ -3639,7 +3652,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
                      const wxPoint& pos, const wxSize& size, long type)
     : Wisteria::UI::BaseMainFrame(manager, frame, defaultFileExtensions, title, pos, size, type),
       CUSTOM_TEST_RANGE(1000), EXAMPLE_RANGE(300), TEST_BUNDLE_RANGE(300),
-      PLAIN_LANGUAGE_GUIDE_LIST_RANGE(100)
+      PLAIN_LANGUAGE_GUIDE_LIST_RANGE(100), REPORT_THEME_RANGE(100)
     {
     Bind(wxEVT_MENU, &MainFrame::OnOpenExample, this, EXAMPLE_RANGE.GetFirstId(),
          EXAMPLE_RANGE.GetLastId());
@@ -5072,6 +5085,64 @@ void MainFrame::FillPlainLanguageGuideListMenu(wxMenu& menu, const wxString& cur
                            wxString{}, wxITEM_CHECK);
         menu.Append(item);
         item->Check(listFile == currentListName);
+        }
+    }
+
+//-------------------------------------------------------
+wxArrayString ReadabilityApp::GetAvailableReportThemeFiles()
+    {
+    wxArrayString themeFiles;
+    // recurses into subfolders, so "export-themes" (CSSes for the "Export All"
+    // single-file report, not a user-selectable in-app report theme) is filtered out below
+    wxDir::GetAllFiles(FindResourceDirectory(_DT(L"report-themes")), &themeFiles, _DT(L"*.css"),
+                       wxDIR_FILES);
+    wxArrayString selectableThemeFiles;
+    for (const auto& themeFile : themeFiles)
+        {
+        const wxFileName themeFileName{ themeFile };
+        // "default" is the base theme that the others are overlaid on top of,
+        // so it isn't a user-selectable theme itself
+        if (themeFileName.GetName().CmpNoCase(_DT(L"default")) != 0 &&
+            (themeFileName.GetDirs().empty() ||
+             themeFileName.GetDirs().Last().CmpNoCase(_DT(L"export-themes")) != 0))
+            {
+            selectableThemeFiles.Add(themeFile);
+            }
+        }
+    selectableThemeFiles.Sort();
+    return selectableThemeFiles;
+    }
+
+//-------------------------------------------------------
+void MainFrame::FillReportThemeMenu(wxMenu& menu, const wxString& currentThemeName)
+    {
+    while (menu.GetMenuItemCount() != 0U)
+        {
+        menu.Destroy(menu.FindItemByPosition(0));
+        }
+
+    // the bundled themes are fixed for the life of the program, so only allocate
+    // menu IDs for them once and reuse the same IDs on every rebuild
+    if (m_reportThemeMenuIds.empty())
+        {
+        for (const auto& themeFile : wxGetApp().GetAvailableReportThemeFiles())
+            {
+            const int menuId = wxGetApp().GetMainFrameEx()->REPORT_THEME_RANGE.GetNextId();
+            if (menuId == wxNOT_FOUND)
+                {
+                break;
+                }
+            m_reportThemeMenuIds.insert(
+                std::make_pair(menuId, wxFileName{ themeFile }.GetFullName()));
+            }
+        }
+
+    for (const auto& [id, themeFile] : m_reportThemeMenuIds)
+        {
+        auto* item = new wxMenuItem(&menu, id, wxGetApp().ThemeFileNameToLabel(themeFile),
+                                    wxString{}, wxITEM_CHECK);
+        menu.Append(item);
+        item->Check(themeFile == currentThemeName);
         }
     }
 

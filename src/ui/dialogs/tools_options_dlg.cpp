@@ -787,7 +787,8 @@ ToolsOptionsDlg::ToolsOptionsDlg(wxWindow* parent, BaseProjectDoc* project /*= n
       m_persistJsCookies(wxGetApp().GetAppOptions()->IsPersistingJavaScriptCookies()),
       m_uiLanguage(static_cast<int>(wxGetApp().GetAppOptions()->GetUiLanguage())),
       // report options
-      m_reportTheme(ThemeFileNameToLabel(wxGetApp().GetAppOptions()->GetReportTheme())),
+      m_reportTheme(
+          ReadabilityApp::ThemeFileNameToLabel(wxGetApp().GetAppOptions()->GetReportTheme())),
       m_disableGpuAcceleration(wxGetApp().GetAppOptions()->IsGpuAccelerationDisabled()),
       // log options
       m_logVerbose(wxGetApp().GetLogFile() != nullptr ? wxLog::GetVerbose() : false),
@@ -1821,7 +1822,8 @@ void ToolsOptionsDlg::SaveOptions()
         }
     if (m_reportTheme.has_changed())
         {
-        wxGetApp().GetAppOptions()->SetReportTheme(ThemeLabelToFileName(m_reportTheme.get_value()));
+        wxGetApp().GetAppOptions()->SetReportTheme(
+            wxGetApp().ThemeLabelToFileName(m_reportTheme.get_value()));
         }
     if (m_logVerbose.has_changed() && wxGetApp().GetLogFile() != nullptr)
         {
@@ -5644,21 +5646,10 @@ void ToolsOptionsDlg::CreateThemesSection()
     themeSizer->Add(new wxStaticText(themesPage, wxID_STATIC, _(L"Theme:")),
                     wxSizerFlags{}.CenterVertical());
 
-    wxArrayString themeFiles;
-    // recurses into subfolders, so "export-themes" (CSSes for the "Export All"
-    // single-file report, not a user-selectable in-app report theme) is filtered out below
-    wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"report-themes")), &themeFiles,
-                       _DT(L"*.css"), wxDIR_FILES);
     wxArrayString themeChoices;
-    for (const auto& themeFile : themeFiles)
+    for (const auto& themeFile : wxGetApp().GetAvailableReportThemeFiles())
         {
-        const wxFileName themeFileName{ themeFile };
-        if (themeFileName.GetName().CmpNoCase(_DT(L"default")) != 0 &&
-            (themeFileName.GetDirs().empty() ||
-             themeFileName.GetDirs().Last().CmpNoCase(_DT(L"export-themes")) != 0))
-            {
-            themeChoices.Add(ThemeFileNameToLabel(themeFile));
-            }
+        themeChoices.Add(ReadabilityApp::ThemeFileNameToLabel(themeFile));
         }
     themeChoices.Sort();
 
@@ -5669,8 +5660,9 @@ void ToolsOptionsDlg::CreateThemesSection()
 
     optionsSizer->AddStretchSpacer();
 
-    auto* noteLabel = new wxStaticText(themesPage, wxID_STATIC,
-                                       _(L"Controls the colors used in various reports."));
+    auto* noteLabel =
+        new wxStaticText(themesPage, wxID_STATIC,
+                         _(L"Controls the colors used for various reports and the sidebar."));
     optionsSizer->Add(noteLabel, wxSizerFlags{}.Border(wxTOP));
     }
 

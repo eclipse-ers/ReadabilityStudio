@@ -191,6 +191,18 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
         return m_plainLanguageGuideListMenuIds;
         }
 
+    /// @brief (Re)builds a menu with the available report themes, checking
+    ///     whichever entry matches @c currentThemeName.
+    /// @param menu The menu to fill.
+    /// @param currentThemeName The currently active report theme (a bundled CSS filename).
+    static void FillReportThemeMenu(wxMenu& menu, const wxString& currentThemeName);
+
+    [[nodiscard]]
+    static const std::map<int, wxString>& GetReportThemeMenuIds() noexcept
+        {
+        return m_reportThemeMenuIds;
+        }
+
     [[nodiscard]]
     static const std::map<int, wxString>& GetTestBundleMenuIds() noexcept
         {
@@ -279,6 +291,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     IdRangeLock EXAMPLE_RANGE;
     IdRangeLock TEST_BUNDLE_RANGE;
     IdRangeLock PLAIN_LANGUAGE_GUIDE_LIST_RANGE;
+    IdRangeLock REPORT_THEME_RANGE;
 
     wxMenu m_fileOpenMenu;
     wxMenu m_printMenu;
@@ -357,6 +370,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     static std::map<int, wxString> m_customTestMenuIds;
     static std::map<int, wxString> m_examplesMenuIds;
     static std::map<int, wxString> m_plainLanguageGuideListMenuIds;
+    static std::map<int, wxString> m_reportThemeMenuIds;
 
     std::vector<wxBitmapBundle> m_projectSideBarImageList;
 
@@ -434,6 +448,31 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         }
 
     void SetLastSelectedDocFilter(const wxString& filter) { m_lastSelectedDocFilter = filter; }
+
+    /// @returns The full paths of the bundled, user-selectable report themes.
+    [[nodiscard]]
+    wxArrayString GetAvailableReportThemeFiles();
+
+    /// @brief Converts a report theme's filename to a display label
+    ///     (e.g., "oceanic.css" -> "Oceanic").
+    [[nodiscard]]
+    static wxString ThemeFileNameToLabel(const wxString& fileName)
+        {
+        wxString label{ wxFileName{ fileName }.GetName() };
+        label.Replace(L"-", L" ");
+        return label.Capitalize();
+        }
+
+    /// @brief Converts a report theme's display label back to its filename
+    ///     (e.g., "Oceanic" -> "oceanic.css").
+    [[nodiscard]]
+    static wxString ThemeLabelToFileName(const wxString& label)
+        {
+        wxString fileName{ label.Lower() };
+        fileName.Replace(L" ", L"-");
+        fileName += L".css";
+        return fileName;
+        }
 
     [[nodiscard]]
     std::unique_ptr<ReadabilityAppOptions>& GetAppOptions() noexcept
