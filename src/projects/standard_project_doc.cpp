@@ -1320,6 +1320,8 @@ bool ProjectDoc::OnCreate(const wxString& path, long flags)
     {
     if ((flags & wxDOC_NEW) != 0)
         {
+        const bool forceWizard = wxGetApp().IsForcingProjectWizard();
+        wxGetApp().SetForceProjectWizard(false);
         const wxString exampleFolder =
             wxGetApp().FindResourceDirectory(_DT(L"examples", DTExplanation::FilePath));
         if (exampleFolder.empty() || !wxFileName::DirExists(exampleFolder))
@@ -1333,7 +1335,8 @@ bool ProjectDoc::OnCreate(const wxString& path, long flags)
         // This is useful for scripting, where you need to create a new project from a filepath
         // and add tests and whatnot afterward. In this case, you don't want an interactive
         // wizard appearing. Same for where you drag-n-drop a file into the interface.
-        if (!resolvePath.IsInvalidFile() &&
+        // (This can be overridden by forceWizard, e.g., when opening a document from File->Open.)
+        if (!forceWizard && !resolvePath.IsInvalidFile() &&
             (wxFileName(path).GetPath().CmpNoCase(exampleFolder) != 0 ||
              LuaInterpreter::IsRunning()))
             {

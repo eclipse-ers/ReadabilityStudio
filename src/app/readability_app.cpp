@@ -3656,6 +3656,9 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
     {
     Bind(wxEVT_MENU, &MainFrame::OnOpenExample, this, EXAMPLE_RANGE.GetFirstId(),
          EXAMPLE_RANGE.GetLastId());
+    // Override the doc manager's default wxID_OPEN handling. Bound on the manager itself
+    // so it's also caught when the command bubbles up from a project's child frame.
+    manager->Bind(wxEVT_MENU, &MainFrame::OnFileOpen, this, wxID_OPEN);
     const auto accelEntries = std::to_array<wxAcceleratorEntry>(
         { { wxACCEL_NORMAL, WXK_F1, wxID_HELP },
           { wxACCEL_CMD, static_cast<int>(L'N'), wxID_NEW },
@@ -5845,6 +5848,46 @@ void MainFrame::OnClose(wxCloseEvent& event)
     }
 
 //-------------------------------------------------------
+void MainFrame::OnFileOpen([[maybe_unused]] wxCommandEvent& event)
+    {
+    wxFileDialog dialog(wxGetApp().GetParentingWindow(), _(L"Select Project to Open"),
+                        wxGetApp().GetAppOptions()->GetProjectPath(), wxString{},
+                        // TRANSLATORS: %s is program name.
+                        wxString::Format(_(L"%s Project (*.rsp;*.rsbp)|*.rsp;*.rsbp|"),
+                                         wxGetApp().GetAppDisplayName()) +
+                            ReadabilityAppOptions::GetDocumentFilter(),
+                        wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);
+    if (dialog.ShowModal() != wxID_OK)
+        {
+        return;
+        }
+    wxGetApp().GetAppOptions()->SetProjectPath(wxFileName{ dialog.GetPath() }.GetPath());
+
+    const wxString ext{ wxFileName{ dialog.GetPath() }.GetExt() };
+    bool isProjectFile = false;
+    for (size_t i = 0; i < GetDefaultFileExtensions().GetCount(); ++i)
+        {
+        if (ext.CmpNoCase(GetDefaultFileExtensions()[i]) == 0)
+            {
+            isProjectFile = true;
+            break;
+            }
+        }
+
+    if (isProjectFile)
+        {
+        OpenFile(dialog.GetPath());
+        }
+    else
+        {
+        // not one of the app's own project formats, so run the standard project
+        // wizard with the file already selected
+        wxGetApp().SetForceProjectWizard(true);
+        CreateStandardProjectFromDocument(dialog.GetPath());
+        }
+    }
+
+//-------------------------------------------------------
 void MainFrame::OnOpenDocument([[maybe_unused]] wxCommandEvent& event)
     {
     wxFileDialog dialog(wxGetApp().GetParentingWindow(), _(L"Select Document to Analyze"),
@@ -5854,6 +5897,12 @@ void MainFrame::OnOpenDocument([[maybe_unused]] wxCommandEvent& event)
         {
         return;
         }
+    CreateStandardProjectFromDocument(dialog.GetPath());
+    }
+
+//-------------------------------------------------------
+void MainFrame::CreateStandardProjectFromDocument(const wxString& path)
+    {
     const auto& templateList = wxGetApp().GetDocManager()->GetTemplates();
     for (size_t i = 0; i < templateList.GetCount(); ++i)
         {
@@ -5861,8 +5910,7 @@ void MainFrame::OnOpenDocument([[maybe_unused]] wxCommandEvent& event)
         if ((docTemplate != nullptr) &&
             docTemplate->GetDocClassInfo()->IsKindOf(wxCLASSINFO(ProjectDoc)))
             {
-            auto* newDoc =
-                dynamic_cast<ProjectDoc*>(docTemplate->CreateDocument(dialog.GetPath(), wxDOC_NEW));
+            auto* newDoc = dynamic_cast<ProjectDoc*>(docTemplate->CreateDocument(path, wxDOC_NEW));
             if ((newDoc != nullptr) && !newDoc->OnNewDocument())
                 {
                 // Document is implicitly deleted by DeleteAllViews

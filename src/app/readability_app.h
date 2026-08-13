@@ -122,6 +122,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 
     void OnAbout([[maybe_unused]] wxCommandEvent& event);
     void OnStartPageClick(const wxCommandEvent& event);
+    void OnFileOpen(wxCommandEvent& event);
     void OnOpenDocument([[maybe_unused]] wxCommandEvent& event);
     void OnPaste([[maybe_unused]] wxCommandEvent& event);
     void OnPrinterHeaderFooter([[maybe_unused]] wxCommandEvent& event);
@@ -366,6 +367,10 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     static void RefreshOpenProjectsIfThemeChanged(const wxString& previousReportTheme);
 
   private:
+    /// @brief Creates a new standard project from an arbitrary document (i.e., not
+    ///     one of the app's own project file formats).
+    void CreateStandardProjectFromDocument(const wxString& path);
+
     static std::map<int, wxString> m_testBundleMenuIds;
     static std::map<int, wxString> m_customTestMenuIds;
     static std::map<int, wxString> m_examplesMenuIds;
@@ -448,6 +453,18 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         }
 
     void SetLastSelectedDocFilter(const wxString& filter) { m_lastSelectedDocFilter = filter; }
+
+    /// @brief Whether the next new (standard) project document created via @c wxDOC_NEW
+    ///     should run the project wizard, even for a file path that would normally
+    ///     bypass it.
+    /// @details Consumed (and reset) by ProjectDoc::OnCreate() the next time it runs.
+    [[nodiscard]]
+    bool IsForcingProjectWizard() const noexcept
+        {
+        return m_forceProjectWizard;
+        }
+
+    void SetForceProjectWizard(const bool force) noexcept { m_forceProjectWizard = force; }
 
     /// @returns The full paths of the bundled, user-selectable report themes.
     [[nodiscard]]
@@ -646,6 +663,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     bool LoadWordLists(const wxString& AppSettingFolderPath);
     wxArrayString m_lastSelectedWebPages;
     wxString m_lastSelectedDocFilter;
+    bool m_forceProjectWizard{ false };
     LuaInterpreter m_LuaRunner;
     wxString m_CustomEnglishDictionaryPath;
     wxString m_CustomSpanishDictionaryPath;
