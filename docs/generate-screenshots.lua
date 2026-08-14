@@ -879,7 +879,7 @@ sp:Reload()
 
 ScreenshotLib.SnapScreenshotOfTextWindow(ImagePath .. "exclusion-tags-example-excluding." .. FileExtension,
     HighlightedReportType.GrammarHighlightedIssues, true,
-    "<Platforms>", "<Note that this is not intended for general distribution. (9)  This is a preliminary draft, final approval pending>")
+    "<Platforms>", "<Note that this is not intended for general distribution.  This is a preliminary draft, final approval pending>")
 
 sp:ShowProperties(OptionsPageType.AnalysisDocumentIndexing)
 ScreenshotLib.SnapScreenshot(ImagePath .. "exclusion-tags-example-options." .. FileExtension, 1078, 1079, 1078)

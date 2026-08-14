@@ -4239,17 +4239,60 @@ namespace LuaScripting
         escapedSearchText.Replace(L"\n", L"\\n", true);
         escapedSearchText.Replace(L"\r", L"\\r", true);
 
-        // window.find() is a non-standard (but Chromium-supported) API that searches,
-        // selects, and scrolls the match into view all in one call
+        // window.find() would also match highlighted words' hover-only tooltip text
+        // (opacity:0 doesn't hide it from find()). That splices the tooltip text ahead
+        // of the word it describes, breaking any search phrase spanning across it. Walk
+        // the text nodes directly instead (skipping .tooltip-box, same as the screenshot
+        // helper's walker) and select a Range over the match.
         const wxString script = wxString::Format(_DT(LR"JS(
             (function() {
+                var acceptNode = function(node)
+                    {
+                    var parent = node.parentElement;
+                    if (parent && (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE'))
+                        { return NodeFilter.FILTER_REJECT; }
+                    if (parent && parent.closest('.tooltip-box'))
+                        { return NodeFilter.FILTER_REJECT; }
+                    return NodeFilter.FILTER_ACCEPT;
+                    };
+
+                var text = '', node;
+                var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT,
+                    { acceptNode: acceptNode });
+                while ((node = walker.nextNode())) { text += node.textContent; }
+
+                var idx = text.indexOf('%s');
+                if (idx === -1) { return 'false'; }
+                var start = idx, end = idx + '%s'.length;
+
+                var rangeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT,
+                    { acceptNode: acceptNode });
+                var pos = 0, range = document.createRange(), started = false;
+                while ((node = rangeWalker.nextNode()))
+                    {
+                    var nodeStart = pos, nodeEnd = pos + node.length;
+                    if (!started && end >= nodeStart && start < nodeEnd)
+                        {
+                        range.setStart(node, Math.max(0, start - nodeStart));
+                        started = true;
+                        }
+                    if (started && end <= nodeEnd)
+                        {
+                        range.setEnd(node, Math.max(0, end - nodeStart));
+                        break;
+                        }
+                    pos = nodeEnd;
+                    }
+                if (!started) { return 'false'; }
+
                 window.getSelection().removeAllRanges();
-                window.scrollTo(0, 0);
-                return window.find('%s', false, false, true, false, true, false) ?
-                    'true' : 'false';
+                window.getSelection().addRange(range);
+                var r = range.getBoundingClientRect();
+                window.scrollTo(0, Math.max(0, r.top + window.pageYOffset - 40));
+                return 'true';
                 })();
             )JS"),
-                                                 escapedSearchText);
+                                                 escapedSearchText, escapedSearchText);
 
         wxString scriptOutput;
         return webView->RunScript(script, &scriptOutput) && scriptOutput == L"true";
