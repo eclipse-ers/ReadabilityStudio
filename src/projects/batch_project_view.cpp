@@ -608,7 +608,12 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         {
         m_testExplanations->Hide();
         m_testExplanations->SetLabel(_(L"Test Explanations"));
+#ifndef NDEBUG
+        m_testExplanations->EnableContextMenu(true);
+        m_testExplanations->EnableAccessToDevTools();
+#else
         m_testExplanations->EnableContextMenu(false);
+#endif
         GetWorkSpaceSizer()->Add(m_testExplanations, wxSizerFlags{ 1 }.Expand());
         }
 
@@ -617,7 +622,12 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         {
         m_statsReport->Hide();
         m_statsReport->SetLabel(_(L"Summary Statistics"));
+#ifndef NDEBUG
+        m_statsReport->EnableContextMenu(true);
+        m_statsReport->EnableAccessToDevTools();
+#else
         m_statsReport->EnableContextMenu(false);
+#endif
         GetWorkSpaceSizer()->Add(m_statsReport, wxSizerFlags{ 1 }.Expand());
         }
 

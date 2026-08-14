@@ -88,8 +88,14 @@ ExplanationListCtrl::ExplanationListCtrl(wxWindow* parent, wxWindowID id,
         }
     else
         {
-        // suppress the browser's reload/view-source context menu
+            // suppress the browser's reload/view-source context menu (except in debug
+            // builds, where the context menu and dev tools are left available)
+#ifndef NDEBUG
+        GetExplanationView()->EnableContextMenu(true);
+        GetExplanationView()->EnableAccessToDevTools();
+#else
         GetExplanationView()->EnableContextMenu(false);
+#endif
         GetExplanationView()->Bind(wxEVT_WEBVIEW_LOADED, &ExplanationListCtrl::OnExplanationLoaded,
                                    this);
         }

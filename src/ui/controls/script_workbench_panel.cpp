@@ -172,6 +172,12 @@ void ScriptWorkbenchPanel::CreateControls()
     m_debugNotebook = new wxNotebook(m_outerSplitter, wxID_ANY);
 
     m_debugMessageWindow = wxWebView::New(m_debugNotebook, wxID_ANY);
+#ifndef NDEBUG
+    m_debugMessageWindow->EnableContextMenu(true);
+    m_debugMessageWindow->EnableAccessToDevTools();
+#else
+    m_debugMessageWindow->EnableContextMenu(false);
+#endif
     m_debugNotebook->AddPage(m_debugMessageWindow, _(L"Output"), true);
 
     m_localsWindow = new wxTreeListCtrl(m_debugNotebook, wxID_ANY);

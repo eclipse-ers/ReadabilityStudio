@@ -1178,7 +1178,12 @@ void ProjectDoc::DisplayReadabilityScores(const bool setFocus)
                     scoresReport->Hide();
                     scoresReport->SetName(_(L"Summary Report"));
                     scoresReport->SetLabel(_(L"Summary Report"));
+#ifndef NDEBUG
+                    scoresReport->EnableContextMenu(true);
+                    scoresReport->EnableAccessToDevTools();
+#else
                     scoresReport->EnableContextMenu(false);
+#endif
                     scoresReport->Bind(wxEVT_WEBVIEW_NAVIGATING,
                                        &ProjectView::OnExplanationNavigating, view);
                     view->GetReadabilityResultsView().InsertWindow(1, scoresReport);
@@ -4120,7 +4125,12 @@ void ProjectDoc::DisplayStatistics()
                 summaryReportWindow->Hide();
                 summaryReportWindow->SetLabel(BaseProjectView::GetFormattedReportLabel());
                 summaryReportWindow->SetName(BaseProjectView::GetFormattedReportLabel());
+#ifndef NDEBUG
+                summaryReportWindow->EnableContextMenu(true);
+                summaryReportWindow->EnableAccessToDevTools();
+#else
                 summaryReportWindow->EnableContextMenu(false);
+#endif
                 summaryReportWindow->Bind(wxEVT_WEBVIEW_NAVIGATING,
                                           &ProjectView::OnExplanationNavigating, view);
                 }
@@ -4206,7 +4216,12 @@ void ProjectDoc::DisplayStatistics()
                 sumWindow->Hide();
                 sumWindow->SetLabel(_(L"Summary"));
                 sumWindow->SetName(_(L"Dolch Summary"));
+#ifndef NDEBUG
+                sumWindow->EnableContextMenu(true);
+                sumWindow->EnableAccessToDevTools();
+#else
                 sumWindow->EnableContextMenu(false);
+#endif
                 sumWindow->Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating,
                                 view);
                 view->GetDolchSightWordsView().AddWindow(sumWindow);
@@ -4277,7 +4292,12 @@ void ProjectDoc::DisplayPlainLanguageGuide()
             guideWindow->Hide();
             guideWindow->SetLabel(BaseProjectView::GetPlainLanguageGuideLabel());
             guideWindow->SetName(BaseProjectView::GetPlainLanguageGuideLabel());
+#ifndef NDEBUG
+            guideWindow->EnableContextMenu(true);
+            guideWindow->EnableAccessToDevTools();
+#else
             guideWindow->EnableContextMenu(false);
+#endif
             guideWindow->Bind(wxEVT_WEBVIEW_NAVIGATING, &ProjectView::OnExplanationNavigating,
                               view);
             guideWindow->RegisterHandler(m_plainLanguageGuidePageHandler);
@@ -6726,10 +6746,16 @@ wxWebView* ProjectDoc::CreateHighlightedTextWindow(wxWindow* parent, const int I
     textWindow->SetName(label);
     textWindow->Bind(wxEVT_WEBVIEW_LOADED, &ProjectDoc::OnHighlightedTextLoaded, this);
     textWindow->Hide();
-    // Read-only report, so hide the browser's context menu. Don't block navigation;
+    // Read-only report, so hide the browser's context menu (except in debug builds,
+    // where the context menu and dev tools are left available). Don't block navigation;
     // there are no links to follow, and some backends rewrite the page's url
     // internally, which a scheme-based veto would wrongly cancel.
+#ifndef NDEBUG
+    textWindow->EnableContextMenu(true);
+    textWindow->EnableAccessToDevTools();
+#else
     textWindow->EnableContextMenu(false);
+#endif
     return textWindow;
     }
 
