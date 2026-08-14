@@ -92,7 +92,7 @@ set(INSTALLED_SIZE 131072)
 math(EXPR INSTALLED_SIZE_MB "${INSTALLED_SIZE} / 1024")
 
 # Edit these values when bumping the release version
-project(readstudio VERSION 2026.0.2.0 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
+project(readstudio VERSION 2026.1.0.0 DESCRIPTION "Readability Studio" HOMEPAGE_URL https://eclipse.dev/ers)
 enable_language(CXX)
 if(APPLE)
     enable_language(OBJCXX)
