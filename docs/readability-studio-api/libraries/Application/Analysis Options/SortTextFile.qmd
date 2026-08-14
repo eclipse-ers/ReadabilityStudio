@@ -1,0 +1,26 @@
+::: {.minipage data-latex="{\textwidth}"}
+### `SortTextFile` {-}
+
+Creates a new file from a text file, with its lines sorted (case insensitively).
+
+#### Syntax {-}
+
+``` {.lua}
+boolean SortTextFile(string inputFile,
+                     string outputFile)
+```
+
+
+#### Return value {-}
+
+Type: `boolean`
+
+#### Parameters {-}
+
+**Parameter** | **Description**
+| :-- | :-- |
+| `string` inputFile | The input file to be sorted. | 
+| `string` outputFile | Where to save the sorted file. |
+
+
+:::

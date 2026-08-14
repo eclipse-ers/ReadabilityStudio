@@ -112,6 +112,7 @@ namespace LuaScripting
     int RemoveAllCustomTestBundles(lua_State* L); // Clears all custom test bundles from the program.
     int /*boolean*/ MergeWordLists(lua_State* L /*string inputFile1, string inputFile2, ..., string outputFile*/); // Creates a new word list file from a list of other word list files.
     int /*boolean*/ MergePhraseLists(lua_State* L /*string inputFile1, string inputFile2, ..., string outputFile*/); // Creates a new phrase list file from a list of other phrase list files.
+    int /*boolean*/ SortTextFile(lua_State* L /*string inputFile, string outputFile*/); // Creates a new file from a text file, with its lines sorted (case insensitively).
     // Append given suffixes to words in a list.
     // Note that these are internal functions used for expanding our proper noun list.
     int /*boolean*/ /*INTERNAL!!!*/ ExpandWordList(lua_State* L /*string inputWordList, string outputFile, ... suffixesToAddToEachWord*/); // INTERNAL FUNCTION!!! SHOULD NOT BE DOCUMENTED.
@@ -642,6 +643,7 @@ namespace LuaScripting
         { "SplashScreen", SplashScreen },
         { "MergeWordLists", MergeWordLists },
         { "MergePhraseLists", MergePhraseLists },
+        { "SortTextFile", SortTextFile },
         { "QAVerify", QAVerify },
         { "CheckHtmlLinks", CheckHtmlLinks },
         { "GetPaperOrientation", GetPaperOrientation },

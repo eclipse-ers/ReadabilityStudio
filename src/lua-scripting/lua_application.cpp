@@ -1455,6 +1455,63 @@ namespace LuaScripting
         return 1;
         }
 
+    //-------------------------------------------------------------
+    int SortTextFile(lua_State* L)
+        {
+        if (!VerifyParameterCount(L, 2, __func__))
+            {
+            return 0;
+            }
+
+        wxString inputPath{ luaL_checkstring(L, 1), wxConvUTF8 };
+        if (!wxFile::Exists(inputPath))
+            {
+            wxMessageBox(wxString::Format(_(L"%s: file not found."), inputPath), _(L"Script Error"),
+                         wxOK | wxICON_EXCLAMATION);
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        wxString inputFileBuffer;
+        if (!Wisteria::TextStream::ReadFile(inputPath, inputFileBuffer))
+            {
+            lua_pushboolean(L, false);
+            return 1;
+            }
+
+        // read the lines as-is (i.e., no tokenizing within the lines)
+        std::vector<word_list::word_type> lines;
+        string_util::string_tokenize<word_list::word_type> tkzr{ inputFileBuffer.wc_str(), L"\n\r",
+                                                                 true };
+        lines.reserve(tkzr.count_tokens(inputFileBuffer.wc_str()));
+        while (tkzr.has_more_tokens())
+            {
+            lines.emplace_back(tkzr.get_next_token());
+            }
+
+        // case insensitive, based on the string type's traits
+        std::ranges::sort(lines);
+
+        wxString outputStr;
+        outputStr.reserve(inputFileBuffer.length());
+        for (const auto& line : lines)
+            {
+            outputStr += line.c_str() + wxString{ L"\n" };
+            }
+        outputStr.Trim(true);
+        outputStr.Trim(false);
+
+        const wxString outputPath{ luaL_checkstring(L, 2), wxConvUTF8 };
+        wxFileName::Mkdir(wxFileName{ outputPath }.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+        wxFileName{ outputPath }.SetPermissions(wxS_DEFAULT);
+        wxFile outputFile{ outputPath, wxFile::write };
+        lua_pushboolean(L, outputFile.Write(outputStr, wxConvUTF8));
+
+        wxGetApp().Yield();
+        return 1;
+        }
+
     // PROJECT SETTINGS
     //-------------------------------------------------------------
     int SetReviewer(lua_State* L)
