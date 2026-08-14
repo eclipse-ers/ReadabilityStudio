@@ -1,0 +1,261 @@
+2FA	Two-Factor Authentication	A specific form of multi-factor authentication requiring two authentication factors.
+ABI	Application Binary Interface	Defines how compiled software components interact at the binary level.
+ACID	Atomicity Consistency Isolation Durability	Properties that help ensure database transactions remain reliable.
+ACL	Access Control List	A list defining which users or systems are allowed or denied access to a resource.
+ActiveX	Reusable COM components for web	Reusable software components based on COM.
+ADL	Argument-Dependent Lookup	Also called “Koenig lookup.” When looking up a function name, the compiler also searches the namespaces of the function’s arguments.
+aggregate initialization	Brace-enclosed list for aggregates	Initialize a struct or array by listing values in order.
+alignment	Memory address layout	`int` wants 4-byte alignment, `double` wants 8-byte. Misaligned access is slow (or crashes on some architectures). Compilers pad structs to maintain alignment.
+AOT	Ahead-Of-Time	A technique where code is compiled before the program runs.
+apartment	Threading model boundary in COM	A threading concept, not a physical container. STA = one thread; calls into it are marshaled. MTA = shared across threads. Objects in different apartments communicate via marshaling.
+API	Application Programming Interface	A defined interface through which software components communicate.
+ARC	Automatic Reference Counting	The compiler inserts `retain`/`release`/`autorelease` calls at compile time. Not garbage collection — deterministic, reference-counted.
+ARP	Address Resolution Protocol	A protocol used to determine the hardware address associated with an IPv4 address on a local network.
+ASan	AddressSanitizer	A runtime checker for memory errors. Catches buffer overflows, use-after-free, and double-free. Fast enough for testing. `-fsanitize=address` in GCC/Clang.
+ATL	Active Template Library	Microsoft’s template library for building COM objects. Lighter weight than MFC, focused on COM. Uses macros extensively. Good for small, fast COM DLLs.
+automatic storage	Local variables on the stack	`int x = 5;` — x is automatic. Created when entering the block, destroyed when leaving. Fast, scoped, no cleanup needed.
+autorelease	Delayed release at runloop end	`[obj autorelease]` — adds the object to the current pool. Pool drains later. Prevents objects from being freed while still in use.
+BDD	Behavior-Driven Development	A development approach that describes and tests software behavior in terms meaningful to users and stakeholders.
+bisection debugging	Binary search to find an issue	Bisection debugging is like a hi-lo game: test the midpoint, determine whether the bug is before or after it, then keep halving the search area until you find it.
+Bohrbug	Predictable bug	The opposite of a Heisenbug. You can reproduce it every time. Named after Bohr’s model of the atom — deterministic and predictable.
+buffer overflow	Writing past end of a buffer	Corrupts adjacent memory. Classic security vulnerability. Stack overflows can overwrite return addresses. Heap overflows corrupt allocator metadata.
+cache line	Block loaded into CPU cache	Typically 64 bytes. When you read one byte, the CPU loads the whole line. If your data fits in one cache line, it’s fast. If you jump around, you're wasting the load.
+cache-friendly	Access pattern working well caches	Sequential access, predictable patterns, data packed together. The CPU preloads nearby memory into cache lines. Cache-friendly code is fast because it avoids cache misses.
+cache-hostile	Access pattern causing cache misses	Random access, scattered pointers, large objects spread across memory. The CPU keeps loading cache lines it doesn't use. The same data, accessed differently, can be 100x slower.
+cache-oblivious algorithm	Algorithm fast regardless cache size	Works well at any cache line size or cache hierarchy. Uses recursive divide-and-conquer. No need to tune for specific hardware.
+CAP	Consistency Availability Partition Tolerance	A theorem describing tradeoffs that arise in distributed data systems when network partitions occur.
+capture list	Variables a lambda captures	The `[...]` part of a lambda. Captures by value, by reference, or by move.
+CD	Continuous Delivery	Continuous Delivery automates preparing software for release; Continuous Deployment goes further by automatically deploying qualifying changes.
+CDN	Content Delivery Network	A distributed network of servers that delivers content from locations closer to users to reduce latency.
+CI	Continuous Integration	A development practice where code changes are automatically built and tested frequently.
+CI/CD	Continuous Integration / Continuous Delivery	Automated processes for building, testing, packaging, and deploying software.
+circular reference	Mutual references that prevent cleanup	Two or more objects, directly or in a chain, each depend on another to free them — so nothing does. A memory leak. Break the cycle with `weak_ptr` or raw pointers.
+CLI	Command-Line Interface	A text-based interface for interacting with software.
+closure type	Anonymous class generated for lambda	The compiler creates a hidden class for each lambda. Each lambda has a unique, unnamed type — even two lambdas with identical code are different types.
+cold code	Code that rarely executes	Error handlers, edge cases, shutdown paths. Don't bother optimizing it — keep it readable. The optimizer might even discard it entirely.
+COM	Component Object Model	Microsoft’s binary standard for inter-process communication and object interaction. Objects are accessed through interfaces, not concrete types.
+core dump	Process memory snapshot at crash	A file containing the entire memory image of a crashed process. Used for postmortem debugging.
+coroutine	Function suspending and resuming	A function that can pause execution and be resumed later. Used for async I/O, generators, and asynchronous algorithms.
+CORS	Cross-Origin Resource Sharing	A browser security mechanism controlling whether web pages can request resources from another origin.
+CPU	Central Processing Unit	The processor that executes instructions and performs calculations.
+CRTP	Curiously Recurring Template Pattern	A base class parameterized with the derived class (e.g., `class Derived : public Base<Derived>`). Used to implement static polymorphism; the base calls derived methods without virtual dispatch.
+CRUD	Create Read Update Delete	The basic operations commonly performed on stored data.
+CSRF	Cross-Site Request Forgery	A vulnerability where an attacker tricks a user’s authenticated browser into making an unintended request.
+CTAD	Class Template Argument Deduction	The compiler deduces template arguments from constructor arguments, so you can skip the explicit types.
+CTE	Common Table Expression	A temporary query result that can be referenced in a downstream query. Multiple CTEs can be chained, as long as the final one is used downstream.
+CTOR	Constructor	A special method called when an object is created; initializes the object’s state.
+CVE	Common Vulnerabilities and Exposures	A standardized identifier assigned to publicly known cybersecurity vulnerabilities.
+CVSS	Common Vulnerability Scoring System	A standardized system for rating the severity of security vulnerabilities.
+cyclic dependency	Mutual dependency A and B	A cyclic dependency is like a circular chain where A depends on B, B depends on C, and C depends back on A.
+dangling pointer	Pointer to freed memory	Pointing to something that no longer exists. Using it is undefined behavior; might crash, might seem to work, might corrupt data.
+DBMS	Database Management System	Software used to create, store, retrieve, update, and manage data in databases.
+DCL	Data Control Language	SQL commands used to control permissions, such as `GRANT` and `REVOKE`.
+DCOM	Remote COM	The COM object lives on another machine, marshaled via network RPC.
+DDL	Data Definition Language	SQL commands used to define database structures, such as `CREATE`, `ALTER`, and `DROP`.
+DDoS	Distributed Denial of Service	A denial-of-service attack originating from many systems simultaneously.
+DDX	Dialog Data Exchange	Bind UI controls to member variables in MFC. `DoDataExchange` runs the bindings.
+dead code	Code that cannot be reached	Unreachable branches, commented-out logic, functions nobody calls. The compiler might remove it entirely. Even when it doesn't, it’s a maintenance burden and a source of confusion.
+debug symbols	Mapping machine code to source	Without debug symbols, the debugger only sees raw addresses and assembly. With them, it can show you source lines, variable names, and types. Stripped binaries have no debug info.
+defensive programming	Assume everything will go wrong	Validate inputs, check return values, handle edge cases. “Never trust the caller.” The opposite of “programming by contract” where you trust the interface.
+delegate pattern	Object handles events for another	An object delegates decisions to another object via callbacks.
+designated initialization	Named member initialization in aggregates	`Point{.x=1, .y=2}`. Initializes specific members by name. Makes aggregate initialization readable for structs with many fields.
+designated initializer	Init that does real work	Other inits call the designated one with defaults. Subclasses must override the designated init (not convenience inits).
+disk thrashing	Swapping pages more than working	Memory demand exceeds physical RAM, so the OS constantly swaps pages to/from disk. Everything grinds to a halt.
+DLL	Dynamic-Link Library	A Windows library containing code and data that programs can load and use at runtime.
+DML	Data Manipulation Language	SQL commands used to modify data, such as `INSERT`, `UPDATE`, and `DELETE`.
+DNS	Domain Name System	A distributed naming system used to locate network resources.
+DoS	Denial of Service	An attack or condition that prevents legitimate users from accessing a service.
+DQL	Data Query Language	A term sometimes used for SQL commands that retrieve data, particularly `SELECT`.
+DRY	Don't Repeat Yourself	A principle discouraging unnecessary duplication of code or knowledge.
+DTOR	Destructor	A special method called when an object is destroyed; cleans up resources.
+DWARF	GCC/Clang’s debug information format	The equivalent of PDB for non-MSVC compilers. Embedded in the binary or in separate `.dSYM` (macOS) / `.debug` (Linux) files. The standard for Unix debugging.
+EBO	Empty Base Optimization	The compiler can eliminate the storage an empty base class would otherwise need. Not guaranteed in every case, such as when multiple empty bases of the same type require distinct addresses.
+event sink	Object that receives COM events	Implements the callback interface (your code) that the event source calls. Connected via `IConnectionPoint::Advise`.
+event source	COM object that fires event	A button that was clicked. Connected to its event sink via `IConnectionPoint::Advise`.
+exclusive ownership	One owner at a time	`std::unique_ptr` semantics. When you move it, ownership transfers. The previous owner becomes null. Simple, safe resource management.
+external linkage	Visible across translation units	The default for functions and non-static variables. The linker resolves references to these symbols across TUs.
+false sharing	Cache line contention between threads	The CPU sees the cache line as “dirty” and has to reload it for the other thread, even though they're writing to different data. The fix: pad variables to separate cache lines.
+FK	Foreign Key	A database column or columns that reference a key in another table.
+flame graph	Visual stack-trace profiler output	A stack trace folded into a sideways bar chart. Wide bars represent functions that appear in many samples and hot paths.
+fold expression	Parameter pack reduced with operator	A concise way to apply the same operation across all elements of a parameter pack.
+forward declaration	Declare name without defining it	Tells the compiler that something exists without defining it yet.
+FP	Functional Programming	A programming approach emphasizing functions, immutable data, and minimizing side effects.
+fragmentation	Small gaps between allocations	External fragmentation: free memory exists but not in contiguous blocks. Internal fragmentation: allocated blocks are bigger than needed.
+FTP	File Transfer Protocol	A protocol for transferring files between computers.
+GC	Garbage Collection	Automatically reclaims memory held by objects the collector determines are unreachable.
+GDPR	General Data Protection Regulation	A European Union regulation governing the handling and protection of personal data.
+GPU	Graphics Processing Unit	A processor designed for highly parallel computation. Originally focused on graphics, but now widely used for scientific computing and machine learning.
+guard band	Reserved space between memory regions	A gap between the stack, heap, and other segments. If something overflows into the guard band, it hits an unmapped page and crashes immediately instead of silently corrupting something else.
+GUI	Graphical User Interface	A visual interface for interacting with software.
+HCF	Halt and Catch Fire	A literal CPU instruction that stops the processor. `HLT` on x86 halts it until an interrupt. In practice, people use it to mean “the system is completely stuck” or “intentionally crash.”
+header guard	Prevents double-inclusion of a header	Implemented with an `#ifndef` / `#define` / `#endif` block. `#pragma once` is the non-standard (but widely supported) alternative.
+heap	Where dynamically allocated memory lives	`new`, `malloc`, `operator new` allocate here; you manage the lifetime.
+heap corruption	Damage to heap metadata	A buffer overflow overwrites the allocator’s bookkeeping (size fields, free lists, etc.). May not crash until much later. Hard to debug.
+Heisenbug	Bug that changes when debugged	Observing it changes it. Usually caused by timing changes, added instrumentation, or shifted memory layout.
+hot path	Frequently executing code	The 20% of code that runs 80% of the time. Optimize this first. The profiler tells you where it is. Everything else is cold code.
+HTTP	Hypertext Transfer Protocol	The protocol commonly used to transfer requests and responses between web clients and servers.
+HTTPS	Hypertext Transfer Protocol Secure	HTTP layered over TLS, which provides confidentiality, integrity, and authentication (not just encryption).
+I/O	Input/Output	The communication of data between a program and something outside it, such as a disk, keyboard, network, or device.
+ICMP	Internet Control Message Protocol	A network protocol used for error reporting and diagnostic messages, including ping.
+IDE	Integrated Development Environment	A programming application that combines an editor with tools such as compiling, debugging, code navigation, and version control.
+IDL	Interface Definition Language	A C-like language used to define COM interfaces, methods, and types. Compiled by MIDL to generate proxy/stub code, header files, and GUIDs. The “contract” that both caller and implementer agree on.
+IMAP	Internet Message Access Protocol	A protocol used by email clients to retrieve and manage messages stored on a mail server.
+IMP	Raw function pointer to method	What a selector resolves to at runtime. Caching IMPs is how the runtime avoids repeated name lookups. You almost never touch these directly, but they're the machinery behind message sends.
+in-proc	In-Process COM	A DLL loaded directly into your process. Fastest method, no marshaling needed. `CoCreateInstance` with `CLSCTX_INPROC_SERVER`. Most COM objects you work with are in-proc.
+internal linkage	Visible only in translation unit	`static` on a file-scope variable or function, or anonymous namespace. The symbol isn't exported to the linker.
+IP	Internet Protocol	The network protocol responsible for addressing and routing packets between devices.
+IPC	Inter-Process Communication	Mechanisms that allow separate processes to exchange data or coordinate with each other.
+JIT	Just-In-Time	A technique where code or other resources are compiled or generated when needed, often during program execution.
+JSON	JavaScript Object Notation	A text-based format for representing structured data using objects, arrays, strings, numbers, booleans, and null.
+JWT	JSON Web Token	A compact token containing claims that can be digitally signed so another system can verify its authenticity.
+KISS	Keep It Simple, Stupid	A principle favoring straightforward solutions over unnecessary complexity.
+KVC	Key-Value Coding	Get and set properties by string name instead of calling accessors.
+KVO	Key-Value Observing	Register an observer on a property and get a callback when it changes.
+lambda	A callable anonymous function	A small anonymous function defined inline where it’s used. May capture variables from the surrounding scope.
+LGTM	Looks Good To Me	A code-review comment indicating that the reviewer considers the proposed changes acceptable.
+linkage	Name visibility across TUs	Internal linkage (`static`, anonymous namespace). Visible only in this TU. External linkage is visible to the linker. No linkage is local to scope.
+LTS	Long-Term Support	A software version intended to receive maintenance and security updates for an extended period.
+lvalue	Expression with identity	Named variables are lvalues, and you can usually take their address (`&x`) or assign to them. “Refers to a memory location” is a common teaching shortcut, not the precise standard definition.
+mandatory copy elision	Returning value skips the copy	Unlike NRVO, which compilers are merely permitted to do, this case is guaranteed by the standard. `return T{};` constructs the object directly in the caller’s space.
+Mandelbug	Bug so complex seems random	Named after the Mandelbrot set — chaotic and fractal. Multiple interacting causes make it seem non-deterministic even though it isn't. Usually a sign of deep architectural problems.
+marshaling	Packing calls for cross-boundary transfer	Arguments are packed into a buffer, sent across, and unpacked on the other side. Transparent but slow.
+MDI	Multiple Document Interface	Multiple document windows inside one app window. MDI apps have a parent window with child windows.
+memory leak	Allocated memory that’s never freed	You `new`'d something but forgot to `delete` it. The memory is lost until the program exits. Subtle in small programs, catastrophic in long-running ones.
+memory pool	Big block pre-allocated in pieces	Instead of `malloc` for each small object, allocate a pool once. Free everything at once at the end. Fast, no fragmentation, no per-object allocation overhead.
+memory-mapped file	File mapped into OS memory	`mmap()` / `MapViewOfFile()` — the file looks like a byte array in memory. OS handles paging. Fast for large files.
+message forwarding	Handling unrecognized messages	It can crash (`doesNotRecognize:`), or you can implement `forwardInvocation:` to redirect it. Used for proxies, database access, and NSUndoManager. Powerful but easy to misuse.
+message map	Dispatch for Windows messages	Macro-based dispatch: `ON_WM_PAINT()`, `ON_COMMAND(ID_FILE_EXIT, ...)`. Replaces virtual functions for handling Windows messages.
+message send	Runtime method dispatch via message	An object sends a message to another object. The receiver figures out how to handle it.
+method swizzling	Swap method implementations at runtime	Used for debugging, logging, and altering behavior without subclassing.
+MFA	Multi-Factor Authentication	Authentication requiring two or more different types of evidence, such as a password plus a security key.
+MFC	Microsoft Foundation Classes	Microsoft’s object-oriented C++ framework for Windows apps. Heavy, mature, deeply integrated with Win32. Uses macros, message maps, and CString. Not COM-specific but can host COM objects.
+MIME	Multipurpose Internet Mail Extensions	A standard for describing the format and type of content transmitted over the Internet, including email attachments and HTTP content types.
+minidump	Partial crash dump	Captures key parts (call stack, loaded modules, registers) of a crashed process rather than the full memory image. Common on Windows for compact crash reports.
+MITM	Man-In-The-Middle	An attack where an attacker positions themselves between two communicating parties and intercepts or potentially alters their communication.
+most vexing parse	Ambiguity creating a function declaration	`Widget w(int());` declares a function, not creates an object. The compiler interprets it as a function declaration. Use brace initialization: `Widget w{int()};`.
+move semantics	Transfer ownership instead of copying	“Moving” an object transfers its internal state (like a pointer) instead of deep-copying. Leaves the source in a valid but unspecified state.
+MSan	MemorySanitizer	A runtime checker for uninitialized memory reads. Catches use of memory that was never initialized.
+MTA	Multi-Threaded Apartment	Multiple threads can call in concurrently without marshaling. COM doesn't serialize access for you, so the object itself must be thread-safe. Most modern COM components are MTA or Both.
+MTU	Maximum Transmission Unit	The largest packet size that can normally be transmitted over a particular network link.
+MVC	Model-View-Controller	A software design pattern that separates data/model logic, user-interface presentation, and control/application logic.
+MVP	Minimum Viable Product	The smallest version of a product that contains enough functionality to test the idea with real users.
+MVVM	Model-View-ViewModel	A design pattern separating a user interface from application state and logic through a ViewModel.
+name mangling	Compiler encodes names with type info	Compiler encodes function names with type info to distinguish overloads. Prevents name collisions.
+NAT	Network Address Translation	A technique that translates network addresses, commonly allowing multiple private devices to share a public IP address.
+no man’s land	Memory a program shouldn't access	Refers informally to freed, unmapped, or otherwise invalid memory. If execution reaches it, that indicates a bug.
+NRVO	Named Return Value Optimization	Same as RVO but for named local variables, not just temporaries. The compiler constructs the return value directly in the caller’s space.
+OAuth	Open Authorization	A protocol that allows an application to obtain limited access to resources on behalf of a user without receiving the user’s password.
+object slicing	Losing derived data copying base	`Base b = Derived();` copies only the Base part, throwing away Derived’s members. Use pointers/references to avoid this.
+ODR	One Definition Rule	Every entity (function, variable, class) must have exactly one definition across the entire program.
+OLE	Object Linking and Embedding	Embed one document inside another — an Excel chart inside a Word doc, for example. Still the foundation of clipboard operations (copy/paste with format info).
+OLE automation	Scripting languages calling COM objects	VBScript and JScript call COM objects through IDispatch. Late-bound calls by name. The “automation” in “Visual Basic for Applications” (VBA).
+OOP	Object-Oriented Programming	A programming approach that organizes software around objects containing data and behavior.
+ORM	Object-Relational Mapping	A technique for representing database records as programming-language objects.
+OS	Operating System	The core software that manages computer hardware and provides services to applications.
+out-of-proc	Out-of-Process COM	The COM object lives in another process. Marshaled via LRPC (Local RPC) or named pipes. Slower than in-proc, but isolated.
+ownership	Resource lifetime tied to variable	`unique_ptr` is exclusive ownership. `shared_ptr` is shared ownership. Raw pointer is no ownership (just borrowing). Knowing who owns what prevents leaks and use-after-free.
+page fault	Accessing memory not in RAM	The OS suspends your process, loads the page from disk, and resumes.
+partial specialization	A partially specialized template	Template specialization where some parameters are fixed but others remain generic. Only allowed for class templates, not function templates.
+PDB	Program Database	MSVC’s debug symbol format. A `.pdb` file contains type info, function names, source file mappings. The debugger loads it to show you readable stack traces.
+perfect forwarding	Forward arguments exactly as received	Passing arguments to another function while preserving their value category (lvalue/rvalue) and cv-qualifiers (const/non-const). Uses `std::forward` and universal references (`T&&`).
+PII	Personally Identifiable Information	Information that can identify a particular person, such as a name combined with identifying details.
+PImpl	Pointer to Implementation	A technique to hide implementation details by storing a pointer to a forward-declared struct. Changes to the implementation don't recompile downstream code.
+PK	Primary Key	A database column or combination of columns that uniquely identifies a row.
+placement new	Construct in pre-allocated memory	Written `new (ptr) T(args)`. The memory isn't managed by this `new`, you must manage the lifetime yourself. Common in allocators and memory pools.
+POC	Proof of Concept	A small experiment intended to demonstrate that a technical idea is feasible.
+POD	Plain Old Data	A type with trivial special members and no user-provided constructors. For example, C-compatible structs.
+POP	Post Office Protocol	A protocol traditionally used by email clients to download messages from a mail server.
+post-mortem debugging	Analyzing crash dump	Load the core dump in GDB/WinDbg, examine the stack trace, inspect variables. The program is dead but the evidence is all there.
+profiling	Measuring time or memory usage	Profilers sample the program or instrument it to show where CPU time actually goes.
+proxy	Forwards calls caller COM side	Pretends to be the remote object locally and forwards calls across the apartment/process boundary. Generated by MIDL from the IDL interface definition.
+RAII	Resource Acquisition Is Initialization	Resource lifetime tied to object lifetime. Resources are automatically released when objects are destroyed.
+RAM	Random Access Memory	The computer’s short-term working memory used by running programs.
+RBAC	Role-Based Access Control	An authorization model where permissions are assigned to roles and users receive permissions through those roles.
+RDBMS	Relational Database Management System	Software that manages relational databases organized around tables and relationships.
+reference counting	Tracking users of resource	`shared_ptr` increments on copy, decrements on destroy, frees at zero. Circular references between `shared_ptr`s break it.
+regression	Bug that returned after fix	Someone reintroduced the bug, or the fix only worked in certain conditions.
+REPL	Read-Eval-Print Loop	An interactive programming environment where you enter code, the computer evaluates it, and the result is immediately displayed.
+REST API	Representational State Transfer API	An architectural style commonly used for designing HTTP APIs around resources and standard HTTP operations.
+RFC	Request For Comments	A document used to propose, discuss, or specify technical standards, protocols, or designs.
+ROM	Read-Only Memory	Memory traditionally used for data that should persist without normal power or modification.
+ROT	Running Object Table	Maps monikers to running object pointers. Ask for a moniker and, if the object’s already running, you get the existing one instead of a duplicate. `GetRunningObjectTable` to access it.
+RTTI	Run-Time Type Information	Stores type info for `dynamic_cast` and `typeid`.
+rubber duck debugging	Explaining code aloud	Explaining your code out loud forces you to slow down and actually read it. You'll usually find the bug mid-sentence.
+rvalue	Expression with no identity	Often a temporary destroyed at the end of the statement. For example, `42` is an rvalue. Move semantics work on rvalues.
+rvalue reference	Reference that binds to rvalues	Written `T&&`. Enables move semantics. Used to “steal” resources from temporaries without copying.
+RVO	Return Value Optimization	A compiler trick that eliminates the copy when returning a temporary object directly. “Copy elision” in standard terms.
+sampling profiler	Periodically snapshots the call stack	Takes a stack trace every few milliseconds. Low overhead, good enough for most cases. Shows which functions are on the stack most often.
+SBO	Small Buffer Optimization	Storing small objects inline (on the stack) instead of heap-allocating them. Common in `std::string` and `std::function`.
+SDI	Single Document Interface	One document window at a time. MFC app opens one document, you close it to open another.
+SDK	Software Development Kit	A collection of development tools and resources for a particular platform or service.
+segmentation fault	Program accessed invalid memory	The CPU’s memory protection unit caught an invalid access and the OS sent SIGSEGV. The most common crash on Unix.
+SFINAE	Substitution Failure Is Not Error	When template argument substitution fails, the compiler silently removes that overload from consideration.
+SFTP	SSH File Transfer Protocol	A secure file-transfer protocol that operates over SSH.
+shared ownership	Multiple owners, last cleans up	`std::shared_ptr` semantics. Reference counted — the resource is freed when the last `shared_ptr` to it is destroyed.
+SIGABRT	Abort signal	Raised when `abort()` is called, typically from a failed assertion or an unhandled exception.
+SIGBUS	Bus error	Raised on certain invalid memory accesses, such as misalignment on architectures that enforce it.
+SIGFPE	Floating-point exception	Raised on an erroneous arithmetic operation, such as division by zero.
+SIGSEGV	Segmentation fault	Raised when a program accesses memory it doesn't own — a bad pointer, buffer overflow, or stack smash.
+SIOF	Static Initialization Order Fiasco	Global/static objects in different translation units are initialized in unspecified order. Use the construct-on-first-use idiom.
+smart pointer	Wrapper managing raw pointer lifetime	`std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr`. They call `delete` (or `Release`) automatically. The RAII answer to manual memory management.
+SMTP	Simple Mail Transfer Protocol	A protocol used for sending email between mail systems.
+SOLID	Single Responsibility Open/Closed Liskov Substitution Interface Segregation Dependency Inversion	A set of five object-oriented design principles.
+spaceship operator	Three-way comparison in one operation	Written `<=>`; also called the three-way comparison operator. Define `operator<=>` and the compiler generates `==`, `!=`, `<`, `>`, `<=`, `>=` for free.
+SQL	Structured Query Language	A language used to query and manipulate relational databases.
+SQLi	SQL Injection	A vulnerability where untrusted input is incorporated into SQL in a way that allows an attacker to alter the intended query.
+SSH	Secure Shell	A secure protocol commonly used to remotely access and administer computers.
+SSL	Secure Sockets Layer	The predecessor to TLS. Modern systems use TLS, although “SSL” is still commonly used as a generic term.
+SSO	Single Sign-On	A system where logging in once provides access to multiple applications or services.
+STA	Single-Threaded Apartment	Each STA apartment has exactly one thread. Calls from other threads are marshaled onto it.
+stack	Local variables and call frames	Automatically managed objects created on entering scope, destroyed on leaving.
+stack canary	Random value guarding return address	The compiler inserts a secret value near the return address and checks it before returning. If overwritten, the program aborts.
+stack dump	Snapshot of the stack	Raw memory dump of the stack — local variables, return addresses, saved registers.
+stack overflow	Recursion exhausts the stack	Infinite recursion or very deep recursion. The stack pointer goes past the guard page and crashes. Not the same as a buffer overflow on the stack.
+stack smash	Overwriting the return address	A function writes past a local buffer and clobbers the saved return address. When the function returns, it jumps to the attacker’s address (or just crashes).
+stack trace	Calls leading to current point	Every function still on the stack, from the current one back to `main()`.
+stack walk	Walking call stack programmatically	Walking stack frames to build a stack trace at runtime. Used by profilers, crash reporters, and logging.
+static storage	Exists for entire program run	Global variables and `static` locals. Created before `main()`, destroyed after. One copy, shared. Can cause SIOF if they depend on each other across TUs.
+STL	Standard Template Library	The C++ library of containers, algorithms, iterators, and related utilities.
+stripped binary	Binary with debug symbols removed	Smaller file size, no source-level debugging. Production binaries are usually stripped. You need the matching PDB/DWARF file to debug a stripped binary.
+structured bindings	Decomposing bound values	`auto [x, y] = getPoint();`: a clean way to unpack return values without `.first` and `.second`.
+TCL	Transaction Control Language	SQL commands used to manage transactions, such as `COMMIT` and `ROLLBACK`.
+TCP	Transmission Control Protocol	A network protocol that provides reliable, ordered delivery of data between computers.
+TDD	Test-Driven Development	A development approach where tests are written before the implementation they are intended to verify.
+template specialization	Custom template for specific types	Writing a completely different implementation of a template for one particular type.
+thread-local storage	One copy per thread	Gives each thread its own separate copy of a variable.
+TLS	Transport Layer Security	A cryptographic protocol used to secure network communications, including HTTPS.
+toll-free bridging	CF and NS share memory	`CFStringRef` and `NSString*` can stand in for each other. Cast between them with `__bridge` with no copying or no conversion.
+tracepoint	Static marker for tracing	Like a breakpoint but designed for production use. Very low overhead. `LTTng`, `SystemTap`, and `dtrace` use tracepoints. The production-safe version of printf debugging.
+tracing profiler	Instruments every function call	Inserts code at every entry/exit to record timing. High overhead but precise. Shows exact call counts and per-call timing. Good for micro-benchmarks, bad for production.
+translation unit	Each source file compiles independently	The compiler processes each TU in isolation, then the linker stitches them together.
+TSan	ThreadSanitizer	A runtime checker for data races. Catches unsynchronized concurrent access to shared memory.
+TTL	Time To Live	A value indicating how long information should be considered valid, commonly used in DNS and networking.
+TU	Translation Unit	A single source file after preprocessing; what the compiler actually sees. Includes all the headers that were `#include`d.
+TUI	Text User Interface	A text-based graphical-style interface using terminal characters for menus, panels, and controls.
+type erasure	Hiding concrete type behind interface	Techniques like `std::function`, `std::any`, or virtual dispatch that store “some type” without exposing it. The consumer only sees the interface, not the concrete type.
+UB	Undefined Behavior	Anything the language standard doesn't define. The compiler can do whatever it wants.
+UBSan	UndefinedBehaviorSanitizer	A runtime checker for undefined behavior. Catches integer overflow, null pointer dereference, misaligned access, and more. Low overhead. Great for catching UB that compilers silently exploit.
+UDP	User Datagram Protocol	A network protocol that sends packets without guaranteeing delivery or ordering, often used where speed matters more than reliability.
+UI	User Interface	The part of software through which a user interacts with the application.
+universal reference	Forwarding reference in template context	`T&&` where `T` is a template parameter. Binds to both lvalues and rvalues depending on what’s passed. Combined with `std::forward`, it enables perfect forwarding.
+unreachable code	Statement that can never execute	Code that can never be executed because program flow can’t reach it.
+URI	Uniform Resource Identifier	A string used to identify a resource.
+URL	Uniform Resource Locator	A type of URI that identifies a resource and provides information about where it can be accessed.
+use after free	Accessing memory after freed	The freed memory might be reused by something else. You're reading garbage or someone else’s data. Common vulnerability in security exploits.
+UX	User Experience	The overall experience a person has when using a product, including usability, clarity, efficiency, and satisfaction.
+value category	Expression lvalue or rvalue	A fundamental classification of every expression. Determines which overloads are called, which constructors are used, and whether you can move from it.
+variadic templates	Templates accepting any number args	Templates accepting a variable number of parameters.
+virtual memory	Each process own address space	Processes think they each have gigabytes of RAM. The OS maps virtual addresses to physical RAM (and disk). This is why pointers are process-specific.
+VLA	Variable Length Array	Array size determined at runtime. Not standard C++.
+VM	Virtual Machine	A software-created computer that runs an operating system in an isolated environment.
+VPN	Virtual Private Network	A system that creates an encrypted network connection through another network.
+vtable	Virtual Method Table	A table of function pointers for virtual dispatch. Each class with virtual functions gets one; objects hold a hidden pointer to it.
+weak pointer	Non-owning reference to shared resource	`std::weak_ptr` observes a `shared_ptr` without extending lifetime. Use it to break circular references that would leak with `shared_ptr`.
+wild pointer	Uninitialized pointer	A dangling pointer is “was valid, now freed.” A wild pointer is “never pointed at anything valid in the first place.” Both are UB when dereferenced.
+WinRT	Windows Runtime	Microsoft’s modern app platform. Successor to COM for modern apps.
+WIP	Work In Progress	Indicates that something is not finished yet.
+WRL	Windows Runtime C++ Template Library	Microsoft’s modern COM implementation template. Used for UWP and WinRT components. Modern COM without ATL macros.
+XML	Extensible Markup Language	A text-based format for representing structured data using nested tags.
+XSS	Cross-Site Scripting	A security vulnerability where attacker-controlled content is injected into a web page and executed in another user’s browser.
+YAML	YAML Ain't Markup Language	A human-readable data serialization format commonly used for configuration files.
+zero-cost abstraction	Abstraction with no runtime overhead	“If you don't use it, you don't pay for it.” A design goal where abstractions add no runtime overhead.

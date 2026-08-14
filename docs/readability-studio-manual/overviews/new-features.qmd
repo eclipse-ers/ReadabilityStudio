@@ -14,6 +14,9 @@ source('../R/appdown.r')
 
 - Added a **Preview** page to the project wizard.
   This shows an excerpt of your document to preview how it will appear with your current settings.
+- Added the [**Plain Language Guide**](#sec-reviewing-plain-language-guide) to standard projects.
+  This report flags technical phrases that aren't explained nearby in your document.
+  - A **Programming** phrase list is currently available.
 - Redesigned the **Export All** single-file HTML report for standard projects.
   - Added a branded masthead banner.
   - Added a sticky, numbered table of contents sidebar.

@@ -83,6 +83,9 @@ Application.MergeWordLists(
 os.remove(Debug.GetScriptFolder().."NonPersonalTEMP.txt")
 
 -- Sort (and reformat) phrase lists
+Application.SortTextFile(
+    Debug.GetScriptFolder().."words/plain-language/programming-en.txt",
+    Debug.GetScriptFolder().."words/plain-language/programming-en.txt")
 Application.MergePhraseLists(
     Debug.GetScriptFolder().."words/caption-labels/captions.txt",
     Debug.GetScriptFolder().."words/caption-labels/captions.txt")
