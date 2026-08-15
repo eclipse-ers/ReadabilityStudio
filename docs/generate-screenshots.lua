@@ -11,13 +11,6 @@ ScreenshotProjectsFolder = Application.GetAbsoluteFilePath(
 ImagePath = Debug.GetScriptFolder().."readability-studio-manual/images/"
 FileExtension = "bmp"
 
-function wait(seconds)
-  local start = os.time()
-  repeat until os.time() > start + seconds
-end
-
-wait(4)
-
 -- reset settings for the screenshots
 Application.RemoveAllCustomTests()
 Application.RemoveAllCustomTestBundles()

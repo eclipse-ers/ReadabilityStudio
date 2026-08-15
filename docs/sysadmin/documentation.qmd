@@ -80,6 +80,11 @@ All screenshots are generated from a script; they should never be created manual
 To generate screenshots, run the script `r file_path(c("docs", "generate-screenshots.lua"))` from *{{< var PROGRAM_NAME >}}*.
 This will generate all new screenshots in the folder `r file_path(c("docs", "readability-studio-manual", "images"))`.
 
+::: {.notesection data-latex=""}
+Before creating screenshots, set your OS's theme to light (if possible).
+Darker themes are inappropriate as the screenshots will consume too much ink if the documents are printed.
+:::
+
 The subdirectory `r file_path("non-generated")` will not be affected and does not need to be regenerated.
 The `r file_path("non-generated")` folder should not contain images affected by the program's UI changes.
 It also should not contain images with content that should be localized.
