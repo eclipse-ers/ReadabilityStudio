@@ -582,7 +582,7 @@ img
   font-weight: bold;
   font-size: calc(var(--tooltip-font-size) * 1.2);
   border-radius: 6px 6px 0 0;
-  white-space: nowrap;
+  white-space: normal;
   }
 
 /* no suggestion: title is the only row, so it's fully rounded */

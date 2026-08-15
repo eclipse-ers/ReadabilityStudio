@@ -52,7 +52,7 @@
        id="g15006"><g
          id="g15008"
          clip-path="url(#clipPath15012)"><path
-           d="M 500,0 H 0 v 500 h 500 z"
+           d="M 500,60 V 440 C 500,472.033 474.033,498 442,498 H 58 C 25.967,498 0,472.033 0,440 V 60 C 0,27.967 25.967,2 58,2 H 442 C 474.033,2 500,27.967 500,60 Z"
            style="fill:#f6f9eb;fill-opacity:1;fill-rule:nonzero;stroke:none"
            id="path15014"
            inkscape:connector-curvature="0" /><path
