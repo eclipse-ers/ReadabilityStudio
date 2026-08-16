@@ -281,8 +281,14 @@ size_t FormatWordCollectionHighlightedWords(
             {
             text += L"</p>";
             }
-        // add the paragraph line feed
-        for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)
+        // Add the paragraph line feed(s). In HTML mode, the </p> above already
+        // accounts for one line break, so only add extras for genuinely blank
+        // lines between paragraphs
+        const size_t leadingLineFeedCount =
+            (!useRtfEncoding && currentParagraph.get_leading_end_of_line_count() > 0) ?
+                currentParagraph.get_leading_end_of_line_count() - 1 :
+                currentParagraph.get_leading_end_of_line_count();
+        for (size_t i = 0; i < leadingLineFeedCount; ++i)
             {
             text += newLine;
             }
@@ -637,7 +643,11 @@ size_t FormatWordCollectionHighlightedGrammarIssues(
             text += L"</p>";
             }
         // add the paragraph line feed
-        for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)
+        const size_t leadingLineFeedCount =
+            (!useRtfEncoding && currentParagraph.get_leading_end_of_line_count() > 0) ?
+                currentParagraph.get_leading_end_of_line_count() - 1 :
+                currentParagraph.get_leading_end_of_line_count();
+        for (size_t i = 0; i < leadingLineFeedCount; ++i)
             {
             text += newLine;
             }
@@ -905,7 +915,10 @@ FormatWordCollectionPlainLanguageGuide(const std::shared_ptr<documentT>& theDocu
             output.documentHtml.erase(output.documentHtml.end() - 2, output.documentHtml.cend());
             }
         output.documentHtml += L"</p>";
-        for (size_t i = 0; i < currentParagraph.get_leading_end_of_line_count(); ++i)
+        for (size_t i = 0; i < (currentParagraph.get_leading_end_of_line_count() > 0 ?
+                                    currentParagraph.get_leading_end_of_line_count() - 1 :
+                                    0);
+             ++i)
             {
             output.documentHtml += newLine;
             }
