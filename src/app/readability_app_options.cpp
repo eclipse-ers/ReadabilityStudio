@@ -4376,6 +4376,14 @@ ReadabilityAppOptions::TiXmlNodeAttributeToString(const tinyxml2::XMLNode* node,
     }
 
 //------------------------------------------------
+wxString ReadabilityAppOptions::GetDocumentWildcards()
+    {
+    return _DT(L"*.txt;*.htm;*.html;*.xhtml;*.sgml;*.php;*.php3;*.php4;*.aspx;*.asp;"
+               "*.doc;*.docx;*.docm;*.dot;*.wri;*.pptx;*.pptm;*.odp;*.otp;*.odt;*.ott;"
+               "*.rtf;*.md;*.qmd;*.rmd;*.ps;*.idl;*.cpp;*.c;*.h");
+    }
+
+//------------------------------------------------
 wxString ReadabilityAppOptions::GetDocumentFilter()
     {
     const wxString textFilter = _DT(L"*.txt");
@@ -4389,13 +4397,10 @@ wxString ReadabilityAppOptions::GetDocumentFilter()
     const wxString psFilter = _DT(L"*.ps");
     const wxString idlFilter = _DT(L"*.idl");
     const wxString cppFilter = _DT(L"*.cpp;*.c;*.h");
+    // when adding a file type here, also add its extensions to GetDocumentWildcards()
     const wxString allDocumentsFilter = wxString::Format(
         // TRANSLATORS: %s are file filters
-        _(L"Documents (%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s)|%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s"),
-        textFilter, htmlFiles, wordFilter, powerPointFilter, openDocPrezFilter, openDocFilter,
-        rtfFilter, markdownFilter, psFilter, idlFilter, cppFilter, textFilter, htmlFiles,
-        wordFilter, powerPointFilter, openDocPrezFilter, openDocFilter, rtfFilter, markdownFilter,
-        psFilter, idlFilter, cppFilter);
+        _(L"Documents (%s)|%s"), GetDocumentWildcards(), GetDocumentWildcards());
     return wxString::Format(
         // TRANSLATORS: %s are file filters
         _(L"%s|Text files (%s)|%s|HTML files (%s)|%s|Word files (%s)|%s|"

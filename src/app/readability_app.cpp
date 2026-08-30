@@ -5850,10 +5850,14 @@ void MainFrame::OnClose(wxCloseEvent& event)
 //-------------------------------------------------------
 void MainFrame::OnFileOpen([[maybe_unused]] wxCommandEvent& event)
     {
+    const wxString allSupportedWildcards =
+        _DT(L"*.rsp;*.rsbp;") + ReadabilityAppOptions::GetDocumentWildcards();
     wxFileDialog dialog(wxGetApp().GetParentingWindow(), _(L"Select Project to Open"),
                         wxGetApp().GetAppOptions()->GetProjectPath(), wxString{},
-                        // TRANSLATORS: %s is program name.
-                        wxString::Format(_(L"%s Project (*.rsp;*.rsbp)|*.rsp;*.rsbp|"),
+                        // TRANSLATORS: last %s is program name, other %s are file filters
+                        wxString::Format(_(L"All Supported Files (%s)|%s|"
+                                           "%s Project (*.rsp;*.rsbp)|*.rsp;*.rsbp|"),
+                                         allSupportedWildcards, allSupportedWildcards,
                                          wxGetApp().GetAppDisplayName()) +
                             ReadabilityAppOptions::GetDocumentFilter(),
                         wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW);

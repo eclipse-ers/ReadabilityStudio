@@ -2506,6 +2506,12 @@ class ReadabilityAppOptions
     [[nodiscard]]
     static wxString GetDocumentFilter();
 
+    /// @returns The semicolon-delimited wildcard pattern (e.g. "*.txt;*.rtf")
+    ///     matching every supported document type. Combine this into a larger
+    ///     filter when a dialog also accepts other file types.
+    [[nodiscard]]
+    static wxString GetDocumentWildcards();
+
     [[nodiscard]]
     static wxString TiXmlNodeAttributeToString(const tinyxml2::XMLNode* node,
                                                const wxString& tagToRead,
