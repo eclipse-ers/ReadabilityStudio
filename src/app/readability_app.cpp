@@ -959,7 +959,22 @@ bool ReadabilityApp::LoadWordLists(const wxString& AppSettingFolderPath)
 
     std::vector<char> wordyZipFileText(theFile.Length());
     const size_t readSize = theFile.Read(wordyZipFileText.data(), wordyZipFileText.size());
-    const Wisteria::ZipCatalog cat(wordyZipFileText.data(), readSize);
+    const Wisteria::ZipCatalog cat{ wordyZipFileText.data(), readSize };
+
+    // parse and cache the bundled Plain Language Guide lists (stored under "plain-language/")
+    // while the archive is open
+    m_plainLanguageGuideListFileNames.Clear();
+    m_plainLanguageGuideLists.clear();
+    for (const auto& plainLanguagePath : cat.GetFilesInFolder(_DT(L"plain-language")))
+        {
+        m_plainLanguageGuideListFileNames.Add(plainLanguagePath.AfterLast(L'/'));
+
+        auto parsedList = std::make_shared<grammar::plain_language_phrase_collection>();
+        parsedList->load_phrases(cat.ReadTextFile(plainLanguagePath).c_str(), true, false);
+        m_plainLanguageGuideLists.emplace(plainLanguagePath.AfterLast(L'/'), std::move(parsedList));
+        }
+    m_plainLanguageGuideListFileNames.Sort();
+
     // read in the wordy items
     const std::wstring englishWordyPhraseFileText = cat.ReadTextFile(L"wordy-phrases/english.txt");
     const std::wstring spanishWordyPhraseFileText = cat.ReadTextFile(L"wordy-phrases/spanish.txt");
@@ -1118,6 +1133,14 @@ bool ReadabilityApp::LoadWordLists(const wxString& AppSettingFolderPath)
     // clang-format on
 
     return true;
+    }
+
+//-----------------------------------
+std::shared_ptr<const grammar::plain_language_phrase_collection>
+ReadabilityApp::GetPlainLanguageGuideList(const wxString& listFileName) const
+    {
+    const auto foundList = m_plainLanguageGuideLists.find(listFileName);
+    return (foundList != m_plainLanguageGuideLists.cend()) ? foundList->second : nullptr;
     }
 
 //-----------------------------------
@@ -5062,11 +5085,7 @@ void MainFrame::FillPlainLanguageGuideListMenu(wxMenu& menu, const wxString& cur
         const int noneId = wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetNextId();
         m_plainLanguageGuideListMenuIds.insert(std::make_pair(noneId, wxString{}));
 
-        wxArrayString listFiles;
-        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
-                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
-        listFiles.Sort();
-        for (const auto& listFile : listFiles)
+        for (const auto& listFile : wxGetApp().GetPlainLanguageGuideListFileNames())
             {
             const int menuId =
                 wxGetApp().GetMainFrameEx()->PLAIN_LANGUAGE_GUIDE_LIST_RANGE.GetNextId();
@@ -5075,9 +5094,8 @@ void MainFrame::FillPlainLanguageGuideListMenu(wxMenu& menu, const wxString& cur
                 break;
                 }
             // GetPlainLanguageGuideListName() stores a bare filename (resolved against
-            // the bundled directory at load time), not a full path
-            m_plainLanguageGuideListMenuIds.insert(
-                std::make_pair(menuId, wxFileName{ listFile }.GetFullName()));
+            // the bundled archive at load time), not a full path
+            m_plainLanguageGuideListMenuIds.insert(std::make_pair(menuId, listFile));
             }
         }
 

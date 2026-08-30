@@ -4772,11 +4772,8 @@ void ToolsOptionsDlg::CreatePlainLanguageGuideSection()
         listSizer->Add(new wxStaticText(panel, wxID_STATIC, _(L"Technical phrase list:")),
                        wxSizerFlags{}.CenterVertical());
 
-        wxArrayString listFiles;
-        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
-                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
         wxArrayString listChoices;
-        for (const auto& listFile : listFiles)
+        for (const auto& listFile : wxGetApp().GetPlainLanguageGuideListFileNames())
             {
             listChoices.Add(BaseProjectView::PlainLanguageGuideListNameToLabel(listFile));
             }

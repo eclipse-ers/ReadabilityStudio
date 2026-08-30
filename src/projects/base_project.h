@@ -2184,8 +2184,8 @@ class BaseProject : public ProjectRefresh
     /** @returns The filename (e.g., @c "legal-terms.txt") of the bundled Plain Language
             Guide phrase list currently selected for this project, or an empty string if
             the feature is disabled ("None," the default).
-        @note This is always resolved against the fixed, bundled `resources/words/plain-language`
-            directory.*/
+        @note This is always resolved against the fixed, bundled `plain-language` folder
+            inside the word-list archive.*/
     [[nodiscard]]
     wxString GetPlainLanguageGuideListName() const
         {
@@ -2202,8 +2202,7 @@ class BaseProject : public ProjectRefresh
         m_plainLanguageGuideListName = name;
         }
 
-    /// @brief Reloads the Plain Language Guide phrase list from the bundled resource
-    ///     folder.
+    /// @brief Reloads the Plain Language Guide phrase list from the bundled word-list archive.
     void LoadPlainLanguageGuideList();
 
     // Tags for excluding blocks of text
@@ -2714,7 +2713,9 @@ class BaseProject : public ProjectRefresh
 
     // these can vary from project to project
     std::shared_ptr<grammar::phrase_collection> m_excluded_phrases{ nullptr };
-    std::shared_ptr<grammar::plain_language_phrase_collection> m_plain_language_phrases{ nullptr };
+    std::shared_ptr<const grammar::plain_language_phrase_collection> m_plain_language_phrases{
+        nullptr
+    };
 
     StatisticsInfo m_statsInfo;
     StatisticsReportInfo m_statsReportInfo;

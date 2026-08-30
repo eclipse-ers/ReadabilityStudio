@@ -65,6 +65,7 @@
 #include "../Wisteria-Dataviz/src/util/xml_format.h"
 #include "../Wisteria-Dataviz/src/wxStartPage/startpage.h"
 #include "../app/readability_app_options.h"
+#include "../indexing/plain_language_phrase.h"
 #include "../lua-scripting/lua_interface.h"
 #include "../readability/custom_readability_test.h"
 #include "../readability/readability_project_test.h"
@@ -624,6 +625,22 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         return m_splashscreenImagePaths;
         }
 
+    /// @returns The bare filenames (e.g., "programming-en.txt") of the bundled
+    ///     Plain Language Guide phrase lists stored in the word-list archive, sorted.
+    ///     Cached when the word lists are loaded.
+    [[nodiscard]]
+    const wxArrayString& GetPlainLanguageGuideListFileNames() const noexcept
+        {
+        return m_plainLanguageGuideListFileNames;
+        }
+
+    /// @brief Returns a bundled Plain Language Guide phrase list.
+    /// @param listFileName The bare filename of the list (e.g., "programming-en.txt").
+    /// @returns The parsed phrase collection, or null if there is no such list.
+    [[nodiscard]]
+    std::shared_ptr<const grammar::plain_language_phrase_collection>
+    GetPlainLanguageGuideList(const wxString& listFileName) const;
+
     /// @returns A random number generator engine for use in calls to
     /// std::uniform_xxx().
     [[nodiscard]]
@@ -670,6 +687,10 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     wxString m_CustomGermanDictionaryPath;
     double m_dpiScaleFactor{ 1.0 };
     wxArrayString m_splashscreenImagePaths;
+    wxArrayString m_plainLanguageGuideListFileNames;
+    // parsed Plain Language Guide lists, cached by filename the first time they are requested
+    std::map<wxString, std::shared_ptr<const grammar::plain_language_phrase_collection>>
+        m_plainLanguageGuideLists;
     WebHarvester m_webHarvester;
     std::mt19937_64 m_mersenneTwister;
 

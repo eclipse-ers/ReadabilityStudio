@@ -1030,11 +1030,8 @@ void ProjectWizardDlg::CreateControls()
         listSizer->Add(new wxStaticText(page, wxID_STATIC, _(L"Technical phrase list:")), 0,
                        wxRIGHT | wxALIGN_CENTRE, wxSizerFlags::GetDefaultBorder());
 
-        wxArrayString listFiles;
-        wxDir::GetAllFiles(wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")),
-                           &listFiles, _DT(L"*.txt"), wxDIR_FILES);
         wxArrayString listChoices;
-        for (const auto& listFile : listFiles)
+        for (const auto& listFile : wxGetApp().GetPlainLanguageGuideListFileNames())
             {
             listChoices.Add(BaseProjectView::PlainLanguageGuideListNameToLabel(listFile));
             }

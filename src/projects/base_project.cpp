@@ -119,26 +119,27 @@ std::map<comparable_first_pair<Goal::string_type, Goal::string_type>,
 //-------------------------------------------------------
 void BaseProject::LoadPlainLanguageGuideList()
     {
-    m_plain_language_phrases = std::make_shared<grammar::plain_language_phrase_collection>();
+    m_plain_language_phrases = nullptr;
     if (!GetPlainLanguageGuideListName().empty())
         {
-        wxString filePath = wxGetApp().FindResourceDirectory(_DT(L"words/plain-language")) +
-                            wxFileName::GetPathSeparator() + GetPlainLanguageGuideListName();
-        wxString phrases;
-        if (Wisteria::TextStream::ReadFile(filePath, phrases))
-            {
-            m_plain_language_phrases->load_phrases(phrases, true, false);
-            }
-        else
+        m_plain_language_phrases =
+            wxGetApp().GetPlainLanguageGuideList(GetPlainLanguageGuideListName());
+        if (m_plain_language_phrases == nullptr)
             {
             LogMessage(
                 wxString::Format(_(L"Plain Language Guide phrase list not found:\n\n%s\n\nFeature "
                                    "will not be included in this project."),
-                                 filePath),
+                                 GetPlainLanguageGuideListName()),
                 _(L"Warning"), wxOK | wxICON_EXCLAMATION);
             SetModifiedFlag();
             SetPlainLanguageGuideListName(wxString{});
             }
+        }
+
+    // callers expect a valid (possibly empty) collection
+    if (m_plain_language_phrases == nullptr)
+        {
+        m_plain_language_phrases = std::make_shared<grammar::plain_language_phrase_collection>();
         }
     }
 

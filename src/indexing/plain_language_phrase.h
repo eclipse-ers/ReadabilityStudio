@@ -38,11 +38,11 @@ namespace grammar
         /// @brief A detailed explanation of the technical phrase.
         traits::case_insensitive_wstring_ex explanation;
         /// @brief The technical phrase exactly as it appeared in the source list
-        ///     (used for display). Unlike the phrase key, punctuation-only words
+        ///     (used for display). Unlike the phrase key, punctuation-only "words"
         ///     are kept here.
         traits::case_insensitive_wstring_ex technical_phrase_display;
         /// @brief The plain-language replacement exactly as it appeared in the source
-        ///     list (used for display). Unlike @c replacement, punctuation-only words
+        ///     list (used for display). Unlike @c replacement, punctuation-only "words"
         ///     are kept here).
         traits::case_insensitive_wstring_ex replacement_display;
         };
@@ -136,7 +136,9 @@ namespace grammar
 
         /** @brief Loads phrases from a text stream.
             Each row in this text should be tab-delimited, with the columns:
-            - Technical phrase
+            - Technical phrase. Multiple variants of the same term (e.g., possessive
+              and plural forms) can be listed here separated by ';'. Each variant is
+              loaded as its own entry sharing the row's replacement and explanation.
             - Plain-language replacement (can be multiple words)
             - Detailed explanation
             @param text The text stream to load the phrases from.
@@ -194,17 +196,6 @@ namespace grammar
                     continue;
                     }
 
-                // technical phrase should have at least one word
-                newPair.second.technical_phrase_display = rowStrings[0];
-                phraseRow.set_values(&newPair.first.get_words());
-                phraseRow.read(rowStrings[0].c_str());
-                if (phraseRow.get_number_of_columns_last_read() < 1)
-                    {
-                    continue;
-                    }
-                newPair.first.resize(phraseRow.get_number_of_columns_last_read());
-                clean_words_for_matching(newPair.first.get_words());
-
                 // plain-language replacement is optional (a list author may rely purely
                 // on the explanation column); an empty replacement phrase simply means
                 // the proximity check will never find it nearby.
@@ -224,7 +215,34 @@ namespace grammar
                                                  rowStrings[2] :
                                                  traits::case_insensitive_wstring_ex();
 
-                m_phrases.push_back(newPair);
+                // The technical-phrase column may list several variants of the same term
+                // (e.g., possessive and plural forms) separated by ';'. Load each variant
+                // as its own entry sharing this row's replacement and explanation.
+                string_util::string_tokenize<traits::case_insensitive_wstring_ex> technicalPhrases{
+                    rowStrings[0], L";", true
+                };
+                while (technicalPhrases.has_more_tokens())
+                    {
+                    auto technicalPhrase = technicalPhrases.get_next_token();
+                    string_util::trim(technicalPhrase);
+                    if (technicalPhrase.empty())
+                        {
+                        continue;
+                        }
+
+                    // technical phrase should have at least one word
+                    newPair.second.technical_phrase_display = technicalPhrase;
+                    phraseRow.set_values(&newPair.first.get_words());
+                    phraseRow.read(technicalPhrase.c_str());
+                    if (phraseRow.get_number_of_columns_last_read() < 1)
+                        {
+                        continue;
+                        }
+                    newPair.first.resize(phraseRow.get_number_of_columns_last_read());
+                    clean_words_for_matching(newPair.first.get_words());
+
+                    m_phrases.push_back(newPair);
+                    }
                 } while (text != nullptr);
 
             if (sort_phrases)

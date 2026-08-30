@@ -2131,6 +2131,37 @@ TEST_CASE("Plain language phrase collection", "[plainlanguage]")
         CHECK(phrases.get_phrases().at(0).second.explanation ==
               L"Commonly confused with CI/CD.");
         }
+    SECTION("Load Technical Phrase Variants Split On Semicolon")
+        {
+        // the first column lists the base term plus its possessive and plural
+        // forms; each becomes its own entry sharing the replacement and explanation
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(
+            L"utilize; utilizes; utilized\tuse\tA longer word for \"use\".", true, false);
+        REQUIRE(phrases.get_phrases().size() == 3);
+        for (const auto& entry : phrases.get_phrases())
+            {
+            CHECK(entry.second.replacement.to_string() == L"use");
+            CHECK(entry.second.explanation == L"A longer word for \"use\".");
+            }
+        CHECK(phrases.get_phrases().at(0).first.to_string() == L"utilize");
+        CHECK(phrases.get_phrases().at(0).second.technical_phrase_display == L"utilize");
+        CHECK(phrases.get_phrases().at(1).first.to_string() == L"utilized");
+        CHECK(phrases.get_phrases().at(2).first.to_string() == L"utilizes");
+
+        std::vector<std::basic_string<wchar_t, traits::case_insensitive_ex>> words{ L"utilized" };
+        const size_t matchIdx = phrases(words.begin(), 0, words.size(), true);
+        REQUIRE(matchIdx != grammar::plain_language_phrase_collection::npos);
+        CHECK(phrases.get_phrases().at(matchIdx).second.explanation == L"A longer word for \"use\".");
+        }
+    SECTION("Load Technical Phrase Variants Ignore Empty Tokens")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(L"color;;colour;\tcolor\t", false, false);
+        REQUIRE(phrases.get_phrases().size() == 2);
+        CHECK(phrases.get_phrases().at(0).first.to_string() == L"color");
+        CHECK(phrases.get_phrases().at(1).first.to_string() == L"colour");
+        }
     }
 
 TEST_CASE("Plain language guide analysis", "[plainlanguage]")

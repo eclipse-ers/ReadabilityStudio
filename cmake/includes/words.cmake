@@ -9,6 +9,7 @@ dictionaries/english.txt
 dictionaries/german.txt
 dictionaries/spanish.txt
 past-participles/exceptions.txt
+plain-language/programming-en.txt
 programming/all-languages.txt
 proper-nouns/all.txt
 proper-nouns/personal.txt
