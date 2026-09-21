@@ -2351,17 +2351,20 @@ class document
             }
         }
 
-    /// @brief Determines whether @c replacementPhrase occurs anywhere within 10 words
-    ///     before or after the technical phrase match at
-    ///     [@c matchStart, @c matchStart + @c matchWordCount - 1] in @c m_words.
-    /// @details The window is a flat index into the whole document (m_words), so it can
-    ///     cross sentence and paragraph boundaries.
+    /// @brief Determines whether every word in @c keywords appears, as a standalone
+    ///     word, within the 10 words before or after the technical phrase match
+    ///     (or start/end of the document).
+    /// @details The technical phrase occupies @c matchWordCount words in @c m_words,
+    ///     starting at @c matchStart. The phrase's word positions are skipped,
+    ///     so a key word can't be satisfied by the phrase itself.
+    ///     Word order does not matter. The key words need not be next to each other.
+    ///     The window can cross sentence and paragraph boundaries.
     [[nodiscard]]
     bool plain_language_replacement_nearby(
-        const grammar::phrase<traits::case_insensitive_wstring_ex>& replacementPhrase,
-        const size_t matchStart, const size_t matchWordCount) const
+        const std::vector<traits::case_insensitive_wstring_ex>& keywords, const size_t matchStart,
+        const size_t matchWordCount) const
         {
-        if (m_words.empty())
+        if (m_words.empty() || keywords.empty())
             {
             return false;
             }
@@ -2371,29 +2374,31 @@ class document
         const size_t matchEnd = matchStart + matchWordCount - 1;
         const size_t windowEnd = std::min(matchEnd + PROXIMITY_WINDOW, m_words.size() - 1);
 
-        for (size_t i = windowStart; i <= windowEnd; ++i)
+        for (const auto& keyword : keywords)
             {
-            const size_t wordsAvailable = windowEnd - i + 1;
-            if (replacementPhrase.get_word_count() > wordsAvailable)
+            bool keywordFound{ false };
+            for (size_t i = windowStart; i <= windowEnd && !keywordFound; ++i)
                 {
-                continue;
+                // a match inside the technical phrase's own span does not count
+                if (i >= matchStart && i <= matchEnd)
+                    {
+                    continue;
+                    }
+                if (keyword.compare(m_words[i].c_str()) == 0)
+                    {
+                    keywordFound = true;
+                    }
                 }
-            // skip candidates whose span overlaps the technical phrase's own words
-            const size_t candidateEnd = i + replacementPhrase.get_word_count() - 1;
-            if (candidateEnd >= matchStart && i <= matchEnd)
+            if (!keywordFound)
                 {
-                continue;
-                }
-            if (replacementPhrase.equal_to_words(m_words.cbegin() + i, i, wordsAvailable).first)
-                {
-                return true;
+                return false;
                 }
             }
-        return false;
+        return true;
         }
 
     /// @brief Searches for the Plain Language Guide's technical phrases and determines,
-    ///     for each one, whether its plain-language replacement was ever found within
+    ///     for each one, whether its plain-language key words were all found within
     ///     10 words of any occurrence of it.
     void analyze_plain_language_guide()
         {
@@ -2431,10 +2436,10 @@ class document
                 // replacement near later occurrences
                 if (!m_plain_language_phrase_explained[phraseResult])
                     {
-                    const auto& replacementPhrase =
-                        phraseCollection.get_phrases()[phraseResult].second.replacement;
-                    if (replacementPhrase.get_word_count() > 0 &&
-                        plain_language_replacement_nearby(replacementPhrase, wordCounter,
+                    const auto& replacementKeywords =
+                        phraseCollection.get_phrases()[phraseResult].second.replacement_keywords;
+                    if (!replacementKeywords.empty() &&
+                        plain_language_replacement_nearby(replacementKeywords, wordCounter,
                                                           phraseWordCount))
                         {
                         m_plain_language_phrase_explained[phraseResult] = true;

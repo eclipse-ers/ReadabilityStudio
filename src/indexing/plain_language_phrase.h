@@ -19,36 +19,38 @@
 #include "../Wisteria-Dataviz/src/math/mathematics.h"
 #include "character_traits.h"
 #include "phrase.h"
+#include <utility>
 #include <vector>
 
 namespace grammar
     {
     /** @brief The information paired with a technical phrase in a
-            plain_language_phrase_collection. A plain-language replacement phrase
+            plain_language_phrase_collection. A set of plain-language key words
             (used for the proximity check) and a detailed explanation (shown in a
             sidebar note if the phrase is never found explained nearby).*/
     struct plain_language_entry
         {
-        /// @brief The plain-language replacement for the technical phrase, used for the
-        ///     proximity check. Words that are just a single punctuation character
-        ///     (e.g., a stray "/" from a source list like "Continuous Integration / Continuous
-        ///     Delivery") are dropped from this so that they don't have to appear literally in the
-        ///     document for the phrase to be considered explained.
-        phrase<traits::case_insensitive_wstring_ex> replacement;
+        /// @brief The plain-language key words for the technical phrase, used for the
+        ///     proximity check. The phrase counts as explained only when every one of
+        ///     these words appears near an occurrence of it (in any order). Words that
+        ///     are just a single punctuation character (e.g., a stray "/" from a source
+        ///     list like "Continuous Integration / Continuous Delivery") are dropped so
+        ///     that they don't have to appear literally in the document.
+        std::vector<traits::case_insensitive_wstring_ex> replacement_keywords;
         /// @brief A detailed explanation of the technical phrase.
         traits::case_insensitive_wstring_ex explanation;
         /// @brief The technical phrase exactly as it appeared in the source list
         ///     (used for display). Unlike the phrase key, punctuation-only "words"
         ///     are kept here.
         traits::case_insensitive_wstring_ex technical_phrase_display;
-        /// @brief The plain-language replacement exactly as it appeared in the source
-        ///     list (used for display). Unlike @c replacement, punctuation-only "words"
-        ///     are kept here).
+        /// @brief The plain-language key words exactly as they appeared in the source
+        ///     list (used for display). Unlike @c replacement_keywords, punctuation-only
+        ///     "words" are kept here.
         traits::case_insensitive_wstring_ex replacement_display;
         };
 
     /** @brief Wrapper for a collection of "technical phrase -> plain-language
-            replacement and explanation" entries, used by the Plain Language Guide report.
+            key words and explanation" entries, used by the Plain Language Guide report.
         @details Modeled on @c phrase_collection, but purpose-built for the simpler
             3-column format (no phrase type or preceding/trailing exceptions).*/
     class plain_language_phrase_collection
@@ -138,8 +140,10 @@ namespace grammar
             Each row in this text should be tab-delimited, with the columns:
             - Technical phrase. Multiple variants of the same term (e.g., possessive
               and plural forms) can be listed here separated by ';'. Each variant is
-              loaded as its own entry sharing the row's replacement and explanation.
-            - Plain-language replacement (can be multiple words)
+              loaded as its own entry sharing the row's key words and explanation.
+            - Plain-language key words, separated by spaces, commas, or semicolons
+              (usually 2-3). The phrase counts as explained only when all of them
+              appear near it.
             - Detailed explanation
             @param text The text stream to load the phrases from.
             @param sort_phrases Whether to sort the phrases after loading them.
@@ -164,7 +168,7 @@ namespace grammar
                 }
             m_phrases.reserve(m_phrases.size() + lineCount);
 
-            // technical phrase, plain-language replacement, detailed explanation
+            // technical phrase, plain-language key words, detailed explanation
             std::vector<traits::case_insensitive_wstring_ex> rowStrings(3);
             lily_of_the_valley::standard_delimited_character_column tabbedColumn(
                 lily_of_the_valley::text_column_delimited_character_parser{ L'\t' }, 3);
@@ -182,12 +186,6 @@ namespace grammar
             phraseRow.allow_column_resizing();
             phraseRow.add_column(spacedColumn);
 
-            lily_of_the_valley::text_row<traits::case_insensitive_wstring_ex> replacementRow(
-                std::nullopt);
-            replacementRow.treat_consecutive_delimiters_as_one(true);
-            replacementRow.allow_column_resizing();
-            replacementRow.add_column(spacedColumn);
-
             do
                 {
                 text = row.read(text);
@@ -196,19 +194,28 @@ namespace grammar
                     continue;
                     }
 
-                // plain-language replacement is optional (a list author may rely purely
-                // on the explanation column); an empty replacement phrase simply means
-                // the proximity check will never find it nearby.
-                newPair.second.replacement.clear_words();
+                // Plain-language key words are optional (a list author may rely purely
+                // on the explanation column). with none, the proximity check can never
+                // mark the phrase explained.
+                newPair.second.replacement_keywords.clear();
                 newPair.second.replacement_display.clear();
                 if (row.get_number_of_columns_last_read() >= 2 && !rowStrings[1].empty())
                     {
                     newPair.second.replacement_display = rowStrings[1];
-                    replacementRow.set_values(&newPair.second.replacement.get_words());
-                    replacementRow.read(rowStrings[1].c_str());
-                    newPair.second.replacement.resize(
-                        replacementRow.get_number_of_columns_last_read());
-                    clean_words_for_matching(newPair.second.replacement.get_words());
+                    // key words may be separated by spaces, commas, or semicolons
+                    string_util::string_tokenize<traits::case_insensitive_wstring_ex> keywords{
+                        rowStrings[1], L" ,;", true
+                    };
+                    while (keywords.has_more_tokens())
+                        {
+                        auto keyword = keywords.get_next_token();
+                        string_util::trim(keyword);
+                        if (!keyword.empty())
+                            {
+                            newPair.second.replacement_keywords.push_back(std::move(keyword));
+                            }
+                        }
+                    clean_words_for_matching(newPair.second.replacement_keywords);
                     }
 
                 newPair.second.explanation = (row.get_number_of_columns_last_read() >= 3) ?
@@ -217,7 +224,7 @@ namespace grammar
 
                 // The technical-phrase column may list several variants of the same term
                 // (e.g., possessive and plural forms) separated by ';'. Load each variant
-                // as its own entry sharing this row's replacement and explanation.
+                // as its own entry sharing this row's key words and explanation.
                 string_util::string_tokenize<traits::case_insensitive_wstring_ex> technicalPhrases{
                     rowStrings[0], L";", true
                 };

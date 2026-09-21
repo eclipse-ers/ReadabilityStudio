@@ -2042,18 +2042,19 @@ TEST_CASE("Plain language phrase collection", "[plainlanguage]")
         CHECK(phrases.get_phrases().size() == 1);
         CHECK(phrases.get_phrases().at(0).first.get_word_count() == 2);
         CHECK(phrases.get_phrases().at(0).first.to_string() == L"myocardial infarction");
-        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 2);
-        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() == L"heart attack");
+        REQUIRE(phrases.get_phrases().at(0).second.replacement_keywords.size() == 2);
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(0) == L"heart");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(1) == L"attack");
         CHECK(phrases.get_phrases().at(0).second.explanation ==
               L"A blockage of blood flow to the heart muscle.");
         }
     SECTION("Load Missing Optional Columns")
         {
-        // replacement and explanation are both optional
+        // key words and explanation are both optional
         grammar::plain_language_phrase_collection phrases;
         phrases.load_phrases(L"myocardial infarction", false, false);
         CHECK(phrases.get_phrases().size() == 1);
-        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 0);
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.empty());
         CHECK(phrases.get_phrases().at(0).second.explanation.empty());
         }
     SECTION("Load Empty")
@@ -2079,42 +2080,47 @@ TEST_CASE("Plain language phrase collection", "[plainlanguage]")
         size_t matchIdx = phrases(words.begin(), 0, words.size(), true);
         REQUIRE(matchIdx != grammar::plain_language_phrase_collection::npos);
         CHECK(phrases.get_phrases().at(matchIdx).first.to_string() == L"myocardial infarction");
-        CHECK(phrases.get_phrases().at(matchIdx).second.replacement.to_string() ==
-              L"heart attack");
+        REQUIRE(phrases.get_phrases().at(matchIdx).second.replacement_keywords.size() == 2);
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement_keywords.at(0) == L"heart");
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement_keywords.at(1) == L"attack");
 
         words = { L"hypertension" };
         matchIdx = phrases(words.begin(), 0, words.size(), true);
         REQUIRE(matchIdx != grammar::plain_language_phrase_collection::npos);
         CHECK(phrases.get_phrases().at(matchIdx).first.to_string() == L"hypertension");
-        CHECK(phrases.get_phrases().at(matchIdx).second.replacement.to_string() ==
-              L"high blood pressure");
+        REQUIRE(phrases.get_phrases().at(matchIdx).second.replacement_keywords.size() == 3);
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement_keywords.at(0) == L"high");
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement_keywords.at(1) == L"blood");
+        CHECK(phrases.get_phrases().at(matchIdx).second.replacement_keywords.at(2) == L"pressure");
 
         words = { L"aspirin" };
         CHECK(phrases(words.begin(), 0, words.size(), true) ==
               grammar::plain_language_phrase_collection::npos);
         }
-    SECTION("Load Strips Trailing Comma From Replacement Word")
+    SECTION("Comma Separates Replacement Keywords")
         {
-        // "simple," should lose its trailing comma for matching purposes, but the
-        // note card should still show the replacement exactly as written
+        // key words may be separated by commas as well as spaces; the note card
+        // still shows column 1 exactly as written
         grammar::plain_language_phrase_collection phrases;
         phrases.load_phrases(
             L"KISS\tKeep it simple, stupid\tKeep it simple, stupid.", false, false);
         CHECK(phrases.get_phrases().size() == 1);
         CHECK(phrases.get_phrases().at(0).first.to_string() == L"KISS");
         CHECK(phrases.get_phrases().at(0).second.technical_phrase_display == L"KISS");
-        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 4);
-        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() ==
-              L"Keep it simple stupid");
+        REQUIRE(phrases.get_phrases().at(0).second.replacement_keywords.size() == 4);
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(0) == L"Keep");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(1) == L"it");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(2) == L"simple");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(3) == L"stupid");
         CHECK(phrases.get_phrases().at(0).second.replacement_display ==
               L"Keep it simple, stupid");
         CHECK(phrases.get_phrases().at(0).second.explanation ==
               L"Keep it simple, stupid.");
         }
-    SECTION("Load Strips Standalone Slash From Replacement")
+    SECTION("Drops Standalone Slash From Replacement Keywords")
         {
-        // the lone "/" token between the two alternative wordings should be dropped
-        // for matching purposes, but the note card should still show the original
+        // the lone "/" token between the two alternative wordings is dropped from the
+        // key words, but the note card still shows column 1 as written
         grammar::plain_language_phrase_collection phrases;
         phrases.load_phrases(
             L"CI/DC\tContinuous Integration / Continuous Delivery\t"
@@ -2123,25 +2129,39 @@ TEST_CASE("Plain language phrase collection", "[plainlanguage]")
         CHECK(phrases.get_phrases().size() == 1);
         CHECK(phrases.get_phrases().at(0).first.to_string() == L"CI/DC");
         CHECK(phrases.get_phrases().at(0).second.technical_phrase_display == L"CI/DC");
-        CHECK(phrases.get_phrases().at(0).second.replacement.get_word_count() == 4);
-        CHECK(phrases.get_phrases().at(0).second.replacement.to_string() ==
-              L"Continuous Integration Continuous Delivery");
+        REQUIRE(phrases.get_phrases().at(0).second.replacement_keywords.size() == 4);
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(0) == L"Continuous");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(1) == L"Integration");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(2) == L"Continuous");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(3) == L"Delivery");
         CHECK(phrases.get_phrases().at(0).second.replacement_display ==
               L"Continuous Integration / Continuous Delivery");
         CHECK(phrases.get_phrases().at(0).second.explanation ==
               L"Commonly confused with CI/CD.");
         }
+    SECTION("Replacement Keywords Split On Spaces Commas And Semicolons")
+        {
+        grammar::plain_language_phrase_collection phrases;
+        phrases.load_phrases(L"FOO\tbar; baz, qux quux\t", false, false);
+        REQUIRE(phrases.get_phrases().size() == 1);
+        REQUIRE(phrases.get_phrases().at(0).second.replacement_keywords.size() == 4);
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(0) == L"bar");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(1) == L"baz");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(2) == L"qux");
+        CHECK(phrases.get_phrases().at(0).second.replacement_keywords.at(3) == L"quux");
+        }
     SECTION("Load Technical Phrase Variants Split On Semicolon")
         {
         // the first column lists the base term plus its possessive and plural
-        // forms; each becomes its own entry sharing the replacement and explanation
+        // forms; each becomes its own entry sharing the key words and explanation
         grammar::plain_language_phrase_collection phrases;
         phrases.load_phrases(
             L"utilize; utilizes; utilized\tuse\tA longer word for \"use\".", true, false);
         REQUIRE(phrases.get_phrases().size() == 3);
         for (const auto& entry : phrases.get_phrases())
             {
-            CHECK(entry.second.replacement.to_string() == L"use");
+            REQUIRE(entry.second.replacement_keywords.size() == 1);
+            CHECK(entry.second.replacement_keywords.at(0) == L"use");
             CHECK(entry.second.explanation == L"A longer word for \"use\".");
             }
         CHECK(phrases.get_phrases().at(0).first.to_string() == L"utilize");
@@ -2192,7 +2212,7 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         CHECK(doc.get_word(8) == L"myocardial");
         CHECK(doc.get_word(9) == L"infarction");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement never appears in the text, so the phrase is never explained
+        // the key words never appear in the text, so the phrase is never explained
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
         }
     SECTION("Explained Phrase Never Flagged")
@@ -2249,8 +2269,8 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         }
     SECTION("Replacement Within Ten Words Counts")
         {
-        // exactly 8 filler words between the technical phrase and its replacement,
-        // putting the replacement's last word exactly 10 words after the phrase's last word
+        // 8 filler words sit between the technical phrase and its key words, putting
+        // "attack" exactly 10 words after the phrase's last word
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
@@ -2273,8 +2293,8 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         }
     SECTION("Replacement Just Beyond Ten Words Does Not Count")
         {
-        // one more filler word than the previous case pushes the replacement's last
-        // word one word past the proximity window
+        // one more filler word than the previous case pushes "attack" one word past
+        // the proximity window
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
@@ -2294,12 +2314,12 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         CHECK(doc.get_word(11) == L"heart");
         CHECK(doc.get_word(12) == L"attack");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement is one word past the proximity window, so it doesn't count
+        // "attack" is past the proximity window, so not every key word is nearby
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
         }
     SECTION("Replacement Before Technical Phrase Within Ten Words Counts")
         {
-        // same as "Replacement Within Ten Words Counts," but with the replacement
+        // same as "Replacement Within Ten Words Counts," but with the key words
         // preceding the technical phrase instead of following it
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
@@ -2323,8 +2343,8 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         }
     SECTION("Replacement Before Technical Phrase Just Beyond Ten Words Does Not Count")
         {
-        // one more filler word than the previous case pushes the replacement's first
-        // word one word before the proximity window
+        // one more filler word than the previous case pushes "heart" one word before
+        // the proximity window
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
@@ -2344,15 +2364,15 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         CHECK(doc.get_word(11) == L"myocardial");
         CHECK(doc.get_word(12) == L"infarction");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement is one word before the proximity window, so it doesn't count
+        // "heart" is before the proximity window, so not every key word is nearby
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
         }
     SECTION("Replacement Overlapping Technical Phrase Does Not Count")
         {
-        // "plain language" (the replacement) immediately precedes "language guide"
-        // (the technical phrase) and shares its first word ("language"). That shared
-        // word must not let the replacement be mistaken for a real, independent nearby
-        // occurrence -- otherwise a phrase could effectively "explain itself."
+        // the key words "plain language" sit right before "language guide" (the
+        // technical phrase) and share its first word ("language"). The key word
+        // "language" only occurs inside the technical phrase's own span, so it doesn't
+        // count -- otherwise a phrase could effectively "explain itself."
         plainLanguagePMap->load_phrases(
             L"language guide\tplain language\tA guide written in plain language.", true, false);
         document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
@@ -2369,51 +2389,299 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         CHECK(doc.get_word(3) == L"language");
         CHECK(doc.get_word(4) == L"guide");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement overlaps the technical phrase's own words, so it doesn't count
+        // "language" is only found inside the technical phrase's own span, so not every
+        // key word is present nearby
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
         }
-    SECTION("Technical Phrase At End Of Document")
+    SECTION("Replacement As Last Word Of Document Counts")
         {
-        // the technical phrase's last word is also the document's last word, so the
-        // proximity window's upper bound (matchEnd + 10) must clamp to the end of
-        // m_words instead of reading past it
+        // the key words are the document's final words, so the proximity window's upper
+        // bound (matchEnd + 10) must clamp to the last index of m_words; not clamping
+        // reads out of bounds, while clamping one word short would miss "attack"
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
-        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
         doc.set_plain_language_phrase_function(plainLanguagePMap);
-        const wchar_t* text = L"The patient suffered a myocardial infarction.";
+        const wchar_t* text =
+            L"The patient suffered a myocardial infarction, also called heart attack.";
         doc.load_document(text, wcslen(text), false, false, false, false);
 
-        // "The(0) patient(1) suffered(2) a(3) myocardial(4) infarction(5)"
+        // "The(0) patient(1) suffered(2) a(3) myocardial(4) infarction(5) also(6) called(7)
+        // heart(8) attack(9)"
         REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
         CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
         CHECK(doc.get_word(4) == L"myocardial");
         CHECK(doc.get_word(5) == L"infarction");
+        CHECK(doc.get_word(8) == L"heart");
+        CHECK(doc.get_word(9) == L"attack");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement never appears, so the phrase is unexplained (and, more importantly,
-        // the clamp must keep this from reading past the end of the document's word array)
-        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
         }
-    SECTION("Technical Phrase At Start Of Document")
+    SECTION("Replacement As First Word Of Document Counts")
         {
-        // the technical phrase's first word is also the document's first word, so the
-        // proximity window's lower bound (matchStart - 10) must clamp to 0 instead of
-        // underflowing (matchStart is unsigned)
+        // the technical phrase starts fewer than 10 words into the document, so the
+        // proximity window's lower bound (matchStart - 10) must clamp to 0; not clamping
+        // underflows the unsigned index and skips the search entirely, while clamping
+        // above 0 would miss "Heart"
         plainLanguagePMap->load_phrases(
             L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
-        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap, &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings, &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
         doc.set_plain_language_phrase_function(plainLanguagePMap);
-        const wchar_t* text = L"Myocardial infarction is a serious condition.";
+        const wchar_t* text = L"Heart attack, or myocardial infarction, is serious.";
         doc.load_document(text, wcslen(text), false, false, false, false);
 
-        // "Myocardial(0) infarction(1) is(2) a(3) serious(4) condition(5)"
+        // "Heart(0) attack(1) or(2) myocardial(3) infarction(4) is(5) serious(6)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        CHECK(doc.get_word(0) == L"Heart");
+        CHECK(doc.get_word(1) == L"attack");
+        CHECK(doc.get_word(3) == L"myocardial");
+        CHECK(doc.get_word(4) == L"infarction");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Immediately Before Technical Phrase Counts")
+        {
+        // "attack" sits at matchStart - 1, right against the phrase
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"He had heart attack myocardial infarction today.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "He(0) had(1) heart(2) attack(3) myocardial(4) infarction(5) today(6)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        CHECK(doc.get_word(3) == L"attack");
+        CHECK(doc.get_word(4) == L"myocardial");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Immediately After Technical Phrase Counts")
+        {
+        // "heart" sits at matchEnd + 1, right against the phrase
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"He had myocardial infarction heart attack today.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "He(0) had(1) myocardial(2) infarction(3) heart(4) attack(5) today(6)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 2);
+        CHECK(doc.get_word(3) == L"infarction");
+        CHECK(doc.get_word(4) == L"heart");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Split Across Both Sides Counts")
+        {
+        // one key word precedes the technical phrase and the other follows it
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"His heart was failing when a myocardial infarction struck, a sudden attack.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "His(0) heart(1) was(2) failing(3) when(4) a(5) myocardial(6) infarction(7)
+        // struck(8) a(9) sudden(10) attack(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 6);
+        CHECK(doc.get_word(1) == L"heart");
+        CHECK(doc.get_word(11) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement In Adjacent Sentence Counts")
+        {
+        // the window is a flat index into the document, so it crosses sentence boundaries
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient had a heart attack. Doctors call it a myocardial infarction.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) had(2) a(3) heart(4) attack(5) Doctors(6) call(7) it(8) a(9)
+        // myocardial(10) infarction(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 10);
+        CHECK(doc.get_word(4) == L"heart");
+        CHECK(doc.get_word(5) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Matches Regardless Of Case")
+        {
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient had a myocardial infarction, also called a HEART ATTACK.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) had(2) a(3) myocardial(4) infarction(5) also(6) called(7) a(8)
+        // HEART(9) ATTACK(10)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        CHECK(doc.get_word(9) == L"HEART");
+        CHECK(doc.get_word(10) == L"ATTACK");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Replacement Must Be A Standalone Word")
+        {
+        // "hearts" and "attacks" merely contain the key words, so they don't count
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient had a myocardial infarction that harmed his hearts and attacks.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) had(2) a(3) myocardial(4) infarction(5) that(6) harmed(7) his(8)
+        // hearts(9) and(10) attacks(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        CHECK(doc.get_word(9) == L"hearts");
+        CHECK(doc.get_word(11) == L"attacks");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Key Word Inside Phrase And Also Nearby Counts")
+        {
+        // "language" occurs inside the technical phrase and again after it; the inside
+        // occurrence is skipped, but the later one still satisfies the key word
+        plainLanguagePMap->load_phrases(
+            L"language guide\tplain language\tA guide written in plain language.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"Read the plain language guide, or any other language resource.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "Read(0) the(1) plain(2) language(3) guide(4) or(5) any(6) other(7) language(8)
+        // resource(9)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        CHECK(doc.get_word(2) == L"plain");
+        CHECK(doc.get_word(3) == L"language");
+        CHECK(doc.get_word(4) == L"guide");
+        CHECK(doc.get_word(8) == L"language");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Single Word Phrase Replacement Within Ten Words Counts")
+        {
+        // a one-word phrase has matchEnd == matchStart, so "pressure" at index 10 is
+        // exactly 10 words after it
+        plainLanguagePMap->load_phrases(
+            L"hypertension\thigh pressure\tAbnormally high blood pressure.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"hypertension widget widget widget widget widget widget widget "
+                              L"widget high pressure.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "hypertension(0) widget(1..8) high(9) pressure(10)"
         REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
         CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
-        CHECK(doc.get_word(0) == L"Myocardial");
-        CHECK(doc.get_word(1) == L"infarction");
+        CHECK(doc.get_word(0) == L"hypertension");
+        CHECK(doc.get_word(9) == L"high");
+        CHECK(doc.get_word(10) == L"pressure");
         REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
-        // replacement never appears, so the phrase is unexplained (and, more importantly,
-        // the clamp must keep matchStart - 10 from underflowing a size_t)
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Single Word Phrase Replacement Just Beyond Ten Words Does Not Count")
+        {
+        // one more filler word than the previous case pushes "pressure" to index 11
+        plainLanguagePMap->load_phrases(
+            L"hypertension\thigh pressure\tAbnormally high blood pressure.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"hypertension widget widget widget widget widget widget widget "
+                              L"widget widget high pressure.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "hypertension(0) widget(1..9) high(10) pressure(11)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
+        CHECK(doc.get_word(10) == L"high");
+        CHECK(doc.get_word(11) == L"pressure");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // "pressure" is past the proximity window, so not every key word is nearby
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Three Word Phrase Window Measured From Its Last Word")
+        {
+        // the window extends 10 words from the phrase's last word (index 2), not its
+        // first, so "attack" at index 12 still counts
+        plainLanguagePMap->load_phrases(
+            L"acute myocardial infarction\theart attack\tA sudden blockage of blood flow.", true,
+            false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"acute myocardial infarction widget widget widget widget widget widget widget "
+            L"widget heart attack.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "acute(0) myocardial(1) infarction(2) widget(3..10) heart(11) attack(12)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 0);
+        CHECK(doc.get_word(2) == L"infarction");
+        CHECK(doc.get_word(11) == L"heart");
+        CHECK(doc.get_word(12) == L"attack");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Phrase Without Key Words Never Explained")
+        {
+        // the key words column is empty, so the proximity check has nothing to match
+        plainLanguagePMap->load_phrases(L"hypertension\t\tAbnormally high blood pressure.", true,
+                                        false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text = L"The patient has hypertension, which is high blood pressure.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) has(2) hypertension(3) which(4) is(5) high(6) blood(7)
+        // pressure(8)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 3);
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
         }
     SECTION("Multiple Phrases Tracked Independently")
@@ -2448,12 +2716,16 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
             }
         REQUIRE(hypertensionIdx < loadedPhrases.size());
         REQUIRE(infarctionIdx < loadedPhrases.size());
-        // each phrase's own replacement and explanation must stay paired with it,
+        // each phrase's own key words and explanation must stay paired with it,
         // not get crossed with the other row
-        CHECK(loadedPhrases[hypertensionIdx].second.replacement.to_string() ==
-              L"high blood pressure");
+        REQUIRE(loadedPhrases[hypertensionIdx].second.replacement_keywords.size() == 3);
+        CHECK(loadedPhrases[hypertensionIdx].second.replacement_keywords.at(0) == L"high");
+        CHECK(loadedPhrases[hypertensionIdx].second.replacement_keywords.at(1) == L"blood");
+        CHECK(loadedPhrases[hypertensionIdx].second.replacement_keywords.at(2) == L"pressure");
         CHECK(loadedPhrases[hypertensionIdx].second.explanation == L"Explanation two.");
-        CHECK(loadedPhrases[infarctionIdx].second.replacement.to_string() == L"heart attack");
+        REQUIRE(loadedPhrases[infarctionIdx].second.replacement_keywords.size() == 2);
+        CHECK(loadedPhrases[infarctionIdx].second.replacement_keywords.at(0) == L"heart");
+        CHECK(loadedPhrases[infarctionIdx].second.replacement_keywords.at(1) == L"attack");
         CHECK(loadedPhrases[infarctionIdx].second.explanation == L"Explanation one.");
 
         REQUIRE(doc.get_plain_language_phrase_indices().size() == 2);
@@ -2468,6 +2740,49 @@ TEST_CASE("Plain language guide analysis", "[plainlanguage]")
         REQUIRE(doc.get_plain_language_phrase_explained().size() == loadedPhrases.size());
         CHECK(doc.get_plain_language_phrase_explained()[hypertensionIdx]);
         CHECK_FALSE(doc.get_plain_language_phrase_explained()[infarctionIdx]);
+        }
+    SECTION("One Key Word Present Another Missing Not Explained")
+        {
+        // every key word in column 1 must be nearby; here only "heart" is
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The patient suffered a myocardial infarction, a serious heart condition.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) patient(1) suffered(2) a(3) myocardial(4) infarction(5) a(6) serious(7)
+        // heart(8) condition(9)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 4);
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        // "heart" is nearby but "attack" is not, so the phrase stays unexplained
+        CHECK_FALSE(doc.get_plain_language_phrase_explained()[0]);
+        }
+    SECTION("Key Words In Any Order Counts")
+        {
+        // the key words may appear near the phrase in any order and need not be adjacent
+        plainLanguagePMap->load_phrases(
+            L"myocardial infarction\theart attack\tA blockage of blood flow.", true, false);
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns, &Known_spellings,
+                             &Secondary_known_spellings, &Programming_known_spellings, &Stop_list);
+        doc.set_plain_language_phrase_function(plainLanguagePMap);
+        const wchar_t* text =
+            L"The attack happened in his heart when a myocardial infarction occurred.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+
+        // "The(0) attack(1) happened(2) in(3) his(4) heart(5) when(6) a(7) myocardial(8)
+        // infarction(9) occurred(10)"
+        REQUIRE(doc.get_plain_language_phrase_indices().size() == 1);
+        CHECK(doc.get_plain_language_phrase_indices()[0].first == 8);
+        CHECK(doc.get_word(1) == L"attack");
+        CHECK(doc.get_word(5) == L"heart");
+        REQUIRE(doc.get_plain_language_phrase_explained().size() == 1);
+        CHECK(doc.get_plain_language_phrase_explained()[0]);
         }
     SECTION("No List Set Is A No-Op")
         {
