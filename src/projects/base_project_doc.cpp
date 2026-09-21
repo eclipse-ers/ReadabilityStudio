@@ -945,8 +945,9 @@ void BaseProjectDoc::LoadSettingsFile(const wchar_t* settingsFileText)
                     {
                     docVersionNumber.assign(version, (versionEnd - version));
                     double docDouble{ 0 }, appDocDouble{ 0 };
-                    if (docVersionNumber.ToDouble(&docDouble) &&
-                        wxGetApp().GetDocumentVersionNumber().ToDouble(&appDocDouble) &&
+                    // version numbers always use '.' as the decimal separator
+                    if (docVersionNumber.ToCDouble(&docDouble) &&
+                        wxGetApp().GetDocumentVersionNumber().ToCDouble(&appDocDouble) &&
                         docDouble > appDocDouble)
                         {
                         LogMessage(wxString::Format(
