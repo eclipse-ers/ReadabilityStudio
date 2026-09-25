@@ -1874,6 +1874,32 @@ TEST_CASE("Document misspellings", "[document]")
         CHECK(doc.get_misspelled_words().size() == 1);
         CHECK(doc.get_misspelled_words().at(0) == 1);
         }
+    SECTION("Misspellings Not Searched For")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        doc.set_search_for_misspellings(false);
+        Known_spellings.load_words(L"the a and hat in cat", true, false);
+        const wchar_t text[] = L"The catz in the hat. The cat hadd a hat.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_misspelled_words().size() == 0);
+        }
+    SECTION("Misspellings Not Searched For Still Joins Split Words")
+        {
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        doc.set_search_for_misspellings(false);
+        Known_spellings.load_words(L"the pumpkin in hat", true, false);
+        const wchar_t text[] = L"The pump-\nkin in the hat.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_word_count() == 5);
+        CHECK(doc.get_words().at(1) == L"pumpkin");
+        CHECK(doc.get_misspelled_words().size() == 0);
+        }
     }
 
 TEST_CASE("Document misspellings 2", "[document]")

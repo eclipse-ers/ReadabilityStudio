@@ -1218,6 +1218,22 @@ class document
         m_search_passive_voice = search;
         }
 
+    /// @returns Whether misspelled words are flagged during grammar analysis.
+    [[nodiscard]]
+    bool searches_for_misspellings() const noexcept
+        {
+        return m_search_for_misspellings;
+        }
+
+    /** @brief Sets whether misspelled words are flagged during grammar analysis.
+        @param search @c false to skip flagging misspellings.
+        @note The spell checker's word list is still used to review words split
+            across lines by hyphens, regardless of this setting.*/
+    void set_search_for_misspellings(const bool search) noexcept
+        {
+        m_search_for_misspellings = search;
+        }
+
     void set_allowable_incomplete_sentence_size(const size_t size) noexcept
         {
         m_allowable_incomplete_sentence_size = size;
@@ -2343,7 +2359,7 @@ class document
                         }
                     }
                 // misspellings
-                if (!is_correctly_spelled(m_words[wordCounter]))
+                if (m_search_for_misspellings && !is_correctly_spelled(m_words[wordCounter]))
                     {
                     m_misspelled_words.push_back(wordCounter);
                     }
@@ -3212,6 +3228,7 @@ class document
     bool m_aggressive_exclusion{ false };
     bool m_search_for_proper_nouns{ true };
     bool m_search_passive_voice{ true };
+    bool m_search_for_misspellings{ true };
     bool m_exclude_file_addresses{ false };
     bool m_exclude_numerals{ false };
     bool m_exclude_proper_nouns{ false };
