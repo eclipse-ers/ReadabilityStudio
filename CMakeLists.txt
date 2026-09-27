@@ -116,8 +116,8 @@ string(APPEND DOWNLOAD_PAGE "/download")
 set(INNOSETUP_GUID "{FBFBEAB6-622A-4E16-893D-216C25FF6A69}")
 set(PROGRAM_LICENSE "Eclipse Public License 2.0")
 
-include(cmake/modules/FindGit.cmake)
-include(cmake/modules/GetGitInfo.cmake)
+include(src/Wisteria-Dataviz/cmake/FindGit.cmake)
+include(src/Wisteria-Dataviz/cmake/GetGitInfo.cmake)
 if(Git_FOUND)
   execute_process(
     COMMAND ${GIT_EXECUTABLE} --no-pager log -n 1 HEAD --pretty=format:%H
@@ -576,7 +576,7 @@ if(MSVC)
         $<$<CONFIG:Debug>:__WXDEBUG__ ${SANITIZER_DEFS}>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
-        /Zc:__cplusplus /MP /W3 /WX /wd6211 /openmp /permissive- /sdl
+        /Zc:__cplusplus /MP /W3 /WX /wd6211 /permissive- /sdl
         $<$<CONFIG:Debug>:/Od ${SANITIZER_FLAGS}>
         $<$<CONFIG:Release>:/O2>)
 
@@ -617,7 +617,7 @@ elseif(UNIX)
         $<$<CONFIG:Debug>:__WXDEBUG__>
         $<$<CONFIG:Release>:NDEBUG>)
     target_compile_options(${PROJECT_NAME} PUBLIC
-        -Wall -Wextra -Wpedantic -Wshadow -Werror -fopenmp
+        -Wall -Wextra -Wpedantic -Wshadow -Werror
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-fstack-protector-strong>
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-D_FORTIFY_SOURCE=2>
         $<$<CONFIG:Debug>:-Og -g3 ${SANITIZER_FLAGS} ${SANITIZER_EXTRA_FLAGS}>
@@ -642,7 +642,6 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 
 # Link required libraries to the executable
 if(WIN32 OR APPLE)
-    # AppleClang dropped support for OpenMP
     # Including TBB is not necessary for macOS and actually breaks hardened runtime
     # because that library is not included by default with the OS (XCode installs it)
     # and it is not signed.
@@ -652,19 +651,10 @@ if(WIN32 OR APPLE)
         target_link_libraries(${PROJECT_NAME} dxgi)
     endif()
 elseif(UNIX)
-    # Add OpenMP for multithreading.
     # TBB is required for GCC linkage sometimes, although this app is not explicitly using it,
     # so try to link it in.
-    find_package(OpenMP)
     find_package(TBB)
-    if(OpenMP_FOUND AND TBB_FOUND)
-        message(STATUS "OpenMP: ${OpenMP_VERSION}")
-        message(STATUS "Intel Threading Building Blocks: ${TBB_VERSION}")
-        target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} TBB::tbb OpenMP::OpenMP_CXX)
-    elseif(OpenMP_FOUND)
-        message(STATUS "OpenMP: ${OpenMP_VERSION}")
-        target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} OpenMP::OpenMP_CXX)
-    elseif(TBB_FOUND)
+    if(TBB_FOUND)
         message(STATUS "Intel Threading Building Blocks: ${TBB_VERSION}")
         target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} TBB::tbb)
     else()

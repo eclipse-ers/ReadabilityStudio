@@ -48,7 +48,7 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "batch_project_doc.h"
-#include "../Wisteria-Dataviz/src/base/reportenumconvert.h"
+#include "../Wisteria-Dataviz/src/reporting/reportenumconvert.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
 #include "../Wisteria-Dataviz/src/graphs/inflesz.h"
 #include "../Wisteria-Dataviz/src/graphs/lixgauge.h"

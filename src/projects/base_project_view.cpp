@@ -1199,7 +1199,10 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
 
     m_maxColumnWidth = GetDocFrame()->FromDIP(wxSize{ 200, 200 }).GetWidth();
 
-    m_splitter = new wxSplitterWindow(m_frame, SPLITTER_ID, wxDefaultPosition,
+    // host all controls in a panel so that tab navigation works
+    m_panel = new wxPanel{ m_frame };
+
+    m_splitter = new wxSplitterWindow(m_panel, SPLITTER_ID, wxDefaultPosition,
                                       m_frame->GetClientSize(), wxSP_LIVE_UPDATE | wxSP_NOBORDER);
 
     // main sidebar (left side of splitter)
@@ -1209,7 +1212,7 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
 
     auto* quickAccessToolbarSizer = new wxBoxSizer(wxHORIZONTAL);
     // quick access toolbar
-    m_quickToolbar = new wxAuiToolBar(m_frame, wxID_ANY);
+    m_quickToolbar = new wxAuiToolBar(m_panel, wxID_ANY);
     quickAccessToolbarSizer->Add(GetQuickToolbar(), wxSizerFlags{ 1 }.Expand());
     // save
     GetQuickToolbar()->AddTool(wxID_SAVE, _(L"Save the project"),
@@ -1222,14 +1225,14 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
                                wxArtProvider::GetBitmapBundle(wxART_PRINT, wxART_BUTTON));
     GetQuickToolbar()->Realize();
 
-    m_searchCtrl = new Wisteria::UI::SearchPanel(m_frame, wxID_ANY);
+    m_searchCtrl = new Wisteria::UI::SearchPanel(m_panel, wxID_ANY);
     quickAccessToolbarSizer->Add(GetSearchPanel());
     mainSizer->Add(quickAccessToolbarSizer, wxSizerFlags{}.Expand());
 
-    m_ribbon = wxGetApp().CreateRibbon(m_frame, doc);
+    m_ribbon = wxGetApp().CreateRibbon(m_panel, doc);
     mainSizer->Add(m_ribbon, wxSizerFlags{}.Expand());
 
-    m_infoBar = new wxInfoBar(m_frame, wxID_ANY, wxINFOBAR_CHECKBOX);
+    m_infoBar = new wxInfoBar(m_panel, wxID_ANY, wxINFOBAR_CHECKBOX);
     GetInfoBar()->Connect(wxID_CLOSE, wxEVT_BUTTON,
                           wxCommandEventHandler(BaseProjectView::OnCloseInfoBar), nullptr, this);
     GetInfoBar()->SetEffectDuration(250);
@@ -1258,7 +1261,11 @@ bool BaseProjectView::OnCreate(wxDocument* doc, [[maybe_unused]] long flags)
 
     mainSizer->Add(m_workSpaceSizer, wxSizerFlags{ 1 }.Expand());
 
-    m_frame->SetSizer(mainSizer);
+    m_panel->SetSizer(mainSizer);
+
+    auto* frameSizer = new wxBoxSizer{ wxVERTICAL };
+    frameSizer->Add(m_panel, wxSizerFlags{ 1 }.Expand());
+    m_frame->SetSizer(frameSizer);
 
     const std::array<wxAcceleratorEntry, 18> accelEntries = {
         wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F1, wxID_HELP),

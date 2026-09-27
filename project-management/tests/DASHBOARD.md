@@ -1,6 +1,6 @@
 # 🧪 Testing & Quality Dashboard
 
-> **Project:** Readability Studio · **Last updated:** 2026-01-17
+> **Project:** Readability Studio · **Last updated:** 2026-09-27
 
 ---
 
@@ -17,7 +17,7 @@
 
 | Platform Builds  | Result |
 | ------------- | ------------- |
-| Linux    | [![Linux Build](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/unix%20build.yml/badge.svg)](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/unix%20build.yml) |
+| Linux    | [![Linux Build](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/unix-build.yml/badge.svg)](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/unix-build.yml) |
 | Windows  | [![Windows Build](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/windows-build.yml/badge.svg)](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/windows-build.yml) |
 | macOS    | [![macOS Build](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/mac-build.yml/badge.svg)](https://github.com/eclipse-ers/ReadabilityStudio/actions/workflows/mac-build.yml) |
 

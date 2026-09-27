@@ -232,6 +232,7 @@ void BaseProject::UpdateDocumentSettings()
         GetWords()->set_known_phrase_function(&m_spanishWordyPhrases);
         GetWords()->get_spell_checker().set_word_list(&known_spanish_spellings);
         GetWords()->get_spell_checker().set_secondary_word_list(&known_custom_spanish_spellings);
+        GetWords()->set_search_for_misspellings(false);
         GetWords()->set_search_for_proper_nouns(true);
         GetWords()->set_mismatched_article_function(nullptr);
         GetWords()->set_search_for_passive_voice(false);
@@ -245,6 +246,7 @@ void BaseProject::UpdateDocumentSettings()
         GetWords()->set_known_phrase_function(&m_germanWordyPhrases);
         GetWords()->get_spell_checker().set_word_list(&known_german_spellings);
         GetWords()->get_spell_checker().set_secondary_word_list(&known_custom_german_spellings);
+        GetWords()->set_search_for_misspellings(false);
         GetWords()->set_search_for_proper_nouns(false);
         GetWords()->set_mismatched_article_function(nullptr);
         GetWords()->set_search_for_passive_voice(false);
@@ -258,6 +260,7 @@ void BaseProject::UpdateDocumentSettings()
         GetWords()->set_known_phrase_function(&m_englishWordyPhrases);
         GetWords()->get_spell_checker().set_word_list(&known_english_spellings);
         GetWords()->get_spell_checker().set_secondary_word_list(&known_custom_english_spellings);
+        GetWords()->set_search_for_misspellings(true);
         GetWords()->set_search_for_proper_nouns(true);
         GetWords()->set_mismatched_article_function(&m_english_mismatched_article);
         GetWords()->set_search_for_passive_voice(true);

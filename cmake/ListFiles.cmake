@@ -9,12 +9,17 @@ utfcpp/samples|utfcpp/extern|cxxopts|xmltest[.]cpp|html5-printer[.]cpp|htmltable
 textclassifier[.]cpp|candlestickplot[.]cpp|ganttchart[.]cpp|lrroadmap[.]cpp|proconroadmap[.]cpp|\
 roadmap[.]cpp|sankeydiagram[.]cpp|table[.]cpp|wcurveplot[.]cpp|variableselectdlg[.]cpp|reportbuilder[.]cpp|\
 formattedtextctrl[.]cpp|gtktextview[-]helper[.]cpp|benchmark[.]cpp|\
-report_builder_formulas[.]cpp|reporttableloader[.]cpp|datasetimportdlg[.]cpp|\
+report_builder_formulas[.]cpp|report_builder_basic_graphs[.]cpp|report_builder_business_graphs[.]cpp|\
+report_builder_education_graphs[.]cpp|report_builder_social_science_graphs[.]cpp|\
+report_builder_sports_graphs[.]cpp|report_builder_stat_graphs[.]cpp|reporttableloader[.]cpp|datasetimportdlg[.]cpp|\
 win_loss_sparkline[.]cpp|multi_series_lineplot[.]cpp|likertchart[.]cpp|waffle_chart[.]cpp|\
+pivot[.]cpp|kmlreader[.]cpp|geojsonreader[.]cpp|geojsonreader[.]cpp|geofeature[.]cpp|geodataset[.]cpp|geofeature[.]cpp|\
+funnelchart[.]cpp|duboisspiralchart[.]cpp|choroplethmap[.]cpp|wilmarth_bridge_plot[.]cpp|bulletchart[.]cpp|\
+objectgallery[.]cpp|waterfallchart[.]cpp|nightingale_rose_chart[.]cpp|racetrackchart[.]cpp|pictograph[.]cpp|\
 pivot[.]cpp|subset[.]cpp|join[.]cpp|clone[.]cpp|xrc_menu_strings[.]cpp)")
 
 # these files get compiled into larger ones that are included with the distribution instead
-set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-english-dictionary[.]txt|base-non-personal[.]txt|base-personal[.]txt|base-english[.]txt|\
+set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-(english|spanish|german)-dictionary[.]txt|base-non-personal[.]txt|base-personal[.]txt|base-english[.]txt|\
 base-german[.]txt|base-spanish[.]txt|common-errors[.]txt|sql[.]txt|visual-basic[.]txt|programming/r[.]txt|python[.]txt|java[.]txt|\
 html[.]txt|csharp[.]txt|cpp[.]txt|assembly[.]txt)")
 

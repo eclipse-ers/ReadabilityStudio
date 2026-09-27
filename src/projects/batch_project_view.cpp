@@ -372,7 +372,7 @@ void BatchProjectView::OnPaneShowOrHide(wxRibbonButtonBarEvent& event)
             m_statsReport->Show(!m_statsReport->IsShown());
             }
         }
-    GetDocFrame()->GetSizer()->Layout();
+    GetPanel()->Layout();
     }
 
 //------------------------------------------------------

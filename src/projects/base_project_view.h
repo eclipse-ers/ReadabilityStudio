@@ -165,6 +165,13 @@ class BaseProjectView : public wxView
         return m_frame;
         }
 
+    /// @returns The panel inside the frame that hosts the frame's controls.
+    [[nodiscard]]
+    wxPanel* GetPanel() noexcept
+        {
+        return m_panel;
+        }
+
     [[nodiscard]]
     wxRibbonBar* GetRibbon() noexcept
         {
@@ -866,6 +873,7 @@ class BaseProjectView : public wxView
     void AddQueuedMessage(const WarningMessage& message) { m_queuedMessages.insert(message); }
 
     ProjectDocChildFrame* m_frame{ nullptr };
+    wxPanel* m_panel{ nullptr };
     wxRibbonBar* m_ribbon{ nullptr };
     Wisteria::UI::SideBar* m_sideBar{ nullptr };
     wxAuiToolBar* m_quickToolbar{ nullptr };

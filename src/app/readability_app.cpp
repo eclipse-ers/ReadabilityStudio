@@ -1468,7 +1468,7 @@ void ReadabilityApp::LoadInterface()
     CreateAppOptions();
 
     // set up the ribbon (and its submenus)
-    GetMainFrame()->InitControls(CreateRibbon(GetMainFrame(), nullptr));
+    GetMainFrame()->InitControls(CreateRibbon(GetMainFrame()->GetPanel(), nullptr));
 
     auto* menuItem = new wxMenuItem(&GetMainFrameEx()->m_fileOpenMenu, wxID_OPEN,
                                     _(L"Open Project...") + _DT(L"\tCtrl+O"));
@@ -3376,7 +3376,7 @@ void MainFrame::ActivateLogTab()
         m_logEditButtonBar->ToggleButton(XRCID("ID_LOG_TAB_REALTIME_UPDATE"), m_logAutoRefresh);
         m_logEditButtonBar->ToggleButton(XRCID("ID_LOG_TAB_VERBOSE"), wxLog::GetVerbose());
         }
-    Layout();
+    GetPanel()->Layout();
     wxGetApp().ReadLogIntoListCtrl(m_logListCtrl);
     m_logListCtrl->SetFocus();
     }
@@ -4056,7 +4056,7 @@ MainFrame::MainFrame(wxDocManager* manager, wxFrame* frame,
                  {
                  m_logAutoRefreshTimer.Stop();
                  }
-             Layout();
+             GetPanel()->Layout();
              if (showWorkbench && GetScriptWorkbench() != nullptr)
                  {
                  GetScriptWorkbench()->SetFocus();
@@ -4404,8 +4404,9 @@ void ReadabilityApp::InitStartPage()
         {
         mruFiles.Add(GetDocManager()->GetFileHistory()->GetHistoryFile(i));
         }
-    GetMainFrameEx()->m_startPage = new wxStartPage(
-        GetMainFrameEx(), wxID_ANY, mruFiles, GetResourceManager().GetSVG(L"ribbon/app-logo.svg"));
+    GetMainFrameEx()->m_startPage =
+        new wxStartPage(GetMainFrameEx()->GetPanel(), wxID_ANY, mruFiles,
+                        GetResourceManager().GetSVG(L"ribbon/app-logo.svg"));
 
     GetMainFrameEx()->GetStartPage()->SetUserName(m_preInitOptions.m_userName);
     GetMainFrameEx()->GetStartPage()->AddButton(
@@ -4423,16 +4424,17 @@ void ReadabilityApp::InitStartPage()
     GetMainFrameEx()->GetStartPage()->AddButton(
         GetResourceManager().GetSVG(L"ribbon/configure.svg"), _(L"Review Program Options"));
 
-    GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->GetStartPage(), wxSizerFlags{ 1 }.Expand());
+    GetMainFrameEx()->GetPanel()->GetSizer()->Add(GetMainFrameEx()->GetStartPage(),
+                                                  wxSizerFlags{ 1 }.Expand());
 
     // The script workbench and log panel share the same sizer slot as the start page;
     // the Developer/Log ribbon tabs swap which one is visible.
-    GetMainFrameEx()->m_scriptWorkbench = new ScriptWorkbenchPanel(GetMainFrameEx());
+    GetMainFrameEx()->m_scriptWorkbench = new ScriptWorkbenchPanel(GetMainFrameEx()->GetPanel());
     GetMainFrameEx()->GetScriptWorkbench()->Hide();
-    GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->GetScriptWorkbench(),
-                                      wxSizerFlags{ 1 }.Expand());
+    GetMainFrameEx()->GetPanel()->GetSizer()->Add(GetMainFrameEx()->GetScriptWorkbench(),
+                                                  wxSizerFlags{ 1 }.Expand());
 
-    GetMainFrameEx()->m_logPanel = new wxPanel(GetMainFrameEx());
+    GetMainFrameEx()->m_logPanel = new wxPanel(GetMainFrameEx()->GetPanel());
     GetMainFrameEx()->m_logPanel->Hide();
     GetMainFrameEx()->m_logDataProvider = std::make_shared<Wisteria::UI::ListCtrlExDataProvider>();
     GetMainFrameEx()->m_logListCtrl =
@@ -4442,7 +4444,8 @@ void ReadabilityApp::InitStartPage()
     auto* logPanelSizer = new wxBoxSizer(wxVERTICAL);
     logPanelSizer->Add(GetMainFrameEx()->m_logListCtrl, wxSizerFlags{ 1 }.Expand());
     GetMainFrameEx()->m_logPanel->SetSizer(logPanelSizer);
-    GetMainFrameEx()->GetSizer()->Add(GetMainFrameEx()->m_logPanel, wxSizerFlags{ 1 }.Expand());
+    GetMainFrameEx()->GetPanel()->GetSizer()->Add(GetMainFrameEx()->m_logPanel,
+                                                  wxSizerFlags{ 1 }.Expand());
     }
 
 //---------------------------------------------------
@@ -4734,7 +4737,7 @@ void MainFrame::ActivateScriptWorkbench()
         {
         m_logPanel->Hide();
         }
-    Layout();
+    GetPanel()->Layout();
     GetScriptWorkbench()->SetFocus();
     }
 
@@ -4760,7 +4763,7 @@ void MainFrame::ActivateHomePage()
         {
         GetScriptWorkbench()->Hide();
         }
-    Layout();
+    GetPanel()->Layout();
     }
 
 //-------------------------------------------------------

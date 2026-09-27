@@ -48,7 +48,7 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "lua_debug.h"
-#include "../Wisteria-Dataviz/src/base/reportbuilder.h"
+#include "../Wisteria-Dataviz/src/reporting/reportbuilder.h"
 #include "../app/readability_app.h"
 #include "../ui/controls/script_workbench_panel.h"
 

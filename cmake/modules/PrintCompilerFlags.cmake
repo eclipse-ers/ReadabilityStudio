@@ -145,9 +145,6 @@ function(print_compile_flags_summary TARGET_NAME)
         elseif(clean_flag STREQUAL "-g3")
             set(line "• ${clean_flag}: Full debug info")
 
-        elseif(clean_flag STREQUAL "-fopenmp" OR clean_flag STREQUAL "/openmp")
-            set(line "• ${clean_flag}: Enable OpenMP parallelism")
-
         else()
             set(line "• ${clean_flag}: [Unrecognized or custom flag]")
         endif()

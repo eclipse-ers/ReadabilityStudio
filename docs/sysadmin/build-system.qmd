@@ -88,7 +88,7 @@ On Windows (`r os_logo('Windows')`), *Inno Setup* installer scripts are generate
 
 - Definitions: `__WXMSW__`, `CRCPP_USE_CPP11`, `_CRT_SECURE_NO_WARNINGS`, `_UNICODE`
 - Debug adds: `__WXDEBUG__`, sanitizer definitions
-- Key flags: `/Zc:__cplusplus`, `/MP`, `/W3`, `/WX`, `/openmp`, `/permissive-`, `/sdl`, `/utf-8`
+- Key flags: `/Zc:__cplusplus`, `/MP`, `/W3`, `/WX`, `/permissive-`, `/sdl`, `/utf-8`
 - Release optimization: `/O2`
 
 ### Windows (MinGW/MSYS) `r os_logo('Windows')` {-}
@@ -110,7 +110,7 @@ On Windows (`r os_logo('Windows')`), *Inno Setup* installer scripts are generate
 
 - Definitions: `__WXGTK__`, `CRCPP_USE_CPP11`
 - Requires *GTK 3*
-- *OpenMP* enabled for multithreading; *Intel TBB* linked if available
+- *Intel TBB* linked if available
 - Dead code stripped in release builds (`-s`)
 - Symbol visibility set to hidden
 - *clang* flags: `-Wall`, `-Wextra`, `-Wpedantic`, `-Wshadow`, `-Werror`

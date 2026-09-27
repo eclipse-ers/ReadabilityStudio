@@ -49,7 +49,7 @@
 
 #include "lua_batch_project.h"
 #include "../Wisteria-Dataviz/src/base/label.h"
-#include "../Wisteria-Dataviz/src/base/reportbuilder.h"
+#include "../Wisteria-Dataviz/src/reporting/reportbuilder.h"
 #include "../app/readability_app.h"
 #include "../projects/batch_project_doc.h"
 #include "../projects/batch_project_view.h"

@@ -48,7 +48,7 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "standard_project_doc.h"
-#include "../Wisteria-Dataviz/src/base/reportenumconvert.h"
+#include "../Wisteria-Dataviz/src/reporting/reportenumconvert.h"
 #include "../Wisteria-Dataviz/src/graphs/crawfordgraph.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
 #include "../Wisteria-Dataviz/src/graphs/fleschchart.h"
