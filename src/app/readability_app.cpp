@@ -1545,6 +1545,7 @@ void ReadabilityApp::LoadInterface()
     GetMainFrame()->Centre();
     GetMainFrame()->Show();
     GetMainFrame()->Update();
+    GetMainFrameEx()->GetStartPage()->SetFocus();
     SetTopWindow(GetMainFrame());
     }
 

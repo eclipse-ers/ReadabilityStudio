@@ -1350,5 +1350,6 @@ void BaseProjectView::OnActivateView(const bool activate, [[maybe_unused]] wxVie
             {
             GetSplitter()->GetWindow2()->Show(true);
             }
+        GetSideBar()->SetFocus();
         }
     }
