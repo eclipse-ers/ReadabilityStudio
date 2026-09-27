@@ -603,7 +603,7 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         return false;
         }
 
-    m_testExplanations = wxWebView::New(GetDocFrame(), wxID_ANY);
+    m_testExplanations = wxWebView::New(GetPanel(), wxID_ANY);
     if (m_testExplanations != nullptr)
         {
         m_testExplanations->Hide();
@@ -617,7 +617,7 @@ bool BatchProjectView::OnCreate(wxDocument* doc, long flags)
         GetWorkSpaceSizer()->Add(m_testExplanations, wxSizerFlags{ 1 }.Expand());
         }
 
-    m_statsReport = wxWebView::New(GetDocFrame(), wxID_ANY);
+    m_statsReport = wxWebView::New(GetPanel(), wxID_ANY);
     if (m_statsReport != nullptr)
         {
         m_statsReport->Hide();
