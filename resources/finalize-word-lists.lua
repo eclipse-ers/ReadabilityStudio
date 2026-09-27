@@ -21,6 +21,14 @@ Application.MergeWordLists(
     Debug.GetScriptFolder().."words/base-english-dictionary.txt")
 
 Application.MergeWordLists(
+    Debug.GetScriptFolder().."words/base-spanish-dictionary.txt",
+    Debug.GetScriptFolder().."words/base-spanish-dictionary.txt")
+
+Application.MergeWordLists(
+    Debug.GetScriptFolder().."words/base-german-dictionary.txt",
+    Debug.GetScriptFolder().."words/base-german-dictionary.txt")
+
+Application.MergeWordLists(
     Debug.GetScriptFolder().."words/base-personal.txt",
     Debug.GetScriptFolder().."words/base-personal.txt")
 
@@ -148,6 +156,21 @@ Application.MergeWordLists(
     Debug.GetScriptFolder().."words/proper-nouns/all.txt",
     Debug.GetScriptFolder().."CommonDictionaryTEMP.txt",
     Debug.GetScriptFolder().."words/dictionaries/english.txt")
+
+-- Spanish and German dictionaries
+-- (these share the proper nouns and common dictionary with English)
+Application.MergeWordLists(
+    Debug.GetScriptFolder().."words/base-spanish-dictionary.txt",
+    Debug.GetScriptFolder().."words/abbreviations/abbreviations.txt",
+    Debug.GetScriptFolder().."words/proper-nouns/all.txt",
+    Debug.GetScriptFolder().."CommonDictionaryTEMP.txt",
+    Debug.GetScriptFolder().."words/dictionaries/spanish.txt")
+Application.MergeWordLists(
+    Debug.GetScriptFolder().."words/base-german-dictionary.txt",
+    Debug.GetScriptFolder().."words/abbreviations/abbreviations.txt",
+    Debug.GetScriptFolder().."words/proper-nouns/all.txt",
+    Debug.GetScriptFolder().."CommonDictionaryTEMP.txt",
+    Debug.GetScriptFolder().."words/dictionaries/german.txt")
 
 os.remove(Debug.GetScriptFolder().."CommonDictionaryTEMP.txt")
 
