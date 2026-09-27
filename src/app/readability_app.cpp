@@ -2019,6 +2019,11 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  _(L"View the selected row in tabular format."));
         editButtonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"), ReadSvgIcon(L"ribbon/sort.svg"),
                                  _(L"Sort the list."));
+
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_VIEW_ITEM"), _DT(L"EV"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
         }
         // list button edit panel (Long Format, Grade Scales, Copy, Select, View, Sort)
         {
@@ -2044,6 +2049,13 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  _(L"View the selected row in tabular format."));
         editButtonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"), ReadSvgIcon(L"ribbon/sort.svg"),
                                  _(L"Sort the list."));
+
+        editButtonBar->SetKeyTip(XRCID("ID_LONG_FORMAT"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_GRADE_SCALES"), _DT(L"K"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_VIEW_ITEM"), _DT(L"EV"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
         }
         // list button edit panel (Copy, Select, View, Sort, Sum)
         {
@@ -2065,6 +2077,12 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  _(L"Sort the list."));
         editButtonBar->AddButton(XRCID("ID_SUMMATION"), _(L"Sum"), ReadSvgIcon(L"ribbon/sum.svg"),
                                  _(L"Total the values from the selected column."));
+
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_VIEW_ITEM"), _DT(L"EV"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_SUMMATION"), _DT(L"EU"));
         }
         // list button edit panel (Copy, Select, Sort)
         {
@@ -2081,6 +2099,10 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  ReadSvgIcon(L"ribbon/select-all.svg"), _(L"Select All"));
         editButtonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"), ReadSvgIcon(L"ribbon/sort.svg"),
                                  _(L"Sort the list."));
+
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
         }
         // list button edit panel (Copy, Select, Sort, Sum)
         {
@@ -2099,6 +2121,11 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  _(L"Sort the list."));
         editButtonBar->AddButton(XRCID("ID_SUMMATION"), _(L"Sum"), ReadSvgIcon(L"ribbon/sum.svg"),
                                  _(L"Total the values from the selected column."));
+
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_SUMMATION"), _DT(L"EU"));
         }
         // list button edit panel (Copy, Select, Exclude, Sum, Sort)
         {
@@ -2120,6 +2147,12 @@ void ReadabilityApp::LoadRibbonHomePageListSection(wxRibbonPage* homePage)
                                  _(L"Exclude selected words."));
         editButtonBar->AddButton(XRCID("ID_SUMMATION"), _(L"Sum"), ReadSvgIcon(L"ribbon/sum.svg"),
                                  _(L"Total the values from the selected column."));
+
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_SELECTED"), _DT(L"EX"));
+        editButtonBar->SetKeyTip(XRCID("ID_SUMMATION"), _DT(L"EU"));
         }
     }
 
@@ -2137,6 +2170,9 @@ void ReadabilityApp::LoadRibbonHomePageHtmlReportSection(wxRibbonPage* homePage)
                                      _(L"Change the report's theme."));
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
                              _(L"Copy the report."));
+
+    editButtonBar->SetKeyTip(XRCID("ID_REPORT_THEME"), _DT(L"G"));
+    editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
     }
 
 //-----------------------------------
@@ -2178,6 +2214,17 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy"));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_BAR_STYLE"), _DT(L"EB"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_BAR_LABELS"), _DT(L"EL"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_BAR_ORIENTATION"), _DT(L"EO"));
+        editButtonBar->SetKeyTip(XRCID("ID_GRAPH_SORT"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // box plot panel
         {
@@ -2213,6 +2260,16 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_BOX_STYLE"), _DT(L"EB"));
+        editButtonBar->SetKeyTip(XRCID("ID_BOX_PLOT_DISPLAY_LABELS"), _DT(L"EL"));
+        editButtonBar->SetKeyTip(XRCID("ID_BOX_PLOT_DISPLAY_ALL_POINTS"), _DT(L"EP"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // syllable histogram panel
         {
@@ -2249,6 +2306,16 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOGRAM_BAR_STYLE"), _DT(L"EB"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOBAR_LABELS"), _DT(L"EL"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // histogram panel
         {
@@ -2280,6 +2347,15 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOGRAM_BAR_STYLE"), _DT(L"EB"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOBAR_LABELS"), _DT(L"EL"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // batch project histogram panel
         {
@@ -2317,6 +2393,17 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_COLOR_SCHEME"), _DT(L"EC"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(XRCID("ID_GRADE_SCALES"), _DT(L"EG"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOGRAM_BAR_STYLE"), _DT(L"EB"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_HISTOBAR_LABELS"), _DT(L"EL"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // wordcloud panel
         {
@@ -2344,6 +2431,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_COLOR_SCHEME"), _DT(L"EC"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // pie chart panel
         {
@@ -2376,6 +2470,14 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_COLOR_SCHEME"), _DT(L"EC"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // graph panel
         {
@@ -2402,6 +2504,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_DROP_SHADOW"), _DT(L"W"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // Lix (German) panel
         {
@@ -2430,6 +2539,14 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_USE_ENGLISH_LABELS"), _DT(L"EE"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // Raygor panel
         {
@@ -2458,6 +2575,14 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_INVALID_REGION_COLOR"), _DT(L"EI"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_RAYGOR_STYLE"), _DT(L"ER"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // Fry panel
         {
@@ -2473,6 +2598,7 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
             editButtonBar->AddToggleButton(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"),
                                            _(L"Showcase"), ReadSvgIcon(L"ribbon/showcase.svg"),
                                            _(L"Toggle whether the score is being showcased."));
+            editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
             }
         editButtonBar->AddDropdownButton(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _(L"Background"),
                                          ReadSvgIcon(L"ribbon/photos.svg"),
@@ -2489,6 +2615,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_INVALID_REGION_COLOR"), _DT(L"EI"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // Flesch panel
         {
@@ -2514,6 +2647,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(XRCID("ID_FLESCH_DISPLAY_LINES"), _DT(L"EC"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // DB2
         {
@@ -2540,6 +2680,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // LIX
         {
@@ -2566,6 +2713,13 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_SHOWCASE_KEY_ITEMS"), _DT(L"ES"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
         // panel for other readability graphs
         {
@@ -2589,6 +2743,12 @@ void ReadabilityApp::LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, cons
                                  _(L"Copy the graph."));
         editButtonBar->AddHybridButton(wxID_ZOOM_IN, _(L"Zoom"), ReadSvgIcon(L"ribbon/zoom-in.svg"),
                                        _(L"Zoom"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_BACKGROUND"), _DT(L"G"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_GRAPH_FONTS"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_LOGO"), _DT(L"Q"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_ZOOM_IN, _DT(L"Z"));
         }
     }
 
@@ -2616,6 +2776,12 @@ void ReadabilityApp::LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* hom
                                  _(L"View the selected row in tabular format."));
         editButtonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"), ReadSvgIcon(L"ribbon/sort.svg"),
                                  _(L"Sort the list."));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_STATS_REPORT"), _DT(L"K"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+        editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
+        editButtonBar->SetKeyTip(XRCID("ID_VIEW_ITEM"), _DT(L"EV"));
+        editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
         }
         // statistics HTML report in a standard project
         {
@@ -2634,6 +2800,10 @@ void ReadabilityApp::LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* hom
                                          _(L"Change the report's theme."));
         editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
                                  _(L"Copy"));
+
+        editButtonBar->SetKeyTip(XRCID("ID_EDIT_STATS_REPORT"), _DT(L"K"));
+        editButtonBar->SetKeyTip(XRCID("ID_REPORT_THEME"), _DT(L"G"));
+        editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
         }
     }
 
@@ -2653,6 +2823,10 @@ void ReadabilityApp::LoadRibbonHomePagePlainLanguageGuideSection(wxRibbonPage* h
                                      ReadSvgIcon(L"ribbon/themes.svg"),
                                      _(L"Change the report's theme."));
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"), _(L"Copy"));
+
+    editButtonBar->SetKeyTip(XRCID("ID_PLAIN_LANGUAGE_GUIDE_LIST"), _DT(L"K"));
+    editButtonBar->SetKeyTip(XRCID("ID_REPORT_THEME"), _DT(L"G"));
+    editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
     }
 
 //-----------------------------------
@@ -2674,6 +2848,11 @@ void ReadabilityApp::LoadRibbonHomePageExplanationListSection(wxRibbonPage* home
                              _(L"Copy the selected rows."));
     editButtonBar->AddButton(XRCID("ID_LIST_SORT"), _(L"Sort"), ReadSvgIcon(L"ribbon/sort.svg"),
                              _(L"Sort the list."));
+
+    editButtonBar->SetKeyTip(XRCID("ID_LONG_FORMAT"), _DT(L"G"));
+    editButtonBar->SetKeyTip(XRCID("ID_GRADE_SCALES"), _DT(L"K"));
+    editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+    editButtonBar->SetKeyTip(XRCID("ID_LIST_SORT"), _DT(L"ES"));
     }
 
 //-----------------------------------
@@ -2694,6 +2873,11 @@ void ReadabilityApp::LoadRibbonHomePageTextWindowSection(wxRibbonPage* homePage)
     editButtonBar->AddButton(wxID_COPY, _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"), _(L"Copy"));
     editButtonBar->AddButton(wxID_SELECTALL, _(L"Select All"),
                              ReadSvgIcon(L"ribbon/select-all.svg"), _(L"Select All"));
+
+    editButtonBar->SetKeyTip(XRCID("ID_TEXT_WINDOW_COLORS"), _DT(L"K"));
+    editButtonBar->SetKeyTip(XRCID("ID_REPORT_THEME"), _DT(L"G"));
+    editButtonBar->SetKeyTip(wxID_COPY, _DT(L"C"));
+    editButtonBar->SetKeyTip(wxID_SELECTALL, _DT(L"EA"));
     }
 
 //-----------------------------------
@@ -2714,6 +2898,8 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
                                       _(L"Create a new project."));
     projectButtonBar->AddHybridButton(wxID_OPEN, _(L"Open"), ReadSvgIcon(L"ribbon/file-open.svg"),
                                       _(L"Open an existing project."));
+    projectButtonBar->SetKeyTip(wxID_NEW, _DT(L"N"));
+    projectButtonBar->SetKeyTip(wxID_OPEN, _DT(L"O"));
     if (rtype == RibbonType::BatchProjectRibbon)
         {
         auto* documentsPanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
@@ -2729,6 +2915,10 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         documentsButtonBar->AddButton(XRCID("ID_REMOVE_DOCUMENT"), _(L"Remove Document"),
                                       ReadSvgIcon(L"ribbon/delete-document.svg"),
                                       _(L"Remove the selected document from the project."));
+
+        documentsButtonBar->SetKeyTip(XRCID("ID_SEND_TO_STANDARD_PROJECT"), _DT(L"J"));
+        documentsButtonBar->SetKeyTip(XRCID("ID_STATISTICS_WINDOW"), _DT(L"A"));
+        documentsButtonBar->SetKeyTip(XRCID("ID_REMOVE_DOCUMENT"), _DT(L"M"));
         }
     if (rtype != RibbonType::MainFrameRibbon)
         {
@@ -2758,6 +2948,17 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
                                           _(L"Shows or hides the sidebar."));
         projectButtonBar->ToggleButton(XRCID("ID_SHOW_SIDEBAR"), true);
 
+        projectButtonBar->SetKeyTip(XRCID("ID_DOCUMENT_REFRESH"), _DT(L"F"));
+        if (rtype == RibbonType::StandardProjectRibbon)
+            {
+            projectButtonBar->SetKeyTip(XRCID("ID_REALTIME_UPDATE"), _DT(L"U"));
+            }
+        projectButtonBar->SetKeyTip(XRCID("ID_SAVE_PROJECT"), _DT(L"S"));
+        projectButtonBar->SetKeyTip(XRCID("ID_SAVE_ITEM"), _DT(L"X"));
+        projectButtonBar->SetKeyTip(wxID_PRINT, _DT(L"I"));
+        projectButtonBar->SetKeyTip(wxID_PROPERTIES, _DT(L"Y"));
+        projectButtonBar->SetKeyTip(XRCID("ID_SHOW_SIDEBAR"), _DT(L"B"));
+
         // edit sections
         //--------------
         LoadRibbonHomePageListSection(GetMainFrameEx()->m_homeRibbonPage);
@@ -2784,6 +2985,10 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         settingsButtonBar->AddButton(wxID_PREFERENCES, _(L"Options"),
                                      ReadSvgIcon(L"ribbon/configure.svg"),
                                      _(L"Change the program's general options."));
+
+        settingsButtonBar->SetKeyTip(XRCID("ID_PRINT_OPTIONS"), _DT(L"I"));
+        settingsButtonBar->SetKeyTip(XRCID("ID_EDIT_DICTIONARY"), _DT(L"K"));
+        settingsButtonBar->SetKeyTip(wxID_PREFERENCES, _DT(L"C"));
         // test section
         auto* readabilityTestsPanel = new wxRibbonPanel(
             GetMainFrameEx()->m_homeRibbonPage, wxID_ANY, _(L"Readability Tests"), wxNullBitmap,
@@ -2804,6 +3009,12 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         readabilityTestsBar->AddDropdownButton(
             XRCID("ID_BLANK_GRAPHS"), _(L"Blank Graphs"), ReadSvgIcon(L"ribbon/blank-graphs.svg"),
             _(L"Print or save blank readability graph templates."));
+
+        readabilityTestsBar->SetKeyTip(XRCID("ID_CUSTOM_TESTS"), _DT(L"U"));
+        readabilityTestsBar->SetKeyTip(XRCID("ID_TEST_BUNDLES"), _DT(L"B"));
+        readabilityTestsBar->SetKeyTip(XRCID("ID_TESTS_OVERVIEW"), _DT(L"E"));
+        readabilityTestsBar->SetKeyTip(XRCID("ID_WORD_LISTS"), _DT(L"W"));
+        readabilityTestsBar->SetKeyTip(XRCID("ID_BLANK_GRAPHS"), _DT(L"G"));
         // tools section
         auto* toolsPanel = new wxRibbonPanel(GetMainFrameEx()->m_homeRibbonPage, wxID_ANY,
                                              _(L"Tools"), wxNullBitmap, wxDefaultPosition,
@@ -2812,6 +3023,7 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         toolButtonBar->AddButton(XRCID("ID_WEB_HARVEST"), _(L"Web Harvester"),
                                  ReadSvgIcon(L"ribbon/web-export.svg"),
                                  _(L"Download and analyze multiple webpages."));
+        toolButtonBar->SetKeyTip(XRCID("ID_WEB_HARVEST"), _DT(L"S"));
 #ifndef NDEBUG
         toolButtonBar->AddButton(XRCID("ID_CHAPTER_SPLIT"), _(L"Chapter Split"),
                                  ReadSvgIcon(L"ribbon/chapter-split.svg"),
@@ -2819,6 +3031,8 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         toolButtonBar->AddButton(XRCID("ID_FIND_DUPLICATE_FILES"), _(L"Find Duplicates"),
                                  ReadSvgIcon(L"ribbon/duplicate-files.svg"),
                                  _(L"Search for (and remove) duplicate files."));
+        toolButtonBar->SetKeyTip(XRCID("ID_CHAPTER_SPLIT"), _DT(L"F"));
+        toolButtonBar->SetKeyTip(XRCID("ID_FIND_DUPLICATE_FILES"), _DT(L"Q"));
 #endif
 
         // image section
@@ -2832,11 +3046,14 @@ void ReadabilityApp::LoadRibbonHomePage(wxRibbonBar* ribbon, const RibbonType rt
         imageButtonBar->AddButton(XRCID("ID_TOOLS_IMAGE_EFFECT"), _(L"Apply Effect"),
                                   ReadSvgIcon(L"ribbon/paint.svg"),
                                   _(L"Apply an effect to an image and save the result."));
+
+        imageButtonBar->SetKeyTip(XRCID("ID_TOOLS_MERGE_IMAGES"), _DT(L"M"));
+        imageButtonBar->SetKeyTip(XRCID("ID_TOOLS_IMAGE_EFFECT"), _DT(L"A"));
         }
     }
 
 //-----------------------------------
-void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonType rtype)
+wxRibbonPage* ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonType rtype)
     {
     if (rtype != RibbonType::MainFrameRibbon)
         {
@@ -2854,6 +3071,9 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
         proofingButtonBar->AddHybridButton(XRCID("ID_EDIT_DICTIONARY"), _(L"Spell Checker"),
                                            ReadSvgIcon(L"ribbon/misspellings.svg"),
                                            _(L"Edit the spell checker's dictionary."));
+
+        proofingButtonBar->SetKeyTip(XRCID("ID_LAUNCH_SOURCE_FILE"), _DT(L"E"));
+        proofingButtonBar->SetKeyTip(XRCID("ID_EDIT_DICTIONARY"), _DT(L"K"));
         // sentence section
         auto* sentencePanel =
             new wxRibbonPanel(documentPage, wxID_ANY, _(L"Sentences"), wxNullBitmap,
@@ -2863,6 +3083,8 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
             XRCID("ID_SENTENCE_LENGTHS"), _(L"Long Sentences"),
             ReadSvgIcon(L"ribbon/long-sentence.svg"),
             _(L"Control how overly long sentences are determined."));
+
+        sentenceButtonBar->SetKeyTip(XRCID("ID_SENTENCE_LENGTHS"), _DT(L"S"));
         // sentence/paragraph deduction
         auto* deductionPanel = new wxRibbonPanel(
             documentPage, wxID_ANY, _(L"Sentence & Paragraph Deduction"), wxNullBitmap,
@@ -2885,6 +3107,11 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
             ReadSvgIcon(L"ribbon/capital-letter.svg"),
             _(L"Change whether sentences must begin with capital letters "
               "when determining sentence breaks."));
+
+        deductionButtonBar->SetKeyTip(XRCID("ID_LINE_ENDS"), _DT(L"N"));
+        deductionButtonBar->SetKeyTip(XRCID("ID_IGNORE_BLANK_LINES"), _DT(L"I"));
+        deductionButtonBar->SetKeyTip(XRCID("ID_IGNORE_INDENTING"), _DT(L"G"));
+        deductionButtonBar->SetKeyTip(XRCID("ID_SENTENCES_CAPITALIZED"), _DT(L"C"));
         // text exclusion
         auto* exclusionPanel =
             new wxRibbonPanel(documentPage, wxID_ANY, _(L"Text Exclusion"), wxNullBitmap,
@@ -2908,8 +3135,8 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
             ReadSvgIcon(L"ribbon/ignore-copyright.svg"),
             _(L"Exclude trailing copyright statements from the analysis."));
         exclusionButtonBar->AddToggleButton(XRCID("ID_EXCLUDE_TRAILING_CITATIONS"), _(L"Citations"),
-                                            ReadSvgIcon(L"ribbon/citation.svg")),
-            _(L"Exclude trailing citations from the analysis.");
+                                            ReadSvgIcon(L"ribbon/citation.svg"),
+                                            _(L"Exclude trailing citations from the analysis."));
         exclusionButtonBar->AddToggleButton(
             XRCID("ID_EXCLUDE_FILE_ADDRESSES"), _(L"File Names"),
             ReadSvgIcon(L"ribbon/internet.svg"),
@@ -2928,6 +3155,17 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
             XRCID("ID_EXCLUSION_TAGS"), _(L"Exclusion Tags"),
             ReadSvgIcon(L"ribbon/exclusion-tags.svg"),
             _(L"Specify tags that will exclude all text between them."));
+
+        exclusionButtonBar->SetKeyTip(XRCID("ID_TEXT_EXCLUSION"), _DT(L"X"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_INCOMPLETE_THRESHOLD"), _DT(L"M"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_AGGRESSIVELY"), _DT(L"A"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_COPYRIGHT_NOTICES"), _DT(L"O"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_TRAILING_CITATIONS"), _DT(L"J"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_FILE_ADDRESSES"), _DT(L"F"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_NUMERALS"), _DT(L"U"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_PROPER_NOUNS"), _DT(L"Y"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUDE_WORD_LIST"), _DT(L"W"));
+        exclusionButtonBar->SetKeyTip(XRCID("ID_EXCLUSION_TAGS"), _DT(L"Z"));
         // numeral syllabizing
         auto* numeralsPanel =
             new wxRibbonPanel(documentPage, wxID_ANY, _(L"Numerals"), wxNullBitmap,
@@ -2938,11 +3176,16 @@ void ReadabilityApp::LoadRibbonDocumentPage(wxRibbonBar* ribbon, const RibbonTyp
             XRCID("ID_NUMERAL_SYLLABICATION"), _(L"Syllabication"),
             ReadSvgIcon(L"ribbon/number-syllabize.svg"),
             _(L"Specify how syllables should be counted for numbers."));
+
+        numeralsButtonBar->SetKeyTip(XRCID("ID_NUMERAL_SYLLABICATION"), _DT(L"B"));
+
+        return documentPage;
         }
+    return nullptr;
     }
 
 //-----------------------------------
-void ReadabilityApp::LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype)
+wxRibbonPage* ReadabilityApp::LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype)
     {
     if (rtype != RibbonType::MainFrameRibbon)
         {
@@ -2974,6 +3217,14 @@ void ReadabilityApp::LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType r
         standardTestsBar->AddButton(XRCID("ID_REMOVE_TEST"), _(L"Remove"),
                                     ReadSvgIcon(L"ribbon/delete.svg"),
                                     _(L"Remove the selected test from the project."));
+
+        standardTestsBar->SetKeyTip(XRCID("ID_PRIMARY_AGE_TESTS_BUTTON"), _DT(L"I"));
+        standardTestsBar->SetKeyTip(XRCID("ID_SECONDARY_AGE_TESTS_BUTTON"), _DT(L"S"));
+        standardTestsBar->SetKeyTip(XRCID("ID_ADULT_TESTS_BUTTON"), _DT(L"A"));
+        standardTestsBar->SetKeyTip(XRCID("ID_SECOND_LANGUAGE_TESTS_BUTTON"), _DT(L"N"));
+        standardTestsBar->SetKeyTip(XRCID("ID_CUSTOM_TESTS"), _DT(L"C"));
+        standardTestsBar->SetKeyTip(XRCID("ID_TEST_BUNDLES"), _DT(L"B"));
+        standardTestsBar->SetKeyTip(XRCID("ID_REMOVE_TEST"), _DT(L"M"));
         // readability tools section
         auto* readabilityToolsPanel =
             new wxRibbonPanel(testsPage, wxID_ANY, _(L"Tools"), wxNullBitmap, wxDefaultPosition,
@@ -2982,12 +3233,14 @@ void ReadabilityApp::LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType r
         readabilityToolBar->AddButton(XRCID("ID_TESTS_OVERVIEW"), _(L"Tests Overview"),
                                       ReadSvgIcon(L"ribbon/tests-overview.svg"),
                                       _(L"View information about each readability test."));
+        readabilityToolBar->SetKeyTip(XRCID("ID_TESTS_OVERVIEW"), _DT(L"O"));
         if (rtype == RibbonType::BatchProjectRibbon)
             {
             readabilityToolBar->AddToggleButton(
                 XRCID("ID_TEST_EXPLANATIONS_WINDOW"), _(L"Test Explanations"),
                 ReadSvgIcon(L"ribbon/formula.svg"),
                 _(L"Read an explanation of the selected test score."));
+            readabilityToolBar->SetKeyTip(XRCID("ID_TEST_EXPLANATIONS_WINDOW"), _DT(L"X"));
             }
         readabilityToolBar->AddHybridButton(XRCID("ID_WORD_LISTS"), _(L"Word Lists"),
                                             ReadSvgIcon(L"tests/dale-chall-test.svg"),
@@ -2995,11 +3248,17 @@ void ReadabilityApp::LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType r
         readabilityToolBar->AddDropdownButton(
             XRCID("ID_BLANK_GRAPHS"), _(L"Blank Graphs"), ReadSvgIcon(L"ribbon/blank-graphs.svg"),
             _(L"Print or save blank readability graph templates."));
+
+        readabilityToolBar->SetKeyTip(XRCID("ID_WORD_LISTS"), _DT(L"W"));
+        readabilityToolBar->SetKeyTip(XRCID("ID_BLANK_GRAPHS"), _DT(L"G"));
+
+        return testsPage;
         }
+    return nullptr;
     }
 
 //-----------------------------------
-void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
+wxRibbonPage* ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
     {
     if (rtype != RibbonType::MainFrameRibbon)
         {
@@ -3012,6 +3271,7 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         toolButtonBar->AddButton(XRCID("ID_WEB_HARVEST"), _(L"Web Harvester"),
                                  ReadSvgIcon(L"ribbon/web-export.svg"),
                                  _(L"Download and analyze multiple webpages."));
+        toolButtonBar->SetKeyTip(XRCID("ID_WEB_HARVEST"), _DT(L"W"));
 #ifndef NDEBUG
         toolButtonBar->AddButton(XRCID("ID_CHAPTER_SPLIT"), _(L"Chapter Split"),
                                  ReadSvgIcon(L"ribbon/chapter-split.svg"),
@@ -3019,16 +3279,21 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         toolButtonBar->AddButton(XRCID("ID_FIND_DUPLICATE_FILES"), _(L"Find Duplicates"),
                                  ReadSvgIcon(L"ribbon/duplicate-files.svg"),
                                  _(L"Search for and remove duplicate files."));
+        toolButtonBar->SetKeyTip(XRCID("ID_CHAPTER_SPLIT"), _DT(L"C"));
+        toolButtonBar->SetKeyTip(XRCID("ID_FIND_DUPLICATE_FILES"), _DT(L"F"));
 #endif
         toolButtonBar->AddButton(wxID_PREFERENCES, _(L"Options"),
                                  ReadSvgIcon(L"ribbon/configure.svg"),
                                  _(L"Change the program's general options."));
         toolButtonBar->AddButton(XRCID("ID_VIEW_LOG_REPORT"), _(L"Log Report"),
                                  ReadSvgIcon(L"ribbon/log-book.svg"));
+        toolButtonBar->SetKeyTip(wxID_PREFERENCES, _DT(L"O"));
+        toolButtonBar->SetKeyTip(XRCID("ID_VIEW_LOG_REPORT"), _DT(L"G"));
         if (GetAppOptions()->IsShowingDeveloperTab())
             {
             toolButtonBar->AddButton(XRCID("ID_SCRIPT_WINDOW"), _(L"Developer Tools"),
                                      ReadSvgIcon(L"ribbon/dev-tools.svg"));
+            toolButtonBar->SetKeyTip(XRCID("ID_SCRIPT_WINDOW"), _DT(L"E"));
             }
 
         // image section
@@ -3042,11 +3307,17 @@ void ReadabilityApp::LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype)
         imageButtonBar->AddButton(XRCID("ID_TOOLS_IMAGE_EFFECT"), _(L"Apply Effect"),
                                   ReadSvgIcon(L"ribbon/paint.svg"),
                                   _(L"Apply an effect to an image and save the result."));
+
+        imageButtonBar->SetKeyTip(XRCID("ID_TOOLS_MERGE_IMAGES"), _DT(L"M"));
+        imageButtonBar->SetKeyTip(XRCID("ID_TOOLS_IMAGE_EFFECT"), _DT(L"A"));
+
+        return toolsPage;
         }
+    return nullptr;
     }
 
 //-----------------------------------
-void ReadabilityApp::LoadRibbonHelpPage(wxRibbonBar* ribbon)
+wxRibbonPage* ReadabilityApp::LoadRibbonHelpPage(wxRibbonBar* ribbon)
     {
     auto* helpPage = new wxRibbonPage(ribbon, wxID_ANY, _(L"Help"));
     auto* helpPanel =
@@ -3078,16 +3349,31 @@ void ReadabilityApp::LoadRibbonHelpPage(wxRibbonBar* ribbon)
                                      ReadSvgIcon(L"ribbon/examples.svg"),
                                      _(L"Analyze example documents from the help."));
 
+    helpButtonBar->SetKeyTip(wxID_HELP, _DT(L"E"));
+    helpButtonBar->SetKeyTip(XRCID("ID_HELP_MANUAL"), _DT(L"M"));
+    helpButtonBar->SetKeyTip(XRCID("ID_TESTS_REFERENCE"), _DT(L"F"));
+    helpButtonBar->SetKeyTip(XRCID("ID_SHORTCUTS_CHEATSHEET"), _DT(L"S"));
+    helpButtonBar->SetKeyTip(XRCID("ID_RELEASE_NOTES"), _DT(L"N"));
+    helpButtonBar->SetKeyTip(XRCID("ID_PROGRAMMING_MANUAL"), _DT(L"G"));
+    helpButtonBar->SetKeyTip(XRCID("ID_SYSADMIN"), _DT(L"A"));
+    helpButtonBar->SetKeyTip(XRCID("ID_EXAMPLES"), _DT(L"X"));
+
     auto* supportPanel = new wxRibbonPanel(helpPage, wxID_ANY, _(L"Support"), wxNullBitmap);
     auto* supportButtonBar = new wxRibbonButtonBar(supportPanel);
 #ifndef APP_STORE_BUILD
     supportButtonBar->AddButton(XRCID("ID_CHECK_FOR_UPDATES"), _(L"Updates"),
                                 ReadSvgIcon(L"ribbon/updates.svg"), _(L"Check for updates."));
+    supportButtonBar->SetKeyTip(XRCID("ID_CHECK_FOR_UPDATES"), _DT(L"U"));
 #endif
     supportButtonBar->AddButton(XRCID("ID_SUPPORT"), _(L"Support"),
                                 ReadSvgIcon(L"ribbon/support.svg"), _(L"Contact support."));
     supportButtonBar->AddButton(wxID_ABOUT, _(L"About"), ReadSvgIcon(L"ribbon/app-logo.svg"),
                                 _(L"Learn more about the program."));
+
+    supportButtonBar->SetKeyTip(XRCID("ID_SUPPORT"), _DT(L"O"));
+    supportButtonBar->SetKeyTip(wxID_ABOUT, _DT(L"B"));
+
+    return helpPage;
     }
 
 //-----------------------------------
@@ -3106,6 +3392,10 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     scriptBar->AddButton(XRCID("ID_SCRIPT_SAVE"), _(L"Save"), ReadSvgIcon(L"ribbon/file-save.svg"),
                          _(L"Save the script."));
 
+    scriptBar->SetKeyTip(XRCID("ID_SCRIPT_NEW"), _DT(L"N"));
+    scriptBar->SetKeyTip(XRCID("ID_SCRIPT_OPEN"), _DT(L"O"));
+    scriptBar->SetKeyTip(XRCID("ID_SCRIPT_SAVE"), _DT(L"S"));
+
     auto* runBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Run"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
@@ -3120,6 +3410,11 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
         XRCID("ID_SCRIPT_CLEAR_GLOBALS"), _(L"Clear Globals"), ReadSvgIcon(L"ribbon/reload.svg"),
         _(L"Restart the Lua interpreter, clearing all global variables from previous runs."));
 
+    runBar->SetKeyTip(XRCID("ID_SCRIPT_RUN"), _DT(L"U"));
+    runBar->SetKeyTip(XRCID("ID_SCRIPT_CONTINUE"), _DT(L"C"));
+    runBar->SetKeyTip(XRCID("ID_SCRIPT_STOP"), _DT(L"ES"));
+    runBar->SetKeyTip(XRCID("ID_SCRIPT_CLEAR_GLOBALS"), _DT(L"G"));
+
     auto* clipboardBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Clipboard"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
@@ -3129,6 +3424,10 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
                             _(L"Cut."));
     clipboardBar->AddButton(XRCID("ID_SCRIPT_COPY"), _(L"Copy"), ReadSvgIcon(L"ribbon/copy.svg"),
                             _(L"Copy."));
+
+    clipboardBar->SetKeyTip(XRCID("ID_SCRIPT_PASTE"), _DT(L"A"));
+    clipboardBar->SetKeyTip(XRCID("ID_SCRIPT_CUT"), _DT(L"K"));
+    clipboardBar->SetKeyTip(XRCID("ID_SCRIPT_COPY"), _DT(L"Y"));
 
     auto* editBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Edit"), wxNullBitmap,
@@ -3147,6 +3446,13 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     editBar->AddButton(XRCID("ID_SCRIPT_UNCOMMENT"), _(L"Uncomment"),
                        ReadSvgIcon(L"ribbon/uncomment.svg"), _(L"Uncomment the selected lines."));
 
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_UNDO"), _DT(L"Z"));
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_REDO"), _DT(L"I"));
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_DUPLICATE_LINE"), _DT(L"ED"));
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_SELECT_ALL"), _DT(L"FA"));
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_COMMENT"), _DT(L"M"));
+    editBar->SetKeyTip(XRCID("ID_SCRIPT_UNCOMMENT"), _DT(L"FU"));
+
     auto* findBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Find"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
@@ -3157,6 +3463,10 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     findBar->AddButton(XRCID("ID_SCRIPT_GOTO_LINE"), _(L"Go To Line"),
                        ReadSvgIcon(L"ribbon/go-to-line.svg"), _(L"Go to a specific line."));
 
+    findBar->SetKeyTip(XRCID("ID_SCRIPT_FIND"), _DT(L"JF"));
+    findBar->SetKeyTip(XRCID("ID_SCRIPT_REPLACE"), _DT(L"W"));
+    findBar->SetKeyTip(XRCID("ID_SCRIPT_GOTO_LINE"), _DT(L"B"));
+
     auto* debugBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Debug"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE));
@@ -3165,6 +3475,9 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
                         wxRIBBON_BUTTON_TOGGLE);
     debugBar->AddButton(XRCID("ID_SCRIPT_CLEAR_DEBUG"), _(L"Clear"),
                         ReadSvgIcon(L"ribbon/clear.svg"), _(L"Clear the log window."));
+
+    debugBar->SetKeyTip(XRCID("ID_SCRIPT_TOGGLE_DEBUG"), _DT(L"JD"));
+    debugBar->SetKeyTip(XRCID("ID_SCRIPT_CLEAR_DEBUG"), _DT(L"QC"));
 
     auto* refBar = new wxRibbonButtonBar(new wxRibbonPanel(
         GetMainFrameEx()->GetDeveloperRibbonPage(), wxID_ANY, _(L"Reference"), wxNullBitmap,
@@ -3178,6 +3491,10 @@ void ReadabilityApp::LoadRibbonDeveloperPage(wxRibbonBar* ribbon)
     refBar->AddButton(XRCID("ID_SCRIPT_LUA_REFERENCE"), _(L"Lua Reference"),
                       ReadSvgIcon(darkMode ? L"ribbon/lua-dark-mode.svg" : L"ribbon/lua.svg"),
                       _(L"View the Lua Reference Manual."));
+
+    refBar->SetKeyTip(XRCID("ID_SCRIPT_FUNCTION_BROWSER"), _DT(L"QF"));
+    refBar->SetKeyTip(XRCID("ID_SCRIPT_API_PDF"), _DT(L"XA"));
+    refBar->SetKeyTip(XRCID("ID_SCRIPT_LUA_REFERENCE"), _DT(L"XL"));
     }
 
 //-----------------------------------
@@ -3192,6 +3509,9 @@ void ReadabilityApp::LoadRibbonLogPage(wxRibbonBar* ribbon)
                          _(L"Save the log report."));
     exportBar->AddButton(XRCID("ID_LOG_TAB_PRINT"), _(L"Print"), ReadSvgIcon(L"ribbon/print.svg"),
                          _(L"Print the log report."));
+
+    exportBar->SetKeyTip(XRCID("ID_LOG_TAB_SAVE"), _DT(L"S"));
+    exportBar->SetKeyTip(XRCID("ID_LOG_TAB_PRINT"), _DT(L"I"));
 
     GetMainFrameEx()->m_logEditButtonBar = new wxRibbonButtonBar(
         new wxRibbonPanel(GetMainFrameEx()->GetLogRibbonPage(), wxID_ANY, _(L"Edit"), wxNullBitmap,
@@ -3217,6 +3537,14 @@ void ReadabilityApp::LoadRibbonLogPage(wxRibbonBar* ribbon)
     GetMainFrameEx()->m_logEditButtonBar->AddToggleButton(
         XRCID("ID_LOG_TAB_VERBOSE"), _(L"Verbose"), ReadSvgIcon(L"ribbon/info.svg"),
         _(L"Toggles whether the logging system includes more detailed information."));
+
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_COPY"), _DT(L"C"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_SELECT_ALL"), _DT(L"A"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_SORT"), _DT(L"O"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_CLEAR"), _DT(L"K"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_REFRESH"), _DT(L"F"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_REALTIME_UPDATE"), _DT(L"U"));
+    GetMainFrameEx()->m_logEditButtonBar->SetKeyTip(XRCID("ID_LOG_TAB_VERBOSE"), _DT(L"B"));
     }
 
 //-----------------------------------
@@ -3230,9 +3558,9 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
     auto* ribbon = new wxRibbonBar(frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                    wxRIBBON_BAR_SHOW_PAGE_ICONS | wxRIBBON_BAR_DEFAULT_STYLE);
     LoadRibbonHomePage(ribbon, rtype, doc);
-    LoadRibbonDocumentPage(ribbon, rtype);
-    LoadRibbonReadabilityPage(ribbon, rtype);
-    LoadRibbonToolsPage(ribbon, rtype);
+    auto* documentPage = LoadRibbonDocumentPage(ribbon, rtype);
+    auto* readabilityPage = LoadRibbonReadabilityPage(ribbon, rtype);
+    auto* toolsPage = LoadRibbonToolsPage(ribbon, rtype);
     if (rtype == RibbonType::MainFrameRibbon)
         {
         LoadRibbonDeveloperPage(ribbon);
@@ -3246,7 +3574,27 @@ wxRibbonBar* ReadabilityApp::CreateRibbon(wxWindow* frame, const wxDocument* doc
             ribbon->HidePage(ribbon->GetPageNumber(GetMainFrameEx()->GetLogRibbonPage()));
             }
         }
-    LoadRibbonHelpPage(ribbon);
+    auto* helpPage = LoadRibbonHelpPage(ribbon);
+
+    ribbon->SetPageKeyTip(GetMainFrameEx()->GetHomeRibbonPage(), _DT(L"H"));
+    if (documentPage != nullptr)
+        {
+        ribbon->SetPageKeyTip(documentPage, _DT(L"D"));
+        }
+    if (readabilityPage != nullptr)
+        {
+        ribbon->SetPageKeyTip(readabilityPage, _DT(L"R"));
+        }
+    if (toolsPage != nullptr)
+        {
+        ribbon->SetPageKeyTip(toolsPage, _DT(L"T"));
+        }
+    if (rtype == RibbonType::MainFrameRibbon)
+        {
+        ribbon->SetPageKeyTip(GetMainFrameEx()->GetDeveloperRibbonPage(), _DT(L"V"));
+        ribbon->SetPageKeyTip(GetMainFrameEx()->GetLogRibbonPage(), _DT(L"L"));
+        }
+    ribbon->SetPageKeyTip(helpPage, _DT(L"P"));
 
     ribbon->SetArtProvider(new wxRibbonMSWFlatArtProvider);
 

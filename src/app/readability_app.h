@@ -538,12 +538,12 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void LoadRibbonHomePageStatisticsReportSection(wxRibbonPage* homePage);
     void LoadRibbonHomePagePlainLanguageGuideSection(wxRibbonPage* homePage);
     void LoadRibbonHomePageGraphSection(wxRibbonPage* homePage, const wxDocument* doc);
-    void LoadRibbonDocumentPage(wxRibbonBar* ribbon, RibbonType rtype);
-    void LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);
-    void LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype);
+    wxRibbonPage* LoadRibbonDocumentPage(wxRibbonBar* ribbon, RibbonType rtype);
+    wxRibbonPage* LoadRibbonReadabilityPage(wxRibbonBar* ribbon, RibbonType rtype);
+    wxRibbonPage* LoadRibbonToolsPage(wxRibbonBar* ribbon, RibbonType rtype);
     void LoadRibbonDeveloperPage(wxRibbonBar* ribbon);
     void LoadRibbonLogPage(wxRibbonBar* ribbon);
-    void LoadRibbonHelpPage(wxRibbonBar* ribbon);
+    wxRibbonPage* LoadRibbonHelpPage(wxRibbonBar* ribbon);
 
     // menu creation
     void FillPrintMenu(wxMenu& printMenu, const RibbonType rtype);
