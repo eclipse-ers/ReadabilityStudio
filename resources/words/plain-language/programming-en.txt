@@ -99,8 +99,9 @@ I/O	Input, Output	Input/Output. The communication of data between a program and 
 ICMP	Internet, Control, Message, Protocol	Internet Control Message Protocol. A network protocol used for error reporting and diagnostic messages, including ping.
 IDE; IDEs; IDE's	Integrated, Development, Environment	Integrated Development Environment. A programming application that combines an editor with tools such as compiling, debugging, code navigation, and version control.
 IDL	Interface, Definition, Language	Interface Definition Language. A C-like language used to define COM interfaces, methods, and types. Compiled by MIDL to generate proxy/stub code, header files, and GUIDs. The “contract” that both caller and implementer agree on.
-IIFE	Immediately, Invoked, Function, Expression	Immediately Invoked Function Expression. A function defined and called in the same expression, commonly used to create a private scope.
-IMAP	Internet, Message, Access, Protocol	Internet Message Access Protocol. A protocol used by email clients to retrieve and manage messages stored on a mail server.
+IIFE; IIFEs; IIFE's	Immediately, Invoked, Function, Expression	Immediately Invoked Function Expression. A function defined and called in the same expression, commonly used to create a private scope.
+IILE; IILEs; IILE's	Immediately, Invoked, Lambda, Expression	Immediately Invoked Lambda Expression. A lambda defined and called in the same expression, commonly used to initialize a `const` variable with complex logic.
+IMAP	Internet, Message, Access, ProtocolInternet Message Access Protocol. A protocol used by email clients to retrieve and manage messages stored on a mail server.
 IMP	Raw, function, pointer	What a selector resolves to at runtime. Caching IMPs is how the runtime avoids repeated name lookups. You almost never touch these directly, but they're the machinery behind message sends.
 in-proc	In-Process, COM	A DLL loaded directly into your process. Fastest method, no marshaling needed. `CoCreateInstance` with `CLSCTX_INPROC_SERVER`. Most COM objects you work with are in-proc.
 internal linkage	Visible, only, translation	`static` on a file-scope variable or function, or anonymous namespace. The symbol isn't exported to the linker.
