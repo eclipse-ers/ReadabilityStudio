@@ -438,6 +438,11 @@ When *{{< var PROGRAM_NAME >}}* encounters a hyphenated word at the end of a lin
 With the above example, *Bus-iness* will be recognized as *Business*.
 In contrast, *Point-of-Sale* will remain as a hyphenated compound word because *PointofSale* is not a known word.
 
+For languages with no available dictionary, there is no way to confirm whether the joined word is correct.
+In that case, the following is used instead:
+if only one hyphen is in the combined word, it is assumed to be a pagination artifact and is removed.
+If more than one hyphen remains, then the word is assumed to be a multi-part compound word and all its hyphens are kept.
+
 ## Special Characters
 
 When a *%* is preceded by a space, the program will check if the character before the space is a number.

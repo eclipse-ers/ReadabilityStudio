@@ -71,6 +71,7 @@
 #include "syllable.h"
 #include "tokenize.h"
 #include "word_functional.h"
+#include <algorithm>
 #include <cstdlib>
 #include <limits>
 #include <map>
@@ -146,6 +147,15 @@ class document
         grammar::base_syllabize& countSyllables = *syllabize;
         const punctuation::punctuation_count countPunctuation;
 
+        // If this language has no known spellings to consult, then a split word with only
+        // one hyphen (i.e., the one at the end of the line) is assumed to be a
+        // pagination artifact, rather than an actual part of the word.
+        const bool dictionaryIsEmpty =
+            (is_correctly_spelled.get_word_list() == nullptr ||
+             is_correctly_spelled.get_word_list()->get_list_size() == 0) &&
+            (is_correctly_spelled.get_secondary_word_list() == nullptr ||
+             is_correctly_spelled.get_secondary_word_list()->get_list_size() == 0);
+
         const wchar_t* currentChar = nullptr;
 
         while ((currentChar = tokenizeText()) != nullptr)
@@ -185,7 +195,13 @@ class document
                         currentWordNoHyphens.push_back(currentChar[i]);
                         }
                     }
-                if (is_correctly_spelled(currentWordNoHyphens))
+                // A word with more than one embedded hyphen is almost certainly a genuine
+                // multi-part compound (e.g., "man-at-arms"), so its hyphens are left alone
+                // (unless the dictionary confirms the fully joined form).
+                const size_t hyphenCount = static_cast<size_t>(std::count_if(
+                    currentWord.cbegin(), currentWord.cend(), characters::is_character::is_hyphen));
+                if (is_correctly_spelled(currentWordNoHyphens) ||
+                    (hyphenCount == 1 && dictionaryIsEmpty))
                     {
                     m_words.emplace_back(
                         currentWordNoHyphens.c_str(), currentWordNoHyphens.length(),

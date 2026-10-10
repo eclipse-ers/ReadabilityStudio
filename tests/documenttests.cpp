@@ -1900,6 +1900,32 @@ TEST_CASE("Document misspellings", "[document]")
         CHECK(doc.get_words().at(1) == L"pumpkin");
         CHECK(doc.get_misspelled_words().size() == 0);
         }
+    SECTION("Split Word Multiple Hyphens Kept When Dictionary Empty")
+        {
+        // Known_spellings and Secondary_known_spellings are left empty here,
+        // simulating a language with no dictionary content (e.g., Spanish or German).
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t text[] = L"Man-at-\narms.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_word_count() == 1);
+        CHECK(doc.get_words().at(0) == L"Man-at-arms");
+        }
+    SECTION("Split Word Single Hyphen Joined When Dictionary Empty")
+        {
+        // with no dictionary to consult, a lone hyphen at the line break is
+        // assumed to be a pagination artifact and is removed.
+        document<MYWORD> doc(L"", &ENsyllabizer, &ENStemmer, &is_conjunction, &pmap, &copyrightPMap,
+                             &citationPMap, &Known_proper_nouns, &Known_personal_nouns,
+                             &Known_spellings, &Secondary_known_spellings,
+                             &Programming_known_spellings, &Stop_list);
+        const wchar_t text[] = L"Infor-\nmation.";
+        doc.load_document(text, wcslen(text), false, false, false, false);
+        CHECK(doc.get_word_count() == 1);
+        CHECK(doc.get_words().at(0) == L"Information");
+        }
     }
 
 TEST_CASE("Document misspellings 2", "[document]")
