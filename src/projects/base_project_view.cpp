@@ -614,6 +614,7 @@ void BaseProjectView::Present()
     // Associate the menu with this view.
     if (m_frame->GetMenuBar() == nullptr)
         {
+        wxGetApp().BindQuitMenu(GetMenuBar());
         m_frame->SetMenuBar(GetMenuBar());
         }
 #endif

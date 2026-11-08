@@ -926,6 +926,32 @@ void ReadabilityApp::MacOpenFiles(const wxArrayString& files)
         CallAfter([this, file]() { GetMainFrame()->OpenFile(file); });
         }
     }
+
+//-----------------------------------
+void ReadabilityApp::BindQuitMenu(wxMenuBar* menuBar)
+    {
+    // macOS puts Quit in the application menu, which wxWidgets builds itself.
+    // Its default action stops the main loop without closing the open projects.
+    if (menuBar == nullptr)
+        {
+        return;
+        }
+    if (wxMenu* const appleMenu = menuBar->OSXGetAppleMenu(); appleMenu != nullptr)
+        {
+        appleMenu->Bind(wxEVT_MENU, &ReadabilityApp::OnQuitMenu, this, wxApp::s_macExitMenuItemId);
+        }
+    }
+
+//-----------------------------------
+void ReadabilityApp::OnQuitMenu([[maybe_unused]] wxCommandEvent& event)
+    {
+    if (!GetMainFrameEx()->ConfirmCanClose() || !GetDocManager()->CloseDocuments(false))
+        {
+        return;
+        }
+
+    GetMainFrame()->Close(true);
+    }
 #endif
 
 //-----------------------------------
@@ -1514,6 +1540,7 @@ void ReadabilityApp::LoadInterface()
             checkForUpdatesMenu->Destroy(XRCID("ID_CHECK_FOR_UPDATES"));
             }
     #endif
+        BindQuitMenu(menuBar);
         GetMainFrame()->SetMenuBar(menuBar);
         }
     else
@@ -3677,13 +3704,13 @@ void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
         // TRANSLATORS: "%s" is the software publisher.
         .Copyright(wxString::Format(
             _(L"Copyright ©2006–2025 Oleander Software, Ltd.\n"
-                           "Copyright ©2025–%d %s.\nAll rights reserved.\n\n"
-                           "%s® is a Trademark of %s.\n"
-                           "Jakarta and Jakarta EE are Trademarks of %s.\n"
-                           "Eclipse® is a Trademark of %s.\n"
-                           "Eclipse Foundation is a Trademark of %s."),
+              "Copyright ©2025–%d %s.\nAll rights reserved.\n\n"
+              "%s® is a Trademark of %s.\n"
+              "Jakarta and Jakarta EE are Trademarks of %s.\n"
+              "Eclipse® is a Trademark of %s.\n"
+              "Eclipse Foundation is a Trademark of %s."),
             buildDate.GetYear(), wxGetApp().GetVendorDisplayName(), _READSTUDIO_APP_LONG_NAME,
-                         wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName(),
+            wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName(),
             wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName()))
         .Eula(eula)
         .AddCitationFile(_DT(L"MLA:"), wxGetApp().FindResourceFile(_DT(L"citations.mla")))
@@ -6239,13 +6266,29 @@ void MainFrame::OnClose(wxCloseEvent& event)
         return;
         }
 
+    if (event.CanVeto() && !ConfirmCanClose())
+        {
+        event.Veto();
+        return;
+        }
+
+    wxGetApp().GetAppOptions()->SetAppWindowMaximized(IsMaximized());
+    wxGetApp().GetAppOptions()->SetAppWindowWidth(GetSize().GetWidth());
+    wxGetApp().GetAppOptions()->SetAppWindowHeight(GetSize().GetHeight());
+    wxGetApp().GetAppOptions()->SetPaperId(wxGetApp().GetPrintData()->GetPaperId());
+    wxGetApp().GetAppOptions()->SetPaperOrientation(wxGetApp().GetPrintData()->GetOrientation());
+    event.Skip();
+    }
+
+//-------------------------------------------------------
+bool MainFrame::ConfirmCanClose()
+    {
     if (LuaInterpreter::IsRunning())
         {
         ActivateScriptWorkbench();
         wxMessageBox(_(L"A script is still running. Please stop it before closing."),
                      _(L"Script Running"), wxOK | wxICON_EXCLAMATION);
-        event.Veto();
-        return;
+        return false;
         }
 
     const auto& docs = wxGetApp().GetDocManager()->GetDocuments();
@@ -6256,22 +6299,16 @@ void MainFrame::OnClose(wxCloseEvent& event)
             {
             wxMessageBox(_(L"Project still processing. Please wait before closing."),
                          wxFileName::StripExtension(doc->GetTitle()), wxOK | wxICON_EXCLAMATION);
-            event.Veto();
-            return;
+            return false;
             }
         }
     if (GetScriptWorkbench() != nullptr && !GetScriptWorkbench()->PromptToSaveUnsavedScripts())
         {
         ActivateScriptWorkbench();
-        event.Veto();
-        return;
+        return false;
         }
-    wxGetApp().GetAppOptions()->SetAppWindowMaximized(IsMaximized());
-    wxGetApp().GetAppOptions()->SetAppWindowWidth(GetSize().GetWidth());
-    wxGetApp().GetAppOptions()->SetAppWindowHeight(GetSize().GetHeight());
-    wxGetApp().GetAppOptions()->SetPaperId(wxGetApp().GetPrintData()->GetPaperId());
-    wxGetApp().GetAppOptions()->SetPaperOrientation(wxGetApp().GetPrintData()->GetOrientation());
-    event.Skip();
+
+    return true;
     }
 
 //-------------------------------------------------------

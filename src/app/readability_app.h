@@ -94,7 +94,7 @@ class BaseProject;
 
 namespace Wisteria::UI
     {
-class ScriptWorkbenchPanel;
+    class ScriptWorkbenchPanel;
     }
 
 using Wisteria::UI::LuaInterpreter;
@@ -138,6 +138,10 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
     void OnBlankGraph(const wxCommandEvent& event);
     void OnTestsOverview([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnClose(wxCloseEvent& event);
+    /// @brief Checks for running scripts, processing projects, and unsaved scripts.
+    /// @returns @c true if the application is safe to close.
+    [[nodiscard]]
+    bool ConfirmCanClose();
     void OnToolsOptions([[maybe_unused]] wxRibbonButtonBarEvent& event);
     void OnEditWordList([[maybe_unused]] wxCommandEvent& event);
     void OnEditPhraseList([[maybe_unused]] wxCommandEvent& event);
@@ -419,6 +423,12 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     bool OnCmdLineParsed(wxCmdLineParser& cmdParser) final;
 #ifdef __WXOSX__
     void MacOpenFiles(const wxArrayString& files) final;
+    /// @brief Connects a menu bar's Quit item to OnQuitMenu().
+    /// @param menuBar The menu bar to connect.
+    void BindQuitMenu(wxMenuBar* menuBar);
+    /// @brief Closes the open projects, then quits the application.
+    /// @param event The menu event (unused).
+    void OnQuitMenu([[maybe_unused]] wxCommandEvent& event);
 #endif
     void LoadInterface();
     void LoadMenus();
@@ -504,12 +514,6 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         {
         wxASSERT_MSG(m_appOptions, L"Call CreateAppOptions() to construct this interface!");
         return m_appOptions;
-        }
-
-    [[nodiscard]]
-    LuaInterpreter& GetLuaRunner() noexcept
-        {
-        return m_LuaRunner;
         }
 
     [[nodiscard]]
@@ -659,12 +663,6 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     void ShowSplashscreen();
 
     [[nodiscard]]
-    static const std::map<wxWindowID, wxWindowID>& GetDynamicIdMap() noexcept
-        {
-        return m_dynamicIdMap;
-        }
-
-    [[nodiscard]]
     const std::map<wxString, wxString>& GetShapeMap() const noexcept
         {
         return m_shapeMap;
@@ -677,18 +675,12 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
         }
 
   private:
-    /// @brief IDs exposed to scripting and their respective dynamic IDs in the
-    /// framework.
-    /// @details Set (or add to this) in your framework's initialization.
-    static std::map<wxWindowID, wxWindowID> m_dynamicIdMap;
-
     PreAppInitOptions m_preInitOptions;
     std::unique_ptr<ReadabilityAppOptions> m_appOptions{ nullptr };
     bool LoadWordLists(const wxString& AppSettingFolderPath);
     wxArrayString m_lastSelectedWebPages;
     wxString m_lastSelectedDocFilter;
     bool m_forceProjectWizard{ false };
-    LuaInterpreter m_LuaRunner;
     wxString m_CustomEnglishDictionaryPath;
     wxString m_CustomSpanishDictionaryPath;
     wxString m_CustomGermanDictionaryPath;

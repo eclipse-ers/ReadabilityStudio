@@ -1661,6 +1661,12 @@ void ProjectDoc::UpdateSourceFileModifiedTime()
 //-------------------------------------------------------
 void ProjectDoc::OnRealTimeTimer([[maybe_unused]] wxTimerEvent& event)
     {
+    // wait while the user is working in a dialog
+    if (Wisteria::UI::BaseApp::IsModalDialogOpen())
+        {
+        return;
+        }
+
     if (GetDocumentStorageMethod() == TextStorage::LoadFromExternalDocument)
         {
         StopRealtimeUpdate();
