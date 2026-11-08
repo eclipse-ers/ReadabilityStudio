@@ -19,10 +19,12 @@ SetStippleShape(string shapeId)
 Available named shapes are:
 <!--translate:off-->
 `"sun"`, `"book"`, `"fall-leaf"`, `"man"`, `"woman"`, `"business-woman"`, `"tire"`, `"flower"`,
-`"warning-road-sign"`, `"location-marker"`, `"graduation-cap"`, `"car"`, `"newspaper"`,
-`"snowflake"`, `"blackboard"`, `"clock"`, `"ruler"`, `"ivbag"`, `"cold-thermometer"`, `"hot-thermometer"`,
+`"sunflower"`, `"warning-road-sign"`, `"location-marker"`, `"graduation-cap"`, `"car"`, `"newspaper"`,
+`"snowflake"`, `"blackboard"`, `"clock"`, `"ruler"`, `"curving-road"`, `"ivbag"`, `"cold-thermometer"`, `"hot-thermometer"`,
 `"apple"`, `"granny-smith-apple"`, `"heart"`, `"immaculate-heart"`, `"immaculate-heart-with-sword"`, `"flame"`, `"office"`, `"factory"`,
-`"house"`, `"barn"`, `"farm"`, `"hundred-dollar-bill"`, `"pumpkin"`, `"jack-o-lantern"`, `"monitor"`.
+`"house"`, `"barn"`, `"farm"`, `"hundred-dollar-bill"`, `"pumpkin"`, `"jack-o-lantern"`, `"monitor"`,
+`"cheese-pizza"`, `"pepperoni-pizza"`, `"hawaiian-pizza"`, `"chocolate-chip-cookie"`, `"pumpkin-pie"`,
+`"coffee-shop-cup"`, `"pill"`, `"tractor"`, `"butterfly"`, `"star"`.
 <!--translate:on-->
 :::
 

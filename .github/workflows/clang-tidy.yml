@@ -27,7 +27,6 @@ jobs:
       # Tip: list the folder roots; the step adds '/*' for you.
       EXCLUDE_DIRS: |
         src/Catch2
-        src/lua
         src/tinyxml2
         src/tinyexpr-plusplus
         src/OleanderStemmingLibrary
@@ -40,12 +39,13 @@ jobs:
         src/Wisteria-Dataviz/src/wxStartPage/demo
         src/Wisteria-Dataviz/src/wxpdfdoc
         src/Wisteria-Dataviz/src/easyexif
+        src/Wisteria-Dataviz/src/lua
         src/Wisteria-Dataviz/tests
         src/Wisteria-Dataviz/demo
 
       EXCLUDE_FILES: |
         src/app/version.h
-        src/lua-scripting/luna.h
+        src/Wisteria-Dataviz/src/lua-scripting/luna.h
         src/Wisteria-Dataviz/src/util/donttranslate.h
         /usr/include/gtk-3.0/gtk/gtkshortcutsshortcut.h
         wxWidgets/include/wx/notebook.h

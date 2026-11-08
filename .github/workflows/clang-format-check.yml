@@ -20,9 +20,7 @@ jobs:
             ! -path 'src/tinyxml2/*' \
             ! -path 'src/tinyexpr-plusplus/*' \
             ! -path 'src/OleanderStemmingLibrary/*' \
-            ! -path 'src/lua/*' \
-            ! -path 'src/Catch2/*' \
-            ! -path 'src/lua-scripting/luna.h')
+            ! -path 'src/Catch2/*')
           echo "$FILES" | wc -l | xargs -I{} echo "Checking {} files..."
           echo "$FILES" | xargs sed -i 's/\r//'
           echo "$FILES" | xargs clang-format-19 --dry-run --Werror
