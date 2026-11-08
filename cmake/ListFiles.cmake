@@ -16,7 +16,8 @@ win_loss_sparkline[.]cpp|multi_series_lineplot[.]cpp|likertchart[.]cpp|waffle_ch
 pivot[.]cpp|kmlreader[.]cpp|geojsonreader[.]cpp|geojsonreader[.]cpp|geofeature[.]cpp|geodataset[.]cpp|geofeature[.]cpp|\
 funnelchart[.]cpp|duboisspiralchart[.]cpp|choroplethmap[.]cpp|wilmarth_bridge_plot[.]cpp|bulletchart[.]cpp|\
 objectgallery[.]cpp|waterfallchart[.]cpp|nightingale_rose_chart[.]cpp|racetrackchart[.]cpp|pictograph[.]cpp|\
-pivot[.]cpp|subset[.]cpp|join[.]cpp|clone[.]cpp|xrc_menu_strings[.]cpp)")
+duelingpiechart[.]cpp|ishikawadiagram[.]cpp|runchart[.]cpp|spcchart[.]cpp|dataguidectrl[.]cpp|\
+pivot[.]cpp|join_inner[.]cpp|join_left[.]cpp|optionsdlg[.]cpp|xrc_menu_strings[.]cpp)")
 
 # these files get compiled into larger ones that are included with the distribution instead
 set(WORD_FILES_TO_REMOVE_FILTER "(common-dictionary|base-(english|spanish|german)-dictionary[.]txt|base-non-personal[.]txt|base-personal[.]txt|base-english[.]txt|\
@@ -27,21 +28,7 @@ get_filename_component(FILE_SRC_PATH "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 
 message(STATUS "Generating file lists for build system.")
 
-# Don't touch the file unless it is out of date or missing.
-# CMake generators may break if build files get updated but their content didn't actually change.
-function(update_file_if_needed FILE_MANIFEST_PATH FILE_CONTENT)
-    if(NOT EXISTS "${FILE_MANIFEST_PATH}")
-        message(STATUS "${FILE_MANIFEST_PATH}: creating list.")
-        file(WRITE "${FILE_MANIFEST_PATH}" "${FILE_CONTENT}")
-    else()
-        file(READ "${FILE_MANIFEST_PATH}" ORIGINAL_FILE_CONTENT)
-        string(COMPARE NOTEQUAL "${FILE_CONTENT}" "${ORIGINAL_FILE_CONTENT}" FILES_DIFFERENT)
-        if (FILES_DIFFERENT)
-            message(STATUS "${FILE_MANIFEST_PATH}: updating list.")
-            file(WRITE "${FILE_MANIFEST_PATH}" "${FILE_CONTENT}")
-        endif()
-    endif()
-endfunction()
+include("${FILE_SRC_PATH}/src/Wisteria-Dataviz/cmake/XrcStrings.cmake")
 
 # source files to include in the build
 block()
@@ -108,42 +95,5 @@ block()
 endblock()
 
 # Extract translatable strings from XRC files for gettext
-block()
-    set(TRANSLATABLE_TAGS label help title tooltip longhelp)
-
-    set(OUTPUT_CONTENT "// Auto-generated from XRC files for gettext extraction\n")
-    string(APPEND OUTPUT_CONTENT "// DO NOT EDIT - regenerate by running CMake\n\n")
-    string(APPEND OUTPUT_CONTENT "#include <wx/intl.h>\n\n")
-    string(APPEND OUTPUT_CONTENT "void _xrc_menu_strings()\n")
-    string(APPEND OUTPUT_CONTENT "    {\n")
-
-    file(GLOB XRC_FILES "${FILE_SRC_PATH}/resources/images/menus/*.xrc")
-    foreach(XRC_FILE ${XRC_FILES})
-        file(READ "${XRC_FILE}" XRC_CONTENT)
-        # escape semicolons to prevent CMake from treating them as list separators
-        string(REPLACE ";" "<<SEMICOLON>>" XRC_CONTENT "${XRC_CONTENT}")
-        get_filename_component(XRC_FILENAME "${XRC_FILE}" NAME)
-        string(APPEND OUTPUT_CONTENT "    // ${XRC_FILENAME}\n")
-
-        foreach(TAG ${TRANSLATABLE_TAGS})
-            string(REGEX MATCHALL "<${TAG}>[^<]+</${TAG}>" MATCHES "${XRC_CONTENT}")
-            foreach(MATCH ${MATCHES})
-                string(REGEX REPLACE "<${TAG}>([^<]+)</${TAG}>" "\\1" TEXT "${MATCH}")
-                # restore semicolons
-                string(REPLACE "<<SEMICOLON>>" ";" TEXT "${TEXT}")
-                string(STRIP "${TEXT}" TEXT)
-                if(TEXT)
-                    string(REPLACE "\\" "\\\\" TEXT "${TEXT}")
-                    string(REPLACE "\"" "\\\"" TEXT "${TEXT}")
-                    string(REPLACE "\n" "\\n" TEXT "${TEXT}")
-                    string(APPEND OUTPUT_CONTENT "    _(\"${TEXT}\");\n")
-                endif()
-            endforeach()
-        endforeach()
-    endforeach()
-
-    string(APPEND OUTPUT_CONTENT "    }\n")
-
-    set(FILE_MANIFEST_PATH "${FILE_SRC_PATH}/src/xrc_menu_strings.cpp")
-    update_file_if_needed("${FILE_MANIFEST_PATH}" "${OUTPUT_CONTENT}")
-endblock()
+generate_xrc_strings("${FILE_SRC_PATH}/resources/images/menus"
+                     "${FILE_SRC_PATH}/src/xrc_menu_strings.cpp")

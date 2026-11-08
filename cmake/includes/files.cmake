@@ -25,11 +25,9 @@ SET(APP_SRC_FILES
     src/indexing/word_functional.cpp
     src/lua-scripting/lua_application.cpp
     src/lua-scripting/lua_batch_project.cpp
-    src/lua-scripting/lua_debug.cpp
-    src/lua-scripting/lua_interface.cpp
     src/lua-scripting/lua_screenshot.cpp
     src/lua-scripting/lua_standard_project.cpp
-    src/lua-scripting/onelua_no_warnings.c
+    src/lua-scripting/readability_lua_interpreter.cpp
     src/projects/base_project.cpp
     src/projects/base_project_doc.cpp
     src/projects/base_project_view.cpp
@@ -45,9 +43,7 @@ SET(APP_SRC_FILES
     src/tinyexpr-plusplus/tinyexpr.cpp
     src/tinyxml2/tinyxml2.cpp
     src/ui/controls/explanation_listctrl.cpp
-    src/ui/controls/script_workbench_panel.cpp
     src/ui/controls/word_list_property.cpp
-    src/ui/dialogs/about_dlg_ex.cpp
     src/ui/dialogs/custom_test_dlg.cpp
     src/ui/dialogs/doc_group_select_dlg.cpp
     src/ui/dialogs/edit_text_dlg.cpp
@@ -93,12 +89,12 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/base/shapes_religion.cpp
     src/Wisteria-Dataviz/src/base/shapes_stats.cpp
     src/Wisteria-Dataviz/src/base/shapes_vehicles.cpp
+    src/Wisteria-Dataviz/src/data/clone.cpp
     src/Wisteria-Dataviz/src/data/dataset.cpp
     src/Wisteria-Dataviz/src/data/excelreader.cpp
-    src/Wisteria-Dataviz/src/data/join_inner.cpp
-    src/Wisteria-Dataviz/src/data/join_left.cpp
     src/Wisteria-Dataviz/src/data/odsreader.cpp
     src/Wisteria-Dataviz/src/data/pdfreader.cpp
+    src/Wisteria-Dataviz/src/data/subset.cpp
     src/Wisteria-Dataviz/src/easyexif/exif.cpp
     src/Wisteria-Dataviz/src/graphs/barchart.cpp
     src/Wisteria-Dataviz/src/graphs/barchart_serpentine.cpp
@@ -108,6 +104,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/graphs/chernoffplot.cpp
     src/Wisteria-Dataviz/src/graphs/crawfordgraph.cpp
     src/Wisteria-Dataviz/src/graphs/danielsonbryan2plot.cpp
+    src/Wisteria-Dataviz/src/graphs/filterablegraph.cpp
     src/Wisteria-Dataviz/src/graphs/fleschchart.cpp
     src/Wisteria-Dataviz/src/graphs/graph2d.cpp
     src/Wisteria-Dataviz/src/graphs/groupgraph2d.cpp
@@ -139,11 +136,19 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/import/rtf_extract_text.cpp
     src/Wisteria-Dataviz/src/import/spreadsheet_extract_text.cpp
     src/Wisteria-Dataviz/src/import/xlsx_extract_text.cpp
+    src/Wisteria-Dataviz/src/lua-scripting/lua_debug.cpp
+    src/Wisteria-Dataviz/src/lua-scripting/lua_interface.cpp
+    src/Wisteria-Dataviz/src/lua-scripting/lua_screenshot.cpp
+    src/Wisteria-Dataviz/src/lua-scripting/onelua_no_warnings.c
+    src/Wisteria-Dataviz/src/lua-scripting/script_workbench_panel.cpp
     src/Wisteria-Dataviz/src/reporting/htmldashboardprintout.cpp
+    src/Wisteria-Dataviz/src/reporting/odpreportprintout.cpp
     src/Wisteria-Dataviz/src/reporting/pdfreportprintout.cpp
     src/Wisteria-Dataviz/src/reporting/pptxreportprintout.cpp
     src/Wisteria-Dataviz/src/reporting/reportbuildercolors.cpp
+    src/Wisteria-Dataviz/src/reporting/reportexportpage.cpp
     src/Wisteria-Dataviz/src/reporting/reportprintout.cpp
+    src/Wisteria-Dataviz/src/reporting/reportslideexportbase.cpp
     src/Wisteria-Dataviz/src/reporting/svgreportprintout.cpp
     src/Wisteria-Dataviz/src/ui/app.cpp
     src/Wisteria-Dataviz/src/ui/controls/codeeditor.cpp
@@ -156,6 +161,7 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/ui/controls/sidebar.cpp
     src/Wisteria-Dataviz/src/ui/controls/sidebarbook.cpp
     src/Wisteria-Dataviz/src/ui/controls/thumbnail.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/aboutdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/archivedlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/excelpreviewdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/filelistdlg.cpp
@@ -169,8 +175,10 @@ SET(APP_SRC_FILES
     src/Wisteria-Dataviz/src/ui/dialogs/listctrlitemviewdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/listctrlsortdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/listdlg.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/odpexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/odspreviewdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/opacitydlg.cpp
+    src/Wisteria-Dataviz/src/ui/dialogs/pageselectiondlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/pdfexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/pptxexportdlg.cpp
     src/Wisteria-Dataviz/src/ui/dialogs/printerheaderfooterdlg.cpp

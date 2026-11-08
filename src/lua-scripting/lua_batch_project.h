@@ -50,8 +50,8 @@
 #ifndef LUA_BATCH_PROJECTS_H
 #define LUA_BATCH_PROJECTS_H
 
-#include "lua_debug.h"
-#include "luna.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/lua_debug.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/luna.h"
 #include <wx/wx.h>
 
 class ProjectDoc;

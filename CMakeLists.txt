@@ -159,8 +159,8 @@ endif()
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    include(cmake/modules/CheckASAN.cmake)
-    include(cmake/modules/EnableSanitizers.cmake)
+    include(src/Wisteria-Dataviz/cmake/CheckASAN.cmake)
+    include(src/Wisteria-Dataviz/cmake/EnableSanitizers.cmake)
 endif()
 
 # Read implementation of Snowball used by stemming library (this appears in the help)
@@ -265,7 +265,7 @@ else()
 endif()
 
 # Build the project management dashboards
-include(cmake/modules/CheckTranslations.cmake)
+include(src/Wisteria-Dataviz/cmake/CheckTranslations.cmake)
 check_all_translations()
 include(cmake/G11NDashboard.cmake)
 include(cmake/DocsDashboard.cmake)
@@ -344,16 +344,17 @@ endif()
 # List of submodules (relative paths)
 set(SUBMODULES
     src/Catch2
-    src/lua
     src/OleanderStemmingLibrary
     src/tinyexpr-plusplus
     src/tinyxml2
     src/Wisteria-Dataviz
     src/Wisteria-Dataviz/src/CRCpp
     src/Wisteria-Dataviz/src/easyexif
+    src/Wisteria-Dataviz/src/lua
     src/Wisteria-Dataviz/src/utfcpp
     src/Wisteria-Dataviz/src/wxpdfdoc
     src/Wisteria-Dataviz/src/wxSimpleJSON
+    src/Wisteria-Dataviz/src/wxSimpleJSON/src/cJSON
     src/Wisteria-Dataviz/src/wxStartPage
     ${wxWidgets_BASEDIR}
     ${wxWidgets_BASEDIR}/src/expat
@@ -460,7 +461,7 @@ endif()
 # Help Files
 ##############################################################
 
-include(cmake/modules/FindR.cmake)
+include(src/Wisteria-Dataviz/cmake/FindR.cmake)
 if(NOT R_FOUND)
     message(WARNING "R not found. Help manuals cannot be built.")
 endif()
@@ -635,7 +636,7 @@ endif()
 if(ENABLE_SANITIZERS AND ENABLED_SANITIZERS_SUMMARY)
     message(STATUS "Target ${PROJECT_NAME} built with sanitizers (Debug): ${ENABLED_SANITIZERS_SUMMARY}")
 endif()
-include(cmake/modules/PrintCompilerFlags.cmake)
+include(src/Wisteria-Dataviz/cmake/PrintCompilerFlags.cmake)
 print_compile_flags_summary(${PROJECT_NAME})
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     COMPILE_FLAGS_SUMMARY_STR="${COMPILE_FLAGS_SUMMARY_STR}")

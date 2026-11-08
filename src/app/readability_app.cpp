@@ -48,7 +48,15 @@
 \*== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =*/
 
 #include "readability_app.h"
+#include "../OleanderStemmingLibrary/src/stemming.h"
 #include "../Wisteria-Dataviz/src/CRCpp/inc/CRC.h"
+#include "../Wisteria-Dataviz/src/easyexif/exif.h"
+#include "../Wisteria-Dataviz/src/lua/lua.h"
+#include "../Wisteria-Dataviz/src/wxSimpleJSON/src/cJSON/cJSON.h"
+#include "../Wisteria-Dataviz/src/wxpdfdoc/include/wx/pdfdoc_version.h"
+#include "../tinyexpr-plusplus/tinyexpr.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "sbom.h"
 #include "../Wisteria-Dataviz/src/base/colorbrewer.h"
 #include "../Wisteria-Dataviz/src/data/pdfreader.h"
 #include "../Wisteria-Dataviz/src/graphs/danielsonbryan2plot.h"
@@ -70,7 +78,7 @@
 #include "../projects/standard_project_doc.h"
 #include "../projects/standard_project_view.h"
 #include "../results-format/project_report_format.h"
-#include "../ui/controls/script_workbench_panel.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/script_workbench_panel.h"
 #include "../ui/dialogs/custom_test_dlg.h"
 #include "../ui/dialogs/edit_word_list_dlg.h"
 #include "../ui/dialogs/new_custom_test_simple_dlg.h"
@@ -81,15 +89,21 @@
 #include <utility>
 #include <wx/dir.h>
 #include <wx/richmsgdlg.h>
+#include <wx/imagjpeg.h>
+#include <wx/imagpng.h>
+#include <wx/imagtiff.h>
+#include <wx/imagwebp.h>
+#include <wx/regex.h>
+#include <wx/stc/stc.h>
 #include <wx/webview.h>
+#include <wx/xml/xml.h>
+#include <wx/zstream.h>
 
 // ===========================================================================
 // implementation
 // ===========================================================================
 // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast,cppcoreguidelines-avoid-non-const-global-variables)
 wxIMPLEMENT_APP(ReadabilityApp);
-
-std::map<wxWindowID, wxWindowID> ReadabilityApp::m_dynamicIdMap;
 
 RSArtProvider::RSArtProvider()
     {
@@ -442,6 +456,9 @@ bool ReadabilityApp::OnInit()
         wxLog::SetLogLevel(wxLOG_Max);
         }
 
+    // the script workbench connects to this as the interface is built
+    SetLuaRunner(std::make_unique<ReadabilityLuaInterpreter>());
+
     LoadInterface();
     ShowSplashscreen();
     LoadMenus();
@@ -491,6 +508,7 @@ bool ReadabilityApp::OnInit()
                    std::make_pair(_(L"Hawaiian pizza"), DONTTRANSLATE(L"hawaiian-pizza")),
                    std::make_pair(_(L"Chocolate chip cookie"),
                                   DONTTRANSLATE(L"chocolate-chip-cookie")),
+                   std::make_pair(_(L"Pumpkin pie"), DONTTRANSLATE(L"pumpkin-pie")),
                    std::make_pair(_(L"Coffee shop cup"), DONTTRANSLATE(L"coffee-shop-cup")),
                    std::make_pair(_(L"Pill"), DONTTRANSLATE(L"pill")),
                    std::make_pair(_(L"Tractor"), DONTTRANSLATE(L"tractor")),
@@ -766,7 +784,7 @@ bool ReadabilityApp::OnInit()
     GetMainFrameEx()->GetRibbon()->Realize();
 
     // initialize Lua interpreter (after options are loaded so it can check unsafe mode setting)
-    m_LuaRunner.Initialize();
+    GetLuaRunner()->Initialize();
 
     // clang-format off
     // add some standard test bundles
@@ -3645,49 +3663,85 @@ void MainFrame::OnAbout([[maybe_unused]] wxCommandEvent& event)
     wxDateTime buildDate;
     buildDate.ParseDate(__DATE__);
 
-    wxString filePath = wxGetApp().FindResourceFile(_DT(L"LICENSE"));
+    wxString licensePath = wxGetApp().FindResourceFile(_DT(L"LICENSE"));
     wxString eula;
-    if (!(wxFile::Exists(filePath) && Wisteria::TextStream::ReadFile(filePath, eula)))
+    if (!(wxFile::Exists(licensePath) && Wisteria::TextStream::ReadFile(licensePath, eula)))
         {
-        wxLogMessage(L"Unable to read EULA from '%s'", filePath);
+        wxLogMessage(L"Unable to read EULA from '%s'", licensePath);
         }
 
-    filePath = wxGetApp().FindResourceFile(_DT(L"citations.mla"));
-    wxString mlaCitation;
-    if (!(wxFile::Exists(filePath) && Wisteria::TextStream::ReadFile(filePath, mlaCitation)))
-        {
-        wxLogMessage(L"Unable to read MLA citation from '%s'", filePath);
-        }
-
-    filePath = wxGetApp().FindResourceFile(_DT(L"citations.apa"));
-    wxString apaCitation;
-    if (!(wxFile::Exists(filePath) && Wisteria::TextStream::ReadFile(filePath, apaCitation)))
-        {
-        wxLogMessage(L"Unable to read APA citation from '%s'", filePath);
-        }
-
-    filePath = wxGetApp().FindResourceFile(_DT(L"citations.bib"));
-    wxString bibTexCitation;
-    if (!(wxFile::Exists(filePath) && Wisteria::TextStream::ReadFile(filePath, bibTexCitation)))
-        {
-        wxLogMessage(L"Unable to read BibTeX citation from '%s'", filePath);
-        }
-
-    AboutDialogEx aboutDlg(
-        wxGetApp().GetParentingWindow(), wxGetApp().GetAppVersion(),
+    Wisteria::UI::AboutDlgInfo info;
+    info.AppName(wxGetApp().GetAppName())
+        .AppVersion(wxGetApp().GetAppVersion())
+        .Logo(GetLogo())
         // TRANSLATORS: "%s" is the software publisher.
-        wxString::Format(_(L"Copyright ©2006–2025 Oleander Software, Ltd.\n"
+        .Copyright(wxString::Format(
+            _(L"Copyright ©2006–2025 Oleander Software, Ltd.\n"
                            "Copyright ©2025–%d %s.\nAll rights reserved.\n\n"
                            "%s® is a Trademark of %s.\n"
                            "Jakarta and Jakarta EE are Trademarks of %s.\n"
                            "Eclipse® is a Trademark of %s.\n"
                            "Eclipse Foundation is a Trademark of %s."),
-                         buildDate.GetYear(), wxGetApp().GetVendorDisplayName(),
-                         _READSTUDIO_APP_LONG_NAME, wxGetApp().GetVendorDisplayName(),
+            buildDate.GetYear(), wxGetApp().GetVendorDisplayName(), _READSTUDIO_APP_LONG_NAME,
                          wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName(),
-                         wxGetApp().GetVendorDisplayName()),
-        eula, mlaCitation, apaCitation, bibTexCitation);
+            wxGetApp().GetVendorDisplayName(), wxGetApp().GetVendorDisplayName()))
+        .Eula(eula)
+        .AddCitationFile(_DT(L"MLA:"), wxGetApp().FindResourceFile(_DT(L"citations.mla")))
+        .AddCitationFile(_DT(L"APA:"), wxGetApp().FindResourceFile(_DT(L"citations.apa")))
+        .AddCitationFile(_DT(L"BibTeX:"), wxGetApp().FindResourceFile(_DT(L"citations.bib")),
+                         Wisteria::UI::CitationFormat::PlainText)
+        .AddLibrary(wxGetLibraryVersionInfo(), WXWIDGETS_HASH, WXWIDGETS_ORIGIN)
+        .AddLibrary(Wisteria::GetLibraryVersionInfo(), WISTERIA_DATAVIZ_HASH,
+                    WISTERIA_DATAVIZ_ORIGIN)
+        .AddLibrary(wxTIFFHandler::GetLibraryVersionInfo(), TIFF_HASH, TIFF_ORIGIN)
+        .AddLibrary(wxJPEGHandler::GetLibraryVersionInfo(), JPEG_HASH, JPEG_ORIGIN)
+        .AddLibrary(wxPNGHandler::GetLibraryVersionInfo(), PNG_HASH, PNG_ORIGIN)
+        .AddLibrary(wxWEBPHandler::GetLibraryVersionInfo(), LIBWEBP_HASH, LIBWEBP_ORIGIN)
+        .AddLibrary(wxRegEx::GetLibraryVersionInfo(), PCRE_HASH, PCRE_ORIGIN)
+        .AddLibrary(wxXmlDocument::GetLibraryVersionInfo(), EXPAT_HASH, EXPAT_ORIGIN)
+        .AddLibrary(wxStyledTextCtrl::GetLibraryVersionInfo(), SCINTILLA_HASH, SCINTILLA_ORIGIN)
+        .AddLibrary(wxStyledTextCtrl::GetLexerVersionInfo(), LEXILLA_HASH, LEXILLA_ORIGIN)
+        .AddLibrary(wxGetZlibVersionInfo(), ZLIB_HASH, ZLIB_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"wxPdfDocument", PDFDOC_MAJOR_VERSION, PDFDOC_MINOR_VERSION,
+                                   PDFDOC_RELEASE_NUMBER, PDFDOC_SUBRELEASE_NUMBER, wxString{},
+                                   wxString{} },
+                    WXPDFDOC_HASH, WXPDFDOC_ORIGIN)
+        .AddLibrary(wxWebView::GetBackendVersionInfo())
+        .AddLibrary(wxVersionInfo{ L"NanoSVG", -1 }, NANOSVG_HASH, NANOSVG_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"CRC++", CRCPP_MAJOR_VERSION, CRCPP_MINOR_VERSION,
+                                   CRCPP_PATCH_VERSION, CRCPP_REVISION_VERSION, wxString{},
+                                   CRCPP_COPYRIGHT },
+                    CRCPP_HASH, CRCPP_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"Lua", LUA_VERSION_MAJOR_N, LUA_VERSION_MINOR_N,
+                                   LUA_VERSION_RELEASE_N, 0, wxString{}, LUA_COPYRIGHT },
+                    LUA_HASH, LUA_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"Oleander Stemming Library",
+                                   stemming::OLEANDER_STEM_MAJOR_VERSION,
+                                   stemming::OLEANDER_STEM_MINOR_VERSION,
+                                   stemming::OLEANDER_STEM_PATCH_VERSION,
+                                   stemming::OLEANDER_STEM_TWEAK_VERSION, wxString{},
+                                   stemming::OLEANDER_STEM_COPYRIGHT },
+                    OLEANDERSTEMMINGLIBRARY_HASH, OLEANDERSTEMMINGLIBRARY_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"TinyExpr++", TINYEXPR_CPP_MAJOR_VERSION,
+                                   TINYEXPR_CPP_MINOR_VERSION, TINYEXPR_CPP_PATCH_VERSION,
+                                   TINYEXPR_CPP_TWEAK_VERSION, wxString{}, TINYEXPR_CPP_COPYRIGHT },
+                    TINYEXPR_PLUSPLUS_HASH, TINYEXPR_PLUSPLUS_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"TinyXML2", TIXML2_MAJOR_VERSION, TIXML2_MINOR_VERSION,
+                                   TIXML2_PATCH_VERSION },
+                    TINYXML2_HASH, TINYXML2_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"wxStartPage", -1 }, WXSTARTPAGE_HASH, WXSTARTPAGE_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"wxSimpleJSON", -1 }, WXSIMPLEJSON_HASH, WXSIMPLEJSON_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"cJSON", CJSON_VERSION_MAJOR, CJSON_VERSION_MINOR,
+                                   CJSON_VERSION_PATCH, 0, wxString{},
+                                   L"Copyright (c) 2009-2017 Dave Gamble and cJSON contributors" },
+                    CJSON_HASH, CJSON_ORIGIN)
+        .AddLibrary(
+            wxVersionInfo{ L"easyexif", -1, 0, 0, 0, wxString{}, easyexif::EASYEXIF_COPYRIGHT },
+            EASYEXIF_HASH, EASYEXIF_ORIGIN)
+        .AddLibrary(wxVersionInfo{ L"UTF8-CPP", -1 }, UTFCPP_HASH, UTFCPP_ORIGIN);
 
+    Wisteria::UI::AboutDlg aboutDlg(wxGetApp().GetParentingWindow(), std::move(info));
+    wxGetApp().ApplyThemeToSideBar(aboutDlg.GetSideBar());
     aboutDlg.ShowModal();
     }
 
@@ -4778,7 +4832,10 @@ void ReadabilityApp::InitStartPage()
 
     // The script workbench and log panel share the same sizer slot as the start page;
     // the Developer/Log ribbon tabs swap which one is visible.
-    GetMainFrameEx()->m_scriptWorkbench = new ScriptWorkbenchPanel(GetMainFrameEx()->GetPanel());
+    GetMainFrameEx()->m_scriptWorkbench = new ScriptWorkbenchPanel(
+        GetMainFrameEx()->GetPanel(), wxID_ANY, L"rs",
+        L"-- " + wxString::Format(_(L"Imports %s specific enumerations"), GetAppDisplayName()) +
+            L"\ndofile(Application.GetLuaConstantsPath())\n\n");
     GetMainFrameEx()->GetScriptWorkbench()->Hide();
     GetMainFrameEx()->GetPanel()->GetSizer()->Add(GetMainFrameEx()->GetScriptWorkbench(),
                                                   wxSizerFlags{ 1 }.Expand());

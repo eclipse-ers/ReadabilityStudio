@@ -50,7 +50,7 @@
 #ifndef LUASCREENSHOT_H
 #define LUASCREENSHOT_H
 
-#include "lua.hpp"
+#include "../Wisteria-Dataviz/src/lua-scripting/lua.hpp"
 
 // NOLINTBEGIN(readability-identifier-length)
 // NOLINTBEGIN(readability-implicit-bool-conversion)
@@ -69,16 +69,7 @@ enum class ProjectScreenshotCropMode
 namespace LuaScripting
     {
     int ShowScriptEditor(lua_State* L);
-    int SnapScreenshot(lua_State* L);
-    int SnapScreenshotWithAnnotation(lua_State* L);
     int SnapScreenshotOfActiveProject(lua_State* L);
-    int SnapScreenshotOfDialogWithPropertyGrid(lua_State* L);
-    int SnapScreenshotOfTextWindow(lua_State* L);
-    int SnapScreenshotOfListControl(lua_State* L);
-    int SnapScreenshotOfRibbon(lua_State* L);
-    int CropScreenshot(lua_State* L);
-    int HighlightScreenshot(lua_State* L);
-    int ConvertImage(lua_State* L);
     int ShowStandardProjectWizardLanguagePage(lua_State* L);
     int ShowStandardProjectWizardTextSourcePage(lua_State* L);
     int ShowStandardProjectWizardTextFromFilePage(lua_State* L);
@@ -115,10 +106,6 @@ namespace LuaScripting
     int CloseOptions(lua_State* L);
     int ShowPrinterHeaderFooterOptions(lua_State* L);
     int ClosePrinterHeaderFooterOptions(lua_State* L);
-    int ShowListExportDlg(lua_State* L);
-    int CloseListExportDlg(lua_State* L);
-    int CloseListViewItemDlg(lua_State* L);
-    int ShowListViewItemDlg(lua_State* L);
     int ShowGetDirDlg(lua_State* L);
     int ShowGetArchiveDlg(lua_State* L);
     int CloseGetDirDlg(lua_State* L);
@@ -129,8 +116,6 @@ namespace LuaScripting
     int CloseWebHarvesterDlg(lua_State* L);
     int ShowFilteredTextPreviewDlg(lua_State* L);
     int CloseFilteredTextPreviewDlg(lua_State* L);
-    int ShowSortListDlg(lua_State* L);
-    int CloseSortListDlg(lua_State* L);
     int ShowEditWordListDlg(lua_State* L);
     int CloseEditWordListDlg(lua_State* L);
     int ShowDocGroupSelectDlg(lua_State* L);
@@ -139,15 +124,13 @@ namespace LuaScripting
     int CloseEditorTextDlg(lua_State* L);
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
-    static const luaL_Reg ScreenshotLib[] = {
+    static const luaL_Reg ScreenshotLib2[] = {
         { "ShowEditorTextDlg", ShowEditorTextDlg },
         { "CloseEditorTextDlg", CloseEditorTextDlg },
         { "ShowEditWordListDlg", ShowEditWordListDlg },
         { "CloseEditWordListDlg", CloseEditWordListDlg },
         { "ShowDocGroupSelectDlg", ShowDocGroupSelectDlg },
         { "CloseDocGroupSelectDlg", CloseDocGroupSelectDlg },
-        { "ShowSortListDlg", ShowSortListDlg },
-        { "CloseSortListDlg", CloseSortListDlg },
         { "ShowFilteredTextPreviewDlg", ShowFilteredTextPreviewDlg },
         { "CloseFilteredTextPreviewDlg", CloseFilteredTextPreviewDlg },
         { "ShowWebHarvesterDlg", ShowWebHarvesterDlg },
@@ -158,10 +141,6 @@ namespace LuaScripting
         { "CloseGetDirDlg", CloseGetDirDlg },
         { "ShowGetArchiveDlg", ShowGetArchiveDlg },
         { "CloseGetArchiveDlg", CloseGetArchiveDlg },
-        { "ShowListViewItemDlg", ShowListViewItemDlg },
-        { "CloseListViewItemDlg", CloseListViewItemDlg },
-        { "ShowListExportDlg", ShowListExportDlg },
-        { "CloseListExportDlg", CloseListExportDlg },
         { "ShowPrinterHeaderFooterOptions", ShowPrinterHeaderFooterOptions },
         { "ClosePrinterHeaderFooterOptions", ClosePrinterHeaderFooterOptions },
         { "ShowStandardProjectWizardLanguagePage", ShowStandardProjectWizardLanguagePage },
@@ -207,16 +186,7 @@ namespace LuaScripting
         { "SetCustomTestDialogDocumentTypes", SetCustomTestDialogDocumentTypes },
         { "SetCustomTestDialogIndustries", SetCustomTestDialogIndustries },
         { "CloseCustomTestDialog", CloseCustomTestDialog },
-        { "SnapScreenshot", SnapScreenshot },
-        { "SnapScreenshotWithAnnotation", SnapScreenshotWithAnnotation },
         { "SnapScreenshotOfActiveProject", SnapScreenshotOfActiveProject },
-        { "SnapScreenshotOfDialogWithPropertyGrid", SnapScreenshotOfDialogWithPropertyGrid },
-        { "SnapScreenshotOfTextWindow", SnapScreenshotOfTextWindow },
-        { "SnapScreenshotOfListControl", SnapScreenshotOfListControl },
-        { "SnapScreenshotOfRibbon", SnapScreenshotOfRibbon },
-        { "CropScreenshot", CropScreenshot },
-        { "HighlightScreenshot", HighlightScreenshot },
-        { "ConvertImage", ConvertImage },
         { "ShowScriptEditor", ShowScriptEditor },
         { nullptr, nullptr }
     };

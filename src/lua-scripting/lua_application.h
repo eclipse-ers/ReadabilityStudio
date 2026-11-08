@@ -51,9 +51,9 @@
 #define LUAAPPLICATION_H
 
 #include "../Wisteria-Dataviz/src/util/donttranslate.h"
-#include "lua.hpp"
+#include "../Wisteria-Dataviz/src/lua-scripting/lua.hpp"
 #include "lua_batch_project.h"
-#include "lua_debug.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/lua_debug.h"
 #include "lua_standard_project.h"
 #include <map>
 #include <wx/wx.h>

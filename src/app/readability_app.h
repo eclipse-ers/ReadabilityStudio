@@ -54,6 +54,7 @@
 #include "../Wisteria-Dataviz/src/ui/app.h"
 #include "../Wisteria-Dataviz/src/ui/controls/codeeditor.h"
 #include "../Wisteria-Dataviz/src/ui/controls/listctrlex.h"
+#include "../Wisteria-Dataviz/src/ui/dialogs/aboutdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/functionbrowserdlg.h"
 #include "../Wisteria-Dataviz/src/ui/dialogs/printerheaderfooterdlg.h"
 #include "../Wisteria-Dataviz/src/ui/mainframe.h"
@@ -66,11 +67,10 @@
 #include "../Wisteria-Dataviz/src/wxStartPage/startpage.h"
 #include "../app/readability_app_options.h"
 #include "../indexing/plain_language_phrase.h"
-#include "../lua-scripting/lua_interface.h"
+#include "../lua-scripting/readability_lua_interpreter.h"
 #include "../readability/custom_readability_test.h"
 #include "../readability/readability_project_test.h"
 #include "../test-helpers/tests_functional.h"
-#include "../ui/dialogs/about_dlg_ex.h"
 #include "../ui/dialogs/web_harvester_dlg.h"
 #include "../ui/dialogs/word_list_dlg.h"
 #include "../webharvester/webharvester.h"
@@ -91,7 +91,14 @@
 #include <wx/wx.h>
 
 class BaseProject;
+
+namespace Wisteria::UI
+    {
 class ScriptWorkbenchPanel;
+    }
+
+using Wisteria::UI::LuaInterpreter;
+using Wisteria::UI::ScriptWorkbenchPanel;
 
 /// @brief Extended icon provider, which is connected to application's
 ///     custom icons.
@@ -337,7 +344,7 @@ class MainFrame final : public Wisteria::UI::BaseMainFrame
 
     /// @brief Show MainFrame, switch the ribbon to the Developer tab,
     ///     and focus the script workbench.
-    void ActivateScriptWorkbench();
+    void ActivateScriptWorkbench() override;
 
     /// @brief Show MainFrame and switch the ribbon to the Home tab.
     void ActivateHomePage();
@@ -525,7 +532,7 @@ class ReadabilityApp final : public Wisteria::UI::BaseApp
     /// @brief Applies the currently active report theme's accent color to a sidebar's
     ///     selection and hover-highlight colors.
     /// @param sideBar The sidebar to update.
-    void ApplyThemeToSideBar(Wisteria::UI::SideBar* sideBar);
+    void ApplyThemeToSideBar(Wisteria::UI::SideBar* sideBar) override;
 
     // ribbon creation
     Wisteria::UI::SideBar* CreateSideBar(wxWindow* frame, const wxWindowID id);

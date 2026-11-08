@@ -59,7 +59,7 @@
 #include "../projects/base_project.h"
 #include "../projects/batch_project_doc.h"
 #include "../projects/standard_project_doc.h"
-#include "../ui/controls/script_workbench_panel.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/script_workbench_panel.h"
 #include <wx/dir.h>
 
 wxDECLARE_APP(ReadabilityApp);

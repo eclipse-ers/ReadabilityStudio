@@ -49,7 +49,7 @@
 
 #include "base_project_view.h"
 #include "../app/readability_app.h"
-#include "../ui/controls/script_workbench_panel.h"
+#include "../Wisteria-Dataviz/src/lua-scripting/script_workbench_panel.h"
 #include "../ui/dialogs/test_bundle_dlg.h"
 #include "batch_project_doc.h"
 #include "standard_project_doc.h"
