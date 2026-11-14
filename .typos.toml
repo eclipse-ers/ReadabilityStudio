@@ -87,7 +87,7 @@ check-file = false
 [files]
 extend-exclude = ["docs-online", "src/Catch2/", "src/Wisteria-Dataviz/src/lua/", "docs/projects",
                   "resources/words", "locale/*.po", "examples",
-                  "tests/Dictionaries", "tests/germansyllabletests.cpp",
+                  "tests/Dictionaries", "tests/germansyllabletests.cpp", "tests/documenttests.cpp",
                   "docs/lua-5.4", "installers/windows/messages/messages-es.isl",
                   "installers/windows/messages/messages-pt.isl",
                   "installers/windows/messages/messages-fr.isl",
